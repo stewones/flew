@@ -7,11 +7,20 @@
 - [Install library](https://github.com/ionfire/reactive-record#install-lib)
 - [Install dependencies](https://github.com/ionfire/reactive-record#install-dependencies)
 - [Angular setup](https://github.com/ionfire/reactive-record#angular-setup)
-- [Basic usage for firebase/firestore](https://github.com/ionfire/reactive-record#basic-usage-for-firebasefirestore)
+    - [Service]()
+    - [Component]()
+    - [Template]()
+- [Basic usage for firestore](https://github.com/ionfire/reactive-record#basic-usage-for-firebasefirestore)
 - [Reactive Record Options](https://github.com/ionfire/reactive-record#reactive-record-options)
 - [Client Setup Options](https://github.com/ionfire/reactive-record#client-setup-options)
+- [Reactive Record Methods]()
+- [Extra Options]()
 - [Advanced usage](https://github.com/ionfire/reactive-record#advanced-usage)
 - [Node.js usage](https://github.com/ionfire/reactive-record#nodejs-usage)
+- [Dev Setup]()
+    - [Try locally]()
+    - [Running tests]()
+- [Contributions]() 
 
 ## Requirements
 - axios
@@ -28,7 +37,7 @@ npm install --save @ionfire/reactive-record
 ## Install dependencies
 
 ```sh
-npm i -P axios && npm i -P lodash && npm i -P moment && npm i -P rxjs && npm i -P rxjs-compat
+npm i -P axios && npm i -P lodash && npm i -P moment && npm i -P rxjs
 ```
 
 ## Angular Setup
@@ -54,7 +63,7 @@ export const environment = {
 
 ### Basic usage for firebase/firestore
 
-#### service
+#### Service
 
 ```ts
 import * as Firebase from 'firebase/app';
@@ -75,7 +84,7 @@ export class MyService extends ReactiveRecord {
 }
 ```
 
-#### component
+#### Component
 
 ```ts
 import { RRResponse } from '@ionfire/reactive-record';
@@ -93,7 +102,7 @@ export class MyComponent implements OnInit {
 }
 ```
 
-#### template
+#### Template
 
 ```html
 <ul>
@@ -102,7 +111,6 @@ export class MyComponent implements OnInit {
     </li>
 </ul>
 ```
-
 
 ## Reactive Record Options
 
@@ -116,6 +124,25 @@ timestamp | `boolean` | false | true | [RROptions](https://github.com/ionfire/re
 hook | `object` | false | {} | [RRHook](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-hook.ts)
 connector | `object` | false | {} | [RRConnector](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-connector.ts)
 
+## Reactive Record Methods
+
+Almost all RR public methods must return a `rxjs` observable. Not all drivers are currently implemented, feel free to submit a PR.
+
+method | params | return | info
+------ | ------ | ------ | ----
+find | `*request|extraOptions|driver` | `Observable<RRResponse>` | fetch all data
+findOne | `*request|extraOptions|driver` | `Observable<RRResponse>` | fetch one data
+set | `*id|*data|driver` | any | set data
+update | `*id|*data|driver` | any | set data
+on | `*request|onSuccess|onError|driver` | `**function` | fetch realtime data
+get | `*path|extraOptions` | `Observable<RRResponse>`  | fetch data using http
+post | `*path|*body|extraOptions` | `Observable<RRResponse>`  | post data using http
+patch | `*path|*body|extraOptions` | `Observable<RRResponse>`  | patch data using http
+delete | `*path|extraOptions` | `Observable<RRResponse>`  | post data using http
+
+> `* => required`
+> 
+> `** => unsubscribe function`
 
 ## Advanced Usage
 
@@ -132,9 +159,10 @@ export class MyService extends ReactiveRecord {
     constructor(public storage: Storage) {
         super(new ClientSetup({
             collection: 'my-collection',   
-            storage: storage,                // storage adapter
-            firebase: Firebase,              // firebase sdk
-            config: environment.firebase     // firebase web config
+            storage: storage,                 // storage adapter
+            firebase: Firebase,               // firebase sdk
+            config: environment.firebase,     // firebase web config
+            ttl: 60*60                        // time to live in seconds
         }));
     }
 }
@@ -158,12 +186,39 @@ token | `object` | false | null | [ClientToken](https://github.com/ionfire/react
 Since in server we don't need to cache any data, avoid the usage of `ClientSetup`
 
 ```js
-const RR = require('@ionfire/reactive-record').RR;
-const myService = new RR({ baseURL: 'http://localhost:5000', endpoint: '/' });
+const ReactiveRecord = require('@ionfire/reactive-record').ReactiveRecord;
 
-// using as promise
-myService.get('users').toPromise().then(console.log).catch(console.log);
+const todoService = new ReactiveRecord({ baseURL: 'https://jsonplaceholder.typicode.com', endpoint: '/todos' });
 
-// using as observable
-myService.get('posts').subscribe(console.log, console.log);
+// as promise
+todoService.get('/54').toPromise().then(r => console.log(r.data)).catch(console.log);
+
+// as observable
+todoService.get('/54').subscribe(r => console.log(r.data), console.log);
 ```
+
+## Dev Setup
+
+- git clone this repo
+- `cd reactive-record`
+- npm install
+- `npm run build:p` (or `:w` for watch)
+- `cd dist/reactive-record`
+- `npm link`
+  
+### Try locally
+
+- cd `your-awesome-app`
+- `npm link @ionfire/reactive-record`
+- import stuff and do amazing things
+
+### Running tests
+
+- `cd reactive-record`
+- `npm run test` (or `test:w` for watch)
+- see the `coverage` folder generated
+
+
+## 🤝 Contributions
+
+Contributions, issues and feature requests are always welcome. Please make sure to read the [Contributing Guide]() before making a pull request.

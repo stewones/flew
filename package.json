@@ -9,9 +9,9 @@
     "e2e": "ng e2e",
     "build:w": "ng build reactive-record --prod --watch",
     "build:p": "ng build reactive-record --prod",
-    "publish": "npm run build:p && cp README.md dist/reactive-record && cd dist/reactive-record && npm publish",
     "patch:a": "standard-version release --release-as patch --prerelease alpha && bin/patch-warning.sh",
-    "patch:b": "standard-version release --release-as patch --prerelease beta && bin/patch-warning.sh"
+    "patch:b": "standard-version release --release-as patch --prerelease beta && bin/patch-warning.sh",
+    "publish": "npm run build:p && cp README.md dist/reactive-record && cd dist/reactive-record && npm publish"
   },
   "private": true,
   "dependencies": {
@@ -25,7 +25,6 @@
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
     "rxjs": "~6.3.2",
-    "rxjs-compat": "^6.3.2",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {

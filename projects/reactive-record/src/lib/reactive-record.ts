@@ -553,10 +553,10 @@ export class ReactiveRecord {
      *
      * @param {string} path
      * @param {ExtraOptions} [extraOptions]
-     * @returns {(Observable<RRResponse | any>)}
+     * @returns {(Observable<RRResponse>)}
      * @memberof RR
      */
-    public get(path: string, extraOptions?: ExtraOptions): Observable<RRResponse | any> {
+    public get(path: string, extraOptions?: ExtraOptions): Observable<RRResponse> {
         return new Observable((observer: PartialObserver<any>) => {
             //
             // set default options
@@ -647,10 +647,10 @@ export class ReactiveRecord {
      * @param {string} path
      * @param {*} body
      * @param {ExtraOptions} [extraOptions={ disableHook: [] }]
-     * @returns {(Observable<RRResponse | any>)}
+     * @returns {(Observable<RRResponse>)}
      * @memberof RR
      */
-    public post(path: string, body: any, extraOptions: ExtraOptions = { disableHook: [] }): Observable<RRResponse | any> {
+    public post(path: string, body: any, extraOptions: ExtraOptions = { disableHook: [] }): Observable<RRResponse> {
         return new Observable((observer: PartialObserver<any>) => {
             //
             // set default options

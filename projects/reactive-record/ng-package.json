@@ -6,7 +6,8 @@
     "umdModuleIds": {
       "lodash": "_",
       "axios": "axios",
-      "moment": "moment"
+      "moment": "moment",
+      "rxjs": "rxjs"
     }
   }
 }
