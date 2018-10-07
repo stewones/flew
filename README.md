@@ -146,7 +146,7 @@ on | `*request/onSuccess/onError/driver` | `**function` | fetch realtime data
 get | `*path/extraOptions` | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts)  | fetch data using http
 post | `*path/*body/extraOptions` | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts)  | post data using http
 patch | `*path/*body/extraOptions` | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts)  | patch data using http
-delete | `*path/extraOptions` | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts)  | post data using http
+delete | `*path/extraOptions` | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts)  | delete data using http
 
 > `* => required`
 > 
