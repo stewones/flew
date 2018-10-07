@@ -20,6 +20,7 @@
 - [Dev Setup](https://github.com/ionfire/reactive-record#dev-setup)
     - [Try locally](https://github.com/ionfire/reactive-record#try-locally)
     - [Running tests](https://github.com/ionfire/reactive-record#running-tests)
+- [Changelog](https://github.com/ionfire/reactive-record#changelog) 
 - [Contributions](https://github.com/ionfire/reactive-record#-contributions) 
 
 ## Requirements
@@ -238,6 +239,9 @@ todoService.get('/54').subscribe(r => console.log(r.data), console.log);
 - `npm run test` (or `test:w` for watch)
 - see the `coverage` folder generated
 
+## Changelog
+
+We keep our changes synced with a changelog. [Check it out](https://github.com/ionfire/reactive-record/blob/master/CHANGELOG.md).
 
 ## 🤝 Contributions
 
