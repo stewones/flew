@@ -159,7 +159,7 @@ Almost all of extra options is applied only when using the [ClientSetup](https:/
 option | type | required | default | info
 ------ | ---- | -------- | ------- | ---------
 ttl | `number` | false | `0` | time to live for cache
-key | `string` | false | `query|path` | key name for cache
+key | `string` | false | `query/path` | key name for cache
 forceCache | `boolean` | false | `false` | force caching 
 forceNetwork | `boolean` | false | `false` | force network call
 disableHook | `string[]` | false | `[]` | list of hook names to disable 
