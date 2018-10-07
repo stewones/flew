@@ -7,20 +7,20 @@
 - [Install library](https://github.com/ionfire/reactive-record#install-lib)
 - [Install dependencies](https://github.com/ionfire/reactive-record#install-dependencies)
 - [Angular setup](https://github.com/ionfire/reactive-record#angular-setup)
-    - [Service]()
-    - [Component]()
-    - [Template]()
+    - [Service](https://github.com/ionfire/reactive-record#service)
+    - [Component](https://github.com/ionfire/reactive-record#component)
+    - [Template](https://github.com/ionfire/reactive-record#template)
 - [Basic usage for firestore](https://github.com/ionfire/reactive-record#basic-usage-for-firebasefirestore)
 - [Reactive Record Options](https://github.com/ionfire/reactive-record#reactive-record-options)
 - [Client Setup Options](https://github.com/ionfire/reactive-record#client-setup-options)
-- [Reactive Record Methods]()
-- [Extra Options]()
+- [Reactive Record Methods](https://github.com/ionfire/reactive-record#reactive-record-methods)
+- [Extra Options](https://github.com/ionfire/reactive-record#extra-options)
 - [Advanced usage](https://github.com/ionfire/reactive-record#advanced-usage)
 - [Node.js usage](https://github.com/ionfire/reactive-record#nodejs-usage)
-- [Dev Setup]()
-    - [Try locally]()
-    - [Running tests]()
-- [Contributions]() 
+- [Dev Setup](https://github.com/ionfire/reactive-record#dev-setup)
+    - [Try locally](https://github.com/ionfire/reactive-record#try-locally)
+    - [Running tests](https://github.com/ionfire/reactive-record#running-tests)
+- [Contributions](https://github.com/ionfire/reactive-record#-contributions) 
 
 ## Requirements
 - axios
@@ -88,6 +88,8 @@ export class MyService extends ReactiveRecord {
 
 ```ts
 import { RRResponse } from '@ionfire/reactive-record';
+import { map } from 'rxjs/operators';
+import { pipe } from 'rxjs';
 
 @Component({
     selector: 'my-component',
@@ -97,7 +99,12 @@ export class MyComponent implements OnInit {
     users$: Observable<any[]>;
     constructor(public myService: MyService) { }
     ngOnInit() {
-        this.users$ = <any>this.myService.find({ query: { field: 'active', operator: '==', value: true } }, (response: RRResponse) => response.data);
+        this.users$ = <any>this.myService
+                      .find({ query: { field: 'active', operator: '==', value: true } })
+                      .pipe(
+                        // transform response
+                        map((response: RRResponse) => response.data)
+                       );
     }
 }
 ```
@@ -115,7 +122,7 @@ export class MyComponent implements OnInit {
 ## Reactive Record Options
 
 option | type | required | default | interface
------- | ---- | --------- | -------- | -------
+------ | ---- | -------- | ------- | ---------
 baseURL | `string` | false | null | [RROptions](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)
 endpoint | `string` | false | null | [RROptions](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)
 collection | `string` | false | null | [RROptions](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)
@@ -130,19 +137,32 @@ Almost all RR public methods must return a `rxjs` observable. Not all drivers ar
 
 method | params | return | info
 ------ | ------ | ------ | ----
-find | `*request|extraOptions|driver` | `Observable<RRResponse>` | fetch all data
-findOne | `*request|extraOptions|driver` | `Observable<RRResponse>` | fetch one data
-set | `*id|*data|driver` | any | set data
-update | `*id|*data|driver` | any | set data
-on | `*request|onSuccess|onError|driver` | `**function` | fetch realtime data
-get | `*path|extraOptions` | `Observable<RRResponse>`  | fetch data using http
-post | `*path|*body|extraOptions` | `Observable<RRResponse>`  | post data using http
-patch | `*path|*body|extraOptions` | `Observable<RRResponse>`  | patch data using http
-delete | `*path|extraOptions` | `Observable<RRResponse>`  | post data using http
+find | `*request/extraOptions/driver` | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch all data
+findOne | `*request/extraOptions/driver` | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch one data
+set | `*id/*data/driver` | any | set data
+update | `*id/*data/driver` | any | set data
+on | `*request/onSuccess/onError/driver` | `**function` | fetch realtime data
+get | `*path/extraOptions` | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts)  | fetch data using http
+post | `*path/*body/extraOptions` | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts)  | post data using http
+patch | `*path/*body/extraOptions` | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts)  | patch data using http
+delete | `*path/extraOptions` | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts)  | post data using http
 
 > `* => required`
 > 
 > `** => unsubscribe function`
+
+## Extra Options
+
+Almost all of extra options is applied only when using the [ClientSetup](https://github.com/ionfire/reactive-record#advanced-usage) strategy.
+
+option | type | required | default | info
+------ | ---- | -------- | ------- | ---------
+ttl | `number` | false | `0` | time to live for cache
+key | `string` | false | `query|path` | key name for cache
+forceCache | `boolean` | false | `false` | force caching 
+forceNetwork | `boolean` | false | `false` | force network call
+disableHook | `string[]` | false | `[]` | list of hook names to disable 
+transformCache | `function` | false | `(data:any)=>data` | transform function for cache
 
 ## Advanced Usage
 
@@ -177,7 +197,7 @@ option | type | required | default | interface
 ttl | `number` | false | 0 | [ClientSetupOptions](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/client-setup-options.ts)
 firebase | `class` | true | null | ---
 config | `object` | true | null | [FirebaseConfig](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/firebase-config.ts)
-storage | `object` | true | null | [ClientStorage](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/client-storage.ts)
+storage | `instance` | true | null | [ClientStorage](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/client-storage.ts)
 version | `string` | false | null | [ClientSetupOptions](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/client-setup-options.ts)
 token | `object` | false | null | [ClientToken](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/client-token.ts)
 
@@ -221,4 +241,4 @@ todoService.get('/54').subscribe(r => console.log(r.data), console.log);
 
 ## 🤝 Contributions
 
-Contributions, issues and feature requests are always welcome. Please make sure to read the [Contributing Guide]() before making a pull request.
+Contributions, issues and feature requests are always welcome. Please make sure to read the [Contributing Guide](https://github.com/ionfire/reactive-record/blob/master/CONTRIBUTING.md) before making a pull request.
