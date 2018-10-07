@@ -1,0 +1,27 @@
+{
+  "name": "@ionfire/reactive-record",
+  "version": "0.0.1-alpha.0",
+  "homepage": "https://github.com/ionfire/reactive-record#readme",
+  "license": "BSD-3-Clause",
+  "author": {
+    "name": "ionfire team",
+    "email": "support@ionfire.app",
+    "url": "https://ionfire.app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ionfire/reactive-record.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ionfire/reactive-record/issues",
+    "email": "support@ionfire.app"
+  },
+  "peerDependencies": {
+    "axios": "^0.18.0",
+    "lodash": "^4.17.11",
+    "moment": "^2.22.2",
+    "rxjs": "^6.3.2",
+    "rxjs-compat": "^6.3.2"
+  },
+  "description": "It has never been easier to work with cross-platform data using firebase, firestore, http and elasticsearch."
+}
