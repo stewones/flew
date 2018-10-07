@@ -209,7 +209,10 @@ Since in server we don't need to cache any data, avoid the usage of `ClientSetup
 ```js
 const ReactiveRecord = require('@ionfire/reactive-record').ReactiveRecord;
 
-const todoService = new ReactiveRecord({ baseURL: 'https://jsonplaceholder.typicode.com', endpoint: '/todos' });
+const todoService = new ReactiveRecord({ 
+    baseURL: 'https://jsonplaceholder.typicode.com',
+    endpoint: '/todos'
+});
 
 // as promise
 todoService.get('/54').toPromise().then(r => console.log(r.data)).catch(console.log);
