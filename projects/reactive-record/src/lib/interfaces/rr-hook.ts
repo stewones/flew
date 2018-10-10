@@ -17,6 +17,10 @@ export interface RRHook {
         post?: {
             before?: (key: string, observer: PartialObserver<RRResponse>, extraOptions?: ExtraOptions) => Promise<boolean>,
             after?: (key: string, response: RRResponse&{ttl: number}, observer: PartialObserver<RRResponse>, extraOptions?: ExtraOptions) => any
+        },
+        patch?: {
+            before?: (key: string, observer: PartialObserver<RRResponse>, extraOptions?: ExtraOptions) => Promise<boolean>,
+            after?: (key: string, response: RRResponse&{ttl: number}, observer: PartialObserver<RRResponse>, extraOptions?: ExtraOptions) => any
         }
     },
     find?: {

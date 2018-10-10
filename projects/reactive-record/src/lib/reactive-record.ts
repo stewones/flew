@@ -208,7 +208,7 @@ export class ReactiveRecord {
 
                     //
                     // find endpoint
-                    const findEndpoint: string = (this.hook.find && typeof this.hook.find.endpoint === 'function') ? this.hook.find.endpoint() : '/_search';
+                    const findEndpoint: string = (this.hook.find && typeof this.hook.find.endpoint === 'function') ? this.hook.find.endpoint() : '/find';
 
                     //
                     // set an unique identifier
@@ -672,7 +672,7 @@ export class ReactiveRecord {
 
             //
             // define an unique key
-            const key = _extraOptions.key || requestPath;
+            const key = _extraOptions.key || requestPath + `/${body}`;
 
             //
             // for unit test
@@ -736,8 +736,98 @@ export class ReactiveRecord {
     }
 
 
-    patch(path: string, body: any) {
+    /**
+     * http patch
+     *
+     * @param {string} path
+     * @param {*} body
+     * @param {ExtraOptions} [extraOptions={ disableHook: [] }]
+     * @returns {Observable<RRResponse>}
+     * @memberof ReactiveRecord
+     */
+    public patch(path: string, body: any, extraOptions: ExtraOptions = { disableHook: [] }): Observable<RRResponse> {
+        return new Observable((observer: PartialObserver<any>) => {
+            //
+            // set default options
+            const _extraOptions: ExtraOptions = { disableHook: [] };
+            _.merge(_extraOptions, extraOptions);
 
+            //
+            // call exceptions
+            if (!this.baseURL) throw 'baseURL needed for [patch]';
+            if (!this.endpoint) throw 'endpoint required for [patch]';
+
+            //
+            // re-apply http stuff
+            this.httpSetup();
+
+            //
+            // set path to be requestes
+            const requestPath: string = `${this.endpoint}${path}`;
+
+            //
+            // define an unique key
+            const key = _extraOptions.key || requestPath + `/${body}`;
+
+            //
+            // for unit test
+            this._observer = observer;
+
+            //
+            // network handle
+            const network = () => {
+                this.http
+                    .patch(requestPath, body)
+                    .then(async (r: AxiosResponse) => {
+                        //
+                        // build standard response
+                        const response: RRResponse = {
+                            data: r.data,
+                            response: r
+                        }
+                        //
+                        // get after hook
+                        const hook = this.hasHook('http.patch.after');
+                        //
+                        // check availability
+                        if (hook && !_extraOptions.disableHook.includes('http.patch.after')) {
+                            //
+                            // run client hook
+                            hook(key, response, observer, _extraOptions);
+                        } else {
+                            //
+                            // success callback
+                            observer.next(response);
+                            observer.complete();
+                        }
+
+                    })
+                    .catch(err => {
+                        //
+                        // error callback
+                        observer.error(err.response.data ? err.response.data : err.response);
+                        observer.complete();
+                    });
+            }
+            //
+            // get before hook
+            const hook = this.hasHook('http.patch.before');
+            //
+            // check availability
+            if (!_extraOptions.forceNetwork && hook && !_extraOptions.disableHook.includes('http.patch.before')) {
+                //
+                // run client hook
+                hook(key, observer, _extraOptions).then(canRequest => {
+                    //
+                    // http.get.before should return a boolean
+                    if (canRequest) network();
+                });
+            } else {
+                //
+                // otherwise
+                network();
+            }
+        })
     }
 
     delete(path: string) {

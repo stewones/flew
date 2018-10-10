@@ -77,6 +77,16 @@ export class ClientSetup {
                             return this.setCache(key, network, observer, extraOptions);
                         }
                     },
+                    patch: {
+                        before: (key, observer, extraOptions) => {
+                            console.log('hook.http.patch.before');
+                            return this.getCache(key, observer, extraOptions);
+                        },
+                        after: async (key, network, observer, extraOptions) => {
+                            console.log('hook.http.patch.after');
+                            return this.setCache(key, network, observer, extraOptions);
+                        }
+                    },
                     get: {
                         before: async (key, observer, extraOptions) => {
                             console.log('hook.http.get.before');
