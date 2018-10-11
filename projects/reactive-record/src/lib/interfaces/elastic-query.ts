@@ -5,6 +5,10 @@ import { ElasticMatch } from "./elastic-match";
  * @interface ElasticQuery
  */
 export interface ElasticQuery {
+    size?: number,
+    sort?: any,                         // eg: { "created_at": { "order": "desc" } }
+    aggs?: any,                         // see elastic aggs docs
+    range?: any,                        // see elastic range docs
     nested?: {
         path: string,
         score_mode?: string,            // eg: avg

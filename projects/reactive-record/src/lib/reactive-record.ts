@@ -2,7 +2,8 @@ import * as _ from 'lodash';
 import * as moment_import from 'moment';
 
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
-import { Observable, PartialObserver } from 'rxjs';
+import { Observable } from 'rxjs';
+import { PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RRHook } from './interfaces/rr-hook';
 import { RRConnector } from './interfaces/rr-connector';
@@ -650,8 +651,8 @@ export class ReactiveRecord {
      * @returns {(Observable<RRResponse>)}
      * @memberof RR
      */
-    public post(path: string, body: any, extraOptions: ExtraOptions = { disableHook: [] }): Observable<RRResponse> {
-        return new Observable((observer: PartialObserver<any>) => {
+    public post(path: string, body: any = {}, extraOptions: ExtraOptions = { disableHook: [] }): Observable<RRResponse> {
+        return new Observable((observer: PartialObserver<RRResponse>) => {
             //
             // set default options
             const _extraOptions: ExtraOptions = { disableHook: [] };
@@ -672,7 +673,7 @@ export class ReactiveRecord {
 
             //
             // define an unique key
-            const key = _extraOptions.key || requestPath + `/${body}`;
+            const key = _extraOptions.key || requestPath + `/${JSON.stringify(body)}`;
 
             //
             // for unit test
@@ -745,7 +746,7 @@ export class ReactiveRecord {
      * @returns {Observable<RRResponse>}
      * @memberof ReactiveRecord
      */
-    public patch(path: string, body: any, extraOptions: ExtraOptions = { disableHook: [] }): Observable<RRResponse> {
+    public patch(path: string, body: any = {}, extraOptions: ExtraOptions = { disableHook: [] }): Observable<RRResponse> {
         return new Observable((observer: PartialObserver<any>) => {
             //
             // set default options
@@ -767,7 +768,7 @@ export class ReactiveRecord {
 
             //
             // define an unique key
-            const key = _extraOptions.key || requestPath + `/${body}`;
+            const key = _extraOptions.key || requestPath + `/${JSON.stringify(body)}`;
 
             //
             // for unit test

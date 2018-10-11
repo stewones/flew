@@ -175,7 +175,7 @@ export class ClientSetup {
                 // set cache response
                 ttl += seconds;
                 network.ttl = ttl;
-                this.params.storage.set(key, transform(network));
+                this.params.storage.set(key, transform(_.omit(network, ['config', 'request', 'response.config', 'response.data', 'response.request'])));
             }
 
         }
