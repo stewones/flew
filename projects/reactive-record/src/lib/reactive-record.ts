@@ -197,88 +197,7 @@ export class ReactiveRecord {
 
             switch (driver) {
                 case 'elastic':
-                    //
-                    // run exceptions for elastic
-                    if (!this.baseURL) throw 'baseURL needed for elastic';
-                    if (!this.endpoint) throw 'endpoint required for elastic';
-                    if (!this.collection) throw 'missing collection';
-
-                    //
-                    // re-apply http stuff
-                    this.httpSetup();
-
-                    //
-                    // find endpoint
-                    const findEndpoint: string = (this.hook.find && typeof this.hook.find.endpoint === 'function') ? this.hook.find.endpoint() : '/find';
-
-                    //
-                    // set an unique identifier
-                    key = _extraOptions.key || `${this.endpoint}/${this.collection}${findEndpoint}/${JSON.stringify(request)}`;
-
-                    //
-                    // set path to be requestes
-                    const requestPath: string = `${this.endpoint}/${this.collection}${findEndpoint}`;
-
-                    //
-                    // network handle
-                    network = () => {
-                        this.http
-                            .post(requestPath, request)
-                            .then(async (r: AxiosResponse) => {
-                                //
-                                // format data
-                                const data: any[] = r.data.hits.total > 0 ? r.data.hits.hits.map(hit => hit._source) : [];
-                                //
-                                // build standard response
-                                const response: RRResponse = {
-                                    data: data,
-                                    response: r
-                                }
-                                //
-                                // get after hook
-                                const hook = this.hasHook('find.after');
-                                //
-                                // check availability
-                                if (hook && !_extraOptions.disableHook.includes('find.after')) {
-                                    //
-                                    // run client hook
-                                    hook(key, response, observer, _extraOptions);
-                                } else {
-                                    //
-                                    // success callback
-                                    observer.next(response);
-                                    observer.complete();
-                                }
-
-                            })
-                            .catch(err => {
-                                //
-                                // error callback
-                                observer.error(err.response.data ? err.response.data : err.response);
-                                observer.complete();
-                            });
-                    }
-
-                    //
-                    // get before hook
-                    hook = this.hasHook('find.before');
-
-                    //
-                    // check availability
-                    if (!_extraOptions.forceNetwork && hook && !_extraOptions.disableHook.includes('find.before')) {
-                        //
-                        // run client hook
-                        hook(key, observer, _extraOptions).then(canRequest => {
-                            //
-                            // http.get.before should return a boolean
-                            if (canRequest) network();
-                        });
-                    } else {
-                        //
-                        // otherwise
-                        network();
-                    }
-
+                    throw 'use REST methods [GET/POST/UPDATE/DELETE/PATCH]';
                     break;
 
                 case 'firestore':
@@ -294,6 +213,10 @@ export class ReactiveRecord {
                     //
                     // set query
                     firestore = this.setFirestoreWhere(request.query, firestore);
+
+                    //
+                    // set order
+                    firestore = this.setFirestoreOrder(request.sort, firestore);
 
                     //
                     // set an unique identifier
@@ -536,18 +459,35 @@ export class ReactiveRecord {
      */
     private setFirestoreWhere(query: any, firestore: any) {
         if (_.isArray(query)) {
-            console.log('query where array', query[0].field, query[0].operator, query[0].value);
+            console.log('where array', query[0].field, query[0].operator, query[0].value);
             query.map(q => {
                 if (!(q.value)) throw (`value can't be null for firestore where`);
                 firestore = firestore.where(q.field, q.operator, q.value);
             });
         } else if (<any>typeof query === 'object' && query.field && query.operator) {
-            console.log('query where object', query.field, query.operator, query.value);
+            console.log('where object', query.field, query.operator, query.value);
             if (!(query.value)) throw (`value can't be null for firestore where`);
             firestore = firestore.where(query.field, query.operator, query.value);
         }
         return firestore;
     }
+
+    private setFirestoreOrder(sort: any, firestore: any) {
+        if (_.isArray(sort)) {
+            console.log('sort array', sort);
+            sort.map(s => {
+                if (_.isEmpty(s)) throw `sort object in array can't be null`;
+                for (let k in s) firestore = firestore.orderBy(k, s[k]);
+            });
+        } else if (<any>typeof sort === 'object') {
+            console.log('sort object', sort);
+            if (_.isEmpty(sort)) throw `sort object can't be null`;
+            for (let k in sort) firestore = firestore.orderBy(k, sort[k]);
+        }
+        return firestore;
+    }
+
+
 
     /**
      * http get 

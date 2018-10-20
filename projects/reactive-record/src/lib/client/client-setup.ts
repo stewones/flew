@@ -140,7 +140,7 @@ export class ClientSetup {
         //
         // check for TTL
         const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-        if (cache && seconds < cache.ttl && !_.isEmpty(cache.data)) return false;
+        if ((cache && seconds < cache.ttl) && (!_.isEmpty(cache.data))) return false;
 
         //
         // otherwise
@@ -158,7 +158,8 @@ export class ClientSetup {
      */
     async setCache(key: string, network: RRResponse & { ttl: number }, observer: PartialObserver<any>, extraOptions: ExtraOptions = {}) {
         const cache: RRResponse & { ttl: number } = await this.params.storage.get(key);
-        if (!_.isEqual(cache, network) || _.isEmpty(cache.data)) {
+        if ((cache && !_.isEqual(cache.data, network.data)) || (cache && _.isEmpty(cache.data)) || !cache) {
+
             //
             // return network response only if different from cache
             observer.next(network);
