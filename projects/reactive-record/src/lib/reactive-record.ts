@@ -341,9 +341,6 @@ export class ReactiveRecord {
                     // define connector
                     const firestore: any = this.connector.firestore.collection(this.collection);
                     //
-                    // auto update timestamp
-                    if (this.timestamp) data.updated_at = moment().toISOString();
-                    //
                     // define return
                     const response = (r) => { observer.next(r); observer.complete() };
                     //
