@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.0.1-alpha.3"></a>
+## [0.0.1-alpha.3](https://github.com/ionfire/reactive-record/compare/v0.0.1-alpha.2...v0.0.1-alpha.3) (2018-10-30)
+
+
+### Bug Fixes
+
+* performance issue related with cache ([d116506](https://github.com/ionfire/reactive-record/commit/d116506))
+* **rr:** remove updated_at from set ([a8804dc](https://github.com/ionfire/reactive-record/commit/a8804dc))
+
+
+
 <a name="0.0.1-alpha.2"></a>
 ## [0.0.1-alpha.2](https://github.com/ionfire/reactive-record/compare/v0.0.1-alpha.1...v0.0.1-alpha.2) (2018-10-12)
 
