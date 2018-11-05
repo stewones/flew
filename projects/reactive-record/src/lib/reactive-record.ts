@@ -219,6 +219,10 @@ export class ReactiveRecord {
                     firestore = this.setFirestoreOrder(request.sort, firestore);
 
                     //
+                    // set limit
+                    if (request.size) firestore = this.setFirestoreLimit(request.size, firestore);
+
+                    //
                     // set an unique identifier
                     key = _extraOptions.key || `${this.collection}/${JSON.stringify(request)}`;
 
@@ -484,7 +488,9 @@ export class ReactiveRecord {
         return firestore;
     }
 
-
+    private setFirestoreLimit(limit: number, firestore: any) {
+        return firestore.limit(limit);
+    }
 
     /**
      * http get 
