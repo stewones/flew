@@ -27,7 +27,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     private _drivers: { firestore: RRDriver };
     private http: AxiosInstance;
     private baseURL: string;
-    private RRExtraOptions: RRExtraOptions = {};
+    private extraOptions: RRExtraOptions = {};
     private request: RRRequest = {};
 
     //
@@ -77,32 +77,33 @@ export class ReactiveRecord extends RRHooks implements RRApi {
         this.http = axios.create(config);
     }
 
+
     /**
      * @param {RRRequest} request
-     * @param {RRExtraOptions} [RRExtraOptions]
+     * @param {RRExtraOptions} [extraOptions]
      * @param {string} [driver=this._driver]
-     * @returns {(Observable<RRResponse[]]>)}
-     * @memberof RR
+     * @returns {Observable<RRResponse>}
+     * @memberof ReactiveRecord
      */
-    public find(request: RRRequest, RRExtraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse> {
+    public find(request: RRRequest, extraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse> {
         if (!this._drivers[driver] || typeof this._drivers[driver].find != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
         merge(this.request, request);
-        merge(this.RRExtraOptions, RRExtraOptions);
-        return this._drivers[driver].find(this.RRExtraOptions, RRExtraOptions);
+        merge(this.extraOptions, extraOptions);
+        return this._drivers[driver].find(this.request, this.extraOptions);
     }
 
     /**
      * @param {RRRequest} request
-     * @param {RRExtraOptions} [RRExtraOptions]
+     * @param {RRExtraOptions} [extraOptions]
      * @param {string} [driver=this._driver]
      * @returns {(Observable<RRResponse>)}
      * @memberof RR
      */
-    public findOne(request: RRRequest, RRExtraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse> {
+    public findOne(request: RRRequest, extraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse> {
         if (!this._drivers[driver] || typeof this._drivers[driver].findOne != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
         merge(this.request, request);
-        merge(this.RRExtraOptions, RRExtraOptions);
-        return this._drivers[driver].findOne(this.request, this.RRExtraOptions);
+        merge(this.extraOptions, extraOptions);
+        return this._drivers[driver].findOne(this.request, this.extraOptions);
     }
 
     /**
@@ -150,15 +151,15 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      * http get 
      *
      * @param {string} path
-     * @param {RRExtraOptions} [RRExtraOptions]
+     * @param {RRExtraOptions} [extraOptions]
      * @returns {(Observable<RRResponse>)}
      * @memberof RR
      */
-    public get(path: string, RRExtraOptions?: RRExtraOptions): Observable<RRResponse> {
+    public get(path: string, extraOptions?: RRExtraOptions): Observable<RRResponse> {
         return new Observable((observer: PartialObserver<any>) => {
             //
             // set default options
-            merge(this.RRExtraOptions, RRExtraOptions);
+            merge(this.extraOptions, extraOptions);
 
             //
             // call exceptions
@@ -175,7 +176,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
 
             //
             // define an unique key
-            const key = this.RRExtraOptions.key || requestPath;
+            const key = this.extraOptions.key || requestPath;
 
             //
             // for unit test
@@ -203,7 +204,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
                         if (hook) {
                             //
                             // run client hook
-                            hook(key, response, observer, this.RRExtraOptions);
+                            hook(key, response, observer, this.extraOptions);
                         } else {
                             //
                             // success callback
@@ -224,10 +225,10 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             const hook = this.hasHook('http.get.before');
             //
             // check availability
-            if (!this.RRExtraOptions.forceNetwork && hook) {
+            if (!this.extraOptions.forceNetwork && hook) {
                 //
                 // run client hook
-                hook(key, observer, this.RRExtraOptions).then(canRequest => {
+                hook(key, observer, this.extraOptions).then(canRequest => {
                     //
                     // http.get.before should return a boolean
                     if (canRequest) network();
@@ -249,11 +250,11 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      * @returns {(Observable<RRResponse>)}
      * @memberof RR
      */
-    public post(path: string, body: any = {}, RRExtraOptions: RRExtraOptions = { disableHook: [] }): Observable<RRResponse> {
+    public post(path: string, body: any = {}, extraOptions: RRExtraOptions = { disableHook: [] }): Observable<RRResponse> {
         return new Observable((observer: PartialObserver<RRResponse>) => {
             //
             // set default options
-            merge(this.RRExtraOptions, RRExtraOptions);
+            merge(this.extraOptions, extraOptions);
 
             //
             // call exceptions
@@ -270,7 +271,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
 
             //
             // define an unique key
-            const key = this.RRExtraOptions.key || requestPath + `/${JSON.stringify(body)}`;
+            const key = this.extraOptions.key || requestPath + `/${JSON.stringify(body)}`;
 
             //
             // for unit test
@@ -296,7 +297,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
                         if (hook) {
                             //
                             // run client hook
-                            hook(key, response, observer, this.RRExtraOptions);
+                            hook(key, response, observer, this.extraOptions);
                         } else {
                             //
                             // success callback
@@ -317,10 +318,10 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             const hook = this.hasHook('http.post.before');
             //
             // check availability
-            if (!this.RRExtraOptions.forceNetwork && hook) {
+            if (!this.extraOptions.forceNetwork && hook) {
                 //
                 // run client hook
-                hook(key, observer, this.RRExtraOptions).then(canRequest => {
+                hook(key, observer, this.extraOptions).then(canRequest => {
                     //
                     // http.get.before should return a boolean
                     if (canRequest) network();
@@ -342,11 +343,11 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      * @returns {Observable<RRResponse>}
      * @memberof ReactiveRecord
      */
-    public patch(path: string, body: any = {}, RRExtraOptions: RRExtraOptions = { disableHook: [] }): Observable<RRResponse> {
+    public patch(path: string, body: any = {}, extraOptions: RRExtraOptions = { disableHook: [] }): Observable<RRResponse> {
         return new Observable((observer: PartialObserver<any>) => {
             //
             // set default options
-            merge(this.RRExtraOptions, RRExtraOptions);
+            merge(this.extraOptions, extraOptions);
 
             //
             // call exceptions
@@ -363,7 +364,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
 
             //
             // define an unique key
-            const key = this.RRExtraOptions.key || requestPath + `/${JSON.stringify(body)}`;
+            const key = this.extraOptions.key || requestPath + `/${JSON.stringify(body)}`;
 
             //
             // for unit test
@@ -389,7 +390,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
                         if (hook) {
                             //
                             // run client hook
-                            hook(key, response, observer, this.RRExtraOptions);
+                            hook(key, response, observer, this.extraOptions);
                         } else {
                             //
                             // success callback
@@ -410,10 +411,10 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             const hook = this.hasHook('http.patch.before');
             //
             // check availability
-            if (!this.RRExtraOptions.forceNetwork && hook) {
+            if (!this.extraOptions.forceNetwork && hook) {
                 //
                 // run client hook
-                hook(key, observer, this.RRExtraOptions).then(canRequest => {
+                hook(key, observer, this.extraOptions).then(canRequest => {
                     //
                     // http.get.before should return a boolean
                     if (canRequest) network();
@@ -438,33 +439,33 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     }
 
     public network(active: boolean) {
-        this.RRExtraOptions.forceNetwork = active;
+        this.extraOptions.forceNetwork = active;
         return this;
     }
 
     // @todo implement
     public networkTransform(transformFn: (data: any[]) => any) {
-        this.RRExtraOptions.transformNetwork = transformFn;
+        this.extraOptions.transformNetwork = transformFn;
         return this;
     }
 
     public ttl(value: number) {
-        this.RRExtraOptions.ttl = value;
+        this.extraOptions.ttl = value;
         return this;
     }
 
     public cache(active: boolean) {
-        this.RRExtraOptions.forceCache = active;
+        this.extraOptions.forceCache = active;
         return this;
     }
 
     public cacheTransform(transformFn: (data: any[]) => any) {
-        this.RRExtraOptions.transformCache = transformFn;
+        this.extraOptions.transformCache = transformFn;
         return this;
     }
 
     public key(name: string) {
-        this.RRExtraOptions.key = name;
+        this.extraOptions.key = name;
         return this;
     }
 
