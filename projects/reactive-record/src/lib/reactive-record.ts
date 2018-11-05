@@ -85,7 +85,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      * @memberof RR
      */
     public find(request: RRRequest, RRExtraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse> {
-        if (typeof this._drivers[driver].find != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
+        if (!this._drivers[driver] || typeof this._drivers[driver].find != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
         merge(this.request, request);
         merge(this.RRExtraOptions, RRExtraOptions);
         return this._drivers[driver].find(this.RRExtraOptions, RRExtraOptions);
@@ -99,7 +99,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      * @memberof RR
      */
     public findOne(request: RRRequest, RRExtraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse> {
-        if (typeof this._drivers[driver].findOne != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
+        if (!this._drivers[driver] || typeof this._drivers[driver].findOne != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
         merge(this.request, request);
         merge(this.RRExtraOptions, RRExtraOptions);
         return this._drivers[driver].findOne(this.request, this.RRExtraOptions);
@@ -114,7 +114,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      * @memberof RR
      */
     public set(id: string, data: any, driver: string = this._driver, merge: boolean = true): Observable<any> {
-        if (typeof this._drivers[driver].set != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
+        if (!this._drivers[driver] || typeof this._drivers[driver].set != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
         return this._drivers[driver].set(id, data, merge);
     }
 
@@ -126,7 +126,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      * @memberof RR
      */
     public update(id: string, data: any, driver: string = this._driver): Observable<any> {
-        if (typeof this._drivers[driver].update != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
+        if (!this._drivers[driver] || typeof this._drivers[driver].update != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
         return this._drivers[driver].update(id, data);
     }
 
@@ -141,7 +141,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      * @memberof RR
      */
     public on(request: RRRequest, onSuccess: (response: RRResponse) => any = (response: RRResponse) => { }, onError: (response: any) => any = (response: any) => { }, driver: string = this._driver): any {
-        if (typeof this._drivers[driver].on != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
+        if (!this._drivers[driver] || typeof this._drivers[driver].on != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
         merge(this.request, request);
         return this._drivers[driver].on(this.request, onSuccess, onError);
     }
