@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.0.1-alpha.4"></a>
+## [0.0.1-alpha.4](https://github.com/ionfire/reactive-record/compare/v0.0.1-alpha.3...v0.0.1-alpha.4) (2018-11-05)
+
+
+### Features
+
+* add request size ([ee49405](https://github.com/ionfire/reactive-record/commit/ee49405))
+
+
+
 <a name="0.0.1-alpha.3"></a>
 ## [0.0.1-alpha.3](https://github.com/ionfire/reactive-record/compare/v0.0.1-alpha.2...v0.0.1-alpha.3) (2018-10-30)
 
