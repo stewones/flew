@@ -6,11 +6,6 @@ All notable changes to this project will be documented in this file. See [standa
 # [1.0.0-beta.1](https://github.com/ionfire/reactive-record/compare/v1.0.0-beta.0...v1.0.0-beta.1) (2018-11-05)
 
 
-
-<a name="1.0.0-beta.0"></a>
-# [1.0.0-beta.0](https://github.com/ionfire/reactive-record/compare/v0.0.1-alpha.4...v1.0.0-beta.0) (2018-11-05)
-
-
 ### Features
 
 * add driver abstraction for firestore and a chainable public api for RR ([6e962f2](https://github.com/ionfire/reactive-record/commit/6e962f2))
