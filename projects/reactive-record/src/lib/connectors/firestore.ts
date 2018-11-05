@@ -1,11 +1,10 @@
-
 /**
  * initialize and return the firestore instance
  *
  * @export
- * @class FirestoreConnector
+ * @class RRFirestoreConnector
  */
-export class FirestoreConnector {
+export class RRFirestoreConnector {
     constructor(firebase, config) {
         const settings = {/* your settings... */ timestampsInSnapshots: true };
 
@@ -21,3 +20,5 @@ export class FirestoreConnector {
         }
     }
 }
+
+export class FirestoreConnector extends RRFirestoreConnector { }

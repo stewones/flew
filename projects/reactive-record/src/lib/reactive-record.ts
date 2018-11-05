@@ -1,20 +1,17 @@
-import * as _ from 'lodash';
-import * as moment_import from 'moment';
-
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
-import { Observable } from 'rxjs';
-import { PartialObserver } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { RRHook } from './interfaces/rr-hook';
+import { merge, isEmpty } from 'lodash';
+import { Observable, PartialObserver } from 'rxjs';
+import { RRExtraOptions } from './interfaces/rr-extra-options';
+import { RRFirestoreDriver } from './drivers/firestore';
 import { RRConnector } from './interfaces/rr-connector';
 import { RROptions } from './interfaces/rr-options';
 import { RRResponse } from './interfaces/rr-response';
 import { RRRequest } from './interfaces/rr-request';
-import { ExtraOptions } from './interfaces/extra-options';
+import { RRApi } from './interfaces/rr-api';
+import { RRHooks } from './hooks/hooks';
+import { RRDriver } from './interfaces/rr-driver';
 
-//
-// workaround for imports
-const moment = moment_import;
+
 
 /**
  * handle firestore/elastic/http calls
@@ -22,61 +19,26 @@ const moment = moment_import;
  * @export
  * @class ReactiveRecord
  */
-export class ReactiveRecord {
+export class ReactiveRecord extends RRHooks implements RRApi {
     //
     // default params
-    public collection: string;
-    public endpoint: string;
-    private driver: string = 'firestore';
-
-    private timestamp: boolean = true;
+    private endpoint: string;
+    private _driver: string = 'firestore';
+    private _drivers: { firestore: RRDriver };
     private http: AxiosInstance;
+    private baseURL: string;
+    private RRExtraOptions: RRExtraOptions = {};
+    private request: RRRequest = {};
 
     //
-    // base url for elasticsearch
-    private baseURL_: string;
-    get baseURL() {
-        return this.baseURL_;
-    }
-    set baseURL(string) {
-        this.baseURL_ = string;
-    }
-
-    //
-    // mapping for elasticsearch @todo
-    // private mapping_: string;
-    // get mapping() {
-    //     return this.mapping_;
-    // }
-    // set mapping(string) {
-    //     this.mapping_ = string;
-    // }
-
-    //
-    // connectors
-    private connector_: RRConnector = {
+    // connectors @todo remove
+    private connector: RRConnector = {
         firebase: {},
         firestore: {}
     };
-    get connector() {
-        return this.connector_;
-    }
-    set connector(instance) {
-        this.connector_ = instance;
-    }
 
     //
-    // hooks
-    private hook_: RRHook = { exception: {} };
-    get hook() {
-        return this.hook_;
-    }
-    set hook(instance) {
-        this.hook_ = instance;
-    }
-
-    //
-    // for unit test
+    // for unit test @todo remove
     _observer: PartialObserver<any>
 
     /**
@@ -85,72 +47,18 @@ export class ReactiveRecord {
      * @memberof RR
      */
     constructor(options: RROptions) {
-        const params: RROptions = {
-            hook: {
-                http: {
-                    pre: (config: AxiosRequestConfig) => { }
-                },
-                exception: {
-                    client: () => { },
-                    server: () => { }
-                }
-            },
-            connector: {
-                firebase: {},
-                firestore: {}
-            }
-        }
+        super(options);
+        //
+        // set default drivers
+        this._drivers = { firestore: new RRFirestoreDriver(options) };
 
         //
-        // set params
-        _.merge(params, options);
-        _.merge(this, params);
-
-        //
-        // call exceptions
-        this.runHook('exception.client');
-        this.runHook('exception.server');
+        // extend options
+        merge(this, options);
 
         //
         // configure http client
         this.httpSetup();
-    }
-
-    /**
-     * set hooks
-     * call httpSetup() after adding any http hook
-     *
-     * @param {string} path
-     * @param {*} hook
-     * @memberof RR
-     */
-    public setHook(path: string, hook: any) {
-        _.set(this.hook, path, hook);
-    }
-
-    /**
-     * run hooks
-     *
-     * @param {string} path
-     * @param {*} args
-     * @returns {(boolean | any)}
-     * @memberof RR
-     */
-    public runHook(path: string, ...args): boolean | any {
-        const hook = this.hasHook(path);
-        return hook ? hook(...args) : false;
-    }
-
-    /**
-     * check whether the hook exists or not
-     *
-     * @param {string} path
-     * @returns {(boolean | any)}
-     * @memberof RR
-     */
-    public hasHook(path: string): boolean | any {
-        const hook = _.get(this.hook, path, false);
-        return hook && typeof hook === 'function' ? hook : false;
     }
 
     /**
@@ -171,232 +79,55 @@ export class ReactiveRecord {
 
     /**
      * @param {RRRequest} request
-     * @param {ExtraOptions} [extraOptions]
-     * @param {string} [driver=this.driver]
+     * @param {RRExtraOptions} [RRExtraOptions]
+     * @param {string} [driver=this._driver]
      * @returns {(Observable<RRResponse[]]>)}
      * @memberof RR
      */
-    public find(request: RRRequest, extraOptions?: ExtraOptions, driver: string = this.driver): Observable<RRResponse> {
-        return new Observable((observer: PartialObserver<any>) => {
-            //
-            // set default options
-            const _extraOptions: ExtraOptions = { disableHook: [] };
-            _.merge(_extraOptions, extraOptions);
-
-            //
-            // handlers
-            let network: any, hook: any;
-
-            //
-            // define an unique key
-            let key: string;
-
-            //
-            // for unit test
-            this._observer = observer;
-
-            switch (driver) {
-                case 'elastic':
-                    throw 'use REST methods [GET/POST/UPDATE/DELETE/PATCH]';
-                    break;
-
-                case 'firestore':
-                    //
-                    // run exceptions for firestore
-                    if (!this.collection) throw 'missing collection';
-                    if (_.isEmpty(this.connector.firestore)) throw 'missing firestore connector';
-
-                    //
-                    // define adapter
-                    let firestore: any = this.connector.firestore.collection(this.collection);
-
-                    //
-                    // set query
-                    firestore = this.setFirestoreWhere(request.query, firestore);
-
-                    //
-                    // set order
-                    firestore = this.setFirestoreOrder(request.sort, firestore);
-
-                    //
-                    // set limit
-                    if (request.size) firestore = this.setFirestoreLimit(request.size, firestore);
-
-                    //
-                    // set an unique identifier
-                    key = _extraOptions.key || `${this.collection}/${JSON.stringify(request)}`;
-
-                    //
-                    // network handle
-                    network = () => {
-                        //
-                        // fire in the hole
-                        firestore
-                            .get()
-                            .then(async (snapshot: any) => {
-                                //
-                                // format data
-                                let data: any[] = [];
-                                snapshot.forEach((doc) => data.push(doc.data()));
-
-                                //
-                                // define standard response
-                                const response: RRResponse = {
-                                    data: data,
-                                    response: {
-                                        empty: snapshot.empty,
-                                        size: snapshot.size
-                                    }
-                                }
-
-                                //
-                                // get after hook
-                                hook = this.hasHook('find.after');
-
-                                //
-                                // check availability
-                                if (hook && !_extraOptions.disableHook.includes('find.after')) {
-                                    //
-                                    // run client hook
-                                    hook(key, response, observer, _extraOptions);
-                                } else {
-                                    //
-                                    // success callback
-                                    observer.next(response);
-                                    observer.complete();
-                                }
-
-                            })
-                            .catch(err => {
-                                observer.error(err);
-                                observer.complete();
-                            });
-
-                    }
-
-                    //
-                    // get before hook
-                    hook = this.hasHook('find.before');
-
-                    //
-                    // check availability
-                    if (!_extraOptions.forceNetwork && hook && !_extraOptions.disableHook.includes('find.before')) {
-                        //
-                        // run client hook
-                        hook(key, observer, _extraOptions).then(canRequest => {
-                            //
-                            // http.get.before should return a boolean
-                            if (canRequest) network();
-                        });
-                    } else {
-                        //
-                        // otherwise
-                        network();
-                    }
-
-                    break;
-
-                // case 'firebase':
-                //     if (!this.collection) throw 'missing collection';
-                //     if (_.isEmpty(this.connector.firebase)) throw 'missing firebase connector';
-
-                //     key = `${this.collection}/${JSON.stringify(request)}`;
-
-                //     console.log('@todo implement firebase driver');
-
-                //     break;
-
-                default:
-                    throw (`${driver} driver unavailable for now, sorry =(`);
-            }
-
-
-        })
+    public find(request: RRRequest, RRExtraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse> {
+        if (typeof this._drivers[driver].find != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
+        merge(this.request, request);
+        merge(this.RRExtraOptions, RRExtraOptions);
+        return this._drivers[driver].find(this.RRExtraOptions, RRExtraOptions);
     }
 
     /**
      * @param {RRRequest} request
-     * @param {ExtraOptions} [extraOptions]
-     * @param {string} [driver=this.driver]
+     * @param {RRExtraOptions} [RRExtraOptions]
+     * @param {string} [driver=this._driver]
      * @returns {(Observable<RRResponse>)}
      * @memberof RR
      */
-    public findOne(request: RRRequest, extraOptions?: ExtraOptions, driver: string = this.driver): Observable<RRResponse> {
-        return this.find(request, extraOptions, driver).pipe(map((r: RRResponse) => <RRResponse>{ data: r.data[0], response: r.response }));
+    public findOne(request: RRRequest, RRExtraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse> {
+        if (typeof this._drivers[driver].findOne != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
+        merge(this.request, request);
+        merge(this.RRExtraOptions, RRExtraOptions);
+        return this._drivers[driver].findOne(this.request, this.RRExtraOptions);
     }
 
     /**
      * @param {string} id
      * @param {*} data
-     * @param {string} [driver=this.driver]
+     * @param {string} [driver=this._driver]
      * @param {boolean} [merge=true]
      * @returns {Observable<any>}
      * @memberof RR
      */
-    public set(id: string, data: any, driver: string = this.driver, merge: boolean = true): Observable<any> {
-        return new Observable((observer) => {
-            switch (driver) {
-                case 'firestore':
-                    //
-                    // primary exceptions
-                    if (!this.collection) throw 'missing collection';
-                    if (_.isEmpty(this.connector.firestore)) throw 'missing firestore connector';
-                    //
-                    // define connector
-                    const firestore: any = this.connector.firestore.collection(this.collection);
-                    //
-                    // define return
-                    const response = (r) => { observer.next(r); observer.complete() };
-                    //
-                    // call firestore
-                    firestore
-                        .doc(id)
-                        .set(data, { merge: merge })
-                        .then(response)
-                        .catch(response);
-                    break;
-                default:
-                    throw (`the driver ${driver} isn't implemented yet`);
-            }
-        })
+    public set(id: string, data: any, driver: string = this._driver, merge: boolean = true): Observable<any> {
+        if (typeof this._drivers[driver].set != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
+        return this._drivers[driver].set(id, data, merge);
     }
 
     /**
      * @param {string} id
      * @param {*} data
-     * @param {string} [driver=this.driver]
+     * @param {string} [driver=this._driver]
      * @returns {Observable<any>}
      * @memberof RR
      */
-    public update(id: string, data: any, driver: string = this.driver): Observable<any> {
-        return new Observable((observer) => {
-            switch (driver) {
-                case 'firestore':
-                    //
-                    // primary exceptions
-                    if (!this.collection) throw 'missing collection';
-                    if (_.isEmpty(this.connector.firestore)) throw 'missing firestore connector';
-                    //
-                    // define connector
-                    const firestore: any = this.connector.firestore.collection(this.collection);
-                    //
-                    // auto update timestamp
-                    if (this.timestamp) data.updated_at = moment().toISOString();
-                    //
-                    // define return
-                    const response = (r) => { observer.next(r); observer.complete() };
-                    //
-                    // call firestore
-                    firestore
-                        .doc(id)
-                        .update(data)
-                        .then(response)
-                        .catch(response);
-                    break;
-                default:
-                    throw (`the driver ${driver} isn't implemented yet`);
-            }
-        })
+    public update(id: string, data: any, driver: string = this._driver): Observable<any> {
+        if (typeof this._drivers[driver].update != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
+        return this._drivers[driver].update(id, data);
     }
 
     /**
@@ -405,107 +136,29 @@ export class ReactiveRecord {
      * @param {RRRequest} request
      * @param {(response: RRResponse) => any} [onSuccess=(response: RRResponse) => { }]
      * @param {(response: any) => any} [onError=(response: any) => { }]
-     * @param {string} [driver=this.driver]
+     * @param {string} [driver=this._driver]
      * @returns {*}
      * @memberof RR
      */
-    public on(request: RRRequest, onSuccess: (response: RRResponse) => any = (response: RRResponse) => { }, onError: (response: any) => any = (response: any) => { }, driver: string = this.driver): any {
-        //
-        // firestore driver
-        if (driver === 'firestore') {
-            //
-            // run exceptions
-            if (!this.collection) throw 'missing collection';
-            if (_.isEmpty(this.connector.firestore)) throw 'missing firestore connector';
-
-            //
-            // define adapter
-            const firestore: any = this.connector.firestore.collection(this.collection);
-
-            //
-            // set doc
-            if (request.id) firestore.doc(request.id);
-
-            //
-            // set where
-            this.setFirestoreWhere(request.query, firestore);
-
-            //
-            // fire in the hole
-            return firestore
-                .onSnapshot((snapshot: any) => {
-                    let data: any[] = [];
-                    snapshot.forEach((doc) => data.push(doc.data()));
-                    const response: RRResponse = {
-                        data: data,
-                        response: {
-                            empty: snapshot.empty,
-                            size: snapshot.size
-                        }
-                    }
-                    //
-                    // callback
-                    onSuccess(response);
-                }, onError);
-        } else {
-            throw (`${driver} driver unavailable for now, sorry =(`);
-        }
-    }
-
-    /**
-     * @private
-     * @param {*} query
-     * @param {*} firestore
-     * @memberof RR
-     */
-    private setFirestoreWhere(query: any, firestore: any) {
-        if (_.isArray(query)) {
-            console.log('where array', query[0].field, query[0].operator, query[0].value);
-            query.map(q => {
-                if (!(q.value)) throw (`value can't be null for firestore where`);
-                firestore = firestore.where(q.field, q.operator, q.value);
-            });
-        } else if (<any>typeof query === 'object' && query.field && query.operator) {
-            console.log('where object', query.field, query.operator, query.value);
-            if (!(query.value)) throw (`value can't be null for firestore where`);
-            firestore = firestore.where(query.field, query.operator, query.value);
-        }
-        return firestore;
-    }
-
-    private setFirestoreOrder(sort: any, firestore: any) {
-        if (_.isArray(sort)) {
-            console.log('sort array', sort);
-            sort.map(s => {
-                if (_.isEmpty(s)) throw `sort object in array can't be null`;
-                for (let k in s) firestore = firestore.orderBy(k, s[k]);
-            });
-        } else if (<any>typeof sort === 'object') {
-            console.log('sort object', sort);
-            if (_.isEmpty(sort)) throw `sort object can't be null`;
-            for (let k in sort) firestore = firestore.orderBy(k, sort[k]);
-        }
-        return firestore;
-    }
-
-    private setFirestoreLimit(limit: number, firestore: any) {
-        return firestore.limit(limit);
+    public on(request: RRRequest, onSuccess: (response: RRResponse) => any = (response: RRResponse) => { }, onError: (response: any) => any = (response: any) => { }, driver: string = this._driver): any {
+        if (typeof this._drivers[driver].on != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
+        merge(this.request, request);
+        return this._drivers[driver].on(this.request, onSuccess, onError);
     }
 
     /**
      * http get 
      *
      * @param {string} path
-     * @param {ExtraOptions} [extraOptions]
+     * @param {RRExtraOptions} [RRExtraOptions]
      * @returns {(Observable<RRResponse>)}
      * @memberof RR
      */
-    public get(path: string, extraOptions?: ExtraOptions): Observable<RRResponse> {
+    public get(path: string, RRExtraOptions?: RRExtraOptions): Observable<RRResponse> {
         return new Observable((observer: PartialObserver<any>) => {
             //
             // set default options
-            const _extraOptions: ExtraOptions = { disableHook: [] };
-            _.merge(_extraOptions, extraOptions);
+            merge(this.RRExtraOptions, RRExtraOptions);
 
             //
             // call exceptions
@@ -522,11 +175,13 @@ export class ReactiveRecord {
 
             //
             // define an unique key
-            const key = _extraOptions.key || requestPath;
+            const key = this.RRExtraOptions.key || requestPath;
 
             //
             // for unit test
             this._observer = observer;
+
+
 
             //
             // network handle
@@ -545,10 +200,10 @@ export class ReactiveRecord {
                         const hook = this.hasHook('http.get.after');
                         //
                         // check availability
-                        if (hook && !_extraOptions.disableHook.includes('http.get.after')) {
+                        if (hook) {
                             //
                             // run client hook
-                            hook(key, response, observer, _extraOptions);
+                            hook(key, response, observer, this.RRExtraOptions);
                         } else {
                             //
                             // success callback
@@ -569,10 +224,10 @@ export class ReactiveRecord {
             const hook = this.hasHook('http.get.before');
             //
             // check availability
-            if (!_extraOptions.forceNetwork && hook && !_extraOptions.disableHook.includes('http.get.before')) {
+            if (!this.RRExtraOptions.forceNetwork && hook) {
                 //
                 // run client hook
-                hook(key, observer, _extraOptions).then(canRequest => {
+                hook(key, observer, this.RRExtraOptions).then(canRequest => {
                     //
                     // http.get.before should return a boolean
                     if (canRequest) network();
@@ -590,16 +245,15 @@ export class ReactiveRecord {
      *
      * @param {string} path
      * @param {*} body
-     * @param {ExtraOptions} [extraOptions={ disableHook: [] }]
+     * @param {RRExtraOptions} [RRExtraOptions={ disableHook: [] }]
      * @returns {(Observable<RRResponse>)}
      * @memberof RR
      */
-    public post(path: string, body: any = {}, extraOptions: ExtraOptions = { disableHook: [] }): Observable<RRResponse> {
+    public post(path: string, body: any = {}, RRExtraOptions: RRExtraOptions = { disableHook: [] }): Observable<RRResponse> {
         return new Observable((observer: PartialObserver<RRResponse>) => {
             //
             // set default options
-            const _extraOptions: ExtraOptions = { disableHook: [] };
-            _.merge(_extraOptions, extraOptions);
+            merge(this.RRExtraOptions, RRExtraOptions);
 
             //
             // call exceptions
@@ -616,7 +270,7 @@ export class ReactiveRecord {
 
             //
             // define an unique key
-            const key = _extraOptions.key || requestPath + `/${JSON.stringify(body)}`;
+            const key = this.RRExtraOptions.key || requestPath + `/${JSON.stringify(body)}`;
 
             //
             // for unit test
@@ -639,10 +293,10 @@ export class ReactiveRecord {
                         const hook = this.hasHook('http.post.after');
                         //
                         // check availability
-                        if (hook && !_extraOptions.disableHook.includes('http.post.after')) {
+                        if (hook) {
                             //
                             // run client hook
-                            hook(key, response, observer, _extraOptions);
+                            hook(key, response, observer, this.RRExtraOptions);
                         } else {
                             //
                             // success callback
@@ -663,10 +317,10 @@ export class ReactiveRecord {
             const hook = this.hasHook('http.post.before');
             //
             // check availability
-            if (!_extraOptions.forceNetwork && hook && !_extraOptions.disableHook.includes('http.post.before')) {
+            if (!this.RRExtraOptions.forceNetwork && hook) {
                 //
                 // run client hook
-                hook(key, observer, _extraOptions).then(canRequest => {
+                hook(key, observer, this.RRExtraOptions).then(canRequest => {
                     //
                     // http.get.before should return a boolean
                     if (canRequest) network();
@@ -679,22 +333,20 @@ export class ReactiveRecord {
         })
     }
 
-
     /**
      * http patch
      *
      * @param {string} path
      * @param {*} body
-     * @param {ExtraOptions} [extraOptions={ disableHook: [] }]
+     * @param {RRExtraOptions} [RRExtraOptions={ disableHook: [] }]
      * @returns {Observable<RRResponse>}
      * @memberof ReactiveRecord
      */
-    public patch(path: string, body: any = {}, extraOptions: ExtraOptions = { disableHook: [] }): Observable<RRResponse> {
+    public patch(path: string, body: any = {}, RRExtraOptions: RRExtraOptions = { disableHook: [] }): Observable<RRResponse> {
         return new Observable((observer: PartialObserver<any>) => {
             //
             // set default options
-            const _extraOptions: ExtraOptions = { disableHook: [] };
-            _.merge(_extraOptions, extraOptions);
+            merge(this.RRExtraOptions, RRExtraOptions);
 
             //
             // call exceptions
@@ -711,7 +363,7 @@ export class ReactiveRecord {
 
             //
             // define an unique key
-            const key = _extraOptions.key || requestPath + `/${JSON.stringify(body)}`;
+            const key = this.RRExtraOptions.key || requestPath + `/${JSON.stringify(body)}`;
 
             //
             // for unit test
@@ -734,10 +386,10 @@ export class ReactiveRecord {
                         const hook = this.hasHook('http.patch.after');
                         //
                         // check availability
-                        if (hook && !_extraOptions.disableHook.includes('http.patch.after')) {
+                        if (hook) {
                             //
                             // run client hook
-                            hook(key, response, observer, _extraOptions);
+                            hook(key, response, observer, this.RRExtraOptions);
                         } else {
                             //
                             // success callback
@@ -758,10 +410,10 @@ export class ReactiveRecord {
             const hook = this.hasHook('http.patch.before');
             //
             // check availability
-            if (!_extraOptions.forceNetwork && hook && !_extraOptions.disableHook.includes('http.patch.before')) {
+            if (!this.RRExtraOptions.forceNetwork && hook) {
                 //
                 // run client hook
-                hook(key, observer, _extraOptions).then(canRequest => {
+                hook(key, observer, this.RRExtraOptions).then(canRequest => {
                     //
                     // http.get.before should return a boolean
                     if (canRequest) network();
@@ -774,7 +426,77 @@ export class ReactiveRecord {
         })
     }
 
-    delete(path: string) {
+    // @todo
+    public delete(path: string) { }
 
+    //
+    // RR API
+
+    public driver(name: string) {
+        this._driver = name;
+        return this;
+    }
+
+    public network(active: boolean) {
+        this.RRExtraOptions.forceNetwork = active;
+        return this;
+    }
+
+    // @todo implement
+    public networkTransform(transformFn: (data: any[]) => any) {
+        this.RRExtraOptions.transformNetwork = transformFn;
+        return this;
+    }
+
+    public ttl(value: number) {
+        this.RRExtraOptions.ttl = value;
+        return this;
+    }
+
+    public cache(active: boolean) {
+        this.RRExtraOptions.forceCache = active;
+        return this;
+    }
+
+    public cacheTransform(transformFn: (data: any[]) => any) {
+        this.RRExtraOptions.transformCache = transformFn;
+        return this;
+    }
+
+    public key(name: string) {
+        this.RRExtraOptions.key = name;
+        return this;
+    }
+
+    public query(by: { [key: string]: {} }) {
+        this.request.query = by;
+        return this;
+    }
+
+    public where(field: string, operator: string, value: string | number) {
+        if (isEmpty(this.request.query)) {
+            this.request.query = [];
+        }
+        this.request.query.push({
+            field: field,
+            operator: operator,
+            value: value
+        })
+        return this;
+    }
+
+    public sort(by: { [key: string]: string }) {
+        if (isEmpty(this.request.sort)) {
+            this.request.sort = {};
+        }
+        for (let k in by) {
+            this.request.sort[k] = by[k]
+        }
+        return this;
+    }
+
+    public size(value: number) {
+        this.request.size = value;
+        return this;
     }
 }

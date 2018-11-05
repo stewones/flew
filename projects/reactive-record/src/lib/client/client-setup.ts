@@ -2,12 +2,12 @@ import * as _ from 'lodash';
 import { AxiosRequestConfig } from 'axios';
 import { PartialObserver } from 'rxjs';
 
-import { FirebaseConnector } from "../connectors/firebase-connector";
-import { FirestoreConnector } from "../connectors/firestore-connector";
+import { FirebaseConnector } from "../connectors/firebase";
+import { FirestoreConnector } from "../connectors/firestore";
 
 import { RROptions } from '../interfaces/rr-options';
 import { RRResponse } from '../interfaces/rr-response';
-import { ExtraOptions } from '../interfaces/extra-options';
+import { RRExtraOptions } from '../interfaces/rr-extra-options';
 import { ClientSetupOptions } from '../interfaces/client-setup-options';
 
 /**
@@ -68,33 +68,33 @@ export class ClientSetup {
                         if (params.version) config.headers['accept-version'] = params.version;
                     },
                     post: {
-                        before: (key, observer, extraOptions) => {
+                        before: (key, observer, RRExtraOptions) => {
                             console.log('hook.http.post.before');
-                            return this.getCache(key, observer, extraOptions);
+                            return this.getCache(key, observer, RRExtraOptions);
                         },
-                        after: async (key, network, observer, extraOptions) => {
+                        after: async (key, network, observer, RRExtraOptions) => {
                             console.log('hook.http.post.after');
-                            return this.setCache(key, network, observer, extraOptions);
+                            return this.setCache(key, network, observer, RRExtraOptions);
                         }
                     },
                     patch: {
-                        before: (key, observer, extraOptions) => {
+                        before: (key, observer, RRExtraOptions) => {
                             console.log('hook.http.patch.before');
-                            return this.getCache(key, observer, extraOptions);
+                            return this.getCache(key, observer, RRExtraOptions);
                         },
-                        after: async (key, network, observer, extraOptions) => {
+                        after: async (key, network, observer, RRExtraOptions) => {
                             console.log('hook.http.patch.after');
-                            return this.setCache(key, network, observer, extraOptions);
+                            return this.setCache(key, network, observer, RRExtraOptions);
                         }
                     },
                     get: {
-                        before: async (key, observer, extraOptions) => {
+                        before: async (key, observer, RRExtraOptions) => {
                             console.log('hook.http.get.before');
-                            return await this.getCache(key, observer, extraOptions);
+                            return await this.getCache(key, observer, RRExtraOptions);
                         },
-                        after: async (key, network, observer, extraOptions) => {
+                        after: async (key, network, observer, RRExtraOptions) => {
                             console.log('hook.http.get.after');
-                            return this.setCache(key, network, observer, extraOptions);
+                            return this.setCache(key, network, observer, RRExtraOptions);
                         }
                     }
                 },
@@ -104,13 +104,13 @@ export class ClientSetup {
                     //
                     // customize http endpoint
                     endpoint: params.hook.find.endpoint,
-                    before: (key, observer, extraOptions) => {
+                    before: (key, observer, RRExtraOptions) => {
                         console.log('hook.find.before');
-                        return this.getCache(key, observer, extraOptions);
+                        return this.getCache(key, observer, RRExtraOptions);
                     },
-                    after: async (key, network, observer, extraOptions) => {
+                    after: async (key, network, observer, RRExtraOptions) => {
                         console.log('hook.find.after');
-                        return this.setCache(key, network, observer, extraOptions);
+                        return this.setCache(key, network, observer, RRExtraOptions);
                     }
                 }
             }
@@ -125,11 +125,11 @@ export class ClientSetup {
      *
      * @param {string} key
      * @param {PartialObserver<any>} observer
-     * @param {ExtraOptions} [extraOptions={}]
+     * @param {RRExtraOptions} [RRExtraOptions={}]
      * @returns
      * @memberof ClientSetup
      */
-    async getCache(key: string, observer: PartialObserver<any>, extraOptions: ExtraOptions = {}) {
+    async getCache(key: string, observer: PartialObserver<any>, RRExtraOptions: RRExtraOptions = {}) {
         const cache: RRResponse & { ttl: number } = await this.params.storage.get(key);
 
         //
@@ -153,10 +153,10 @@ export class ClientSetup {
      * @param {string} key
      * @param {(RRResponse & { ttl: number })} network
      * @param {PartialObserver<any>} observer
-     * @param {ExtraOptions} [extraOptions]
+     * @param {RRExtraOptions} [RRExtraOptions]
      * @memberof ClientSetup
      */
-    async setCache(key: string, network: RRResponse & { ttl: number }, observer: PartialObserver<any>, extraOptions: ExtraOptions = {}) {
+    async setCache(key: string, network: RRResponse & { ttl: number }, observer: PartialObserver<any>, RRExtraOptions: RRExtraOptions = {}) {
         const cache: RRResponse & { ttl: number } = await this.params.storage.get(key);
         if ((cache && !_.isEqual(cache.data, network.data)) || (cache && _.isEmpty(cache.data)) || !cache) {
 
@@ -168,10 +168,10 @@ export class ClientSetup {
             // time to live
             let seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
 
-            if (_.isEmpty(cache) || (cache && seconds >= cache.ttl) || extraOptions.forceCache) {
+            if (_.isEmpty(cache) || (cache && seconds >= cache.ttl) || RRExtraOptions.forceCache) {
                 console.log(`${key} cache empty or updated`);
-                const transform: any = extraOptions.transformCache && typeof extraOptions.transformCache === 'function' ? extraOptions.transformCache : (data: RRResponse) => data;
-                let ttl = extraOptions.ttl || this.params.ttl;
+                const transform: any = RRExtraOptions.transformCache && typeof RRExtraOptions.transformCache === 'function' ? RRExtraOptions.transformCache : (data: RRResponse) => data;
+                let ttl = RRExtraOptions.ttl || this.params.ttl;
                 //
                 // set cache response
                 ttl += seconds;

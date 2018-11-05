@@ -97,7 +97,7 @@ describe('ReactiveRecord', () => {
   //     },
   //     hook: {
   //       find: {
-  //         before: (key, observer, extraOptions) => Promise.resolve(true)
+  //         before: (key, observer, RRExtraOptions) => Promise.resolve(true)
   //       }
   //     }
   //   });

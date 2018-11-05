@@ -2,9 +2,9 @@
  * initialize and return the firebase instance
  *
  * @export
- * @class FirebaseConnector
+ * @class RRFirebaseConnector
  */
-export class FirebaseConnector {
+export class RRFirebaseConnector {
     constructor(firebase, config) {
         if (!firebase.apps.length) {
             firebase.initializeApp(config);
@@ -14,3 +14,5 @@ export class FirebaseConnector {
         }
     }
 }
+
+export class FirebaseConnector extends RRFirebaseConnector { }
