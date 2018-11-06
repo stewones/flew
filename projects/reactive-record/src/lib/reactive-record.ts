@@ -3,7 +3,6 @@ import { merge, isEmpty } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
 import { RRExtraOptions } from './interfaces/rr-extra-options';
 import { RRFirestoreDriver } from './drivers/firestore';
-import { RRConnector } from './interfaces/rr-connector';
 import { RROptions } from './interfaces/rr-options';
 import { RRResponse } from './interfaces/rr-response';
 import { RRRequest } from './interfaces/rr-request';
@@ -22,23 +21,18 @@ import { RRDriver } from './interfaces/rr-driver';
 export class ReactiveRecord extends RRHooks implements RRApi {
     //
     // default params
-    private endpoint: string;
     private _driver: string = 'firestore';
     private _drivers: { firestore: RRDriver };
+
     private http: AxiosInstance;
     private baseURL: string;
-    private extraOptions: RRExtraOptions = {};
+    private endpoint: string;
+
     private request: RRRequest = {};
+    private extraOptions: RRExtraOptions = {};
 
     //
-    // connectors @todo remove
-    private connector: RRConnector = {
-        firebase: {},
-        firestore: {}
-    };
-
-    //
-    // for unit test @todo remove
+    // for unit tests
     _observer: PartialObserver<any>
 
     /**
@@ -246,11 +240,11 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      *
      * @param {string} path
      * @param {*} body
-     * @param {RRExtraOptions} [RRExtraOptions={ disableHook: [] }]
+     * @param {RRExtraOptions} [RRExtraOptions={  }]
      * @returns {(Observable<RRResponse>)}
      * @memberof RR
      */
-    public post(path: string, body: any = {}, extraOptions: RRExtraOptions = { disableHook: [] }): Observable<RRResponse> {
+    public post(path: string, body: any = {}, extraOptions: RRExtraOptions = {}): Observable<RRResponse> {
         return new Observable((observer: PartialObserver<RRResponse>) => {
             //
             // set default options
@@ -339,11 +333,11 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      *
      * @param {string} path
      * @param {*} body
-     * @param {RRExtraOptions} [RRExtraOptions={ disableHook: [] }]
+     * @param {RRExtraOptions} [RRExtraOptions={  }]
      * @returns {Observable<RRResponse>}
      * @memberof ReactiveRecord
      */
-    public patch(path: string, body: any = {}, extraOptions: RRExtraOptions = { disableHook: [] }): Observable<RRResponse> {
+    public patch(path: string, body: any = {}, extraOptions: RRExtraOptions = {}): Observable<RRResponse> {
         return new Observable((observer: PartialObserver<any>) => {
             //
             // set default options

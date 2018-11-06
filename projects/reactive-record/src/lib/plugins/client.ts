@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import { merge, omit, isEmpty, isEqual } from 'lodash';
 import { AxiosRequestConfig } from 'axios';
 import { PartialObserver } from 'rxjs';
 
@@ -8,64 +8,44 @@ import { FirestoreConnector } from "../connectors/firestore";
 import { RROptions } from '../interfaces/rr-options';
 import { RRResponse } from '../interfaces/rr-response';
 import { RRExtraOptions } from '../interfaces/rr-extra-options';
-import { ClientSetupOptions } from '../interfaces/client-setup-options';
+import { RRClientOptions } from '../interfaces/rr-client-options';
+
 
 /**
- * configure client usage with things like cache
- * 
  * @export
- * @class RRClientSetup
- * @returns RROptions
+ * @class RRClientPlugin
  */
-export class ClientSetup {
+export class RRClientPlugin {
 
-    /**
-     * @type {ClientSetupOptions}
-     * @memberof ClientSetup
-     */
-    public params: ClientSetupOptions;
+    //
+    // default params
+    public params: RRClientOptions = {
+        ttl: 0,
+        hook: {},
+        token: {
+            type: 'Bearer'
+        }
+    };
 
+    constructor(options: RRClientOptions) {
+        merge(this.params, options);
 
-    /**
-     * Creates an instance of ClientSetup
-     * 
-     * @param {ClientSetupOptions} options
-     * @memberof ClientSetup
-     */
-    constructor(options: ClientSetupOptions) {
+        if (!this.params.config) throw ('missing firebase config');
+        if (!this.params.firebase) throw ('missing firebase sdk');
+        if (!this.params.storage) throw ('missing storage instance');
 
-        //
-        // default params
-        const params: ClientSetupOptions = {
-            ttl: 0,
-            hook: {
-                find: {
-                    endpoint: () => '/find'
-                }
-            },
-            token: {
-                type: 'Bearer'
-            }
-        };
-
-        _.extend(params, options);
-
-        if (!params.config) throw ('missing firebase config');
-        if (!params.firebase) throw ('missing firebase sdk');
-        if (!params.storage) throw ('missing storage instance');
-
-        this.params = _.merge(params, <RROptions>{
+        merge(this.params, <RROptions>{
             connector: {
-                firebase: new FirebaseConnector(params.firebase, params.config),
-                firestore: new FirestoreConnector(params.firebase, params.config)
+                firebase: new FirebaseConnector(this.params.firebase, this.params.config),
+                firestore: new FirestoreConnector(this.params.firebase, this.params.config)
             },
             hook: {
                 //
                 // customize http behavior
                 http: {
                     pre: (config: AxiosRequestConfig) => {
-                        if (params.token.value) config.headers['Authorization'] = `${params.token.type} ${params.token.value}`;
-                        if (params.version) config.headers['accept-version'] = params.version;
+                        if (this.params.token.value) config.headers['Authorization'] = `${this.params.token.type} ${this.params.token.value}`;
+                        if (this.params.version) config.headers['accept-version'] = this.params.version;
                     },
                     post: {
                         before: (key, observer, RRExtraOptions) => {
@@ -103,7 +83,7 @@ export class ClientSetup {
                 find: {
                     //
                     // customize http endpoint
-                    endpoint: params.hook.find.endpoint,
+                    endpoint: this.params.hook.find.endpoint,
                     before: (key, observer, RRExtraOptions) => {
                         console.log('hook.find.before');
                         return this.getCache(key, observer, RRExtraOptions);
@@ -116,7 +96,7 @@ export class ClientSetup {
             }
         });
 
-        return _.omit(this.params, ['config', 'firebase', 'storage', 'version', 'token']);
+        return omit(this.params, ['config', 'firebase', 'storage', 'version', 'token']);
     }
 
 
@@ -125,22 +105,26 @@ export class ClientSetup {
      *
      * @param {string} key
      * @param {PartialObserver<any>} observer
-     * @param {RRExtraOptions} [RRExtraOptions={}]
+     * @param {RRExtraOptions} [extraOptions={}]
      * @returns
      * @memberof ClientSetup
      */
-    async getCache(key: string, observer: PartialObserver<any>, RRExtraOptions: RRExtraOptions = {}) {
+    async getCache(key: string, observer: PartialObserver<any>, extraOptions: RRExtraOptions = {}) {
         const cache: RRResponse & { ttl: number } = await this.params.storage.get(key);
 
         //
         // return cached response immediately to view
-        if (cache && !_.isEmpty(cache.data))
+        if (cache && !isEmpty(cache.data))
             observer.next(cache);
 
         //
         // check for TTL
+        // should not call network
         const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-        if ((cache && seconds < cache.ttl) && (!_.isEmpty(cache.data))) return false;
+        if ((cache && seconds < cache.ttl) && (!isEmpty(cache.data))) {
+            observer.complete();
+            return false;
+        }
 
         //
         // otherwise
@@ -153,33 +137,44 @@ export class ClientSetup {
      * @param {string} key
      * @param {(RRResponse & { ttl: number })} network
      * @param {PartialObserver<any>} observer
-     * @param {RRExtraOptions} [RRExtraOptions]
+     * @param {RRExtraOptions} [extraOptions]
      * @memberof ClientSetup
      */
-    async setCache(key: string, network: RRResponse & { ttl: number }, observer: PartialObserver<any>, RRExtraOptions: RRExtraOptions = {}) {
+    async setCache(key: string, network: RRResponse & { ttl: number }, observer: PartialObserver<any>, extraOptions: RRExtraOptions = {}) {
         const cache: RRResponse & { ttl: number } = await this.params.storage.get(key);
-        if ((cache && !_.isEqual(cache.data, network.data)) || (cache && _.isEmpty(cache.data)) || !cache) {
 
+        //
+        // return network response only if different from cache
+        if ((cache && !isEqual(cache.data, network.data)) || (cache && isEmpty(cache.data)) || !cache) {
             //
-            // return network response only if different from cache
+            // return network response
             observer.next(network);
 
             //
             // time to live
             let seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
 
-            if (_.isEmpty(cache) || (cache && seconds >= cache.ttl) || RRExtraOptions.forceCache) {
+            if (isEmpty(cache) || (cache && seconds >= cache.ttl) || extraOptions.forceCache) {
                 console.log(`${key} cache empty or updated`);
-                const transform: any = RRExtraOptions.transformCache && typeof RRExtraOptions.transformCache === 'function' ? RRExtraOptions.transformCache : (data: RRResponse) => data;
-                let ttl = RRExtraOptions.ttl || this.params.ttl;
+                const transform: any = extraOptions.transformCache && typeof extraOptions.transformCache === 'function' ? extraOptions.transformCache : (data: RRResponse) => data;
+                let ttl = extraOptions.ttl || this.params.ttl;
                 //
                 // set cache response
                 ttl += seconds;
                 network.ttl = ttl;
-                this.params.storage.set(key, transform(_.omit(network, ['config', 'request', 'response.config', 'response.data', 'response.request'])));
+                this.params.storage.set(key, transform(omit(network, ['config', 'request', 'response.config', 'response.data', 'response.request'])));
             }
 
         }
         observer.complete();
     }
 }
+
+
+/**
+ * @deprecated
+ * @export
+ * @class ClientSetup
+ * @extends {RRClientPlugin}
+ */
+export class ClientSetup extends RRClientPlugin { }

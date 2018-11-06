@@ -1,15 +1,8 @@
+import { RRClientStorage } from "./rr-client-storage";
 
 /**
- * storage adapter
- * you can use any class that implements this interface
- * either the package `ionic-storage`(https://github.com/ionic-team/ionic-storage)
- *
+ * @deprecated
  * @export
  * @interface ClientStorage
  */
-export interface ClientStorage {
-    get(key: string): Promise<any>,
-    set(key: string, value: any): Promise<any>,
-    remove(key: string): Promise<any>,
-    clear(): Promise<void>
-}
+export interface ClientStorage extends RRClientStorage { }
