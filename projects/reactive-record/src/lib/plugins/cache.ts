@@ -13,9 +13,9 @@ import { RRClientOptions } from '../interfaces/rr-client-options';
 
 /**
  * @export
- * @class RRClientPlugin
+ * @class RRCachePlugin
  */
-export class RRClientPlugin {
+export class RRCachePlugin {
 
     //
     // default params
@@ -175,6 +175,6 @@ export class RRClientPlugin {
  * @deprecated
  * @export
  * @class ClientSetup
- * @extends {RRClientPlugin}
+ * @extends {RRCachePlugin}
  */
-export class ClientSetup extends RRClientPlugin { }
+export class ClientSetup extends RRCachePlugin { }

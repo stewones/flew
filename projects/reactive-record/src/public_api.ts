@@ -9,7 +9,7 @@ export * from './lib/connectors/firestore';
 
 //
 // plugins
-export * from './lib/plugins/client';
+export * from './lib/plugins/cache';
 
 //
 // drivers
