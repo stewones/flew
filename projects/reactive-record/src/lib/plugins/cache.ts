@@ -139,13 +139,15 @@ export class RRCachePlugin {
      */
     async setCache(key: string, network: RRResponse & { ttl: number }, observer: PartialObserver<any>, extraOptions: RRExtraOptions = {}) {
         const cache: RRResponse & { ttl: number } = await this.params.storage.get(key);
+        const transformCache: any = extraOptions.transformCache && typeof extraOptions.transformCache === 'function' ? extraOptions.transformCache : (data: RRResponse) => data;
+        const transformNetwork: any = extraOptions.transformNetwork && typeof extraOptions.transformNetwork === 'function' ? extraOptions.transformNetwork : (data: RRResponse) => data;
 
         //
         // return network response only if different from cache
         if ((cache && !isEqual(cache.data, network.data)) || (cache && isEmpty(cache.data)) || !cache) {
             //
             // return network response
-            observer.next(network);
+            observer.next(transformNetwork(network));
 
             //
             // time to live
@@ -153,13 +155,12 @@ export class RRCachePlugin {
 
             if (isEmpty(cache) || (cache && seconds >= cache.ttl) || extraOptions.forceCache) {
                 console.log(`${key} cache empty or updated`);
-                const transform: any = extraOptions.transformCache && typeof extraOptions.transformCache === 'function' ? extraOptions.transformCache : (data: RRResponse) => data;
                 let ttl = extraOptions.ttl || this.params.ttl;
                 //
                 // set cache response
                 ttl += seconds;
                 network.ttl = ttl;
-                this.params.storage.set(key, transform(omit(network, ['config', 'request', 'response.config', 'response.data', 'response.request'])));
+                this.params.storage.set(key, transformCache(omit(network, ['config', 'request', 'response.config', 'response.data', 'response.request'])));
             }
 
         }

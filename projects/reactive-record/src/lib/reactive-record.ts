@@ -432,13 +432,12 @@ export class ReactiveRecord extends RRHooks implements RRApi {
         return this;
     }
 
-    public network(active: boolean) {
+    public useNetwork(active: boolean) {
         this.extraOptions.forceNetwork = active;
         return this;
     }
 
-    // @todo implement
-    public networkTransform(transformFn: (data: any[]) => any) {
+    public transformNetwork(transformFn: (response: RRResponse) => any) {
         this.extraOptions.transformNetwork = transformFn;
         return this;
     }
@@ -448,12 +447,12 @@ export class ReactiveRecord extends RRHooks implements RRApi {
         return this;
     }
 
-    public cache(active: boolean) {
+    public useCache(active: boolean) {
         this.extraOptions.forceCache = active;
         return this;
     }
 
-    public cacheTransform(transformFn: (data: any[]) => any) {
+    public transformCache(transformFn: (response: RRResponse) => any) {
         this.extraOptions.transformCache = transformFn;
         return this;
     }

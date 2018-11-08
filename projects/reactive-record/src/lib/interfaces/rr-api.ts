@@ -13,11 +13,11 @@ export interface RRApi {
     //
     // chaining
     driver(name: string),
-    network(active: boolean),
-    networkTransform(transformFn: (data: any[]) => any),
+    useNetwork(active: boolean),
+    transformNetwork(transformFn: (response: RRResponse) => any),
     ttl(value: number),
-    cache(active: boolean),
-    cacheTransform(transformFn: (data: any[]) => any),
+    useCache(active: boolean),
+    transformCache(transformFn: (response: RRResponse) => any),
     key(name: string),
     query(by: { [key: string]: {} }),
     where(field: string, operator: string, value: string | number),
