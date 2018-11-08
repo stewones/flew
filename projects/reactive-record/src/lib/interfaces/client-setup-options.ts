@@ -1,4 +1,4 @@
-import { RRClientOptions } from "./rr-client-options";
+import { RRCacheOptions } from "./rr-cache-options";
 
 /**
  * @deprecated
@@ -6,4 +6,4 @@ import { RRClientOptions } from "./rr-client-options";
  * @interface ClientSetupOptions
  * @extends {RROptions}
  */
-export interface ClientSetupOptions extends RRClientOptions { }
+export interface ClientSetupOptions extends RRCacheOptions { }

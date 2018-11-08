@@ -2,13 +2,13 @@ import { merge, omit, isEmpty, isEqual } from 'lodash';
 import { AxiosRequestConfig } from 'axios';
 import { PartialObserver } from 'rxjs';
 
-import { FirebaseConnector } from "../connectors/firebase";
-import { FirestoreConnector } from "../connectors/firestore";
 
 import { RROptions } from '../interfaces/rr-options';
 import { RRResponse } from '../interfaces/rr-response';
 import { RRExtraOptions } from '../interfaces/rr-extra-options';
-import { RRClientOptions } from '../interfaces/rr-client-options';
+import { RRCacheOptions } from '../interfaces/rr-cache-options';
+import { RRFirebaseConnector } from '../connectors/firebase';
+import { RRFirestoreConnector } from '../connectors/firestore';
 
 
 /**
@@ -19,7 +19,7 @@ export class RRCachePlugin {
 
     //
     // default params
-    public params: RRClientOptions = {
+    public params: RRCacheOptions = {
         ttl: 0,
         hook: {},
         token: {
@@ -27,7 +27,7 @@ export class RRCachePlugin {
         }
     };
 
-    constructor(options: RRClientOptions) {
+    constructor(options: RRCacheOptions) {
         merge(this.params, options);
 
         if (!this.params.config) throw ('missing firebase config');
@@ -36,8 +36,8 @@ export class RRCachePlugin {
 
         merge(this.params, <RROptions>{
             connector: {
-                firebase: new FirebaseConnector(this.params.firebase, this.params.config),
-                firestore: new FirestoreConnector(this.params.firebase, this.params.config)
+                firebase: new RRFirebaseConnector(this.params.firebase, this.params.config),
+                firestore: new RRFirestoreConnector(this.params.firebase, this.params.config)
             },
             hook: {
                 //
@@ -81,9 +81,6 @@ export class RRCachePlugin {
                 //
                 // customize search behavior
                 find: {
-                    //
-                    // customize http endpoint
-                    endpoint: this.params.hook.find.endpoint,
                     before: (key, observer, RRExtraOptions) => {
                         console.log('hook.find.before');
                         return this.getCache(key, observer, RRExtraOptions);

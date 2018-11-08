@@ -5,9 +5,9 @@
  * either the package `ionic-storage`(https://github.com/ionic-team/ionic-storage)
  *
  * @export
- * @interface RRClientStorage
+ * @interface RRCacheStorage
  */
-export interface RRClientStorage {
+export interface RRCacheStorage {
     get(key: string): Promise<any>,
     set(key: string, value: any): Promise<any>,
     remove(key: string): Promise<any>,

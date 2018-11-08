@@ -7,9 +7,12 @@
 export class RRFirestoreConnector {
     constructor(firebase, config) {
         const settings = {/* your settings... */ timestampsInSnapshots: true };
-
-        if (!firebase.apps.length) {
+        try {
             firebase.initializeApp(config);
+        } catch (err) {
+            if (!/already exists/.test(err.message)) console.error('Firebase initialization error', err.stack)
+        }
+        if (!firebase.apps.length) {
             const firestore = firebase.default.firestore();
             firestore.settings(settings);
             return firestore;
@@ -21,4 +24,5 @@ export class RRFirestoreConnector {
     }
 }
 
+// @deprecated
 export class FirestoreConnector extends RRFirestoreConnector { }

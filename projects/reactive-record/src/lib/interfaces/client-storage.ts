@@ -1,8 +1,8 @@
-import { RRClientStorage } from "./rr-client-storage";
+import { RRCacheStorage } from "./rr-cache-storage";
 
 /**
  * @deprecated
  * @export
  * @interface ClientStorage
  */
-export interface ClientStorage extends RRClientStorage { }
+export interface ClientStorage extends RRCacheStorage { }

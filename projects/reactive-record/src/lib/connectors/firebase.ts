@@ -6,8 +6,12 @@
  */
 export class RRFirebaseConnector {
     constructor(firebase, config) {
-        if (!firebase.apps.length) {
+        try {
             firebase.initializeApp(config);
+        } catch (err) {
+            if (!/already exists/.test(err.message)) console.error('Firebase initialization error', err.stack)
+        }
+        if (!firebase.apps.length) {
             return firebase.default;
         } else {
             return firebase.apps[0].firebase_;
@@ -15,4 +19,5 @@ export class RRFirebaseConnector {
     }
 }
 
+// @deprecated
 export class FirebaseConnector extends RRFirebaseConnector { }

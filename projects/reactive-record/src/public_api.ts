@@ -29,8 +29,8 @@ export { RRHook } from './lib/interfaces/rr-hook';
 export { RRRequest } from './lib/interfaces/rr-request';
 export { RRDriver } from './lib/interfaces/rr-driver';
 export { RRExtraOptions } from './lib/interfaces/rr-extra-options';
-export { RRClientOptions } from './lib/interfaces/rr-client-options';     
-export { RRClientStorage } from './lib/interfaces/rr-client-storage';                
+export { RRCacheOptions } from './lib/interfaces/rr-cache-options';     
+export { RRCacheStorage } from './lib/interfaces/rr-cache-storage';                
 export { RRClientToken } from './lib/interfaces/rr-client-token';                    
 
 export { ElasticMatch } from './lib/interfaces/elastic-match';
