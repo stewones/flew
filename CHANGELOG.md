@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.0-beta.2"></a>
+# [1.0.0-beta.2](https://github.com/ionfire/reactive-record/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2018-11-08)
+
+
+### Bug Fixes
+
+* code cleaning and refact ClientSetup to RRClientPlugin ([e9c4766](https://github.com/ionfire/reactive-record/commit/e9c4766))
+* rename RRClientPlugin to RRCachePlugin as it makes more sense ([6a1e122](https://github.com/ionfire/reactive-record/commit/6a1e122))
+* rr find ([263b35c](https://github.com/ionfire/reactive-record/commit/263b35c))
+
+
+### Features
+
+* add cache plugin strategy ([8b55566](https://github.com/ionfire/reactive-record/commit/8b55566))
+
+
+
 <a name="1.0.0-beta.1"></a>
 # [1.0.0-beta.1](https://github.com/ionfire/reactive-record/compare/v1.0.0-beta.0...v1.0.0-beta.1) (2018-11-05)
 

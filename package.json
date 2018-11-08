@@ -1,6 +1,6 @@
 {
   "name": "@ionfire/reactive-record",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "scripts": {
     "ng": "ng",
     "test": "ng test reactive-record --code-coverage --source-map --watch=false --progress=false --browsers=ChromeHeadlessCI",
