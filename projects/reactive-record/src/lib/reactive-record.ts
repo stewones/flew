@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
-import { merge, isEmpty } from 'lodash';
+import { get, merge, isEmpty } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
 import { RRExtraOptions } from './interfaces/rr-extra-options';
 import { RRFirestoreDriver } from './drivers/firestore';
@@ -79,7 +79,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      * @returns {Observable<RRResponse>}
      * @memberof ReactiveRecord
      */
-    public find(request: RRRequest, extraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse> {
+    public find(request: RRRequest, extraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse | any> {
         if (!this._drivers[driver] || typeof this._drivers[driver].find != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
         merge(this.request, request);
         merge(this.extraOptions, extraOptions);
@@ -93,7 +93,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      * @returns {(Observable<RRResponse>)}
      * @memberof RR
      */
-    public findOne(request: RRRequest, extraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse> {
+    public findOne(request: RRRequest, extraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse | any> {
         if (!this._drivers[driver] || typeof this._drivers[driver].findOne != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
         merge(this.request, request);
         merge(this.extraOptions, extraOptions);
@@ -149,7 +149,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      * @returns {(Observable<RRResponse>)}
      * @memberof RR
      */
-    public get(path: string, extraOptions?: RRExtraOptions): Observable<RRResponse> {
+    public get(path: string, extraOptions?: RRExtraOptions): Observable<RRResponse | any> {
         return new Observable((observer: PartialObserver<any>) => {
             //
             // set default options
@@ -208,9 +208,10 @@ export class ReactiveRecord extends RRHooks implements RRApi {
 
                     })
                     .catch(err => {
+                        const errData = get(err, 'response.data');
                         //
                         // error callback
-                        observer.error(err.response.data ? err.response.data : err.response);
+                        observer.error(errData ? errData : err);
                         observer.complete();
                     });
             }
@@ -244,7 +245,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      * @returns {(Observable<RRResponse>)}
      * @memberof RR
      */
-    public post(path: string, body: any = {}, extraOptions: RRExtraOptions = {}): Observable<RRResponse> {
+    public post(path: string, body: any = {}, extraOptions: RRExtraOptions = {}): Observable<RRResponse | any> {
         return new Observable((observer: PartialObserver<RRResponse>) => {
             //
             // set default options
@@ -301,9 +302,10 @@ export class ReactiveRecord extends RRHooks implements RRApi {
 
                     })
                     .catch(err => {
+                        const errData = get(err, 'response.data');
                         //
                         // error callback
-                        observer.error(err.response.data ? err.response.data : err.response);
+                        observer.error(errData ? errData : err);
                         observer.complete();
                     });
             }
@@ -337,7 +339,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      * @returns {Observable<RRResponse>}
      * @memberof ReactiveRecord
      */
-    public patch(path: string, body: any = {}, extraOptions: RRExtraOptions = {}): Observable<RRResponse> {
+    public patch(path: string, body: any = {}, extraOptions: RRExtraOptions = {}): Observable<RRResponse | any> {
         return new Observable((observer: PartialObserver<any>) => {
             //
             // set default options
@@ -394,9 +396,10 @@ export class ReactiveRecord extends RRHooks implements RRApi {
 
                     })
                     .catch(err => {
+                        const errData = get(err, 'response.data');
                         //
                         // error callback
-                        observer.error(err.response.data ? err.response.data : err.response);
+                        observer.error(errData ? errData : err);
                         observer.complete();
                     });
             }

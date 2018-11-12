@@ -108,11 +108,12 @@ export class RRCachePlugin {
      */
     async getCache(key: string, observer: PartialObserver<any>, extraOptions: RRExtraOptions = {}) {
         const cache: RRResponse & { ttl: number } = await this.params.storage.get(key);
+        const transformNetwork: any = extraOptions.transformNetwork && typeof extraOptions.transformNetwork === 'function' ? extraOptions.transformNetwork : (data: RRResponse) => data;
 
         //
         // return cached response immediately to view
         if (cache && !isEmpty(cache.data))
-            observer.next(cache);
+            observer.next(transformNetwork(cache));
 
         //
         // check for TTL
