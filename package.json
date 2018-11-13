@@ -15,7 +15,7 @@
     "patch:major": "standard-version release --release-as major && bin/patch-warning.sh",
     "patch:a": "standard-version release --release-as patch --prerelease alpha && bin/patch-warning.sh",
     "patch:b": "standard-version release --release-as patch --prerelease beta && bin/patch-warning.sh",
-    "publish": "npm run build:p && cp README.md dist/reactive-record && cd dist/reactive-record && npm publish"
+    "publish": "npm run build:p && cp README.md dist/reactive-record && cd dist/reactive-record && npm publish && git push origin --tags"
   },
   "private": true,
   "dependencies": {
