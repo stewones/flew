@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.0-beta.3"></a>
+# [1.0.0-beta.3](https://github.com/ionfire/reactive-record/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2018-11-13)
+
+
+### Bug Fixes
+
+* improve rr api ([02e8ecb](https://github.com/ionfire/reactive-record/commit/02e8ecb))
+* transform response ([e0ca2c7](https://github.com/ionfire/reactive-record/commit/e0ca2c7))
+
+
+
 <a name="1.0.0-beta.2"></a>
 # [1.0.0-beta.2](https://github.com/ionfire/reactive-record/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2018-11-08)
 
