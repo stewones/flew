@@ -67,12 +67,12 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
         return firestore.limit(limit);
     }
 
-    public find(request: RRRequest, RRExtraOptions?: RRExtraOptions): Observable<RRResponse> {
+    public find(request: RRRequest, extraOptions?: RRExtraOptions): Observable<RRResponse> {
         return new Observable((observer: PartialObserver<any>) => {
             //
             // set default options
-            const _RRExtraOptions: RRExtraOptions = { disableHook: [] };
-            merge(_RRExtraOptions, RRExtraOptions);
+            const _extraOptions: RRExtraOptions = { disableHook: [] };
+            merge(_extraOptions, extraOptions);
 
             //
             // handlers
@@ -109,11 +109,12 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
 
             //
             // set an unique identifier
-            key = _RRExtraOptions.key || `${this.collection}/${JSON.stringify(request)}`;
+            key = _extraOptions.key || `${this.collection}/${JSON.stringify(request)}`;
 
             //
             // network handle
             network = () => {
+                const transformNetwork: any = extraOptions.transformNetwork && typeof extraOptions.transformNetwork === 'function' ? extraOptions.transformNetwork : (data: RRResponse) => data;
                 //
                 // fire in the hole
                 firestore
@@ -143,11 +144,11 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
                         if (hook) {
                             //
                             // run client hook
-                            hook(key, response, observer, _RRExtraOptions);
+                            hook(key, response, observer, _extraOptions);
                         } else {
                             //
                             // success callback
-                            observer.next(response);
+                            observer.next(transformNetwork(response));
                             observer.complete();
                         }
 
@@ -165,10 +166,10 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
 
             //
             // check availability
-            if (!_RRExtraOptions.useNetwork && hook) {
+            if (!_extraOptions.useNetwork && hook) {
                 //
                 // run client hook
-                hook(key, observer, _RRExtraOptions).then(canRequest => {
+                hook(key, observer, _extraOptions).then(canRequest => {
                     //
                     // http.get.before should return a boolean
                     if (canRequest) network();
@@ -182,8 +183,8 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
         })
     }
 
-    public findOne(request: RRRequest, RRExtraOptions?: RRExtraOptions): Observable<RRResponse> {
-        return this.find(request, RRExtraOptions).pipe(map((r: RRResponse) => <RRResponse>{ data: r.data[0], response: r.response }));
+    public findOne(request: RRRequest, extraOptions?: RRExtraOptions): Observable<RRResponse> {
+        return this.find(request, extraOptions).pipe(map((r: RRResponse) => <RRResponse>{ data: r.data[0], response: r.response }));
     }
 
     public on(request: RRRequest, onSuccess: (response: RRResponse) => any = (response: RRResponse) => { }, onError: (response: any) => any = (response: any) => { }): any {
