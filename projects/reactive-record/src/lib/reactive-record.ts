@@ -73,13 +73,13 @@ export class ReactiveRecord extends RRHooks implements RRApi {
 
 
     /**
-     * @param {RRRequest} request
+     * @param {RRRequest} [request]
      * @param {RRExtraOptions} [extraOptions]
      * @param {string} [driver=this._driver]
      * @returns {Observable<RRResponse>}
      * @memberof ReactiveRecord
      */
-    public find(request: RRRequest, extraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse | any> {
+    public find(request?: RRRequest, extraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse | any> {
         if (!this._drivers[driver] || typeof this._drivers[driver].find != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
         merge(this.request, request);
         merge(this.extraOptions, extraOptions);
@@ -87,13 +87,13 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     }
 
     /**
-     * @param {RRRequest} request
+     * @param {RRRequest} [request]
      * @param {RRExtraOptions} [extraOptions]
      * @param {string} [driver=this._driver]
      * @returns {(Observable<RRResponse>)}
      * @memberof RR
      */
-    public findOne(request: RRRequest, extraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse | any> {
+    public findOne(request?: RRRequest, extraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse | any> {
         if (!this._drivers[driver] || typeof this._drivers[driver].findOne != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
         merge(this.request, request);
         merge(this.extraOptions, extraOptions);
@@ -220,7 +220,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             const hook = this.hasHook('http.get.before');
             //
             // check availability
-            if (!this.extraOptions.forceNetwork && hook) {
+            if (!this.extraOptions.useNetwork && hook) {
                 //
                 // run client hook
                 hook(key, observer, this.extraOptions).then(canRequest => {
@@ -314,7 +314,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             const hook = this.hasHook('http.post.before');
             //
             // check availability
-            if (!this.extraOptions.forceNetwork && hook) {
+            if (!this.extraOptions.useNetwork && hook) {
                 //
                 // run client hook
                 hook(key, observer, this.extraOptions).then(canRequest => {
@@ -408,7 +408,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             const hook = this.hasHook('http.patch.before');
             //
             // check availability
-            if (!this.extraOptions.forceNetwork && hook) {
+            if (!this.extraOptions.useNetwork && hook) {
                 //
                 // run client hook
                 hook(key, observer, this.extraOptions).then(canRequest => {
@@ -436,7 +436,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     }
 
     public useNetwork(active: boolean) {
-        this.extraOptions.forceNetwork = active;
+        this.extraOptions.useNetwork = active;
         return this;
     }
 

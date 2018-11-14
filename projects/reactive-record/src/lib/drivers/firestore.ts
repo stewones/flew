@@ -165,7 +165,7 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
 
             //
             // check availability
-            if (!_RRExtraOptions.forceNetwork && hook) {
+            if (!_RRExtraOptions.useNetwork && hook) {
                 //
                 // run client hook
                 hook(key, observer, _RRExtraOptions).then(canRequest => {

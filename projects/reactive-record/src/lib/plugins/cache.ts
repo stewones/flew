@@ -109,7 +109,7 @@ export class RRCachePlugin {
     async getCache(key: string, observer: PartialObserver<any>, extraOptions: RRExtraOptions = {}) {
         const cache: RRResponse & { ttl: number } = await this.params.storage.get(key);
         const transformNetwork: any = extraOptions.transformNetwork && typeof extraOptions.transformNetwork === 'function' ? extraOptions.transformNetwork : (data: RRResponse) => data;
-        const useCache: boolean = !extraOptions.useCache ? false : true;
+        const useCache: boolean = extraOptions.useCache === false ? false : true;
         //
         // return cached response immediately to view
         if (useCache && cache && !isEmpty(cache.data))
@@ -142,8 +142,8 @@ export class RRCachePlugin {
         const cache: RRResponse & { ttl: number } = await this.params.storage.get(key);
         const transformCache: any = extraOptions.transformCache && typeof extraOptions.transformCache === 'function' ? extraOptions.transformCache : (data: RRResponse) => data;
         const transformNetwork: any = extraOptions.transformNetwork && typeof extraOptions.transformNetwork === 'function' ? extraOptions.transformNetwork : (data: RRResponse) => data;
-        const saveNetwork: boolean = !extraOptions.saveNetwork ? false : true;
-
+        const saveNetwork: boolean = extraOptions.saveNetwork === false ? false : true;
+        console.log(saveNetwork, extraOptions)
         //
         // return network response only if different from cache
         if ((cache && !isEqual(cache.data, network.data)) || (cache && isEmpty(cache.data)) || !cache) {
@@ -153,7 +153,7 @@ export class RRCachePlugin {
             //
             // time to live
             let seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-            if (saveNetwork || (isEmpty(cache) || (cache && seconds >= cache.ttl))) {
+            if (saveNetwork && (isEmpty(cache) || (cache && seconds >= cache.ttl))) {
 
                 console.log(`${key} cache empty or updated`);
                 let ttl = extraOptions.ttl || this.params.ttl;
