@@ -143,7 +143,7 @@ export class RRCachePlugin {
         const transformCache: any = extraOptions.transformCache && typeof extraOptions.transformCache === 'function' ? extraOptions.transformCache : (data: RRResponse) => data;
         const transformNetwork: any = extraOptions.transformNetwork && typeof extraOptions.transformNetwork === 'function' ? extraOptions.transformNetwork : (data: RRResponse) => data;
         const saveNetwork: boolean = extraOptions.saveNetwork === false ? false : true;
-        console.log(saveNetwork, extraOptions)
+  
         //
         // return network response only if different from cache
         if ((cache && !isEqual(cache.data, network.data)) || (cache && isEmpty(cache.data)) || !cache) {
