@@ -63,7 +63,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      */
     public httpSetup() {
         const config: AxiosRequestConfig = {
-            timeout: 30 * 1000,
+            timeout: 60 * 1000,
             headers: {},
             baseURL: this.baseURL
         }
@@ -440,6 +440,11 @@ export class ReactiveRecord extends RRHooks implements RRApi {
         return this;
     }
 
+    public saveNetwork(active: boolean) {
+        this.extraOptions.saveNetwork = active;
+        return this;
+    }
+
     public transformNetwork(transformFn: (response: RRResponse) => any) {
         this.extraOptions.transformNetwork = transformFn;
         return this;
@@ -451,7 +456,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     }
 
     public useCache(active: boolean) {
-        this.extraOptions.forceCache = active;
+        this.extraOptions.useCache = active;
         return this;
     }
 

@@ -14,6 +14,7 @@ export interface RRApi {
     // chaining
     driver(name: string),
     useNetwork(active: boolean),
+    saveNetwork(active: boolean),
     transformNetwork(transformFn: (response: RRResponse) => any),
     ttl(value: number),
     useCache(active: boolean),

@@ -109,17 +109,17 @@ export class RRCachePlugin {
     async getCache(key: string, observer: PartialObserver<any>, extraOptions: RRExtraOptions = {}) {
         const cache: RRResponse & { ttl: number } = await this.params.storage.get(key);
         const transformNetwork: any = extraOptions.transformNetwork && typeof extraOptions.transformNetwork === 'function' ? extraOptions.transformNetwork : (data: RRResponse) => data;
-
+        const useCache: boolean = !extraOptions.useCache ? false : true;
         //
         // return cached response immediately to view
-        if (cache && !isEmpty(cache.data))
+        if (useCache && cache && !isEmpty(cache.data))
             observer.next(transformNetwork(cache));
 
         //
         // check for TTL
         // should not call network
         const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-        if ((cache && seconds < cache.ttl) && (!isEmpty(cache.data))) {
+        if (useCache && (cache && seconds < cache.ttl) && (!isEmpty(cache.data))) {
             observer.complete();
             return false;
         }
@@ -142,6 +142,7 @@ export class RRCachePlugin {
         const cache: RRResponse & { ttl: number } = await this.params.storage.get(key);
         const transformCache: any = extraOptions.transformCache && typeof extraOptions.transformCache === 'function' ? extraOptions.transformCache : (data: RRResponse) => data;
         const transformNetwork: any = extraOptions.transformNetwork && typeof extraOptions.transformNetwork === 'function' ? extraOptions.transformNetwork : (data: RRResponse) => data;
+        const saveNetwork: boolean = !extraOptions.saveNetwork ? false : true;
 
         //
         // return network response only if different from cache
@@ -149,12 +150,11 @@ export class RRCachePlugin {
             //
             // return network response
             observer.next(transformNetwork(network));
-
             //
             // time to live
             let seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
+            if (saveNetwork || (isEmpty(cache) || (cache && seconds >= cache.ttl))) {
 
-            if (isEmpty(cache) || (cache && seconds >= cache.ttl) || extraOptions.forceCache) {
                 console.log(`${key} cache empty or updated`);
                 let ttl = extraOptions.ttl || this.params.ttl;
                 //
@@ -163,7 +163,6 @@ export class RRCachePlugin {
                 network.ttl = ttl;
                 this.params.storage.set(key, transformCache(omit(network, ['config', 'request', 'response.config', 'response.data', 'response.request'])));
             }
-
         }
         observer.complete();
     }
