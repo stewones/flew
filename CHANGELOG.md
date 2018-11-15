@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/ionfire/reactive-record/compare/v1.0.0-beta.3...v1.0.1) (2018-11-15)
+
+
+### Bug Fixes
+
+* **firestore:** add transformNetwork ([6e38fdf](https://github.com/ionfire/reactive-record/commit/6e38fdf))
+
+
+### Features
+
+* add saveNetwork and replace forceNetwork and forceCache to useNetwork and useCache instead ([e8c8036](https://github.com/ionfire/reactive-record/commit/e8c8036))
+* add saveNetwork and replace forceNetwork and forceCache to useNetwork and useCache instead ([231cd7b](https://github.com/ionfire/reactive-record/commit/231cd7b))
+
+
+
 <a name="1.0.0-beta.3"></a>
 # [1.0.0-beta.3](https://github.com/ionfire/reactive-record/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2018-11-13)
 
