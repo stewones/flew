@@ -29,16 +29,9 @@ export class RRCachePlugin {
 
     constructor(options: RRCacheOptions) {
         merge(this.params, options);
-
-        if (!this.params.config) throw ('missing firebase config');
-        if (!this.params.firebase) throw ('missing firebase sdk');
         if (!this.params.storage) throw ('missing storage instance');
 
         merge(this.params, <RROptions>{
-            connector: {
-                firebase: new RRFirebaseConnector(this.params.firebase, this.params.config),
-                firestore: new RRFirestoreConnector(this.params.firebase, this.params.config)
-            },
             hook: {
                 //
                 // customize http behavior
@@ -93,6 +86,15 @@ export class RRCachePlugin {
             }
         });
 
+        if (isEmpty(this.params.connector)) {
+            if (!this.params.config) throw ('missing firebase config');
+            if (!this.params.firebase) throw ('missing firebase sdk');
+            this.params.connector = {
+                firebase: new RRFirebaseConnector(this.params.firebase, this.params.config),
+                firestore: new RRFirestoreConnector(this.params.firebase, this.params.config)
+            }
+        }
+
         return omit(this.params, ['config', 'firebase', 'storage', 'version', 'token']);
     }
 
@@ -143,7 +145,7 @@ export class RRCachePlugin {
         const transformCache: any = extraOptions.transformCache && typeof extraOptions.transformCache === 'function' ? extraOptions.transformCache : (data: RRResponse) => data;
         const transformNetwork: any = extraOptions.transformNetwork && typeof extraOptions.transformNetwork === 'function' ? extraOptions.transformNetwork : (data: RRResponse) => data;
         const saveNetwork: boolean = extraOptions.saveNetwork === false ? false : true;
-  
+
         //
         // return network response only if different from cache
         if ((cache && !isEqual(cache.data, network.data)) || (cache && isEmpty(cache.data)) || !cache) {
@@ -153,7 +155,7 @@ export class RRCachePlugin {
             //
             // time to live
             let seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-            if (saveNetwork && (isEmpty(cache) || (cache && seconds >= cache.ttl))) {
+            if (saveNetwork && (!isEmpty(network.data) || isEmpty(cache) || (cache && seconds >= cache.ttl))) {
 
                 console.log(`${key} cache empty or updated`);
                 let ttl = extraOptions.ttl || this.params.ttl;
