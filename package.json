@@ -1,6 +1,6 @@
 {
   "name": "@ionfire/reactive-record",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {
     "ng": "ng",
     "test": "ng test reactive-record --code-coverage --source-map --watch=false --progress=false --browsers=ChromeHeadlessCI",
@@ -11,6 +11,7 @@
     "build:p": "ng build reactive-record --prod",
     "patch:custom": "standard-version release --release-as 1.0.1 && bin/patch-warning.sh",
     "patch:build": "standard-version release --release-as build && bin/patch-warning.sh",
+    "patch:patch": "standard-version release --release-as patch && bin/patch-warning.sh",
     "patch:minor": "standard-version release --release-as minor && bin/patch-warning.sh",
     "patch:major": "standard-version release --release-as major && bin/patch-warning.sh",
     "patch:a": "standard-version release --release-as patch --prerelease alpha && bin/patch-warning.sh",
