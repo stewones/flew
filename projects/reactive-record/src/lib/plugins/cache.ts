@@ -155,7 +155,7 @@ export class RRCachePlugin {
             //
             // time to live
             let seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-            if (saveNetwork && (!isEmpty(network.data) || isEmpty(cache) || (cache && seconds >= cache.ttl))) {
+            if (saveNetwork && ((isEmpty(network.data) && cache) || isEmpty(cache) || (cache && seconds >= cache.ttl))) {
 
                 console.log(`${key} cache empty or updated`);
                 let ttl = extraOptions.ttl || this.params.ttl;

@@ -81,9 +81,17 @@ export class ReactiveRecord extends RRHooks implements RRApi {
      */
     public find(request?: RRRequest, extraOptions?: RRExtraOptions, driver: string = this._driver): Observable<RRResponse | any> {
         if (!this._drivers[driver] || typeof this._drivers[driver].find != 'function') throw (`${driver} driver unavailable for now, sorry =(`);
+
         merge(this.request, request);
         merge(this.extraOptions, extraOptions);
-        return this._drivers[driver].find(this.request, this.extraOptions);
+      
+        const _request = this.request;
+        const _extraOptions = this.extraOptions;
+
+        this.request = {};
+        this.extraOptions = {};
+
+        return this._drivers[driver].find(_request, _extraOptions);
     }
 
     /**
@@ -153,8 +161,9 @@ export class ReactiveRecord extends RRHooks implements RRApi {
         return new Observable((observer: PartialObserver<any>) => {
             //
             // set default options
-            merge(this.extraOptions, extraOptions);
-
+            merge(this.extraOptions, extraOptions);       
+            const _extraOptions = this.extraOptions;
+            this.extraOptions = {};
             //
             // call exceptions
             if (!this.baseURL) throw 'baseURL needed for [get]';
@@ -170,13 +179,11 @@ export class ReactiveRecord extends RRHooks implements RRApi {
 
             //
             // define an unique key
-            const key = this.extraOptions.key || requestPath;
+            const key = _extraOptions.key || requestPath;
 
             //
             // for unit test
             this._observer = observer;
-
-
 
             //
             // network handle
@@ -198,7 +205,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
                         if (hook) {
                             //
                             // run client hook
-                            hook(key, response, observer, this.extraOptions);
+                            hook(key, response, observer, _extraOptions);
                         } else {
                             //
                             // success callback
@@ -220,10 +227,10 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             const hook = this.hasHook('http.get.before');
             //
             // check availability
-            if (!this.extraOptions.useNetwork && hook) {
+            if (!_extraOptions.useNetwork && hook) {
                 //
                 // run client hook
-                hook(key, observer, this.extraOptions).then(canRequest => {
+                hook(key, observer, _extraOptions).then(canRequest => {
                     //
                     // http.get.before should return a boolean
                     if (canRequest) network();
@@ -250,6 +257,8 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             //
             // set default options
             merge(this.extraOptions, extraOptions);
+            const _extraOptions = this.extraOptions;
+            this.extraOptions = {};
 
             //
             // call exceptions
@@ -266,7 +275,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
 
             //
             // define an unique key
-            const key = this.extraOptions.key || requestPath + `/${JSON.stringify(body)}`;
+            const key = _extraOptions.key || requestPath + `/${JSON.stringify(body)}`;
 
             //
             // for unit test
@@ -292,7 +301,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
                         if (hook) {
                             //
                             // run client hook
-                            hook(key, response, observer, this.extraOptions);
+                            hook(key, response, observer, _extraOptions);
                         } else {
                             //
                             // success callback
@@ -314,10 +323,10 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             const hook = this.hasHook('http.post.before');
             //
             // check availability
-            if (!this.extraOptions.useNetwork && hook) {
+            if (!_extraOptions.useNetwork && hook) {
                 //
                 // run client hook
-                hook(key, observer, this.extraOptions).then(canRequest => {
+                hook(key, observer, _extraOptions).then(canRequest => {
                     //
                     // http.get.before should return a boolean
                     if (canRequest) network();
@@ -344,7 +353,9 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             //
             // set default options
             merge(this.extraOptions, extraOptions);
-
+            const _extraOptions = this.extraOptions;
+            this.extraOptions = {};
+            
             //
             // call exceptions
             if (!this.baseURL) throw 'baseURL needed for [patch]';
@@ -360,7 +371,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
 
             //
             // define an unique key
-            const key = this.extraOptions.key || requestPath + `/${JSON.stringify(body)}`;
+            const key = _extraOptions.key || requestPath + `/${JSON.stringify(body)}`;
 
             //
             // for unit test
@@ -386,7 +397,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
                         if (hook) {
                             //
                             // run client hook
-                            hook(key, response, observer, this.extraOptions);
+                            hook(key, response, observer, _extraOptions);
                         } else {
                             //
                             // success callback
@@ -408,10 +419,10 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             const hook = this.hasHook('http.patch.before');
             //
             // check availability
-            if (!this.extraOptions.useNetwork && hook) {
+            if (!_extraOptions.useNetwork && hook) {
                 //
                 // run client hook
-                hook(key, observer, this.extraOptions).then(canRequest => {
+                hook(key, observer, _extraOptions).then(canRequest => {
                     //
                     // http.get.before should return a boolean
                     if (canRequest) network();
