@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/ionfire/reactive-record/compare/v1.0.3...v1.1.0) (2018-11-20)
+
+
+### Bug Fixes
+
+* **firestore:** deprecation. now the `on` method receives only two params. the other things is adjusted using the chain ([de50531](https://github.com/ionfire/reactive-record/commit/de50531))
+
+
+
 <a name="1.0.3"></a>
 ## [1.0.3](https://github.com/ionfire/reactive-record/compare/v1.0.2...v1.0.3) (2018-11-17)
 
