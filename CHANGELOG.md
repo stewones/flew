@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/ionfire/reactive-record/compare/v1.1.0...v1.2.0) (2018-11-21)
+
+
+### Features
+
+* improve RR api by removing all unnecessary params like request, extraOptions and driver from methods. Now all the things should be set earlier via chaining. Also ensure that state is being reseted after calls. ([1aefdab](https://github.com/ionfire/reactive-record/commit/1aefdab))
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/ionfire/reactive-record/compare/v1.0.3...v1.1.0) (2018-11-20)
 
