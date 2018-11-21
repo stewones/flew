@@ -1,14 +1,14 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from "axios";
-import { get, merge, isEmpty, cloneDeep } from "lodash";
-import { Observable, PartialObserver } from "rxjs";
-import { RRExtraOptions } from "./interfaces/rr-extra-options";
-import { RRFirestoreDriver } from "./drivers/firestore";
-import { RROptions } from "./interfaces/rr-options";
-import { RRResponse } from "./interfaces/rr-response";
-import { RRRequest } from "./interfaces/rr-request";
-import { RRApi } from "./interfaces/rr-api";
-import { RRHooks } from "./hooks/hooks";
-import { RRDriver } from "./interfaces/rr-driver";
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
+import { get, merge, isEmpty, clone, cloneDeep } from 'lodash';
+import { Observable, PartialObserver } from 'rxjs';
+import { RRExtraOptions } from './interfaces/rr-extra-options';
+import { RRFirestoreDriver } from './drivers/firestore';
+import { RROptions } from './interfaces/rr-options';
+import { RRResponse } from './interfaces/rr-response';
+import { RRRequest } from './interfaces/rr-request';
+import { RRApi } from './interfaces/rr-api';
+import { RRHooks } from './hooks/hooks';
+import { RRDriver } from './interfaces/rr-driver';
 
 /**
  * handle firestore/elastic/http calls
@@ -19,7 +19,7 @@ import { RRDriver } from "./interfaces/rr-driver";
 export class ReactiveRecord extends RRHooks implements RRApi {
   //
   // default params
-  private _driver: string = "firestore";
+  private _driver: string = 'firestore';
   private _drivers: { firestore: RRDriver };
 
   private http: AxiosInstance;
@@ -30,11 +30,11 @@ export class ReactiveRecord extends RRHooks implements RRApi {
   private extraOptions: RRExtraOptions = {};
 
   //
-  // for unit tests
+  // for unit test
   _observer: PartialObserver<any>;
 
   /**
-   * Creates an instance of RR
+   * Creates an instance for RR
    * @param { RROptions } options
    * @memberof RR
    */
@@ -65,109 +65,101 @@ export class ReactiveRecord extends RRHooks implements RRApi {
       headers: {},
       baseURL: this.baseURL
     };
-    this.runHook("http.pre", config);
+    this.runHook('http.pre', config);
     this.http = axios.create(config);
   }
 
   /**
-   * @param {RRRequest} [request]
-   * @param {RRExtraOptions} [extraOptions]
-   * @param {string} [driver=this._driver]
-   * @returns {Observable<RRResponse>}
+   * Reset RR chaining
+   *
+   * @private
    * @memberof ReactiveRecord
    */
-  public find(
-    request?: RRRequest,
-    extraOptions?: RRExtraOptions,
-    driver: string = this._driver
-  ): Observable<RRResponse | any> {
-    if (
-      !this._drivers[driver] ||
-      typeof this._drivers[driver].find != "function"
-    )
-      throw `${driver} driver unavailable for now, sorry =(`;
-
-    merge(this.request, request);
-    merge(this.extraOptions, extraOptions);
-
-    const _request = cloneDeep(this.request);
-    const _extraOptions = cloneDeep(this.extraOptions);
-
+  private reset(): void {
+    this._driver = 'firestore';
     this.request = {};
     this.extraOptions = {};
-
-    return this._drivers[driver].find(_request, _extraOptions);
   }
 
   /**
-   * @param {RRRequest} [request]
-   * @param {RRExtraOptions} [extraOptions]
-   * @param {string} [driver=this._driver]
-   * @returns {(Observable<RRResponse>)}
-   * @memberof RR
+   * Search for data returning a list
+   *
+   * @returns {(Observable<RRResponse | any>)}
+   * @memberof ReactiveRecord
    */
-  public findOne(
-    request?: RRRequest,
-    extraOptions?: RRExtraOptions,
-    driver: string = this._driver
-  ): Observable<RRResponse | any> {
-    if (
-      !this._drivers[driver] ||
-      typeof this._drivers[driver].findOne != "function"
-    )
-      throw `${driver} driver unavailable for now, sorry =(`;
-    merge(this.request, request);
-    merge(this.extraOptions, extraOptions);
-
+  public find(): Observable<RRResponse | any> {
     const _request = cloneDeep(this.request);
     const _extraOptions = cloneDeep(this.extraOptions);
+    const _driver = clone(this._driver);
+    this.reset();
 
-    this.request = {};
-    this.extraOptions = {};
+    if (
+      !this._drivers[_driver] ||
+      typeof this._drivers[_driver].find != 'function'
+    )
+      throw `${_driver} driver unavailable for now, sorry =(`;
 
-    return this._drivers[driver].findOne(_request, _extraOptions);
+    return this._drivers[_driver].find(_request, _extraOptions);
   }
 
   /**
+   * Search for data returning an object
+   *
+   * @returns {(Observable<RRResponse | any>)}
+   * @memberof ReactiveRecord
+   */
+  public findOne(): Observable<RRResponse | any> {
+    const _request = cloneDeep(this.request);
+    const _extraOptions = cloneDeep(this.extraOptions);
+    const _driver = clone(this._driver);
+    this.reset();
+
+    if (
+      !this._drivers[_driver] ||
+      typeof this._drivers[_driver].findOne != 'function'
+    )
+      throw `${_driver} driver unavailable for now, sorry =(`;
+
+    return this._drivers[_driver].findOne(_request, _extraOptions);
+  }
+
+  /**
+   * Persist data to database
+   *
    * @param {string} id
    * @param {*} data
-   * @param {string} [driver=this._driver]
    * @param {boolean} [merge=true]
    * @returns {Observable<any>}
-   * @memberof RR
+   * @memberof ReactiveRecord
    */
-  public set(
-    id: string,
-    data: any,
-    driver: string = this._driver,
-    merge: boolean = true
-  ): Observable<any> {
+  public set(id: string, data: any, merge: boolean = true): Observable<any> {
+    const _driver = clone(this._driver);
+    this.reset();
     if (
-      !this._drivers[driver] ||
-      typeof this._drivers[driver].set != "function"
+      !this._drivers[_driver] ||
+      typeof this._drivers[_driver].set != 'function'
     )
-      throw `${driver} driver unavailable for now, sorry =(`;
-    return this._drivers[driver].set(id, data, merge);
+      throw `${_driver} driver unavailable for now, sorry =(`;
+    return this._drivers[_driver].set(id, data, merge);
   }
 
   /**
+   * Update data in database
+   *
    * @param {string} id
    * @param {*} data
-   * @param {string} [driver=this._driver]
    * @returns {Observable<any>}
-   * @memberof RR
+   * @memberof ReactiveRecord
    */
-  public update(
-    id: string,
-    data: any,
-    driver: string = this._driver
-  ): Observable<any> {
+  public update(id: string, data: any): Observable<any> {
+    const _driver = clone(this._driver);
+    this.reset();
     if (
-      !this._drivers[driver] ||
-      typeof this._drivers[driver].update != "function"
+      !this._drivers[_driver] ||
+      typeof this._drivers[_driver].update != 'function'
     )
-      throw `${driver} driver unavailable for now, sorry =(`;
-    return this._drivers[driver].update(id, data);
+      throw `${_driver} driver unavailable for now, sorry =(`;
+    return this._drivers[_driver].update(id, data);
   }
 
   /**
@@ -186,16 +178,20 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     ) => {},
     onError: (response: any) => any = (response: any) => {}
   ): any {
+    const _request = cloneDeep(this.request);
+    const _extraOptions = cloneDeep(this.extraOptions);
+    const _driver = clone(this._driver);
+    this.reset();
     if (
-      !this._drivers[this._driver] ||
-      typeof this._drivers[this._driver].on != "function"
+      !this._drivers[_driver] ||
+      typeof this._drivers[_driver].on != 'function'
     )
       throw `${this._driver} driver unavailable for now, sorry =(`;
-    return this._drivers[this._driver].on(
-      this.request,
+    return this._drivers[_driver].on(
+      _request,
       onSuccess,
       onError,
-      this.extraOptions
+      _extraOptions
     );
   }
 
@@ -203,24 +199,17 @@ export class ReactiveRecord extends RRHooks implements RRApi {
    * http get
    *
    * @param {string} path
-   * @param {RRExtraOptions} [extraOptions]
    * @returns {(Observable<RRResponse>)}
    * @memberof RR
    */
-  public get(
-    path: string,
-    extraOptions?: RRExtraOptions
-  ): Observable<RRResponse | any> {
+  public get(path: string): Observable<RRResponse | any> {
+    const _extraOptions = cloneDeep(this.extraOptions);
+    this.reset();
     return new Observable((observer: PartialObserver<any>) => {
       //
-      // set default options
-      merge(this.extraOptions, extraOptions);
-      const _extraOptions = this.extraOptions;
-      this.extraOptions = {};
-      //
       // call exceptions
-      if (!this.baseURL) throw "baseURL needed for [get]";
-      if (!this.endpoint) throw "endpoint required for [get]";
+      if (!this.baseURL) throw 'baseURL needed for [get]';
+      if (!this.endpoint) throw 'endpoint required for [get]';
 
       //
       // re-apply http stuff
@@ -252,7 +241,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             };
             //
             // get after hook
-            const hook = this.hasHook("http.get.after");
+            const hook = this.hasHook('http.get.after');
             //
             // check availability
             if (hook) {
@@ -267,7 +256,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             }
           })
           .catch(err => {
-            const errData = get(err, "response.data");
+            const errData = get(err, 'response.data');
             //
             // error callback
             observer.error(errData ? errData : err);
@@ -276,7 +265,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
       };
       //
       // get before hook
-      const hook = this.hasHook("http.get.before");
+      const hook = this.hasHook('http.get.before');
       //
       // check availability
       if (!_extraOptions.useNetwork && hook) {
@@ -300,26 +289,18 @@ export class ReactiveRecord extends RRHooks implements RRApi {
    *
    * @param {string} path
    * @param {*} body
-   * @param {RRExtraOptions} [RRExtraOptions={  }]
    * @returns {(Observable<RRResponse>)}
    * @memberof RR
    */
-  public post(
-    path: string,
-    body: any = {},
-    extraOptions: RRExtraOptions = {}
-  ): Observable<RRResponse | any> {
+  public post(path: string, body: any = {}): Observable<RRResponse | any> {
+    const _extraOptions = cloneDeep(this.extraOptions);
+    this.reset();
+
     return new Observable((observer: PartialObserver<RRResponse>) => {
       //
-      // set default options
-      merge(this.extraOptions, extraOptions);
-      const _extraOptions = this.extraOptions;
-      this.extraOptions = {};
-
-      //
       // call exceptions
-      if (!this.baseURL) throw "baseURL needed for [post]";
-      if (!this.endpoint) throw "endpoint required for [post]";
+      if (!this.baseURL) throw 'baseURL needed for [post]';
+      if (!this.endpoint) throw 'endpoint required for [post]';
 
       //
       // re-apply http stuff
@@ -351,7 +332,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             };
             //
             // get after hook
-            const hook = this.hasHook("http.post.after");
+            const hook = this.hasHook('http.post.after');
             //
             // check availability
             if (hook) {
@@ -366,7 +347,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             }
           })
           .catch(err => {
-            const errData = get(err, "response.data");
+            const errData = get(err, 'response.data');
             //
             // error callback
             observer.error(errData ? errData : err);
@@ -375,7 +356,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
       };
       //
       // get before hook
-      const hook = this.hasHook("http.post.before");
+      const hook = this.hasHook('http.post.before');
       //
       // check availability
       if (!_extraOptions.useNetwork && hook) {
@@ -399,26 +380,18 @@ export class ReactiveRecord extends RRHooks implements RRApi {
    *
    * @param {string} path
    * @param {*} body
-   * @param {RRExtraOptions} [RRExtraOptions={  }]
    * @returns {Observable<RRResponse>}
    * @memberof ReactiveRecord
    */
-  public patch(
-    path: string,
-    body: any = {},
-    extraOptions: RRExtraOptions = {}
-  ): Observable<RRResponse | any> {
+  public patch(path: string, body: any = {}): Observable<RRResponse | any> {
+    const _extraOptions = cloneDeep(this.extraOptions);
+    this.reset();
+
     return new Observable((observer: PartialObserver<any>) => {
       //
-      // set default options
-      merge(this.extraOptions, extraOptions);
-      const _extraOptions = this.extraOptions;
-      this.extraOptions = {};
-
-      //
       // call exceptions
-      if (!this.baseURL) throw "baseURL needed for [patch]";
-      if (!this.endpoint) throw "endpoint required for [patch]";
+      if (!this.baseURL) throw 'baseURL needed for [patch]';
+      if (!this.endpoint) throw 'endpoint required for [patch]';
 
       //
       // re-apply http stuff
@@ -450,7 +423,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             };
             //
             // get after hook
-            const hook = this.hasHook("http.patch.after");
+            const hook = this.hasHook('http.patch.after');
             //
             // check availability
             if (hook) {
@@ -465,7 +438,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
             }
           })
           .catch(err => {
-            const errData = get(err, "response.data");
+            const errData = get(err, 'response.data');
             //
             // error callback
             observer.error(errData ? errData : err);
@@ -474,7 +447,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
       };
       //
       // get before hook
-      const hook = this.hasHook("http.patch.before");
+      const hook = this.hasHook('http.patch.before');
       //
       // check availability
       if (!_extraOptions.useNetwork && hook) {
@@ -493,57 +466,131 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     });
   }
 
-  // @todo
+  /**
+   *
+   * @todo
+   * @param {string} path
+   * @memberof ReactiveRecord
+   */
   public delete(path: string) {}
 
-  //
-  // RR API
-
+  /**
+   * Set current driver
+   *
+   * @param {string} name
+   * @returns
+   * @memberof ReactiveRecord
+   */
   public driver(name: string) {
     this._driver = name;
     return this;
   }
 
+  /**
+   * Set whether to use network for first requests
+   *
+   * @param {boolean} active
+   * @returns
+   * @memberof ReactiveRecord
+   */
   public useNetwork(active: boolean) {
     this.extraOptions.useNetwork = active;
     return this;
   }
 
+  /**
+   * Set whether to cache network responses
+   *
+   * @param {boolean} active
+   * @returns
+   * @memberof ReactiveRecord
+   */
   public saveNetwork(active: boolean) {
     this.extraOptions.saveNetwork = active;
     return this;
   }
 
+  /**
+   * Set transform fn for network responses
+   *
+   * @param {(response: RRResponse) => any} transformFn
+   * @returns
+   * @memberof ReactiveRecord
+   */
   public transformNetwork(transformFn: (response: RRResponse) => any) {
     this.extraOptions.transformNetwork = transformFn;
     return this;
   }
 
+  /**
+   * Set cache time to live
+   *
+   * @param {number} value
+   * @returns
+   * @memberof ReactiveRecord
+   */
   public ttl(value: number) {
     this.extraOptions.ttl = value;
     return this;
   }
 
+  /**
+   * Set whether to use cache for first requests
+   *
+   * @param {boolean} active
+   * @returns
+   * @memberof ReactiveRecord
+   */
   public useCache(active: boolean) {
     this.extraOptions.useCache = active;
     return this;
   }
 
+  /**
+   * Set transform fn for cache
+   *
+   * @param {(response: RRResponse) => any} transformFn
+   * @returns
+   * @memberof ReactiveRecord
+   */
   public transformCache(transformFn: (response: RRResponse) => any) {
     this.extraOptions.transformCache = transformFn;
     return this;
   }
 
+  /**
+   * Set cache key
+   *
+   * @param {string} name
+   * @returns
+   * @memberof ReactiveRecord
+   */
   public key(name: string) {
     this.extraOptions.key = name;
     return this;
   }
 
+  /**
+   * Set request query
+   *
+   * @param {{ [key: string]: {} }} by
+   * @returns
+   * @memberof ReactiveRecord
+   */
   public query(by: { [key: string]: {} }) {
     this.request.query = by;
     return this;
   }
 
+  /**
+   * Set request where
+   *
+   * @param {string} field
+   * @param {string} operator
+   * @param {(string | number)} value
+   * @returns
+   * @memberof ReactiveRecord
+   */
   public where(field: string, operator: string, value: string | number) {
     if (isEmpty(this.request.query)) {
       this.request.query = [];
@@ -556,6 +603,13 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     return this;
   }
 
+  /**
+   * Set request sort
+   *
+   * @param {{ [key: string]: string }} by
+   * @returns
+   * @memberof ReactiveRecord
+   */
   public sort(by: { [key: string]: string }) {
     if (isEmpty(this.request.sort)) {
       this.request.sort = {};
@@ -566,6 +620,13 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     return this;
   }
 
+  /**
+   * Set request size
+   *
+   * @param {number} value
+   * @returns
+   * @memberof ReactiveRecord
+   */
   public size(value: number) {
     this.request.size = value;
     return this;

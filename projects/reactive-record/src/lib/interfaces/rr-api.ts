@@ -1,7 +1,7 @@
-import { RRRequest } from "./rr-request";
-import { RRExtraOptions } from "./rr-extra-options";
-import { RRResponse } from "./rr-response";
-import { Observable } from "rxjs";
+import { RRRequest } from './rr-request';
+import { RRExtraOptions } from './rr-extra-options';
+import { RRResponse } from './rr-response';
+import { Observable } from 'rxjs';
 
 /**
  * Public RR Api
@@ -27,18 +27,10 @@ export interface RRApi {
 
   //
   // data
-  find(
-    request: RRRequest,
-    extraOptions?: RRExtraOptions,
-    driver?: string
-  ): Observable<RRResponse>;
-  findOne(
-    request: RRRequest,
-    extraOptions?: RRExtraOptions,
-    driver?: string
-  ): Observable<RRResponse>;
-  set(id: string, data: any, driver?: string, merge?: boolean): Observable<any>;
-  update(id: string, data: any, driver?: string): Observable<any>;
+  find(): Observable<RRResponse>;
+  findOne(): Observable<RRResponse>;
+  set(id: string, data: any, merge?: boolean): Observable<any>;
+  update(id: string, data: any): Observable<any>;
   on(
     onSuccess: (response: RRResponse | any) => any,
     onError: (response: any) => any
@@ -46,15 +38,7 @@ export interface RRApi {
 
   //
   // http
-  get(path: string, extraOptions?: RRExtraOptions): Observable<RRResponse>;
-  post(
-    path: string,
-    body: any,
-    extraOptions?: RRExtraOptions
-  ): Observable<RRResponse>;
-  patch(
-    path: string,
-    body: any,
-    extraOptions?: RRExtraOptions
-  ): Observable<RRResponse>;
+  get(path: string): Observable<RRResponse>;
+  post(path: string, body: any): Observable<RRResponse>;
+  patch(path: string, body: any): Observable<RRResponse>;
 }

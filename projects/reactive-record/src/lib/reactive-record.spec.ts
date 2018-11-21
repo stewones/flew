@@ -1,10 +1,8 @@
-import { ReactiveRecord } from "./reactive-record";
-import { fakeAsync, tick } from "@angular/core/testing";
+import { ReactiveRecord } from './reactive-record';
+import { fakeAsync, tick } from '@angular/core/testing';
 
-import { FirestoreStub } from "./utils/firestore-stub.spec";
+import { FirestoreStub } from './utils/firestore-stub.spec';
 import { PartialObserver } from 'rxjs';
-
-
 
 describe('ReactiveRecord', () => {
   let lib: ReactiveRecord,
@@ -14,9 +12,7 @@ describe('ReactiveRecord', () => {
     baseURL = 'http://127.0.0.1',
     collection = 'foo-collection';
 
-  beforeEach(() => {
-
-  });
+  beforeEach(() => {});
 
   it('should be created using minimal setup', () => {
     lib = new ReactiveRecord({
@@ -43,9 +39,12 @@ describe('ReactiveRecord', () => {
     lib = new ReactiveRecord({
       baseURL: baseURL
     });
-    lib.find({}, null, 'firestore').subscribe(r => { }, err => {
-      expect(err).toEqual('missing collection')
-    });
+    lib.find().subscribe(
+      r => {},
+      err => {
+        expect(err).toEqual('missing collection');
+      }
+    );
   });
 
   // it('must have a firebase connector', () => {
@@ -63,9 +62,12 @@ describe('ReactiveRecord', () => {
       baseURL: baseURL,
       collection: collection
     });
-    lib.find({}, null, 'firestore').subscribe(r => { }, err => {
-      expect(err).toEqual('missing firestore connector')
-    });
+    lib.find().subscribe(
+      r => {},
+      err => {
+        expect(err).toEqual('missing firestore connector');
+      }
+    );
     // cover else path
     lib = new ReactiveRecord({
       baseURL: baseURL,
@@ -76,7 +78,7 @@ describe('ReactiveRecord', () => {
         }
       }
     });
-    lib.find({}, null, 'firestore').subscribe();
+    lib.find().subscribe();
   });
 
   // it('should run the hook `find.before` for firestore driver', () => {
