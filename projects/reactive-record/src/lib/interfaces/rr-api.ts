@@ -24,6 +24,7 @@ export interface RRApi {
   where(field: string, operator: string, value: string | number);
   sort(by: { [key: string]: string });
   size(value: number);
+  ref(path: string);
 
   //
   // data

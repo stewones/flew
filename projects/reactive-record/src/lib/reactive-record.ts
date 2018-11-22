@@ -1,14 +1,15 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
 import { get, merge, isEmpty, clone, cloneDeep } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
-import { RRExtraOptions } from './interfaces/rr-extra-options';
-import { RRFirestoreDriver } from './drivers/firestore';
 import { RROptions } from './interfaces/rr-options';
 import { RRResponse } from './interfaces/rr-response';
 import { RRRequest } from './interfaces/rr-request';
 import { RRApi } from './interfaces/rr-api';
 import { RRHooks } from './hooks/hooks';
 import { RRDriver } from './interfaces/rr-driver';
+import { RRFirebaseDriver } from './drivers/firebase';
+import { RRFirestoreDriver } from './drivers/firestore';
+import { RRExtraOptions } from './interfaces/rr-extra-options';
 
 /**
  * handle firestore/elastic/http calls
@@ -20,7 +21,10 @@ export class ReactiveRecord extends RRHooks implements RRApi {
   //
   // default params
   private _driver: string = 'firestore';
-  private _drivers: { firestore: RRDriver };
+  private _drivers: {
+    firestore: RRDriver;
+    firebase: RRDriver | any;
+  };
 
   private http: AxiosInstance;
   private baseURL: string;
@@ -42,7 +46,10 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     super(options);
     //
     // set default drivers
-    this._drivers = { firestore: new RRFirestoreDriver(options) };
+    this._drivers = {
+      firestore: new RRFirestoreDriver(options),
+      firebase: new RRFirebaseDriver(options)
+    };
 
     //
     // extend options
@@ -629,6 +636,18 @@ export class ReactiveRecord extends RRHooks implements RRApi {
    */
   public size(value: number) {
     this.request.size = value;
+    return this;
+  }
+
+  /**
+   * Set reference
+   *
+   * @param {string} path
+   * @returns
+   * @memberof ReactiveRecord
+   */
+  public ref(path: string) {
+    this.extraOptions.ref = path;
     return this;
   }
 }

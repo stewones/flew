@@ -1,10 +1,10 @@
 export interface RRExtraOptions {
-    ttl?: number,                            // time to live (in seconds. default: 0)
-    key?: string,                            // key used to cache. defaults to requested path
-    useCache?: boolean,
-    useNetwork?: boolean,
-    saveNetwork?: boolean,
-    disableHook?: string[] & any,            // disable any hook. eg: http.post.before
-    transformCache?: (data: any) => any      // transform function for cache data
-    transformNetwork?: (data: any) => any    // transform function for network data response
+  ttl?: number; // time to live (in seconds. default: 0)
+  key?: string; // key used for cache. defaults to requested info
+  useCache?: boolean; //  use cache for first response
+  useNetwork?: boolean; // use network for first response
+  saveNetwork?: boolean; // save network response
+  transformCache?: (data: any) => any; // transform function for cache data
+  transformNetwork?: (data: any) => any; // transform function for network data response
+  ref?: string; //  used for firebase driver
 }

@@ -1,8 +1,8 @@
-import { Observable } from "rxjs";
-import { RRExtraOptions } from "./rr-extra-options";
-import { RRResponse } from "./rr-response";
-import { RRRequest } from "./rr-request";
-import { RRConnector } from "./rr-connector";
+import { Observable } from 'rxjs';
+import { RRExtraOptions } from './rr-extra-options';
+import { RRResponse } from './rr-response';
+import { RRRequest } from './rr-request';
+import { RRConnector } from './rr-connector';
 
 export interface RRDriver {
   connector: RRConnector;
