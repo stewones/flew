@@ -20,7 +20,7 @@ export interface RRApi {
   useCache(active: boolean);
   transformCache(transformFn: (response: RRResponse) => any);
   key(name: string);
-  query(by: { [key: string]: {} });
+  query(by: { [key: string]: {} } | { [key: string]: {} }[]);
   where(field: string, operator: string, value: string | number);
   sort(by: { [key: string]: string });
   size(value: number);

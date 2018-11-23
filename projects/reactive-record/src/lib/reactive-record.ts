@@ -580,11 +580,11 @@ export class ReactiveRecord extends RRHooks implements RRApi {
   /**
    * Set request query
    *
-   * @param {{ [key: string]: {} }} by
+   * @param {({ [key: string]: {} } | { [key: string]: {} }[])} by
    * @returns
    * @memberof ReactiveRecord
    */
-  public query(by: { [key: string]: {} }) {
+  public query(by: { [key: string]: {} } | { [key: string]: {} }[]) {
     this.request.query = by;
     return this;
   }
