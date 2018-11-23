@@ -594,11 +594,15 @@ export class ReactiveRecord extends RRHooks implements RRApi {
    *
    * @param {string} field
    * @param {string} operator
-   * @param {(string | number)} value
+   * @param {(string | number | boolean)} value
    * @returns
    * @memberof ReactiveRecord
    */
-  public where(field: string, operator: string, value: string | number) {
+  public where(
+    field: string,
+    operator: string,
+    value: string | number | boolean
+  ) {
     if (isEmpty(this.request.query)) {
       this.request.query = [];
     }

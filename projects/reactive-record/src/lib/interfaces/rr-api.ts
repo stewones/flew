@@ -21,7 +21,7 @@ export interface RRApi {
   transformCache(transformFn: (response: RRResponse) => any);
   key(name: string);
   query(by: { [key: string]: {} } | { [key: string]: {} }[]);
-  where(field: string, operator: string, value: string | number);
+  where(field: string, operator: string, value: string | number | boolean);
   sort(by: { [key: string]: string });
   size(value: number);
   ref(path: string);
