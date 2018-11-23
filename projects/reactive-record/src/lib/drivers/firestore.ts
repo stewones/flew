@@ -36,7 +36,7 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
   private where(query: any, firestore: any) {
     if (isArray(query)) {
       console.log(
-        'where array',
+        'where using array',
         query[0].field,
         query[0].operator,
         query[0].value
@@ -50,7 +50,12 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
       query.field &&
       query.operator
     ) {
-      console.log('where object', query.field, query.operator, query.value);
+      console.log(
+        'where using object',
+        query.field,
+        query.operator,
+        query.value
+      );
       if (!query.value) throw `value can't be null for firestore where`;
       firestore = firestore.where(query.field, query.operator, query.value);
     }
@@ -59,13 +64,13 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
 
   private order(sort: any, firestore: any) {
     if (isArray(sort)) {
-      console.log('sort array', sort);
+      console.log('sort using array', sort);
       sort.map(s => {
         if (isEmpty(s)) throw `sort object in array can't be null`;
         for (let k in s) firestore = firestore.orderBy(k, s[k]);
       });
     } else if (<any>typeof sort === 'object') {
-      console.log('sort object', sort);
+      console.log('sort using object', sort);
       if (isEmpty(sort)) throw `sort object can't be null`;
       for (let k in sort) firestore = firestore.orderBy(k, sort[k]);
     }
@@ -204,12 +209,14 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
   ): Observable<RRResponse> {
     return this.find(request, extraOptions).pipe(
       map((r: RRResponse) => {
-        return !isEmpty(r.data)
-          ? <RRResponse>{
-              data: r.data[0],
-              response: r.response
-            }
-          : r[0];
+        console.log(456, r);
+        // return !isEmpty(r.data)
+        //?
+        return <RRResponse>{
+          data: r.data[0] || {},
+          response: r.response
+        };
+        //: r[0];
       })
     );
   }

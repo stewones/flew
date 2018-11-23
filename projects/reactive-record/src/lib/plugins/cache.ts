@@ -1,13 +1,13 @@
-import { merge, omit, isEmpty, isEqual } from "lodash";
-import { AxiosRequestConfig } from "axios";
-import { PartialObserver } from "rxjs";
+import { merge, omit, isEmpty, isEqual } from 'lodash';
+import { AxiosRequestConfig } from 'axios';
+import { PartialObserver } from 'rxjs';
 
-import { RROptions } from "../interfaces/rr-options";
-import { RRResponse } from "../interfaces/rr-response";
-import { RRExtraOptions } from "../interfaces/rr-extra-options";
-import { RRCacheOptions } from "../interfaces/rr-cache-options";
-import { RRFirebaseConnector } from "../connectors/firebase";
-import { RRFirestoreConnector } from "../connectors/firestore";
+import { RROptions } from '../interfaces/rr-options';
+import { RRResponse } from '../interfaces/rr-response';
+import { RRExtraOptions } from '../interfaces/rr-extra-options';
+import { RRCacheOptions } from '../interfaces/rr-cache-options';
+import { RRFirebaseConnector } from '../connectors/firebase';
+import { RRFirestoreConnector } from '../connectors/firestore';
 
 /**
  * @export
@@ -20,13 +20,13 @@ export class RRCachePlugin {
     ttl: 0,
     hook: {},
     token: {
-      type: "Bearer"
+      type: 'Bearer'
     }
   };
 
   constructor(options: RRCacheOptions) {
     merge(this.params, options);
-    if (!this.params.storage) throw "missing storage instance";
+    if (!this.params.storage) throw 'missing storage instance';
 
     merge(this.params, <RROptions>{
       hook: {
@@ -35,39 +35,39 @@ export class RRCachePlugin {
         http: {
           pre: (config: AxiosRequestConfig) => {
             if (this.params.token.value)
-              config.headers["Authorization"] = `${this.params.token.type} ${
+              config.headers['Authorization'] = `${this.params.token.type} ${
                 this.params.token.value
               }`;
             if (this.params.version)
-              config.headers["accept-version"] = this.params.version;
+              config.headers['accept-version'] = this.params.version;
           },
           post: {
             before: (key, observer, RRExtraOptions) => {
-              console.log("hook.http.post.before");
+              console.log('hook.http.post.before');
               return this.getCache(key, observer, RRExtraOptions);
             },
             after: async (key, network, observer, RRExtraOptions) => {
-              console.log("hook.http.post.after");
+              console.log('hook.http.post.after');
               return this.setCache(key, network, observer, RRExtraOptions);
             }
           },
           patch: {
             before: (key, observer, RRExtraOptions) => {
-              console.log("hook.http.patch.before");
+              console.log('hook.http.patch.before');
               return this.getCache(key, observer, RRExtraOptions);
             },
             after: async (key, network, observer, RRExtraOptions) => {
-              console.log("hook.http.patch.after");
+              console.log('hook.http.patch.after');
               return this.setCache(key, network, observer, RRExtraOptions);
             }
           },
           get: {
             before: async (key, observer, RRExtraOptions) => {
-              console.log("hook.http.get.before");
+              console.log('hook.http.get.before');
               return await this.getCache(key, observer, RRExtraOptions);
             },
             after: async (key, network, observer, RRExtraOptions) => {
-              console.log("hook.http.get.after");
+              console.log('hook.http.get.after');
               return this.setCache(key, network, observer, RRExtraOptions);
             }
           }
@@ -76,11 +76,11 @@ export class RRCachePlugin {
         // customize search behavior
         find: {
           before: (key, observer, RRExtraOptions) => {
-            console.log("hook.find.before");
+            console.log('hook.find.before');
             return this.getCache(key, observer, RRExtraOptions);
           },
           after: async (key, network, observer, RRExtraOptions) => {
-            console.log("hook.find.after");
+            console.log('hook.find.after');
             return this.setCache(key, network, observer, RRExtraOptions);
           }
         }
@@ -88,8 +88,8 @@ export class RRCachePlugin {
     });
 
     if (isEmpty(this.params.connector)) {
-      if (!this.params.config) throw "missing firebase config";
-      if (!this.params.firebase) throw "missing firebase sdk";
+      if (!this.params.config) throw 'missing firebase config';
+      if (!this.params.firebase) throw 'missing firebase sdk';
       this.params.connector = {
         firebase: new RRFirebaseConnector(
           this.params.firebase,
@@ -103,11 +103,11 @@ export class RRCachePlugin {
     }
 
     return omit(this.params, [
-      "config",
-      "firebase",
-      "storage",
-      "version",
-      "token"
+      'config',
+      'firebase',
+      'storage',
+      'version',
+      'token'
     ]);
   }
 
@@ -130,7 +130,7 @@ export class RRCachePlugin {
     );
     const transformNetwork: any =
       extraOptions.transformNetwork &&
-      typeof extraOptions.transformNetwork === "function"
+      typeof extraOptions.transformNetwork === 'function'
         ? extraOptions.transformNetwork
         : (data: RRResponse) => data;
 
@@ -174,18 +174,19 @@ export class RRCachePlugin {
     );
     const transformCache: any =
       extraOptions.transformCache &&
-      typeof extraOptions.transformCache === "function"
+      typeof extraOptions.transformCache === 'function'
         ? extraOptions.transformCache
         : (data: RRResponse) => data;
     const transformNetwork: any =
       extraOptions.transformNetwork &&
-      typeof extraOptions.transformNetwork === "function"
+      typeof extraOptions.transformNetwork === 'function'
         ? extraOptions.transformNetwork
         : (data: RRResponse) => data;
     const saveNetwork: boolean =
       extraOptions.saveNetwork === false ? false : true;
 
     //
+    // defaults to
     // return network response only if different from cache
     if (
       (cache && !isEqual(cache.data, network.data)) ||
@@ -214,15 +215,20 @@ export class RRCachePlugin {
           key,
           transformCache(
             omit(network, [
-              "config",
-              "request",
-              "response.config",
-              "response.data",
-              "response.request"
+              'config',
+              'request',
+              'response.config',
+              'response.data',
+              'response.request'
             ])
           )
         );
       }
+    }
+    //
+    // force network return
+    else if (extraOptions.useNetwork) {
+      observer.next(transformNetwork(network));
     }
     observer.complete();
   }
