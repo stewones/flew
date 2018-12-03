@@ -56,12 +56,13 @@ export class RRFirebaseDriver extends RRHooks /*implements RRDriver*/ {
 
       //
       // run exceptions for firestore
-      if (!this.collection) throw 'missing collection';
-      if (isEmpty(this.connector.firebase)) throw 'missing firebase connector';
+      if (!this.collection) throw new Error('missing collection');
+      if (isEmpty(this.connector.firebase))
+        throw new Error('missing firebase connector');
 
       //
       // define adapter
-      let firebase: any = this.connector.firebase
+      const firebase: any = this.connector.firebase
         .database()
         .ref(`${this.collection}/${_extraOptions.ref}`);
 
@@ -92,12 +93,12 @@ export class RRFirebaseDriver extends RRHooks /*implements RRDriver*/ {
 
             //
             // format data
-            let data: any[] = [];
+            const data: any[] = [];
 
-            if (typeof val != 'object') {
+            if (typeof val !== 'object') {
               data[0] = snapshot.val();
             } else {
-              for (let k in val) {
+              for (const k in val) {
                 data.push(val[k]);
               }
             }

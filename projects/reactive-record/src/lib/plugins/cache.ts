@@ -26,7 +26,7 @@ export class RRCachePlugin {
 
   constructor(options: RRCacheOptions) {
     merge(this.params, options);
-    if (!this.params.storage) throw 'missing storage instance';
+    if (!this.params.storage) throw new Error('missing storage instance');
 
     merge(this.params, <RROptions>{
       hook: {
@@ -42,54 +42,54 @@ export class RRCachePlugin {
               config.headers['accept-version'] = this.params.version;
           },
           post: {
-            before: (key, observer, RRExtraOptions) => {
+            before: (key, observer, extraOptions) => {
               console.log('hook.http.post.before');
-              return this.getCache(key, observer, RRExtraOptions);
+              return this.getCache(key, observer, extraOptions);
             },
-            after: async (key, network, observer, RRExtraOptions) => {
+            after: async (key, network, observer, extraOptions) => {
               console.log('hook.http.post.after');
-              return this.setCache(key, network, observer, RRExtraOptions);
+              return this.setCache(key, network, observer, extraOptions);
             }
           },
           patch: {
-            before: (key, observer, RRExtraOptions) => {
+            before: (key, observer, extraOptions) => {
               console.log('hook.http.patch.before');
-              return this.getCache(key, observer, RRExtraOptions);
+              return this.getCache(key, observer, extraOptions);
             },
-            after: async (key, network, observer, RRExtraOptions) => {
+            after: async (key, network, observer, extraOptions) => {
               console.log('hook.http.patch.after');
-              return this.setCache(key, network, observer, RRExtraOptions);
+              return this.setCache(key, network, observer, extraOptions);
             }
           },
           get: {
-            before: async (key, observer, RRExtraOptions) => {
+            before: async (key, observer, extraOptions) => {
               console.log('hook.http.get.before');
-              return await this.getCache(key, observer, RRExtraOptions);
+              return await this.getCache(key, observer, extraOptions);
             },
-            after: async (key, network, observer, RRExtraOptions) => {
+            after: async (key, network, observer, extraOptions) => {
               console.log('hook.http.get.after');
-              return this.setCache(key, network, observer, RRExtraOptions);
+              return this.setCache(key, network, observer, extraOptions);
             }
           }
         },
         //
         // customize search behavior
         find: {
-          before: (key, observer, RRExtraOptions) => {
+          before: (key, observer, extraOptions) => {
             console.log('hook.find.before');
-            return this.getCache(key, observer, RRExtraOptions);
+            return this.getCache(key, observer, extraOptions);
           },
-          after: async (key, network, observer, RRExtraOptions) => {
+          after: async (key, network, observer, extraOptions) => {
             console.log('hook.find.after');
-            return this.setCache(key, network, observer, RRExtraOptions);
+            return this.setCache(key, network, observer, extraOptions);
           }
         }
       }
     });
 
     if (isEmpty(this.params.connector)) {
-      if (!this.params.config) throw 'missing firebase config';
-      if (!this.params.firebase) throw 'missing firebase sdk';
+      if (!this.params.config) throw new Error('missing firebase config');
+      if (!this.params.firebase) throw new Error('missing firebase sdk');
       this.params.connector = {
         firebase: new RRFirebaseConnector(
           this.params.firebase,
@@ -198,7 +198,7 @@ export class RRCachePlugin {
       observer.next(transformNetwork(network));
       //
       // time to live
-      let seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
+      const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
       if (
         saveNetwork &&
         ((isEmpty(network.data) && cache) ||
@@ -233,11 +233,3 @@ export class RRCachePlugin {
     observer.complete();
   }
 }
-
-/**
- * @deprecated
- * @export
- * @class ClientSetup
- * @extends {RRCachePlugin}
- */
-export class ClientSetup extends RRCachePlugin {}

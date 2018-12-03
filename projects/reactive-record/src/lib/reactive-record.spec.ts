@@ -5,12 +5,12 @@ import { FirestoreStub } from './utils/firestore-stub.spec';
 import { PartialObserver } from 'rxjs';
 
 describe('ReactiveRecord', () => {
-  let lib: ReactiveRecord,
-    hookStub,
-    exceptionServerStub,
-    exceptionClientStub,
-    baseURL = 'http://127.0.0.1',
-    collection = 'foo-collection';
+  let lib: ReactiveRecord;
+  // hookStub,
+  // exceptionServerStub,
+  // exceptionClientStub,
+  const baseURL = 'http://127.0.0.1';
+  const collection = 'foo-collection';
 
   beforeEach(() => {});
 

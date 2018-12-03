@@ -102,9 +102,9 @@ export class ReactiveRecord extends RRHooks implements RRApi {
 
     if (
       !this._drivers[_driver] ||
-      typeof this._drivers[_driver].find != 'function'
+      typeof this._drivers[_driver].find !== 'function'
     )
-      throw `${_driver} driver unavailable for now, sorry =(`;
+      throw new Error(`${_driver} driver unavailable for now, sorry =(`);
 
     return this._drivers[_driver].find(_request, _extraOptions);
   }
@@ -123,9 +123,9 @@ export class ReactiveRecord extends RRHooks implements RRApi {
 
     if (
       !this._drivers[_driver] ||
-      typeof this._drivers[_driver].findOne != 'function'
+      typeof this._drivers[_driver].findOne !== 'function'
     )
-      throw `${_driver} driver unavailable for now, sorry =(`;
+      throw new Error(`${_driver} driver unavailable for now, sorry =(`);
 
     return this._drivers[_driver].findOne(_request, _extraOptions);
   }
@@ -135,19 +135,23 @@ export class ReactiveRecord extends RRHooks implements RRApi {
    *
    * @param {string} id
    * @param {*} data
-   * @param {boolean} [merge=true]
+   * @param {boolean} [shouldMerge=true]
    * @returns {Observable<any>}
    * @memberof ReactiveRecord
    */
-  public set(id: string, data: any, merge: boolean = true): Observable<any> {
+  public set(
+    id: string,
+    data: any,
+    shouldMerge: boolean = true
+  ): Observable<any> {
     const _driver = clone(this._driver);
     this.reset();
     if (
       !this._drivers[_driver] ||
-      typeof this._drivers[_driver].set != 'function'
+      typeof this._drivers[_driver].set !== 'function'
     )
-      throw `${_driver} driver unavailable for now, sorry =(`;
-    return this._drivers[_driver].set(id, data, merge);
+      throw new Error(`${_driver} driver unavailable for now, sorry =(`);
+    return this._drivers[_driver].set(id, data, shouldMerge);
   }
 
   /**
@@ -163,9 +167,9 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     this.reset();
     if (
       !this._drivers[_driver] ||
-      typeof this._drivers[_driver].update != 'function'
+      typeof this._drivers[_driver].update !== 'function'
     )
-      throw `${_driver} driver unavailable for now, sorry =(`;
+      throw new Error(`${_driver} driver unavailable for now, sorry =(`);
     return this._drivers[_driver].update(id, data);
   }
 
@@ -191,9 +195,9 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     this.reset();
     if (
       !this._drivers[_driver] ||
-      typeof this._drivers[_driver].on != 'function'
+      typeof this._drivers[_driver].on !== 'function'
     )
-      throw `${this._driver} driver unavailable for now, sorry =(`;
+      throw new Error(`${this._driver} driver unavailable for now, sorry =(`);
     return this._drivers[_driver].on(
       _request,
       onSuccess,
@@ -215,8 +219,8 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     return new Observable((observer: PartialObserver<any>) => {
       //
       // call exceptions
-      if (!this.baseURL) throw 'baseURL needed for [get]';
-      if (!this.endpoint) throw 'endpoint required for [get]';
+      if (!this.baseURL) throw new Error('baseURL needed for [get]');
+      if (!this.endpoint) throw new Error('endpoint required for [get]');
 
       //
       // re-apply http stuff
@@ -246,15 +250,18 @@ export class ReactiveRecord extends RRHooks implements RRApi {
               data: r.data,
               response: r
             };
-            //
-            // get after hook
-            const hook = this.hasHook('http.get.after');
+
             //
             // check availability
-            if (hook) {
+            if (this.hasHook('http.get.after')) {
               //
               // run client hook
-              hook(key, response, observer, _extraOptions);
+              this.hasHook('http.get.after')(
+                key,
+                response,
+                observer,
+                _extraOptions
+              );
             } else {
               //
               // success callback
@@ -272,13 +279,13 @@ export class ReactiveRecord extends RRHooks implements RRApi {
       };
       //
       // get before hook
-      const hook = this.hasHook('http.get.before');
+      const hookFn = this.hasHook('http.get.before');
       //
       // check availability
-      if (!_extraOptions.useNetwork && hook) {
+      if (!_extraOptions.useNetwork && hookFn) {
         //
         // run client hook
-        hook(key, observer, _extraOptions).then(canRequest => {
+        hookFn(key, observer, _extraOptions).then(canRequest => {
           //
           // http.get.before should return a boolean
           if (canRequest) network();
@@ -306,8 +313,8 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     return new Observable((observer: PartialObserver<RRResponse>) => {
       //
       // call exceptions
-      if (!this.baseURL) throw 'baseURL needed for [post]';
-      if (!this.endpoint) throw 'endpoint required for [post]';
+      if (!this.baseURL) throw new Error('baseURL needed for [post]');
+      if (!this.endpoint) throw new Error('endpoint required for [post]');
 
       //
       // re-apply http stuff
@@ -337,15 +344,18 @@ export class ReactiveRecord extends RRHooks implements RRApi {
               data: r.data,
               response: r
             };
-            //
-            // get after hook
-            const hook = this.hasHook('http.post.after');
+
             //
             // check availability
-            if (hook) {
+            if (this.hasHook('http.get.after')) {
               //
               // run client hook
-              hook(key, response, observer, _extraOptions);
+              this.hasHook('http.get.after')(
+                key,
+                response,
+                observer,
+                _extraOptions
+              );
             } else {
               //
               // success callback
@@ -363,13 +373,13 @@ export class ReactiveRecord extends RRHooks implements RRApi {
       };
       //
       // get before hook
-      const hook = this.hasHook('http.post.before');
+      const hookFn = this.hasHook('http.post.before');
       //
       // check availability
-      if (!_extraOptions.useNetwork && hook) {
+      if (!_extraOptions.useNetwork && hookFn) {
         //
         // run client hook
-        hook(key, observer, _extraOptions).then(canRequest => {
+        hookFn(key, observer, _extraOptions).then(canRequest => {
           //
           // http.get.before should return a boolean
           if (canRequest) network();
@@ -397,8 +407,8 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     return new Observable((observer: PartialObserver<any>) => {
       //
       // call exceptions
-      if (!this.baseURL) throw 'baseURL needed for [patch]';
-      if (!this.endpoint) throw 'endpoint required for [patch]';
+      if (!this.baseURL) throw new Error('baseURL needed for [patch]');
+      if (!this.endpoint) throw new Error('endpoint required for [patch]');
 
       //
       // re-apply http stuff
@@ -429,14 +439,16 @@ export class ReactiveRecord extends RRHooks implements RRApi {
               response: r
             };
             //
-            // get after hook
-            const hook = this.hasHook('http.patch.after');
-            //
             // check availability
-            if (hook) {
+            if (this.hasHook('http.get.after')) {
               //
               // run client hook
-              hook(key, response, observer, _extraOptions);
+              this.hasHook('http.get.after')(
+                key,
+                response,
+                observer,
+                _extraOptions
+              );
             } else {
               //
               // success callback
@@ -454,13 +466,13 @@ export class ReactiveRecord extends RRHooks implements RRApi {
       };
       //
       // get before hook
-      const hook = this.hasHook('http.patch.before');
+      const hookFn = this.hasHook('http.patch.before');
       //
       // check availability
-      if (!_extraOptions.useNetwork && hook) {
+      if (!_extraOptions.useNetwork && hookFn) {
         //
         // run client hook
-        hook(key, observer, _extraOptions).then(canRequest => {
+        hookFn(key, observer, _extraOptions).then(canRequest => {
           //
           // http.get.before should return a boolean
           if (canRequest) network();
@@ -625,7 +637,7 @@ export class ReactiveRecord extends RRHooks implements RRApi {
     if (isEmpty(this.request.sort)) {
       this.request.sort = {};
     }
-    for (let k in by) {
+    for (const k in by) {
       this.request.sort[k] = by[k];
     }
     return this;

@@ -1,4 +1,3 @@
-
 /**
  * storage adapter
  * you can use any class that implements this interface
@@ -8,8 +7,8 @@
  * @interface RRCacheStorage
  */
 export interface RRCacheStorage {
-    get(key: string): Promise<any>,
-    set(key: string, value: any): Promise<any>,
-    remove(key: string): Promise<any>,
-    clear(): Promise<void>
+  get(key: string): Promise<any>;
+  set(key: string, value: any): Promise<any>;
+  remove(key: string): Promise<any>;
+  clear(): Promise<void>;
 }

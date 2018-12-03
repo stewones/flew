@@ -3,6 +3,6 @@
  * @interface RRConnector
  */
 export interface RRConnector {
-    firebase?: any,
-    firestore?: any
+  firebase?: any;
+  firestore?: any;
 }

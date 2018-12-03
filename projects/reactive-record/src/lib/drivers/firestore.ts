@@ -42,7 +42,7 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
         query[0].value
       );
       query.map(q => {
-        if (!q.value) throw `value can't be null for firestore where`;
+        if (!q.value) throw Error(`value can't be null for firestore where`);
         firestore = firestore.where(q.field, q.operator, q.value);
       });
     } else if (
@@ -56,7 +56,8 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
         query.operator,
         query.value
       );
-      if (!query.value) throw `value can't be null for firestore where`;
+      if (!query.value)
+        throw new Error(`value can't be null for firestore where`);
       firestore = firestore.where(query.field, query.operator, query.value);
     }
     return firestore;
@@ -66,13 +67,13 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
     if (isArray(sort)) {
       console.log('sort using array', sort);
       sort.map(s => {
-        if (isEmpty(s)) throw `sort object in array can't be null`;
-        for (let k in s) firestore = firestore.orderBy(k, s[k]);
+        if (isEmpty(s)) throw new Error(`sort object in array can't be null`);
+        for (const k in s) firestore = firestore.orderBy(k, s[k]);
       });
     } else if (<any>typeof sort === 'object') {
       console.log('sort using object', sort);
-      if (isEmpty(sort)) throw `sort object can't be null`;
-      for (let k in sort) firestore = firestore.orderBy(k, sort[k]);
+      if (isEmpty(sort)) throw new Error(`sort object can't be null`);
+      for (const k in sort) firestore = firestore.orderBy(k, sort[k]);
     }
     return firestore;
   }
@@ -105,9 +106,9 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
 
       //
       // run exceptions for firestore
-      if (!this.collection) throw 'missing collection';
+      if (!this.collection) throw new Error('missing collection');
       if (isEmpty(this.connector.firestore))
-        throw 'missing firestore connector';
+        throw new Error('missing firestore connector');
 
       //
       // define adapter
@@ -145,7 +146,7 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
           .then(async (snapshot: any) => {
             //
             // format data
-            let data: any[] = [];
+            const data: any[] = [];
             snapshot.forEach(doc => data.push(doc.data()));
             //
             // define standard response
@@ -236,8 +237,9 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
         : (data: RRResponse) => data;
     //
     // run exceptions
-    if (!this.collection) throw 'missing collection';
-    if (isEmpty(this.connector.firestore)) throw 'missing firestore connector';
+    if (!this.collection) throw new Error('missing collection');
+    if (isEmpty(this.connector.firestore))
+      throw new Error('missing firestore connector');
 
     //
     // define adapter
@@ -262,7 +264,7 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
     //
     // fire in the hole
     return firestore.onSnapshot((snapshot: any) => {
-      let data: any[] = [];
+      const data: any[] = [];
       snapshot.forEach(doc => data.push(doc.data()));
       const response: RRResponse = {
         data: data,
@@ -277,13 +279,17 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
     }, onError);
   }
 
-  public set(id: string, data: any, merge: boolean = true): Observable<any> {
+  public set(
+    id: string,
+    data: any,
+    shouldMerge: boolean = true
+  ): Observable<any> {
     return new Observable(observer => {
       //
       // primary exceptions
-      if (!this.collection) throw 'missing collection';
+      if (!this.collection) throw new Error('missing collection');
       if (isEmpty(this.connector.firestore))
-        throw 'missing firestore connector';
+        throw new Error('missing firestore connector');
       //
       // define connector
       const firestore: any = this.connector.firestore.collection(
@@ -299,7 +305,7 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
       // call firestore
       firestore
         .doc(id)
-        .set(data, { merge: merge })
+        .set(data, { merge: shouldMerge })
         .then(response)
         .catch(response);
     });
@@ -309,9 +315,9 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
     return new Observable(observer => {
       //
       // primary exceptions
-      if (!this.collection) throw 'missing collection';
+      if (!this.collection) throw new Error('missing collection');
       if (isEmpty(this.connector.firestore))
-        throw 'missing firestore connector';
+        throw new Error('missing firestore connector');
       //
       // define connector
       const firestore: any = this.connector.firestore.collection(
