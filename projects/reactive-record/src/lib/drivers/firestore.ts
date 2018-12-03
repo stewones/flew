@@ -3,8 +3,8 @@ const moment = moment_import; // workaround for imports
 import { RRDriver } from '../interfaces/rr-driver';
 import { RRRequest } from '../interfaces/rr-request';
 import { RRExtraOptions } from '../interfaces/rr-extra-options';
-import { Observable, PartialObserver } from 'rxjs';
-import { merge, isEmpty, isArray } from 'lodash';
+import { Observable, PartialObserver, race } from 'rxjs';
+import { get, merge, isEmpty, isArray } from 'lodash';
 
 import { RRConnector } from '../interfaces/rr-connector';
 import { RROptions } from '../interfaces/rr-options';
@@ -210,14 +210,18 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
   ): Observable<RRResponse> {
     return this.find(request, extraOptions).pipe(
       map((r: RRResponse) => {
-        console.log(456, r);
-        // return !isEmpty(r.data)
-        //?
-        return <RRResponse>{
-          data: r.data[0] || {},
+        const transformNetwork: any =
+          extraOptions.transformNetwork &&
+          typeof extraOptions.transformNetwork === 'function'
+            ? extraOptions.transformNetwork
+            : (data: RRResponse) => data;
+        const data = isArray(r) ? r : get(r, 'data') || [];
+        const response = <RRResponse>{
+          data: data.length ? data[0] : {},
           response: r.response
         };
-        //: r[0];
+        // console.log('findOne response', response);
+        return transformNetwork(response);
       })
     );
   }

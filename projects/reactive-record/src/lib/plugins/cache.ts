@@ -151,6 +151,7 @@ export class RRCachePlugin {
 
     //
     // otherwise
+    // console.log('get cache pass');
     return true;
   }
 
@@ -230,6 +231,7 @@ export class RRCachePlugin {
     else if (extraOptions.useNetwork) {
       observer.next(transformNetwork(network));
     }
+    // console.log('useNetwork?', extraOptions.useNetwork);
     observer.complete();
   }
 }
