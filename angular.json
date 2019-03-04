@@ -2,7 +2,239 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "",
-  "projects": {},
+  "projects": {
+    "reactive-record-demo": {
+      "root": "apps/reactive-record/demo/",
+      "sourceRoot": "apps/reactive-record/demo/src",
+      "projectType": "application",
+      "prefix": "firetask",
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "style": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/reactive-record/demo",
+            "index": "apps/reactive-record/demo/src/index.html",
+            "main": "apps/reactive-record/demo/src/main.ts",
+            "polyfills": "apps/reactive-record/demo/src/polyfills.ts",
+            "tsConfig": "apps/reactive-record/demo/tsconfig.app.json",
+            "assets": [
+              "apps/reactive-record/demo/src/favicon.ico",
+              "apps/reactive-record/demo/src/assets"
+            ],
+            "styles": ["apps/reactive-record/demo/src/styles.scss"],
+            "scripts": [],
+            "es5BrowserSupport": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/reactive-record/demo/src/environments/environment.ts",
+                  "with": "apps/reactive-record/demo/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "reactive-record-demo:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "reactive-record-demo:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "reactive-record-demo:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/reactive-record/demo/tsconfig.app.json",
+              "apps/reactive-record/demo/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "apps/reactive-record/demo/jest.config.js",
+            "tsConfig": "apps/reactive-record/demo/tsconfig.spec.json",
+            "setupFile": "apps/reactive-record/demo/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "reactive-record-demo-e2e": {
+      "root": "apps/reactive-record/demo-e2e",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/builders:cypress",
+          "options": {
+            "cypressConfig": "apps/reactive-record/demo-e2e/cypress.json",
+            "tsConfig": "apps/reactive-record/demo-e2e/tsconfig.e2e.json",
+            "devServerTarget": "reactive-record-demo:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "reactive-record-demo:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "apps/reactive-record/demo-e2e/tsconfig.e2e.json",
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
+    "reactive-record": {
+      "root": "libs/reactive-record",
+      "sourceRoot": "libs/reactive-record/src",
+      "projectType": "library",
+      "prefix": "rr",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/reactive-record/tsconfig.lib.json",
+            "project": "libs/reactive-record/ng-package.json"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/reactive-record/tsconfig.lib.json",
+              "libs/reactive-record/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/reactive-record/jest.config.js",
+            "tsConfig": "libs/reactive-record/tsconfig.spec.json",
+            "setupFile": "libs/reactive-record/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "ionic": {
+      "root": "libs/ionic",
+      "sourceRoot": "libs/ionic/src",
+      "projectType": "library",
+      "prefix": "firetask",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/ionic/tsconfig.lib.json",
+            "project": "libs/ionic/ng-package.json"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ionic/tsconfig.lib.json",
+              "libs/ionic/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/ionic/jest.config.js",
+            "tsConfig": "libs/ionic/tsconfig.spec.json"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "angular": {
+      "root": "libs/angular",
+      "sourceRoot": "libs/angular/src",
+      "projectType": "library",
+      "prefix": "firetask",
+      "architect": {
+        "build": {
+          "builder": "@libs/angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/angular/tsconfig.lib.json",
+            "project": "libs/angular/ng-package.json"
+          }
+        },
+        "lint": {
+          "builder": "@libs/angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/angular/tsconfig.lib.json",
+              "libs/angular/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/angular/jest.config.js",
+            "tsConfig": "libs/angular/tsconfig.spec.json",
+            "setupFile": "libs/angular/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    }
+  },
   "cli": {
     "warnings": {
       "typescriptMismatch": false,
@@ -17,5 +249,6 @@
     "@nrwl/schematics:library": {
       "style": "scss"
     }
-  }
+  },
+  "defaultProject": "reactive-record-demo"
 }

@@ -7,5 +7,21 @@
     "tslint.json": "*",
     "nx.json": "*"
   },
-  "projects": {}
+  "projects": {
+    "reactive-record-demo": {
+      "tags": []
+    },
+    "reactive-record-demo-e2e": {
+      "tags": []
+    },
+    "reactive-record": {
+      "tags": []
+    },
+    "ionic": {
+      "tags": []
+    },
+    "angular": {
+      "tags": []
+    }
+  }
 }
