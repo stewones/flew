@@ -132,6 +132,9 @@
           "options": {
             "tsConfig": "libs/reactive-record/tsconfig.lib.json",
             "project": "libs/reactive-record/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
           }
         },
         "lint": {

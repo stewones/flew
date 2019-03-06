@@ -44,6 +44,7 @@ export { FirebaseConfig } from './lib/interfaces/firebase-config';
 export { RRClientToken } from './lib/interfaces/client-token';
 export { RRCacheStorage } from './lib/interfaces/storage-adapter';
 export { RRConnector } from './lib/interfaces/connector';
+export { RRCacheOptions } from './lib/interfaces/cache-options';
 export { ElasticMatch } from './lib/interfaces/elastic-match';
 export { ElasticQuery } from './lib/interfaces/elastic-query';
 export { FirestoreQuery } from './lib/interfaces/firestore-query';

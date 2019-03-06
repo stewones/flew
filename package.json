@@ -24,7 +24,15 @@
     "update:check": "ng update",
     "workspace-schematic": "./node_modules/.bin/nx workspace-schematic",
     "dep-graph": "./node_modules/.bin/nx dep-graph",
-    "help": "./node_modules/.bin/nx help"
+    "help": "./node_modules/.bin/nx help",
+    "rr:build:p": "ng build reactive-record --prod",
+    "rr:release:custom": "standard-version release --release-as 1.0.1 && tools/bin/patch-warning.sh",
+    "rr:release:patch": "standard-version release --release-as patch && tools/bin/patch-warning.sh",
+    "rr:release:minor": "standard-version release --release-as minor && tools/bin/patch-warning.sh",
+    "rr:release:major": "standard-version release --release-as major && tools/bin/patch-warning.sh",
+    "rr:release:a": "standard-version release --release-as patch --prerelease alpha && tools/bin/patch-warning.sh",
+    "rr:release:b": "standard-version release --release-as patch --prerelease beta && tools/bin/patch-warning.sh",
+    "rr:publish": "npm run build:p && cd dist/libs/reactive-record && npm publish && git push origin --tags"
   },
   "private": true,
   "dependencies": {
@@ -46,7 +54,7 @@
     "firebase": "^5.8.5",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
-    "rxjs": "^6.4.0",
+    "rxjs": "6.0.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
