@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'reactive-record-demo';
+  title = 'Reactive Record Demo';
 
   todos$: Subscription;
 

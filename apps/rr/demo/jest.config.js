@@ -1,7 +1,7 @@
 module.exports = {
-  name: 'reactive-record-demo',
+  name: 'rr-demo',
   preset: '../../../jest.config.js',
-  coverageDirectory: '../../../coverage/apps/reactive-record/demo/',
+  coverageDirectory: '../../../coverage/apps/rr/demo/',
   snapshotSerializers: [
     'jest-preset-angular/AngularSnapshotSerializer.js',
     'jest-preset-angular/HTMLCommentSerializer.js'

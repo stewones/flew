@@ -3,124 +3,6 @@
   "version": 1,
   "newProjectRoot": "",
   "projects": {
-    "reactive-record-demo": {
-      "root": "apps/reactive-record/demo/",
-      "sourceRoot": "apps/reactive-record/demo/src",
-      "projectType": "application",
-      "prefix": "firetask",
-      "schematics": {
-        "@nrwl/schematics:component": {
-          "style": "scss"
-        }
-      },
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/apps/reactive-record/demo",
-            "index": "apps/reactive-record/demo/src/index.html",
-            "main": "apps/reactive-record/demo/src/main.ts",
-            "polyfills": "apps/reactive-record/demo/src/polyfills.ts",
-            "tsConfig": "apps/reactive-record/demo/tsconfig.app.json",
-            "assets": [
-              "apps/reactive-record/demo/src/favicon.ico",
-              "apps/reactive-record/demo/src/assets"
-            ],
-            "styles": ["apps/reactive-record/demo/src/styles.scss"],
-            "scripts": [],
-            "es5BrowserSupport": true
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/reactive-record/demo/src/environments/environment.ts",
-                  "with": "apps/reactive-record/demo/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "reactive-record-demo:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "reactive-record-demo:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "reactive-record-demo:build"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "apps/reactive-record/demo/tsconfig.app.json",
-              "apps/reactive-record/demo/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/builders:jest",
-          "options": {
-            "jestConfig": "apps/reactive-record/demo/jest.config.js",
-            "tsConfig": "apps/reactive-record/demo/tsconfig.spec.json",
-            "setupFile": "apps/reactive-record/demo/src/test-setup.ts"
-          }
-        }
-      }
-    },
-    "reactive-record-demo-e2e": {
-      "root": "apps/reactive-record/demo-e2e",
-      "projectType": "application",
-      "prefix": "",
-      "architect": {
-        "e2e": {
-          "builder": "@nrwl/builders:cypress",
-          "options": {
-            "cypressConfig": "apps/reactive-record/demo-e2e/cypress.json",
-            "tsConfig": "apps/reactive-record/demo-e2e/tsconfig.e2e.json",
-            "devServerTarget": "reactive-record-demo:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "reactive-record-demo:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "apps/reactive-record/demo-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
-          }
-        }
-      }
-    },
     "reactive-record": {
       "root": "libs/reactive-record",
       "sourceRoot": "libs/reactive-record/src",
@@ -236,6 +118,124 @@
           "styleext": "scss"
         }
       }
+    },
+    "rr-demo": {
+      "root": "apps/rr/demo/",
+      "sourceRoot": "apps/rr/demo/src",
+      "projectType": "application",
+      "prefix": "firetask",
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "style": "scss"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/rr/demo",
+            "index": "apps/rr/demo/src/index.html",
+            "main": "apps/rr/demo/src/main.ts",
+            "polyfills": "apps/rr/demo/src/polyfills.ts",
+            "tsConfig": "apps/rr/demo/tsconfig.app.json",
+            "assets": [
+              "apps/rr/demo/src/favicon.ico",
+              "apps/rr/demo/src/assets"
+            ],
+            "styles": ["apps/rr/demo/src/styles.scss"],
+            "scripts": [],
+            "es5BrowserSupport": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/rr/demo/src/environments/environment.ts",
+                  "with": "apps/rr/demo/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "rr-demo:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "rr-demo:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "rr-demo:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/rr/demo/tsconfig.app.json",
+              "apps/rr/demo/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "apps/rr/demo/jest.config.js",
+            "tsConfig": "apps/rr/demo/tsconfig.spec.json",
+            "setupFile": "apps/rr/demo/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "rr-demo-e2e": {
+      "root": "apps/rr/demo-e2e",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/builders:cypress",
+          "options": {
+            "cypressConfig": "apps/rr/demo-e2e/cypress.json",
+            "tsConfig": "apps/rr/demo-e2e/tsconfig.e2e.json",
+            "devServerTarget": "rr-demo:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "rr-demo:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "apps/rr/demo-e2e/tsconfig.e2e.json",
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
     }
   },
   "cli": {
@@ -253,5 +253,5 @@
       "style": "scss"
     }
   },
-  "defaultProject": "reactive-record-demo"
+  "defaultProject": "rr-demo"
 }

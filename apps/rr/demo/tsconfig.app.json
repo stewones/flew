@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../../dist/out-tsc/apps/reactive-record/demo",
+    "outDir": "../../../dist/out-tsc/apps/rr/demo",
     "types": []
   },
   "exclude": ["src/test-setup.ts", "**/*.spec.ts"],

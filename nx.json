@@ -8,12 +8,6 @@
     "nx.json": "*"
   },
   "projects": {
-    "reactive-record-demo": {
-      "tags": []
-    },
-    "reactive-record-demo-e2e": {
-      "tags": []
-    },
     "reactive-record": {
       "tags": []
     },
@@ -21,6 +15,12 @@
       "tags": []
     },
     "angular": {
+      "tags": []
+    },
+    "rr-demo": {
+      "tags": []
+    },
+    "rr-demo-e2e": {
       "tags": []
     }
   }
