@@ -32,7 +32,8 @@
     "rr:release:major": "standard-version release --release-as major && tools/bin/patch-warning.sh",
     "rr:release:a": "standard-version release --release-as patch --prerelease alpha && tools/bin/patch-warning.sh",
     "rr:release:b": "standard-version release --release-as patch --prerelease beta && tools/bin/patch-warning.sh",
-    "rr:publish": "npm run build:p && cd dist/libs/reactive-record && npm publish && git push origin --tags"
+    "rr:publish": "npm run build:p && cd dist/libs/reactive-record && npm publish && git push origin --tags",
+    "rr:test:w": "ng test reactive-record --watch"
   },
   "private": true,
   "dependencies": {
@@ -66,12 +67,14 @@
     "@ngrx/store-devtools": "7.2.0",
     "@nrwl/builders": "7.6.2",
     "@nrwl/schematics": "7.6.2",
+    "@types/jasmine": "^3.3.9",
     "@types/jest": "23.0.0",
     "@types/jquery": "3.3.6",
     "@types/node": "^8.9.5",
     "codelyzer": "~4.5.0",
     "cypress": "3.1.0",
     "dotenv": "6.2.0",
+    "fsevents": "^1.2.7",
     "jest": "23.0.0",
     "jest-preset-angular": "6.0.1",
     "ng-packagr": "^4.2.0",

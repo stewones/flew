@@ -1,23 +1,49 @@
 import { ReactiveRecord } from './server';
-import { fakeAsync, tick } from '@angular/core/testing';
-
-import { PartialObserver } from 'rxjs';
+import { FirestoreStub } from '../utils/firestore-stub';
+// import { fakeAsync, tick } from '@angular/core/testing';
 
 describe('ReactiveRecord', () => {
   let lib: ReactiveRecord;
   // hookStub,
   // exceptionServerStub,
   // exceptionClientStub,
-  const baseURL = 'http://127.0.0.1';
+  const baseURL = 'http://firetask.dev';
   const collection = 'foo-collection';
 
-  beforeEach(() => {});
+  beforeEach(() => {
+    const firestoreStub = FirestoreStub({
+      get: Promise.resolve({
+        forEach: () => {}
+      })
+    });
+    lib = new ReactiveRecord({
+      baseURL: baseURL,
+      collection: collection,
+      connector: {
+        firestore: firestoreStub
+        // firebase: {}
+      }
+    });
+  });
 
   it('should be created using minimal setup', () => {
-    lib = new ReactiveRecord({
-      baseURL: baseURL
-    });
-    expect(lib).toBeTruthy();
+    const lib_ = new ReactiveRecord({});
+    expect(lib_).toBeTruthy();
+  });
+
+  it('should fail for unknown drivers', () => {
+    expect(() => {
+      lib
+        .driver('unknown')
+        .find()
+        .toPromise();
+    }).toThrowError('unknown driver unavailable for method [find]');
+  });
+
+  it('should implement the findOne method', () => {
+    const spy = jest.spyOn(ReactiveRecord.prototype, 'findOne');
+    lib.findOne().toPromise();
+    expect(spy).toBeCalled();
   });
 
   // it('must have a baseURL for http calls', () => {

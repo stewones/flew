@@ -85,6 +85,14 @@ export class ReactiveRecord extends Hooks implements Api {
     this.extraOptions = {};
   }
 
+  private driverException(_driver: string, _method: string) {
+    if (
+      !this._drivers[_driver] ||
+      typeof this._drivers[_driver].find !== 'function'
+    )
+      throw new Error(`${_driver} driver unavailable for method [${_method}]`);
+  }
+
   /**
    * Search for data returning a list
    *
@@ -97,11 +105,7 @@ export class ReactiveRecord extends Hooks implements Api {
     const _driver = clone(this._driver);
     this.reset();
 
-    if (
-      !this._drivers[_driver] ||
-      typeof this._drivers[_driver].find !== 'function'
-    )
-      throw new Error(`${_driver} driver unavailable for method [find]`);
+    this.driverException(_driver, 'find');
 
     return this._drivers[_driver].find(_request, _extraOptions);
   }
@@ -118,11 +122,7 @@ export class ReactiveRecord extends Hooks implements Api {
     const _driver = clone(this._driver);
     this.reset();
 
-    if (
-      !this._drivers[_driver] ||
-      typeof this._drivers[_driver].findOne !== 'function'
-    )
-      throw new Error(`${_driver} driver unavailable for method [findOne]`);
+    this.driverException(_driver, 'findOne');
 
     return this._drivers[_driver].findOne(_request, _extraOptions);
   }
@@ -143,11 +143,9 @@ export class ReactiveRecord extends Hooks implements Api {
   ): Observable<any> {
     const _driver = clone(this._driver);
     this.reset();
-    if (
-      !this._drivers[_driver] ||
-      typeof this._drivers[_driver].set !== 'function'
-    )
-      throw new Error(`${_driver} driver unavailable for method [set]`);
+
+    this.driverException(_driver, 'set');
+
     return this._drivers[_driver].set(id, data, shouldMerge);
   }
 
@@ -162,11 +160,9 @@ export class ReactiveRecord extends Hooks implements Api {
   public update(id: string, data: any): Observable<any> {
     const _driver = clone(this._driver);
     this.reset();
-    if (
-      !this._drivers[_driver] ||
-      typeof this._drivers[_driver].update !== 'function'
-    )
-      throw new Error(`${_driver} driver unavailable for method [update]`);
+
+    this.driverException(_driver, 'update');
+
     return this._drivers[_driver].update(id, data);
   }
 
@@ -191,11 +187,8 @@ export class ReactiveRecord extends Hooks implements Api {
     const _driver = clone(this._driver);
     this.reset();
 
-    if (
-      !this._drivers[_driver] ||
-      typeof this._drivers[_driver].on !== 'function'
-    )
-      throw new Error(`${_driver} driver unavailable for method [on]`);
+    this.driverException(_driver, 'on');
+
     return this._drivers[_driver].on(
       _request,
       onSuccess,
