@@ -27,10 +27,10 @@ export * from './lib/utils/version';
 //
 // interfaces
 export { Api } from './lib/interfaces/api';
-export { RROptions } from './lib/interfaces/rr-options';
-export { RRExtraOptions } from './lib/interfaces/rr-extra-options';
-export { RRRequest } from './lib/interfaces/rr-request';
-export { RRResponse } from './lib/interfaces/rr-response';
+export { Response } from './lib/interfaces/response';
+export { Options } from './lib/interfaces/options';
+export { ExtraOptions } from './lib/interfaces/extra-options';
+export { Request } from './lib/interfaces/request';
 export { Connector } from './lib/interfaces/connector';
 export { Hook } from './lib/interfaces/hook';
 export { Driver } from './lib/interfaces/driver';
@@ -45,6 +45,10 @@ export { RRClientToken } from './lib/interfaces/client-token';
 export { RRCacheStorage } from './lib/interfaces/storage-adapter';
 export { RRConnector } from './lib/interfaces/connector';
 export { RRCacheOptions } from './lib/interfaces/cache-options';
+export { RRResponse } from './lib/interfaces/response';
+export { RRRequest } from './lib/interfaces/request';
+export { RROptions } from './lib/interfaces/options';
+export { RRExtraOptions } from './lib/interfaces/extra-options';
 export { ElasticMatch } from './lib/interfaces/elastic-match';
 export { ElasticQuery } from './lib/interfaces/elastic-query';
 export { FirestoreQuery } from './lib/interfaces/firestore-query';

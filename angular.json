@@ -55,6 +55,9 @@
           "options": {
             "tsConfig": "libs/ionic/tsconfig.lib.json",
             "project": "libs/ionic/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
           }
         },
         "lint": {
@@ -92,6 +95,9 @@
           "options": {
             "tsConfig": "libs/angular/tsconfig.lib.json",
             "project": "libs/angular/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
           }
         },
         "lint": {

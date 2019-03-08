@@ -5,33 +5,33 @@ import {
   ModuleWithProviders
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RROptions } from '@firetask/reactive-record';
+import { Options } from '@firetask/reactive-record';
 import { merge } from 'lodash';
 
-export const $options: RROptions = {
+export const $options: Options = {
   baseURL: 'https://rr.dev'
 };
 
 export class RRProvider {
-  public static options: RROptions;
+  public static options: Options;
 
-  constructor(options: RROptions) {
+  constructor(options: Options) {
     merge(this, options);
     RRProvider.options = options;
   }
 }
 
 export class ReactiveRecordProvider {
-  public static options: RROptions;
+  public static options: Options;
 
-  constructor(options: RROptions) {
+  constructor(options: Options) {
     merge(this, options);
   }
 }
 
-export const RROptionsToken = new InjectionToken<any>('RR_OPTIONS_TOKEN');
+export const OptionsToken = new InjectionToken<any>('RR_OPTIONS_TOKEN');
 
-export function provideRR(options: RROptions): ReactiveRecordProvider {
+export function provideRR(options: Options): ReactiveRecordProvider {
   const config = !!options ? options : {};
   return new ReactiveRecordProvider(config);
 }
@@ -51,15 +51,15 @@ export class RRInjectorModule {
   imports: [CommonModule]
 })
 export class ReactiveRecordModule {
-  static forRoot(options: RROptions): ModuleWithProviders {
+  static forRoot(options: Options): ModuleWithProviders {
     return {
       ngModule: ReactiveRecordModule,
       providers: [
-        { provide: RROptionsToken, useValue: $options },
+        { provide: OptionsToken, useValue: $options },
         {
           provide: ReactiveRecordProvider,
           useFactory: provideRR,
-          deps: [RROptionsToken]
+          deps: [OptionsToken]
         }
       ]
     };

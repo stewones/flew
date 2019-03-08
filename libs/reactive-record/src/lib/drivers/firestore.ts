@@ -1,14 +1,13 @@
-import * as moment_import from 'moment';
-const moment = moment_import; // workaround for imports
+import moment from 'moment';
 import { Driver } from '../interfaces/driver';
-import { RRRequest } from '../interfaces/rr-request';
-import { RRExtraOptions } from '../interfaces/rr-extra-options';
+import { Request } from '../interfaces/request';
+import { ExtraOptions } from '../interfaces/extra-options';
 import { Observable, PartialObserver, race } from 'rxjs';
 import { get, merge, isEmpty, isArray, isNil } from 'lodash';
 
 import { Connector } from '../interfaces/connector';
-import { RROptions } from '../interfaces/rr-options';
-import { RRResponse } from '../interfaces/rr-response';
+import { Options } from '../interfaces/options';
+import { Response } from '../interfaces/response';
 import { Hooks } from '../hooks/hooks';
 import { map } from 'rxjs/operators';
 
@@ -28,7 +27,7 @@ export class FirestoreDriver extends Hooks implements Driver {
   // for unit test
   _observer: PartialObserver<any>;
 
-  constructor(options: RROptions) {
+  constructor(options: Options) {
     super(options);
     merge(this, options);
   }
@@ -84,13 +83,13 @@ export class FirestoreDriver extends Hooks implements Driver {
   }
 
   public find(
-    request: RRRequest,
-    extraOptions?: RRExtraOptions
-  ): Observable<RRResponse> {
+    request: Request,
+    extraOptions?: ExtraOptions
+  ): Observable<Response> {
     return new Observable((observer: PartialObserver<any>) => {
       //
       // set default options
-      const _extraOptions: RRExtraOptions = {};
+      const _extraOptions: ExtraOptions = {};
       merge(_extraOptions, extraOptions);
 
       //
@@ -138,7 +137,7 @@ export class FirestoreDriver extends Hooks implements Driver {
         extraOptions.transformNetwork &&
         typeof extraOptions.transformNetwork === 'function'
           ? extraOptions.transformNetwork
-          : (data: RRResponse) => data;
+          : (data: Response) => data;
       network = () => {
         //
         // fire in the hole
@@ -151,7 +150,7 @@ export class FirestoreDriver extends Hooks implements Driver {
             snapshot.forEach(doc => data.push(doc.data()));
             //
             // define standard response
-            const response: RRResponse = {
+            const response: Response = {
               data: data,
               key: key,
               response: {
@@ -207,20 +206,20 @@ export class FirestoreDriver extends Hooks implements Driver {
   }
 
   public findOne(
-    request: RRRequest,
-    extraOptions?: RRExtraOptions
-  ): Observable<RRResponse> {
+    request: Request,
+    extraOptions?: ExtraOptions
+  ): Observable<Response> {
     return this.find(request, extraOptions).pipe(
-      map((r: RRResponse) => {
+      map((r: Response) => {
         const transformNetwork: any =
           extraOptions.transformNetwork &&
           typeof extraOptions.transformNetwork === 'function'
             ? extraOptions.transformNetwork
-            : (data: RRResponse) => data;
-        const data = isArray(r) ? r : get(r, 'data') || [];
-        const response = <RRResponse>{
-          data: data.length ? data[0] : {},
-          key: data.length ? data[0].key : '',
+            : (data: Response) => data;
+        const data: any = isArray(r) ? r : get(r, 'data') || [];
+        const response = <Response>{
+          data: data && data.length ? data[0] : {},
+          key: data && data.length ? data[0].key : '',
           response: r.response
         };
         // console.log('findOne response', response);
@@ -230,10 +229,10 @@ export class FirestoreDriver extends Hooks implements Driver {
   }
 
   public on(
-    request: RRRequest,
-    onSuccess: (response: RRResponse) => any = (response: RRResponse) => {},
+    request: Request,
+    onSuccess: (response: Response) => any = (response: Response) => {},
     onError: (response: any) => any = (response: any) => {},
-    extraOptions: RRExtraOptions
+    extraOptions: ExtraOptions
   ): any {
     //
     // network handle
@@ -241,7 +240,7 @@ export class FirestoreDriver extends Hooks implements Driver {
       extraOptions.transformNetwork &&
       typeof extraOptions.transformNetwork === 'function'
         ? extraOptions.transformNetwork
-        : (data: RRResponse) => data;
+        : (data: Response) => data;
     //
     // run exceptions
     if (!this.collection) throw new Error('missing collection');
@@ -273,7 +272,7 @@ export class FirestoreDriver extends Hooks implements Driver {
     return firestore.onSnapshot((snapshot: any) => {
       const data: any[] = [];
       snapshot.forEach(doc => data.push(doc.data()));
-      const response: RRResponse = {
+      const response: Response = {
         data: data,
         response: {
           empty: snapshot.empty,

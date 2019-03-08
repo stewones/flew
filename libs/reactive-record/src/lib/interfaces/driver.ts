@@ -1,26 +1,26 @@
 import { Observable } from 'rxjs';
-import { RRExtraOptions } from './rr-extra-options';
-import { RRResponse } from './rr-response';
-import { RRRequest } from './rr-request';
+import { ExtraOptions } from './extra-options';
+import { Response } from './response';
+import { Request } from './request';
 import { Connector } from './connector';
 
 export interface Driver {
   connector: Connector;
   timestamp: boolean;
   find: (
-    request: RRRequest,
-    extraOptions?: RRExtraOptions
-  ) => Observable<RRResponse>;
+    request: Request,
+    extraOptions?: ExtraOptions
+  ) => Observable<Response>;
   findOne: (
-    request: RRRequest,
-    extraOptions?: RRExtraOptions
-  ) => Observable<RRResponse>;
-  set: (id: string, data: any) => Observable<RRResponse>;
-  update: (id: string, data: any) => Observable<RRResponse>;
+    request: Request,
+    extraOptions?: ExtraOptions
+  ) => Observable<Response>;
+  set: (id: string, data: any) => Observable<Response>;
+  update: (id: string, data: any) => Observable<Response>;
   on?: (
-    request: RRRequest,
-    onSuccess: (response: RRResponse | any) => any,
+    request: Request,
+    onSuccess: (response: Response | any) => any,
     onError: (response: any) => any,
-    extraOptions?: RRExtraOptions
+    extraOptions?: ExtraOptions
   ) => any;
 }

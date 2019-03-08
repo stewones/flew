@@ -73,14 +73,14 @@ import 'firebase/firestore';
 import { environment } from '../../environments/environment';
 import {
   ReactiveRecord,
-  RROptions,
+  Options,
   FirebaseConnector,
   FirestoreConnector
 } from '@ionfire/reactive-record';
 
 export class MyService extends ReactiveRecord {
   constructor() {
-    super(<RROptions>{
+    super(<Options>{
       collection: 'users',
       connector: {
         firebase: new FirebaseConnector(Firebase, environment.firebase),
@@ -94,7 +94,7 @@ export class MyService extends ReactiveRecord {
 #### Component
 
 ```ts
-import { RRResponse } from '@ionfire/reactive-record';
+import { Response } from '@ionfire/reactive-record';
 import { map } from 'rxjs/operators';
 import { pipe } from 'rxjs';
 
@@ -111,7 +111,7 @@ export class MyComponent implements OnInit {
         .find({ query: { field: 'active', operator: '==', value: true } })
         .pipe(
           // transform response
-          map((response: RRResponse) => response.data)
+          map((response: Response) => response.data)
         )
     );
   }
@@ -130,11 +130,11 @@ export class MyComponent implements OnInit {
 
 | option     | type      | required | default   | interface                                                                                                                       |
 | ---------- | --------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| baseURL    | `string`  | false    | null      | [RROptions](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
-| endpoint   | `string`  | false    | null      | [RROptions](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
-| collection | `string`  | false    | null      | [RROptions](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
-| driver     | `string`  | false    | firestore | [RROptions](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
-| timestamp  | `boolean` | false    | true      | [RROptions](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
+| baseURL    | `string`  | false    | null      | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
+| endpoint   | `string`  | false    | null      | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
+| collection | `string`  | false    | null      | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
+| driver     | `string`  | false    | firestore | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
+| timestamp  | `boolean` | false    | true      | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
 | hook       | `object`  | false    | {}        | [Hook](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-hook.ts)           |
 | connector  | `object`  | false    | {}        | [Connector](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-connector.ts) |
 
@@ -144,15 +144,15 @@ Almost all RR public methods must return a `rxjs` observable. Not all drivers ar
 
 | method  | params                              | return                                                                                                                                        | info                   |
 | ------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| find    | `*request/extraOptions/driver`      | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch all data         |
-| findOne | `*request/extraOptions/driver`      | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch one data         |
+| find    | `*request/extraOptions/driver`      | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch all data         |
+| findOne | `*request/extraOptions/driver`      | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch one data         |
 | set     | `*id/*data/driver`                  | any                                                                                                                                           | set data               |
 | update  | `*id/*data/driver`                  | any                                                                                                                                           | set data               |
 | on      | `*request/onSuccess/onError/driver` | `**function`                                                                                                                                  | fetch realtime data    |
-| get     | `*path/extraOptions`                | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch data using http  |
-| post    | `*path/*body/extraOptions`          | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | post data using http   |
-| patch   | `*path/*body/extraOptions`          | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | patch data using http  |
-| delete  | `*path/extraOptions`                | [`Observable<RRResponse>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | delete data using http |
+| get     | `*path/extraOptions`                | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch data using http  |
+| post    | `*path/*body/extraOptions`          | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | post data using http   |
+| patch   | `*path/*body/extraOptions`          | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | patch data using http  |
+| delete  | `*path/extraOptions`                | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | delete data using http |
 
 > `* => required`
 >
@@ -199,7 +199,7 @@ export class MyService extends ReactiveRecord {
 
 ## Client Setup Options
 
-Extends [`RROptions`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts) plus the following
+Extends [`Options`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts) plus the following
 
 | option   | type       | required | default | interface                                                                                                                                        |
 | -------- | ---------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |

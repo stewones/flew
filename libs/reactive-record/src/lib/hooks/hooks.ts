@@ -2,7 +2,7 @@ import { merge, get, set } from 'lodash';
 import { AxiosRequestConfig } from 'axios';
 
 import { Hook } from '../interfaces/hook';
-import { RROptions } from '../interfaces/rr-options';
+import { Options } from '../interfaces/options';
 
 export class Hooks {
   //
@@ -13,7 +13,7 @@ export class Hooks {
     }
   };
 
-  constructor(options: RROptions) {
+  constructor(options: Options) {
     merge(this, options);
   }
 

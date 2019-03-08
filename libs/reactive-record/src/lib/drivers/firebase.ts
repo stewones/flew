@@ -1,14 +1,14 @@
 import * as moment_import from 'moment';
 const moment = moment_import; // workaround for imports
 import { Driver } from '../interfaces/driver';
-import { RRRequest } from '../interfaces/rr-request';
-import { RRExtraOptions } from '../interfaces/rr-extra-options';
+import { Request } from '../interfaces/request';
+import { ExtraOptions } from '../interfaces/extra-options';
 import { Observable, PartialObserver } from 'rxjs';
 import { merge, isEmpty, isArray } from 'lodash';
 
 import { Connector } from '../interfaces/connector';
-import { RROptions } from '../interfaces/rr-options';
-import { RRResponse } from '../interfaces/rr-response';
+import { Options } from '../interfaces/options';
+import { Response } from '../interfaces/response';
 import { Hooks } from '../hooks/hooks';
 import { map } from 'rxjs/operators';
 
@@ -28,18 +28,18 @@ export class FirebaseDriver extends Hooks /*implements Driver*/ {
   // for unit test
   _observer: PartialObserver<any>;
 
-  constructor(options: RROptions) {
+  constructor(options: Options) {
     super(options);
     merge(this, options);
   }
   public find(
-    request: RRRequest,
-    extraOptions?: RRExtraOptions
-  ): Observable<RRResponse> {
+    request: Request,
+    extraOptions?: ExtraOptions
+  ): Observable<Response> {
     return new Observable((observer: PartialObserver<any>) => {
       //
       // set default options
-      const _extraOptions: RRExtraOptions = {};
+      const _extraOptions: ExtraOptions = {};
       merge(_extraOptions, extraOptions);
 
       //
@@ -82,7 +82,7 @@ export class FirebaseDriver extends Hooks /*implements Driver*/ {
         extraOptions.transformNetwork &&
         typeof extraOptions.transformNetwork === 'function'
           ? extraOptions.transformNetwork
-          : (data: RRResponse) => data;
+          : (data: Response) => data;
       network = () => {
         //
         // fire in the hole
@@ -105,7 +105,7 @@ export class FirebaseDriver extends Hooks /*implements Driver*/ {
 
             //
             // define standard response
-            const response: RRResponse = {
+            const response: Response = {
               data: data,
               response: {
                 key: snapshot.key
@@ -160,13 +160,13 @@ export class FirebaseDriver extends Hooks /*implements Driver*/ {
   }
 
   public findOne(
-    request: RRRequest,
-    extraOptions?: RRExtraOptions
-  ): Observable<RRResponse> {
+    request: Request,
+    extraOptions?: ExtraOptions
+  ): Observable<Response> {
     return this.find(request, extraOptions).pipe(
-      map((r: RRResponse) => {
+      map((r: Response) => {
         return !isEmpty(r.data)
-          ? <RRResponse>{
+          ? <Response>{
               data: r.data[0],
               response: r.response,
               key: r.data[0].key
@@ -177,10 +177,10 @@ export class FirebaseDriver extends Hooks /*implements Driver*/ {
   }
 
   public on(
-    request: RRRequest,
-    onSuccess: (response: RRResponse) => any = (response: RRResponse) => {},
+    request: Request,
+    onSuccess: (response: Response) => any = (response: Response) => {},
     onError: (response: any) => any = (response: any) => {},
-    extraOptions: RRExtraOptions
+    extraOptions: ExtraOptions
   ): any {
     //
     // network handle
@@ -188,7 +188,7 @@ export class FirebaseDriver extends Hooks /*implements Driver*/ {
       extraOptions.transformNetwork &&
       typeof extraOptions.transformNetwork === 'function'
         ? extraOptions.transformNetwork
-        : (data: RRResponse) => data;
+        : (data: Response) => data;
     //
     // run exceptions
     if (!this.collection) throw new Error('missing collection');
@@ -222,7 +222,7 @@ export class FirebaseDriver extends Hooks /*implements Driver*/ {
     return firebase.on(
       'value',
       (snapshot: any) => {
-        const response: RRResponse = {
+        const response: Response = {
           data: snapshot.val(),
           response: {
             empty: !snapshot.exists(),

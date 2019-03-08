@@ -1,10 +1,10 @@
-import { RROptions } from '../interfaces/rr-options';
+import { Options } from '../interfaces/options';
 import { isEmpty } from 'lodash';
 import { PlatformServer } from '../platforms/server';
 import { PlatformBrowser } from '../platforms/browser';
 declare var module;
 
-export function Collection(options: RROptions) {
+export function Collection(options: Options) {
   const isServer = typeof module !== 'undefined' && module.exports;
   const useCache =
     isEmpty(options.useCache) && !isServer && options.useCache !== false

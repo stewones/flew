@@ -4,12 +4,12 @@ import { Observable, PartialObserver } from 'rxjs';
 import { Hooks } from '../hooks/hooks';
 import { Api } from '../interfaces/api';
 import { Driver } from '../interfaces/driver';
-import { RRRequest } from '../interfaces/rr-request';
-import { RRExtraOptions } from '../interfaces/rr-extra-options';
-import { RROptions } from '../interfaces/rr-options';
+import { Request } from '../interfaces/request';
+import { ExtraOptions } from '../interfaces/extra-options';
+import { Options } from '../interfaces/options';
 import { FirestoreDriver } from '../drivers/firestore';
 import { FirebaseDriver } from '../drivers/firebase';
-import { RRResponse } from '../interfaces/rr-response';
+import { Response } from '../interfaces/response';
 
 export class ReactiveRecord extends Hooks implements Api {
   //
@@ -24,8 +24,8 @@ export class ReactiveRecord extends Hooks implements Api {
   public baseURL: string;
   private endpoint: string;
 
-  private request: RRRequest = {};
-  private extraOptions: RRExtraOptions = {};
+  private request: Request = {};
+  private extraOptions: ExtraOptions = {};
 
   //
   // for unit test
@@ -33,10 +33,10 @@ export class ReactiveRecord extends Hooks implements Api {
 
   /**
    * Creates an instance for RR
-   * @param { RROptions } options
+   * @param { Options } options
    * @memberof RR
    */
-  constructor(options: RROptions) {
+  constructor(options: Options) {
     super(options);
 
     //
@@ -49,7 +49,6 @@ export class ReactiveRecord extends Hooks implements Api {
     //
     // extend options
     merge(this, options);
-
     this.baseURL = options.baseURL;
 
     //
@@ -93,30 +92,16 @@ export class ReactiveRecord extends Hooks implements Api {
       throw new Error(`${_driver} driver unavailable for method [${_method}]`);
   }
 
-  /**
-   * Search for data returning a list
-   *
-   * @returns {(Observable<RRResponse | any>)}
-   * @memberof ReactiveRecord
-   */
-  public find(): Observable<RRResponse | any> {
+  public find<T extends Response>(): Observable<T> {
     const _request = cloneDeep(this.request);
     const _extraOptions = cloneDeep(this.extraOptions);
     const _driver = clone(this._driver);
     this.reset();
-
     this.driverException(_driver, 'find');
-
-    return this._drivers[_driver].find(_request, _extraOptions);
+    return this._drivers[_driver].find<T>(_request, _extraOptions);
   }
 
-  /**
-   * Search for data returning an object
-   *
-   * @returns {(Observable<RRResponse | any>)}
-   * @memberof ReactiveRecord
-   */
-  public findOne(): Observable<RRResponse | any> {
+  public findOne<T extends Response>(): Observable<T> {
     const _request = cloneDeep(this.request);
     const _extraOptions = cloneDeep(this.extraOptions);
     const _driver = clone(this._driver);
@@ -124,18 +109,9 @@ export class ReactiveRecord extends Hooks implements Api {
 
     this.driverException(_driver, 'findOne');
 
-    return this._drivers[_driver].findOne(_request, _extraOptions);
+    return this._drivers[_driver].findOne<T>(_request, _extraOptions);
   }
 
-  /**
-   * Persist data to database
-   *
-   * @param {string} id
-   * @param {*} data
-   * @param {boolean} [shouldMerge=true]
-   * @returns {Observable<any>}
-   * @memberof ReactiveRecord
-   */
   public set(
     id: string,
     data: any,
@@ -143,20 +119,10 @@ export class ReactiveRecord extends Hooks implements Api {
   ): Observable<any> {
     const _driver = clone(this._driver);
     this.reset();
-
     this.driverException(_driver, 'set');
-
     return this._drivers[_driver].set(id, data, shouldMerge);
   }
 
-  /**
-   * Update data in database
-   *
-   * @param {string} id
-   * @param {*} data
-   * @returns {Observable<any>}
-   * @memberof ReactiveRecord
-   */
   public update(id: string, data: any): Observable<any> {
     const _driver = clone(this._driver);
     this.reset();
@@ -166,29 +132,15 @@ export class ReactiveRecord extends Hooks implements Api {
     return this._drivers[_driver].update(id, data);
   }
 
-  /**
-   * Realtime requests
-   *
-   * @param {((response: RRResponse | any) => any)} [onSuccess=(
-   *       response: RRResponse | any
-   *     ) => {}]
-   * @param {(response: any) => any} [onError=(response: any) => {}]
-   * @returns {*}
-   * @memberof ReactiveRecord
-   */
-  public on(
-    onSuccess: (response: RRResponse | any) => any = (
-      response: RRResponse | any
-    ) => {},
+  public on<T>(
+    onSuccess: (response: Response) => any = (response: Response) => {},
     onError: (response: any) => any = (response: any) => {}
   ): any {
     const _request = cloneDeep(this.request);
     const _extraOptions = cloneDeep(this.extraOptions);
     const _driver = clone(this._driver);
     this.reset();
-
     this.driverException(_driver, 'on');
-
     return this._drivers[_driver].on(
       _request,
       onSuccess,
@@ -197,17 +149,10 @@ export class ReactiveRecord extends Hooks implements Api {
     );
   }
 
-  /**
-   * http get
-   *
-   * @param {string} path
-   * @returns {(Observable<RRResponse>)}
-   * @memberof RR
-   */
-  public get(path: string): Observable<RRResponse | any> {
+  public get<T extends Response>(path: string): Observable<T> {
     const _extraOptions = cloneDeep(this.extraOptions);
     this.reset();
-    return new Observable((observer: PartialObserver<any>) => {
+    return new Observable((observer: PartialObserver<T>) => {
       //
       // call exceptions
       if (!this.baseURL) throw new Error('baseURL needed for [get]');
@@ -219,7 +164,7 @@ export class ReactiveRecord extends Hooks implements Api {
 
       //
       // set path to be requestes
-      const requestPath: string = `${this.endpoint}${path}`;
+      const requestPath = `${this.endpoint}${path}`;
 
       //
       // define an unique key
@@ -237,7 +182,7 @@ export class ReactiveRecord extends Hooks implements Api {
           .then(async (r: AxiosResponse) => {
             //
             // build standard response
-            const response: RRResponse = {
+            const response: Response = {
               data: r.data,
               response: r,
               key: key
@@ -257,7 +202,7 @@ export class ReactiveRecord extends Hooks implements Api {
             } else {
               //
               // success callback
-              observer.next(response);
+              observer.next(response as T);
               observer.complete();
             }
           })
@@ -290,19 +235,14 @@ export class ReactiveRecord extends Hooks implements Api {
     });
   }
 
-  /**
-   * http post
-   *
-   * @param {string} path
-   * @param {*} body
-   * @returns {(Observable<RRResponse>)}
-   * @memberof RR
-   */
-  public post(path: string, body: any = {}): Observable<RRResponse | any> {
+  public post<T extends Response>(
+    path: string,
+    body: any = {}
+  ): Observable<T> {
     const _extraOptions = cloneDeep(this.extraOptions);
     this.reset();
 
-    return new Observable((observer: PartialObserver<RRResponse>) => {
+    return new Observable((observer: PartialObserver<T>) => {
       //
       // call exceptions
       if (!this.baseURL) throw new Error('baseURL needed for [post]');
@@ -332,7 +272,7 @@ export class ReactiveRecord extends Hooks implements Api {
           .then(async (r: AxiosResponse) => {
             //
             // build standard response
-            const response: RRResponse = {
+            const response: Response = {
               data: r.data,
               response: r,
               key: key
@@ -350,9 +290,10 @@ export class ReactiveRecord extends Hooks implements Api {
                 _extraOptions
               );
             } else {
+              console.log('NO HOOK');
               //
               // success callback
-              observer.next(response);
+              observer.next(response as T);
               observer.complete();
             }
           })
@@ -385,19 +326,14 @@ export class ReactiveRecord extends Hooks implements Api {
     });
   }
 
-  /**
-   * http patch
-   *
-   * @param {string} path
-   * @param {*} body
-   * @returns {Observable<RRResponse>}
-   * @memberof ReactiveRecord
-   */
-  public patch(path: string, body: any = {}): Observable<RRResponse | any> {
+  public patch<T extends Response>(
+    path: string,
+    body: any = {}
+  ): Observable<T> {
     const _extraOptions = cloneDeep(this.extraOptions);
     this.reset();
 
-    return new Observable((observer: PartialObserver<any>) => {
+    return new Observable((observer: PartialObserver<T>) => {
       //
       // call exceptions
       if (!this.baseURL) throw new Error('baseURL needed for [patch]');
@@ -427,7 +363,7 @@ export class ReactiveRecord extends Hooks implements Api {
           .then(async (r: AxiosResponse) => {
             //
             // build standard response
-            const response: RRResponse = {
+            const response: Response = {
               data: r.data,
               response: r,
               key: key
@@ -446,7 +382,7 @@ export class ReactiveRecord extends Hooks implements Api {
             } else {
               //
               // success callback
-              observer.next(response);
+              observer.next(response as T);
               observer.complete();
             }
           })
@@ -479,17 +415,10 @@ export class ReactiveRecord extends Hooks implements Api {
     });
   }
 
-  /**
-   * http delete
-   *
-   * @param {string} path
-   * @returns {(Observable<RRResponse>)}
-   * @memberof RR
-   */
-  public delete(path: string): Observable<RRResponse | any> {
+  public delete<T extends Response>(path: string): Observable<T> {
     const _extraOptions = cloneDeep(this.extraOptions);
     this.reset();
-    return new Observable((observer: PartialObserver<any>) => {
+    return new Observable((observer: PartialObserver<T>) => {
       //
       // call exceptions
       if (!this.baseURL) throw new Error('baseURL needed for [delete]');
@@ -515,14 +444,14 @@ export class ReactiveRecord extends Hooks implements Api {
           .then(async (r: AxiosResponse) => {
             //
             // build standard response
-            const response: RRResponse = {
+            const response: Response = {
               data: r.data,
               response: r
             };
 
             //
             // success callback
-            observer.next(response);
+            observer.next(response as T);
             observer.complete();
           })
           .catch(err => {
@@ -579,11 +508,11 @@ export class ReactiveRecord extends Hooks implements Api {
   /**
    * Set transform fn for network responses
    *
-   * @param {(response: RRResponse) => any} transformFn
+   * @param {(response: Response) => any} transformFn
    * @returns
    * @memberof ReactiveRecord
    */
-  public transformNetwork(transformFn: (response: RRResponse) => any) {
+  public transformNetwork<T>(transformFn: (response: Response) => any) {
     this.extraOptions.transformNetwork = transformFn;
     return this;
   }
@@ -615,11 +544,11 @@ export class ReactiveRecord extends Hooks implements Api {
   /**
    * Set transform fn for cache
    *
-   * @param {(response: RRResponse) => any} transformFn
+   * @param {(response: Response) => any} transformFn
    * @returns
    * @memberof ReactiveRecord
    */
-  public transformCache(transformFn: (response: RRResponse) => any) {
+  public transformCache<T>(transformFn: (response: Response) => any) {
     this.extraOptions.transformCache = transformFn;
     return this;
   }

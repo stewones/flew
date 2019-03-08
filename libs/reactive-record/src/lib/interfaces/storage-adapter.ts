@@ -6,7 +6,7 @@
  * @export
  * @interface StorageAdapter
  */
-export interface StorageAdapter {
+export interface StorageAdapter<T = any> {
   get(key: string): Promise<any>;
   set(key: string, value: any): Promise<any>;
   remove(key: string): Promise<any>;
@@ -14,4 +14,4 @@ export interface StorageAdapter {
 }
 
 // @deprecated
-export interface RRCacheStorage extends StorageAdapter {}
+export interface RRCacheStorage<T = any> extends StorageAdapter {}

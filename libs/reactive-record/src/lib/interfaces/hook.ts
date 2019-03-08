@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 import { PartialObserver } from 'rxjs';
-import { RRExtraOptions } from './rr-extra-options';
-import { RRResponse } from './rr-response';
+import { ExtraOptions } from './extra-options';
+import { Response } from './response';
 
 /**
  * @export
@@ -13,54 +13,54 @@ export interface Hook {
     get?: {
       before?: (
         key: string,
-        observer: PartialObserver<RRResponse>,
-        RRExtraOptions?: RRExtraOptions
+        observer: PartialObserver<Response>,
+        ExtraOptions?: ExtraOptions
       ) => Promise<boolean>;
       after?: (
         key: string,
-        response: RRResponse & { ttl: number },
-        observer: PartialObserver<RRResponse>,
-        RRExtraOptions?: RRExtraOptions
+        response: Response & { ttl: number },
+        observer: PartialObserver<Response>,
+        ExtraOptions?: ExtraOptions
       ) => any;
     };
     post?: {
       before?: (
         key: string,
-        observer: PartialObserver<RRResponse>,
-        RRExtraOptions?: RRExtraOptions
+        observer: PartialObserver<Response>,
+        ExtraOptions?: ExtraOptions
       ) => Promise<boolean>;
       after?: (
         key: string,
-        response: RRResponse & { ttl: number },
-        observer: PartialObserver<RRResponse>,
-        RRExtraOptions?: RRExtraOptions
+        response: Response & { ttl: number },
+        observer: PartialObserver<Response>,
+        ExtraOptions?: ExtraOptions
       ) => any;
     };
     patch?: {
       before?: (
         key: string,
-        observer: PartialObserver<RRResponse>,
-        RRExtraOptions?: RRExtraOptions
+        observer: PartialObserver<Response>,
+        ExtraOptions?: ExtraOptions
       ) => Promise<boolean>;
       after?: (
         key: string,
-        response: RRResponse & { ttl: number },
-        observer: PartialObserver<RRResponse>,
-        RRExtraOptions?: RRExtraOptions
+        response: Response & { ttl: number },
+        observer: PartialObserver<Response>,
+        ExtraOptions?: ExtraOptions
       ) => any;
     };
   };
   find?: {
     before?: (
       key: string,
-      observer: PartialObserver<RRResponse>,
-      RRExtraOptions?: RRExtraOptions
+      observer: PartialObserver<Response>,
+      ExtraOptions?: ExtraOptions
     ) => Promise<boolean>;
     after?: (
       key: string,
-      response: RRResponse & { ttl: number },
-      observer: PartialObserver<RRResponse>,
-      RRExtraOptions?: RRExtraOptions
+      response: Response & { ttl: number },
+      observer: PartialObserver<Response>,
+      ExtraOptions?: ExtraOptions
     ) => any;
     endpoint?: () => string;
   };

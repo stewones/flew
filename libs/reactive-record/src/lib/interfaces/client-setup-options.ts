@@ -4,6 +4,6 @@ import { CacheOptions } from './cache-options';
  * @deprecated
  * @export
  * @interface ClientSetupOptions
- * @extends {RROptions}
+ * @extends {Options}
  */
 export interface ClientSetupOptions extends CacheOptions {}

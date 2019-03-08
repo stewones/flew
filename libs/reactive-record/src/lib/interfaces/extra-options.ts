@@ -1,4 +1,4 @@
-export interface RRExtraOptions {
+export interface ExtraOptions {
   ttl?: number; // time to live (in seconds. default: 0)
   key?: string; // key used for cache. defaults to requested info
   useCache?: boolean; //  use cache for first response
@@ -8,3 +8,5 @@ export interface RRExtraOptions {
   transformNetwork?: (data: any) => any; // transform function for network data response
   ref?: string; //  used for firebase driver
 }
+
+export interface RRExtraOptions extends ExtraOptions {}

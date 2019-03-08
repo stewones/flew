@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Collection, ReactiveRecord } from '@firetask/reactive-record';
+import {
+  Collection,
+  ReactiveRecord,
+  Response
+} from '@firetask/reactive-record';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
 import { AxiosRequestConfig } from 'axios';
 
-export interface TodoEntry extends Observable<TodoEntry> {
+export interface TodoEntry extends Response {
   id: string;
   text: string;
 }
@@ -28,11 +32,31 @@ export class TodoService {
     console.log(this);
   }
 
-  findAll(): Observable<TodoEntry> {
-    return <TodoEntry>this.$collection.find();
+  findAll(): Observable<Response<TodoEntry>> {
+    return this.$collection.find<TodoEntry>();
+  }
+
+  findAll_(): Observable<Response<TodoEntry[]>> {
+    return this.$collection
+      .transformNetwork((r: Response) => r.data)
+      .get<Response<TodoEntry[]>>('/images/search');
   }
 
   findOne(): Observable<TodoEntry> {
-    return <TodoEntry>this.$collection.get('/images/search');
+    return this.$collection
+      .transformNetwork((r: Response) => r.data)
+      .get<TodoEntry>('/images/search');
+  }
+
+  findOneLegacy(): Observable<TodoEntry> {
+    return <any>(
+      this.$collection.transformNetwork(r => r.data).get('/images/search')
+    );
+  }
+
+  findOneSimple(): Observable<TodoEntry> {
+    return this.$collection
+      .transformNetwork((r: Response) => r.data)
+      .get('/images/search');
   }
 }

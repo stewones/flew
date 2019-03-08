@@ -14,7 +14,9 @@ describe('ReactiveRecord', () => {
     const firestoreStub = FirestoreStub({
       get: Promise.resolve({
         forEach: () => {}
-      })
+      }),
+      set: Promise.resolve(true),
+      update: Promise.resolve(true)
     });
     lib = new ReactiveRecord({
       baseURL: baseURL,
@@ -40,98 +42,34 @@ describe('ReactiveRecord', () => {
     }).toThrowError('unknown driver unavailable for method [find]');
   });
 
-  it('should implement the findOne method', () => {
+  it('should implement `find` method', () => {
+    const spy = jest.spyOn(ReactiveRecord.prototype, 'find');
+    lib.find().toPromise();
+    expect(spy).toBeCalled();
+  });
+
+  it('should implement `findOne` method', () => {
     const spy = jest.spyOn(ReactiveRecord.prototype, 'findOne');
     lib.findOne().toPromise();
     expect(spy).toBeCalled();
   });
 
-  // it('must have a baseURL for http calls', () => {
-  //   lib = new ReactiveRecord({ driver: 'elastic' });
-  //   lib.findOne({}).subscribe(null, err => expect(err).toEqual('baseURL needed for elastic'));
-  // });
+  it('should implement `set` method', () => {
+    const spy = jest.spyOn(ReactiveRecord.prototype, 'set');
+    lib.set('some_id', { some: 'data' }).toPromise();
+    expect(spy).toBeCalled();
 
-  // it('must have a collection for firebase to use the find', () => {
-  //   lib = new ReactiveRecord({
-  //     baseURL: baseURL
-  //   });
-  //   lib.find({}, null, 'firebase').subscribe(r => { }, err => {
-  //     expect(err).toEqual('missing collection')
-  //   });
-  // });
+    lib.set('some_id', { some: 'data' }, false).toPromise();
 
-  it('must have a collection for firestore to use the find', () => {
-    lib = new ReactiveRecord({
-      baseURL: baseURL
-    });
-    lib.find().subscribe(
-      r => {},
-      err => {
-        expect(err).toEqual('missing collection');
-      }
-    );
+    expect(spy).toBeCalledWith('some_id', { some: 'data' }, false);
   });
 
-  // it('must have a firebase connector', () => {
-  //   lib = new ReactiveRecord({
-  //     baseURL: baseURL,
-  //     collection: collection
-  //   });
-  //   lib.find({}, null, 'firebase').subscribe(r => { }, err => {
-  //     expect(err).toEqual('firebase driver unavailable for now, sorry =(')
-  //   });
-  // });
-
-  it('must have a firestore connector', () => {
-    lib = new ReactiveRecord({
-      baseURL: baseURL,
-      collection: collection
-    });
-    lib.find().subscribe(
-      r => {},
-      err => {
-        expect(err).toEqual('missing firestore connector');
-      }
-    );
-    // cover else path
-    lib = new ReactiveRecord({
-      baseURL: baseURL,
-      collection: collection,
-      connector: {
-        firestore: {
-          loaded: true
-        }
-      }
-    });
-    lib.find().subscribe();
+  it('should implement `update` method', () => {
+    // const spy = jest.spyOn(ReactiveRecord.prototype, 'update');
+    lib
+      .update('some_id', { some: 'data' })
+      .toPromise()
+      .then(r => console.log(r));
+    // expect(spy).toBeCalled();
   });
-
-  // it('should run the hook `find.before` for firestore driver', () => {
-  //   const firestoreStub = FirestoreStub({});
-
-  //   spyOnProperty(ReactiveRecord.prototype, 'connector', 'get').and.returnValue({
-  //     firestore: {
-  //       collection: firestoreStub.collection
-  //     }
-  //   });
-  //   lib = new ReactiveRecord({
-  //     baseURL: baseURL,
-  //     collection: collection,
-  //     connector: {
-  //       firestore: {
-  //         loaded: true
-  //       }
-  //     },
-  //     hook: {
-  //       find: {
-  //         before: (key, observer, RRExtraOptions) => Promise.resolve(true)
-  //       }
-  //     }
-  //   });
-  //   const key: string = `${lib.collection}/${JSON.stringify({})}`;
-  //   spyOn(ReactiveRecord.prototype, 'runHook');
-  //   lib.find({}, null, 'firestore').subscribe(r => {
-  //     expect(ReactiveRecord.prototype.runHook).toHaveBeenCalledWith('find.before', key, lib._observer, null);
-  //   }, console.log);
-  // });
 });
