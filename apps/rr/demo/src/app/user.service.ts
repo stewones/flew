@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { Collection, ReactiveRecord } from '@firetask/reactive-record';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
+import { Response } from '@firetask/reactive-record';
+
 // import { AxiosRequestConfig } from 'axios';
 
-export interface UserEntry extends Observable<UserEntry> {
+export interface UserEntry extends Response {
   id: string;
   text: string;
 }
@@ -27,10 +29,18 @@ export class UserService {
   }
 
   find(): Observable<UserEntry> {
-    return <UserEntry>this.$collection.find();
+    return this.$collection.find();
   }
 
   findOne(): Observable<UserEntry> {
-    return <UserEntry>this.$collection.findOne();
+    return this.$collection.findOne();
+  }
+
+  findOneAlternative(): Observable<Response<UserEntry>> {
+    return this.$collection.findOne();
+  }
+
+  findAll(): Observable<Response<UserEntry[]>> {
+    return this.$collection.find();
   }
 }
