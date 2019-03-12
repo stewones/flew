@@ -16,7 +16,10 @@ describe('ReactiveRecord', () => {
         forEach: () => {}
       }),
       set: Promise.resolve(true),
-      update: Promise.resolve(true)
+      update: Promise.resolve(true),
+      onSnapshot: (success, error) => {
+        console.log(123, success);
+      }
     });
     lib = new ReactiveRecord({
       baseURL: baseURL,
@@ -65,11 +68,22 @@ describe('ReactiveRecord', () => {
   });
 
   it('should implement `update` method', () => {
-    // const spy = jest.spyOn(ReactiveRecord.prototype, 'update');
+    const spy = jest.spyOn(ReactiveRecord.prototype, 'update');
     lib
       .update('some_id', { some: 'data' })
       .toPromise()
       .then(r => console.log(r));
+    expect(spy).toBeCalled();
+  });
+
+  fit('should implement `on` method', () => {
+    // const spy = jest.spyOn(ReactiveRecord.prototype, 'on');
+    lib.on(
+      r => {
+        console.log(123, r);
+      },
+      r => console.log(r)
+    );
     // expect(spy).toBeCalled();
   });
 });

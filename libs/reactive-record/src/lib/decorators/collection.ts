@@ -11,8 +11,8 @@ export function Collection(options: Options) {
       ? true
       : options.useCache;
 
-  options.useCache = useCache;
   if (options.name) options.collection = options.name;
+  delete options.useCache; // @todo make a test for this
 
   return function(constructor: Function) {
     constructor.prototype.$collection = useCache

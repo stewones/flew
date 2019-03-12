@@ -11,11 +11,13 @@ export const FirestoreStub = ({
     }
   ]),
   set = Promise.resolve(true),
-  update = Promise.resolve(true)
+  update = Promise.resolve(true),
+  onSnapshot = (successFn, errorFn) => {}
 }: {
   get?: Promise<any>;
   set?: Promise<any>;
   update?: Promise<any>;
+  onSnapshot?: any;
 }): {
   firestore: any;
   collection: any;
@@ -23,6 +25,7 @@ export const FirestoreStub = ({
   get: any;
   set: any;
   update: any;
+  onSnapshot: any;
 } => {
   const firestoreCollectionDocGetStub: any = jasmine
     .createSpy('get')
@@ -36,19 +39,25 @@ export const FirestoreStub = ({
     .createSpy('update')
     .and.returnValue(update);
 
+  const firestoreCollectionDocOnStub: any = jasmine
+    .createSpy('onSnapshot')
+    .and.returnValue(onSnapshot);
+
   const firestoreCollectionDocStub: any = jasmine
     .createSpy('doc')
     .and.returnValue({
       get: firestoreCollectionDocGetStub,
       set: firestoreCollectionDocSetStub,
-      update: firestoreCollectionDocUpdateStub
+      update: firestoreCollectionDocUpdateStub,
+      onSnapshot: firestoreCollectionDocOnStub
     });
 
   const firestoreCollectionStub: any = jasmine
     .createSpy('collection')
     .and.returnValue({
       doc: firestoreCollectionDocStub,
-      get: firestoreCollectionDocGetStub
+      get: firestoreCollectionDocGetStub,
+      onSnapshot: firestoreCollectionDocOnStub
     });
 
   const firestoreStub: any = {
@@ -61,6 +70,7 @@ export const FirestoreStub = ({
     doc: firestoreCollectionDocStub,
     get: firestoreCollectionDocGetStub,
     set: firestoreCollectionDocSetStub,
-    update: firestoreCollectionDocUpdateStub
+    update: firestoreCollectionDocUpdateStub,
+    onSnapshot: firestoreCollectionDocOnStub
   };
 };

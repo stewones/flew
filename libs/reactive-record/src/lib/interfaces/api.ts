@@ -9,34 +9,34 @@ import { Observable } from 'rxjs';
  */
 export interface Api {
   //
-  // chaining
-  driver(name: string);
-  useNetwork(active: boolean);
-  saveNetwork(active: boolean);
-  transformNetwork(transformFn: (response: Response) => any);
-  ttl(value: number);
-  useCache(active: boolean);
-  transformCache(transformFn: (response: Response) => any);
-  key(name: string);
-  query(by: { [key: string]: {} } | { [key: string]: {} }[]);
-  where(field: string, operator: string, value: string | number | boolean);
-  sort(by: { [key: string]: string });
-  size(value: number);
-  ref(path: string);
+  // chained options
+  driver(name: string); // firebase / firestore / http
+  useNetwork(active: boolean); // force the use of network call
+  saveNetwork(active: boolean); // as a cache
+  transformNetwork(transformFn: (response: Response) => any); // transform the network response
+  ttl(value: number); // set a max time to cache
+  useCache(active: boolean); // when true the first response should be from the cache if exists
+  transformCache(transformFn: (response: Response) => any); // transform the response from cache
+  key(name: string); // cache name
+  query(by: { [key: string]: {} } | { [key: string]: {} }[]); // firestore only - this is an object literal way of `where`
+  where(field: string, operator: string, value: string | number | boolean); // firestore only - short way as firebase sdk does
+  sort(by: { [key: string]: string }); // firestore only
+  size(value: number); // firestore only
+  ref(path: string); // firebase only
 
   //
-  // data
-  find(): Observable<Response>;
-  findOne(): Observable<Response>;
-  set(id: string, data: any, merge?: boolean): Observable<any>;
-  update(id: string, data: any): Observable<any>;
-  on(
+  // fire requests
+  find(): Observable<Response>; // firestore & firebase
+  findOne(): Observable<Response>; // firestore & firebase
+  set(id: string, data: any, merge?: boolean): Observable<any>; // firestore
+  update(id: string, data: any): Observable<any>; // firestore
+  on( // firestore & firebase - real time calls doesn't has caching features
     onSuccess: (response: Response | any) => any,
     onError: (response: any) => any
   ): any;
 
   //
-  // http
+  // http requests
   get(path: string): Observable<Response>;
   post(path: string, body: any): Observable<Response>;
   patch(path: string, body: any): Observable<Response>;
