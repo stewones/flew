@@ -1,11 +1,10 @@
 import { Action } from '@ngrx/store';
-import { Entity } from './play.reducer';
 import { Method } from '../interfaces/method.interface';
 
 export enum PlayActionTypes {
-  LoadPlay = '[Play] Load Play',
-  PlayLoaded = '[Play] Play Loaded',
-  PlayLoadError = '[Play] Play Load Error',
+  // LoadPlay = '[Play] Load Play',
+  // PlayLoaded = '[Play] Play Loaded',
+  // PlayLoadError = '[Play] Play Load Error',
   ADD_METHOD = '[Methods] Add Method'
 }
 
@@ -14,25 +13,26 @@ export class AddMethod implements Action {
   constructor(public payload: Method) {}
 }
 
-export class LoadPlay implements Action {
-  readonly type = PlayActionTypes.LoadPlay;
-}
+// export class LoadPlay implements Action {
+//   readonly type = PlayActionTypes.LoadPlay;
+// }
 
-export class PlayLoadError implements Action {
-  readonly type = PlayActionTypes.PlayLoadError;
-  constructor(public payload: any) {}
-}
+// export class PlayLoadError implements Action {
+//   readonly type = PlayActionTypes.PlayLoadError;
+//   constructor(public payload: any) {}
+// }
 
-export class PlayLoaded implements Action {
-  readonly type = PlayActionTypes.PlayLoaded;
-  constructor(public payload: Entity[]) {}
-}
+// export class PlayLoaded implements Action {
+//   readonly type = PlayActionTypes.PlayLoaded;
+//   // constructor(public payload: Entity[]) {}
+// }
 
-export type PlayAction = AddMethod | LoadPlay | PlayLoaded | PlayLoadError;
+export type PlayAction = AddMethod;
+//| LoadPlay | PlayLoaded | PlayLoadError;
 
 export const fromPlayActions = {
-  LoadPlay,
-  PlayLoaded,
-  PlayLoadError,
   AddMethod
+  // LoadPlay,
+  // PlayLoaded,
+  // PlayLoadError,
 };

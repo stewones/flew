@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
-import { DataPersistence } from '@nrwl/nx';
+// import { DataPersistence } from '@nrwl/nx';
+// import { PlayPartialState } from './play.reducer';
 
-import { PlayPartialState } from './play.reducer';
 import {
-  LoadPlay,
-  PlayLoaded,
-  PlayLoadError,
+  // LoadPlay,
+  // PlayLoaded,
+  // PlayLoadError,
   PlayActionTypes
 } from './play.actions';
 import { tap } from 'rxjs/operators';
@@ -36,7 +36,6 @@ export class PlayEffects {
   );
 
   constructor(
-    private actions$: Actions
-  ) // private dataPersistence: DataPersistence<PlayPartialState>
-  {}
+    private actions$: Actions // private dataPersistence: DataPersistence<PlayPartialState>
+  ) {}
 }

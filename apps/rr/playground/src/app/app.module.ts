@@ -31,15 +31,6 @@ import { ChainingPickerContainerModule } from './containers/chaining-picker-cont
     ),
     EffectsModule.forRoot([PlayEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : []
-
-    // StoreModule.forRoot(
-    //   { methods: methodsReducer },
-    //   {
-    //     initialState: { methods: methodsInitialState },
-    //     metaReducers: !environment.production ? [storeFreeze] : []
-    //   }
-    // ),
-    // !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [],
   bootstrap: [AppComponent]

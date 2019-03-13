@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { Method } from '../../interfaces/method.interface';
 import { PlayState } from '../../+play/play.reducer';
-import { playQuery } from '../../+play/play.selectors';
+import { getAllMethods } from '../../+play/method/method.selectors';
 
 @Component({
   selector: 'rr-play-chaining-picker-container',
@@ -15,6 +15,6 @@ export class ChainingPickerContainerComponent implements OnInit {
   constructor(private store: Store<PlayState>) {}
 
   ngOnInit() {
-    this.methods$ = this.store.pipe(select(playQuery.getAllPlay));
+    this.methods$ = this.store.pipe(select(getAllMethods));
   }
 }
