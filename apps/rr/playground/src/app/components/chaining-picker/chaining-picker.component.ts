@@ -3,13 +3,18 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   Input,
-  Output
+  Output,
+  ViewChild,
+  ViewContainerRef,
+  ComponentFactoryResolver
 } from '@angular/core';
 import { EventEmitter } from 'events';
 import { Store } from '@ngrx/store';
 import { AddMethod } from '../../+play/play.actions';
 import { Method } from '../../interfaces/method.interface';
 import { PlayState } from '../../+play/play.reducer';
+import { FieldCallbackComponent } from '../form/field-callback/field-callback.component';
+import { FieldBooleanComponent } from '../form/field-boolean/field-boolean.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

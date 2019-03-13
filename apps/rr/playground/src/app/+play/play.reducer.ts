@@ -20,17 +20,17 @@ export const initialState: PlayState = {
     {
       name: 'useNetwork',
       description: ' force the use of network call',
-      type: 'boolean',
       default: 'true',
-      platform: ['browser', 'server']
+      platform: ['browser', 'server'],
+      type: 'boolean'
     },
     {
       name: 'useCache',
       description:
         'when true the first response should be from the cache if exists',
-      type: 'boolean',
       default: 'true',
-      platform: ['browser']
+      platform: ['browser'],
+      type: 'callback'
     }
   ]
 };

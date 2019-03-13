@@ -1,3 +1,7 @@
-<a *ngFor="let method of methods" (click)="addMethod(method)">
-  {{ method.name }}
-</a>
+<ul>
+  <li *ngFor="let method of methods" (click)="addMethod(method)">
+    {{ method.name }}
+
+    <rr-play-field [data]="{ type: method.type }"></rr-play-field>
+  </li>
+</ul>
