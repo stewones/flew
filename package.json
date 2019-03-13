@@ -56,7 +56,8 @@
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "rxjs": "6.4.0",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.26",
+    "@ngrx/entity": "7.2.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.13.5",

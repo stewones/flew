@@ -22,6 +22,12 @@
     },
     "rr-demo-e2e": {
       "tags": []
+    },
+    "rr-playground": {
+      "tags": []
+    },
+    "rr-playground-e2e": {
+      "tags": []
     }
   }
 }
