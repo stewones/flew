@@ -6,9 +6,10 @@ import {
   Output
 } from '@angular/core';
 import { EventEmitter } from 'events';
-import { Method, MethodState } from '../../methods.reducer';
 import { Store } from '@ngrx/store';
-import { MethodsActionTypes, AddMethod } from '../../methods.actions';
+import { AddMethod } from '../../+play/play.actions';
+import { Method } from '../../interfaces/method.interface';
+import { PlayState } from '../../+play/play.reducer';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,7 +21,7 @@ export class ChainingPickerComponent implements OnInit {
   @Input() methods: Method[];
   @Output() onSelect = new EventEmitter();
 
-  constructor(private store: Store<MethodState>) {}
+  constructor(private store: Store<PlayState>) {}
 
   ngOnInit() {}
 

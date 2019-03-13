@@ -10,12 +10,12 @@ import { NxModule } from '@nrwl/nx';
 import { DataPersistence } from '@nrwl/nx';
 import { hot } from '@nrwl/nx/testing';
 
-import { MethodsEffects } from './methods.effects';
-import { LoadMethods, MethodsLoaded } from './methods.actions';
+import { PlayEffects } from './play.effects';
+import { LoadPlay, PlayLoaded } from './play.actions';
 
-describe('MethodsEffects', () => {
+describe('PlayEffects', () => {
   let actions: Observable<any>;
-  let effects: MethodsEffects;
+  let effects: PlayEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,20 +25,20 @@ describe('MethodsEffects', () => {
         EffectsModule.forRoot([])
       ],
       providers: [
-        MethodsEffects,
+        PlayEffects,
         DataPersistence,
         provideMockActions(() => actions)
       ]
     });
 
-    effects = TestBed.get(MethodsEffects);
+    effects = TestBed.get(PlayEffects);
   });
 
-  describe('loadMethods$', () => {
+  describe('loadPlay$', () => {
     it('should work', () => {
-      actions = hot('-a-|', { a: new LoadMethods() });
-      expect(effects.loadMethods$).toBeObservable(
-        hot('-a-|', { a: new MethodsLoaded([]) })
+      actions = hot('-a-|', { a: new LoadPlay() });
+      expect(effects.loadPlay$).toBeObservable(
+        hot('-a-|', { a: new PlayLoaded([]) })
       );
     });
   });

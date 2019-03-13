@@ -6,30 +6,31 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { NxModule } from '@nrwl/nx';
 
-import { initialState, reducer } from './+methods/methods.reducer';
-import { MethodEffects } from './+methods/methods.effects';
-
-import { ChainingPickerContainerModule } from './+methods/containers/chaining-picker-container/chaining-picker-container.module';
-
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
+import {
+  initialState as playInitialState,
+  playReducer
+} from './+play/play.reducer';
+import { PlayEffects } from './+play/play.effects';
+import { ChainingPickerContainerModule } from './containers/chaining-picker-container/chaining-picker-container.module';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    NxModule.forRoot(),
+    ChainingPickerContainerModule,
     StoreModule.forRoot(
-      { methods: reducer },
+      { play: playReducer },
       {
-        initialState: { methods: initialState },
+        initialState: { play: playInitialState },
         metaReducers: !environment.production ? [storeFreeze] : []
       }
     ),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([MethodEffects]),
-    NxModule.forRoot(),
-    ChainingPickerContainerModule
+    EffectsModule.forRoot([PlayEffects]),
+    !environment.production ? StoreDevtoolsModule.instrument() : []
 
     // StoreModule.forRoot(
     //   { methods: methodsReducer },
