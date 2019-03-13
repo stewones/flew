@@ -6,27 +6,39 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { NxModule } from '@nrwl/nx';
 
-import {
-  METHODS_FEATURE_KEY,
-  initialState as methodsInitialState,
-  methodsReducer
-} from './+methods/methods.reducer';
-import { MethodsEffects } from './+methods/methods.effects';
+import { initialState, reducer } from './+methods/methods.reducer';
+import { MethodEffects } from './+methods/methods.effects';
 
 import { ChainingPickerContainerModule } from './+methods/containers/chaining-picker-container/chaining-picker-container.module';
+
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+import { storeFreeze } from 'ngrx-store-freeze';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    StoreModule.forRoot({}),
-    EffectsModule.forRoot([]),
+    StoreModule.forRoot(
+      { methods: reducer },
+      {
+        initialState: { methods: initialState },
+        metaReducers: !environment.production ? [storeFreeze] : []
+      }
+    ),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    EffectsModule.forRoot([MethodEffects]),
     NxModule.forRoot(),
-    StoreModule.forFeature(METHODS_FEATURE_KEY, methodsReducer, {
-      initialState: methodsInitialState
-    }),
-    EffectsModule.forFeature([MethodsEffects]),
     ChainingPickerContainerModule
+
+    // StoreModule.forRoot(
+    //   { methods: methodsReducer },
+    //   {
+    //     initialState: { methods: methodsInitialState },
+    //     metaReducers: !environment.production ? [storeFreeze] : []
+    //   }
+    // ),
+    // !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [],
   bootstrap: [AppComponent]

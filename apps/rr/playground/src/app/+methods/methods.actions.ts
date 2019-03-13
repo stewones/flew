@@ -4,7 +4,13 @@ import { Method } from './methods.reducer';
 export enum MethodsActionTypes {
   LoadMethods = '[Methods] Load Methods',
   MethodsLoaded = '[Methods] Methods Loaded',
-  MethodsLoadError = '[Methods] Methods Load Error'
+  MethodsLoadError = '[Methods] Methods Load Error',
+  ADD_METHOD = '[Methods] Add Method'
+}
+
+export class AddMethod implements Action {
+  readonly type = MethodsActionTypes.ADD_METHOD;
+  constructor(public payload: Method) {}
 }
 
 export class LoadMethods implements Action {
@@ -21,10 +27,15 @@ export class MethodsLoaded implements Action {
   constructor(public payload: Method[]) {}
 }
 
-export type MethodsAction = LoadMethods | MethodsLoaded | MethodsLoadError;
+export type MethodsAction =
+  | AddMethod
+  | LoadMethods
+  | MethodsLoaded
+  | MethodsLoadError;
 
 export const fromMethodsActions = {
   LoadMethods,
   MethodsLoaded,
-  MethodsLoadError
+  MethodsLoadError,
+  AddMethod
 };

@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Effect, Actions } from '@ngrx/effects';
-import { DataPersistence } from '@nrwl/nx';
-
-import { MethodsPartialState } from './methods.reducer';
+import { Effect, Actions, ofType } from '@ngrx/effects';
+import { MethodPartialState, Method } from './methods.reducer';
 import {
   LoadMethods,
   MethodsLoaded,
@@ -10,25 +8,20 @@ import {
   MethodsActionTypes
 } from './methods.actions';
 
-@Injectable()
-export class MethodsEffects {
-  @Effect() loadMethods$ = this.dataPersistence.fetch(
-    MethodsActionTypes.LoadMethods,
-    {
-      run: (action: LoadMethods, state: MethodsPartialState) => {
-        // Your custom REST 'load' logic goes here. For now just return an empty list...
-        return new MethodsLoaded([]);
-      },
+import { mergeMap, tap } from 'rxjs/operators';
+import { Action } from '@ngrx/store';
 
-      onError: (action: LoadMethods, error) => {
-        console.error('Error', error);
-        return new MethodsLoadError(error);
-      }
-    }
+@Injectable()
+export class MethodEffects {
+  @Effect({
+    dispatch: false
+  })
+  addMethod$ = this.actions$.pipe(
+    ofType(MethodsActionTypes.ADD_METHOD),
+    tap((action: any) => {
+      alert(`oh yeah ${action.payload.name}`);
+    })
   );
 
-  constructor(
-    private actions$: Actions,
-    private dataPersistence: DataPersistence<MethodsPartialState>
-  ) {}
+  constructor(private actions$: Actions) {}
 }

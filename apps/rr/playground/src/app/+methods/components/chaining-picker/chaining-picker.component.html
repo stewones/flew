@@ -1,4 +1,3 @@
-<p>
-  chaining-picker works!
-</p>
-{{ methods | json }}
+<a *ngFor="let method of methods" (click)="addMethod(method)">
+  {{ method.name }}
+</a>

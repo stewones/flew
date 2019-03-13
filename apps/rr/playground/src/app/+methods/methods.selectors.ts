@@ -1,30 +1,28 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { METHODS_FEATURE_KEY, MethodsState } from './methods.reducer';
+import { METHODS_FEATURE_KEY, MethodState } from './methods.reducer';
 
 // Lookup the 'Methods' feature state managed by NgRx
-const getMethodsState = createFeatureSelector<MethodsState>(
-  METHODS_FEATURE_KEY
-);
+const getMethodsState = createFeatureSelector<MethodState>(METHODS_FEATURE_KEY);
 
 const getLoaded = createSelector(
   getMethodsState,
-  (state: MethodsState) => state.loaded
+  (state: MethodState) => state.loaded
 );
 const getError = createSelector(
   getMethodsState,
-  (state: MethodsState) => state.error
+  (state: MethodState) => state.error
 );
 
 const getAllMethods = createSelector(
   getMethodsState,
   getLoaded,
-  (state: MethodsState, isLoaded) => {
+  (state: MethodState, isLoaded) => {
     return isLoaded ? state.list : [];
   }
 );
 const getSelectedId = createSelector(
   getMethodsState,
-  (state: MethodsState) => state.selectedId
+  (state: MethodState) => state.selectedId
 );
 const getSelectedMethods = createSelector(
   getAllMethods,
