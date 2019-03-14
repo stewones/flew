@@ -1,11 +1,12 @@
 import { PlayAction, PlayActionTypes } from './play.actions';
 import { Method } from '../interfaces/method.interface';
+import { addMethodReducer } from './method/method.reducer';
 
 export const PLAY_FEATURE_KEY = 'play';
 
 export interface PlayState {
   methods: Method[]; // list of Play; analogous to a sql normalized table
-  selectedMethods?: string; // which Play record has been selected
+  selectedMethods?: Method[]; // which Play record has been selected
   loaded: boolean; // has the Play list been loaded
   error?: any; // last none error (if any)
 }
@@ -16,6 +17,7 @@ export interface PlayPartialState {
 
 export const initialState: PlayState = {
   loaded: true,
+  selectedMethods: [],
   methods: [
     {
       name: 'useNetwork',
@@ -39,16 +41,11 @@ export function playReducer(
   state: PlayState = initialState,
   action: PlayAction
 ): PlayState {
-  // switch (action.type) {
-  //   case PlayActionTypes.PlayLoaded: {
-  //     state = {
-  //       ...state,
-  //       methods: action.payload,
-  //       // loaded: true
-  //     };
-  //     break;
-  //   }
-  // }
-
+  switch (action.type) {
+    case PlayActionTypes.ADD_METHOD: {
+      state = addMethodReducer(state, action);
+      break;
+    }
+  }
   return state;
 }

@@ -31,7 +31,7 @@ export class PlayEffects {
   addMethod$ = this.actions$.pipe(
     ofType(PlayActionTypes.ADD_METHOD),
     tap((action: any) => {
-      alert(`oh yeah ${action.payload.name}`);
+      // alert(`oh yeah ${action.payload.name}`);
     })
   );
 
