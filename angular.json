@@ -266,7 +266,11 @@
               "apps/rr/playground/src/favicon.ico",
               "apps/rr/playground/src/assets"
             ],
-            "styles": ["apps/rr/playground/src/styles.scss"],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
+              "apps/rr/playground/src/styles.scss",
+              "tools/tailwind/common.bundle.css"
+            ],
             "scripts": [],
             "es5BrowserSupport": true
           },

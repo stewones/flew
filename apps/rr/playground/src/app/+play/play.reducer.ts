@@ -19,7 +19,7 @@ export const initialState: PlayState = {
   methods: [
     {
       name: 'useNetwork',
-      description: ' force the use of network call',
+      description: 'force the use of network call',
       default: 'true',
       platform: ['browser', 'server'],
       type: 'boolean'

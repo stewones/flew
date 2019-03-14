@@ -14,14 +14,17 @@ import {
   playReducer
 } from './+play/play.reducer';
 import { PlayEffects } from './+play/play.effects';
-import { ChainingPickerContainerModule } from './containers/chaining-picker-container/chaining-picker-container.module';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { GroundModule } from './ground/ground.module';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     NxModule.forRoot(),
-    ChainingPickerContainerModule,
     StoreModule.forRoot(
       { play: playReducer },
       {
@@ -30,7 +33,9 @@ import { ChainingPickerContainerModule } from './containers/chaining-picker-cont
       }
     ),
     EffectsModule.forRoot([PlayEffects]),
-    !environment.production ? StoreDevtoolsModule.instrument() : []
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+
+    GroundModule
   ],
   providers: [],
   bootstrap: [AppComponent]
