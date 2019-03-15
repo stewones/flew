@@ -1,3 +1,11 @@
-<p>
-  field-boolean works!
-</p>
+<mat-checkbox
+  class="example-margin"
+  [(ngModel)]="data.checked"
+  [(indeterminate)]="data.indeterminate"
+  [labelPosition]="data.labelPosition"
+  [disabled]="data.disabled"
+  [color]="data.color"
+  (change)="didChange($event)"
+>
+  {{ data.placeholder || data.name }}
+</mat-checkbox>

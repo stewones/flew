@@ -16,8 +16,7 @@ import {
 import { PlayEffects } from './+play/play.effects';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { GroundModule } from './ground/ground.module';
+import { GroundModule } from './components/ground/ground.module';
 
 @NgModule({
   declarations: [AppComponent],

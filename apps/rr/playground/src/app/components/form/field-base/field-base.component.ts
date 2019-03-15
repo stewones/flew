@@ -2,20 +2,27 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
-  Input
+  Input,
+  Output,
+  EventEmitter
 } from '@angular/core';
-import { FormField } from '../form.interface';
+import { FormField, FormFieldChange } from '../form.interface';
 
 @Component({
   selector: 'rr-play-field-base',
-  templateUrl: './field-base.component.html',
-  styleUrls: ['./field-base.component.css'],
+  template: ``,
+  styleUrls: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FieldBaseComponent implements OnInit {
   @Input() data: FormField = <FormField>{};
+  @Output() onChange = new EventEmitter<FormFieldChange>();
 
   constructor() {}
 
   ngOnInit() {}
+
+  didChange($event: any) {
+    this.onChange.emit(<FormFieldChange>{ field: this.data, event: $event });
+  }
 }

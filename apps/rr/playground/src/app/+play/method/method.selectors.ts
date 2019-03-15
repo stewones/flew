@@ -14,12 +14,3 @@ export const getSelectedMethods = createSelector(
   playState,
   (state: PlayState) => state.selectedMethods
 );
-
-// const getSelectedMethod = createSelector(
-//   getAllPlay,
-//   getSelectedId,
-//   (play, id) => {
-//     const result = play.find(it => it['id'] === id);
-//     return result ? Object.assign({}, result) : undefined;
-//   }
-// );

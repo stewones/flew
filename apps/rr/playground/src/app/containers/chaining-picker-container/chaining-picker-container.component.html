@@ -1,1 +1,5 @@
-<rr-play-chaining-picker [methods]="methods$ | async"></rr-play-chaining-picker>
+<rr-play-chaining-picker
+  [methods]="methods$ | async"
+  (onAdd)="didAddMethod($event)"
+  (onUpdate)="didUpdateMethod($event)"
+></rr-play-chaining-picker>

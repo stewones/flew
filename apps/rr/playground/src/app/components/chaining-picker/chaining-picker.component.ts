@@ -4,33 +4,53 @@ import {
   ChangeDetectionStrategy,
   Input,
   Output,
-  ViewChild,
-  ViewContainerRef,
-  ComponentFactoryResolver
+  EventEmitter
 } from '@angular/core';
-import { EventEmitter } from 'events';
-import { Store } from '@ngrx/store';
-import { AddMethod } from '../../+play/play.actions';
-import { Method } from '../../interfaces/method.interface';
-import { PlayState } from '../../+play/play.reducer';
-import { FieldCallbackComponent } from '../form/field-callback/field-callback.component';
-import { FieldBooleanComponent } from '../form/field-boolean/field-boolean.component';
+
+import { Method, MethodChange } from '../../interfaces/method.interface';
+import { FormFieldChange } from '../form/form.interface';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'rr-play-chaining-picker',
   templateUrl: './chaining-picker.component.html',
-  styleUrls: ['./chaining-picker.component.css']
+  styleUrls: ['./chaining-picker.component.scss']
 })
 export class ChainingPickerComponent implements OnInit {
   @Input() methods: Method[];
-  @Output() onSelect = new EventEmitter();
+  @Output() onAdd = new EventEmitter<MethodChange>();
+  @Output() onUpdate = new EventEmitter<MethodChange>();
 
-  constructor(private store: Store<PlayState>) {}
+  showInput: { [key: string]: boolean } = {};
+
+  constructor() {}
 
   ngOnInit() {}
 
-  addMethod(payload: Method) {
-    this.store.dispatch(new AddMethod(payload));
+  getMethod(name: string): Method {
+    return this.methods.find(it => it.name === name);
   }
+
+  didFieldChange($event: FormFieldChange) {
+    const method: Method = this.getMethod($event.field.name);
+    this.showInput[method.name] = $event.event.checked;
+
+    this.onAdd.emit(<MethodChange>{
+      ...$event,
+      method: method
+    });
+  }
+
+  didFieldValueChange($event: FormFieldChange) {
+    const method: Method = this.getMethod($event.field.name);
+
+    this.onUpdate.emit(<MethodChange>{
+      ...$event,
+      method: method
+    });
+  }
+
+  // ngDoCheck() {
+  //   console.log('this is awesome');
+  // }
 }

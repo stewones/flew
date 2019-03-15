@@ -1,8 +1,9 @@
-<p>
-  chaining-api works!
+<p class="m-0">
+  this.$collection
 </p>
-<ul>
-  <li *ngFor="let method of methods">
-    {{ method.name }}
+<ul class="list-reset m-0 ml-3">
+  <li class="my-1" *ngFor="let method of methods">
+    .<strong>{{ method.name }}</strong
+    >(<span [innerHTML]="removeComments(method.value)"></span>)
   </li>
 </ul>

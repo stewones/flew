@@ -1,6 +1,10 @@
 import { PlayAction, PlayActionTypes } from './play.actions';
 import { Method } from '../interfaces/method.interface';
-import { addMethodReducer } from './method/method.reducer';
+import {
+  addMethodToSelectionReducer,
+  removeSelectedMethodReducer,
+  updateSelectedMethodReducer
+} from './method/method.reducer';
 
 export const PLAY_FEATURE_KEY = 'play';
 
@@ -21,18 +25,34 @@ export const initialState: PlayState = {
   methods: [
     {
       name: 'useNetwork',
+      placeholder: 'Use network?',
       description: 'force the use of network call',
       default: 'true',
       platform: ['browser', 'server'],
-      type: 'boolean'
+      type: 'boolean',
+      value: 'true'
     },
     {
       name: 'useCache',
+      placeholder: 'Use cache?',
       description:
         'when true the first response should be from the cache if exists',
       default: 'true',
       platform: ['browser'],
-      type: 'callback'
+      type: 'boolean',
+      value: 'true'
+    },
+    {
+      name: 'transformNetwork',
+      placeholder: 'Transform Network',
+      description: 'a callback function to transform the network response',
+      default: 'response',
+      platform: ['browser'],
+      type: 'callback',
+      value: `(response: Response):any => {
+    // do whatever with response
+    return response;
+}`
     }
   ]
 };
@@ -42,8 +62,16 @@ export function playReducer(
   action: PlayAction
 ): PlayState {
   switch (action.type) {
-    case PlayActionTypes.ADD_METHOD: {
-      state = addMethodReducer(state, action);
+    case PlayActionTypes.ADD_CHAIN_METHOD: {
+      state = addMethodToSelectionReducer(state, action);
+      break;
+    }
+    case PlayActionTypes.REMOVE_CHAIN_METHOD: {
+      state = removeSelectedMethodReducer(state, action);
+      break;
+    }
+    case PlayActionTypes.UPDATE_CHAIN_METHOD: {
+      state = updateSelectedMethodReducer(state, action);
       break;
     }
   }

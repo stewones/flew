@@ -17,4 +17,9 @@ export class FieldCallbackComponent extends FieldBaseComponent
   implements OnInit {
   @Input() data: FormField = <FormField>{};
   ngOnInit() {}
+
+  didChange($event) {
+    $event.value = this.data.value;
+    super.didChange($event);
+  }
 }

@@ -5,7 +5,8 @@ import {
   Input
 } from '@angular/core';
 import { FieldBaseComponent } from '../field-base/field-base.component';
-import { FormField } from '../form.interface';
+import { FormFieldBoolean } from './field-boolean.interface';
+import { MatCheckboxChange } from '@angular/material';
 
 @Component({
   selector: 'rr-play-field-boolean',
@@ -15,6 +16,11 @@ import { FormField } from '../form.interface';
 })
 export class FieldBooleanComponent extends FieldBaseComponent
   implements OnInit {
-  @Input() data: FormField = <FormField>{};
+  @Input() data: FormFieldBoolean = <FormFieldBoolean>{};
+
   ngOnInit() {}
+
+  didChange($event: MatCheckboxChange) {
+    super.didChange($event);
+  }
 }

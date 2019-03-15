@@ -17,4 +17,10 @@ export class ChainingApiComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  removeComments(subject: any) {
+    return typeof subject === 'string'
+      ? subject.split(`// do whatever with response`).join('')
+      : subject;
+  }
 }

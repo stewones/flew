@@ -8,3 +8,31 @@ body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+rr-play-chaining-picker {
+    .field {
+        &.field-callback {
+            margin-top: -16px;
+
+            .mat-form-field-label-wrapper {
+                display: none;
+            }
+
+            mat-form-field {
+                width: 95%;
+            }
+
+            textarea {
+                height: 78px;
+            }
+        }
+
+        &.field-assert {
+            margin-bottom: 8px;
+
+            .mat-radio-label-content {
+                margin-right: 10px;
+            }
+        }
+    }
+}

@@ -1,7 +1,40 @@
-<ul>
-  <li *ngFor="let method of methods" (click)="addMethod(method)">
-    {{ method.name }}
+<ul class="list-reset">
+  <li *ngFor="let method of methods">
+    <div class="flex flex-col">
+      <!-- <mat-checkbox
+        class="example-margin"
+        (change)="
+          didFieldChange({ event: $event, field: { name: method.name } })
+        "
+      >
+        {{ method.name }}
+      </mat-checkbox> -->
 
-    <rr-play-field [data]="{ type: method.type }"></rr-play-field>
+      <rr-play-field
+        [data]="{
+          type: 'boolean',
+          name: method.name,
+          placeholder: method.placeholder
+        }"
+        (onChange)="didFieldChange($event)"
+      ></rr-play-field>
+      <div class="mb-3" [hidden]="!showInput[method.name]">
+        <div class="flex flex-col mb-3 mt-1">
+          <small>{{ method.description }}</small>
+          <small class="mt-1 text-purple-dark text-xs"
+            >defaults to {{ method.default }}</small
+          >
+        </div>
+        <rr-play-field
+          [data]="{
+            name: method.name,
+            placeholder: method.placeholder,
+            type: method.type === 'boolean' ? 'assert' : method.type,
+            value: method.value
+          }"
+          (onChange)="didFieldValueChange($event)"
+        ></rr-play-field>
+      </div>
+    </div>
   </li>
 </ul>

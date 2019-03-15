@@ -2,37 +2,28 @@ import { Action } from '@ngrx/store';
 import { Method } from '../interfaces/method.interface';
 
 export enum PlayActionTypes {
-  // LoadPlay = '[Play] Load Play',
-  // PlayLoaded = '[Play] Play Loaded',
-  // PlayLoadError = '[Play] Play Load Error',
-  ADD_METHOD = '[Methods] Add Method'
+  ADD_CHAIN_METHOD = '[Methods] Add method to chain',
+  REMOVE_CHAIN_METHOD = '[Methods] Remove method from chain',
+  UPDATE_CHAIN_METHOD = '[Methods] Update method in chain'
 }
 
-export class AddMethod implements Action {
-  readonly type = PlayActionTypes.ADD_METHOD;
+export class AddChainMethod implements Action {
+  readonly type = PlayActionTypes.ADD_CHAIN_METHOD;
+  constructor(public payload: Method) {}
+}
+export class RemoveChainMethod implements Action {
+  readonly type = PlayActionTypes.REMOVE_CHAIN_METHOD;
+  constructor(public payload: Method) {}
+}
+export class UpdateChainMethod implements Action {
+  readonly type = PlayActionTypes.UPDATE_CHAIN_METHOD;
   constructor(public payload: Method) {}
 }
 
-// export class LoadPlay implements Action {
-//   readonly type = PlayActionTypes.LoadPlay;
-// }
-
-// export class PlayLoadError implements Action {
-//   readonly type = PlayActionTypes.PlayLoadError;
-//   constructor(public payload: any) {}
-// }
-
-// export class PlayLoaded implements Action {
-//   readonly type = PlayActionTypes.PlayLoaded;
-//   // constructor(public payload: Entity[]) {}
-// }
-
-export type PlayAction = AddMethod;
-//| LoadPlay | PlayLoaded | PlayLoadError;
+export type PlayAction = AddChainMethod | RemoveChainMethod | UpdateChainMethod;
 
 export const fromPlayActions = {
-  AddMethod
-  // LoadPlay,
-  // PlayLoaded,
-  // PlayLoadError,
+  AddChainMethod,
+  RemoveChainMethod,
+  UpdateChainMethod
 };
