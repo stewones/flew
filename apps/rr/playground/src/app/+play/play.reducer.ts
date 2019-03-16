@@ -50,7 +50,7 @@ export const initialState: PlayState = {
       platform: ['browser'],
       type: 'callback',
       value: `(response: Response) => {
-    // do whatever with response
+    // do whatever with the response
     return response;
 }`
     }

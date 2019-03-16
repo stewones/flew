@@ -43,7 +43,6 @@ export class ChainingPickerComponent implements OnInit {
 
   didFieldValueChange($event: FormFieldChange) {
     const method: Method = this.getMethod($event.field.name);
-
     this.onUpdate.emit(<MethodChange>{
       ...$event,
       method: method

@@ -1,15 +1,7 @@
 <ul class="list-reset">
   <li *ngFor="let method of methods">
     <div class="flex flex-col">
-      <!-- <mat-checkbox
-        class="example-margin"
-        (change)="
-          didFieldChange({ event: $event, field: { name: method.name } })
-        "
-      >
-        {{ method.name }}
-      </mat-checkbox> -->
-
+      <!-- FIRST FIELD (THE DECISION) -->
       <rr-play-field
         [data]="{
           type: 'boolean',
@@ -18,13 +10,14 @@
         }"
         (onChange)="didFieldChange($event)"
       ></rr-play-field>
-      <div class="mb-3" [hidden]="!showInput[method.name]">
+      <div class="mb-3" *ngIf="showInput[method.name]">
         <div class="flex flex-col mb-3 mt-1">
           <small>{{ method.description }}</small>
           <small class="mt-1 text-purple-dark text-xs"
             >defaults to {{ method.default }}</small
           >
         </div>
+        <!-- SECOND FIELD (THE INPUT) -->
         <rr-play-field
           [data]="{
             name: method.name,
