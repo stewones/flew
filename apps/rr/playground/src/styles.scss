@@ -1,4 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+//
+// common imports
+@import "~codemirror/lib/codemirror.css";
+@import "~codemirror/theme/material.css";
+
+//
+// common resets
 
 html, body {
     height: 100%;
@@ -9,22 +15,30 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+//
+// common customizations
+
 rr-play-chaining-picker {
     .field {
         &.field-callback {
-            margin-top: -16px;
-
-            .mat-form-field-label-wrapper {
-                display: none;
+            .CodeMirror {
+                height: 100px;
             }
 
-            mat-form-field {
-                width: 95%;
-            }
+            // margin-top: -16px;
 
-            textarea {
-                height: 78px;
-            }
+            // .mat-form-field-label-wrapper {
+            //     display: none;
+            // }
+
+            // mat-form-field {
+            //     width: 95%;
+            // }
+
+            // textarea {
+            //     height: 78px;
+            // }
+       
         }
 
         &.field-assert {
@@ -35,4 +49,11 @@ rr-play-chaining-picker {
             }
         }
     }
+}
+
+//
+// common defaults
+
+.card {
+    background-color: hsla(0, 0%, 100%, 0.5);
 }

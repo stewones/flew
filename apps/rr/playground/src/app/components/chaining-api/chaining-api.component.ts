@@ -5,11 +5,13 @@ import {
   Input
 } from '@angular/core';
 import { Method } from '../../interfaces/method.interface';
+import { js } from 'js-beautify';
+import Prism from 'prismjs';
 
 @Component({
   selector: 'rr-play-chaining-api',
   templateUrl: './chaining-api.component.html',
-  styleUrls: ['./chaining-api.component.css'],
+  styleUrls: ['./chaining-api.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChainingApiComponent implements OnInit {
@@ -18,9 +20,11 @@ export class ChainingApiComponent implements OnInit {
 
   ngOnInit() {}
 
-  removeComments(subject: any) {
-    return typeof subject === 'string'
-      ? subject.split(`// do whatever with response`).join('')
-      : subject;
+  beautify(text) {
+    return this.highlight(js(text));
+  }
+
+  highlight(text) {
+    return Prism.highlight(text, Prism.languages.javascript, 'javascript');
   }
 }

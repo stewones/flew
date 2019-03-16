@@ -10,7 +10,7 @@ import { FormField } from '../form.interface';
 @Component({
   selector: 'rr-play-field-callback',
   templateUrl: './field-callback.component.html',
-  styleUrls: ['./field-callback.component.css'],
+  styleUrls: ['./field-callback.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FieldCallbackComponent extends FieldBaseComponent
@@ -18,8 +18,8 @@ export class FieldCallbackComponent extends FieldBaseComponent
   @Input() data: FormField = <FormField>{};
   ngOnInit() {}
 
-  didChange($event) {
-    $event.value = this.data.value;
-    super.didChange($event);
+  didChange($event: string) {
+    // $event.value = this.data.value;
+    super.didChange({ value: $event });
   }
 }

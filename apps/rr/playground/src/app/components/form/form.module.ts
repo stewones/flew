@@ -14,6 +14,12 @@ import {
 } from '@angular/material';
 import { FieldAssertComponent } from './field-assert/field-assert.component';
 
+// Added to NgModule
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+// see https://codemirror.net/mode/index.html
+import 'codemirror/mode/javascript/javascript';
+// import 'codemirror/mode/markdown/markdown';
+
 @NgModule({
   declarations: [
     FieldBooleanComponent,
@@ -36,7 +42,8 @@ import { FieldAssertComponent } from './field-assert/field-assert.component';
     MatCheckboxModule,
     MatFormFieldModule,
     MatInputModule,
-    MatRadioModule
+    MatRadioModule,
+    CodemirrorModule
   ],
   entryComponents: [
     FieldBooleanComponent,

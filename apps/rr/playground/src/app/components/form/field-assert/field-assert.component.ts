@@ -20,7 +20,7 @@ export class FieldAssertComponent extends FieldBaseComponent implements OnInit {
   ngOnInit() {}
 
   didChange($event: MatRadioChange) {
-    $event.value = $event.value === 'true';
+    $event.value = $event.value === 'true' ? 'true' : 'false';
     super.didChange($event);
   }
 }
