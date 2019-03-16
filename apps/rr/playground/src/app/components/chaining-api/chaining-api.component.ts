@@ -21,10 +21,14 @@ export class ChainingApiComponent implements OnInit {
   ngOnInit() {}
 
   beautify(text) {
-    return this.highlight(js(text));
+    return this.highlight(js(this.removeComments(text)));
   }
 
   highlight(text) {
     return Prism.highlight(text, Prism.languages.javascript, 'javascript');
+  }
+
+  removeComments(text) {
+    return text.replace(/[^:]\/\/.*/g, '').replace(/\r?\n|\r/g, '');
   }
 }

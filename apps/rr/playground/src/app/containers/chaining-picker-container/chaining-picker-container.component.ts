@@ -52,4 +52,21 @@ export class ChainingPickerContainerComponent implements OnInit {
     const event: FormFieldChangeEvent = $event.event;
     this.updateMethod({ ...$event.method, ...{ value: event.value } });
   }
+
+  getInstrumentation() {
+    const text = document.getElementsByTagName<any>(
+      'rr-play-chaining-api-container'
+    )[0].innerText;
+
+    return text
+      .split(`\n`)
+      .join('')
+      .split(`  `)
+      .join('');
+  }
+
+  executeCollection() {
+    const instruments = this.getInstrumentation();
+    console.log(instruments);
+  }
 }
