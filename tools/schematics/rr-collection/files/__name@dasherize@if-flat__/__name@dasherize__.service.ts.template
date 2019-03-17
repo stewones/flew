@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Collection, ReactiveRecord } from '@firetask/reactive-record';
-import { environment } from '../environments/environment';
+import { Collection, ReactiveRecord, Response } from '@firetask/reactive-record';
+import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 // import { AxiosRequestConfig } from 'axios';
 
-export interface <%= classify(name) %>Entry extends Observable<<%= classify(name) %>Entry> {
+export interface <%= classify(name) %> extends Response<<%= classify(name) %>> {
   id: string;
-  text: string;
+  name: string;
 }
 
 @Injectable({
@@ -14,8 +14,8 @@ export interface <%= classify(name) %>Entry extends Observable<<%= classify(name
 })
 @Collection({
   ...environment.rr,
-  name: '<%= camelize(name) %>',
-  endpoint: '<%= endpoint %>'
+  name: '<%= camelize(name) %>s',
+  endpoint: '<%= endpoint %><%= camelize(name) %>s'
 })
 export class <%= classify(name) %>Service {
   $collection: ReactiveRecord;
@@ -26,11 +26,11 @@ export class <%= classify(name) %>Service {
     // });
   }
 
-  find(): Observable<<%= classify(name) %>Entry> {
-    return <<%= classify(name) %>Entry>this.$collection.find();
+  find(): Observable<<%= classify(name) %>> {
+    return this.$collection.find<<%= classify(name) %>>();
   }
 
-  findOne(): Observable<<%= classify(name) %>Entry> {
-    return <<%= classify(name) %>Entry>this.$collection.findOne();
+  findOne(): Observable<<%= classify(name) %>> {
+    return this.$collection.findOne<<%= classify(name) %>>();
   }
 }
