@@ -4,12 +4,12 @@ import { Store, select } from '@ngrx/store';
 import { Method, MethodChange } from '../../interfaces/method.interface';
 import { PlayState } from '../../+play/play.reducer';
 import { getAllMethods } from '../../+play/method/method.selectors';
-import {
-  AddChainMethod,
-  RemoveChainMethod,
-  UpdateChainMethod
-} from '../../+play/play.actions';
 import { FormFieldChangeEvent } from '../../components/form/form.interface';
+import {
+  RemoveChainMethod,
+  AddChainMethod,
+  UpdateChainMethod
+} from '../../+play/method/method.actions';
 
 @Component({
   selector: 'rr-play-chaining-picker-container',

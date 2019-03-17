@@ -1,0 +1,14 @@
+<mat-form-field>
+  <mat-select
+    placeholder="Collection"
+    [ngModel]="selectedCollection.service"
+    (selectionChange)="didCollectionChange($event)"
+  >
+    <mat-option
+      *ngFor="let collection of (collections$ | async)"
+      [value]="collection.service"
+    >
+      {{ collection.name }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

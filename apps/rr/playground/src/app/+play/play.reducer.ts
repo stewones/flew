@@ -5,30 +5,36 @@ import {
   removeSelectedMethodReducer,
   updateSelectedMethodReducer
 } from './method/method.reducer';
+import { Collection } from '../interfaces/collection.interface';
+import { updateSelectedCollectionReducer } from './collection/collection.reducer';
 
 export const PLAY_FEATURE_KEY = 'play';
 
 export interface PlayState {
-  collections: { name: string; service: string }[];
-  methods: Method[]; // list of Play; analogous to a sql normalized table
-  selectedMethods?: Method[]; // which Play record has been selected
-  loaded: boolean; // has the Play list been loaded
-  error?: any; // last none error (if any)
+  collections: Collection[];
+  selectedCollection: Collection;
+  methods: Method[];
+  selectedMethods?: Method[];
+  loaded: boolean;
+  error?: any;
 }
 
 export interface PlayPartialState {
   readonly [PLAY_FEATURE_KEY]: PlayState;
 }
 
+export const Collections: Collection[] = [
+  { name: 'Users', service: 'UserService' },
+  { name: 'Albums', service: 'AlbumService' },
+  { name: 'Comments', service: 'CommentService' },
+  { name: 'Photos', service: 'PhotoService' },
+  { name: 'Todos', service: 'TodoService' }
+];
+
 export const initialState: PlayState = {
   loaded: true,
-  collections: [
-    { name: 'Albums', service: 'AlbumService' },
-    { name: 'Comments', service: 'CommentService' },
-    { name: 'Photos', service: 'PhotoService' },
-    { name: 'Todos', service: 'TodoService' },
-    { name: 'Users', service: 'UserService' }
-  ],
+  selectedCollection: Collections[0],
+  collections: Collections,
   selectedMethods: [],
   methods: [
     {
@@ -80,6 +86,10 @@ export function playReducer(
     }
     case PlayActionTypes.UPDATE_CHAIN_METHOD: {
       state = updateSelectedMethodReducer(state, action);
+      break;
+    }
+    case PlayActionTypes.UPDATE_CHAIN_COLLECTION: {
+      state = updateSelectedCollectionReducer(state, action);
       break;
     }
   }

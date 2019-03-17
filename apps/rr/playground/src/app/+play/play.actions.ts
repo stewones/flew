@@ -1,29 +1,27 @@
-import { Action } from '@ngrx/store';
-import { Method } from '../interfaces/method.interface';
+import {
+  AddChainMethod,
+  RemoveChainMethod,
+  UpdateChainMethod
+} from './method/method.actions';
+import { UpdateChainCollection } from './collection/collection.actions';
 
 export enum PlayActionTypes {
   ADD_CHAIN_METHOD = '[Methods] Add method to chain',
   REMOVE_CHAIN_METHOD = '[Methods] Remove method from chain',
-  UPDATE_CHAIN_METHOD = '[Methods] Update method in chain'
+  UPDATE_CHAIN_METHOD = '[Methods] Update method in chain',
+  UPDATE_CHAIN_COLLECTION = '[Collections] Update collection in chain'
 }
 
-export class AddChainMethod implements Action {
-  readonly type = PlayActionTypes.ADD_CHAIN_METHOD;
-  constructor(public payload: Method) {}
-}
-export class RemoveChainMethod implements Action {
-  readonly type = PlayActionTypes.REMOVE_CHAIN_METHOD;
-  constructor(public payload: Method) {}
-}
-export class UpdateChainMethod implements Action {
-  readonly type = PlayActionTypes.UPDATE_CHAIN_METHOD;
-  constructor(public payload: Method) {}
-}
+export type PlayAction =
+  | AddChainMethod
+  | RemoveChainMethod
+  | UpdateChainMethod
+  | UpdateChainCollection;
 
-export type PlayAction = AddChainMethod | RemoveChainMethod | UpdateChainMethod;
-
-export const fromPlayActions = {
-  AddChainMethod,
-  RemoveChainMethod,
-  UpdateChainMethod
-};
+// not needed for now
+// export const fromPlayActions = {
+//   AddChainMethod,
+//   RemoveChainMethod,
+//   UpdateChainMethod,
+//   UpdateChainCollection
+// };

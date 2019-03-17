@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material';
 import { ChainingPickerContainerModule } from '../../containers/chaining-picker-container/chaining-picker-container.module';
 import { ChainingApiContainerModule } from '../../containers/chaining-api-container/chaining-api-container.module';
 import { ChainingApiModule } from '../chaining-api/chaining-api.module';
+import { CollectionChooserContainerModule } from '../../containers/collection-chooser-container/collection-chooser-container.module';
 
 @NgModule({
   declarations: [GroundComponent],
@@ -13,7 +14,8 @@ import { ChainingApiModule } from '../chaining-api/chaining-api.module';
     MatButtonModule,
     ChainingPickerContainerModule,
     ChainingApiContainerModule,
-    ChainingApiModule
+    ChainingApiModule,
+    CollectionChooserContainerModule
   ],
   exports: [GroundComponent]
 })
