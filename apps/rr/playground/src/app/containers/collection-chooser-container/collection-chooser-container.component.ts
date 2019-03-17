@@ -7,7 +7,6 @@ import {
 } from '../../+play/collection/collection.selectors';
 import { select, Store } from '@ngrx/store';
 import { PlayState } from '../../+play/play.reducer';
-import { map } from 'rxjs/operators';
 import { MatSelectChange } from '@angular/material';
 import { UpdateChainCollection } from '../../+play/collection/collection.actions';
 

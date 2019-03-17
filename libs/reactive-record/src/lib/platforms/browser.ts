@@ -32,7 +32,7 @@ export class PlatformBrowser extends ReactiveRecord {
         // customize http behavior
         http: {
           pre: (config: AxiosRequestConfig) => {
-            if (this.token.value)
+            if (this.token && this.token.value)
               config.headers['Authorization'] = `${this.token.type} ${
                 this.token.value
               }`;

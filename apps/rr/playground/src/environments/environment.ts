@@ -13,7 +13,7 @@ import { storageConfig } from '@firetask/ionic';
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-const appVersion: number | string = '0001'; // MAJOR.MINOR.PATCH.BUILD
+const appVersion: number | string = 1000; // MAJOR.MINOR.PATCH.BUILD
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDd0NPKiqB06EkCxRRai6rHphUVgkU38jA',
