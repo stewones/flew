@@ -99,6 +99,8 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
       .split(`\n`)
       .join('')
       .split(`  `)
+      .join('')
+      .split(': Response')
       .join('');
   }
 
