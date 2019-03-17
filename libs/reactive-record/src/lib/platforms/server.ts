@@ -149,7 +149,7 @@ export class ReactiveRecord extends Hooks implements Api {
     );
   }
 
-  public get<T extends Response>(path: string = '/'): Observable<T> {
+  public get<T extends Response>(path: string = ''): Observable<T> {
     const _extraOptions = cloneDeep(this.extraOptions);
     this.reset();
     return new Observable((observer: PartialObserver<T>) => {
@@ -236,7 +236,7 @@ export class ReactiveRecord extends Hooks implements Api {
   }
 
   public post<T extends Response>(
-    path: string = '/',
+    path: string = '',
     body: any = {}
   ): Observable<T> {
     const _extraOptions = cloneDeep(this.extraOptions);
@@ -327,7 +327,7 @@ export class ReactiveRecord extends Hooks implements Api {
   }
 
   public patch<T extends Response>(
-    path: string = '/',
+    path: string = '',
     body: any = {}
   ): Observable<T> {
     const _extraOptions = cloneDeep(this.extraOptions);
@@ -415,7 +415,7 @@ export class ReactiveRecord extends Hooks implements Api {
     });
   }
 
-  public delete<T extends Response>(path: string = '/'): Observable<T> {
+  public delete<T extends Response>(path: string = ''): Observable<T> {
     const _extraOptions = cloneDeep(this.extraOptions);
     this.reset();
     return new Observable((observer: PartialObserver<T>) => {

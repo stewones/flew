@@ -4,7 +4,7 @@ export interface Method {
   name: string;
   placeholder: string;
   description: string;
-  type: 'boolean' | 'callback';
+  type: 'boolean' | 'callback' | 'executor' | 'where' | 'query';
   default: string;
   platform: Array<'browser' | 'server'>;
   value?: any;
