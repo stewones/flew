@@ -9,6 +9,7 @@ import {
 export const PLAY_FEATURE_KEY = 'play';
 
 export interface PlayState {
+  collections: { name: string; service: string }[];
   methods: Method[]; // list of Play; analogous to a sql normalized table
   selectedMethods?: Method[]; // which Play record has been selected
   loaded: boolean; // has the Play list been loaded
@@ -21,11 +22,18 @@ export interface PlayPartialState {
 
 export const initialState: PlayState = {
   loaded: true,
+  collections: [
+    { name: 'Albums', service: 'AlbumService' },
+    { name: 'Comments', service: 'CommentService' },
+    { name: 'Photos', service: 'PhotoService' },
+    { name: 'Todos', service: 'TodoService' },
+    { name: 'Users', service: 'UserService' }
+  ],
   selectedMethods: [],
   methods: [
     {
       name: 'useNetwork',
-      placeholder: 'Use network?',
+      placeholder: 'Use Network',
       description: 'force the use of network call',
       default: 'true',
       platform: ['browser', 'server'],
@@ -34,7 +42,7 @@ export const initialState: PlayState = {
     },
     {
       name: 'useCache',
-      placeholder: 'Use cache?',
+      placeholder: 'Use Cache',
       description:
         'when true the first response should be from the cache if exists',
       default: 'true',

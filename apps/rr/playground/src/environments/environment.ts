@@ -1,9 +1,44 @@
+import * as Firebase from 'firebase/app';
+import 'firebase/firestore';
+import {
+  FirebaseConnector,
+  FirestoreConnector,
+  Version
+} from '@firetask/reactive-record';
+
+import { Storage } from '@ionic/storage';
+import { storageConfig } from '@firetask/ionic';
+
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+const appVersion: number | string = '0001'; // MAJOR.MINOR.PATCH.BUILD
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyDd0NPKiqB06EkCxRRai6rHphUVgkU38jA',
+  authDomain: 'reactive-record-demo.firebaseapp.com',
+  databaseURL: 'https://reactive-record-demo.firebaseio.com',
+  projectId: 'reactive-record-demo',
+  storageBucket: 'reactive-record-demo.appspot.com',
+  messagingSenderId: '244444899524'
+};
+
 export const environment = {
-  production: false
+  production: false,
+  firebase: firebaseConfig,
+  rr: {
+    baseURL: 'https://jsonplaceholder.typicode.com',
+    endpoint: '',
+    connector: {
+      firebase: new FirebaseConnector(Firebase, firebaseConfig),
+      firestore: new FirestoreConnector(Firebase, firebaseConfig)
+    },
+
+    // extra options
+    version: Version.get(appVersion),
+    storage: new Storage(storageConfig())
+  }
 };
 
 /*
