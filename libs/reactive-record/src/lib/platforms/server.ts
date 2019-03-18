@@ -220,14 +220,17 @@ export class ReactiveRecord extends Hooks implements Api {
       //
       // check availability
       if (!_extraOptions.useNetwork && hookFn) {
+        // console.log('no useNetwork but has hook');
         //
         // run client hook
         hookFn(key, observer, _extraOptions).then(canRequest => {
+          // console.log(canRequest);
           //
           // http.get.before should return a boolean
           if (canRequest) network();
         });
       } else {
+        // console.log('yes useNetwork but has NOT hook');
         //
         // otherwise
         network();

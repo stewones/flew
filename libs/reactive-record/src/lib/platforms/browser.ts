@@ -111,15 +111,16 @@ export class PlatformBrowser extends ReactiveRecord {
         : (data: Response) => data;
 
     const useCache: boolean = extraOptions.useCache === false ? false : true;
-
     //
     // avoid caching
     if (useCache === false) return true;
 
     //
     // return cached response immediately to view
-    if (useCache && cache && !isEmpty(cache.data))
+    if (useCache && cache && !isEmpty(cache.data)) {
+      // console.log('useCache & has cache & is not empty cache.data', cache);
       observer.next(transformNetwork(cache));
+    }
 
     //
     // check for TTL
@@ -212,7 +213,7 @@ export class PlatformBrowser extends ReactiveRecord {
     }
     //
     // force network return
-    else if (extraOptions.useNetwork) {
+    else if (extraOptions.useNetwork !== false) {
       observer.next(transformNetwork(network));
     }
     // console.log('useNetwork?', extraOptions.useNetwork);
