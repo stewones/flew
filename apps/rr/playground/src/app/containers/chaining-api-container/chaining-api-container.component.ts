@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Method } from '../../interfaces/method.interface';
+import { PlayMethod } from '../../interfaces/method.interface';
 import { Store, select } from '@ngrx/store';
 import { getSelectedMethods } from '../../+play/method/method.selectors';
 import { PlayState } from '../../+play/play.reducer';
@@ -11,7 +11,7 @@ import { PlayState } from '../../+play/play.reducer';
   styleUrls: ['./chaining-api-container.component.css']
 })
 export class ChainingApiContainerComponent implements OnInit {
-  selectedMethods$: Observable<Method[]>;
+  selectedMethods$: Observable<PlayMethod[]>;
 
   constructor(private store: Store<PlayState>) {}
 

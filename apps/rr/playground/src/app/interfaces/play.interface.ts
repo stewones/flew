@@ -1,3 +1,5 @@
+import { Response } from '@firetask/reactive-record';
+
 import { UserService } from '../services/user.service';
 import { AlbumService } from '../services/album.service';
 import { CommentService } from '../services/comment.service';
@@ -10,3 +12,5 @@ export type PlayService =
   | CommentService
   | PhotoService
   | TodoService;
+
+export type PlayResponse = Response | any;

@@ -1,6 +1,6 @@
 import { FormFieldChange } from '../components/form/form.interface';
 
-export interface Method {
+export interface PlayMethod {
   name: string;
   placeholder: string;
   description: string;
@@ -10,6 +10,6 @@ export interface Method {
   value?: any;
 }
 
-export interface MethodChange extends FormFieldChange {
-  method: Method;
+export interface PlayMethodChange extends FormFieldChange {
+  method: PlayMethod;
 }

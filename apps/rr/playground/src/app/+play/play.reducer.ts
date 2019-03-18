@@ -1,20 +1,26 @@
 import { PlayAction, PlayActionTypes } from './play.actions';
-import { Method } from '../interfaces/method.interface';
+import { PlayMethod } from '../interfaces/method.interface';
 import {
   addMethodToSelectionReducer,
   removeSelectedMethodReducer,
   updateSelectedMethodReducer
 } from './method/method.reducer';
-import { Collection } from '../interfaces/collection.interface';
+import { PlayCollection } from '../interfaces/collection.interface';
 import { updateSelectedCollectionReducer } from './collection/collection.reducer';
+import { PlayResponse } from '../interfaces/play.interface';
+import {
+  addResponseToSelectionReducer,
+  removeAllResponsesReducer
+} from './response/response.reducer';
 
 export const PLAY_FEATURE_KEY = 'play';
 
 export interface PlayState {
-  collections: Collection[];
-  selectedCollection: Collection;
-  methods: Method[];
-  selectedMethods?: Method[];
+  collections: PlayCollection[];
+  selectedCollection: PlayCollection;
+  methods: PlayMethod[];
+  selectedMethods?: PlayMethod[];
+  responses?: PlayResponse[];
   loaded: boolean;
   error?: any;
 }
@@ -23,7 +29,7 @@ export interface PlayPartialState {
   readonly [PLAY_FEATURE_KEY]: PlayState;
 }
 
-export const Collections: Collection[] = [
+export const Collections: PlayCollection[] = [
   { name: 'Users', service: 'UserService' },
   { name: 'Albums', service: 'AlbumService' },
   { name: 'Comments', service: 'CommentService' },
@@ -36,6 +42,7 @@ export const initialState: PlayState = {
   selectedCollection: Collections[0],
   collections: Collections,
   selectedMethods: [],
+  responses: [],
   methods: [
     {
       name: 'useNetwork',
@@ -90,6 +97,14 @@ export function playReducer(
     }
     case PlayActionTypes.UPDATE_CHAIN_COLLECTION: {
       state = updateSelectedCollectionReducer(state, action);
+      break;
+    }
+    case PlayActionTypes.ADD_COLLECTION_RESPONSE: {
+      state = addResponseToSelectionReducer(state, action);
+      break;
+    }
+    case PlayActionTypes.REMOVE_COLLECTION_RESPONSES: {
+      state = removeAllResponsesReducer(state, action);
       break;
     }
   }

@@ -1,4 +1,4 @@
-export interface Collection {
+export interface PlayCollection {
   name: string;
   service: string;
 }

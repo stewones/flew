@@ -13,7 +13,8 @@ export interface Api {
   driver(name: string); // firebase / firestore / http
   useNetwork(active: boolean); // force the use of network call
   saveNetwork(active: boolean); // as a cache
-  transformNetwork(transformFn: (response: Response) => any); // transform the network response
+  transformNetwork(transformFn: (response: Response) => any); // @deprecated same as transformResponse
+  transformResponse(transformFn: (response: Response) => any); // transform the network/cache response
   ttl(value: number); // set a max time to cache
   useCache(active: boolean); // when true the first response should be from the cache if exists
   transformCache(transformFn: (response: Response) => any); // transform the response from cache

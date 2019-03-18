@@ -6,6 +6,7 @@ import { ChainingPickerContainerModule } from '../../containers/chaining-picker-
 import { ChainingApiContainerModule } from '../../containers/chaining-api-container/chaining-api-container.module';
 import { ChainingApiModule } from '../chaining-api/chaining-api.module';
 import { CollectionChooserContainerModule } from '../../containers/collection-chooser-container/collection-chooser-container.module';
+import { CollectionResponseContainerModule } from '../../containers/collection-response-container/collection-response-container.module';
 
 @NgModule({
   declarations: [GroundComponent],
@@ -15,7 +16,8 @@ import { CollectionChooserContainerModule } from '../../containers/collection-ch
     ChainingPickerContainerModule,
     ChainingApiContainerModule,
     ChainingApiModule,
-    CollectionChooserContainerModule
+    CollectionChooserContainerModule,
+    CollectionResponseContainerModule
   ],
   exports: [GroundComponent]
 })

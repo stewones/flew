@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { Collection } from '../../interfaces/collection.interface';
+import { PlayCollection } from '../../interfaces/collection.interface';
 import {
   getAllCollections,
   getSelectedCollection
@@ -16,10 +16,10 @@ import { UpdateChainCollection } from '../../+play/collection/collection.actions
   styleUrls: ['./collection-chooser-container.component.css']
 })
 export class CollectionChooserContainerComponent implements OnInit, OnDestroy {
-  collections$: Observable<Collection[]>;
+  collections$: Observable<PlayCollection[]>;
 
   selectedCollection$: Subscription;
-  selectedCollection: Collection = <Collection>{};
+  selectedCollection: PlayCollection = <PlayCollection>{};
 
   constructor(private store: Store<PlayState>) {}
 
@@ -27,7 +27,7 @@ export class CollectionChooserContainerComponent implements OnInit, OnDestroy {
     this.collections$ = this.store.pipe(select(getAllCollections));
     this.selectedCollection$ = this.store
       .pipe(select(getSelectedCollection))
-      .subscribe((entry: Collection) => (this.selectedCollection = entry));
+      .subscribe((entry: PlayCollection) => (this.selectedCollection = entry));
   }
 
   ngOnDestroy() {

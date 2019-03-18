@@ -7,7 +7,10 @@ import {
   EventEmitter
 } from '@angular/core';
 
-import { Method, MethodChange } from '../../interfaces/method.interface';
+import {
+  PlayMethod,
+  PlayMethodChange
+} from '../../interfaces/method.interface';
 import { FormFieldChange } from '../form/form.interface';
 
 @Component({
@@ -17,9 +20,9 @@ import { FormFieldChange } from '../form/form.interface';
   styleUrls: ['./chaining-picker.component.scss']
 })
 export class ChainingPickerComponent implements OnInit {
-  @Input() methods: Method[];
-  @Output() onAdd = new EventEmitter<MethodChange>();
-  @Output() onUpdate = new EventEmitter<MethodChange>();
+  @Input() methods: PlayMethod[];
+  @Output() onAdd = new EventEmitter<PlayMethodChange>();
+  @Output() onUpdate = new EventEmitter<PlayMethodChange>();
 
   showInput: { [key: string]: boolean } = {};
 
@@ -27,23 +30,23 @@ export class ChainingPickerComponent implements OnInit {
 
   ngOnInit() {}
 
-  getMethod(name: string): Method {
+  getMethod(name: string): PlayMethod {
     return this.methods.find(it => it.name === name);
   }
 
   didFieldChange($event: FormFieldChange) {
-    const method: Method = this.getMethod($event.field.name);
+    const method: PlayMethod = this.getMethod($event.field.name);
     this.showInput[method.name] = $event.event.checked;
 
-    this.onAdd.emit(<MethodChange>{
+    this.onAdd.emit(<PlayMethodChange>{
       ...$event,
       method: method
     });
   }
 
   didFieldValueChange($event: FormFieldChange) {
-    const method: Method = this.getMethod($event.field.name);
-    this.onUpdate.emit(<MethodChange>{
+    const method: PlayMethod = this.getMethod($event.field.name);
+    this.onUpdate.emit(<PlayMethodChange>{
       ...$event,
       method: method
     });

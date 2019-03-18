@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Collection, ReactiveRecord } from '@firetask/reactive-record';
+import { PlayCollection, ReactiveRecord } from '@firetask/reactive-record';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
 import { Response } from '@firetask/reactive-record';

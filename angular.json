@@ -272,7 +272,17 @@
               "tools/tailwind/common.bundle.css",
               "apps/rr/playground/src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              {
+                "input": "libs/jsonTreeViewer/app.js"
+              },
+              {
+                "input": "libs/jsonTreeViewer/jsonTree.js"
+              },
+              {
+                "input": "libs/jsonTreeViewer/jsonTreeViewer.js"
+              }
+            ],
             "es5BrowserSupport": true
           },
           "configurations": {

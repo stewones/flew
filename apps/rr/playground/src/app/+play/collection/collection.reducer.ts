@@ -1,5 +1,5 @@
 import { PlayState } from '../play.reducer';
-// import { Collection } from '../../interfaces/collection.interface';
+// import { PlayCollection } from '../../interfaces/collection.interface';
 
 // export function removeSelectedCollectionReducer(
 //   state: PlayState,

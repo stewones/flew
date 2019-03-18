@@ -1,7 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { Method, MethodChange } from '../../interfaces/method.interface';
+import {
+  PlayMethod,
+  PlayMethodChange
+} from '../../interfaces/method.interface';
 import { PlayState } from '../../+play/play.reducer';
 import { getAllMethods } from '../../+play/method/method.selectors';
 import { FormFieldChangeEvent } from '../../components/form/form.interface';
@@ -16,9 +19,14 @@ import { AlbumService } from '../../services/album.service';
 import { CommentService } from '../../services/comment.service';
 import { PhotoService } from '../../services/photo.service';
 import { TodoService } from '../../services/todo.service';
-import { Collection } from '../../interfaces/collection.interface';
+import { PlayCollection } from '../../interfaces/collection.interface';
 import { getSelectedCollection } from '../../+play/collection/collection.selectors';
 import { map } from 'rxjs/operators';
+import {
+  AddCollectionResponse,
+  RemoveCollectionResponses
+} from '../../+play/response/response.actions';
+import { Response } from '@firetask/reactive-record';
 
 @Component({
   selector: 'rr-play-chaining-picker-container',
@@ -26,7 +34,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./chaining-picker-container.component.css']
 })
 export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
-  methods$: Observable<Method[]>;
+  methods$: Observable<PlayMethod[]>;
 
   service: { [key: string]: PlayService } = {
     UserService: this.userService,
@@ -36,7 +44,7 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
     TodoService: this.todoService
   };
 
-  selectedCollection: Collection = <Collection>{};
+  selectedCollection: PlayCollection = <PlayCollection>{};
   selectedCollection$: Subscription;
 
   instrument$: Subscription;
@@ -54,26 +62,26 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
     this.methods$ = this.store.pipe(select(getAllMethods));
     this.selectedCollection$ = this.store
       .pipe(select(getSelectedCollection))
-      .subscribe((entry: Collection) => (this.selectedCollection = entry));
+      .subscribe((entry: PlayCollection) => (this.selectedCollection = entry));
   }
 
   ngOnDestroy() {
     this.selectedCollection$.unsubscribe();
   }
 
-  addMethod(payload: Method) {
+  addMethod(payload: PlayMethod) {
     this.store.dispatch(new AddChainMethod(payload));
   }
 
-  removeMethod(payload: Method) {
+  removeMethod(payload: PlayMethod) {
     this.store.dispatch(new RemoveChainMethod(payload));
   }
 
-  updateMethod(payload: Method) {
+  updateMethod(payload: PlayMethod) {
     this.store.dispatch(new UpdateChainMethod(payload));
   }
 
-  didAddMethod($event: MethodChange) {
+  didAddMethod($event: PlayMethodChange) {
     const event: FormFieldChangeEvent = $event.event;
 
     if (event.checked) {
@@ -85,7 +93,7 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-  didUpdateMethod($event: MethodChange) {
+  didUpdateMethod($event: PlayMethodChange) {
     const event: FormFieldChangeEvent = $event.event;
     this.updateMethod({ ...$event.method, ...{ value: event.value } });
   }
@@ -119,10 +127,18 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
     //   this.service[this.selectedCollection.service].$collection
     // );
 
+    //
+    // first remove all the previous responses
+    this.store.dispatch(new RemoveCollectionResponses());
+
+    //
+    // execute the instrument
     this.instrument$ = eval(instrument)
       .pipe(
         map((r: Response) => {
-          console.log(r);
+          this.store.dispatch(
+            new AddCollectionResponse(JSON.parse(JSON.stringify(r)))
+          );
         })
       )
       .subscribe();

@@ -4,7 +4,7 @@ import {
   ChangeDetectionStrategy,
   Input
 } from '@angular/core';
-import { Method } from '../../interfaces/method.interface';
+import { PlayMethod } from '../../interfaces/method.interface';
 import { js } from 'js-beautify';
 import Prism from 'prismjs';
 
@@ -15,7 +15,7 @@ import Prism from 'prismjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChainingApiComponent implements OnInit {
-  @Input() methods: Method[] = [];
+  @Input() methods: PlayMethod[] = [];
   constructor() {}
 
   ngOnInit() {}
