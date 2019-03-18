@@ -10,7 +10,8 @@ import {
   MatCheckboxModule,
   MatFormFieldModule,
   MatInputModule,
-  MatRadioModule
+  MatRadioModule,
+  MatSelectModule
 } from '@angular/material';
 import { FieldAssertComponent } from './field-assert/field-assert.component';
 
@@ -18,6 +19,7 @@ import { FieldAssertComponent } from './field-assert/field-assert.component';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 // see https://codemirror.net/mode/index.html
 import 'codemirror/mode/javascript/javascript';
+import { FieldSelectComponent } from './field-select/field-select.component';
 // import 'codemirror/mode/markdown/markdown';
 
 @NgModule({
@@ -26,14 +28,16 @@ import 'codemirror/mode/javascript/javascript';
     FieldCallbackComponent,
     FieldComponent,
     FieldBaseComponent,
-    FieldAssertComponent
+    FieldAssertComponent,
+    FieldSelectComponent
   ],
   exports: [
     FieldBooleanComponent,
     FieldCallbackComponent,
     FieldComponent,
     FieldBaseComponent,
-    FieldAssertComponent
+    FieldAssertComponent,
+    FieldSelectComponent
   ],
   imports: [
     CommonModule,
@@ -43,12 +47,15 @@ import 'codemirror/mode/javascript/javascript';
     MatFormFieldModule,
     MatInputModule,
     MatRadioModule,
+    MatSelectModule,
     CodemirrorModule
   ],
   entryComponents: [
     FieldBooleanComponent,
     FieldCallbackComponent,
-    FieldAssertComponent
+    FieldAssertComponent,
+    FieldCallbackComponent,
+    FieldSelectComponent
   ]
 })
 export class FormModule {}

@@ -20,15 +20,25 @@ export class ChainingApiComponent implements OnInit {
 
   ngOnInit() {}
 
-  beautify(text) {
-    return this.highlight(js(this.removeComments(text)));
+  beautify(method: PlayMethod) {
+    const transformFn = this.valueTransform(method);
+    return transformFn(this.highlight(js(this.removeComments(method.value))));
   }
 
-  highlight(text) {
-    return Prism.highlight(text, Prism.languages.javascript, 'javascript');
+  highlight(method: PlayMethod) {
+    const transformFn = this.valueTransform(method);
+    return transformFn(
+      Prism.highlight(method.value, Prism.languages.javascript, 'javascript')
+    );
   }
 
   removeComments(text) {
     return text.replace(/[^:]\/\/.*/g, '').replace(/\r?\n|\r/g, '');
+  }
+
+  valueTransform(method: PlayMethod) {
+    return method.valueTransform && typeof method.valueTransform === 'function'
+      ? method.valueTransform
+      : v => v;
   }
 }

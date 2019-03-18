@@ -1,7 +1,24 @@
 <rr-play-chaining-picker
-  [methods]="methods$ | async"
+  [methods]="methodsChain$ | async"
   (onAdd)="didAddMethod($event)"
   (onUpdate)="didUpdateMethod($event)"
 ></rr-play-chaining-picker>
+<div class="flex flex-col">
+  <mat-form-field>
+    <mat-select
+      placeholder="Target"
+      (selectionChange)="didUpdateExecMethod($event)"
+      [ngModel]="selectedExecMethod.name"
+    >
+      <mat-option
+        *ngFor="let method of (methodsExec$ | async)"
+        [value]="method.name"
+        [disabled]="method.disabled"
+      >
+        {{ method.placeholder }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-<button (click)="execute()">Find One</button>
+  <button mat-button color="primary" (click)="execute()">Execute</button>
+</div>

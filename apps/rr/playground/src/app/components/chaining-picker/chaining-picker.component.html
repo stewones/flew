@@ -6,7 +6,8 @@
         [data]="{
           type: 'boolean',
           name: method.name,
-          placeholder: method.placeholder
+          placeholder: method.placeholder,
+          disabled: method.disabled
         }"
         (onChange)="didFieldChange($event)"
       ></rr-play-field>
@@ -23,7 +24,9 @@
             name: method.name,
             placeholder: method.placeholder,
             type: method.type === 'boolean' ? 'assert' : method.type,
-            value: method.value
+            value: method.value,
+            options: method.options,
+            target: method.target
           }"
           (onChange)="didFieldValueChange($event)"
         ></rr-play-field>

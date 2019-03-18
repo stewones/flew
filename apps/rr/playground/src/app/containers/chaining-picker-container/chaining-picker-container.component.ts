@@ -27,6 +27,8 @@ import {
   RemoveCollectionResponses
 } from '../../+play/response/response.actions';
 import { Response } from '@firetask/reactive-record';
+import { MatSelectChange } from '@angular/material';
+import { PlayMethods } from '../../constants/method';
 
 @Component({
   selector: 'rr-play-chaining-picker-container',
@@ -34,7 +36,14 @@ import { Response } from '@firetask/reactive-record';
   styleUrls: ['./chaining-picker-container.component.css']
 })
 export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
-  methods$: Observable<PlayMethod[]>;
+  methodsChain$: Observable<PlayMethod[]> = this.store.pipe(
+    select(getAllMethods),
+    map((methods: PlayMethod[]) => methods.filter(it => it.target === 'chain'))
+  );
+  methodsExec$: Observable<PlayMethod[]> = this.store.pipe(
+    select(getAllMethods),
+    map((methods: PlayMethod[]) => methods.filter(it => it.target === 'exec'))
+  );
 
   service: { [key: string]: PlayService } = {
     UserService: this.userService,
@@ -49,6 +58,8 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
 
   instrument$: Subscription;
 
+  selectedExecMethod: PlayMethod = PlayMethods.find(it => it.name === 'get');
+
   constructor(
     private store: Store<PlayState>,
     private userService: UserService,
@@ -59,7 +70,6 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.methods$ = this.store.pipe(select(getAllMethods));
     this.selectedCollection$ = this.store
       .pipe(select(getSelectedCollection))
       .subscribe((entry: PlayCollection) => (this.selectedCollection = entry));
@@ -120,7 +130,7 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
       'this.$collection',
       'this.service[this.selectedCollection.service].$collection'
     );
-    instrument += '.get()';
+    instrument += `.${this.selectedExecMethod.name}()`;
 
     // console.log(
     //   instrument,
@@ -142,5 +152,9 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+  }
+
+  didUpdateExecMethod($event: MatSelectChange) {
+    this.selectedExecMethod.name = $event.value;
   }
 }

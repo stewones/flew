@@ -1,5 +1,13 @@
 import { MatCheckboxChange, MatRadioChange } from '@angular/material';
 
+export type FormFieldType =
+  | 'boolean'
+  | 'assert'
+  | 'callback'
+  | 'where' // @todo
+  | 'query' // @todo
+  | 'select';
+
 export interface FormFieldOption {
   name: string;
   label: string;
@@ -11,8 +19,10 @@ export interface FormFieldOption {
 export interface FormField {
   name: string;
   placeholder: string;
-  type: 'boolean' | 'callback' | 'assert';
+  type: FormFieldType;
   value: any;
+  disabled: boolean;
+  options: any;
 }
 
 export interface FormFieldChange {

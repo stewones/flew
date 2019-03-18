@@ -14,6 +14,7 @@ import { FieldCallbackComponent } from '../field-callback/field-callback.compone
 import { FieldBaseComponent } from '../field-base/field-base.component';
 import { FormField, FormFieldChange } from '../form.interface';
 import { FieldAssertComponent } from '../field-assert/field-assert.component';
+import { FieldSelectComponent } from '../field-select/field-select.component';
 
 @Component({
   selector: 'rr-play-field',
@@ -30,7 +31,8 @@ export class FieldComponent implements OnInit {
   readonly fieldMapper = {
     assert: FieldAssertComponent,
     boolean: FieldBooleanComponent,
-    callback: FieldCallbackComponent
+    callback: FieldCallbackComponent,
+    select: FieldSelectComponent
   };
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {}

@@ -12,6 +12,8 @@ import {
   addResponseToSelectionReducer,
   removeAllResponsesReducer
 } from './response/response.reducer';
+import { PlayMethods } from '../constants/method';
+import { PlayCollections } from '../constants/collection';
 
 export const PLAY_FEATURE_KEY = 'play';
 
@@ -29,53 +31,13 @@ export interface PlayPartialState {
   readonly [PLAY_FEATURE_KEY]: PlayState;
 }
 
-export const Collections: PlayCollection[] = [
-  { name: 'Users', service: 'UserService' },
-  { name: 'Albums', service: 'AlbumService' },
-  { name: 'Comments', service: 'CommentService' },
-  { name: 'Photos', service: 'PhotoService' },
-  { name: 'Todos', service: 'TodoService' }
-];
-
 export const initialState: PlayState = {
   loaded: true,
-  selectedCollection: Collections[0],
-  collections: Collections,
+  selectedCollection: PlayCollections[0],
+  collections: PlayCollections,
   selectedMethods: [],
   responses: [],
-  methods: [
-    {
-      name: 'useNetwork',
-      placeholder: 'Use Network',
-      description: 'force the use of network call',
-      default: 'true',
-      platform: ['browser', 'server'],
-      type: 'boolean',
-      value: 'true'
-    },
-    {
-      name: 'useCache',
-      placeholder: 'Use Cache',
-      description:
-        'when true the first response should be from the cache if exists',
-      default: 'true',
-      platform: ['browser'],
-      type: 'boolean',
-      value: 'true'
-    },
-    {
-      name: 'transformResponse',
-      placeholder: 'Transform Response',
-      description: 'a callback function to transform the response',
-      default: 'response',
-      platform: ['browser'],
-      type: 'callback',
-      value: `(response: Response) => {
-    // do whatever with the response
-    return response;
-}`
-    }
-  ]
+  methods: PlayMethods
 };
 
 export function playReducer(

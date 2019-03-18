@@ -6,15 +6,17 @@
     <li class="" *ngFor="let method of methods">
       .<strong>{{ method.name }}</strong>
       <span>(</span>
+
       <pre
         *ngIf="method.type === 'callback'"
-        [innerHTML]="beautify(method.value)"
+        [innerHTML]="beautify(method)"
         class="m-0 ml-3"
       ></pre>
       <span
         *ngIf="method.type !== 'callback'"
-        [innerHTML]="highlight(method.value)"
+        [innerHTML]="highlight(method)"
       ></span>
+
       <span>)</span>
     </li>
   </ul>
