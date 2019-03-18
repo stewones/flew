@@ -219,7 +219,7 @@ export class ReactiveRecord extends Hooks implements Api {
       const hookFn = this.hasHook('http.get.before');
       //
       // check availability
-      if (!_extraOptions.useNetwork && hookFn) {
+      if (hookFn) {
         // console.log('no useNetwork but has hook');
         //
         // run client hook
@@ -313,7 +313,7 @@ export class ReactiveRecord extends Hooks implements Api {
       const hookFn = this.hasHook('http.post.before');
       //
       // check availability
-      if (!_extraOptions.useNetwork && hookFn) {
+      if (hookFn) {
         //
         // run client hook
         hookFn(key, observer, _extraOptions).then(canRequest => {
@@ -402,7 +402,7 @@ export class ReactiveRecord extends Hooks implements Api {
       const hookFn = this.hasHook('http.patch.before');
       //
       // check availability
-      if (!_extraOptions.useNetwork && hookFn) {
+      if (hookFn) {
         //
         // run client hook
         hookFn(key, observer, _extraOptions).then(canRequest => {
@@ -509,14 +509,28 @@ export class ReactiveRecord extends Hooks implements Api {
   }
 
   /**
-   * Set transform fn for network responses
+   * Set a transform fn for the responses
    *
    * @param {(response: Response) => any} transformFn
    * @returns
    * @memberof ReactiveRecord
    */
+  public transformResponse<T>(transformFn: (response: Response) => any) {
+    this.extraOptions.transformResponse = transformFn;
+    return this;
+  }
+
+  /**
+   *
+   *
+   * @template T
+   * @param {(response: Response) => any} transformFn
+   * @returns
+   * @deprecated same as transformResponse
+   * @memberof ReactiveRecord
+   */
   public transformNetwork<T>(transformFn: (response: Response) => any) {
-    this.extraOptions.transformNetwork = transformFn;
+    this.transformResponse(transformFn);
     return this;
   }
 

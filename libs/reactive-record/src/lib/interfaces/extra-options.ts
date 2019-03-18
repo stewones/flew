@@ -5,7 +5,7 @@ export interface ExtraOptions {
   useNetwork?: boolean; // use network for first response
   saveNetwork?: boolean; // save network response
   transformCache?: (data: any) => any; // transform function for cache data
-  transformNetwork?: (data: any) => any; // transform function for network data response
+  transformResponse?: (data: any) => any; // transform function for network data response
   ref?: string; //  used for firebase driver
 }
 

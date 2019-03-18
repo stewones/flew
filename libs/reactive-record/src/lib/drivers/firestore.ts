@@ -133,10 +133,10 @@ export class FirestoreDriver extends Hooks implements Driver {
 
       //
       // network handle
-      const transformNetwork: any =
-        extraOptions.transformNetwork &&
-        typeof extraOptions.transformNetwork === 'function'
-          ? extraOptions.transformNetwork
+      const transformResponse: any =
+        extraOptions.transformResponse &&
+        typeof extraOptions.transformResponse === 'function'
+          ? extraOptions.transformResponse
           : (data: Response) => data;
       network = () => {
         //
@@ -173,7 +173,7 @@ export class FirestoreDriver extends Hooks implements Driver {
             } else {
               //
               // success callback
-              observer.next(transformNetwork(response));
+              observer.next(transformResponse(response));
               observer.complete();
             }
           })
@@ -189,7 +189,7 @@ export class FirestoreDriver extends Hooks implements Driver {
 
       //
       // check availability
-      if (!_extraOptions.useNetwork && hook) {
+      if (hook) {
         //
         // run client hook
         hook(key, observer, _extraOptions).then(canRequest => {
@@ -211,10 +211,10 @@ export class FirestoreDriver extends Hooks implements Driver {
   ): Observable<Response> {
     return this.find(request, extraOptions).pipe(
       map((r: Response) => {
-        const transformNetwork: any =
-          extraOptions.transformNetwork &&
-          typeof extraOptions.transformNetwork === 'function'
-            ? extraOptions.transformNetwork
+        const transformResponse: any =
+          extraOptions.transformResponse &&
+          typeof extraOptions.transformResponse === 'function'
+            ? extraOptions.transformResponse
             : (data: Response) => data;
         const data: any = isArray(r) ? r : get(r, 'data') || [];
         const response = <Response>{
@@ -223,7 +223,7 @@ export class FirestoreDriver extends Hooks implements Driver {
           response: r.response
         };
         // console.log('findOne response', response);
-        return transformNetwork(response);
+        return transformResponse(response);
       })
     );
   }
@@ -236,10 +236,10 @@ export class FirestoreDriver extends Hooks implements Driver {
   ): any {
     //
     // network handle
-    const transformNetwork: any =
-      extraOptions.transformNetwork &&
-      typeof extraOptions.transformNetwork === 'function'
-        ? extraOptions.transformNetwork
+    const transformResponse: any =
+      extraOptions.transformResponse &&
+      typeof extraOptions.transformResponse === 'function'
+        ? extraOptions.transformResponse
         : (data: Response) => data;
     //
     // run exceptions
@@ -281,7 +281,7 @@ export class FirestoreDriver extends Hooks implements Driver {
       };
       //
       // callback
-      onSuccess(transformNetwork(response));
+      onSuccess(transformResponse(response));
     }, onError);
   }
 

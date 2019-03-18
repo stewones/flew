@@ -104,10 +104,10 @@ export class PlatformBrowser extends ReactiveRecord {
     extraOptions: ExtraOptions = {}
   ) {
     const cache: Response & { ttl: number } = await this.storage.get(key);
-    const transformNetwork: any =
-      extraOptions.transformNetwork &&
-      typeof extraOptions.transformNetwork === 'function'
-        ? extraOptions.transformNetwork
+    const transformResponse: any =
+      extraOptions.transformResponse &&
+      typeof extraOptions.transformResponse === 'function'
+        ? extraOptions.transformResponse
         : (data: Response) => data;
 
     const useCache: boolean = extraOptions.useCache === false ? false : true;
@@ -119,7 +119,7 @@ export class PlatformBrowser extends ReactiveRecord {
     // return cached response immediately to view
     if (useCache && cache && !isEmpty(cache.data)) {
       // console.log('useCache & has cache & is not empty cache.data', cache);
-      observer.next(transformNetwork(cache));
+      observer.next(transformResponse(cache));
     }
 
     //
@@ -163,10 +163,10 @@ export class PlatformBrowser extends ReactiveRecord {
       typeof extraOptions.transformCache === 'function'
         ? extraOptions.transformCache
         : (data: Response) => data;
-    const transformNetwork: any =
-      extraOptions.transformNetwork &&
-      typeof extraOptions.transformNetwork === 'function'
-        ? extraOptions.transformNetwork
+    const transformResponse: any =
+      extraOptions.transformResponse &&
+      typeof extraOptions.transformResponse === 'function'
+        ? extraOptions.transformResponse
         : (data: Response) => data;
     const saveNetwork: boolean =
       extraOptions.saveNetwork === false ? false : true;
@@ -181,7 +181,7 @@ export class PlatformBrowser extends ReactiveRecord {
     ) {
       //
       // return network response
-      observer.next(transformNetwork(network));
+      observer.next(transformResponse(network));
       //
       // time to live
       const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
@@ -214,7 +214,7 @@ export class PlatformBrowser extends ReactiveRecord {
     //
     // force network return
     else if (extraOptions.useNetwork !== false) {
-      observer.next(transformNetwork(network));
+      observer.next(transformResponse(network));
     }
     // console.log('useNetwork?', extraOptions.useNetwork);
     observer.complete();
@@ -335,10 +335,10 @@ export class RRCachePlugin {
     const cache: RRResponse & { ttl: number } = await this.params.storage.get(
       key
     );
-    const transformNetwork: any =
-      extraOptions.transformNetwork &&
-      typeof extraOptions.transformNetwork === 'function'
-        ? extraOptions.transformNetwork
+    const transformResponse: any =
+      extraOptions.transformResponse &&
+      typeof extraOptions.transformResponse === 'function'
+        ? extraOptions.transformResponse
         : (data: RRResponse) => data;
 
     const useCache: boolean = extraOptions.useCache === false ? false : true;
@@ -350,7 +350,7 @@ export class RRCachePlugin {
     //
     // return cached response immediately to view
     if (useCache && cache && !isEmpty(cache.data))
-      observer.next(transformNetwork(cache));
+      observer.next(transformResponse(cache));
 
     //
     // check for TTL
@@ -395,10 +395,10 @@ export class RRCachePlugin {
       typeof extraOptions.transformCache === 'function'
         ? extraOptions.transformCache
         : (data: RRResponse) => data;
-    const transformNetwork: any =
-      extraOptions.transformNetwork &&
-      typeof extraOptions.transformNetwork === 'function'
-        ? extraOptions.transformNetwork
+    const transformResponse: any =
+      extraOptions.transformResponse &&
+      typeof extraOptions.transformResponse === 'function'
+        ? extraOptions.transformResponse
         : (data: RRResponse) => data;
     const saveNetwork: boolean =
       extraOptions.saveNetwork === false ? false : true;
@@ -413,7 +413,7 @@ export class RRCachePlugin {
     ) {
       //
       // return network response
-      observer.next(transformNetwork(network));
+      observer.next(transformResponse(network));
       //
       // time to live
       const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
@@ -446,7 +446,7 @@ export class RRCachePlugin {
     //
     // force network return
     else if (extraOptions.useNetwork) {
-      observer.next(transformNetwork(network));
+      observer.next(transformResponse(network));
     }
     // console.log('useNetwork?', extraOptions.useNetwork);
     observer.complete();
