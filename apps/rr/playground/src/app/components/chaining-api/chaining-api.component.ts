@@ -25,10 +25,14 @@ export class ChainingApiComponent implements OnInit {
     return transformFn(this.highlight(js(this.removeComments(method.value))));
   }
 
-  highlight(method: PlayMethod) {
+  highlight(method: PlayMethod | any) {
     const transformFn = this.valueTransform(method);
     return transformFn(
-      Prism.highlight(method.value, Prism.languages.javascript, 'javascript')
+      Prism.highlight(
+        method.value || method,
+        Prism.languages.javascript,
+        'javascript'
+      )
     );
   }
 
