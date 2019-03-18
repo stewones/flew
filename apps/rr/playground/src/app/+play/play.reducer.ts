@@ -64,9 +64,9 @@ export const initialState: PlayState = {
       value: 'true'
     },
     {
-      name: 'transformNetwork',
-      placeholder: 'Transform Network',
-      description: 'a callback function to transform the network response',
+      name: 'transformResponse',
+      placeholder: 'Transform Response',
+      description: 'a callback function to transform the response',
       default: 'response',
       platform: ['browser'],
       type: 'callback',
