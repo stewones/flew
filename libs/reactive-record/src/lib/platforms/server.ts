@@ -10,9 +10,12 @@ import { Options } from '../interfaces/options';
 import { FirestoreDriver } from '../drivers/firestore';
 import { FirebaseDriver } from '../drivers/firebase';
 import { Response } from '../interfaces/response';
+import { StorageAdapter } from '../interfaces/storage-adapter';
 
 export class ReactiveRecord extends Hooks implements Api {
   public collection: string;
+  public storage: StorageAdapter;
+
   //
   // default params
   private _driver = 'firestore';
