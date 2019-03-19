@@ -195,10 +195,14 @@ export class FirebaseDriver extends Hooks /*implements Driver*/ {
     if (isEmpty(this.connector.firebase))
       throw new Error('missing firebase connector');
 
+    if (this.connector.firebase && isEmpty(this.connector.firebase.database))
+      throw new Error(
+        `missing database sdk. did you add import 'firebase/database' at your app environment ?`
+      );
+
     //
     // define adapter
     const path = `${this.collection}/${extraOptions.ref}`;
-    console.log(`requesting database path ${path}`);
     const firebase: any = this.connector.firebase.database().ref(path);
 
     //

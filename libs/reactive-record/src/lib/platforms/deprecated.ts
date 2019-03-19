@@ -1,11 +1,13 @@
 import { merge, omit, isEmpty, isEqual } from 'lodash';
 import { AxiosRequestConfig } from 'axios';
 import { PartialObserver } from 'rxjs';
-import { RRCacheOptions, RRExtraOptions } from '@firetask/reactive-record';
+
 import { RROptions } from '../interfaces/options';
 import { RRFirebaseConnector } from '../connectors/firebase';
 import { RRFirestoreConnector } from '../connectors/firestore';
 import { RRResponse } from '../interfaces/response';
+import { RRCacheOptions } from '../interfaces/cache-options';
+import { RRExtraOptions } from '../interfaces/extra-options';
 
 /**
  * @export
