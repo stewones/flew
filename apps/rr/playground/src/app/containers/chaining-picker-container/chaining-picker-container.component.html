@@ -14,7 +14,7 @@
       [ngModel]="selectedVerbMethod.name"
     >
       <mat-option
-        *ngFor="let method of (methodsExec$ | async)"
+        *ngFor="let method of (verbMethods$ | async)"
         [value]="method.name"
         [disabled]="method.disabled"
       >

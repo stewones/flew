@@ -12,7 +12,7 @@ export interface PlayMethod {
   platform: Array<'browser' | 'server'>;
   value?: any;
   valueTransform?: any;
-  target: 'chain' | 'exec';
+  target: 'chain' | 'verb';
   disabled?: boolean;
   options?: any;
 }

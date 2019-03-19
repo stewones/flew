@@ -74,65 +74,65 @@ export const PlayMethods: PlayMethod[] = [
 }`
   },
   //
-  // executor methods
+  // verb methods
   {
     name: 'find',
     placeholder: 'Find',
     platform: ['browser', 'server'],
-    target: 'exec'
+    target: 'verb'
   },
   {
     name: 'findOne',
     placeholder: 'Find One',
     platform: ['browser', 'server'],
-    target: 'exec'
+    target: 'verb'
   },
   {
     name: 'get',
     placeholder: 'Get',
     platform: ['browser', 'server'],
-    target: 'exec'
+    target: 'verb'
   },
   {
     name: 'post',
     placeholder: 'Post (soon)',
     disabled: true,
     platform: ['browser', 'server'],
-    target: 'exec'
+    target: 'verb'
   },
   {
     name: 'patch',
     placeholder: 'Patch (soon)',
     disabled: true,
     platform: ['browser', 'server'],
-    target: 'exec'
+    target: 'verb'
   },
   {
     name: 'delete',
     placeholder: 'Delete (soon)',
     disabled: true,
     platform: ['browser', 'server'],
-    target: 'exec'
+    target: 'verb'
   },
   {
     name: 'update',
     placeholder: 'Update (soon)',
     disabled: true,
     platform: ['browser', 'server'],
-    target: 'exec'
+    target: 'verb'
   },
   {
     name: 'set',
     placeholder: 'Set (soon)',
     disabled: true,
     platform: ['browser', 'server'],
-    target: 'exec'
+    target: 'verb'
   },
   {
     name: 'on',
     placeholder: 'On (soon)',
     disabled: true,
     platform: ['browser', 'server'],
-    target: 'exec'
+    target: 'verb'
   }
 ];

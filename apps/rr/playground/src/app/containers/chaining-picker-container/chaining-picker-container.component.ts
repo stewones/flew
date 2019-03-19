@@ -42,9 +42,9 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
     select(getAllMethods),
     map((methods: PlayMethod[]) => methods.filter(it => it.target === 'chain'))
   );
-  methodsExec$: Observable<PlayMethod[]> = this.store.pipe(
+  verbMethods$: Observable<PlayMethod[]> = this.store.pipe(
     select(getAllMethods),
-    map((methods: PlayMethod[]) => methods.filter(it => it.target === 'exec')),
+    map((methods: PlayMethod[]) => methods.filter(it => it.target === 'verb')),
     tap((verbs: PlayMethod[]) => (this.verbs = verbs))
   );
 
