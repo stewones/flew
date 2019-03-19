@@ -14,3 +14,8 @@ export type PlayService =
   | TodoService;
 
 export type PlayResponse = Response | any;
+
+export interface PlayCache {
+  key: string;
+  data: any;
+}

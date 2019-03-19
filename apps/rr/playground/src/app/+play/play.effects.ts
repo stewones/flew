@@ -26,7 +26,7 @@ export class PlayEffects {
     // apply the json tree view
     map((result: any) => {
       const index = result.responses.indexOf(result.action.payload) + 1;
-      const key = `tree-${index}`;
+      const key = `response-tree-${index}`;
       setTimeout(() => {
         window.jsonTreeViewer(key).parse(result.action.payload);
       }, 0);

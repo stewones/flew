@@ -16,6 +16,8 @@ import Prism from 'prismjs';
 })
 export class ChainingApiComponent implements OnInit {
   @Input() methods: PlayMethod[] = [];
+  @Input() verb: PlayMethod = <PlayMethod>{};
+
   constructor() {}
 
   ngOnInit() {}

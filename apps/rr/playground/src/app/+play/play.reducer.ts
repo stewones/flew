@@ -3,7 +3,8 @@ import { PlayMethod } from '../interfaces/method.interface';
 import {
   addMethodToSelectionReducer,
   removeSelectedMethodReducer,
-  updateSelectedMethodReducer
+  updateSelectedMethodReducer,
+  updateSelectedVerbReducer
 } from './method/method.reducer';
 import { PlayCollection } from '../interfaces/collection.interface';
 import { updateSelectedCollectionReducer } from './collection/collection.reducer';
@@ -23,6 +24,7 @@ export interface PlayState {
   methods: PlayMethod[];
   selectedMethods?: PlayMethod[];
   responses?: PlayResponse[];
+  selectedVerb: PlayMethod;
   loaded: boolean;
   error?: any;
 }
@@ -37,7 +39,8 @@ export const initialState: PlayState = {
   collections: PlayCollections,
   selectedMethods: [],
   responses: [],
-  methods: PlayMethods
+  methods: PlayMethods,
+  selectedVerb: PlayMethods.find(it => it.name === 'get')
 };
 
 export function playReducer(
@@ -67,6 +70,10 @@ export function playReducer(
     }
     case PlayActionTypes.REMOVE_COLLECTION_RESPONSES: {
       state = removeAllResponsesReducer(state, action);
+      break;
+    }
+    case PlayActionTypes.UPDATE_CHAIN_VERB: {
+      state = updateSelectedVerbReducer(state, action);
       break;
     }
   }

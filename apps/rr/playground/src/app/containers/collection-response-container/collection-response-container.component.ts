@@ -11,11 +11,11 @@ import { PlayState } from '../../+play/play.reducer';
   styleUrls: ['./collection-response-container.component.css']
 })
 export class CollectionResponseContainerComponent implements OnInit {
-  responses$: Observable<PlayResponse[]>;
+  responses$: Observable<PlayResponse[]> = this.store.pipe(
+    select(getAllCollectionResponses)
+  );
 
   constructor(private store: Store<PlayState>) {}
 
-  ngOnInit() {
-    this.responses$ = this.store.pipe(select(getAllCollectionResponses));
-  }
+  ngOnInit() {}
 }

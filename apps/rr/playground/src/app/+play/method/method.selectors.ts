@@ -14,3 +14,8 @@ export const getSelectedMethods = createSelector(
   playState,
   (state: PlayState) => state.selectedMethods
 );
+
+export const getSelectedVerb = createSelector(
+  playState,
+  (state: PlayState) => state.selectedVerb
+);

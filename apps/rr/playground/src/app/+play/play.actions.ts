@@ -1,7 +1,8 @@
 import {
   AddChainMethod,
   RemoveChainMethod,
-  UpdateChainMethod
+  UpdateChainMethod,
+  UpdateChainVerb
 } from './method/method.actions';
 import { UpdateChainCollection } from './collection/collection.actions';
 import {
@@ -14,6 +15,7 @@ export enum PlayActionTypes {
   REMOVE_CHAIN_METHOD = '[Method] Remove from chain',
   UPDATE_CHAIN_METHOD = '[Method] Update in chain',
   UPDATE_CHAIN_COLLECTION = '[Collection] Update in chain',
+  UPDATE_CHAIN_VERB = '[Verb] Update in chain',
   ADD_COLLECTION_RESPONSE = '[Collection] Add response',
   REMOVE_COLLECTION_RESPONSES = '[Collection] Remove responses'
 }
@@ -24,12 +26,5 @@ export type PlayAction =
   | UpdateChainMethod
   | UpdateChainCollection
   | AddCollectionResponse
-  | RemoveCollectionResponses;
-
-// not needed for now
-// export const fromPlayActions = {
-//   AddChainMethod,
-//   RemoveChainMethod,
-//   UpdateChainMethod,
-//   UpdateChainCollection
-// };
+  | RemoveCollectionResponses
+  | UpdateChainVerb;

@@ -1,13 +1,16 @@
-<rr-play-chaining-picker
-  [methods]="methodsChain$ | async"
-  (onAdd)="didAddMethod($event)"
-  (onUpdate)="didUpdateMethod($event)"
-></rr-play-chaining-picker>
 <div class="flex flex-col">
+  <!-- CHAIN OPTIONS -->
+  <rr-play-chaining-picker
+    [methods]="methodsChain$ | async"
+    (onAdd)="didAddMethod($event)"
+    (onUpdate)="didUpdateMethod($event)"
+  ></rr-play-chaining-picker>
+
+  <!-- CHAIN VERB -->
   <mat-form-field>
     <mat-select
       placeholder="Verb"
-      (selectionChange)="didUpdateExecMethod($event)"
+      (selectionChange)="didUpdateVerb($event)"
       [ngModel]="selectedVerbMethod.name"
     >
       <mat-option
@@ -19,8 +22,15 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+
+  <!-- CHAIN ACTION -->
   <div class="flex flex-row justify-center">
     <button mat-button color="primary" (click)="execute()">Execute</button>
-    <button mat-button color="warn" (click)="clearCache()">Clear Cache</button>
+    <button mat-button color="warn" (click)="clearCache()">
+      Clear Cache
+    </button>
   </div>
+
+  <!-- CACHE EXPLORER -->
+  <rr-play-cache-explorer [data]="cache"></rr-play-cache-explorer>
 </div>

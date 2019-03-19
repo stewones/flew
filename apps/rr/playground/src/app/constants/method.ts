@@ -6,7 +6,7 @@ export const PlayMethods: PlayMethod[] = [
   {
     name: 'driver',
     placeholder: 'Driver',
-    description: 'Custom driver',
+    description: 'Use a custom driver.',
     default: 'firestore',
     platform: ['browser', 'server'],
     type: 'select',
@@ -18,9 +18,19 @@ export const PlayMethods: PlayMethod[] = [
   {
     name: 'useNetwork',
     placeholder: 'Use Network',
-    description: 'force the use of network call',
+    description: 'Force the use of a network call.',
     default: 'true',
     platform: ['browser', 'server'],
+    type: 'boolean',
+    value: 'true',
+    target: 'chain'
+  },
+  {
+    name: 'saveNetwork',
+    placeholder: 'Save Network',
+    description: 'Whether to cache network response or not.',
+    default: 'true',
+    platform: ['browser'],
     type: 'boolean',
     value: 'true',
     target: 'chain'
@@ -29,7 +39,7 @@ export const PlayMethods: PlayMethod[] = [
     name: 'useCache',
     placeholder: 'Use Cache',
     description:
-      'when true the first response should be from the cache if exists',
+      'When true the first response should be from the cache if exists.',
     default: 'true',
     platform: ['browser'],
     type: 'boolean',
@@ -39,7 +49,7 @@ export const PlayMethods: PlayMethod[] = [
   {
     name: 'transformResponse',
     placeholder: 'Transform Response',
-    description: 'a callback function to transform the response',
+    description: 'A callback function to transform the response.',
     default: 'response',
     platform: ['browser', 'server'],
     type: 'callback',
@@ -52,7 +62,8 @@ export const PlayMethods: PlayMethod[] = [
   {
     name: 'transformCache',
     placeholder: 'Transform Cache',
-    description: 'a callback function to transform the cache',
+    description:
+      'A callback function to transform the cache before storing it.',
     default: 'response',
     platform: ['browser'],
     type: 'callback',

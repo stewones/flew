@@ -14,3 +14,7 @@ export class UpdateChainMethod implements Action {
   readonly type = PlayActionTypes.UPDATE_CHAIN_METHOD;
   constructor(public payload: PlayMethod) {}
 }
+export class UpdateChainVerb implements Action {
+  readonly type = PlayActionTypes.UPDATE_CHAIN_VERB;
+  constructor(public payload: PlayMethod) {}
+}

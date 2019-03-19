@@ -39,3 +39,10 @@ export function updateSelectedMethodReducer(
     )
   };
 }
+
+export function updateSelectedVerbReducer(state: PlayState, action): PlayState {
+  return {
+    ...state,
+    selectedVerb: action.payload
+  };
+}

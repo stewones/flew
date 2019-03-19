@@ -11,17 +11,18 @@ import { FormFieldChangeEvent } from '../../components/form/form.interface';
 import {
   RemoveChainMethod,
   AddChainMethod,
-  UpdateChainMethod
+  UpdateChainMethod,
+  UpdateChainVerb
 } from '../../+play/method/method.actions';
 import { UserService } from '../../services/user.service';
-import { PlayService } from '../../interfaces/play.interface';
+import { PlayService, PlayCache } from '../../interfaces/play.interface';
 import { AlbumService } from '../../services/album.service';
 import { CommentService } from '../../services/comment.service';
 import { PhotoService } from '../../services/photo.service';
 import { TodoService } from '../../services/todo.service';
 import { PlayCollection } from '../../interfaces/collection.interface';
 import { getSelectedCollection } from '../../+play/collection/collection.selectors';
-import { map } from 'rxjs/operators';
+import { map, combineLatest, last, tap } from 'rxjs/operators';
 import {
   AddCollectionResponse,
   RemoveCollectionResponses
@@ -43,7 +44,8 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
   );
   methodsExec$: Observable<PlayMethod[]> = this.store.pipe(
     select(getAllMethods),
-    map((methods: PlayMethod[]) => methods.filter(it => it.target === 'exec'))
+    map((methods: PlayMethod[]) => methods.filter(it => it.target === 'exec')),
+    tap((verbs: PlayMethod[]) => (this.verbs = verbs))
   );
 
   service: { [key: string]: PlayService } = {
@@ -59,7 +61,10 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
 
   instrument$: Subscription;
 
+  verbs: PlayMethod[];
   selectedVerbMethod: PlayMethod = PlayMethods.find(it => it.name === 'get');
+
+  cache: PlayCache[] = this.resetCache();
 
   constructor(
     private store: Store<PlayState>,
@@ -131,7 +136,7 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
       'this.$collection',
       'this.service[this.selectedCollection.service].$collection'
     );
-    instrument += `.${this.selectedVerbMethod.name}()`;
+    // instrument += `.${this.selectedVerbMethod.name}()`;
 
     // console.log(
     //   instrument,
@@ -160,6 +165,16 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
             result = result;
           }
           this.store.dispatch(new AddCollectionResponse(result));
+          return r;
+        }),
+        last((value: Response, index: number, source: Observable<any>) => {
+          // console.log(value, index, source);
+          if (index >= 1) {
+            //
+            // load cache viewer
+            this.loadCache();
+          }
+          return true;
         })
       )
       .subscribe();
@@ -169,7 +184,24 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
     this.service[this.selectedCollection.service].$collection.clearCache();
   }
 
-  didUpdateExecMethod($event: MatSelectChange) {
-    this.selectedVerbMethod.name = $event.value;
+  resetCache(): PlayCache[] {
+    return [{ key: '', data: {} }];
+  }
+
+  didUpdateVerb($event: MatSelectChange) {
+    this.selectedVerbMethod = this.verbs.find(it => it.name === $event.value);
+    this.store.dispatch(new UpdateChainVerb(this.selectedVerbMethod));
+  }
+
+  loadCache() {
+    this.cache = [];
+    this.service[this.selectedCollection.service].$collection.storage.forEach(
+      (value, key, index) => {
+        this.cache.push({
+          key: key,
+          data: value
+        });
+      }
+    );
   }
 }
