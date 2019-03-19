@@ -177,47 +177,49 @@ export class PlatformBrowser extends ReactiveRecord {
     if (
       (cache && !isEqual(cache.data, network.data)) ||
       (cache && isEmpty(cache.data)) ||
-      !cache
+      !cache ||
+      extraOptions.useNetwork !== false
     ) {
       //
       // return network response
       observer.next(transformResponse(network));
-      //
-      // time to live
-      const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-      if (
-        saveNetwork &&
-        ((isEmpty(network.data) && cache) ||
-          isEmpty(cache) ||
-          (cache && seconds >= cache.ttl))
-      ) {
-        console.log(`${key} cache empty or updated`);
-        let ttl = extraOptions.ttl /*|| this.ttl*/ || 0;
-        //
-        // set cache response
-        ttl += seconds;
-        network.ttl = ttl;
-        this.storage.set(
-          key,
-          transformCache(
-            omit(network, [
-              'config',
-              'request',
-              'response.config',
-              'response.data',
-              'response.request'
-            ])
-          )
-        );
-      }
     }
+
     //
-    // force network return
-    else if (extraOptions.useNetwork !== false) {
-      observer.next(transformResponse(network));
+    // time to live
+    const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
+    if (
+      saveNetwork &&
+      ((isEmpty(network.data) && cache) ||
+        isEmpty(cache) ||
+        (cache && seconds >= cache.ttl))
+    ) {
+      console.log(`${key} cache empty or updated`);
+      let ttl = extraOptions.ttl /*|| this.ttl*/ || 0;
+      //
+      // set cache response
+      ttl += seconds;
+      network.ttl = ttl;
+      this.storage.set(
+        key,
+        transformCache(
+          omit(network, [
+            'config',
+            'request',
+            'response.config',
+            'response.data',
+            'response.request'
+          ])
+        )
+      );
     }
+
     // console.log('useNetwork?', extraOptions.useNetwork);
     observer.complete();
+  }
+
+  clearCache(): void {
+    this.storage.clear();
   }
 }
 
@@ -418,10 +420,11 @@ export class RRCachePlugin {
       // time to live
       const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
       if (
-        saveNetwork &&
-        ((isEmpty(network.data) && cache) ||
-          isEmpty(cache) ||
-          (cache && seconds >= cache.ttl))
+        saveNetwork
+        // &&
+        // ((isEmpty(network.data) && cache) ||
+        //   isEmpty(cache) ||
+        //   (cache && seconds >= cache.ttl))
       ) {
         console.log(`${key} cache empty or updated`);
         let ttl = extraOptions.ttl /*|| this.params.ttl*/ || 0;

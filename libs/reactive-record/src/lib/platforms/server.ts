@@ -659,6 +659,8 @@ export class ReactiveRecord extends Hooks implements Api {
     this.extraOptions.ref = path;
     return this;
   }
+
+  public clearCache(): void {}
 }
 
 export class PlatformServer extends ReactiveRecord {}

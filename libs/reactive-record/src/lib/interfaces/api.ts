@@ -42,4 +42,8 @@ export interface Api {
   post(path: string, body: any): Observable<Response>;
   patch(path: string, body: any): Observable<Response>;
   delete(path: string): Observable<Response>;
+
+  //
+  // utils
+  clearCache(): void;
 }
