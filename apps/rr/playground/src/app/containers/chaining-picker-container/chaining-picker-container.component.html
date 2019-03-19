@@ -25,9 +25,12 @@
 
   <!-- CHAIN ACTION -->
   <div class="flex flex-row justify-center">
-    <button mat-button color="primary" (click)="execute()">Execute</button>
+    <button mat-button color="primary" (click)="execute()">EXECUTE</button>
     <button mat-button color="warn" (click)="clearCache()">
-      Clear Cache
+      <small>CLEAR CACHE</small>
+    </button>
+    <button mat-button color="" (click)="clearResponse()">
+      <small>CLEAR RESPONSE</small>
     </button>
   </div>
 

@@ -1,3 +1,4 @@
-<p>
-  cache-explorer works!
-</p>
+<div *ngFor="let cache of data; let i = index" class="mb-5">
+  <small class="text-grey-dark text-xs font-mono">{{ cache.key }}</small>
+  <div id="cache-tree-{{ i + 1 }}"></div>
+</div>

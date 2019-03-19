@@ -9,12 +9,11 @@ import { PlayCache } from '../../interfaces/play.interface';
 @Component({
   selector: 'rr-play-cache-explorer',
   templateUrl: './cache-explorer.component.html',
-  styleUrls: ['./cache-explorer.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./cache-explorer.component.css']
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CacheExplorerComponent implements OnInit {
   @Input() data: PlayCache = <PlayCache>{};
-  @Input() index: number = 0;
 
   constructor() {}
 

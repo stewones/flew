@@ -30,7 +30,9 @@ import {
 import { Response } from '@firetask/reactive-record';
 import { MatSelectChange } from '@angular/material';
 import { PlayMethods } from '../../constants/method';
-import { isArray, isObject } from 'lodash';
+import { isArray, isObject, merge } from 'lodash';
+
+declare var window;
 
 @Component({
   selector: 'rr-play-chaining-picker-container',
@@ -78,7 +80,10 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.selectedCollection$ = this.store
       .pipe(select(getSelectedCollection))
-      .subscribe((entry: PlayCollection) => (this.selectedCollection = entry));
+      .subscribe((entry: PlayCollection) => {
+        this.selectedCollection = entry;
+        this.loadCache();
+      });
   }
 
   ngOnDestroy() {
@@ -169,11 +174,14 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
         }),
         last((value: Response, index: number, source: Observable<any>) => {
           // console.log(value, index, source);
-          if (index >= 1) {
+          if (!this.cache.length) {
+            setTimeout(() => this.loadCache(), 0); // force load of cache for the very first request
+          } else if (index >= 1) {
             //
             // load cache viewer
-            this.loadCache();
+            setTimeout(() => this.loadCache(), 0);
           }
+
           return true;
         })
       )
@@ -182,10 +190,15 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
 
   clearCache() {
     this.service[this.selectedCollection.service].$collection.clearCache();
+    this.loadCache();
+  }
+
+  clearResponse() {
+    this.store.dispatch(new RemoveCollectionResponses());
   }
 
   resetCache(): PlayCache[] {
-    return [{ key: '', data: {} }];
+    return [];
   }
 
   didUpdateVerb($event: MatSelectChange) {
@@ -197,10 +210,15 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
     this.cache = [];
     this.service[this.selectedCollection.service].$collection.storage.forEach(
       (value, key, index) => {
-        this.cache.push({
+        const className = `cache-tree-${index}`;
+        const cache: PlayCache = {
           key: key,
           data: value
-        });
+        };
+        this.cache.push(cache);
+        setTimeout(() => {
+          window.jsonTreeViewer(className).parse(cache.data);
+        }, 0);
       }
     );
   }
