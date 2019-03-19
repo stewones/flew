@@ -2,6 +2,7 @@
 // platforms
 export * from './lib/platforms/browser';
 export * from './lib/platforms/server';
+export * from './lib/platforms/deprecated';
 
 //
 // connectors

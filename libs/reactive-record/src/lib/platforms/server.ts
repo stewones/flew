@@ -12,6 +12,7 @@ import { FirebaseDriver } from '../drivers/firebase';
 import { Response } from '../interfaces/response';
 
 export class ReactiveRecord extends Hooks implements Api {
+  public collection: string;
   //
   // default params
   private _driver = 'firestore';
@@ -224,7 +225,7 @@ export class ReactiveRecord extends Hooks implements Api {
         //
         // run client hook
         hookFn(key, observer, _extraOptions).then(canRequest => {
-          // console.log(canRequest);
+          console.log(`should it request network?`, canRequest);
           //
           // http.get.before should return a boolean
           if (canRequest) network();
