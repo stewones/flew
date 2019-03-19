@@ -1,7 +1,8 @@
 <div *ngFor="let response of data; let i = index" class="mb-5">
   Response {{ i + 1 }}
   <small class="text-grey-dark"
-    >({{ response.ttl ? 'cache' : 'network' }})</small
+    >{{ isFromCache(response) ? '(cache)' : ''
+    }}{{ isFromNetwork(response) ? '(network)' : '' }}</small
   >
   <div id="tree-{{ i + 1 }}"></div>
 </div>

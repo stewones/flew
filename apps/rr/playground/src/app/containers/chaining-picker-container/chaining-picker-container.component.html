@@ -6,9 +6,9 @@
 <div class="flex flex-col">
   <mat-form-field>
     <mat-select
-      placeholder="Target"
+      placeholder="Verb"
       (selectionChange)="didUpdateExecMethod($event)"
-      [ngModel]="selectedExecMethod.name"
+      [ngModel]="selectedVerbMethod.name"
     >
       <mat-option
         *ngFor="let method of (methodsExec$ | async)"
@@ -19,6 +19,8 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-
-  <button mat-button color="primary" (click)="execute()">Execute</button>
+  <div class="flex flex-row justify-center">
+    <button mat-button color="primary" (click)="execute()">Execute</button>
+    <button mat-button color="warn" (click)="clearCache()">Clear Cache</button>
+  </div>
 </div>

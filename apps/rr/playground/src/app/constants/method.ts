@@ -41,6 +41,19 @@ export const PlayMethods: PlayMethod[] = [
     placeholder: 'Transform Response',
     description: 'a callback function to transform the response',
     default: 'response',
+    platform: ['browser', 'server'],
+    type: 'callback',
+    target: 'chain',
+    value: `(response: Response) => {
+    // do whatever with the response
+    return response;
+}`
+  },
+  {
+    name: 'transformCache',
+    placeholder: 'Transform Cache',
+    description: 'a callback function to transform the cache',
+    default: 'response',
     platform: ['browser'],
     type: 'callback',
     target: 'chain',

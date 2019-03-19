@@ -29,6 +29,7 @@ import {
 import { Response } from '@firetask/reactive-record';
 import { MatSelectChange } from '@angular/material';
 import { PlayMethods } from '../../constants/method';
+import { isArray, isObject } from 'lodash';
 
 @Component({
   selector: 'rr-play-chaining-picker-container',
@@ -58,7 +59,7 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
 
   instrument$: Subscription;
 
-  selectedExecMethod: PlayMethod = PlayMethods.find(it => it.name === 'get');
+  selectedVerbMethod: PlayMethod = PlayMethods.find(it => it.name === 'get');
 
   constructor(
     private store: Store<PlayState>,
@@ -130,7 +131,7 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
       'this.$collection',
       'this.service[this.selectedCollection.service].$collection'
     );
-    instrument += `.${this.selectedExecMethod.name}()`;
+    instrument += `.${this.selectedVerbMethod.name}()`;
 
     // console.log(
     //   instrument,
@@ -146,15 +147,29 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
     this.instrument$ = eval(instrument)
       .pipe(
         map((r: Response) => {
-          this.store.dispatch(
-            new AddCollectionResponse(JSON.parse(JSON.stringify(r)))
-          );
+          let result = JSON.parse(JSON.stringify(r));
+          if (
+            isArray(result) ||
+            (isObject(result) &&
+              !result.data &&
+              !result.key &&
+              !result.response)
+          ) {
+            result = { _: result };
+          } else {
+            result = result;
+          }
+          this.store.dispatch(new AddCollectionResponse(result));
         })
       )
       .subscribe();
   }
 
+  clearCache() {
+    this.service[this.selectedCollection.service].$collection.clearCache();
+  }
+
   didUpdateExecMethod($event: MatSelectChange) {
-    this.selectedExecMethod.name = $event.value;
+    this.selectedVerbMethod.name = $event.value;
   }
 }

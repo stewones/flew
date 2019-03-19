@@ -21,17 +21,15 @@ export class CollectionResponseComponent implements OnInit {
 
   ngOnInit() {}
 
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
-    //if (changes.data.currentValue) {
-    this.mountTree();
-    // }
+  ngOnChanges(changes: SimpleChanges) {}
+
+  mountTree() {}
+
+  isFromCache(response: PlayResponse) {
+    return response.ttl ? true : false /*|| Object.keys(response)[0] === '_'*/;
   }
 
-  mountTree() {
-    const response: PlayResponse = this.data[this.data.length - 1];
-    if (response) {
-      console.log('new response');
-    }
+  isFromNetwork(response: PlayResponse) {
+    return response.response && !this.isFromCache(response) ? true : false;
   }
 }
