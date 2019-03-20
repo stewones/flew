@@ -8,6 +8,7 @@ import { ChainingApiModule } from '../chaining-api/chaining-api.module';
 import { CollectionChooserContainerModule } from '../../containers/collection-chooser-container/collection-chooser-container.module';
 import { CollectionResponseContainerModule } from '../../containers/collection-response-container/collection-response-container.module';
 import { CacheExplorerContainerModule } from '../../containers/cache-explorer-container/cache-explorer-container.module';
+import { CollectionSchemeContainerModule } from '../../containers/collection-scheme-container/collection-scheme-container.module';
 
 @NgModule({
   declarations: [GroundComponent],
@@ -19,7 +20,8 @@ import { CacheExplorerContainerModule } from '../../containers/cache-explorer-co
     ChainingApiModule,
     CollectionChooserContainerModule,
     CollectionResponseContainerModule,
-    CacheExplorerContainerModule
+    CacheExplorerContainerModule,
+    CollectionSchemeContainerModule
   ],
   exports: [GroundComponent]
 })

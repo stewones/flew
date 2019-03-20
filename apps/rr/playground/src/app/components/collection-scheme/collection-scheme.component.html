@@ -1,0 +1,14 @@
+<div class="card">
+  <div class="header">COLLECTION SCHEME</div>
+  <div class="block px-4 py-0 pr-0">
+    <ngx-codemirror
+      [ngModel]="data.info"
+      [options]="{
+        lineNumbers: false,
+        theme: 'neo',
+        mode: 'javascript',
+        readOnly: true
+      }"
+    ></ngx-codemirror>
+  </div>
+</div>

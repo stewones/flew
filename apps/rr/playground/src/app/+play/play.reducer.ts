@@ -4,7 +4,8 @@ import {
   addMethodToSelectionReducer,
   removeSelectedMethodReducer,
   updateSelectedMethodReducer,
-  updateSelectedVerbReducer
+  updateSelectedVerbReducer,
+  removeAllSelectedMethodsReducer
 } from './method/method.reducer';
 import { PlayCollection } from '../interfaces/collection.interface';
 import { updateSelectedCollectionReducer } from './collection/collection.reducer';
@@ -74,6 +75,10 @@ export function playReducer(
     }
     case PlayActionTypes.UPDATE_CHAIN_VERB: {
       state = updateSelectedVerbReducer(state, action);
+      break;
+    }
+    case PlayActionTypes.REMOVE_ALL_CHAIN_METHODS: {
+      state = removeAllSelectedMethodsReducer(state, action);
       break;
     }
   }

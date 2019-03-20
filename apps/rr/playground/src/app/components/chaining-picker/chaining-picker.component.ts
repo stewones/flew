@@ -4,7 +4,8 @@ import {
   ChangeDetectionStrategy,
   Input,
   Output,
-  EventEmitter
+  EventEmitter,
+  ChangeDetectorRef
 } from '@angular/core';
 
 import {
@@ -12,6 +13,8 @@ import {
   PlayMethodChange
 } from '../../interfaces/method.interface';
 import { FormFieldChange } from '../form/form.interface';
+import { AppService } from '../../services/app.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,9 +29,22 @@ export class ChainingPickerComponent implements OnInit {
 
   showInput: { [key: string]: boolean } = {};
 
-  constructor() {}
+  removeAllChainMethods$: Subscription;
 
-  ngOnInit() {}
+  constructor(private app: AppService, private cdr: ChangeDetectorRef) {}
+
+  ngOnInit() {
+    this.removeAllChainMethods$ = this.app.removeAllChainMethods$.subscribe(
+      () => {
+        this.showInput = {};
+        this.cdr.detectChanges();
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.removeAllChainMethods$.unsubscribe();
+  }
 
   getMethod(name: string): PlayMethod {
     return this.methods.find(it => it.name === name);

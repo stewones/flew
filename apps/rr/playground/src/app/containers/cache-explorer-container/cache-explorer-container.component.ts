@@ -47,7 +47,7 @@ export class CacheExplorerContainerComponent implements OnInit, OnDestroy {
       };
       this.data.push(cache);
 
-      console.log(className, value, key, index);
+      // console.log(className, value, key, index);
 
       setTimeout(() => {
         window.jsonTreeViewer(className).parse(cache.data);

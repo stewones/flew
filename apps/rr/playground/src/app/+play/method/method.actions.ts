@@ -10,6 +10,11 @@ export class RemoveChainMethod implements Action {
   readonly type = PlayActionTypes.REMOVE_CHAIN_METHOD;
   constructor(public payload: PlayMethod) {}
 }
+export class RemoveAllChainMethods implements Action {
+  readonly type = PlayActionTypes.REMOVE_ALL_CHAIN_METHODS;
+  constructor() {}
+}
+
 export class UpdateChainMethod implements Action {
   readonly type = PlayActionTypes.UPDATE_CHAIN_METHOD;
   constructor(public payload: PlayMethod) {}

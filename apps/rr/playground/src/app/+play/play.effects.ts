@@ -39,8 +39,6 @@ export class PlayEffects {
   })
   loadCachedResponse$ = this.actions$.pipe(
     ofType(PlayActionTypes.LOAD_COLLECTION_CACHED_RESPONSES),
-    //
-    // apply the json tree view
     tap(() => this.app.loadCachedResponse$.next())
   );
 
@@ -49,9 +47,15 @@ export class PlayEffects {
   })
   clearCachedResponse$ = this.actions$.pipe(
     ofType(PlayActionTypes.CLEAR_COLLECTION_CACHED_RESPONSES),
-    //
-    // apply the json tree view
     tap(() => this.app.clearCachedResponse$.next())
+  );
+
+  @Effect({
+    dispatch: false
+  })
+  removeAllChainMethods$ = this.actions$.pipe(
+    ofType(PlayActionTypes.REMOVE_ALL_CHAIN_METHODS),
+    tap(() => this.app.removeAllChainMethods$.next())
   );
 
   constructor(

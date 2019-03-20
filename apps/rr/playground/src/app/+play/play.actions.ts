@@ -2,7 +2,8 @@ import {
   AddChainMethod,
   RemoveChainMethod,
   UpdateChainMethod,
-  UpdateChainVerb
+  UpdateChainVerb,
+  RemoveAllChainMethods
 } from './method/method.actions';
 import { UpdateChainCollection } from './collection/collection.actions';
 import {
@@ -15,6 +16,7 @@ import {
 export enum PlayActionTypes {
   ADD_CHAIN_METHOD = '[Method] Add to chain',
   REMOVE_CHAIN_METHOD = '[Method] Remove from chain',
+  REMOVE_ALL_CHAIN_METHODS = '[Method] Remove all methods from chain',
   UPDATE_CHAIN_METHOD = '[Method] Update in chain',
   UPDATE_CHAIN_COLLECTION = '[Collection] Update in chain',
   UPDATE_CHAIN_VERB = '[Verb] Update in chain',
@@ -33,4 +35,5 @@ export type PlayAction =
   | RemoveCollectionResponses
   | UpdateChainVerb
   | LoadCollectionCachedResponses
-  | ClearCollectionCachedResponses;
+  | ClearCollectionCachedResponses
+  | RemoveAllChainMethods;

@@ -26,6 +26,7 @@ export class AppService {
 
   loadCachedResponse$: Subject<void> = new Subject();
   clearCachedResponse$: Subject<void> = new Subject();
+  removeAllChainMethods$: Subject<void> = new Subject();
 
   constructor() {}
 }

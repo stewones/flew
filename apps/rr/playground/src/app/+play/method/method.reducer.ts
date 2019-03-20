@@ -28,6 +28,16 @@ export function removeSelectedMethodReducer(
   };
 }
 
+export function removeAllSelectedMethodsReducer(
+  state: PlayState,
+  action
+): PlayState {
+  return {
+    ...state,
+    selectedMethods: []
+  };
+}
+
 export function updateSelectedMethodReducer(
   state: PlayState,
   action

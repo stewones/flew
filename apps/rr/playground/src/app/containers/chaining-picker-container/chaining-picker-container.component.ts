@@ -12,7 +12,8 @@ import {
   RemoveChainMethod,
   AddChainMethod,
   UpdateChainMethod,
-  UpdateChainVerb
+  UpdateChainVerb,
+  RemoveAllChainMethods
 } from '../../+play/method/method.actions';
 import { UserService } from '../../services/user.service';
 import { PlayService, PlayCache } from '../../interfaces/play.interface';
@@ -57,6 +58,8 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
   selectedCollection: PlayCollection = <PlayCollection>{};
   selectedCollection$: Subscription;
 
+  removeAllChainMethods$: Subscription;
+
   instrument$: Subscription;
 
   verbMethods$: Observable<PlayMethod[]> = this.store.pipe(
@@ -75,7 +78,8 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
     private albumService: AlbumService,
     private commentService: CommentService,
     private photoService: PhotoService,
-    private todoService: TodoService
+    private todoService: TodoService,
+    private app: AppService
   ) {}
 
   ngOnInit() {
@@ -85,10 +89,15 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
         this.selectedCollection = entry;
         this.loadCache();
       });
+
+    this.removeAllChainMethods$ = this.app.removeAllChainMethods$.subscribe(
+      () => {}
+    );
   }
 
   ngOnDestroy() {
     this.selectedCollection$.unsubscribe();
+    this.removeAllChainMethods$.unsubscribe();
   }
 
   addMethod(payload: PlayMethod) {
@@ -194,6 +203,7 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
 
   clearResponse() {
     this.store.dispatch(new RemoveCollectionResponses());
+    // this.store.dispatch(new RemoveAllChainMethods()); // @todo need to figure out a way to reset the values for dynamic fields
   }
 
   loadCache() {
