@@ -11,3 +11,13 @@ export class RemoveCollectionResponses implements Action {
   readonly type = PlayActionTypes.REMOVE_COLLECTION_RESPONSES;
   constructor() {}
 }
+
+export class LoadCollectionCachedResponses implements Action {
+  readonly type = PlayActionTypes.LOAD_COLLECTION_CACHED_RESPONSES;
+  constructor() {}
+}
+
+export class ClearCollectionCachedResponses implements Action {
+  readonly type = PlayActionTypes.CLEAR_COLLECTION_CACHED_RESPONSES;
+  constructor() {}
+}

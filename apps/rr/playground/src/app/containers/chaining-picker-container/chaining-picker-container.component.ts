@@ -22,17 +22,18 @@ import { PhotoService } from '../../services/photo.service';
 import { TodoService } from '../../services/todo.service';
 import { PlayCollection } from '../../interfaces/collection.interface';
 import { getSelectedCollection } from '../../+play/collection/collection.selectors';
-import { map, combineLatest, last, tap } from 'rxjs/operators';
+import { map, last, tap } from 'rxjs/operators';
 import {
   AddCollectionResponse,
-  RemoveCollectionResponses
+  RemoveCollectionResponses,
+  LoadCollectionCachedResponses,
+  ClearCollectionCachedResponses
 } from '../../+play/response/response.actions';
 import { Response } from '@firetask/reactive-record';
 import { MatSelectChange } from '@angular/material';
 import { PlayMethods } from '../../constants/method';
-import { isArray, isObject, merge } from 'lodash';
-
-declare var window;
+import { isArray, isObject } from 'lodash';
+import { AppService } from '../../services/app.service';
 
 @Component({
   selector: 'rr-play-chaining-picker-container',
@@ -43,11 +44,6 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
   methodsChain$: Observable<PlayMethod[]> = this.store.pipe(
     select(getAllMethods),
     map((methods: PlayMethod[]) => methods.filter(it => it.target === 'chain'))
-  );
-  verbMethods$: Observable<PlayMethod[]> = this.store.pipe(
-    select(getAllMethods),
-    map((methods: PlayMethod[]) => methods.filter(it => it.target === 'verb')),
-    tap((verbs: PlayMethod[]) => (this.verbs = verbs))
   );
 
   service: { [key: string]: PlayService } = {
@@ -63,13 +59,18 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
 
   instrument$: Subscription;
 
+  verbMethods$: Observable<PlayMethod[]> = this.store.pipe(
+    select(getAllMethods),
+    map((methods: PlayMethod[]) => methods.filter(it => it.target === 'verb')),
+    tap((verbs: PlayMethod[]) => (this.verbs = verbs))
+  );
+
   verbs: PlayMethod[];
   selectedVerbMethod: PlayMethod = PlayMethods.find(it => it.name === 'get');
 
-  cache: PlayCache[] = this.resetCache();
-
   constructor(
     private store: Store<PlayState>,
+    private appService: AppService,
     private userService: UserService,
     private albumService: AlbumService,
     private commentService: CommentService,
@@ -129,11 +130,12 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
       .join('')
       .split(`  `)
       .join('')
-      .split(': Response')
+      .split(': Response') // hardfix to remove ts notation O.o
       .join('');
   }
 
   execute() {
+    this.store.dispatch(new LoadCollectionCachedResponses());
     if (this.instrument$) this.instrument$.unsubscribe();
 
     let instrument = this.getInstrumentation();
@@ -173,14 +175,16 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
           return r;
         }),
         last((value: Response, index: number, source: Observable<any>) => {
-          // console.log(value, index, source);
-          if (!this.cache.length) {
-            setTimeout(() => this.loadCache(), 0); // force load of cache for the very first request
-          } else if (index >= 1) {
-            //
-            // load cache viewer
-            setTimeout(() => this.loadCache(), 0);
-          }
+          this.appService.$collection.storage.length().then(totalCached => {
+            // console.log(value, index, source);
+            if (!totalCached) {
+              setTimeout(() => this.loadCache(), 0); // force load of cache for the very first request
+            } else if (index >= 1) {
+              //
+              // load cache viewer
+              setTimeout(() => this.loadCache(), 0);
+            }
+          });
 
           return true;
         })
@@ -188,38 +192,20 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  clearCache() {
-    this.service[this.selectedCollection.service].$collection.clearCache();
-    this.loadCache();
-  }
-
   clearResponse() {
     this.store.dispatch(new RemoveCollectionResponses());
   }
 
-  resetCache(): PlayCache[] {
-    return [];
+  loadCache() {
+    this.store.dispatch(new LoadCollectionCachedResponses());
+  }
+
+  clearCache() {
+    this.store.dispatch(new ClearCollectionCachedResponses());
   }
 
   didUpdateVerb($event: MatSelectChange) {
     this.selectedVerbMethod = this.verbs.find(it => it.name === $event.value);
     this.store.dispatch(new UpdateChainVerb(this.selectedVerbMethod));
-  }
-
-  loadCache() {
-    this.cache = [];
-    this.service[this.selectedCollection.service].$collection.storage.forEach(
-      (value, key, index) => {
-        const className = `cache-tree-${index}`;
-        const cache: PlayCache = {
-          key: key,
-          data: value
-        };
-        this.cache.push(cache);
-        setTimeout(() => {
-          window.jsonTreeViewer(className).parse(cache.data);
-        }, 0);
-      }
-    );
   }
 }

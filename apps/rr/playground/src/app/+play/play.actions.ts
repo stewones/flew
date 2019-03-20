@@ -7,7 +7,9 @@ import {
 import { UpdateChainCollection } from './collection/collection.actions';
 import {
   AddCollectionResponse,
-  RemoveCollectionResponses
+  RemoveCollectionResponses,
+  LoadCollectionCachedResponses,
+  ClearCollectionCachedResponses
 } from './response/response.actions';
 
 export enum PlayActionTypes {
@@ -17,7 +19,9 @@ export enum PlayActionTypes {
   UPDATE_CHAIN_COLLECTION = '[Collection] Update in chain',
   UPDATE_CHAIN_VERB = '[Verb] Update in chain',
   ADD_COLLECTION_RESPONSE = '[Collection] Add response',
-  REMOVE_COLLECTION_RESPONSES = '[Collection] Remove responses'
+  REMOVE_COLLECTION_RESPONSES = '[Collection] Remove responses',
+  LOAD_COLLECTION_CACHED_RESPONSES = '[Collection] Load cached responses',
+  CLEAR_COLLECTION_CACHED_RESPONSES = '[Collection] Clear cached responses'
 }
 
 export type PlayAction =
@@ -27,4 +31,6 @@ export type PlayAction =
   | UpdateChainCollection
   | AddCollectionResponse
   | RemoveCollectionResponses
-  | UpdateChainVerb;
+  | UpdateChainVerb
+  | LoadCollectionCachedResponses
+  | ClearCollectionCachedResponses;

@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 
 import { PlayActionTypes } from './play.actions';
-import { withLatestFrom, map } from 'rxjs/operators';
+import { withLatestFrom, map, tap } from 'rxjs/operators';
 import { PlayState } from './play.reducer';
 import { Store } from '@ngrx/store';
+import { AppService } from '../services/app.service';
 
 declare var window;
 @Injectable()
@@ -33,5 +34,29 @@ export class PlayEffects {
     })
   );
 
-  constructor(private actions$: Actions, private store$: Store<PlayState>) {}
+  @Effect({
+    dispatch: false
+  })
+  loadCachedResponse$ = this.actions$.pipe(
+    ofType(PlayActionTypes.LOAD_COLLECTION_CACHED_RESPONSES),
+    //
+    // apply the json tree view
+    tap(() => this.app.loadCachedResponse$.next())
+  );
+
+  @Effect({
+    dispatch: false
+  })
+  clearCachedResponse$ = this.actions$.pipe(
+    ofType(PlayActionTypes.CLEAR_COLLECTION_CACHED_RESPONSES),
+    //
+    // apply the json tree view
+    tap(() => this.app.clearCachedResponse$.next())
+  );
+
+  constructor(
+    private actions$: Actions,
+    private store$: Store<PlayState>,
+    private app: AppService
+  ) {}
 }
