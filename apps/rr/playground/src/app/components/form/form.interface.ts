@@ -23,6 +23,7 @@ export interface FormField {
   value: any;
   disabled: boolean;
   options: any;
+  color: string;
 }
 
 export interface FormFieldChange {
