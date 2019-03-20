@@ -73,15 +73,34 @@ rr-play-chaining-picker {
         border: 1px solid #eee;
         background-color: rgba(255, 255, 255, 0.5);
         border-radius: 5px;
-        font-size: 12px;
+        font-size: 11px;
         position: absolute;
-        margin: -25px 0 0 -1px;
+        margin: -29px 0 0 -1px;
         font-family: Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
-        padding: 12px 15px 0;
+        padding: 10px 15px 7px;
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 0;
         border-bottom: 0;
         text-transform: uppercase;
+    }
+
+    .multi-header {
+        position: absolute;
+        margin: 0px 0 0 0px;
+
+        .header {
+            position: relative !important;
+
+            &.inactive {
+                border: 0px !important;
+                background-color: transparent !important;
+                color: #999;
+            }
+
+            // margin: 0 !important;
+            // padding: 0 !important;
+       
+        }
     }
 }
 

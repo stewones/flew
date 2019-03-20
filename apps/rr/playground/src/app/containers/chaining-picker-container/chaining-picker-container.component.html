@@ -1,7 +1,10 @@
 <div class="flex flex-col mb-5">
   <!-- CHAIN OPTIONS -->
   <div class="card mt-0">
-    <div class="header">CHAINING</div>
+    <div class="multi-header flex flex-row">
+      <div class="header">BROWSER</div>
+      <div class="header inactive">SERVER</div>
+    </div>
     <div class="block px-4 py-0">
       <rr-play-chaining-picker
         [methods]="methodsChain$ | async"
