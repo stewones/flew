@@ -13,7 +13,9 @@
       ></rr-play-field>
       <div class="mb-3" *ngIf="showInput[method.name]">
         <div class="flex flex-col mb-3 mt-1">
-          <small>{{ method.description }}</small>
+          <small class="text-grey-darker text-xs">{{
+            method.description
+          }}</small>
           <small class="mt-1 text-purple-dark text-xs"
             >defaults to {{ method.default }}</small
           >

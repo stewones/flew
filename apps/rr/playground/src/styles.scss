@@ -48,6 +48,16 @@ rr-play-chaining-picker {
                 margin-right: 10px;
             }
         }
+
+        &.field-select {
+            .mat-form-field {
+                width: 100%;
+            }
+
+            .mat-form-field-wrapper {
+                margin-bottom: -14px;
+            }
+        }
     }
 }
 
@@ -55,7 +65,24 @@ rr-play-chaining-picker {
 // common defaults
 
 .card {
-    background-color: hsla(0, 0%, 100%, 0.5);
+    border: 1px solid #eee;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+
+    .header {
+        border: 1px solid #eee;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 5px;
+        font-size: 12px;
+        position: absolute;
+        margin: -25px 0 0 -1px;
+        font-family: Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+        padding: 12px 15px 0;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        border-bottom: 0;
+        text-transform: uppercase;
+    }
 }
 
 .jsontree_tree {

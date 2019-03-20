@@ -9,6 +9,7 @@ import {
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CacheExplorerModule } from '../../components/cache-explorer/cache-explorer.module';
+import { CollectionChooserContainerModule } from '../collection-chooser-container/collection-chooser-container.module';
 
 @NgModule({
   declarations: [ChainingPickerContainerComponent],
@@ -20,7 +21,8 @@ import { CacheExplorerModule } from '../../components/cache-explorer/cache-explo
     MatButtonModule,
     FormsModule,
     ReactiveFormsModule,
-    CacheExplorerModule
+    CacheExplorerModule,
+    CollectionChooserContainerModule
   ],
   exports: [ChainingPickerContainerComponent]
 })

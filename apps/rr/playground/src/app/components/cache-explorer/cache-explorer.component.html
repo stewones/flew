@@ -1,4 +1,8 @@
-<div *ngFor="let cache of data; let i = index" class="mb-5">
-  <small class="text-grey-dark text-xs font-mono">{{ cache.key }}</small>
-  <div id="cache-tree-{{ i + 1 }}"></div>
+<div *ngFor="let cache of data; let i = index" class="card my-10 mb-5">
+  <div class="header">
+    Cache
+    <small class="text-grey-dark font-mono">{{ cache.key }}</small>
+  </div>
+
+  <div class="block px-4 py-6" id="cache-tree-{{ i + 1 }}"></div>
 </div>
