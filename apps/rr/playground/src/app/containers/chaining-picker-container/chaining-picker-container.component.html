@@ -2,12 +2,24 @@
   <!-- CHAIN OPTIONS -->
   <div class="card mt-0">
     <div class="multi-header flex flex-row">
-      <div class="header">BROWSER</div>
-      <div class="header inactive">SERVER</div>
+      <div
+        class="header"
+        [ngClass]="{ inactive: target === 'server' }"
+        (click)="loadMethodsFor('browser')"
+      >
+        BROWSER
+      </div>
+      <div
+        class="header"
+        [ngClass]="{ inactive: target === 'browser' }"
+        (click)="loadMethodsFor('server')"
+      >
+        SERVER
+      </div>
     </div>
     <div class="block px-4 py-0">
       <rr-play-chaining-picker
-        [methods]="methodsChain$ | async"
+        [methods]="methods$ | async"
         (onAdd)="didAddMethod($event)"
         (onUpdate)="didUpdateMethod($event)"
       ></rr-play-chaining-picker>

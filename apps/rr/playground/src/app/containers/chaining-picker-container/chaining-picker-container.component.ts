@@ -42,10 +42,9 @@ import { AppService } from '../../services/app.service';
   styleUrls: ['./chaining-picker-container.component.css']
 })
 export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
-  methodsChain$: Observable<PlayMethod[]> = this.store.pipe(
-    select(getAllMethods),
-    map((methods: PlayMethod[]) => methods.filter(it => it.target === 'chain'))
-  );
+  target: 'browser' | 'server' = 'browser';
+
+  methods$: Observable<PlayMethod[]>;
 
   service: { [key: string]: PlayService } = {
     UserService: this.userService,
@@ -62,6 +61,8 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
 
   instrument$: Subscription;
 
+  //
+  // @todo migrate to an own component for verb
   verbMethods$: Observable<PlayMethod[]> = this.store.pipe(
     select(getAllMethods),
     map((methods: PlayMethod[]) => methods.filter(it => it.target === 'verb')),
@@ -83,6 +84,7 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.loadMethodsFor('browser');
     this.selectedCollection$ = this.store
       .pipe(select(getSelectedCollection))
       .subscribe((entry: PlayCollection) => {
@@ -217,5 +219,17 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
   didUpdateVerb($event: MatSelectChange) {
     this.selectedVerbMethod = this.verbs.find(it => it.name === $event.value);
     this.store.dispatch(new UpdateChainVerb(this.selectedVerbMethod));
+  }
+
+  loadMethodsFor(target: 'browser' | 'server' = 'browser') {
+    this.methods$ = this.store.pipe(
+      select(getAllMethods),
+      map((methods: PlayMethod[]) =>
+        methods.filter(
+          it => it.target === 'chain' && it.platform.includes(target)
+        )
+      )
+    );
+    this.target = target;
   }
 }
