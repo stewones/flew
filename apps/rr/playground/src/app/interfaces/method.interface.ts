@@ -2,6 +2,7 @@ import {
   FormFieldChange,
   FormFieldType
 } from '../components/form/form.interface';
+import { PlayPlatform } from './play.interface';
 
 export interface PlayMethod {
   name: string;
@@ -9,7 +10,7 @@ export interface PlayMethod {
   description?: string;
   type?: FormFieldType;
   default?: string;
-  platform: Array<'browser' | 'server'>;
+  platform: Array<PlayPlatform>;
   value?: any;
   valueTransform?: any;
   target: 'chain' | 'verb';

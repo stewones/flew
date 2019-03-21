@@ -14,3 +14,8 @@ export const getSelectedCollection = createSelector(
   playState,
   (state: PlayState) => state.selectedCollection
 );
+
+export const getSelectedPlatform = createSelector(
+  playState,
+  (state: PlayState) => state.selectedPlatform
+);

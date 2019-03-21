@@ -1,22 +1,18 @@
 import { Options } from './options';
 import { FirebaseConfig } from './firebase-config';
 import { StorageAdapter } from './storage-adapter';
-import { RRClientToken } from './client-token';
+import { ClientToken } from './client-token';
 import { AxiosBasicCredentials } from 'axios';
 
-/**
- * @export
- * @interface CacheOptions
- * @extends {Options}
- */
 export interface CacheOptions extends Options {
-  // ttl?: number; // @todo causing bug with RR instance. time to live in seconds. (default 0)
   config?: FirebaseConfig; // firebase web config
   firebase?: any; // firebase sdk to initialize connectors
-  storage?: StorageAdapter | any; // storage adapter
+  storage?: StorageAdapter; // storage adapter
   version?: string; // add 'accept-version' to http headers
-  token?: RRClientToken; // add 'Authorization' token to http headers
+  token?: ClientToken; // add 'Authorization' token to http headers
   auth?: AxiosBasicCredentials;
 }
 
+//
+// deprecated
 export interface RRCacheOptions extends CacheOptions {}

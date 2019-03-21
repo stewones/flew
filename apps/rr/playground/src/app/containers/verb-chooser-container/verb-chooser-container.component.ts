@@ -9,14 +9,17 @@ import {
 } from '../../+play/method/method.selectors';
 import { map, tap, last } from 'rxjs/operators';
 import { PlayCollection } from '../../interfaces/collection.interface';
-import { PlayService } from '../../interfaces/play.interface';
+import { PlayService, PlayPlatform } from '../../interfaces/play.interface';
 import { AppService } from '../../services/app.service';
 import { UserService } from '../../services/user.service';
 import { AlbumService } from '../../services/album.service';
 import { CommentService } from '../../services/comment.service';
 import { PhotoService } from '../../services/photo.service';
 import { TodoService } from '../../services/todo.service';
-import { getSelectedCollection } from '../../+play/collection/collection.selectors';
+import {
+  getSelectedCollection,
+  getSelectedPlatform
+} from '../../+play/collection/collection.selectors';
 import {
   RemoveCollectionResponses,
   LoadCollectionCachedResponses,
@@ -29,6 +32,7 @@ import {
 } from '../../+play/method/method.actions';
 import { MatSelectChange } from '@angular/material';
 import { isArray, isObject } from 'lodash';
+import { UserServerService } from '../../services/user-server.service';
 
 @Component({
   selector: 'rr-play-verb-chooser-container',
@@ -48,6 +52,7 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
 
   service: { [key: string]: PlayService } = {
     UserService: this.userService,
+    UserServerService: this.userServerService,
     AlbumService: this.albumService,
     CommentService: this.commentService,
     PhotoService: this.photoService,
@@ -59,10 +64,14 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
 
   instrument$: Subscription;
 
+  target$: Subscription;
+  platform: PlayPlatform;
+
   constructor(
     private store: Store<PlayState>,
     private appService: AppService,
     private userService: UserService,
+    private userServerService: UserServerService,
     private albumService: AlbumService,
     private commentService: CommentService,
     private photoService: PhotoService,
@@ -70,6 +79,7 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    console.log(this.service);
     this.selectedMethod$ = this.store
       .pipe(select(getSelectedVerb))
       .subscribe((entry: PlayMethod) => (this.selectedMethod = entry));
@@ -80,11 +90,19 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
         this.selectedCollection = entry;
         this.loadCache();
       });
+
+    this.target$ = this.store
+      .pipe(
+        select(getSelectedPlatform),
+        tap(platform => (this.platform = platform))
+      )
+      .subscribe();
   }
 
   ngOnDestroy() {
     this.selectedMethod$.unsubscribe();
     this.selectedCollection$.unsubscribe();
+    this.target$.unsubscribe();
   }
 
   clearResponse() {

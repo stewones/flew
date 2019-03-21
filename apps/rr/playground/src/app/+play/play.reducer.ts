@@ -9,7 +9,7 @@ import {
 } from './method/method.reducer';
 import { PlayCollection } from '../interfaces/collection.interface';
 import { updateSelectedCollectionReducer } from './collection/collection.reducer';
-import { PlayResponse } from '../interfaces/play.interface';
+import { PlayResponse, PlayPlatform } from '../interfaces/play.interface';
 import {
   addResponseToSelectionReducer,
   removeAllResponsesReducer
@@ -26,6 +26,7 @@ export interface PlayState {
   selectedMethods?: PlayMethod[];
   responses?: PlayResponse[];
   selectedVerb: PlayMethod;
+  selectedPlatform: PlayPlatform;
   loaded: boolean;
   error?: any;
 }
@@ -41,7 +42,8 @@ export const initialState: PlayState = {
   selectedMethods: [],
   responses: [],
   methods: PlayMethods,
-  selectedVerb: PlayMethods.find(it => it.name === 'get')
+  selectedVerb: PlayMethods.find(it => it.name === 'get'),
+  selectedPlatform: 'browser'
 };
 
 export function playReducer(

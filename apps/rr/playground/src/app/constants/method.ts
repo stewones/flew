@@ -20,7 +20,7 @@ export const PlayMethods: PlayMethod[] = [
     placeholder: 'Use Network',
     description: 'Force the use of a network call.',
     default: 'true',
-    platform: ['browser', 'server'],
+    platform: ['browser'],
     type: 'boolean',
     value: 'true',
     target: 'chain'
