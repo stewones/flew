@@ -27,8 +27,7 @@ interface User extends Response<User> {
     catchPhrase: string;
     bs: string;
   };
-}
-  `
+}`
   },
   {
     name: 'Albums',
@@ -38,8 +37,7 @@ interface Album extends Response<Album> {
   id: number;
   userId: number;
   title: string;
-}
-  `
+}`
   },
   {
     name: 'Comments',
@@ -51,8 +49,7 @@ interface Comment extends Response<Comment> {
   name: string;
   email: string;
   body: string;
-}
-  `
+}`
   },
   {
     name: 'Photos',
@@ -64,8 +61,7 @@ interface Photo extends Response<Photo> {
   title: string;
   url: string;
   thumbnailUrl: string;
-}  
-  `
+}`
   },
   {
     name: 'Todos',
@@ -76,7 +72,6 @@ interface Todo extends Response<Todo> {
   id: number;
   title: string;
   completed: boolean;
-} 
-  `
+}`
   }
 ];

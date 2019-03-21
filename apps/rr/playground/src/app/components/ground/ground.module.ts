@@ -9,6 +9,7 @@ import { CollectionChooserContainerModule } from '../../containers/collection-ch
 import { CollectionResponseContainerModule } from '../../containers/collection-response-container/collection-response-container.module';
 import { CacheExplorerContainerModule } from '../../containers/cache-explorer-container/cache-explorer-container.module';
 import { CollectionSchemeContainerModule } from '../../containers/collection-scheme-container/collection-scheme-container.module';
+import { VerbChooserContainerModule } from '../../containers/verb-chooser-container/verb-chooser-container.module';
 
 @NgModule({
   declarations: [GroundComponent],
@@ -21,7 +22,8 @@ import { CollectionSchemeContainerModule } from '../../containers/collection-sch
     CollectionChooserContainerModule,
     CollectionResponseContainerModule,
     CacheExplorerContainerModule,
-    CollectionSchemeContainerModule
+    CollectionSchemeContainerModule,
+    VerbChooserContainerModule
   ],
   exports: [GroundComponent]
 })

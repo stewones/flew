@@ -2,9 +2,12 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
-  Input
+  Input,
+  SimpleChanges
 } from '@angular/core';
 import { PlayCollection } from '../../interfaces/collection.interface';
+
+declare var document;
 
 @Component({
   selector: 'rr-play-collection-scheme',
@@ -18,4 +21,19 @@ export class CollectionSchemeComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.data.currentValue) {
+      setTimeout(() => {
+        const height = document.getElementsByClassName('CodeMirror-sizer')[0]
+          .clientHeight;
+        if (height < 300) {
+          document
+            .getElementsByTagName('rr-play-collection-scheme')[0]
+            .getElementsByClassName('CodeMirror')[0].style.height = `${height +
+            18}px`;
+        }
+      }, 0);
+    }
+  }
 }

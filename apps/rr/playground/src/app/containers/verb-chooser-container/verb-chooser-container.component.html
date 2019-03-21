@@ -1,0 +1,34 @@
+<div class="card">
+  <div class="header">VERB</div>
+  <!-- CHAIN VERB -->
+  <div class="block px-4 py-0">
+    <mat-form-field class="w-full">
+      <mat-select
+        placeholder=""
+        (selectionChange)="didUpdateVerb($event)"
+        [ngModel]="selectedMethod.name"
+      >
+        <mat-option
+          *ngFor="let method of (methods$ | async)"
+          [value]="method.name"
+          [disabled]="method.disabled"
+        >
+          {{ method.placeholder }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- CHAIN ACTION -->
+  <div class="flex flex-row justify-center mb-2">
+    <button mat-button color="warn" (click)="execute()">
+      <small>EXECUTE</small>
+    </button>
+    <button mat-button color="" (click)="clearCache()">
+      <small>CLEAR CACHE</small>
+    </button>
+    <button mat-button color="" (click)="clearResponse()">
+      <small>CLEAR RESPONSE</small>
+    </button>
+  </div>
+</div>
