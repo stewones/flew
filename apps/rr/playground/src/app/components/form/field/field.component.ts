@@ -7,7 +7,8 @@ import {
   ComponentFactoryResolver,
   Input,
   Output,
-  EventEmitter
+  EventEmitter,
+  SimpleChanges
 } from '@angular/core';
 import { FieldBooleanComponent } from '../field-boolean/field-boolean.component';
 import { FieldCallbackComponent } from '../field-callback/field-callback.component';
@@ -23,10 +24,10 @@ import { FieldSelectComponent } from '../field-select/field-select.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FieldComponent implements OnInit {
-  @ViewChild('container', { read: ViewContainerRef })
-  private container: ViewContainerRef;
   @Input() data: FormField = <FormField>{};
   @Output() onChange = new EventEmitter<FormFieldChange>();
+  @ViewChild('container', { read: ViewContainerRef })
+  private container: ViewContainerRef;
 
   readonly fieldMapper = {
     assert: FieldAssertComponent,
@@ -50,5 +51,9 @@ export class FieldComponent implements OnInit {
 
   private getComponentFor(field: string) {
     return this.fieldMapper[field];
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!changes.data.firstChange) this.ngOnInit();
   }
 }
