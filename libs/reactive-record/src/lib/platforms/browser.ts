@@ -113,11 +113,11 @@ export class PlatformBrowser extends ReactiveRecord {
     const useNetwork: boolean =
       extraOptions.useNetwork === false ? false : true;
 
-    super.log().warn()(`useNetwork? ${useNetwork ? true : false}`);
-    super.log().warn()(`useCache? ${useCache ? true : false}`);
-    super.log().warn()(`hasCache? ${cache ? true : false}`);
+    super.log().warn()(`${key} useNetwork? ${useNetwork ? true : false}`);
+    super.log().warn()(`${key} useCache? ${useCache ? true : false}`);
+    super.log().warn()(`${key} hasCache? ${cache ? true : false}`);
     super.log().warn()(
-      `transformResponse? ${
+      `${key} transformResponse? ${
         extraOptions.transformResponse &&
         typeof extraOptions.transformResponse === 'function'
           ? true
@@ -192,9 +192,9 @@ export class PlatformBrowser extends ReactiveRecord {
     const useNetwork: boolean =
       extraOptions.useNetwork === false ? false : true;
 
-    super.log().warn()(`hasCache? ${cache ? true : false}`);
+    super.log().warn()(`${key} hasCache? ${cache ? true : false}`);
     super.log().warn()(
-      `transformCache? ${
+      `${key} transformCache? ${
         extraOptions.transformCache &&
         typeof extraOptions.transformCache === 'function'
           ? true
@@ -202,15 +202,15 @@ export class PlatformBrowser extends ReactiveRecord {
       }`
     );
     super.log().warn()(
-      `transformResponse? ${
+      `${key} transformResponse? ${
         extraOptions.transformResponse &&
         typeof extraOptions.transformResponse === 'function'
           ? true
           : false
       }`
     );
-    super.log().warn()(`useNetwork? ${useNetwork ? true : false}`);
-    super.log().warn()(`saveNetwork? ${saveNetwork ? true : false}`);
+    super.log().warn()(`${key} useNetwork? ${useNetwork ? true : false}`);
+    super.log().warn()(`${key} saveNetwork? ${saveNetwork ? true : false}`);
 
     //
     // defaults to return network response only if different from cache

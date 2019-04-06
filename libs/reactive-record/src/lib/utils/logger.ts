@@ -13,40 +13,53 @@ export class Logger {
   }
 
   /**
-   * Getter/setter to set the active state
-   *
-   * @param {boolean} active
-   * @returns {(boolean | void)}
-   * @memberof Logger
+   * Getter/setter to set active state
    */
-  public enabled(active: boolean): boolean | void {
+  public enabled(active?: boolean): boolean | void {
     return active || active === false ? (this.useLog = active) : this.useLog;
+  }
+
+  /**
+   * Getter/setter to set trace state
+   */
+  public traced(active?: boolean): boolean | void {
+    return active || active === false
+      ? (this.useLogTrace = active)
+      : this.useLogTrace;
   }
 
   public success() {
     return this.useLogTrace
-      ? console.log
+      ? this.useLog === false
+        ? msg => {}
+        : console.log
       : (msg: string) => this.add(msg, 'green');
   }
 
   public danger() {
     return this.useLogTrace
-      ? console.log
+      ? this.useLog === false
+        ? msg => {}
+        : console.log
       : (msg: string) => this.add(msg, 'red');
   }
 
   public warn() {
     return this.useLogTrace
-      ? console.log
+      ? this.useLog === false
+        ? msg => {}
+        : console.log
       : (msg: string) => this.add(msg, 'yellow');
   }
 
   private add(msg: string, bg: string = 'green') {
-    if (!this.useLog) return;
+    if (this.useLog === false) return;
+
     // const err = this.getErrorObject();
     // const caller_line = err.stack.split('\n')[4];
     // const index = caller_line.indexOf('at ');
     // const caller = caller_line.slice(index + 2, caller_line.length);
+
     console.log(
       `%c ${msg} `,
       `background: ${bg}; color: ${

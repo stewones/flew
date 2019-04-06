@@ -1,5 +1,6 @@
 import { Response } from './response';
 import { Observable } from 'rxjs';
+import { ReactiveRecord } from '../platforms/server';
 
 /**
  * Public RR Api
@@ -46,4 +47,6 @@ export interface Api {
   //
   // utils
   clearCache(): void;
+  useLog(active: boolean): void;
+  useLogTrace(active: boolean): void;
 }

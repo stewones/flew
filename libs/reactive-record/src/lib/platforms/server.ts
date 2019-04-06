@@ -13,6 +13,7 @@ import { Response } from '../interfaces/response';
 import { StorageAdapter } from '../interfaces/storage-adapter';
 import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
+import { isBoolean } from 'util';
 
 export class ReactiveRecord extends Hooks implements Api {
   public collection: string;
@@ -51,20 +52,26 @@ export class ReactiveRecord extends Hooks implements Api {
     super(options);
 
     //
-    // extend options
-    merge(this, options);
-    //
-    // configure http client
-    this.httpSetup();
-
-    //
     // configure logger
-    if (isEmpty(options.useLog)) options.useLog = true;
+    if (!isBoolean(options.useLog)) options.useLog = true;
+    if (!isBoolean(options.useLogTrace)) options.useLogTrace = false;
     this._logger = new Logger({
       subject: this.log$,
       useLog: options.useLog,
       useLogTrace: options.useLogTrace
     });
+
+    //
+    // apply class options
+    this._driver = options.driver;
+    delete options.useLog;
+    delete options.useLogTrace;
+    delete options.driver;
+    merge(this, options);
+
+    //
+    // configure http client
+    this.httpSetup();
 
     //
     // set default drivers
@@ -97,7 +104,6 @@ export class ReactiveRecord extends Hooks implements Api {
    * Reset RR chaining
    */
   private reset(): void {
-    this._driver = 'firestore';
     this.request = {};
     this.extraOptions = {};
   }
@@ -633,6 +639,11 @@ export class ReactiveRecord extends Hooks implements Api {
 
   public useLog(active: boolean): ReactiveRecord {
     this._logger.enabled(active);
+    return this;
+  }
+
+  public useLogTrace(active: boolean): ReactiveRecord {
+    this._logger.traced(active);
     return this;
   }
 

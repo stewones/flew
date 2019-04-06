@@ -73,6 +73,26 @@ export const PlayMethods: PlayMethod[] = [
     return response;
 }`
   },
+  {
+    name: 'useLog',
+    placeholder: 'Use Log',
+    description: `Controls whether or not display any log. When true it displays a colorful log in console.`,
+    default: 'true',
+    platform: ['browser', 'server'],
+    type: 'boolean',
+    value: 'true',
+    target: 'chain'
+  },
+  {
+    name: 'useLogTrace',
+    placeholder: 'Use Log Trace',
+    description: `When true it should display default console.log with stack trace`,
+    default: 'false',
+    platform: ['browser', 'server'],
+    type: 'boolean',
+    value: 'true',
+    target: 'chain'
+  },
   //
   // verb methods
   {
