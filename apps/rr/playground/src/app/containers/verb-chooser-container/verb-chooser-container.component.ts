@@ -146,6 +146,7 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
       'this.$collection',
       'this.service[this.selectedCollection.service].$collection'
     );
+
     // instrument += `.${this.selectedVerbMethod.name}()`;
 
     // console.log(

@@ -1,10 +1,7 @@
-import * as moment_import from 'moment';
-const moment = moment_import; // workaround for imports
-import { Driver } from '../interfaces/driver';
 import { Request } from '../interfaces/request';
 import { ExtraOptions } from '../interfaces/extra-options';
 import { Observable, PartialObserver } from 'rxjs';
-import { merge, isEmpty, isArray } from 'lodash';
+import { merge, isEmpty } from 'lodash';
 
 import { Connector } from '../interfaces/connector';
 import { Options } from '../interfaces/options';

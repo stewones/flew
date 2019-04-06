@@ -2,15 +2,12 @@ import { merge, omit, isEmpty, isEqual, isArray } from 'lodash';
 import { AxiosRequestConfig, AxiosBasicCredentials } from 'axios';
 import { PartialObserver } from 'rxjs';
 
-import { Options, RROptions } from '../interfaces/options';
-import { Response, RRResponse } from '../interfaces/response';
-import { ExtraOptions, RRExtraOptions } from '../interfaces/extra-options';
+import { Options } from '../interfaces/options';
+import { Response } from '../interfaces/response';
+import { ExtraOptions } from '../interfaces/extra-options';
 import { ReactiveRecord } from './server';
 import { StorageAdapter } from '../interfaces/storage-adapter';
 import { ClientToken } from '../interfaces/client-token';
-import { RRCacheOptions } from '../interfaces/cache-options';
-import { RRFirebaseConnector } from '../connectors/firebase';
-import { RRFirestoreConnector } from '../connectors/firestore';
 import { isObject } from 'util';
 
 export class PlatformBrowser extends ReactiveRecord {
@@ -24,8 +21,9 @@ export class PlatformBrowser extends ReactiveRecord {
     this.init(options);
   }
 
-  init(options) {
-    if (!this.storage) throw new Error('missing storage instance');
+  private init(options) {
+    if (!this.storage && options.useCache)
+      throw new Error('missing storage instance');
 
     const newParams = <Options>{
       hook: {
@@ -43,31 +41,31 @@ export class PlatformBrowser extends ReactiveRecord {
           },
           post: {
             before: (key, observer, extraOptions) => {
-              console.log('hook.http.post.before');
+              super.log().success()('hook.http.post.before');
               return this.getCache(key, observer, extraOptions);
             },
             after: async (key, network, observer, extraOptions) => {
-              console.log('hook.http.post.after');
+              super.log().success()('hook.http.post.after');
               return this.setCache(key, network, observer, extraOptions);
             }
           },
           patch: {
             before: (key, observer, extraOptions) => {
-              console.log('hook.http.patch.before');
+              super.log().success()('hook.http.patch.before');
               return this.getCache(key, observer, extraOptions);
             },
             after: async (key, network, observer, extraOptions) => {
-              console.log('hook.http.patch.after');
+              super.log().success()('hook.http.patch.after');
               return this.setCache(key, network, observer, extraOptions);
             }
           },
           get: {
             before: async (key, observer, extraOptions) => {
-              console.log('hook.http.get.before');
+              super.log().success()('hook.http.get.before');
               return await this.getCache(key, observer, extraOptions);
             },
             after: async (key, network, observer, extraOptions) => {
-              console.log('hook.http.get.after');
+              super.log().success()('hook.http.get.after');
               return this.setCache(key, network, observer, extraOptions);
             }
           }
@@ -76,11 +74,11 @@ export class PlatformBrowser extends ReactiveRecord {
         // customize search behavior
         find: {
           before: (key, observer, extraOptions) => {
-            console.log('hook.find.before');
+            super.log().success()('hook.find.before');
             return this.getCache(key, observer, extraOptions);
           },
           after: async (key, network, observer, extraOptions) => {
-            console.log('hook.find.after');
+            super.log().success()('hook.find.after');
             return this.setCache(key, network, observer, extraOptions);
           }
         }
@@ -99,7 +97,7 @@ export class PlatformBrowser extends ReactiveRecord {
    * @returns
    * @memberof ClientSetup
    */
-  async getCache(
+  private async getCache(
     key: string,
     observer: PartialObserver<any>,
     extraOptions: ExtraOptions = {}
@@ -115,16 +113,16 @@ export class PlatformBrowser extends ReactiveRecord {
     const useNetwork: boolean =
       extraOptions.useNetwork === false ? false : true;
 
-    console.log(key, 'useNetwork?', useNetwork ? true : false);
-    console.log(key, 'useCache?', useCache ? true : false);
-    console.log(key, 'hasCache?', cache ? true : false);
-    console.log(
-      key,
-      'transformResponse?',
-      extraOptions.transformResponse &&
+    super.log().warn()(`useNetwork? ${useNetwork ? true : false}`);
+    super.log().warn()(`useCache? ${useCache ? true : false}`);
+    super.log().warn()(`hasCache? ${cache ? true : false}`);
+    super.log().warn()(
+      `transformResponse? ${
+        extraOptions.transformResponse &&
         typeof extraOptions.transformResponse === 'function'
-        ? true
-        : false
+          ? true
+          : false
+      }`
     );
 
     //
@@ -172,7 +170,7 @@ export class PlatformBrowser extends ReactiveRecord {
    * @param {ExtraOptions} [extraOptions]
    * @memberof ClientSetup
    */
-  async setCache(
+  private async setCache(
     key: string,
     network: Response & { ttl: number },
     observer: PartialObserver<any>,
@@ -194,25 +192,25 @@ export class PlatformBrowser extends ReactiveRecord {
     const useNetwork: boolean =
       extraOptions.useNetwork === false ? false : true;
 
-    console.log(key, 'hasCache?', cache ? true : false);
-    console.log(
-      key,
-      'transformCache?',
-      extraOptions.transformCache &&
+    super.log().warn()(`hasCache? ${cache ? true : false}`);
+    super.log().warn()(
+      `transformCache? ${
+        extraOptions.transformCache &&
         typeof extraOptions.transformCache === 'function'
-        ? true
-        : false
+          ? true
+          : false
+      }`
     );
-    console.log(
-      key,
-      'transformResponse?',
-      extraOptions.transformResponse &&
+    super.log().warn()(
+      `transformResponse? ${
+        extraOptions.transformResponse &&
         typeof extraOptions.transformResponse === 'function'
-        ? true
-        : false
+          ? true
+          : false
+      }`
     );
-    console.log(key, 'useNetwork?', useNetwork ? true : false);
-    console.log(key, 'saveNetwork?', saveNetwork ? true : false);
+    super.log().warn()(`useNetwork? ${useNetwork ? true : false}`);
+    super.log().warn()(`saveNetwork? ${saveNetwork ? true : false}`);
 
     //
     // defaults to return network response only if different from cache
@@ -237,7 +235,7 @@ export class PlatformBrowser extends ReactiveRecord {
         isEmpty(cache) ||
         (cache && seconds >= cache.ttl)
       )
-        console.log(`${key} cache updated`);
+        super.log().danger()(`${key} cache updated`);
 
       //
       // set cache response

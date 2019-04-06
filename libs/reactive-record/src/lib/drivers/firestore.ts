@@ -10,6 +10,7 @@ import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { Hooks } from '../hooks/hooks';
 import { map } from 'rxjs/operators';
+import { Logger } from '../utils/logger';
 
 export class FirestoreDriver extends Hooks implements Driver {
   //
@@ -27,6 +28,10 @@ export class FirestoreDriver extends Hooks implements Driver {
   // for unit test
   _observer: PartialObserver<any>;
 
+  //
+  // for log
+  protected _logger: Logger;
+
   constructor(options: Options) {
     super(options);
     merge(this, options);
@@ -34,11 +39,10 @@ export class FirestoreDriver extends Hooks implements Driver {
 
   private where(query: any, firestore: any) {
     if (isArray(query)) {
-      console.log(
-        'where using array',
-        query[0].field,
-        query[0].operator,
-        query[0].value
+      this._logger.success()(
+        `firestore where array -> ${query[0].field} ${query[0].operator} ${
+          query[0].value
+        }`
       );
       query.map(q => {
         if (isNil(q.value))
@@ -50,11 +54,10 @@ export class FirestoreDriver extends Hooks implements Driver {
       query.field &&
       query.operator
     ) {
-      console.log(
-        'where using object',
-        query.field,
-        query.operator,
-        query.value
+      this._logger.success()(
+        `firestore where object -> ${query.field} ${query.operator} ${
+          query.value
+        }`
       );
       if (!query.value)
         throw new Error(`value can't be null for firestore where`);
@@ -65,13 +68,13 @@ export class FirestoreDriver extends Hooks implements Driver {
 
   private order(sort: any, firestore: any) {
     if (isArray(sort)) {
-      console.log('sort using array', sort);
+      this._logger.success()(`firestore sort array -> ${sort}`);
       sort.map(s => {
         if (isEmpty(s)) throw new Error(`sort object in array can't be null`);
         for (const k in s) firestore = firestore.orderBy(k, s[k]);
       });
     } else if (<any>typeof sort === 'object') {
-      console.log('sort using object', sort);
+      this._logger.success()(`firestore sort object -> ${sort}`);
       if (isEmpty(sort)) throw new Error(`sort object can't be null`);
       for (const k in sort) firestore = firestore.orderBy(k, sort[k]);
     }

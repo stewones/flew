@@ -13,6 +13,8 @@ export interface Options {
   timestamp?: boolean; // whether or not to add `updated_at` timestamp
   hook?: Hook;
   connector?: Connector;
+  useLog?: boolean;
+  useLogTrace?: boolean;
 
   //
   // browser

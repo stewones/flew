@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
 import { get, merge, isEmpty, clone, cloneDeep } from 'lodash';
-import { Observable, PartialObserver } from 'rxjs';
+import { Observable, PartialObserver, Subject } from 'rxjs';
 import { Hooks } from '../hooks/hooks';
 import { Api } from '../interfaces/api';
 import { Driver } from '../interfaces/driver';
@@ -11,6 +11,8 @@ import { FirestoreDriver } from '../drivers/firestore';
 import { FirebaseDriver } from '../drivers/firebase';
 import { Response } from '../interfaces/response';
 import { StorageAdapter } from '../interfaces/storage-adapter';
+import { Log } from '../interfaces/log';
+import { Logger } from '../utils/logger';
 
 export class ReactiveRecord extends Hooks implements Api {
   public collection: string;
@@ -35,6 +37,11 @@ export class ReactiveRecord extends Hooks implements Api {
   // for unit test
   _observer: PartialObserver<any>;
 
+  //
+  // subject for handling logs
+  protected log$: Subject<Log> = new Subject();
+  protected _logger: Logger;
+
   /**
    * Creates an instance for RR
    * @param { Options } options
@@ -44,27 +51,37 @@ export class ReactiveRecord extends Hooks implements Api {
     super(options);
 
     //
-    // set default drivers
-    this._drivers = {
-      firestore: new FirestoreDriver(options),
-      firebase: new FirebaseDriver(options)
-    };
-
-    //
     // extend options
     merge(this, options);
-    this.baseURL = options.baseURL;
-
     //
     // configure http client
     this.httpSetup();
+
+    //
+    // configure logger
+    if (isEmpty(options.useLog)) options.useLog = true;
+    this._logger = new Logger({
+      subject: this.log$,
+      useLog: options.useLog,
+      useLogTrace: options.useLogTrace
+    });
+
+    //
+    // set default drivers
+    this._drivers = {
+      firestore: new FirestoreDriver({
+        ...{ _logger: this._logger },
+        ...options
+      }),
+      firebase: new FirebaseDriver({
+        ...{ _logger: this._logger },
+        ...options
+      })
+    };
   }
 
   /**
    * Configure http client
-   *
-   * @public
-   * @memberof RR
    */
   public httpSetup() {
     const config: AxiosRequestConfig = {
@@ -78,9 +95,6 @@ export class ReactiveRecord extends Hooks implements Api {
 
   /**
    * Reset RR chaining
-   *
-   * @private
-   * @memberof ReactiveRecord
    */
   private reset(): void {
     this._driver = 'firestore';
@@ -228,7 +242,7 @@ export class ReactiveRecord extends Hooks implements Api {
         //
         // run client hook
         hookFn(key, observer, _extraOptions).then(canRequest => {
-          console.log(`should it request network?`, canRequest);
+          this.log().success()(`should it request network? ${canRequest}`);
           //
           // http.get.before should return a boolean
           if (canRequest) network();
@@ -297,7 +311,7 @@ export class ReactiveRecord extends Hooks implements Api {
                 _extraOptions
               );
             } else {
-              console.log('NO HOOK');
+              // console.log('NO HOOK');
               //
               // success callback
               observer.next(response as T);
@@ -478,140 +492,100 @@ export class ReactiveRecord extends Hooks implements Api {
 
   /**
    * Set current driver
-   *
-   * @param {string} name
-   * @returns
-   * @memberof ReactiveRecord
    */
-  public driver(name: string) {
+  public driver(name: string): ReactiveRecord {
     this._driver = name;
     return this;
   }
 
   /**
    * Set whether to use network for first requests
-   *
-   * @param {boolean} active
-   * @returns
-   * @memberof ReactiveRecord
    */
-  public useNetwork(active: boolean) {
+  public useNetwork(active: boolean): ReactiveRecord {
     this.extraOptions.useNetwork = active;
     return this;
   }
 
   /**
    * Set whether to cache network responses
-   *
-   * @param {boolean} active
-   * @returns
-   * @memberof ReactiveRecord
    */
-  public saveNetwork(active: boolean) {
+  public saveNetwork(active: boolean): ReactiveRecord {
     this.extraOptions.saveNetwork = active;
     return this;
   }
 
   /**
    * Set a transform fn for the responses
-   *
-   * @param {(response: Response) => any} transformFn
-   * @returns
-   * @memberof ReactiveRecord
    */
-  public transformResponse<T>(transformFn: (response: Response) => any) {
+  public transformResponse<T>(
+    transformFn: (response: Response) => any
+  ): ReactiveRecord {
     this.extraOptions.transformResponse = transformFn;
     return this;
   }
 
   /**
    *
-   *
-   * @template T
-   * @param {(response: Response) => any} transformFn
-   * @returns
-   * @deprecated same as transformResponse
-   * @memberof ReactiveRecord
    */
-  public transformNetwork<T>(transformFn: (response: Response) => any) {
+  public transformNetwork<T>(
+    transformFn: (response: Response) => any
+  ): ReactiveRecord {
     this.transformResponse(transformFn);
     return this;
   }
 
   /**
    * Set cache time to live
-   *
-   * @param {number} value
-   * @returns
-   * @memberof ReactiveRecord
    */
-  public ttl(value: number) {
+  public ttl(value: number): ReactiveRecord {
     this.extraOptions.ttl = value;
     return this;
   }
 
   /**
    * Set whether to use cache for first requests
-   *
-   * @param {boolean} active
-   * @returns
-   * @memberof ReactiveRecord
    */
-  public useCache(active: boolean) {
+  public useCache(active: boolean): ReactiveRecord {
     this.extraOptions.useCache = active;
     return this;
   }
 
   /**
    * Set transform fn for cache
-   *
-   * @param {(response: Response) => any} transformFn
-   * @returns
-   * @memberof ReactiveRecord
    */
-  public transformCache<T>(transformFn: (response: Response) => any) {
+  public transformCache<T>(
+    transformFn: (response: Response) => any
+  ): ReactiveRecord {
     this.extraOptions.transformCache = transformFn;
     return this;
   }
 
   /**
    * Set cache key
-   *
-   * @param {string} name
-   * @returns
-   * @memberof ReactiveRecord
    */
-  public key(name: string) {
+  public key(name: string): ReactiveRecord {
     this.extraOptions.key = name;
     return this;
   }
 
   /**
    * Set request query
-   *
-   * @param {({ [key: string]: {} } | { [key: string]: {} }[])} by
-   * @returns
-   * @memberof ReactiveRecord
    */
-  public query(by: { [key: string]: {} } | { [key: string]: {} }[]) {
+  public query(
+    by: { [key: string]: {} } | { [key: string]: {} }[]
+  ): ReactiveRecord {
     this.request.query = by;
     return this;
   }
 
   /**
    * Set request where
-   *
-   * @param {string} field
-   * @param {string} operator
-   * @param {(string | number | boolean)} value
-   * @returns
-   * @memberof ReactiveRecord
    */
   public where(
     field: string,
     operator: string,
     value: string | number | boolean
-  ) {
+  ): ReactiveRecord {
     if (isEmpty(this.request.query)) {
       this.request.query = [];
     }
@@ -625,12 +599,8 @@ export class ReactiveRecord extends Hooks implements Api {
 
   /**
    * Set request sort
-   *
-   * @param {{ [key: string]: string }} by
-   * @returns
-   * @memberof ReactiveRecord
    */
-  public sort(by: { [key: string]: string }) {
+  public sort(by: { [key: string]: string }): ReactiveRecord {
     if (isEmpty(this.request.sort)) {
       this.request.sort = {};
     }
@@ -642,29 +612,33 @@ export class ReactiveRecord extends Hooks implements Api {
 
   /**
    * Set request size
-   *
-   * @param {number} value
-   * @returns
-   * @memberof ReactiveRecord
    */
-  public size(value: number) {
+  public size(value: number): ReactiveRecord {
     this.request.size = value;
     return this;
   }
 
   /**
    * Set reference
-   *
-   * @param {string} path
-   * @returns
-   * @memberof ReactiveRecord
    */
-  public ref(path: string) {
+  public ref(path: string): ReactiveRecord {
     this.extraOptions.ref = path;
     return this;
   }
 
+  /**
+   * Clear browser cache
+   */
   public clearCache(): void {}
+
+  public useLog(active: boolean): ReactiveRecord {
+    this._logger.enabled(active);
+    return this;
+  }
+
+  protected log(): Logger {
+    return this._logger;
+  }
 }
 
 export class PlatformServer extends ReactiveRecord {}
