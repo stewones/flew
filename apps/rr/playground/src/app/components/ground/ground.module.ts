@@ -10,7 +10,7 @@ import { CollectionResponseContainerModule } from '../../containers/collection-r
 import { CacheExplorerContainerModule } from '../../containers/cache-explorer-container/cache-explorer-container.module';
 import { CollectionSchemeContainerModule } from '../../containers/collection-scheme-container/collection-scheme-container.module';
 import { VerbChooserContainerModule } from '../../containers/verb-chooser-container/verb-chooser-container.module';
-
+import { CollectionLogContainerModule } from '../../containers/collection-log-container/collection-log-container.module';
 @NgModule({
   declarations: [GroundComponent],
   imports: [
@@ -23,7 +23,8 @@ import { VerbChooserContainerModule } from '../../containers/verb-chooser-contai
     CollectionResponseContainerModule,
     CacheExplorerContainerModule,
     CollectionSchemeContainerModule,
-    VerbChooserContainerModule
+    VerbChooserContainerModule,
+    CollectionLogContainerModule
   ],
   exports: [GroundComponent]
 })

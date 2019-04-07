@@ -40,6 +40,7 @@ export { CacheOptions } from './lib/interfaces/cache-options';
 export { ClientToken } from './lib/interfaces/client-token';
 export { ClientStorage } from './lib/interfaces/client-storage';
 export { FirebaseConfig } from './lib/interfaces/firebase-config';
+export { Log, LogParams } from './lib/interfaces/log';
 
 // @deprecated
 export { RRClientToken } from './lib/interfaces/client-token';

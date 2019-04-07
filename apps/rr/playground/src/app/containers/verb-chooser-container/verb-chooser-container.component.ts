@@ -33,6 +33,7 @@ import {
 import { MatSelectChange } from '@angular/material';
 import { isArray, isObject } from 'lodash';
 import { UserServerService } from '../../services/user-server.service';
+import { ClearCollectionLog } from '../../+play/collection/collection.actions';
 
 @Component({
   selector: 'rr-play-verb-chooser-container',
@@ -107,7 +108,8 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
 
   clearResponse() {
     this.store.dispatch(new RemoveCollectionResponses());
-    this.store.dispatch(new RemoveAllChainMethods()); // @todo need to figure out a way to reset the values for dynamic fields
+    this.store.dispatch(new RemoveAllChainMethods());
+    this.store.dispatch(new ClearCollectionLog());
   }
 
   loadCache() {
@@ -138,7 +140,7 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
   }
 
   execute() {
-    this.store.dispatch(new LoadCollectionCachedResponses());
+    this.store.dispatch(new ClearCollectionLog());
     if (this.instrument$) this.instrument$.unsubscribe();
 
     let instrument = this.getInstrumentation();

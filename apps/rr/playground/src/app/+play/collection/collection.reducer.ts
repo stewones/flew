@@ -21,3 +21,17 @@ export function updateSelectedCollectionReducer(
     selectedCollection: collection ? collection : state.selectedCollection
   };
 }
+
+export function addCollectionLogReducer(state: PlayState, action): PlayState {
+  return {
+    ...state,
+    logs: [...state.logs, ...action.payload]
+  };
+}
+
+export function clearCollectionLogReducer(state: PlayState): PlayState {
+  return {
+    ...state,
+    logs: []
+  };
+}

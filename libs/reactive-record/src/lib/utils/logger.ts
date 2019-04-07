@@ -53,23 +53,25 @@ export class Logger {
   }
 
   private add(msg: string, bg: string = 'green') {
-    if (this.useLog === false) return;
+    const style = `background: ${bg}; color: ${
+      bg === 'yellow' ? '#333333' : '#ffffff'
+    }; display: block`;
 
-    // const err = this.getErrorObject();
-    // const caller_line = err.stack.split('\n')[4];
-    // const index = caller_line.indexOf('at ');
-    // const caller = caller_line.slice(index + 2, caller_line.length);
+    const log =
+      this.useLogTrace === true
+        ? msg
+        : ` <span style="${style}">${msg}</span> `;
 
-    console.log(
-      `%c ${msg} `,
-      `background: ${bg}; color: ${
-        bg === 'yellow' ? '#333333' : '#ffffff'
-      }; display: block;`
-      // `                                   ${caller}`
-    );
-
-    this.subject.next(<Log>{ created: moment().toISOString(), message: msg });
+    if (this.useLog === true) {
+      console.log(`%c ${msg} `, style);
+      this.subject.next(<Log>{ created: moment().toISOString(), message: log });
+    }
   }
+
+  // const err = this.getErrorObject();
+  // const caller_line = err.stack.split('\n')[4];
+  // const index = caller_line.indexOf('at ');
+  // const caller = caller_line.slice(index + 2, caller_line.length);
 
   // private getErrorObject() {
   //   try {

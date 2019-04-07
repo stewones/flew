@@ -5,7 +5,11 @@ import {
   UpdateChainVerb,
   RemoveAllChainMethods
 } from './method/method.actions';
-import { UpdateChainCollection } from './collection/collection.actions';
+import {
+  UpdateChainCollection,
+  AddCollectionLog,
+  ClearCollectionLog
+} from './collection/collection.actions';
 import {
   AddCollectionResponse,
   RemoveCollectionResponses,
@@ -23,7 +27,9 @@ export enum PlayActionTypes {
   ADD_COLLECTION_RESPONSE = '[Collection] Add response',
   REMOVE_COLLECTION_RESPONSES = '[Collection] Remove responses',
   LOAD_COLLECTION_CACHED_RESPONSES = '[Collection] Load cached responses',
-  CLEAR_COLLECTION_CACHED_RESPONSES = '[Collection] Clear cached responses'
+  CLEAR_COLLECTION_CACHED_RESPONSES = '[Collection] Clear cached responses',
+  ADD_COLLECTION_LOG = '[Collection] Add log',
+  CLEAR_COLLECTION_LOG = '[Collection] Clear log'
 }
 
 export type PlayAction =
@@ -32,8 +38,10 @@ export type PlayAction =
   | UpdateChainMethod
   | UpdateChainCollection
   | AddCollectionResponse
+  | AddCollectionLog
   | RemoveCollectionResponses
   | UpdateChainVerb
   | LoadCollectionCachedResponses
   | ClearCollectionCachedResponses
+  | ClearCollectionLog
   | RemoveAllChainMethods;

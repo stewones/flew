@@ -40,7 +40,7 @@ export class ReactiveRecord extends Hooks implements Api {
 
   //
   // subject for handling logs
-  protected log$: Subject<Log> = new Subject();
+  public $log: Subject<Log> = new Subject();
   protected _logger: Logger;
 
   /**
@@ -56,7 +56,7 @@ export class ReactiveRecord extends Hooks implements Api {
     if (!isBoolean(options.useLog)) options.useLog = true;
     if (!isBoolean(options.useLogTrace)) options.useLogTrace = false;
     this._logger = new Logger({
-      subject: this.log$,
+      subject: this.$log,
       useLog: options.useLog,
       useLogTrace: options.useLogTrace
     });

@@ -1,0 +1,13 @@
+<div class="card mb-10">
+  <div class="header">
+    Log
+  </div>
+  <div class="block px-4 py-6 text-grey-dark text-xs">
+    <div
+      class="item"
+      *ngFor="let log of data; let i = index"
+      [innerHTML]="dom.bypassSecurityTrustHtml(log.message)"
+    ></div>
+    <small class="" [hidden]="data.length">execute some verb</small>
+  </div>
+</div>

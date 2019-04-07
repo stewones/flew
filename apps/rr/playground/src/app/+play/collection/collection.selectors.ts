@@ -19,3 +19,8 @@ export const getSelectedPlatform = createSelector(
   playState,
   (state: PlayState) => state.selectedPlatform
 );
+
+export const getLogs = createSelector(
+  playState,
+  (state: PlayState) => state.logs
+);

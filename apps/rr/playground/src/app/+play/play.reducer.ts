@@ -8,7 +8,11 @@ import {
   removeAllSelectedMethodsReducer
 } from './method/method.reducer';
 import { PlayCollection } from '../interfaces/collection.interface';
-import { updateSelectedCollectionReducer } from './collection/collection.reducer';
+import {
+  updateSelectedCollectionReducer,
+  addCollectionLogReducer,
+  clearCollectionLogReducer
+} from './collection/collection.reducer';
 import { PlayResponse, PlayPlatform } from '../interfaces/play.interface';
 import {
   addResponseToSelectionReducer,
@@ -16,6 +20,7 @@ import {
 } from './response/response.reducer';
 import { PlayMethods } from '../constants/method';
 import { PlayCollections } from '../constants/collection';
+import { Log } from '@firetask/reactive-record';
 
 export const PLAY_FEATURE_KEY = 'play';
 
@@ -25,6 +30,7 @@ export interface PlayState {
   methods: PlayMethod[];
   selectedMethods?: PlayMethod[];
   responses?: PlayResponse[];
+  logs?: Log[];
   selectedVerb: PlayMethod;
   selectedPlatform: PlayPlatform;
   loaded: boolean;
@@ -41,6 +47,7 @@ export const initialState: PlayState = {
   collections: PlayCollections,
   selectedMethods: [],
   responses: [],
+  logs: [],
   methods: PlayMethods,
   selectedVerb: PlayMethods.find(it => it.name === 'get'),
   selectedPlatform: 'browser'
@@ -81,6 +88,14 @@ export function playReducer(
     }
     case PlayActionTypes.REMOVE_ALL_CHAIN_METHODS: {
       state = removeAllSelectedMethodsReducer(state, action);
+      break;
+    }
+    case PlayActionTypes.ADD_COLLECTION_LOG: {
+      state = addCollectionLogReducer(state, action);
+      break;
+    }
+    case PlayActionTypes.CLEAR_COLLECTION_LOG: {
+      state = clearCollectionLogReducer(state);
       break;
     }
   }
