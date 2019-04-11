@@ -6,7 +6,7 @@ import {
 } from '@firetask/reactive-record';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { Log } from 'libs/reactive-record/src/lib/interfaces/log';
+import { Log } from '@firetask/reactive-record';
 import { Store } from '@ngxs/store';
 import { AddLog } from '../+state/log/log.actions';
 

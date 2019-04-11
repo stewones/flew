@@ -5,8 +5,7 @@ import {
   Response
 } from '@firetask/reactive-record';
 import { environment } from '../../environments/environment';
-import { Observable, Subject } from 'rxjs';
-// import { AxiosRequestConfig } from 'axios';
+import { Subject } from 'rxjs';
 
 export interface App extends Response<App> {
   id: string;
