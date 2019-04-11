@@ -37,7 +37,7 @@ export class Logger {
       ? this.useLog === false
         ? msg => {}
         : msg => {
-            console.groupCollapsed('success');
+            console.groupCollapsed(`success | ${this.title(msg)}`);
             console.trace(msg);
             console.groupEnd();
           }
@@ -49,7 +49,7 @@ export class Logger {
       ? this.useLog === false
         ? msg => {}
         : msg => {
-            console.groupCollapsed('danger');
+            console.groupCollapsed(`danger | ${this.title(msg)}`);
             console.trace(msg);
             console.groupEnd();
           }
@@ -61,7 +61,7 @@ export class Logger {
       ? this.useLog === false
         ? msg => {}
         : msg => {
-            console.groupCollapsed('warn');
+            console.groupCollapsed(`warn | ${this.title(msg)}`);
             console.trace(msg);
             console.groupEnd();
           }
@@ -82,5 +82,12 @@ export class Logger {
       console.log(`%c ${msg} `, style);
       this.subject.next(<Log>{ created: moment().toISOString(), message: log });
     }
+  }
+
+  title(msg: string) {
+    const title_ = msg.split(' ');
+    return title_[0].includes('/')
+      ? title_[1] + (title_[2] ? ' ' + title_[2] : '')
+      : msg;
   }
 }

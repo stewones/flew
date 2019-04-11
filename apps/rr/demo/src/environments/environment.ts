@@ -1,4 +1,3 @@
-import * as Firebase from 'firebase/app';
 import 'firebase/firestore';
 import {
   FirebaseConnector,
@@ -7,16 +6,16 @@ import {
 } from '@firetask/reactive-record';
 
 import { Storage } from '@ionic/storage';
-import { storageConfig } from '@firetask/ionic'; // @todo export from reactive-record lib
+import { storageConfig } from '@firetask/ionic';
 import { Config } from '@firetask/reactive-record';
 
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-const appVersion: number | string = '0001'; // MAJOR.MINOR.PATCH
+export const appVersion: number | string = '0001'; // MAJOR.MINOR.PATCH
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: 'AIzaSyDd0NPKiqB06EkCxRRai6rHphUVgkU38jA',
   authDomain: 'reactive-record-demo.firebaseapp.com',
   databaseURL: 'https://reactive-record-demo.firebaseio.com',
@@ -27,21 +26,6 @@ const firebaseConfig = {
 
 export const environment = {
   production: false
-};
-
-Config.options = {
-  useLog: !environment.production,
-  useLogTrace: !environment.production,
-  baseURL: 'https://api.thecatapi.com',
-  endpoint: '',
-  connector: {
-    firebase: new FirebaseConnector(Firebase, firebaseConfig),
-    firestore: new FirestoreConnector(Firebase, firebaseConfig)
-  },
-
-  // extra options
-  version: Version.get(appVersion),
-  storage: new Storage(storageConfig())
 };
 
 /*
