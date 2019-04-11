@@ -4,7 +4,6 @@ import {
   ReactiveRecord,
   Response
 } from '@firetask/reactive-record';
-import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
 import { AxiosRequestConfig } from 'axios';
 
@@ -17,7 +16,6 @@ export interface TodoEntry extends Response {
   providedIn: 'root'
 })
 @Collection({
-  ...environment.rr,
   // useCache: false,
   name: 'todos',
   endpoint: '/v1'

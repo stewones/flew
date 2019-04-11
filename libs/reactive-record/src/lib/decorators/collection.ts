@@ -12,7 +12,7 @@ export function Collection(options: Options) {
       : options.useCache;
 
   if (options.name) options.collection = options.name;
-  delete options.useCache; // @todo make a test for this
+  delete options.useCache;
 
   return function(constructor: Function) {
     constructor.prototype.$collection = useCache

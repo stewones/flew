@@ -9,14 +9,24 @@ import { ReactiveRecord } from './server';
 import { StorageAdapter } from '../interfaces/storage-adapter';
 import { ClientToken } from '../interfaces/client-token';
 import { isObject } from 'util';
+import { Injectable, Inject, Optional, SkipSelf } from '@angular/core';
+import { ReactiveRecordConfig } from '../symbols/angular';
+import { ROOT_OPTIONS } from '../modules/angular';
 
+@Injectable()
 export class PlatformBrowser extends ReactiveRecord {
   version: string; // 'accept-version' to http headers
   auth: AxiosBasicCredentials;
   token: ClientToken; // 'Authorization' token to http headers
   storage: StorageAdapter; // storage adapter
 
-  constructor(options: Options) {
+  constructor(
+    options: Options
+    // @Inject(ROOT_OPTIONS)
+    // @Optional()
+    // @SkipSelf()
+    // private _config: ReactiveRecordConfig
+  ) {
     super(options);
     this.init(options);
   }

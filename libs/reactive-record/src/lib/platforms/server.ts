@@ -14,6 +14,7 @@ import { StorageAdapter } from '../interfaces/storage-adapter';
 import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
 import { isBoolean } from 'util';
+import { Config } from '../symbols/rr';
 
 export class ReactiveRecord extends Hooks implements Api {
   public collection: string;
@@ -43,14 +44,19 @@ export class ReactiveRecord extends Hooks implements Api {
   public $log: Subject<Log> = new Subject();
   protected _logger: Logger;
 
+  //
+  // for reconfigure
+  _options: Options;
+  _prevent_config_apply: boolean;
+
   /**
    * Creates an instance for RR
    * @param { Options } options
    * @memberof RR
    */
   constructor(options: Options) {
-    super(options);
-
+    super(options); // provide the hook config
+    this._options = options;
     //
     // configure logger
     if (!isBoolean(options.useLog)) options.useLog = true;
@@ -60,10 +66,32 @@ export class ReactiveRecord extends Hooks implements Api {
       useLog: options.useLog,
       useLogTrace: options.useLogTrace
     });
+  }
+
+  /**
+   * Configure http client
+   * @todo make this a separate driver
+   */
+  public httpSetup() {
+    const config: AxiosRequestConfig = {
+      timeout: 60 * 1000,
+      headers: {},
+      baseURL: this.baseURL
+    };
+    this.runHook('http.pre', config);
+    this.http = axios.create(config);
+  }
+
+  private applyConfig() {
+    if (this._prevent_config_apply) return;
+
+    const consumer: Options = this._options;
+    const config: Options = Config.options;
+    const options: Options = { ...config, ...consumer };
 
     //
     // apply class options
-    this._driver = options.driver;
+    this._driver = options.driver || 'firestore';
     delete options.useLog;
     delete options.useLogTrace;
     delete options.driver;
@@ -85,19 +113,8 @@ export class ReactiveRecord extends Hooks implements Api {
         ...options
       })
     };
-  }
 
-  /**
-   * Configure http client
-   */
-  public httpSetup() {
-    const config: AxiosRequestConfig = {
-      timeout: 60 * 1000,
-      headers: {},
-      baseURL: this.baseURL
-    };
-    this.runHook('http.pre', config);
-    this.http = axios.create(config);
+    this._prevent_config_apply = true;
   }
 
   /**
@@ -117,6 +134,7 @@ export class ReactiveRecord extends Hooks implements Api {
   }
 
   public find<T extends Response>(): Observable<T> {
+    this.applyConfig();
     const _request = cloneDeep(this.request);
     const _extraOptions = cloneDeep(this.extraOptions);
     const _driver = clone(this._driver);
@@ -126,13 +144,12 @@ export class ReactiveRecord extends Hooks implements Api {
   }
 
   public findOne<T extends Response>(): Observable<T> {
+    this.applyConfig();
     const _request = cloneDeep(this.request);
     const _extraOptions = cloneDeep(this.extraOptions);
     const _driver = clone(this._driver);
     this.reset();
-
     this.driverException(_driver, 'findOne');
-
     return this._drivers[_driver].findOne<T>(_request, _extraOptions);
   }
 
@@ -141,6 +158,7 @@ export class ReactiveRecord extends Hooks implements Api {
     data: any,
     shouldMerge: boolean = true
   ): Observable<any> {
+    this.applyConfig();
     const _driver = clone(this._driver);
     this.reset();
     this.driverException(_driver, 'set');
@@ -148,11 +166,10 @@ export class ReactiveRecord extends Hooks implements Api {
   }
 
   public update(id: string, data: any): Observable<any> {
+    this.applyConfig();
     const _driver = clone(this._driver);
     this.reset();
-
     this.driverException(_driver, 'update');
-
     return this._drivers[_driver].update(id, data);
   }
 
@@ -160,6 +177,7 @@ export class ReactiveRecord extends Hooks implements Api {
     onSuccess: (response: Response) => any = (response: Response) => {},
     onError: (response: any) => any = (response: any) => {}
   ): any {
+    this.applyConfig();
     const _request = cloneDeep(this.request);
     const _extraOptions = cloneDeep(this.extraOptions);
     const _driver = clone(this._driver);
@@ -174,6 +192,7 @@ export class ReactiveRecord extends Hooks implements Api {
   }
 
   public get<T extends Response>(path: string = ''): Observable<T> {
+    this.applyConfig();
     const _extraOptions = cloneDeep(this.extraOptions);
     this.reset();
     return new Observable((observer: PartialObserver<T>) => {
@@ -266,6 +285,7 @@ export class ReactiveRecord extends Hooks implements Api {
     path: string = '',
     body: any = {}
   ): Observable<T> {
+    this.applyConfig();
     const _extraOptions = cloneDeep(this.extraOptions);
     this.reset();
 
@@ -357,6 +377,7 @@ export class ReactiveRecord extends Hooks implements Api {
     path: string = '',
     body: any = {}
   ): Observable<T> {
+    this.applyConfig();
     const _extraOptions = cloneDeep(this.extraOptions);
     this.reset();
 
@@ -443,7 +464,7 @@ export class ReactiveRecord extends Hooks implements Api {
   }
 
   public delete<T extends Response>(path: string = ''): Observable<T> {
-    const _extraOptions = cloneDeep(this.extraOptions);
+    this.applyConfig();
     this.reset();
     return new Observable((observer: PartialObserver<T>) => {
       //

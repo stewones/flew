@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PlayCollection, ReactiveRecord } from '@firetask/reactive-record';
+import { ReactiveRecord, Collection } from '@firetask/reactive-record';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
 import { Response } from '@firetask/reactive-record';
@@ -15,7 +15,6 @@ export interface UserEntry extends Response {
   providedIn: 'root'
 })
 @Collection({
-  ...environment.rr,
   name: 'user',
   endpoint: '/the-endpoint'
 })

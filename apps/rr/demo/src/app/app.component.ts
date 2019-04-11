@@ -15,16 +15,21 @@ export class AppComponent implements OnInit {
   constructor(public todoService: TodoService) {}
 
   ngOnInit() {
-    this.todoService
-      .findAll()
-      .toPromise()
-      .then(r => console.log(r))
-      .catch(err => console.log(err));
+    // this.todoService
+    //   .findAll()
+    //   .toPromise()
+    //   .then(r => console.log(r))
+    //   .catch(err => console.log(err));
+
+    // this.todoService
+    //   .findOne()
+    //   .toPromise()
+    //   .then(r => console.log(r))
+    //   .catch(err => console.log(err));
 
     this.todoService
       .findOne()
-      .toPromise()
-      .then(r => console.log(r))
-      .catch(err => console.log(err));
+      //.toPromise()
+      .subscribe(r => console.log(r), err => console.log(err));
   }
 }

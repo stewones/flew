@@ -14,6 +14,10 @@ export * from './lib/connectors/firestore';
 export * from './lib/drivers/firestore';
 
 //
+// symbols
+export * from './lib/symbols/rr';
+
+//
 // hooks
 export * from './lib/hooks/hooks';
 
@@ -54,3 +58,8 @@ export { RRExtraOptions } from './lib/interfaces/extra-options';
 export { ElasticMatch } from './lib/interfaces/elastic-match';
 export { ElasticQuery } from './lib/interfaces/elastic-query';
 export { FirestoreQuery } from './lib/interfaces/firestore-query';
+
+//
+// modules  (experimental)
+// export * from './lib/modules/angular';
+// export * from './lib/symbols/angular'; (experimental)
