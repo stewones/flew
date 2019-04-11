@@ -7,11 +7,8 @@ import {
 } from '@firetask/reactive-record';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { PlayState } from '../+play/play.reducer';
-import { Store } from '@ngrx/store';
-import { AddCollectionLog } from '../+play/collection/collection.actions';
-// import { AxiosRequestConfig } from 'axios';
-
+import { Store } from '@ngxs/store';
+import { AddLog } from '../+state/log/log.actions';
 export interface Todo extends Response<Todo> {
   userId: number;
   id: number;
@@ -30,13 +27,13 @@ export interface Todo extends Response<Todo> {
 export class TodoService {
   $collection: ReactiveRecord;
 
-  constructor(private store: Store<PlayState>) {
+  constructor(private store: Store) {
     // this.$collection.setHook('http.pre', (config: AxiosRequestConfig) => {
     //  config.headers['Authorization'] = `Bearer the-server-token`;
     // });
 
     this.$collection.$log.subscribe((log: Log) => {
-      this.store.dispatch(new AddCollectionLog(log));
+      this.store.dispatch(new AddLog(log));
     });
   }
 

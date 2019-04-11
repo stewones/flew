@@ -29,21 +29,19 @@ export class ChainingPickerComponent implements OnInit {
 
   showInput: { [key: string]: boolean } = {};
 
-  removeAllChainMethods$: Subscription;
+  clearChain$: Subscription;
 
   constructor(private app: AppService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.removeAllChainMethods$ = this.app.removeAllChainMethods$.subscribe(
-      () => {
-        this.showInput = {};
-        this.cdr.detectChanges();
-      }
-    );
+    this.clearChain$ = this.app.clearChain$.subscribe(() => {
+      this.showInput = {};
+      this.cdr.detectChanges();
+    });
   }
 
   ngOnDestroy() {
-    this.removeAllChainMethods$.unsubscribe();
+    this.clearChain$.unsubscribe();
   }
 
   getMethod(name: string): PlayMethod {

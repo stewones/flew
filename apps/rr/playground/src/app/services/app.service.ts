@@ -22,11 +22,11 @@ export interface App extends Response<App> {
   endpoint: '/'
 })
 export class AppService {
-  $collection: ReactiveRecord;
+  $collection: ReactiveRecord; // just 4 fun
 
-  loadCachedResponse$: Subject<void> = new Subject();
-  clearCachedResponse$: Subject<void> = new Subject();
-  removeAllChainMethods$: Subject<void> = new Subject();
+  loadCache$: Subject<void> = new Subject();
+  clearCache$: Subject<void> = new Subject();
+  clearChain$: Subject<void> = new Subject();
 
   constructor() {}
 }

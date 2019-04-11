@@ -18,6 +18,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class CollectionLogComponent implements OnInit {
   @Input() data: Log[] = [];
+  @Input() trace: boolean;
   constructor(public dom: DomSanitizer) {}
 
   ngOnInit() {}

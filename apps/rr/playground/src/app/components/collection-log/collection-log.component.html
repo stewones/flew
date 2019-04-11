@@ -2,12 +2,15 @@
   <div class="header">
     Log
   </div>
-  <div class="block px-4 py-6 text-grey-dark text-xs">
+  <div class="block px-4 py-6 text-grey-dark">
     <div
-      class="item"
+      class="item text-xs"
       *ngFor="let log of data; let i = index"
       [innerHTML]="dom.bypassSecurityTrustHtml(log.message)"
     ></div>
-    <small class="" [hidden]="data.length">execute some verb</small>
+    <small class="text-sm" [hidden]="data.length"
+      >execute some verb
+      {{ trace ? 'and open your browser console' : '' }}</small
+    >
   </div>
 </div>

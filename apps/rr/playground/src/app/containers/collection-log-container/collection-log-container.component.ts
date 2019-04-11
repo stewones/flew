@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Log } from '@firetask/reactive-record';
-import { select, Store } from '@ngrx/store';
-import { getLogs } from '../../+play/collection/collection.selectors';
-import { PlayState } from '../../+play/play.reducer';
+import { Select } from '@ngxs/store';
+import { PlayState } from '../../+state/play.state';
 
 @Component({
   selector: 'rr-play-collection-log-container',
@@ -11,9 +10,10 @@ import { PlayState } from '../../+play/play.reducer';
   styleUrls: ['./collection-log-container.component.css']
 })
 export class CollectionLogContainerComponent implements OnInit {
-  logs$: Observable<Log[]> = this.store.pipe(select(getLogs));
+  @Select(PlayState.logs) logs$: Observable<Log[]>;
+  @Select(PlayState.isLogTrace) trace$: Observable<Log>;
 
-  constructor(private store: Store<PlayState>) {}
+  constructor() {}
 
   ngOnInit() {}
 }

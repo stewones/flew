@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { PlayCache } from '../../interfaces/play.interface';
-import { UserService } from '../../services/user.service';
 import { Subscription } from 'rxjs';
+
+import { PlayCache } from '../../interfaces/play.interface';
 import { AppService } from '../../services/app.service';
 
 declare var window;
@@ -12,29 +12,22 @@ declare var window;
   styleUrls: ['./cache-explorer-container.component.css']
 })
 export class CacheExplorerContainerComponent implements OnInit, OnDestroy {
-  data: PlayCache[] = this.resetCache();
+  data: PlayCache[] = [];
 
-  loadCachedResponse$: Subscription;
-  clearCachedResponse$: Subscription;
+  loadCache$: Subscription;
+  clearCache$: Subscription;
 
   constructor(private app: AppService) {}
 
   ngOnInit() {
     this.loadCache();
-    this.loadCachedResponse$ = this.app.loadCachedResponse$.subscribe(() =>
-      this.loadCache()
-    );
-    this.clearCachedResponse$ = this.app.clearCachedResponse$.subscribe(() =>
-      this.clearCache()
-    );
+    this.loadCache$ = this.app.loadCache$.subscribe(() => this.loadCache());
+    this.clearCache$ = this.app.clearCache$.subscribe(() => this.clearCache());
   }
 
   ngOnDestroy() {
-    this.loadCachedResponse$.unsubscribe();
-  }
-
-  resetCache(): PlayCache[] {
-    return [];
+    this.loadCache$.unsubscribe();
+    this.clearCache$.unsubscribe();
   }
 
   loadCache() {
@@ -57,6 +50,6 @@ export class CacheExplorerContainerComponent implements OnInit, OnDestroy {
 
   clearCache() {
     this.app.$collection.clearCache();
-    this.data = this.resetCache();
+    this.data = [];
   }
 }

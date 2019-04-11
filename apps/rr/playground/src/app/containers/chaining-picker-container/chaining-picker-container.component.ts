@@ -1,22 +1,22 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { Observable, Subscription } from 'rxjs';
-import { Store, select } from '@ngrx/store';
+import { map, tap } from 'rxjs/operators';
+
 import {
   PlayMethod,
   PlayMethodChange
 } from '../../interfaces/method.interface';
-import { PlayState } from '../../+play/play.reducer';
-import { getAllMethods } from '../../+play/method/method.selectors';
-import { FormFieldChangeEvent } from '../../components/form/form.interface';
-import {
-  RemoveChainMethod,
-  AddChainMethod,
-  UpdateChainMethod
-} from '../../+play/method/method.actions';
 
-import { map, tap } from 'rxjs/operators';
 import { PlayPlatform } from '../../interfaces/play.interface';
-import { getSelectedPlatform } from '../../+play/collection/collection.selectors';
+import { FormFieldChangeEvent } from '../../components/form/form.interface';
+
+import { PlayState } from '../../+state/play.state';
+import {
+  AddMethod,
+  RemoveMethod,
+  UpdateMethod
+} from '../../+state/method/method.actions';
 
 @Component({
   selector: 'rr-play-chaining-picker-container',
@@ -26,17 +26,14 @@ import { getSelectedPlatform } from '../../+play/collection/collection.selectors
 export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
   target: PlayPlatform;
   target$: Subscription;
-
   methods$: Observable<PlayMethod[]>;
 
-  constructor(private store: Store<PlayState>) {}
+  constructor(private store: Store) {}
 
   ngOnInit() {
     this.target$ = this.store
-      .pipe(
-        select(getSelectedPlatform),
-        tap(platform => this.loadMethodsFor(platform))
-      )
+      .select(PlayState.selectedPlatform)
+      .pipe(tap(platform => this.loadMethodsFor(platform)))
       .subscribe();
   }
 
@@ -45,15 +42,15 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
   }
 
   addMethod(payload: PlayMethod) {
-    this.store.dispatch(new AddChainMethod(payload));
+    this.store.dispatch(new AddMethod(payload));
   }
 
   removeMethod(payload: PlayMethod) {
-    this.store.dispatch(new RemoveChainMethod(payload));
+    this.store.dispatch(new RemoveMethod(payload));
   }
 
   updateMethod(payload: PlayMethod) {
-    this.store.dispatch(new UpdateChainMethod(payload));
+    this.store.dispatch(new UpdateMethod(payload));
   }
 
   didAddMethod($event: PlayMethodChange) {
@@ -74,14 +71,16 @@ export class ChainingPickerContainerComponent implements OnInit, OnDestroy {
   }
 
   loadMethodsFor(target: PlayPlatform = 'browser') {
-    this.methods$ = this.store.pipe(
-      select(getAllMethods),
-      map((methods: PlayMethod[]) =>
-        methods.filter(
-          it => it.target === 'chain' && it.platform.includes(target)
+    this.methods$ = this.store
+      .select(PlayState.methods)
+      .pipe(
+        map((methods: PlayMethod[]) =>
+          methods.filter(
+            it => it.target === 'chain' && it.platform.includes(target)
+          )
         )
-      )
-    );
+      );
+
     this.target = target;
   }
 }

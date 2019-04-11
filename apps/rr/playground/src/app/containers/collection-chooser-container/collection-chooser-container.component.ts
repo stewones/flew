@@ -1,14 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { Store, Select } from '@ngxs/store';
+
 import { PlayCollection } from '../../interfaces/collection.interface';
-import {
-  getAllCollections,
-  getSelectedCollection
-} from '../../+play/collection/collection.selectors';
-import { select, Store } from '@ngrx/store';
-import { PlayState } from '../../+play/play.reducer';
+import { PlayState } from '../../+state/play.state';
+import { UpdateCollection } from '../../+state/collection/collection.actions';
+
 import { MatSelectChange } from '@angular/material';
-import { UpdateChainCollection } from '../../+play/collection/collection.actions';
 
 @Component({
   selector: 'rr-play-collection-chooser-container',
@@ -16,17 +14,16 @@ import { UpdateChainCollection } from '../../+play/collection/collection.actions
   styleUrls: ['./collection-chooser-container.component.css']
 })
 export class CollectionChooserContainerComponent implements OnInit, OnDestroy {
-  collections$: Observable<PlayCollection[]>;
+  @Select(PlayState.collections) collections$: Observable<PlayCollection[]>;
 
   selectedCollection$: Subscription;
   selectedCollection: PlayCollection = <PlayCollection>{};
 
-  constructor(private store: Store<PlayState>) {}
+  constructor(private store: Store) {}
 
   ngOnInit() {
-    this.collections$ = this.store.pipe(select(getAllCollections));
     this.selectedCollection$ = this.store
-      .pipe(select(getSelectedCollection))
+      .select(PlayState.selectedCollection)
       .subscribe((entry: PlayCollection) => (this.selectedCollection = entry));
   }
 
@@ -35,6 +32,6 @@ export class CollectionChooserContainerComponent implements OnInit, OnDestroy {
   }
 
   didCollectionChange($event: MatSelectChange) {
-    this.store.dispatch(new UpdateChainCollection($event.value));
+    this.store.dispatch(new UpdateCollection($event.value));
   }
 }

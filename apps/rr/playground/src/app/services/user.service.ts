@@ -7,9 +7,8 @@ import {
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Log } from 'libs/reactive-record/src/lib/interfaces/log';
-import { Store } from '@ngrx/store';
-import { PlayState } from '../+play/play.reducer';
-import { AddCollectionLog } from '../+play/collection/collection.actions';
+import { Store } from '@ngxs/store';
+import { AddLog } from '../+state/log/log.actions';
 
 // import { AxiosRequestConfig } from 'axios';
 
@@ -48,13 +47,13 @@ export interface User extends Response<User> {
 export class UserService {
   $collection: ReactiveRecord;
 
-  constructor(private store: Store<PlayState>) {
+  constructor(private store: Store) {
     // this.$collection.setHook('http.pre', (config: AxiosRequestConfig) => {
     //  config.headers['Authorization'] = `Bearer the-server-token`;
     // });
 
     this.$collection.$log.subscribe((log: Log) => {
-      this.store.dispatch(new AddCollectionLog(log));
+      this.store.dispatch(new AddLog(log));
     });
   }
 

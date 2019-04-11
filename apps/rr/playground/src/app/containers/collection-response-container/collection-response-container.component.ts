@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { PlayResponse } from '../../interfaces/play.interface';
-import { Store, select } from '@ngrx/store';
-import { getAllCollectionResponses } from '../../+play/response/response.selectors';
-import { PlayState } from '../../+play/play.reducer';
+import { PlayState } from '../../+state/play.state';
 
 @Component({
   selector: 'rr-play-collection-response-container',
@@ -11,11 +10,9 @@ import { PlayState } from '../../+play/play.reducer';
   styleUrls: ['./collection-response-container.component.css']
 })
 export class CollectionResponseContainerComponent implements OnInit {
-  responses$: Observable<PlayResponse[]> = this.store.pipe(
-    select(getAllCollectionResponses)
-  );
+  @Select(PlayState.responses) responses$: Observable<PlayResponse[]>;
 
-  constructor(private store: Store<PlayState>) {}
+  constructor() {}
 
   ngOnInit() {}
 }

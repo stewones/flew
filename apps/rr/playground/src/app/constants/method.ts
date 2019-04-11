@@ -90,7 +90,7 @@ export const PlayMethods: PlayMethod[] = [
     default: 'false',
     platform: ['browser', 'server'],
     type: 'boolean',
-    value: 'true',
+    value: 'false',
     target: 'chain'
   },
   //

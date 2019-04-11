@@ -1,39 +1,31 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PlayMethod } from '../../interfaces/method.interface';
 import { Observable, Subscription } from 'rxjs';
-import { PlayState } from '../../+play/play.reducer';
-import { Store, select } from '@ngrx/store';
-import {
-  getAllMethods,
-  getSelectedVerb
-} from '../../+play/method/method.selectors';
+import { Store } from '@ngxs/store';
 import { map, tap, last } from 'rxjs/operators';
+import { isArray, isObject } from 'lodash';
+import { MatSelectChange } from '@angular/material';
+
+import { PlayState } from '../../+state/play.state';
 import { PlayCollection } from '../../interfaces/collection.interface';
 import { PlayService, PlayPlatform } from '../../interfaces/play.interface';
+
+import {
+  AddResponse,
+  ClearResponse
+} from '../../+state/response/response.actions';
+import { ClearLog } from '../../+state/log/log.actions';
+import { ClearChain } from '../../+state/chain/chain.actions';
+import { UpdateVerb } from '../../+state/method/method.actions';
+
 import { AppService } from '../../services/app.service';
 import { UserService } from '../../services/user.service';
+import { UserServerService } from '../../services/user-server.service';
+
 import { AlbumService } from '../../services/album.service';
 import { CommentService } from '../../services/comment.service';
 import { PhotoService } from '../../services/photo.service';
 import { TodoService } from '../../services/todo.service';
-import {
-  getSelectedCollection,
-  getSelectedPlatform
-} from '../../+play/collection/collection.selectors';
-import {
-  RemoveCollectionResponses,
-  LoadCollectionCachedResponses,
-  ClearCollectionCachedResponses,
-  AddCollectionResponse
-} from '../../+play/response/response.actions';
-import {
-  RemoveAllChainMethods,
-  UpdateChainVerb
-} from '../../+play/method/method.actions';
-import { MatSelectChange } from '@angular/material';
-import { isArray, isObject } from 'lodash';
-import { UserServerService } from '../../services/user-server.service';
-import { ClearCollectionLog } from '../../+play/collection/collection.actions';
 
 @Component({
   selector: 'rr-play-verb-chooser-container',
@@ -41,11 +33,9 @@ import { ClearCollectionLog } from '../../+play/collection/collection.actions';
   styleUrls: ['./verb-chooser-container.component.css']
 })
 export class VerbChooserContainerComponent implements OnInit, OnDestroy {
-  methods$: Observable<PlayMethod[]> = this.store.pipe(
-    select(getAllMethods),
-    map((methods: PlayMethod[]) => methods.filter(it => it.target === 'verb')),
-    tap((verbs: PlayMethod[]) => (this.verbs = verbs))
-  );
+  methods$: Observable<PlayMethod[]> = this.store
+    .select(PlayState.verbs)
+    .pipe(tap((verbs: PlayMethod[]) => (this.verbs = verbs)));
 
   selectedMethod$: Subscription;
   selectedMethod: PlayMethod = <PlayMethod>{};
@@ -69,7 +59,8 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
   platform: PlayPlatform;
 
   constructor(
-    private store: Store<PlayState>,
+    private app: AppService,
+    private store: Store,
     private appService: AppService,
     private userService: UserService,
     private userServerService: UserServerService,
@@ -80,23 +71,24 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    console.log(this.service);
     this.selectedMethod$ = this.store
-      .pipe(select(getSelectedVerb))
-      .subscribe((entry: PlayMethod) => (this.selectedMethod = entry));
+      .select(PlayState.selectedVerb)
+      .pipe(tap((entry: PlayMethod) => (this.selectedMethod = entry)))
+      .subscribe();
 
     this.selectedCollection$ = this.store
-      .pipe(select(getSelectedCollection))
-      .subscribe((entry: PlayCollection) => {
-        this.selectedCollection = entry;
-        this.loadCache();
-      });
+      .select(PlayState.selectedCollection)
+      .pipe(
+        tap((entry: PlayCollection) => {
+          this.selectedCollection = entry;
+          this.loadCache();
+        })
+      )
+      .subscribe();
 
     this.target$ = this.store
-      .pipe(
-        select(getSelectedPlatform),
-        tap(platform => (this.platform = platform))
-      )
+      .select(PlayState.selectedPlatform)
+      .pipe(tap(platform => (this.platform = platform)))
       .subscribe();
   }
 
@@ -107,22 +99,22 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
   }
 
   clearResponse() {
-    this.store.dispatch(new RemoveCollectionResponses());
-    this.store.dispatch(new RemoveAllChainMethods());
-    this.store.dispatch(new ClearCollectionLog());
+    this.store.dispatch(new ClearResponse());
+    this.store.dispatch(new ClearChain());
+    this.store.dispatch(new ClearLog());
   }
 
   loadCache() {
-    this.store.dispatch(new LoadCollectionCachedResponses());
+    this.app.loadCache$.next();
   }
 
   clearCache() {
-    this.store.dispatch(new ClearCollectionCachedResponses());
+    this.app.clearCache$.next();
   }
 
   didUpdateVerb($event: MatSelectChange) {
     this.selectedMethod = this.verbs.find(it => it.name === $event.value);
-    this.store.dispatch(new UpdateChainVerb(this.selectedMethod));
+    this.store.dispatch(new UpdateVerb(this.selectedMethod));
   }
 
   getInstrumentation() {
@@ -140,7 +132,7 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
   }
 
   execute() {
-    this.store.dispatch(new ClearCollectionLog());
+    this.store.dispatch(new ClearLog());
     if (this.instrument$) this.instrument$.unsubscribe();
 
     let instrument = this.getInstrumentation();
@@ -156,7 +148,7 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
 
     //
     // first remove all the previous responses
-    this.store.dispatch(new RemoveCollectionResponses());
+    this.store.dispatch(new ClearResponse());
 
     //
     // execute the instrument
@@ -175,7 +167,7 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
           } else {
             result = result;
           }
-          this.store.dispatch(new AddCollectionResponse(result));
+          this.store.dispatch(new AddResponse(result));
           return r;
         }),
         last((value: Response, index: number, source: Observable<any>) => {

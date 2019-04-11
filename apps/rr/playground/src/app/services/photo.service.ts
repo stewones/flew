@@ -7,10 +7,8 @@ import {
 } from '@firetask/reactive-record';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { PlayState } from '../+play/play.reducer';
-import { AddCollectionLog } from '../+play/collection/collection.actions';
-// import { AxiosRequestConfig } from 'axios';
+import { Store } from '@ngxs/store';
+import { AddLog } from '../+state/log/log.actions';
 
 export interface Photo extends Response<Photo> {
   id: number;
@@ -31,12 +29,12 @@ export interface Photo extends Response<Photo> {
 export class PhotoService {
   $collection: ReactiveRecord;
 
-  constructor(private store: Store<PlayState>) {
+  constructor(private store: Store) {
     // this.$collection.setHook('http.pre', (config: AxiosRequestConfig) => {
     //  config.headers['Authorization'] = `Bearer the-server-token`;
     // });
     this.$collection.$log.subscribe((log: Log) => {
-      this.store.dispatch(new AddCollectionLog(log));
+      this.store.dispatch(new AddLog(log));
     });
   }
 
