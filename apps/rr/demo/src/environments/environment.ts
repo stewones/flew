@@ -25,7 +25,13 @@ const firebaseConfig = {
   messagingSenderId: '244444899524'
 };
 
+export const environment = {
+  production: false
+};
+
 Config.options = {
+  useLogTrace: !environment.production,
+  useLog: !environment.production,
   baseURL: 'https://api.thecatapi.com',
   endpoint: '',
   connector: {
@@ -36,10 +42,6 @@ Config.options = {
   // extra options
   version: Version.get(appVersion),
   storage: new Storage(storageConfig())
-};
-
-export const environment = {
-  production: false
 };
 
 /*

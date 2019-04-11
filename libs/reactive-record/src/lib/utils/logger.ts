@@ -23,6 +23,10 @@ export class Logger {
    * Getter/setter to set trace state
    */
   public traced(active?: boolean): boolean | void {
+    // console.log('additional data hidden inside collapsed group');
+    // console.trace(); // hidden in collapsed group
+    // console.groupEnd();
+
     return active || active === false
       ? (this.useLogTrace = active)
       : this.useLogTrace;
@@ -32,7 +36,11 @@ export class Logger {
     return this.useLogTrace
       ? this.useLog === false
         ? msg => {}
-        : console.log
+        : msg => {
+            console.groupCollapsed('success');
+            console.trace(msg);
+            console.groupEnd();
+          }
       : (msg: string) => this.add(msg, 'green');
   }
 
@@ -40,7 +48,11 @@ export class Logger {
     return this.useLogTrace
       ? this.useLog === false
         ? msg => {}
-        : console.log
+        : msg => {
+            console.groupCollapsed('danger');
+            console.trace(msg);
+            console.groupEnd();
+          }
       : (msg: string) => this.add(msg, 'red');
   }
 
@@ -48,7 +60,11 @@ export class Logger {
     return this.useLogTrace
       ? this.useLog === false
         ? msg => {}
-        : console.log
+        : msg => {
+            console.groupCollapsed('warn');
+            console.trace(msg);
+            console.groupEnd();
+          }
       : (msg: string) => this.add(msg, 'yellow');
   }
 
@@ -67,17 +83,4 @@ export class Logger {
       this.subject.next(<Log>{ created: moment().toISOString(), message: log });
     }
   }
-
-  // const err = this.getErrorObject();
-  // const caller_line = err.stack.split('\n')[4];
-  // const index = caller_line.indexOf('at ');
-  // const caller = caller_line.slice(index + 2, caller_line.length);
-
-  // private getErrorObject() {
-  //   try {
-  //     throw Error('');
-  //   } catch (err) {
-  //     return err;
-  //   }
-  // }
 }

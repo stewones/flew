@@ -57,15 +57,6 @@ export class ReactiveRecord extends Hooks implements Api {
   constructor(options: Options) {
     super(options); // provide the hook config
     this._options = options;
-    //
-    // configure logger
-    if (!isBoolean(options.useLog)) options.useLog = true;
-    if (!isBoolean(options.useLogTrace)) options.useLogTrace = false;
-    this._logger = new Logger({
-      subject: this.$log,
-      useLog: options.useLog,
-      useLogTrace: options.useLogTrace
-    });
   }
 
   /**
@@ -88,6 +79,16 @@ export class ReactiveRecord extends Hooks implements Api {
     const consumer: Options = this._options;
     const config: Options = Config.options;
     const options: Options = { ...config, ...consumer };
+
+    //
+    // configure logger
+    if (!isBoolean(options.useLog)) options.useLog = true;
+    if (!isBoolean(options.useLogTrace)) options.useLogTrace = false;
+    this._logger = new Logger({
+      subject: this.$log,
+      useLog: options.useLog,
+      useLogTrace: options.useLogTrace
+    });
 
     //
     // apply class options
