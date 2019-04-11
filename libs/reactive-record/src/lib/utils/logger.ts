@@ -84,7 +84,7 @@ export class Logger {
     }
   }
 
-  title(msg: string) {
+  private title(msg: string) {
     const title_ = msg.split(' ');
     return title_[0].includes('/')
       ? title_[1] + (title_[2] ? ' ' + title_[2] : '')
