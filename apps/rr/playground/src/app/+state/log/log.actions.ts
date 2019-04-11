@@ -6,6 +6,6 @@ export class AddLog {
 }
 
 export class ClearLog {
-  public static readonly type = '[Log] Clear up all log';
+  public static readonly type = '[Log] Clear up any log';
   constructor() {}
 }
