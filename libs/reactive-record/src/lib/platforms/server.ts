@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
-import { get, merge, isEmpty, clone, cloneDeep } from 'lodash';
+import { get, merge, isEmpty, clone, cloneDeep, isBoolean } from 'lodash';
 import { Observable, PartialObserver, Subject } from 'rxjs';
 import { Hooks } from '../hooks/hooks';
 import { Api } from '../interfaces/api';
@@ -13,7 +13,6 @@ import { Response } from '../interfaces/response';
 import { StorageAdapter } from '../interfaces/storage-adapter';
 import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
-import { isBoolean } from 'util';
 import { Config } from '../symbols/rr';
 
 export class ReactiveRecord extends Hooks implements Api {

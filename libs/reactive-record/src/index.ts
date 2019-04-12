@@ -28,6 +28,7 @@ export * from './lib/decorators/collection';
 //
 // utils
 export * from './lib/utils/store';
+export * from './lib/utils/storage';
 export * from './lib/utils/version';
 
 //

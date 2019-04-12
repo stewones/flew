@@ -1,6 +1,11 @@
 import { Options } from '../interfaces/options';
 
-const ReactiveConfig: { options: Options; store?: any } = {
+interface ReactiveOptions {
+  options: Options;
+  store?: any;
+}
+
+const ReactiveConfig: ReactiveOptions = {
   options: {
     driver: 'firestore'
   },

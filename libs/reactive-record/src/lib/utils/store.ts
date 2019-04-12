@@ -1,12 +1,6 @@
-import {
-  State,
-  Action,
-  StateContext,
-  Selector,
-  createSelector
-} from '@ngxs/store';
+import { State, Action, StateContext, createSelector } from '@ngxs/store';
 import { Response } from '../interfaces/response';
-import { isEqual, merge, cloneDeep } from 'lodash';
+import { isEqual, cloneDeep } from 'lodash';
 
 export interface StateModel {
   responses: Response[];
@@ -27,6 +21,7 @@ export class ReactiveState {
   static key(name: string, data?: boolean) {
     return createSelector(
       [ReactiveState],
+      // @dynamic
       (state: StateModel) => {
         const response = state.responses.find(it => it.key === name);
         return response && data && response.data ? response.data : response;

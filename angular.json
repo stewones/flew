@@ -26,9 +26,7 @@
               "libs/reactive-record/tsconfig.lib.json",
               "libs/reactive-record/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -69,9 +67,7 @@
               "libs/ionic/tsconfig.lib.json",
               "libs/ionic/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -95,7 +91,7 @@
       "prefix": "firetask",
       "architect": {
         "build": {
-          "builder": "@libs/angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
             "tsConfig": "libs/angular/tsconfig.lib.json",
             "project": "libs/angular/ng-package.json"
@@ -105,15 +101,13 @@
           }
         },
         "lint": {
-          "builder": "@libs/angular-devkit/build-angular:tslint",
+          "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
               "libs/angular/tsconfig.lib.json",
               "libs/angular/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -154,9 +148,7 @@
               "apps/rr/demo/src/favicon.ico",
               "apps/rr/demo/src/assets"
             ],
-            "styles": [
-              "apps/rr/demo/src/styles.scss"
-            ],
+            "styles": ["apps/rr/demo/src/styles.scss"],
             "scripts": [],
             "es5BrowserSupport": true
           },
@@ -211,9 +203,7 @@
               "apps/rr/demo/tsconfig.app.json",
               "apps/rr/demo/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -248,9 +238,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/rr/demo-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -348,9 +336,7 @@
               "apps/rr/playground/tsconfig.app.json",
               "apps/rr/playground/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -385,9 +371,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/rr/playground-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }

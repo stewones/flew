@@ -24,6 +24,7 @@ import { DemoState } from './app.state';
 })
 export class AppModule {
   constructor(public store: Store) {
+    // it's necessary to tell RR the store instance so it can dispatch actions
     Config.store = store;
   }
 }

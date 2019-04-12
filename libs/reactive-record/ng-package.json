@@ -1,14 +1,21 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/libs/reactive-record",
-  "whitelistedNonPeerDependencies": ["lodash", "axios", "moment", "rxjs"],
+  "whitelistedNonPeerDependencies": [
+    "lodash",
+    "axios",
+    "moment",
+    "rxjs",
+    "@ngxs/store"
+  ],
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
       "lodash": "_",
       "axios": "axios",
       "rxjs": "rxjs",
-      "moment": "moment"
+      "moment": "moment",
+      "@ngxs/store": "^3.3.2"
     }
   }
 }

@@ -16,13 +16,15 @@
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
-    "rxjs": "~6.0.0"
+    "rxjs": "~6.0.0",
+    "@ngxs/store": "^3.3.2"
   },
   "description": "It has never been easier to work with cross-platform data using firebase, firestore and http.",
   "dependencies": {
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
-    "rxjs": "^6.0.0"
+    "rxjs": "^6.0.0",
+    "@ngxs/store": "^3.3.2"
   }
 }

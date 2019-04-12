@@ -6,7 +6,6 @@ import {
 } from '@firetask/reactive-record';
 import { Observable } from 'rxjs';
 import { AxiosRequestConfig } from 'axios';
-import { Store } from '@ngxs/store';
 
 export interface TodoEntry extends Response {
   id: string;
