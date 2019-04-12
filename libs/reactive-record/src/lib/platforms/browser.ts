@@ -1,4 +1,4 @@
-import { merge, omit, isEmpty, isEqual, isArray, isObject } from 'lodash';
+import { merge, omit, isEmpty, isEqual, isArray, isObject, get } from 'lodash';
 import { AxiosRequestConfig, AxiosBasicCredentials } from 'axios';
 import { PartialObserver } from 'rxjs';
 
@@ -25,7 +25,6 @@ export class PlatformBrowser extends ReactiveRecord {
   private init(options) {
     if (!this.storage && options.useCache)
       throw new Error('missing storage instance');
-
     const newParams = <Options>{
       hook: {
         //
@@ -265,5 +264,19 @@ export class PlatformBrowser extends ReactiveRecord {
       'response.data',
       'response.request'
     ]);
+  }
+
+  feed() {
+    const storage =
+      !isEmpty(Config.options) && Config.options.storage
+        ? Config.options.storage
+        : false;
+    const store = !isEmpty(Config.store) ? Config.store : false;
+
+    if (store && storage) {
+      storage.forEach((value, key, index) => {
+        store.dispatch(new SyncReactiveResponse(value));
+      });
+    }
   }
 }

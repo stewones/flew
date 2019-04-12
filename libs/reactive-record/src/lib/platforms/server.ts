@@ -672,6 +672,11 @@ export class ReactiveRecord extends Hooks implements Api {
   protected log(): Logger {
     return this._logger;
   }
+
+  /**
+   * Feed store with cached responses
+   */
+  public feed(): void {}
 }
 
 export class PlatformServer extends ReactiveRecord {}

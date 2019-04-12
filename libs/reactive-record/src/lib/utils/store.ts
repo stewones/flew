@@ -34,7 +34,7 @@ export class ReactiveState {
     );
   }
 
-  @Action(SyncReactiveResponse) addResponse(
+  @Action(SyncReactiveResponse) syncResponse(
     context: StateContext<StateModel>,
     action: SyncReactiveResponse
   ) {

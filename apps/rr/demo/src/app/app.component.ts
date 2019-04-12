@@ -23,7 +23,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.babyDynamic$ = this.store.select(key('baby', true)); // return an Observable
+  }
 
+  getCat() {
     // this.todoService
     //   .findAll()
     //   .toPromise()

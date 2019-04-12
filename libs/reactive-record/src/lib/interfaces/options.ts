@@ -23,6 +23,7 @@ export interface Options {
   version?: string; // add 'accept-version' to http headers
   token?: ClientToken; // add 'Authorization' token to http headers
   auth?: AxiosBasicCredentials; // to add axios auth header
+  feed?: boolean; // whether should feed store with cached results
 }
 
 // @deprecated

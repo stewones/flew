@@ -28,6 +28,8 @@ export class TodoService {
     this.$collection.setHook('http.pre', (config: AxiosRequestConfig) => {
       config.headers['Authorization'] = `Bearer the-token`;
     });
+
+    this.$collection.feed(); // feed store with cached response
   }
 
   findAll(): Observable<Response<TodoEntry>> {
