@@ -1,18 +1,30 @@
 import { Options } from '../interfaces/options';
 
-let ReactiveRecordConfig: { options: Options } = {
+let ReactiveConfig: { options: Options; store?: any } = {
   options: {
     driver: 'firestore'
+  },
+  store: {
+    dispatch: () => {}
   }
 };
 
-Object.defineProperty(ReactiveRecordConfig, 'ReactiveRecordConfig', {
+Object.defineProperty(ReactiveConfig, 'o', {
   get: function() {
-    return ReactiveRecordConfig.options;
+    return ReactiveConfig.options;
   },
   set: function(options: Options) {
-    return (ReactiveRecordConfig.options = options);
+    return (ReactiveConfig.options = options);
   }
 });
 
-export const Config = ReactiveRecordConfig;
+Object.defineProperty(ReactiveConfig, 's', {
+  get: function() {
+    return ReactiveConfig.store;
+  },
+  set: function(store) {
+    return (ReactiveConfig.store = store);
+  }
+});
+
+export const Config = ReactiveConfig;

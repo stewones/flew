@@ -6,6 +6,7 @@ import {
 } from '@firetask/reactive-record';
 import { Observable } from 'rxjs';
 import { AxiosRequestConfig } from 'axios';
+import { Store } from '@ngxs/store';
 
 export interface TodoEntry extends Response {
   id: string;
@@ -27,7 +28,6 @@ export class TodoService {
     this.$collection.setHook('http.pre', (config: AxiosRequestConfig) => {
       config.headers['Authorization'] = `Bearer the-token`;
     });
-    console.log(this);
   }
 
   findAll(): Observable<Response<TodoEntry>> {
@@ -43,6 +43,7 @@ export class TodoService {
   findOne(): Observable<TodoEntry> {
     return this.$collection
       .transformNetwork((r: Response) => r.data)
+      .key('baby')
       .get<TodoEntry>('/images/search');
   }
 

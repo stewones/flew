@@ -1,4 +1,4 @@
-import { merge, omit, isEmpty, isEqual, isArray } from 'lodash';
+import { merge, omit, isEmpty, isEqual, isArray, isObject } from 'lodash';
 import { AxiosRequestConfig, AxiosBasicCredentials } from 'axios';
 import { PartialObserver } from 'rxjs';
 
@@ -8,25 +8,16 @@ import { ExtraOptions } from '../interfaces/extra-options';
 import { ReactiveRecord } from './server';
 import { StorageAdapter } from '../interfaces/storage-adapter';
 import { ClientToken } from '../interfaces/client-token';
-import { isObject } from 'util';
-import { Injectable, Inject, Optional, SkipSelf } from '@angular/core';
-import { ReactiveRecordConfig } from '../symbols/angular';
-import { ROOT_OPTIONS } from '../modules/angular';
+import { Config } from '../symbols/rr';
+import { SyncReactiveResponse } from '../utils/store';
 
-@Injectable()
 export class PlatformBrowser extends ReactiveRecord {
   version: string; // 'accept-version' to http headers
   auth: AxiosBasicCredentials;
   token: ClientToken; // 'Authorization' token to http headers
   storage: StorageAdapter; // storage adapter
 
-  constructor(
-    options: Options
-    // @Inject(ROOT_OPTIONS)
-    // @Optional()
-    // @SkipSelf()
-    // private _config: ReactiveRecordConfig
-  ) {
+  constructor(options: Options) {
     super(options);
     this.init(options);
   }
@@ -233,6 +224,9 @@ export class PlatformBrowser extends ReactiveRecord {
       //
       // return network response
       observer.next(transformResponse(network));
+      Config.store.dispatch(
+        new SyncReactiveResponse(this.clearNetworkResponse(network))
+      );
     }
 
     //
@@ -244,25 +238,15 @@ export class PlatformBrowser extends ReactiveRecord {
         (isEmpty(network.data) && cache) ||
         isEmpty(cache) ||
         (cache && seconds >= cache.ttl)
-      )
+      ) {
         super.log().danger()(`${key} cache updated`);
+      }
 
       //
       // set cache response
       ttl += seconds;
       network.ttl = ttl;
-      this.storage.set(
-        key,
-        transformCache(
-          omit(network, [
-            'config',
-            'request',
-            'response.config',
-            'response.data',
-            'response.request'
-          ])
-        )
-      );
+      this.storage.set(key, transformCache(this.clearNetworkResponse(network)));
     }
 
     // console.log('useNetwork?', extraOptions.useNetwork);
@@ -271,5 +255,15 @@ export class PlatformBrowser extends ReactiveRecord {
 
   clearCache(): void {
     this.storage.clear();
+  }
+
+  clearNetworkResponse(network) {
+    return omit(network, [
+      'config',
+      'request',
+      'response.config',
+      'response.data',
+      'response.request'
+    ]);
   }
 }

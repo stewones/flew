@@ -1,45 +1,29 @@
-import 'firebase/firestore';
-import * as Firebase from 'firebase/app';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import {
-  Config,
-  FirebaseConnector,
-  FirestoreConnector,
-  Version
-} from '@firetask/reactive-record';
-import {
-  environment,
-  firebaseConfig,
-  appVersion
-} from '../environments/environment';
+import { environment } from '../environments/environment';
 
-import { Storage } from '@ionic/storage';
-import { storageConfig } from '@firetask/ionic'; // @todo export from reactive-record lib
+import { NgxsModule, Store } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 
-Config.options = {
-  useLog: !environment.production,
-  useLogTrace: !environment.production,
-  baseURL: 'https://api.thecatapi.com',
-  endpoint: '',
-  connector: {
-    firebase: new FirebaseConnector(Firebase, firebaseConfig),
-    firestore: new FirestoreConnector(Firebase, firebaseConfig)
-  },
-
-  // extra options
-  version: Version.get(appVersion),
-  storage: new Storage(storageConfig())
-};
+import { ReactiveState, Config } from '@firetask/reactive-record';
+import { DemoState } from './app.state';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule /*ReactiveRecordModule.forRoot({ useLog: false })*/],
+  imports: [
+    BrowserModule,
+    NgxsModule.forRoot([ReactiveState, DemoState], {
+      developmentMode: !environment.production
+    }),
+    NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production })
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor() {}
+  constructor(public store: Store) {
+    Config.store = store;
+  }
 }

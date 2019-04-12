@@ -16,8 +16,6 @@ import { PlayState } from './+state/play.state';
     BrowserModule,
     BrowserAnimationsModule,
     GroundModule,
-    //
-    // refact to ngxs
     NgxsModule.forRoot([PlayState], {
       developmentMode: !environment.production
     }),
