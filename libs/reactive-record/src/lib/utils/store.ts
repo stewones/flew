@@ -6,6 +6,7 @@ import {
   createSelector
 } from '@ngxs/store';
 import { Response } from '../interfaces/response';
+import { isEqual, merge, cloneDeep } from 'lodash';
 
 export interface StateModel {
   responses: Response[];
@@ -17,37 +18,43 @@ export class SyncReactiveResponse {
 }
 
 @State<StateModel>({
-  name: 'ReactiveRecord',
+  name: 'ReactiveState',
   defaults: {
     responses: []
   }
 })
 export class ReactiveState {
+  static key(name: string, data?: boolean) {
+    return createSelector(
+      [ReactiveState],
+      (state: StateModel) => {
+        const response = state.responses.find(it => it.key === name);
+        return response && data && response.data ? response.data : response;
+      }
+    );
+  }
+
   @Action(SyncReactiveResponse) addResponse(
     context: StateContext<StateModel>,
     action: SyncReactiveResponse
   ) {
     const state = context.getState();
-    const responses = state.responses;
-    let exists = responses.find(it => it.key === action.payload.key);
-    if (exists) exists = { ...exists, ...action.payload };
+    const responses = cloneDeep(state.responses);
+    const exists = responses.find(it => it.key === action.payload.key);
+    const changed = exists && !isEqual(exists, action.payload);
 
-    const result = !exists
-      ? [...responses, ...[action.payload]]
-      : [...responses];
+    if (changed) {
+      Object.assign(exists, action.payload);
+    }
+
+    const result = changed
+      ? [...responses]
+      : [...responses, ...[action.payload]];
 
     context.patchState({
       responses: result
     });
   }
 
-  static key(name: string) {
-    return createSelector(
-      [ReactiveState],
-      (state: StateModel) => {
-        return state.responses.find(it => it.key === name);
-      }
-    );
-  }
   constructor() {}
 }

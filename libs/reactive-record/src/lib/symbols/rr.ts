@@ -1,6 +1,6 @@
 import { Options } from '../interfaces/options';
 
-let ReactiveConfig: { options: Options; store?: any } = {
+const ReactiveConfig: { options: Options; store?: any } = {
   options: {
     driver: 'firestore'
   },
@@ -28,3 +28,10 @@ Object.defineProperty(ReactiveConfig, 's', {
 });
 
 export const Config = ReactiveConfig;
+
+export function key(name: string, data?: boolean) {
+  return (state: any) => {
+    const response = state.ReactiveState.responses.find(it => it.key === name);
+    return response && data && response.data ? response.data : response;
+  };
+}

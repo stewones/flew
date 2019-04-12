@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TodoService } from './todo.service';
 import { Subscription, Observable } from 'rxjs';
-import { Select } from '@ngxs/store';
-import { ReactiveState } from '@firetask/reactive-record';
+import { Select, Store } from '@ngxs/store';
+import { ReactiveState, Response, key } from '@firetask/reactive-record';
 
 @Component({
   selector: 'firetask-root',
@@ -14,12 +14,16 @@ export class AppComponent implements OnInit {
 
   todos$: Subscription;
 
-  @Select(ReactiveState.key('baby'))
+  @Select(ReactiveState.key('baby', true))
   baby$: Observable<Response>;
 
-  constructor(public todoService: TodoService) {}
+  babyDynamic$: Observable<Response<{}>>;
+
+  constructor(public todoService: TodoService, private store: Store) {}
 
   ngOnInit() {
+    this.babyDynamic$ = this.store.select(key('baby', true)); // return an Observable
+
     // this.todoService
     //   .findAll()
     //   .toPromise()
