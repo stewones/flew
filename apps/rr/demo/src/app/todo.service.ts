@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import {
   Collection,
   ReactiveRecord,
-  Response
+  Response,
+  Config
 } from '@firetask/reactive-record';
 import { Observable } from 'rxjs';
 import { AxiosRequestConfig } from 'axios';
+import { UserService } from './user.service';
 
 export interface TodoEntry extends Response {
   id: string;
@@ -21,42 +23,78 @@ export interface TodoEntry extends Response {
   endpoint: '/v1'
 })
 export class TodoService {
-  $collection: ReactiveRecord; // now RR instance lives here
+  $collection: ReactiveRecord;
+  token: string = 'd0c108d0-2568-4373-84f2-c7de7e7a18b4';
+  rr = 'rulez!';
 
-  constructor() {
-    this.$collection.setHook('http.pre', (config: AxiosRequestConfig) => {
-      config.headers['Authorization'] = `Bearer the-token`;
+  constructor(private user: UserService) {
+    this.$collection.feed(); // feed store with cached response
+    this.$collection.http((config: AxiosRequestConfig) => {
+      config.params = { rr: this.rr };
+      config.headers = { 'x-api-key': `${this.token}` };
     });
 
-    this.$collection.feed(); // feed store with cached response
+    //
+    // async http config test
+    //
+    // setTimeout(() => {
+    //   this.token = 'a1b2c3d4';
+    //   this.rr = 'rox!';
+    // }, 5000);
+
+    //
+    // reboot test
+    //
+    // setTimeout(() => {
+    //   console.log('reboot');
+    //   Config.options.useLog = false;
+    //   this.$collection.reboot();
+    // }, 5000);
   }
 
-  findAll(): Observable<Response<TodoEntry>> {
-    return this.$collection.find<TodoEntry>();
-  }
+  // doesnt work for now =(
+  // beforeHttp(config: AxiosRequestConfig) {
+  //   console.log('YAY');
+  //   config.params = { rr: this.rr };
+  //   config.headers = { Authorization: `Bearer ${this.token}` };
+  // }
 
-  findAll_(): Observable<Response<TodoEntry[]>> {
-    return this.$collection
-      .transformNetwork((r: Response) => r.data)
-      .get<Response<TodoEntry[]>>('/images/search');
-  }
-
-  findOne(): Observable<TodoEntry> {
+  getCat(): Observable<TodoEntry> {
     return this.$collection
       .transformNetwork((r: Response) => r.data)
       .key('baby')
       .get<TodoEntry>('/images/search');
   }
 
-  findOneLegacy(): Observable<TodoEntry> {
-    return <any>(
-      this.$collection.transformNetwork(r => r.data).get('/images/search')
+  postCat(): Observable<TodoEntry> {
+    return (
+      this.$collection
+        .transformNetwork((r: Response) => r.data)
+        // .useCache(false)
+        // .saveNetwork(false)
+        .post('/votes', { image_id: 'birm', value: 1 })
     );
   }
 
-  findOneSimple(): Observable<TodoEntry> {
-    return this.$collection
-      .transformNetwork((r: Response) => r.data)
-      .get('/images/search');
-  }
+  // findAll(): Observable<Response<TodoEntry>> {
+  //   return this.$collection.find<TodoEntry>();
+  // }
+
+  // findAll_(): Observable<Response<TodoEntry[]>> {
+  //   return this.$collection
+  //     .transformNetwork((r: Response) => r.data)
+  //     .get<Response<TodoEntry[]>>('/images/search');
+  // }
+
+  // findOneLegacy(): Observable<TodoEntry> {
+  //   return <any>(
+  //     this.$collection.transformNetwork(r => r.data).get('/images/search')
+  //   );
+  // }
+
+  // findOneSimple(): Observable<TodoEntry> {
+  //   return this.$collection
+  //     .transformNetwork((r: Response) => r.data)
+  //     .get('/images/search');
+  // }
 }

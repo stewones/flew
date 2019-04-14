@@ -1,28 +1,24 @@
-import { merge, omit, isEmpty, isEqual, isArray, isObject, get } from 'lodash';
-import { AxiosRequestConfig, AxiosBasicCredentials } from 'axios';
-import { PartialObserver } from 'rxjs';
+import { merge, omit, isEmpty, isEqual, isArray, isObject } from 'lodash';
+import { AxiosRequestConfig } from 'axios';
+import { PartialObserver, Observable } from 'rxjs';
 
 import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { ExtraOptions } from '../interfaces/extra-options';
 import { ReactiveRecord } from './server';
 import { StorageAdapter } from '../interfaces/storage-adapter';
-import { ClientToken } from '../interfaces/client-token';
 import { Config } from '../symbols/rr';
 import { SyncReactiveResponse } from '../utils/store';
 
 export class PlatformBrowser extends ReactiveRecord {
-  version: string; // 'accept-version' to http headers
-  auth: AxiosBasicCredentials;
-  token: ClientToken; // 'Authorization' token to http headers
-  storage: StorageAdapter; // storage adapter
+  storage: StorageAdapter; // storage adapter (see ionic storage for instance)
 
   constructor(options: Options) {
     super(options);
-    this.init(options);
+    this.boot(options);
   }
 
-  private init(options) {
+  private boot(options) {
     if (!this.storage && options.useCache)
       throw new Error('missing storage instance');
     const newParams = <Options>{
@@ -30,15 +26,6 @@ export class PlatformBrowser extends ReactiveRecord {
         //
         // customize http behavior
         http: {
-          pre: (config: AxiosRequestConfig) => {
-            if (this.token && this.token.value)
-              config.headers['Authorization'] = `${this.token.type} ${
-                this.token.value
-              }`;
-            if (this.version) config.headers['accept-version'] = this.version;
-
-            if (this.auth) config.auth = this.auth;
-          },
           post: {
             before: (key, observer, extraOptions) => {
               super.log().success()('hook.http.post.before');
@@ -85,7 +72,7 @@ export class PlatformBrowser extends ReactiveRecord {
       }
     };
 
-    merge(this, { ...options, ...newParams });
+    // merge(this, { ...options, ...newParams });
   }
 
   /**
@@ -172,11 +159,11 @@ export class PlatformBrowser extends ReactiveRecord {
    */
   private async setCache(
     key: string,
-    network: Response & { ttl: number },
+    network: Response & { ttl?: number },
     observer: PartialObserver<any>,
     extraOptions: ExtraOptions = {}
   ) {
-    const cache: Response & { ttl: number } = await this.storage.get(key);
+    const cache: Response & { ttl?: number } = await this.storage.get(key);
     const transformCache: any =
       extraOptions.transformCache &&
       typeof extraOptions.transformCache === 'function'
@@ -223,6 +210,8 @@ export class PlatformBrowser extends ReactiveRecord {
       //
       // return network response
       observer.next(transformResponse(network));
+      //
+      // dispatch to store
       Config.store.dispatch(
         new SyncReactiveResponse(this.clearNetworkResponse(network))
       );
@@ -278,5 +267,80 @@ export class PlatformBrowser extends ReactiveRecord {
         store.dispatch(new SyncReactiveResponse(value));
       });
     }
+  }
+
+  private httpRequest<T extends Response>(
+    method: 'get' | 'post' | 'patch' | 'delete' = 'get',
+    path: string = '/',
+    body?: any
+  ): Observable<T> {
+    super.init();
+    return new Observable((observer: PartialObserver<T>) => {
+      const key = super.createKey(path);
+      const extraOptions = super.cloneExtraOptions();
+      this.getCache(key, observer, extraOptions).then(shouldRequestNetwork => {
+        this.log().success()(
+          `should it request network? ${shouldRequestNetwork}`
+        );
+        if (shouldRequestNetwork) {
+          //
+          // network handle
+          switch (method) {
+            case 'post':
+              return super.post(path, body).subscribe(response => {
+                this.setCache(key, response, observer, extraOptions);
+              }, observer.error);
+              break;
+
+            case 'patch':
+              super.patch(path, body).subscribe(response => {
+                this.setCache(key, response, observer, extraOptions);
+              }, observer.error);
+              break;
+
+            case 'delete':
+              super.delete(path, body).subscribe(response => {
+                this.setCache(key, response, observer, extraOptions);
+              }, observer.error);
+              break;
+
+            default:
+              super.get(path).subscribe(response => {
+                this.setCache(key, response, observer, extraOptions);
+              }, observer.error);
+          }
+        } else {
+          super.log().warn()(
+            `${key} - there is a cached response with time to live`
+          );
+          observer.complete();
+        }
+      });
+    });
+  }
+
+  public get<T extends Response>(path: string = ''): Observable<T> {
+    return this.httpRequest('get', path);
+  }
+
+  public post<T extends Response>(
+    path: string = '',
+    body: any = {}
+  ): Observable<T> {
+    return this.httpRequest('post', path, body);
+  }
+
+  public patch<T extends Response>(
+    path: string = '',
+    body: any = {}
+  ): Observable<T> {
+    return this.httpRequest('patch', path, body);
+  }
+
+  public delete<T extends Response>(
+    path: string = '',
+    body?: any
+  ): Observable<T> {
+    return this.httpRequest('delete', path, body);
   }
 }

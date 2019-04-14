@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
 import { get, merge, isEmpty, clone, cloneDeep, isBoolean } from 'lodash';
 import { Observable, PartialObserver, Subject } from 'rxjs';
 import { Hooks } from '../hooks/hooks';
-import { Api } from '../interfaces/api';
+import { ReactiveApi } from '../interfaces/api';
 import { Driver } from '../interfaces/driver';
 import { Request } from '../interfaces/request';
 import { ExtraOptions } from '../interfaces/extra-options';
@@ -15,7 +15,7 @@ import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
 import { Config } from '../symbols/rr';
 
-export class ReactiveRecord extends Hooks implements Api {
+export class ReactiveRecord extends Hooks implements ReactiveApi {
   public collection: string;
   public storage: StorageAdapter;
 
@@ -27,7 +27,10 @@ export class ReactiveRecord extends Hooks implements Api {
     firebase: Driver | any;
   };
 
-  private http: AxiosInstance;
+  private _http: AxiosInstance;
+  private httpConfig: AxiosRequestConfig = {};
+  private beforeHttp: (config: AxiosRequestConfig) => void;
+
   public baseURL: string;
   private endpoint: string;
 
@@ -35,18 +38,18 @@ export class ReactiveRecord extends Hooks implements Api {
   private extraOptions: ExtraOptions = {};
 
   //
-  // for unit test
-  _observer: PartialObserver<any>;
-
-  //
   // subject for handling logs
   public $log: Subject<Log> = new Subject();
-  protected _logger: Logger;
+  protected _logger: Logger; // instance
 
   //
-  // for reconfigure
+  // runtime config
   _options: Options;
-  _prevent_config_apply: boolean;
+  _initialized: boolean;
+
+  //
+  // for unit test
+  _observer: PartialObserver<any>;
 
   /**
    * Creates an instance for RR
@@ -58,26 +61,25 @@ export class ReactiveRecord extends Hooks implements Api {
     this._options = options;
   }
 
-  /**
-   * Configure http client
-   * @todo make this a separate driver
-   */
-  public httpSetup() {
-    const config: AxiosRequestConfig = {
-      timeout: 60 * 1000,
-      headers: {},
-      baseURL: this.baseURL
-    };
-    this.runHook('http.pre', config);
-    this.http = axios.create(config);
-  }
-
-  private applyConfig() {
-    if (this._prevent_config_apply) return;
-
+  protected init() {
+    //
+    // settings that needs runtime evaluation
     const consumer: Options = this._options;
-    const config: Options = Config.options;
-    const options: Options = { ...config, ...consumer };
+    const general: Options = Config.options;
+    const options: Options = { ...general, ...consumer };
+
+    if (!this.httpConfig.timeout) this.httpConfig.timeout = 60 * 1000;
+    if (!this.httpConfig.baseURL) this.httpConfig.baseURL = options.baseURL;
+
+    this.beforeHttp(this.httpConfig);
+
+    //
+    // configure http client
+    this._http = axios.create(this.httpConfig);
+
+    //
+    // settings initialized once
+    if (this._initialized) return;
 
     //
     // configure logger
@@ -98,10 +100,6 @@ export class ReactiveRecord extends Hooks implements Api {
     merge(this, options);
 
     //
-    // configure http client
-    this.httpSetup();
-
-    //
     // set default drivers
     this._drivers = {
       firestore: new FirestoreDriver({
@@ -114,7 +112,12 @@ export class ReactiveRecord extends Hooks implements Api {
       })
     };
 
-    this._prevent_config_apply = true;
+    this._initialized = true;
+  }
+
+  public reboot() {
+    this._initialized = false;
+    this.init();
   }
 
   /**
@@ -133,8 +136,12 @@ export class ReactiveRecord extends Hooks implements Api {
       throw new Error(`${_driver} driver unavailable for method [${_method}]`);
   }
 
+  public http(fn) {
+    this.beforeHttp = fn;
+  }
+
   public find<T extends Response>(): Observable<T> {
-    this.applyConfig();
+    this.init();
     const _request = cloneDeep(this.request);
     const _extraOptions = cloneDeep(this.extraOptions);
     const _driver = clone(this._driver);
@@ -144,7 +151,7 @@ export class ReactiveRecord extends Hooks implements Api {
   }
 
   public findOne<T extends Response>(): Observable<T> {
-    this.applyConfig();
+    this.init();
     const _request = cloneDeep(this.request);
     const _extraOptions = cloneDeep(this.extraOptions);
     const _driver = clone(this._driver);
@@ -158,7 +165,7 @@ export class ReactiveRecord extends Hooks implements Api {
     data: any,
     shouldMerge: boolean = true
   ): Observable<any> {
-    this.applyConfig();
+    this.init();
     const _driver = clone(this._driver);
     this.reset();
     this.driverException(_driver, 'set');
@@ -166,7 +173,7 @@ export class ReactiveRecord extends Hooks implements Api {
   }
 
   public update(id: string, data: any): Observable<any> {
-    this.applyConfig();
+    this.init();
     const _driver = clone(this._driver);
     this.reset();
     this.driverException(_driver, 'update');
@@ -177,7 +184,7 @@ export class ReactiveRecord extends Hooks implements Api {
     onSuccess: (response: Response) => any = (response: Response) => {},
     onError: (response: any) => any = (response: any) => {}
   ): any {
-    this.applyConfig();
+    this.init();
     const _request = cloneDeep(this.request);
     const _extraOptions = cloneDeep(this.extraOptions);
     const _driver = clone(this._driver);
@@ -191,330 +198,126 @@ export class ReactiveRecord extends Hooks implements Api {
     );
   }
 
-  public get<T extends Response>(path: string = ''): Observable<T> {
-    this.applyConfig();
-    const _extraOptions = cloneDeep(this.extraOptions);
+  protected createKey(path: string): string {
+    const extraOptions = this.cloneExtraOptions();
+    const requestPath = `${this.endpoint}${path}`;
+    return extraOptions.key || requestPath;
+  }
+
+  protected cloneExtraOptions(): ExtraOptions {
+    return cloneDeep(this.extraOptions);
+  }
+
+  // @todo migrate to http driver
+  private executeRequest<T extends Response>(
+    method: 'get' | 'post' | 'patch' | 'delete' = 'get',
+    path: string = '/',
+    body?: any
+  ): Observable<T> {
+    //
+    // ensure settings have been applied
+    this.init();
+
+    //
+    // call exceptions
+    if (!this.baseURL) throw new Error(`baseURL needed for [${method}]`);
+    if (!this.endpoint) throw new Error(`endpoint required for [${method}]`);
+
+    //
+    // set path to be requestes
+    const requestPath = `${this.endpoint}${path}`;
+
+    //
+    // define an unique key
+    const key = this.createKey(path);
+
+    //
+    // reset the chain
     this.reset();
+
     return new Observable((observer: PartialObserver<T>) => {
-      //
-      // call exceptions
-      if (!this.baseURL) throw new Error('baseURL needed for [get]');
-      if (!this.endpoint) throw new Error('endpoint required for [get]');
-
-      //
-      // re-apply http stuff
-      this.httpSetup();
-
-      //
-      // set path to be requestes
-      const requestPath = `${this.endpoint}${path}`;
-
-      //
-      // define an unique key
-      const key = _extraOptions.key || requestPath;
-
       //
       // for unit test
       this._observer = observer;
 
+      const success = async (r: AxiosResponse) => {
+        //
+        // build standard response
+        const response: Response = {
+          data: r.data,
+          response: r,
+          key: key
+        };
+        //
+        // success callback
+        observer.next(response as T);
+        observer.complete();
+      };
+
+      const error = err => {
+        const errData = get(err, 'response.data');
+        //
+        // error callback
+        observer.error(errData ? errData : err);
+        observer.complete();
+      };
+
       //
       // network handle
-      const network = () => {
-        this.http
-          .get(requestPath)
-          .then(async (r: AxiosResponse) => {
-            //
-            // build standard response
-            const response: Response = {
-              data: r.data,
-              response: r,
-              key: key
-            };
+      switch (method) {
+        case 'post':
+          this._http
+            .post(requestPath, body)
+            .then(success)
+            .catch(error);
+          break;
 
-            //
-            // check availability
-            if (this.hasHook('http.get.after')) {
-              //
-              // run client hook
-              this.hasHook('http.get.after')(
-                key,
-                response,
-                observer,
-                _extraOptions
-              );
-            } else {
-              //
-              // success callback
-              observer.next(response as T);
-              observer.complete();
-            }
-          })
-          .catch(err => {
-            const errData = get(err, 'response.data');
-            //
-            // error callback
-            observer.error(errData ? errData : err);
-            observer.complete();
-          });
-      };
-      //
-      // get before hook
-      const hookFn = this.hasHook('http.get.before');
-      //
-      // check availability
-      if (hookFn) {
-        // console.log('no useNetwork but has hook');
-        //
-        // run client hook
-        hookFn(key, observer, _extraOptions).then(canRequest => {
-          this.log().success()(`should it request network? ${canRequest}`);
-          //
-          // http.get.before should return a boolean
-          if (canRequest) network();
-        });
-      } else {
-        // console.log('yes useNetwork but has NOT hook');
-        //
-        // otherwise
-        network();
+        case 'patch':
+          this._http
+            .patch(requestPath, body)
+            .then(success)
+            .catch(error);
+          break;
+
+        case 'delete':
+          this._http
+            .delete(requestPath, body)
+            .then(success)
+            .catch(error);
+          break;
+
+        default:
+          this._http
+            .get(requestPath)
+            .then(success)
+            .catch(error);
       }
     });
+  }
+
+  public get<T extends Response>(path: string = ''): Observable<T> {
+    return this.executeRequest('get', path);
   }
 
   public post<T extends Response>(
     path: string = '',
     body: any = {}
   ): Observable<T> {
-    this.applyConfig();
-    const _extraOptions = cloneDeep(this.extraOptions);
-    this.reset();
-
-    return new Observable((observer: PartialObserver<T>) => {
-      //
-      // call exceptions
-      if (!this.baseURL) throw new Error('baseURL needed for [post]');
-      if (!this.endpoint) throw new Error('endpoint required for [post]');
-
-      //
-      // re-apply http stuff
-      this.httpSetup();
-
-      //
-      // set path to be requestes
-      const requestPath: string = `${this.endpoint}${path}`;
-
-      //
-      // define an unique key
-      const key = _extraOptions.key || requestPath + `/${JSON.stringify(body)}`;
-
-      //
-      // for unit test
-      this._observer = observer;
-
-      //
-      // network handle
-      const network = () => {
-        this.http
-          .post(requestPath, body)
-          .then(async (r: AxiosResponse) => {
-            //
-            // build standard response
-            const response: Response = {
-              data: r.data,
-              response: r,
-              key: key
-            };
-
-            //
-            // check availability
-            if (this.hasHook('http.get.after')) {
-              //
-              // run client hook
-              this.hasHook('http.get.after')(
-                key,
-                response,
-                observer,
-                _extraOptions
-              );
-            } else {
-              // console.log('NO HOOK');
-              //
-              // success callback
-              observer.next(response as T);
-              observer.complete();
-            }
-          })
-          .catch(err => {
-            const errData = get(err, 'response.data');
-            //
-            // error callback
-            observer.error(errData ? errData : err);
-            observer.complete();
-          });
-      };
-      //
-      // get before hook
-      const hookFn = this.hasHook('http.post.before');
-      //
-      // check availability
-      if (hookFn) {
-        //
-        // run client hook
-        hookFn(key, observer, _extraOptions).then(canRequest => {
-          //
-          // http.get.before should return a boolean
-          if (canRequest) network();
-        });
-      } else {
-        //
-        // otherwise
-        network();
-      }
-    });
+    return this.executeRequest('post', path, body);
   }
 
   public patch<T extends Response>(
     path: string = '',
     body: any = {}
   ): Observable<T> {
-    this.applyConfig();
-    const _extraOptions = cloneDeep(this.extraOptions);
-    this.reset();
-
-    return new Observable((observer: PartialObserver<T>) => {
-      //
-      // call exceptions
-      if (!this.baseURL) throw new Error('baseURL needed for [patch]');
-      if (!this.endpoint) throw new Error('endpoint required for [patch]');
-
-      //
-      // re-apply http stuff
-      this.httpSetup();
-
-      //
-      // set path to be requestes
-      const requestPath: string = `${this.endpoint}${path}`;
-
-      //
-      // define an unique key
-      const key = _extraOptions.key || requestPath + `/${JSON.stringify(body)}`;
-
-      //
-      // for unit test
-      this._observer = observer;
-
-      //
-      // network handle
-      const network = () => {
-        this.http
-          .patch(requestPath, body)
-          .then(async (r: AxiosResponse) => {
-            //
-            // build standard response
-            const response: Response = {
-              data: r.data,
-              response: r,
-              key: key
-            };
-            //
-            // check availability
-            if (this.hasHook('http.get.after')) {
-              //
-              // run client hook
-              this.hasHook('http.get.after')(
-                key,
-                response,
-                observer,
-                _extraOptions
-              );
-            } else {
-              //
-              // success callback
-              observer.next(response as T);
-              observer.complete();
-            }
-          })
-          .catch(err => {
-            const errData = get(err, 'response.data');
-            //
-            // error callback
-            observer.error(errData ? errData : err);
-            observer.complete();
-          });
-      };
-      //
-      // get before hook
-      const hookFn = this.hasHook('http.patch.before');
-      //
-      // check availability
-      if (hookFn) {
-        //
-        // run client hook
-        hookFn(key, observer, _extraOptions).then(canRequest => {
-          //
-          // http.get.before should return a boolean
-          if (canRequest) network();
-        });
-      } else {
-        //
-        // otherwise
-        network();
-      }
-    });
+    return this.executeRequest('patch', path, body);
   }
 
-  public delete<T extends Response>(path: string = ''): Observable<T> {
-    this.applyConfig();
-    this.reset();
-    return new Observable((observer: PartialObserver<T>) => {
-      //
-      // call exceptions
-      if (!this.baseURL) throw new Error('baseURL needed for [delete]');
-      if (!this.endpoint) throw new Error('endpoint required for [delete]');
-
-      //
-      // re-apply http stuff
-      this.httpSetup();
-
-      //
-      // set path to be requestes
-      const requestPath: string = `${this.endpoint}${path}`;
-
-      //
-      // for unit test
-      this._observer = observer;
-
-      //
-      // network handle
-      const network = () => {
-        this.http
-          .delete(requestPath)
-          .then(async (r: AxiosResponse) => {
-            //
-            // build standard response
-            const response: Response = {
-              data: r.data,
-              response: r
-            };
-
-            //
-            // success callback
-            observer.next(response as T);
-            observer.complete();
-          })
-          .catch(err => {
-            const errData = get(err, 'response.data');
-            //
-            // error callback
-            observer.error(errData ? errData : err);
-            observer.complete();
-          });
-      };
-
-      //
-      // otherwise
-      network();
-    });
+  public delete<T extends Response>(
+    path: string = '',
+    body?: any
+  ): Observable<T> {
+    return this.executeRequest('delete', path, body);
   }
 
   /**

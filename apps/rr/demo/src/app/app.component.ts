@@ -39,7 +39,14 @@ export class AppComponent implements OnInit {
     //   .catch(err => console.log(err));
 
     this.todoService
-      .findOne()
+      .getCat()
+      //.toPromise()
+      .subscribe(r => console.log(r), err => console.log(err));
+  }
+
+  postCat() {
+    this.todoService
+      .postCat()
       //.toPromise()
       .subscribe(r => console.log(r), err => console.log(err));
   }

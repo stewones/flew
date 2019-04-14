@@ -1,6 +1,5 @@
 import { Response } from './response';
 import { Observable } from 'rxjs';
-import { ReactiveRecord } from '../platforms/server';
 
 /**
  * Public RR Api
@@ -8,7 +7,7 @@ import { ReactiveRecord } from '../platforms/server';
  * @export
  * @interface Api
  */
-export interface Api {
+export interface ReactiveApi {
   //
   // chained options
   driver(name: string); // firebase / firestore / http
@@ -42,7 +41,7 @@ export interface Api {
   get(path: string): Observable<Response>;
   post(path: string, body: any): Observable<Response>;
   patch(path: string, body: any): Observable<Response>;
-  delete(path: string): Observable<Response>;
+  delete(path: string, body?: any): Observable<Response>;
 
   //
   // utils
