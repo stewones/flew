@@ -3,7 +3,7 @@ import { get, merge, isEmpty, clone, cloneDeep, isBoolean } from 'lodash';
 import { Observable, PartialObserver, Subject } from 'rxjs';
 import { Hooks } from '../hooks/hooks';
 import { ReactiveApi } from '../interfaces/api';
-import { Driver } from '../interfaces/driver';
+import { ReactiveDriver } from '../interfaces/driver';
 import { Request } from '../interfaces/request';
 import { ExtraOptions } from '../interfaces/extra-options';
 import { Options } from '../interfaces/options';
@@ -19,17 +19,17 @@ export class ReactiveRecord extends Hooks implements ReactiveApi {
   public collection: string;
   public storage: StorageAdapter;
 
-  //
-  // default params
+  connector;
+  timestamp;
   private _driver = 'firestore';
   private _drivers: {
-    firestore: Driver;
-    firebase: Driver | any;
+    firestore: ReactiveDriver;
+    firebase: ReactiveDriver | any;
   };
 
   private _http: AxiosInstance;
   private httpConfig: AxiosRequestConfig = {};
-  private beforeHttp: (config: AxiosRequestConfig) => void;
+  private beforeHttp = (config: AxiosRequestConfig) => {};
 
   public baseURL: string;
   private endpoint: string;
@@ -51,13 +51,8 @@ export class ReactiveRecord extends Hooks implements ReactiveApi {
   // for unit test
   _observer: PartialObserver<any>;
 
-  /**
-   * Creates an instance for RR
-   * @param { Options } options
-   * @memberof RR
-   */
   constructor(options: Options) {
-    super(options); // provide the hook config
+    super(options);
     this._options = options;
   }
 
@@ -120,9 +115,6 @@ export class ReactiveRecord extends Hooks implements ReactiveApi {
     this.init();
   }
 
-  /**
-   * Reset RR chaining
-   */
   private reset(): void {
     this.request = {};
     this.extraOptions = {};
@@ -246,7 +238,8 @@ export class ReactiveRecord extends Hooks implements ReactiveApi {
         const response: Response = {
           data: r.data,
           response: r,
-          key: key
+          key: key,
+          collection: this.collection
         };
         //
         // success callback
@@ -354,9 +347,6 @@ export class ReactiveRecord extends Hooks implements ReactiveApi {
     return this;
   }
 
-  /**
-   *
-   */
   public transformNetwork<T>(
     transformFn: (response: Response) => any
   ): ReactiveRecord {

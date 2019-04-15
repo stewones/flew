@@ -4,23 +4,24 @@ import { Response } from './response';
 import { Request } from './request';
 import { Connector } from './connector';
 
-export interface Driver {
+export interface ReactiveDriver {
   connector: Connector;
   timestamp: boolean;
-  find: (
-    request: Request,
-    extraOptions?: ExtraOptions
-  ) => Observable<Response>;
-  findOne: (
-    request: Request,
-    extraOptions?: ExtraOptions
-  ) => Observable<Response>;
-  set: (id: string, data: any) => Observable<Response>;
-  update: (id: string, data: any) => Observable<Response>;
-  on?: (
-    request: Request,
+  //
+  // fire requests
+  find(): Observable<Response>; // firestore & firebase
+  findOne(): Observable<Response>; // firestore & firebase
+  set(id: string, data: any, merge?: boolean): Observable<any>; // firestore
+  update(id: string, data: any): Observable<any>; // firestore
+  on( // firestore & firebase - real time calls doesn't has caching features
     onSuccess: (response: Response | any) => any,
-    onError: (response: any) => any,
-    extraOptions?: ExtraOptions
-  ) => any;
+    onError: (response: any) => any
+  ): any;
+
+  //
+  // http requests
+  get(path: string): Observable<Response>;
+  post(path: string, body: any): Observable<Response>;
+  patch(path: string, body: any): Observable<Response>;
+  delete(path: string, body?: any): Observable<Response>;
 }

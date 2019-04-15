@@ -3,6 +3,7 @@ import { TodoService } from './todo.service';
 import { Subscription, Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { ReactiveState, Response, key } from '@firetask/reactive-record';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'firetask-root',
@@ -17,9 +18,16 @@ export class AppComponent implements OnInit {
   @Select(ReactiveState.key('baby', true))
   baby$: Observable<Response>;
 
+  @Select(ReactiveState.key('cat', true))
+  cat$: Observable<Response>;
+
   babyDynamic$: Observable<Response<{}>>;
 
-  constructor(public todoService: TodoService, private store: Store) {}
+  constructor(
+    public todoService: TodoService,
+    private store: Store,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
     this.babyDynamic$ = this.store.select(key('baby', true)); // return an Observable
@@ -41,6 +49,11 @@ export class AppComponent implements OnInit {
     this.todoService
       .getCat()
       //.toPromise()
+      .subscribe(r => console.log(r), err => console.log(err));
+
+    this.userService.$collection
+      .key('cat')
+      .get('/images/search')
       .subscribe(r => console.log(r), err => console.log(err));
   }
 

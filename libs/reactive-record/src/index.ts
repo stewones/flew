@@ -33,14 +33,14 @@ export * from './lib/utils/version';
 
 //
 // interfaces
-export { Api } from './lib/interfaces/api';
+export { ReactiveApi } from './lib/interfaces/api';
+export { ReactiveDriver } from './lib/interfaces/driver';
 export { Response } from './lib/interfaces/response';
 export { Options } from './lib/interfaces/options';
 export { ExtraOptions } from './lib/interfaces/extra-options';
 export { Request } from './lib/interfaces/request';
 export { Connector } from './lib/interfaces/connector';
 export { Hook } from './lib/interfaces/hook';
-export { Driver } from './lib/interfaces/driver';
 export { StorageAdapter } from './lib/interfaces/storage-adapter';
 export { CacheOptions } from './lib/interfaces/cache-options';
 export { ClientToken } from './lib/interfaces/client-token';

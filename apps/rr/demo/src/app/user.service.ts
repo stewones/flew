@@ -3,6 +3,7 @@ import { ReactiveRecord, Collection } from '@firetask/reactive-record';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
 import { Response } from '@firetask/reactive-record';
+import { AxiosRequestConfig } from 'libs/reactive-record/node_modules/axios';
 
 // import { AxiosRequestConfig } from 'axios';
 
@@ -16,14 +17,16 @@ export interface UserEntry extends Response {
 })
 @Collection({
   name: 'user',
-  endpoint: '/the-endpoint'
+  endpoint: '/v1'
 })
 export class UserService {
   $collection: ReactiveRecord;
 
   constructor() {
-    // this.$collection.setHook('http.pre', (config: AxiosRequestConfig) => {
-    //  config.headers['Authorization'] = `Bearer the-server-token`;
+    this.$collection.feed();
+    // this.$collection.http((config: AxiosRequestConfig) => {
+    //   config.params = { rr: 123 };
+    //   config.headers = { 'x-api-key': `${456}` };
     // });
   }
 

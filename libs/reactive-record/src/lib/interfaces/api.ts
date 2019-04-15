@@ -1,5 +1,6 @@
 import { Response } from './response';
 import { Observable } from 'rxjs';
+import { ReactiveDriver } from './driver';
 
 /**
  * Public RR Api
@@ -7,7 +8,7 @@ import { Observable } from 'rxjs';
  * @export
  * @interface Api
  */
-export interface ReactiveApi {
+export interface ReactiveApi extends ReactiveDriver {
   //
   // chained options
   driver(name: string); // firebase / firestore / http
@@ -25,23 +26,23 @@ export interface ReactiveApi {
   size(value: number); // firestore only
   ref(path: string); // firebase only
 
-  //
-  // fire requests
-  find(): Observable<Response>; // firestore & firebase
-  findOne(): Observable<Response>; // firestore & firebase
-  set(id: string, data: any, merge?: boolean): Observable<any>; // firestore
-  update(id: string, data: any): Observable<any>; // firestore
-  on( // firestore & firebase - real time calls doesn't has caching features
-    onSuccess: (response: Response | any) => any,
-    onError: (response: any) => any
-  ): any;
+  // //
+  // // fire requests
+  // find(): Observable<Response>; // firestore & firebase
+  // findOne(): Observable<Response>; // firestore & firebase
+  // set(id: string, data: any, merge?: boolean): Observable<any>; // firestore
+  // update(id: string, data: any): Observable<any>; // firestore
+  // on( // firestore & firebase - real time calls doesn't has caching features
+  //   onSuccess: (response: Response | any) => any,
+  //   onError: (response: any) => any
+  // ): any;
 
-  //
-  // http requests
-  get(path: string): Observable<Response>;
-  post(path: string, body: any): Observable<Response>;
-  patch(path: string, body: any): Observable<Response>;
-  delete(path: string, body?: any): Observable<Response>;
+  // //
+  // // http requests
+  // get(path: string): Observable<Response>;
+  // post(path: string, body: any): Observable<Response>;
+  // patch(path: string, body: any): Observable<Response>;
+  // delete(path: string, body?: any): Observable<Response>;
 
   //
   // utils

@@ -1,5 +1,4 @@
 import moment from 'moment';
-import { Driver } from '../interfaces/driver';
 import { Request } from '../interfaces/request';
 import { ExtraOptions } from '../interfaces/extra-options';
 import { Observable, PartialObserver, race } from 'rxjs';
@@ -12,7 +11,7 @@ import { Hooks } from '../hooks/hooks';
 import { map } from 'rxjs/operators';
 import { Logger } from '../utils/logger';
 
-export class FirestoreDriver extends Hooks implements Driver {
+export class FirestoreDriver extends Hooks /*implements ReactiveDriver*/ {
   //
   // default params
   collection: string;
