@@ -3,11 +3,11 @@ import * as Firebase from 'firebase/app';
 import {
   FirebaseConnector,
   FirestoreConnector,
-  Version
+  Version,
+  storageConfig
 } from '@firetask/reactive-record';
 
 import { Storage } from '@ionic/storage';
-import { storageConfig } from '@firetask/ionic';
 import { Config } from '@firetask/reactive-record';
 
 // This file can be replaced during build by using the `fileReplacements` array.

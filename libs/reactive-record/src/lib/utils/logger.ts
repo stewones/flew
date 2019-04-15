@@ -85,9 +85,10 @@ export class Logger {
   }
 
   private title(msg: string) {
-    const title_ = msg.split(' ');
-    return title_[0].includes('/')
-      ? title_[1] + (title_[2] ? ' ' + title_[2] : '')
-      : msg;
+    return msg;
+    // const title_ = msg.split(' ');
+    // return title_[0].includes('/')
+    //   ? title_[1] + (title_[2] ? ' ' + title_[2] : '')
+    //   : msg;
   }
 }

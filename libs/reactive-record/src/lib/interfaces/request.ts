@@ -5,6 +5,6 @@
 export interface Request {
   id?: string; // for firestore only
   query?: any;
-  size?: number; // for elastic @todo add firestore
-  sort?: any | any[]; // for elastic @todo add firestore
+  size?: number; // elastic/firestore
+  sort?: any | any[]; // elastic/firestore
 }

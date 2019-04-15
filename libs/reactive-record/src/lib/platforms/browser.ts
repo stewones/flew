@@ -83,18 +83,18 @@ export class PlatformBrowser extends ReactiveRecord {
   private fireRequest<T extends Response>(method: 'find' | 'findOne' = 'find') {
     super.init();
     return new Observable((observer: PartialObserver<T>) => {
-      const key = super.createFireKey();
+      const key = super.createKey();
       const extraOptions = super.cloneExtraOptions();
       this.getCache(key, observer, extraOptions).then(shouldRequestNetwork => {
         this.log().success()(
-          `should it request network? ${shouldRequestNetwork}`
+          `${key} should request network? ${shouldRequestNetwork}`
         );
         if (shouldRequestNetwork) {
           super[method]().subscribe(response => {
             this.setCache(key, response, observer, extraOptions);
           }, observer.error);
         } else {
-          super.log().warn()(
+          super.log().danger()(
             `${key} - there is a cached response with time to live`
           );
           observer.complete();
@@ -110,11 +110,11 @@ export class PlatformBrowser extends ReactiveRecord {
   ): Observable<T> {
     super.init();
     return new Observable((observer: PartialObserver<T>) => {
-      const key = super.createKey(path);
+      const key = super.createKey(path, body);
       const extraOptions = super.cloneExtraOptions();
       this.getCache(key, observer, extraOptions).then(shouldRequestNetwork => {
         this.log().success()(
-          `should it request network? ${shouldRequestNetwork}`
+          `${key} should request network? ${shouldRequestNetwork}`
         );
         if (shouldRequestNetwork) {
           //
@@ -144,7 +144,7 @@ export class PlatformBrowser extends ReactiveRecord {
               }, observer.error);
           }
         } else {
-          super.log().warn()(
+          super.log().danger()(
             `${key} - there is a cached response with time to live`
           );
           observer.complete();

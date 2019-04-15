@@ -12,6 +12,7 @@ import { StorageAdapter } from '../interfaces/storage';
 import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
 import { Config } from '../symbols/rr';
+import { SHA256 } from '../utils/sha';
 
 export class ReactiveRecord implements ReactiveApi {
   protected collection: string;
@@ -130,7 +131,7 @@ export class ReactiveRecord implements ReactiveApi {
   public find<T extends Response>(): Observable<T> {
     this.init();
     const _request = cloneDeep(this.request);
-    const _key = this.createFireKey();
+    const _key = this.createKey();
     const _extraOptions = cloneDeep(this.extraOptions);
     const _driver = clone(this._driver);
     this.reset();
@@ -141,7 +142,7 @@ export class ReactiveRecord implements ReactiveApi {
   public findOne<T extends Response>(): Observable<T> {
     this.init();
     const _request = cloneDeep(this.request);
-    const _key = this.createFireKey();
+    const _key = this.createKey();
     const _extraOptions = cloneDeep(this.extraOptions);
     const _driver = clone(this._driver);
     this.reset();
@@ -187,15 +188,11 @@ export class ReactiveRecord implements ReactiveApi {
     );
   }
 
-  protected createKey(path: string): string {
+  protected createKey(path = '', body = {}): string {
     const extraOptions = this.cloneExtraOptions();
-    const requestPath = `${this.endpoint}${path}`;
-    return extraOptions.key || requestPath;
-  }
-
-  protected createFireKey(): string {
-    const extraOptions = this.cloneExtraOptions();
-    const requestPath = `${this.collection}/${JSON.stringify(this.request)}`;
+    const requestPath = `${this.collection}:/${this.endpoint}${path}/${SHA256(
+      JSON.stringify({ ...body, ...this.request })
+    )}`;
     return extraOptions.key || requestPath;
   }
 
@@ -224,7 +221,7 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // define an unique key
-    const key = this.createKey(path);
+    const key = this.createKey(path, body);
 
     //
     // reset the chain
