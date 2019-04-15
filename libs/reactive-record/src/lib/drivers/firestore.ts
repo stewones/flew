@@ -69,7 +69,9 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
         for (const k in s) firestore = firestore.orderBy(k, s[k]);
       });
     } else if (<any>typeof sort === 'object') {
-      this._logger.success()(`firestore sort object -> ${sort}`);
+      this._logger.success()(
+        `firestore sort object -> ${JSON.stringify(sort)}`
+      );
       if (isEmpty(sort)) throw new Error(`sort object can't be null`);
       for (const k in sort) firestore = firestore.orderBy(k, sort[k]);
     }
@@ -91,10 +93,6 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
       // set default options
       const _extraOptions: ExtraOptions = {};
       merge(_extraOptions, extraOptions);
-
-      //
-      // handlers
-      let network: any, hook: any;
 
       //
       // for unit testing
@@ -136,6 +134,7 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
       firestore
         .get()
         .then(async (snapshot: any) => {
+          console.log('oi', snapshot);
           //
           // format data
           const data: any[] = [];
@@ -153,12 +152,15 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
             }
           };
 
+          console.log(response);
+
           //
           // success callback
           observer.next(transformResponse(response));
           observer.complete();
         })
         .catch(err => {
+          console.log(err);
           observer.error(err);
           observer.complete();
         });
