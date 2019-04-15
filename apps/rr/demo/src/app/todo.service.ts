@@ -67,13 +67,11 @@ export class TodoService {
   }
 
   postCat(): Observable<TodoEntry> {
-    return (
-      this.$collection
-        .transformNetwork((r: Response) => r.data)
-        // .useCache(false)
-        // .saveNetwork(false)
-        .post('/votes', { image_id: 'birm', value: 1 })
-    );
+    return this.$collection
+      .transformNetwork((r: Response) => r.data)
+      .useCache(false)
+      .saveNetwork(false)
+      .post('/votes', { image_id: 'birm', value: 1 });
   }
 
   // findAll(): Observable<Response<TodoEntry>> {

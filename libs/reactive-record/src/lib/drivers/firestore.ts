@@ -1,17 +1,14 @@
 import moment from 'moment';
 import { Request } from '../interfaces/request';
-import { ExtraOptions } from '../interfaces/extra-options';
-import { Observable, PartialObserver, race } from 'rxjs';
-import { get, merge, isEmpty, isArray, isNil } from 'lodash';
-
+import { Observable, PartialObserver } from 'rxjs';
+import { merge, isEmpty, isArray, isNil } from 'lodash';
 import { Connector } from '../interfaces/connector';
-import { Options } from '../interfaces/options';
+import { Options, ExtraOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
-import { Hooks } from '../hooks/hooks';
 import { map } from 'rxjs/operators';
 import { Logger } from '../utils/logger';
 
-export class FirestoreDriver extends Hooks /*implements ReactiveDriver*/ {
+export class FirestoreDriver /*implements ReactiveDriver*/ {
   //
   // default params
   collection: string;
@@ -32,7 +29,6 @@ export class FirestoreDriver extends Hooks /*implements ReactiveDriver*/ {
   protected _logger: Logger;
 
   constructor(options: Options) {
-    super(options);
     merge(this, options);
   }
 
@@ -86,7 +82,9 @@ export class FirestoreDriver extends Hooks /*implements ReactiveDriver*/ {
 
   public find(
     request: Request,
-    extraOptions?: ExtraOptions
+    key: string,
+    extraOptions?: ExtraOptions,
+    shouldTransform = true
   ): Observable<Response> {
     return new Observable((observer: PartialObserver<any>) => {
       //
@@ -97,10 +95,6 @@ export class FirestoreDriver extends Hooks /*implements ReactiveDriver*/ {
       //
       // handlers
       let network: any, hook: any;
-
-      //
-      // define an unique key
-      let key: string;
 
       //
       // for unit testing
@@ -129,99 +123,65 @@ export class FirestoreDriver extends Hooks /*implements ReactiveDriver*/ {
       if (request.size) firestore = this.limit(request.size, firestore);
 
       //
-      // set an unique identifier
-      key =
-        _extraOptions.key || `${this.collection}/${JSON.stringify(request)}`;
-
-      //
       // network handle
       const transformResponse: any =
+        shouldTransform &&
         extraOptions.transformResponse &&
         typeof extraOptions.transformResponse === 'function'
           ? extraOptions.transformResponse
           : (data: Response) => data;
-      network = () => {
-        //
-        // fire in the hole
-        firestore
-          .get()
-          .then(async (snapshot: any) => {
-            //
-            // format data
-            const data: any[] = [];
-            snapshot.forEach(doc => data.push(doc.data()));
-            //
-            // define standard response
-            const response: Response = {
-              data: data,
-              key: key,
-              response: {
-                empty: snapshot.empty,
-                size: snapshot.size,
-                metadata: snapshot.metadata
-              }
-            };
-
-            //
-            // get after hook
-            hook = this.hasHook('find.after');
-
-            //
-            // check availability
-            if (hook) {
-              //
-              // run client hook
-              hook(key, response, observer, _extraOptions);
-            } else {
-              //
-              // success callback
-              observer.next(transformResponse(response));
-              observer.complete();
-            }
-          })
-          .catch(err => {
-            observer.error(err);
-            observer.complete();
-          });
-      };
 
       //
-      // get before hook
-      hook = this.hasHook('find.before');
-
-      //
-      // check availability
-      if (hook) {
-        //
-        // run client hook
-        hook(key, observer, _extraOptions).then(canRequest => {
+      // fire in the hole
+      firestore
+        .get()
+        .then(async (snapshot: any) => {
           //
-          // http.get.before should return a boolean
-          if (canRequest) network();
+          // format data
+          const data: any[] = [];
+          snapshot.forEach(doc => data.push(doc.data()));
+          //
+          // define standard response
+          const response: Response = {
+            data: data,
+            key: key,
+            collection: this.collection,
+            response: {
+              empty: snapshot.empty,
+              size: snapshot.size,
+              metadata: snapshot.metadata
+            }
+          };
+
+          //
+          // success callback
+          observer.next(transformResponse(response));
+          observer.complete();
+        })
+        .catch(err => {
+          observer.error(err);
+          observer.complete();
         });
-      } else {
-        //
-        // otherwise
-        network();
-      }
     });
   }
 
   public findOne(
     request: Request,
+    key: string,
     extraOptions?: ExtraOptions
   ): Observable<Response> {
-    return this.find(request, extraOptions).pipe(
+    return this.find(request, key, extraOptions, false).pipe(
       map((r: Response) => {
         const transformResponse: any =
           extraOptions.transformResponse &&
           typeof extraOptions.transformResponse === 'function'
             ? extraOptions.transformResponse
             : (data: Response) => data;
-        const data: any = isArray(r) ? r : get(r, 'data') || [];
+
         const response = <Response>{
-          data: data && data.length ? data[0] : {},
-          key: data && data.length ? data[0].key : '',
+          data: r.data && r.data.length ? r.data[0] : {},
+          key: r.key,
+          collection: this.collection,
           response: r.response
         };
         // console.log('findOne response', response);

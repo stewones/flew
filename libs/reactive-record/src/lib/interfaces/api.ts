@@ -26,27 +26,30 @@ export interface ReactiveApi extends ReactiveDriver {
   size(value: number); // firestore only
   ref(path: string); // firebase only
 
-  // //
-  // // fire requests
-  // find(): Observable<Response>; // firestore & firebase
-  // findOne(): Observable<Response>; // firestore & firebase
-  // set(id: string, data: any, merge?: boolean): Observable<any>; // firestore
-  // update(id: string, data: any): Observable<any>; // firestore
-  // on( // firestore & firebase - real time calls doesn't has caching features
-  //   onSuccess: (response: Response | any) => any,
-  //   onError: (response: any) => any
-  // ): any;
-
-  // //
-  // // http requests
-  // get(path: string): Observable<Response>;
-  // post(path: string, body: any): Observable<Response>;
-  // patch(path: string, body: any): Observable<Response>;
-  // delete(path: string, body?: any): Observable<Response>;
-
   //
   // utils
   clearCache(): void;
   useLog(active: boolean): void;
   useLogTrace(active: boolean): void;
+
+  //
+  // @todo move to ReactiveDriver
+  //
+  //
+  // firebase/firestore requests
+  find(): Observable<Response>; // firestore & firebase
+  findOne(): Observable<Response>; // firestore & firebase
+  set(id: string, data: any, merge?: boolean): Observable<any>; // firestore
+  update(id: string, data: any): Observable<any>; // firestore
+  on( // firestore & firebase - real time calls doesn't has caching features
+    onSuccess: (response: Response | any) => any,
+    onError: (response: any) => any
+  ): any;
+
+  //
+  // http requests
+  get(path: string): Observable<Response>;
+  post(path: string, body: any): Observable<Response>;
+  patch(path: string, body: any): Observable<Response>;
+  delete(path: string, body?: any): Observable<Response>;
 }

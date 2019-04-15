@@ -1,11 +1,9 @@
-import { merge, omit, isEmpty, isEqual, isArray, isObject } from 'lodash';
+import { omit, isEmpty, isEqual, isArray, isObject, merge } from 'lodash';
 import { PartialObserver, Observable } from 'rxjs';
-
-import { Options } from '../interfaces/options';
+import { Options, ExtraOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
-import { ExtraOptions } from '../interfaces/extra-options';
 import { ReactiveRecord } from './server';
-import { StorageAdapter } from '../interfaces/storage-adapter';
+import { StorageAdapter } from '../interfaces/storage';
 import { Config } from '../symbols/rr';
 import { SyncReactiveResponse } from '../utils/store';
 
@@ -14,66 +12,9 @@ export class PlatformBrowser extends ReactiveRecord {
 
   constructor(options: Options) {
     super(options);
+    merge(this, options);
     if (!this.storage && options.useCache)
       throw new Error('missing storage instance');
-
-    // @todo remove
-    this.boot(options);
-  }
-
-  private boot(options) {
-    const newParams = <Options>{
-      hook: {
-        //
-        // customize http behavior
-        http: {
-          post: {
-            before: (key, observer, extraOptions) => {
-              super.log().success()('hook.http.post.before');
-              return this.getCache(key, observer, extraOptions);
-            },
-            after: async (key, network, observer, extraOptions) => {
-              super.log().success()('hook.http.post.after');
-              return this.setCache(key, network, observer, extraOptions);
-            }
-          },
-          patch: {
-            before: (key, observer, extraOptions) => {
-              super.log().success()('hook.http.patch.before');
-              return this.getCache(key, observer, extraOptions);
-            },
-            after: async (key, network, observer, extraOptions) => {
-              super.log().success()('hook.http.patch.after');
-              return this.setCache(key, network, observer, extraOptions);
-            }
-          },
-          get: {
-            before: async (key, observer, extraOptions) => {
-              super.log().success()('hook.http.get.before');
-              return await this.getCache(key, observer, extraOptions);
-            },
-            after: async (key, network, observer, extraOptions) => {
-              super.log().success()('hook.http.get.after');
-              return this.setCache(key, network, observer, extraOptions);
-            }
-          }
-        },
-        //
-        // customize search behavior
-        find: {
-          before: (key, observer, extraOptions) => {
-            super.log().success()('hook.find.before');
-            return this.getCache(key, observer, extraOptions);
-          },
-          after: async (key, network, observer, extraOptions) => {
-            super.log().success()('hook.find.after');
-            return this.setCache(key, network, observer, extraOptions);
-          }
-        }
-      }
-    };
-
-    // merge(this, { ...options, ...newParams });
   }
 
   public clearCache(): void {
@@ -90,7 +31,7 @@ export class PlatformBrowser extends ReactiveRecord {
     ]);
   }
 
-  // feed store with cached response
+  // feed store with cached responses
   public feed() {
     const storage =
       !isEmpty(Config.options) && Config.options.storage
@@ -129,6 +70,37 @@ export class PlatformBrowser extends ReactiveRecord {
     body?: any
   ): Observable<T> {
     return this.httpRequest('delete', path, body);
+  }
+
+  public find<T extends Response>(): Observable<T> {
+    return this.fireRequest<T>('find');
+  }
+
+  public findOne<T extends Response>(): Observable<T> {
+    return this.fireRequest<T>('findOne');
+  }
+
+  private fireRequest<T extends Response>(method: 'find' | 'findOne' = 'find') {
+    super.init();
+    return new Observable((observer: PartialObserver<T>) => {
+      const key = super.createFireKey();
+      const extraOptions = super.cloneExtraOptions();
+      this.getCache(key, observer, extraOptions).then(shouldRequestNetwork => {
+        this.log().success()(
+          `should it request network? ${shouldRequestNetwork}`
+        );
+        if (shouldRequestNetwork) {
+          super[method]().subscribe(response => {
+            this.setCache(key, response, observer, extraOptions);
+          }, observer.error);
+        } else {
+          super.log().warn()(
+            `${key} - there is a cached response with time to live`
+          );
+          observer.complete();
+        }
+      });
+    });
   }
 
   private httpRequest<T extends Response>(

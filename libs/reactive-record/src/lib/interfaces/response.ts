@@ -4,6 +4,3 @@ export interface Response<T = any> {
   key?: string; // key used for cache
   collection?: string;
 }
-
-// @deprecated
-export interface RRResponse<T = any> extends Response<T> {}

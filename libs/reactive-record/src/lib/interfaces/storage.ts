@@ -51,6 +51,3 @@ export interface StorageAdapter<T = any> {
     iteratorCallback: (value: any, key: string, iterationNumber: Number) => any
   ): Promise<void>;
 }
-
-// @deprecated
-export interface RRCacheStorage<T = any> extends StorageAdapter {}

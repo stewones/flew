@@ -8,5 +8,3 @@ export interface Request {
   size?: number; // for elastic @todo add firestore
   sort?: any | any[]; // for elastic @todo add firestore
 }
-
-export interface RRRequest extends Request {}

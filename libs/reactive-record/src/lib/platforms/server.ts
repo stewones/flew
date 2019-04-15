@@ -1,27 +1,23 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
 import { get, merge, isEmpty, clone, cloneDeep, isBoolean } from 'lodash';
 import { Observable, PartialObserver, Subject } from 'rxjs';
-import { Hooks } from '../hooks/hooks';
 import { ReactiveApi } from '../interfaces/api';
-import { ReactiveDriver } from '../interfaces/driver';
+import { ReactiveDriver, ReactiveDriverOption } from '../interfaces/driver';
 import { Request } from '../interfaces/request';
-import { ExtraOptions } from '../interfaces/extra-options';
-import { Options } from '../interfaces/options';
+import { Options, ExtraOptions } from '../interfaces/options';
 import { FirestoreDriver } from '../drivers/firestore';
 import { FirebaseDriver } from '../drivers/firebase';
 import { Response } from '../interfaces/response';
-import { StorageAdapter } from '../interfaces/storage-adapter';
+import { StorageAdapter } from '../interfaces/storage';
 import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
 import { Config } from '../symbols/rr';
 
-export class ReactiveRecord extends Hooks implements ReactiveApi {
-  public collection: string;
-  public storage: StorageAdapter;
+export class ReactiveRecord implements ReactiveApi {
+  protected collection: string;
+  protected storage: StorageAdapter;
 
-  connector;
-  timestamp;
-  private _driver = 'firestore';
+  private _driver: ReactiveDriverOption = 'firestore';
   private _drivers: {
     firestore: ReactiveDriver;
     firebase: ReactiveDriver | any;
@@ -31,7 +27,7 @@ export class ReactiveRecord extends Hooks implements ReactiveApi {
   private httpConfig: AxiosRequestConfig = {};
   private beforeHttp = (config: AxiosRequestConfig) => {};
 
-  public baseURL: string;
+  private baseURL: string;
   private endpoint: string;
 
   private request: Request = {};
@@ -52,7 +48,6 @@ export class ReactiveRecord extends Hooks implements ReactiveApi {
   _observer: PartialObserver<any>;
 
   constructor(options: Options) {
-    super(options);
     this._options = options;
   }
 
@@ -96,7 +91,7 @@ export class ReactiveRecord extends Hooks implements ReactiveApi {
 
     //
     // set default drivers
-    this._drivers = {
+    this._drivers = <any>{
       firestore: new FirestoreDriver({
         ...{ _logger: this._logger },
         ...options
@@ -135,21 +130,23 @@ export class ReactiveRecord extends Hooks implements ReactiveApi {
   public find<T extends Response>(): Observable<T> {
     this.init();
     const _request = cloneDeep(this.request);
+    const _key = this.createFireKey();
     const _extraOptions = cloneDeep(this.extraOptions);
     const _driver = clone(this._driver);
     this.reset();
     this.driverException(_driver, 'find');
-    return this._drivers[_driver].find<T>(_request, _extraOptions);
+    return this._drivers[_driver].find<T>(_request, _key, _extraOptions);
   }
 
   public findOne<T extends Response>(): Observable<T> {
     this.init();
     const _request = cloneDeep(this.request);
+    const _key = this.createFireKey();
     const _extraOptions = cloneDeep(this.extraOptions);
     const _driver = clone(this._driver);
     this.reset();
     this.driverException(_driver, 'findOne');
-    return this._drivers[_driver].findOne<T>(_request, _extraOptions);
+    return this._drivers[_driver].findOne<T>(_request, _key, _extraOptions);
   }
 
   public set(
@@ -193,6 +190,12 @@ export class ReactiveRecord extends Hooks implements ReactiveApi {
   protected createKey(path: string): string {
     const extraOptions = this.cloneExtraOptions();
     const requestPath = `${this.endpoint}${path}`;
+    return extraOptions.key || requestPath;
+  }
+
+  protected createFireKey(): string {
+    const extraOptions = this.cloneExtraOptions();
+    const requestPath = `${this.collection}/${JSON.stringify(this.request)}`;
     return extraOptions.key || requestPath;
   }
 
@@ -316,7 +319,7 @@ export class ReactiveRecord extends Hooks implements ReactiveApi {
   /**
    * Set current driver
    */
-  public driver(name: string): ReactiveRecord {
+  public driver(name: ReactiveDriverOption): ReactiveRecord {
     this._driver = name;
     return this;
   }
