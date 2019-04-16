@@ -50,18 +50,14 @@ export class ReactiveRecord implements ReactiveApi {
   private _initial_options: Options;
   private _initialized: boolean;
 
-  //
-  // for unit test
-  private _observer: PartialObserver<any>;
-
   constructor(options: Options) {
     this._initial_options = options;
   }
 
-  protected init() {
+  protected init(runtime: Options = {}) {
     //
     // settings that needs runtime evaluation
-    const options: Options = this.cloneOptions();
+    const options: Options = { ...this.cloneOptions(), ...runtime };
 
     if (!this.httpConfig.timeout) this.httpConfig.timeout = 60 * 1000;
     if (!this.httpConfig.baseURL) this.httpConfig.baseURL = options.baseURL;
@@ -87,23 +83,22 @@ export class ReactiveRecord implements ReactiveApi {
     });
 
     //
+    // set default drivers
+    this.driverInit(options);
+
+    //
     // apply class options
-    this._driver = options.driver || 'firestore';
     delete options.useLog;
     delete options.useLogTrace;
     delete options.driver;
     merge(this, options);
 
     //
-    // set default drivers
-    this.driverInit(options);
-
-    //
     // mark as initialized
     this._initialized = true;
   }
 
-  private getDriver(driver: ReactiveDriver & string) /*:ReactiveDriver*/ {
+  private getDriverInstance(driver: ReactiveDriver & string) {
     if (isEmpty(this._driver_initialized[driver])) {
       const options: Options = this.cloneOptions();
       this.driverInit(options);
@@ -114,16 +109,21 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   public firebase() {
-    return this.getDriver('firebase');
+    return this.getDriverInstance('firebase');
   }
 
   public firestore() {
-    return this.getDriver('firestore');
+    return this.getDriverInstance('firestore');
+  }
+
+  public getDriver(): ReactiveDriverOption {
+    return this._driver;
   }
 
   public reboot() {
     this._initialized = false;
-    this.init();
+    const currentDriver = this.getDriver();
+    this.init({ driver: currentDriver });
   }
 
   private reset(): void {
@@ -138,6 +138,7 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   private driverInit(options: Options) {
+    this._driver = options.driver || 'firestore';
     this._drivers = {
       firestore: new FirestoreDriver({
         ...{ _logger: this._logger },
@@ -160,25 +161,29 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   public find<T extends Response>(): Observable<T> {
-    this.init();
+    const currentDriver = this.getDriver();
+    this.init({ driver: currentDriver });
     const _request = cloneDeep(this.request);
     const _key = this.createKey();
     const _extraOptions = cloneDeep(this.extraOptions);
-    const _driver = clone(this._driver);
     this.reset();
-    this.driverException(_driver, 'find');
-    return this._drivers[_driver].find<T>(_request, _key, _extraOptions);
+    this.driverException(currentDriver, 'find');
+    return this._drivers[currentDriver].find<T>(_request, _key, _extraOptions);
   }
 
   public findOne<T extends Response>(): Observable<T> {
-    this.init();
+    const currentDriver = this.getDriver();
+    this.init({ driver: currentDriver });
     const _request = cloneDeep(this.request);
     const _key = this.createKey();
     const _extraOptions = cloneDeep(this.extraOptions);
-    const _driver = clone(this._driver);
     this.reset();
-    this.driverException(_driver, 'findOne');
-    return this._drivers[_driver].findOne<T>(_request, _key, _extraOptions);
+    this.driverException(currentDriver, 'findOne');
+    return this._drivers[currentDriver].findOne<T>(
+      _request,
+      _key,
+      _extraOptions
+    );
   }
 
   public set(
@@ -186,32 +191,32 @@ export class ReactiveRecord implements ReactiveApi {
     data: any,
     shouldMerge: boolean = true
   ): Observable<any> {
-    this.init();
-    const _driver = clone(this._driver);
+    const currentDriver = this.getDriver();
+    this.init({ driver: currentDriver });
     this.reset();
-    this.driverException(_driver, 'set');
-    return this._drivers[_driver].set(id, data, shouldMerge);
+    this.driverException(currentDriver, 'set');
+    return this._drivers[currentDriver].set(id, data, shouldMerge);
   }
 
   public update(id: string, data: any): Observable<any> {
-    this.init();
-    const _driver = clone(this._driver);
+    const currentDriver = this.getDriver();
+    this.init({ driver: currentDriver });
     this.reset();
-    this.driverException(_driver, 'update');
-    return this._drivers[_driver].update(id, data);
+    this.driverException(currentDriver, 'update');
+    return this._drivers[currentDriver].update(id, data);
   }
 
   public on<T>(
     onSuccess: (response: Response) => any = (response: Response) => {},
     onError: (response: any) => any = (response: any) => {}
   ): any {
-    this.init();
+    const currentDriver = this.getDriver();
+    this.init({ driver: currentDriver });
     const _request = cloneDeep(this.request);
     const _extraOptions = cloneDeep(this.extraOptions);
-    const _driver = clone(this._driver);
     this.reset();
-    this.driverException(_driver, 'on');
-    return this._drivers[_driver].on(
+    this.driverException(currentDriver, 'on');
+    return this._drivers[currentDriver].on(
       _request,
       onSuccess,
       onError,
@@ -228,7 +233,7 @@ export class ReactiveRecord implements ReactiveApi {
         ...{ ref: this.extraOptions.ref }
       })
     )}`;
-    return extraOptions.key || requestPath;
+    return extraOptions.key || requestPath.replace('///', '//');
   }
 
   protected cloneExtraOptions(): ExtraOptions {
@@ -243,7 +248,8 @@ export class ReactiveRecord implements ReactiveApi {
   ): Observable<T> {
     //
     // ensure settings have been applied
-    this.init();
+    const currentDriver = this.getDriver();
+    this.init({ driver: currentDriver });
 
     //
     // call exceptions
@@ -263,10 +269,6 @@ export class ReactiveRecord implements ReactiveApi {
     this.reset();
 
     return new Observable((observer: PartialObserver<T>) => {
-      //
-      // for unit test
-      this._observer = observer;
-
       //
       // transform response
       const success = async (r: AxiosResponse) => {

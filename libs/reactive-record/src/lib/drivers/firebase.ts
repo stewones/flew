@@ -5,8 +5,11 @@ import { Connector } from '../interfaces/connector';
 import { Options, ExtraOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
+import { ReactiveDriverOption } from '../interfaces/driver';
 
 export class FirebaseDriver /*implements Driver*/ {
+  driver: ReactiveDriverOption = 'firebase';
+
   //
   // default params
   collection: string;
@@ -49,37 +52,25 @@ export class FirebaseDriver /*implements Driver*/ {
 
       //
       // define adapter
-      const firebase: any = this.connector.firebase
-        .database()
-        .ref(`${this.collection}/${_extraOptions.ref}`);
+      const path = `${this.collection}/${_extraOptions.ref}`;
+      const firebase: any = this.connector.firebase.database().ref(path);
 
       //
       // @todo add complete api
       // https://firebase.google.com/docs/reference/js/firebase.database.Query
 
       //
-      // set an unique identifier
-      key =
-        _extraOptions.key ||
-        `${this.collection}/${_extraOptions.ref}/${JSON.stringify(request)}`;
-
-      //
       // fire in the hole
       firebase.once(
         'value',
         async (snapshot: any) => {
-          const val: any = snapshot.val();
-
           //
           // format data
           const data: any[] = [];
+          const val: any = snapshot.toJSON();
 
-          if (typeof val !== 'object') {
-            data[0] = snapshot.val();
-          } else {
-            for (const k in val) {
-              data.push(val[k]);
-            }
+          for (const k in val) {
+            data.push(val[k]);
           }
 
           //
@@ -88,6 +79,7 @@ export class FirebaseDriver /*implements Driver*/ {
             data: data,
             key: key,
             collection: this.collection,
+            driver: this.driver,
             response: {
               key: snapshot.key
             }
@@ -117,9 +109,9 @@ export class FirebaseDriver /*implements Driver*/ {
           data: r.data && r.data.length ? r.data[0] : {},
           key: r.key,
           collection: this.collection,
+          driver: this.driver,
           response: r.response
         };
-        // console.log('findOne response', response);
         return response;
       })
     );
@@ -177,6 +169,9 @@ export class FirebaseDriver /*implements Driver*/ {
       (snapshot: any) => {
         const response: Response = {
           data: snapshot.val(),
+          key: false,
+          collection: this.collection,
+          driver: this.driver,
           response: {
             empty: !snapshot.exists(),
             size: snapshot.numChildren()

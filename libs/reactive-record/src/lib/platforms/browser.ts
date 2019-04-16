@@ -81,7 +81,8 @@ export class PlatformBrowser extends ReactiveRecord {
   }
 
   private fireRequest<T extends Response>(method: 'find' | 'findOne' = 'find') {
-    super.init();
+    const currentDriver = super.getDriver();
+    super.init({ driver: currentDriver });
     return new Observable((observer: PartialObserver<T>) => {
       const key = super.createKey();
       const extraOptions = super.cloneExtraOptions();
@@ -108,7 +109,8 @@ export class PlatformBrowser extends ReactiveRecord {
     path: string = '/',
     body?: any
   ): Observable<T> {
-    super.init();
+    const currentDriver = super.getDriver();
+    super.init({ driver: currentDriver });
     return new Observable((observer: PartialObserver<T>) => {
       const key = super.createKey(path, body);
       const extraOptions = super.cloneExtraOptions();
