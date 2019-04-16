@@ -13,11 +13,19 @@ export interface ReactiveDriver<T = any> {
   timestamp?: boolean;
   //
   // fire requests
-  find?<T extends Response>(): Observable<T>;
+
   find?<T extends Response>(
     request: Request,
-    extraOptions?: ExtraOptions
+    key: string,
+    extraOptions?: ExtraOptions,
+    shouldTransform?
   ): Observable<T>;
+  // find?<T extends Response>(
+  //   request: Request,
+  //   extraOptions?: ExtraOptions
+  // ): Observable<T>;
+  // find?<T extends Response>(): Observable<T>;
+
   findOne?(): Observable<Response>; // firestore & firebase
   set?(id: string, data: any, merge?: boolean): Observable<any>; // firestore
   update?(id: string, data: any): Observable<any>; // firestore

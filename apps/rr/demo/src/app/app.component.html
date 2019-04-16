@@ -1,5 +1,8 @@
 <button (click)="getCat()">Get Cat</button>
 <button (click)="postCat()">Post Cat</button>
+<button (click)="getCatFirestore()">Get Cat from Firestore</button>
+<button (click)="loginFirebase()">Login Firebase</button>
+<button (click)="logoutFirebase()">Logout Firebase</button>
 
 <!-- {{ babyDynamic$ | async | json }} -->
 <br />
@@ -10,3 +13,10 @@ baby:
 
 cat: <br />
 {{ cat$ | async | json }}
+
+<br /><br />
+
+baby firestore:
+<br />
+{{ babyFirestore$ | async | json }}
+<br /><br />

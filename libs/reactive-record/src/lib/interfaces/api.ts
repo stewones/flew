@@ -8,7 +8,7 @@ import { ReactiveDriver } from './driver';
  * @export
  * @interface Api
  */
-export interface ReactiveApi extends ReactiveDriver {
+export interface ReactiveApi /*extends ReactiveDriver*/ {
   //
   // chained options
   driver(name: string); // firebase / firestore / http

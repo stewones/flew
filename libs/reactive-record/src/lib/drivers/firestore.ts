@@ -7,6 +7,7 @@ import { Options, ExtraOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
 import { Logger } from '../utils/logger';
+import { ReactiveDriver } from '../interfaces/driver';
 
 export class FirestoreDriver /*implements ReactiveDriver*/ {
   //
@@ -82,12 +83,12 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
     return firestore.limit(limit);
   }
 
-  public find(
+  public find<T extends Response>(
     request: Request,
     key: string,
     extraOptions?: ExtraOptions,
     shouldTransform = true
-  ): Observable<Response> {
+  ): Observable<T> {
     return new Observable((observer: PartialObserver<any>) => {
       //
       // set default options
@@ -134,7 +135,6 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
       firestore
         .get()
         .then(async (snapshot: any) => {
-          console.log('oi', snapshot);
           //
           // format data
           const data: any[] = [];

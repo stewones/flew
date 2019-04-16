@@ -20,9 +20,15 @@ export class ReactiveRecord implements ReactiveApi {
 
   private _driver: ReactiveDriverOption = 'firestore';
   private _drivers: {
-    firestore: ReactiveDriver;
-    firebase: ReactiveDriver | any;
+    // firestore: ReactiveDriver;
+    // firebase: ReactiveDriver;
+    // http: ReactiveDriver;
+  } = {
+    firestore: {},
+    firebase: {},
+    http: {}
   };
+  _driver_initialized = {};
 
   private _http: AxiosInstance;
   private httpConfig: AxiosRequestConfig = {};
@@ -41,23 +47,21 @@ export class ReactiveRecord implements ReactiveApi {
 
   //
   // runtime config
-  _options: Options;
-  _initialized: boolean;
+  private _initial_options: Options;
+  private _initialized: boolean;
 
   //
   // for unit test
-  _observer: PartialObserver<any>;
+  private _observer: PartialObserver<any>;
 
   constructor(options: Options) {
-    this._options = options;
+    this._initial_options = options;
   }
 
   protected init() {
     //
     // settings that needs runtime evaluation
-    const consumer: Options = this._options;
-    const general: Options = Config.options;
-    const options: Options = { ...general, ...consumer };
+    const options: Options = this.cloneOptions();
 
     if (!this.httpConfig.timeout) this.httpConfig.timeout = 60 * 1000;
     if (!this.httpConfig.baseURL) this.httpConfig.baseURL = options.baseURL;
@@ -92,18 +96,21 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // set default drivers
-    this._drivers = <any>{
-      firestore: new FirestoreDriver({
-        ...{ _logger: this._logger },
-        ...options
-      }),
-      firebase: new FirebaseDriver({
-        ...{ _logger: this._logger },
-        ...options
-      })
-    };
+    this.driverInit(options);
 
+    //
+    // mark as initialized
     this._initialized = true;
+  }
+
+  public getDriver(driver: ReactiveDriver & string) /*:ReactiveDriver*/ {
+    if (isEmpty(this._driver_initialized[driver])) {
+      const options: Options = this.cloneOptions();
+      this.driverInit(options);
+    } else {
+      this._driver_initialized[driver] = true;
+    }
+    return this._drivers[driver].connector[driver];
   }
 
   public reboot() {
@@ -116,16 +123,32 @@ export class ReactiveRecord implements ReactiveApi {
     this.extraOptions = {};
   }
 
+  private cloneOptions() {
+    const consumer: Options = this._initial_options;
+    const general: Options = Config.options;
+    return { ...general, ...consumer };
+  }
+
+  private driverInit(options: Options) {
+    this._drivers = {
+      firestore: new FirestoreDriver({
+        ...{ _logger: this._logger },
+        ...options
+      }),
+      firebase: new FirebaseDriver({
+        ...{ _logger: this._logger },
+        ...options
+      }),
+      http: {} // @todo
+    };
+  }
+
   private driverException(_driver: string, _method: string) {
     if (
       !this._drivers[_driver] ||
       typeof this._drivers[_driver].find !== 'function'
     )
       throw new Error(`${_driver} driver unavailable for method [${_method}]`);
-  }
-
-  public http(fn) {
-    this.beforeHttp = fn;
   }
 
   public find<T extends Response>(): Observable<T> {
@@ -191,7 +214,11 @@ export class ReactiveRecord implements ReactiveApi {
   protected createKey(path = '', body = {}): string {
     const extraOptions = this.cloneExtraOptions();
     const requestPath = `${this.collection}:/${this.endpoint}${path}/${SHA256(
-      JSON.stringify({ ...body, ...this.request })
+      JSON.stringify({
+        ...body,
+        ...this.request,
+        ...{ ref: this.extraOptions.ref }
+      })
     )}`;
     return extraOptions.key || requestPath;
   }
@@ -200,7 +227,7 @@ export class ReactiveRecord implements ReactiveApi {
     return cloneDeep(this.extraOptions);
   }
 
-  // @todo migrate to http driver
+  // @todo move to a separate http driver
   private executeRequest<T extends Response>(
     method: 'get' | 'post' | 'patch' | 'delete' = 'get',
     path: string = '/',
@@ -318,6 +345,14 @@ export class ReactiveRecord implements ReactiveApi {
    */
   public driver(name: ReactiveDriverOption): ReactiveRecord {
     this._driver = name;
+    return this;
+  }
+
+  /**
+   * Set current driver
+   */
+  public http(fn: (config: AxiosRequestConfig) => void): ReactiveRecord {
+    this.beforeHttp = fn;
     return this;
   }
 

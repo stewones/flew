@@ -1,4 +1,5 @@
 import 'firebase/firestore';
+import 'firebase/auth';
 import * as Firebase from 'firebase/app';
 import {
   FirebaseConnector,
