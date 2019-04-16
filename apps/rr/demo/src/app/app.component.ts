@@ -80,7 +80,7 @@ export class AppComponent implements OnInit {
 
   loginFirebase() {
     this.userService.$collection
-      .getDriver('firebase')
+      .firebase()
       .auth()
       .signInWithEmailAndPassword('demo@demo.app', '123456')
       .then(console.log)
@@ -89,7 +89,7 @@ export class AppComponent implements OnInit {
 
   logoutFirebase() {
     this.userService.$collection
-      .getDriver('firebase')
+      .firebase()
       .auth()
       .signOut()
       .then(console.log)

@@ -103,7 +103,7 @@ export class ReactiveRecord implements ReactiveApi {
     this._initialized = true;
   }
 
-  public getDriver(driver: ReactiveDriver & string) /*:ReactiveDriver*/ {
+  private getDriver(driver: ReactiveDriver & string) /*:ReactiveDriver*/ {
     if (isEmpty(this._driver_initialized[driver])) {
       const options: Options = this.cloneOptions();
       this.driverInit(options);
@@ -111,6 +111,14 @@ export class ReactiveRecord implements ReactiveApi {
       this._driver_initialized[driver] = true;
     }
     return this._drivers[driver].connector[driver];
+  }
+
+  public firebase() {
+    return this.getDriver('firebase');
+  }
+
+  public firestore() {
+    return this.getDriver('firestore');
   }
 
   public reboot() {
@@ -259,6 +267,8 @@ export class ReactiveRecord implements ReactiveApi {
       // for unit test
       this._observer = observer;
 
+      //
+      // transform response
       const success = async (r: AxiosResponse) => {
         //
         // build standard response
@@ -266,7 +276,8 @@ export class ReactiveRecord implements ReactiveApi {
           data: r.data,
           response: r,
           key: key,
-          collection: this.collection
+          collection: this.collection,
+          driver: this._driver
         };
         //
         // success callback

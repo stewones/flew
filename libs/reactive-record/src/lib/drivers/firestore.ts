@@ -7,9 +7,11 @@ import { Options, ExtraOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
 import { Logger } from '../utils/logger';
-import { ReactiveDriver } from '../interfaces/driver';
+import { ReactiveDriverOption } from '../interfaces/driver';
 
 export class FirestoreDriver /*implements ReactiveDriver*/ {
+  driver: ReactiveDriverOption = 'firestore';
+
   //
   // default params
   collection: string;
@@ -123,15 +125,6 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
 
       //
       // network handle
-      const transformResponse: any =
-        shouldTransform &&
-        extraOptions.transformResponse &&
-        typeof extraOptions.transformResponse === 'function'
-          ? extraOptions.transformResponse
-          : (data: Response) => data;
-
-      //
-      // fire in the hole
       firestore
         .get()
         .then(async (snapshot: any) => {
@@ -145,6 +138,7 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
             data: data,
             key: key,
             collection: this.collection,
+            driver: this.driver,
             response: {
               empty: snapshot.empty,
               size: snapshot.size,
@@ -152,11 +146,9 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
             }
           };
 
-          console.log(response);
-
           //
           // success callback
-          observer.next(transformResponse(response));
+          observer.next(response);
           observer.complete();
         })
         .catch(err => {
@@ -174,20 +166,15 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
   ): Observable<Response> {
     return this.find(request, key, extraOptions, false).pipe(
       map((r: Response) => {
-        const transformResponse: any =
-          extraOptions.transformResponse &&
-          typeof extraOptions.transformResponse === 'function'
-            ? extraOptions.transformResponse
-            : (data: Response) => data;
-
         const response = <Response>{
           data: r.data && r.data.length ? r.data[0] : {},
           key: r.key,
           collection: this.collection,
+          driver: this.driver,
           response: r.response
         };
-        // console.log('findOne response', response);
-        return transformResponse(response);
+
+        return response;
       })
     );
   }
@@ -238,6 +225,9 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
       snapshot.forEach(doc => data.push(doc.data()));
       const response: Response = {
         data: data,
+        key: false,
+        collection: this.collection,
+        driver: this.driver,
         response: {
           empty: snapshot.empty,
           size: snapshot.size

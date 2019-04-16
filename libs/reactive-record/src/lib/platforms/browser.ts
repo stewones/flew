@@ -272,7 +272,7 @@ export class PlatformBrowser extends ReactiveRecord {
       observer.next(transformResponse(network));
       //
       // dispatch to store
-      if (network.data.length)
+      if (network && network.data && network.data.length)
         Config.store.dispatch(
           new SyncReactiveResponse(this.clearNetworkResponse(network))
         );
@@ -283,23 +283,23 @@ export class PlatformBrowser extends ReactiveRecord {
     const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
     if (saveNetwork) {
       let ttl = extraOptions.ttl /*|| this.ttl*/ || 0;
+
       if (
-        (isEmpty(network.data) && cache) ||
-        isEmpty(cache) ||
-        (cache && seconds >= cache.ttl)
+        (isEmpty(network.data) && !isEmpty(cache)) ||
+        (isEmpty(cache) && !isEmpty(network.data)) ||
+        (!isEmpty(cache) && seconds >= cache.ttl)
       ) {
         super.log().danger()(`${key} cache updated`);
-      }
+        //
+        // set cache response
+        ttl += seconds;
+        network.ttl = ttl;
 
-      //
-      // set cache response
-      ttl += seconds;
-      network.ttl = ttl;
-      if (network.data.length)
         this.storage.set(
           key,
           transformCache(this.clearNetworkResponse(network))
         );
+      }
     }
 
     // console.log('useNetwork?', extraOptions.useNetwork);
