@@ -29,8 +29,7 @@ export class FirebaseDriver /*implements Driver*/ {
   public find(
     request: Request,
     key: string,
-    extraOptions?: ExtraOptions,
-    shouldTransform = true
+    extraOptions?: ExtraOptions
   ): Observable<Response> {
     return new Observable((observer: PartialObserver<any>) => {
       //
@@ -65,15 +64,6 @@ export class FirebaseDriver /*implements Driver*/ {
         `${this.collection}/${_extraOptions.ref}/${JSON.stringify(request)}`;
 
       //
-      // network handle
-      const transformResponse: any =
-        shouldTransform &&
-        extraOptions.transformResponse &&
-        typeof extraOptions.transformResponse === 'function'
-          ? extraOptions.transformResponse
-          : (data: Response) => data;
-
-      //
       // fire in the hole
       firebase.once(
         'value',
@@ -105,7 +95,7 @@ export class FirebaseDriver /*implements Driver*/ {
 
           //
           // success callback
-          observer.next(transformResponse(response));
+          observer.next(response);
           observer.complete();
         },
         err => {
@@ -123,12 +113,6 @@ export class FirebaseDriver /*implements Driver*/ {
   ): Observable<Response> {
     return this.find(request, key, extraOptions).pipe(
       map((r: Response) => {
-        const transformResponse: any =
-          extraOptions.transformResponse &&
-          typeof extraOptions.transformResponse === 'function'
-            ? extraOptions.transformResponse
-            : (data: Response) => data;
-
         const response = <Response>{
           data: r.data && r.data.length ? r.data[0] : {},
           key: r.key,
@@ -136,7 +120,7 @@ export class FirebaseDriver /*implements Driver*/ {
           response: r.response
         };
         // console.log('findOne response', response);
-        return transformResponse(response);
+        return response;
       })
     );
   }

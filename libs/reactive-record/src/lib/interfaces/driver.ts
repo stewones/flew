@@ -17,8 +17,7 @@ export interface ReactiveDriver<T = any> {
   find?<T extends Response>(
     request: Request,
     key: string,
-    extraOptions?: ExtraOptions,
-    shouldTransform?
+    extraOptions?: ExtraOptions
   ): Observable<T>;
   // find?<T extends Response>(
   //   request: Request,

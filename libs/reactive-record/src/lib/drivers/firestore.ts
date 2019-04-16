@@ -88,8 +88,7 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
   public find<T extends Response>(
     request: Request,
     key: string,
-    extraOptions?: ExtraOptions,
-    shouldTransform = true
+    extraOptions?: ExtraOptions
   ): Observable<T> {
     return new Observable((observer: PartialObserver<any>) => {
       //
@@ -164,7 +163,7 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
     key: string,
     extraOptions?: ExtraOptions
   ): Observable<Response> {
-    return this.find(request, key, extraOptions, false).pipe(
+    return this.find(request, key, extraOptions).pipe(
       map((r: Response) => {
         const response = <Response>{
           data: r.data && r.data.length ? r.data[0] : {},
