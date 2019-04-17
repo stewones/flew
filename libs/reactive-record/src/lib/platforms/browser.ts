@@ -161,11 +161,15 @@ export class PlatformBrowser extends ReactiveRecord {
     extraOptions: ExtraOptions = {}
   ) {
     const cache: Response & { ttl: number } | any = await this.storage.get(key);
-    const transformResponse: any =
+    let transformResponse: any =
       extraOptions.transformResponse &&
       typeof extraOptions.transformResponse === 'function'
         ? extraOptions.transformResponse
         : (data: Response) => data;
+
+    if (extraOptions.transformData) {
+      transformResponse = (data: Response) => data.data;
+    }
 
     const useCache: boolean = extraOptions.useCache === false ? false : true;
     const useNetwork: boolean =
@@ -176,8 +180,9 @@ export class PlatformBrowser extends ReactiveRecord {
     super.log().warn()(`${key} hasCache? ${cache ? true : false}`);
     super.log().warn()(
       `${key} transformResponse? ${
-        extraOptions.transformResponse &&
-        typeof extraOptions.transformResponse === 'function'
+        (extraOptions.transformResponse &&
+          typeof extraOptions.transformResponse === 'function') ||
+        extraOptions.transformData
           ? true
           : false
       }`
@@ -231,11 +236,17 @@ export class PlatformBrowser extends ReactiveRecord {
       typeof extraOptions.transformCache === 'function'
         ? extraOptions.transformCache
         : (data: Response) => data;
-    const transformResponse: any =
+
+    let transformResponse: any =
       extraOptions.transformResponse &&
       typeof extraOptions.transformResponse === 'function'
         ? extraOptions.transformResponse
         : (data: Response) => data;
+
+    if (extraOptions.transformData) {
+      transformResponse = (data: Response) => data.data;
+    }
+
     const saveNetwork: boolean =
       extraOptions.saveNetwork === false ? false : true;
     const useNetwork: boolean =
@@ -252,8 +263,9 @@ export class PlatformBrowser extends ReactiveRecord {
     );
     super.log().warn()(
       `${key} transformResponse? ${
-        extraOptions.transformResponse &&
-        typeof extraOptions.transformResponse === 'function'
+        (extraOptions.transformResponse &&
+          typeof extraOptions.transformResponse === 'function') ||
+        extraOptions.transformData
           ? true
           : false
       }`

@@ -494,6 +494,11 @@ export class ReactiveRecord implements ReactiveApi {
     return this;
   }
 
+  public data(transform: boolean): ReactiveRecord {
+    this.extraOptions.transformData = transform;
+    return this;
+  }
+
   /**
    * Clear browser cache
    */

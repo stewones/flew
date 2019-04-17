@@ -1,6 +1,7 @@
 import { Connector } from './connector';
 import { StorageAdapter } from './storage';
 import { ReactiveDriverOption } from './driver';
+import { ReactiveRecord } from '../platforms/server';
 
 export interface Options {
   name?: string; // collection name. eg: 'todos'
@@ -30,5 +31,6 @@ export interface ExtraOptions {
   transformCache?: (data: any) => any; // transform function for cache data
   transformResponse?: (data: any) => any; // transform function for network data response
   transformNetwork?: (data: any) => any; // @deprecated same as transformResponse
+  transformData?: boolean; // shortcut for transformResponse(r=>r.data)
   ref?: string; //  used for firebase driver
 }

@@ -1,6 +1,7 @@
 import { Response } from './response';
 import { Observable } from 'rxjs';
 import { ReactiveDriver } from './driver';
+import { ReactiveRecord } from '../platforms/server';
 
 /**
  * Public RR Api
@@ -11,7 +12,7 @@ import { ReactiveDriver } from './driver';
 export interface ReactiveApi /*extends ReactiveDriver*/ {
   //
   // chained options
-  driver(name: string); // firebase / firestore / http
+  driver(name: string): ReactiveRecord; // firebase / firestore / http
   useNetwork(active: boolean); // force the use of network call
   saveNetwork(active: boolean); // as a cache
   transformNetwork(transformFn: (response: Response) => any); // @deprecated same as transformResponse
@@ -25,6 +26,7 @@ export interface ReactiveApi /*extends ReactiveDriver*/ {
   sort(by: { [key: string]: string }); // firestore only
   size(value: number); // firestore only
   ref(path: string); // firebase only
+  data(transform: boolean): ReactiveRecord;
 
   //
   // utils
