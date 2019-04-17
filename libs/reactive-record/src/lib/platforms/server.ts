@@ -226,11 +226,13 @@ export class ReactiveRecord implements ReactiveApi {
 
   protected createKey(path = '', body = {}): string {
     const extraOptions = this.cloneExtraOptions();
-    const requestPath = `${this.collection}:/${this.endpoint}${path}/${SHA256(
+    const requestPath = `${this.collection}:/${this.endpoint || ''}${path ||
+      ''}/${SHA256(
       JSON.stringify({
         ...body,
         ...this.request,
-        ...{ ref: this.extraOptions.ref }
+        ...{ ref: this.extraOptions.ref || '' },
+        ...{ driver: this._driver }
       })
     )}`;
     return extraOptions.key || requestPath.replace('///', '//');
@@ -487,7 +489,7 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   /**
-   * Set reference
+   * Set reference (for firebase)
    */
   public ref(path: string): ReactiveRecord {
     this.extraOptions.ref = path;

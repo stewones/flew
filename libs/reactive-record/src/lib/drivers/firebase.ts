@@ -52,7 +52,8 @@ export class FirebaseDriver /*implements Driver*/ {
 
       //
       // define adapter
-      const path = `${this.collection}/${_extraOptions.ref}`;
+      const path = `${this.collection}/${_extraOptions.ref || ''}`;
+
       const firebase: any = this.connector.firebase.database().ref(path);
 
       //
@@ -81,7 +82,10 @@ export class FirebaseDriver /*implements Driver*/ {
             collection: this.collection,
             driver: this.driver,
             response: {
-              key: snapshot.key
+              key:
+                !isEmpty(snapshot.key) && snapshot.key != 'undefined'
+                  ? snapshot.key
+                  : false
             }
           };
 
@@ -143,7 +147,7 @@ export class FirebaseDriver /*implements Driver*/ {
 
     //
     // define adapter
-    const path = `${this.collection}/${extraOptions.ref}`;
+    const path = `${this.collection}/${extraOptions.ref || ''}`;
     const firebase: any = this.connector.firebase.database().ref(path);
 
     //
