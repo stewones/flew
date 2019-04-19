@@ -5,12 +5,12 @@ import { Connector } from '../interfaces/connector';
 import { Options, ExtraOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
-import { ReactiveDriverOption } from '../interfaces/driver';
-export class FirebaseDriver /*implements Driver*/ {
-  private driver: ReactiveDriverOption = 'firebase';
-  private collection: string;
-  private timestamp = true;
-  private connector: Connector = {};
+import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
+export class FirebaseDriver implements ReactiveDriver {
+  _driver: ReactiveDriverOption = 'firebase';
+  connector: Connector = {};
+  collection: string;
+  timestamp = true;
 
   //
   // for unit test
@@ -72,7 +72,7 @@ export class FirebaseDriver /*implements Driver*/ {
             data: data,
             key: key,
             collection: this.collection,
-            driver: this.driver,
+            driver: this._driver,
             response: {
               key:
                 !isEmpty(snapshot.key) && snapshot.key != 'undefined'
@@ -105,7 +105,7 @@ export class FirebaseDriver /*implements Driver*/ {
           data: r.data && r.data.length ? r.data[0] : {},
           key: r.key,
           collection: this.collection,
-          driver: this.driver,
+          driver: this._driver,
           response: r.response
         };
         return response;
@@ -167,7 +167,7 @@ export class FirebaseDriver /*implements Driver*/ {
           data: snapshot.val(),
           key: false,
           collection: this.collection,
-          driver: this.driver,
+          driver: this._driver,
           response: {
             empty: !snapshot.exists(),
             size: snapshot.numChildren()

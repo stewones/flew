@@ -127,7 +127,7 @@ export class ReactiveRecord implements ReactiveApi {
     return this._driver;
   }
 
-  private getDriverInstance(driver: ReactiveDriver & string) {
+  private getDriverInstance(driver) {
     if (isEmpty(this._driver_initialized[driver])) {
       const options: Options = this.cloneOptions();
       this.driverInit(options);

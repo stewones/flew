@@ -7,13 +7,13 @@ import { Options, ExtraOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
 import { Logger } from '../utils/logger';
-import { ReactiveDriverOption } from '../interfaces/driver';
+import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
 
-export class FirestoreDriver /*implements ReactiveDriver*/ {
-  private _driver: ReactiveDriverOption = 'firestore';
-  private collection: string;
-  private timestamp = true;
-  private connector: Connector = {};
+export class FirestoreDriver implements ReactiveDriver {
+  _driver: ReactiveDriverOption = 'firestore';
+  collection: string;
+  timestamp = true;
+  connector: Connector = {};
 
   //
   // for unit test

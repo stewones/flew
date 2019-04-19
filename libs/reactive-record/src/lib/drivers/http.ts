@@ -5,14 +5,14 @@ import { Connector } from '../interfaces/connector';
 import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { Logger } from '../utils/logger';
-import { ReactiveDriverOption } from '../interfaces/driver';
+import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
 
-export class HttpDriver /*implements ReactiveDriver*/ {
-  private _driver: ReactiveDriverOption = 'http';
-  private collection: string;
-  private baseURL: string;
-  private endpoint: string;
-  private connector: Connector = {};
+export class HttpDriver implements ReactiveDriver {
+  _driver: ReactiveDriverOption = 'http';
+  collection: string;
+  baseURL: string;
+  endpoint: string;
+  connector: Connector = {};
   private httpConfig: AxiosRequestConfig = {};
 
   //
