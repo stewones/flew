@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Observable, PartialObserver, from } from 'rxjs';
 import { merge, get, isEmpty, isObject } from 'lodash';
 import { Connector } from '../interfaces/connector';
@@ -59,8 +59,8 @@ export class HttpDriver /*implements ReactiveDriver*/ {
       const success = async (r: AxiosResponse) => {
         // build standard response
         const response: Response = {
-          data: !isEmpty(r.data) ? r.data : r,
-          response: !isObject(r) ? r : {},
+          data: r.data ? r.data : r,
+          response: isObject(r) ? r : {},
           key: key,
           collection: this.collection,
           driver: this._driver
