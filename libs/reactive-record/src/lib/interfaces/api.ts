@@ -1,7 +1,9 @@
 import { Response } from './response';
-import { Observable } from 'rxjs';
-// import { ReactiveDriver } from './driver';
+import { Observable, Subject } from 'rxjs';
 import { ReactiveRecord } from '../platforms/server';
+import { Log } from './log';
+import { AxiosRequestConfig } from 'axios';
+import { Options } from './options';
 
 /**
  * Public RR Api
@@ -9,36 +11,44 @@ import { ReactiveRecord } from '../platforms/server';
  * @export
  * @interface Api
  */
-export interface ReactiveApi /*extends ReactiveDriver*/ {
+export interface ReactiveApi {
   //
   // chained options
-  driver(name: string): ReactiveRecord; // firebase / firestore / http
-  useNetwork(active: boolean); // force the use of network call
-  saveNetwork(active: boolean); // as a cache
-  transformNetwork(transformFn: (response: Response) => any); // @deprecated same as transformResponse
-  transformResponse(transformFn: (response: Response) => any); // transform the network/cache response
-  ttl(value: number); // set a max time to cache
-  useCache(active: boolean); // when true the first response should be from the cache if exists
-  transformCache(transformFn: (response: Response) => any); // transform the response from cache
-  key(name: string); // cache name
-  query(by: { [key: string]: {} } | { [key: string]: {} }[]); // firestore only - this is an object literal way of `where`
-  where(field: string, operator: string, value: string | number | boolean); // firestore only - short way as firebase sdk does
-  sort(by: { [key: string]: string }); // firestore only
-  size(value: number); // firestore only
-  ref(path: string); // firebase only
+  driver(name: string): ReactiveRecord; // firebase / firestore / http | [configurable]
+  useNetwork(active: boolean): ReactiveRecord; // force the use of network call
+  saveNetwork(active: boolean): ReactiveRecord; // as a cache
+  transformResponse(transformFn: (response: Response) => any): ReactiveRecord; // transform the network/cache response
+  ttl(value: number): ReactiveRecord; // set a max time to cache
+  useCache(active: boolean): ReactiveRecord; // when true the first response should be from the cache if exists
+  transformCache(transformFn: (response: Response) => any): ReactiveRecord; // transform the response from cache
+  key(name: string): ReactiveRecord; // cache name
+  query(by: { [key: string]: {} } | { [key: string]: {} }[]): ReactiveRecord; // firestore only - this is an object literal way of `where`
+  where(
+    field: string,
+    operator: string,
+    value: string | number | boolean
+  ): ReactiveRecord; // firestore only - short way as firebase sdk does
+  sort(by: { [key: string]: string }): ReactiveRecord; // firestore only
+  size(value: number): ReactiveRecord; // firestore only
+  ref(path: string): ReactiveRecord; // firebase only
   data(transform: boolean): ReactiveRecord;
+  useLog(active: boolean): ReactiveRecord; // [configurable]
+  useLogTrace(active: boolean): ReactiveRecord; // [configurable]
 
   //
   // utils
+  $log: Subject<Log>;
+  init(runtime?: Options): void;
   clearCache(): void;
-  useLog(active: boolean): void;
-  useLogTrace(active: boolean): void;
+  firebase(): any; // firebase instance
+  firestore(): any; // firebase instance
+  cache(): any; // storage instance
+  http(transformFn: (config: AxiosRequestConfig) => void): ReactiveRecord;
+  feed(): void; // add response from cache to store
+  init(): void; // init rr manually
 
   //
-  // @todo move to ReactiveDriver
-  //
-  //
-  // firebase/firestore requests
+  // fire verbs
   find(): Observable<Response>; // firestore & firebase
   findOne(): Observable<Response>; // firestore & firebase
   set(id: string, data: any, merge?: boolean): Observable<any>; // firestore
@@ -49,9 +59,18 @@ export interface ReactiveApi /*extends ReactiveDriver*/ {
   ): any;
 
   //
-  // http requests
+  // http verbs
   get(path: string): Observable<Response>;
   post(path: string, body: any): Observable<Response>;
   patch(path: string, body: any): Observable<Response>;
   delete(path: string, body?: any): Observable<Response>;
+
+  //
+  // experimental
+  reboot(): void; // reload rr initialization
+  reset(): ReactiveRecord;
+
+  //
+  // Legacy
+  transformNetwork(transformFn: (response: Response) => any): ReactiveRecord; // scheduled to @deprecate. use `transformResponse` instead
 }

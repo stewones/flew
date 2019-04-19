@@ -4,7 +4,6 @@ import {
   ReactiveRecord,
   Response
 } from '@firetask/reactive-record';
-import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Log } from '@firetask/reactive-record';
 import { Store } from '@ngxs/store';
@@ -40,7 +39,6 @@ export interface User extends Response<User> {
   providedIn: 'root'
 })
 @Collection({
-  ...environment.rr,
   name: 'users',
   endpoint: '/users'
 })

@@ -3,7 +3,7 @@ import 'firebase/firestore';
 import {
   FirebaseConnector,
   FirestoreConnector,
-  Version
+  Config
 } from '@firetask/reactive-record';
 
 import { Storage } from '@ionic/storage';
@@ -25,20 +25,22 @@ const firebaseConfig = {
 };
 
 export const environment = {
-  production: false,
-  firebase: firebaseConfig,
-  rr: {
-    baseURL: 'https://jsonplaceholder.typicode.com',
-    endpoint: '',
-    connector: {
-      firebase: new FirebaseConnector(Firebase, firebaseConfig),
-      firestore: new FirestoreConnector(Firebase, firebaseConfig)
-    },
+  production: false
+};
 
-    // extra options
-    version: Version.get(appVersion),
-    storage: new Storage(storageConfig())
-  }
+Config.options = {
+  // useLog: false,
+  // useLog: !environment.production,
+  // useLogTrace: !environment.production,
+  baseURL: 'https://jsonplaceholder.typicode.com',
+  // endpoint: '',
+  connector: {
+    firebase: new FirebaseConnector(Firebase, firebaseConfig),
+    firestore: new FirestoreConnector(Firebase, firebaseConfig)
+  },
+
+  // extra options
+  storage: new Storage(storageConfig('rr', 'playground'))
 };
 
 /*

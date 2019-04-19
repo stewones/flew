@@ -171,16 +171,19 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
           return r;
         }),
         last((value: Response, index: number, source: Observable<any>) => {
-          this.appService.$collection.storage.length().then(totalCached => {
-            // console.log(value, index, source);
-            if (!totalCached) {
-              setTimeout(() => this.loadCache(), 0); // force load of cache for the very first request
-            } else if (index >= 1) {
-              //
-              // load cache viewer
-              setTimeout(() => this.loadCache(), 0);
-            }
-          });
+          this.appService.$collection
+            .cache()
+            .length()
+            .then(totalCached => {
+              // console.log(value, index, source);
+              if (!totalCached) {
+                setTimeout(() => this.loadCache(), 0); // force load of cache for the very first request
+              } else if (index >= 1) {
+                //
+                // load cache viewer
+                setTimeout(() => this.loadCache(), 0);
+              }
+            });
 
           return true;
         })

@@ -1,7 +1,6 @@
 import { Connector } from './connector';
 import { StorageAdapter } from './storage';
 import { ReactiveDriverOption } from './driver';
-import { ReactiveRecord } from '../platforms/server';
 
 export interface Options {
   name?: string; // collection name. eg: 'todos'

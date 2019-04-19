@@ -32,11 +32,13 @@ export class CacheExplorerContainerComponent implements OnInit, OnDestroy {
 
   loadCache() {
     this.data = [];
-    this.app.$collection.storage.forEach((value, key, index) => {
+    this.app.$collection.init();
+    this.app.$collection.cache().forEach((value, key, index) => {
       const className = `cache-tree-${index}`;
       const cache: PlayCache = {
         key: key,
-        data: value
+        data: value,
+        collection: value.collection
       };
       this.data.push(cache);
 

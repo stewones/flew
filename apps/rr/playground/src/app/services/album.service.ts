@@ -5,7 +5,6 @@ import {
   Response,
   Log
 } from '@firetask/reactive-record';
-import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { AddLog } from '../+state/log/log.actions';
@@ -20,7 +19,6 @@ export interface Album extends Response<Album> {
   providedIn: 'root'
 })
 @Collection({
-  ...environment.rr,
   name: 'albums',
   endpoint: '/albums'
 })

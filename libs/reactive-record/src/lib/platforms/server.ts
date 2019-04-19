@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
-import { get, merge, isEmpty, clone, cloneDeep, isBoolean } from 'lodash';
+import { get, merge, isEmpty, cloneDeep, isBoolean } from 'lodash';
 import { Observable, PartialObserver, Subject } from 'rxjs';
 import { ReactiveApi } from '../interfaces/api';
 import { ReactiveDriver, ReactiveDriverOption } from '../interfaces/driver';
@@ -54,7 +54,7 @@ export class ReactiveRecord implements ReactiveApi {
     this._initial_options = options;
   }
 
-  protected init(runtime: Options = {}) {
+  public init(runtime: Options = {}) {
     //
     // settings that needs runtime evaluation
     const options: Options = { ...this.cloneOptions(), ...runtime };
@@ -98,6 +98,36 @@ export class ReactiveRecord implements ReactiveApi {
     this._initialized = true;
   }
 
+  public firebase() {
+    return this.getDriverInstance('firebase');
+  }
+
+  public firestore() {
+    return this.getDriverInstance('firestore');
+  }
+
+  public cache() {
+    return this.storage;
+  }
+
+  /**
+   * Clear browser cache
+   */
+  public clearCache(): void {}
+
+  /**
+   * Feed store with cached responses
+   */
+  public feed(): void {}
+
+  protected log(): Logger {
+    return this._logger;
+  }
+
+  protected getDriver(): ReactiveDriverOption {
+    return this._driver;
+  }
+
   private getDriverInstance(driver: ReactiveDriver & string) {
     if (isEmpty(this._driver_initialized[driver])) {
       const options: Options = this.cloneOptions();
@@ -108,25 +138,7 @@ export class ReactiveRecord implements ReactiveApi {
     return this._drivers[driver].connector[driver];
   }
 
-  public firebase() {
-    return this.getDriverInstance('firebase');
-  }
-
-  public firestore() {
-    return this.getDriverInstance('firestore');
-  }
-
-  public getDriver(): ReactiveDriverOption {
-    return this._driver;
-  }
-
-  public reboot() {
-    this._initialized = false;
-    const currentDriver = this.getDriver();
-    this.init({ driver: currentDriver });
-  }
-
-  private reset(): void {
+  private _reset(): void {
     this.request = {};
     this.extraOptions = {};
   }
@@ -160,13 +172,24 @@ export class ReactiveRecord implements ReactiveApi {
       throw new Error(`${_driver} driver unavailable for method [${_method}]`);
   }
 
+  public useLog(active: boolean): ReactiveRecord {
+    this._logger.enabled(active);
+    return this;
+  }
+
+  public useLogTrace(active: boolean): ReactiveRecord {
+    this._logger.traced(active);
+    return this;
+  }
+
   public find<T extends Response>(): Observable<T> {
     const currentDriver = this.getDriver();
     this.init({ driver: currentDriver });
     const _request = cloneDeep(this.request);
     const _key = this.createKey();
+    // console.log(`server key ${_key}`);
     const _extraOptions = cloneDeep(this.extraOptions);
-    this.reset();
+    this._reset();
     this.driverException(currentDriver, 'find');
     return this._drivers[currentDriver].find<T>(_request, _key, _extraOptions);
   }
@@ -177,7 +200,7 @@ export class ReactiveRecord implements ReactiveApi {
     const _request = cloneDeep(this.request);
     const _key = this.createKey();
     const _extraOptions = cloneDeep(this.extraOptions);
-    this.reset();
+    this._reset();
     this.driverException(currentDriver, 'findOne');
     return this._drivers[currentDriver].findOne<T>(
       _request,
@@ -193,7 +216,7 @@ export class ReactiveRecord implements ReactiveApi {
   ): Observable<any> {
     const currentDriver = this.getDriver();
     this.init({ driver: currentDriver });
-    this.reset();
+    this._reset();
     this.driverException(currentDriver, 'set');
     return this._drivers[currentDriver].set(id, data, shouldMerge);
   }
@@ -201,7 +224,7 @@ export class ReactiveRecord implements ReactiveApi {
   public update(id: string, data: any): Observable<any> {
     const currentDriver = this.getDriver();
     this.init({ driver: currentDriver });
-    this.reset();
+    this._reset();
     this.driverException(currentDriver, 'update');
     return this._drivers[currentDriver].update(id, data);
   }
@@ -214,7 +237,7 @@ export class ReactiveRecord implements ReactiveApi {
     this.init({ driver: currentDriver });
     const _request = cloneDeep(this.request);
     const _extraOptions = cloneDeep(this.extraOptions);
-    this.reset();
+    this._reset();
     this.driverException(currentDriver, 'on');
     return this._drivers[currentDriver].on(
       _request,
@@ -235,6 +258,7 @@ export class ReactiveRecord implements ReactiveApi {
         ...{ driver: this._driver }
       })
     )}`;
+    // requestPath += `/${JSON.stringify(this.request.query)}`;
     return extraOptions.key || requestPath.replace('///', '//');
   }
 
@@ -268,7 +292,7 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // reset the chain
-    this.reset();
+    this._reset();
 
     return new Observable((observer: PartialObserver<T>) => {
       //
@@ -281,7 +305,7 @@ export class ReactiveRecord implements ReactiveApi {
           response: r,
           key: key,
           collection: this.collection,
-          driver: this._driver
+          driver: 'http'
         };
         //
         // success callback
@@ -397,6 +421,8 @@ export class ReactiveRecord implements ReactiveApi {
     return this;
   }
 
+  //
+  // legacy method
   public transformNetwork<T>(
     transformFn: (response: Response) => any
   ): ReactiveRecord {
@@ -502,28 +528,18 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   /**
-   * Clear browser cache
+   * experimental
    */
-  public clearCache(): void {}
+  public reboot() {
+    this._initialized = false;
+    const currentDriver = this.getDriver();
+    this.init({ driver: currentDriver });
+  }
 
-  public useLog(active: boolean): ReactiveRecord {
-    this._logger.enabled(active);
+  public reset(): ReactiveRecord {
+    this._reset();
     return this;
   }
-
-  public useLogTrace(active: boolean): ReactiveRecord {
-    this._logger.traced(active);
-    return this;
-  }
-
-  protected log(): Logger {
-    return this._logger;
-  }
-
-  /**
-   * Feed store with cached responses
-   */
-  public feed(): void {}
 }
 
 export class PlatformServer extends ReactiveRecord {}

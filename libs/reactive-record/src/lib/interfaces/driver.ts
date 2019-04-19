@@ -7,7 +7,7 @@ import { ExtraOptions } from './options';
 export type ReactiveDriverOption = 'http' | 'firebase' | 'firestore';
 
 //
-// @todo fix the typing issues
+// @experimental
 export interface ReactiveDriver<T = any> {
   connector?: Connector;
   timestamp?: boolean;

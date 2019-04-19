@@ -8,7 +8,7 @@ import { Config } from '../symbols/rr';
 import { SyncReactiveResponse } from '../utils/store';
 
 export class PlatformBrowser extends ReactiveRecord {
-  storage: StorageAdapter; // storage adapter (see ionic storage for instance)
+  protected storage: StorageAdapter; // storage adapter (see ionic storage for instance)
 
   constructor(options: Options) {
     super(options);
@@ -86,21 +86,26 @@ export class PlatformBrowser extends ReactiveRecord {
     return new Observable((observer: PartialObserver<T>) => {
       const key = super.createKey();
       const extraOptions = super.cloneExtraOptions();
-      this.getCache(key, observer, extraOptions).then(shouldRequestNetwork => {
-        this.log().success()(
-          `${key} should request network? ${shouldRequestNetwork}`
-        );
-        if (shouldRequestNetwork) {
-          super[method]().subscribe(response => {
-            this.setCache(key, response, observer, extraOptions);
-          }, observer.error);
-        } else {
-          super.log().danger()(
-            `${key} - there is a cached response with time to live`
+
+      this.shouldRequestNetwork(key, extraOptions).then(
+        shouldRequestNetwork => {
+          this.log().success()(
+            `${key} should request network? ${shouldRequestNetwork}`
           );
-          observer.complete();
+          if (shouldRequestNetwork) {
+            super[method]().subscribe(response => {
+              this.setCache(key, response, observer, extraOptions);
+            }, observer.error);
+          } else {
+            super.log().danger()(
+              `${key} - there is a cached response with time to live`
+            );
+            observer.complete();
+          }
         }
-      });
+      );
+
+      this.shouldReturnCache(key, observer, extraOptions);
     });
   }
 
@@ -114,48 +119,82 @@ export class PlatformBrowser extends ReactiveRecord {
     return new Observable((observer: PartialObserver<T>) => {
       const key = super.createKey(path, body);
       const extraOptions = super.cloneExtraOptions();
-      this.getCache(key, observer, extraOptions).then(shouldRequestNetwork => {
-        this.log().success()(
-          `${key} should request network? ${shouldRequestNetwork}`
-        );
-        if (shouldRequestNetwork) {
-          //
-          // network handle
-          switch (method) {
-            case 'post':
-              return super.post(path, body).subscribe(response => {
-                this.setCache(key, response, observer, extraOptions);
-              }, observer.error);
-              break;
 
-            case 'patch':
-              super.patch(path, body).subscribe(response => {
-                this.setCache(key, response, observer, extraOptions);
-              }, observer.error);
-              break;
-
-            case 'delete':
-              super.delete(path, body).subscribe(response => {
-                this.setCache(key, response, observer, extraOptions);
-              }, observer.error);
-              break;
-
-            default:
-              super.get(path).subscribe(response => {
-                this.setCache(key, response, observer, extraOptions);
-              }, observer.error);
-          }
-        } else {
-          super.log().danger()(
-            `${key} - there is a cached response with time to live`
+      this.shouldRequestNetwork(key, extraOptions).then(
+        shouldRequestNetwork => {
+          this.log().success()(
+            `${key} should request network? ${shouldRequestNetwork}`
           );
-          observer.complete();
+          if (shouldRequestNetwork) {
+            //
+            // network handle
+            switch (method) {
+              case 'post':
+                return super.post(path, body).subscribe(response => {
+                  this.setCache(key, response, observer, extraOptions);
+                }, observer.error);
+                break;
+
+              case 'patch':
+                super.patch(path, body).subscribe(response => {
+                  this.setCache(key, response, observer, extraOptions);
+                }, observer.error);
+                break;
+
+              case 'delete':
+                super.delete(path, body).subscribe(response => {
+                  this.setCache(key, response, observer, extraOptions);
+                }, observer.error);
+                break;
+
+              default:
+                super.get(path).subscribe(response => {
+                  this.setCache(key, response, observer, extraOptions);
+                }, observer.error);
+            }
+          } else {
+            super.log().danger()(
+              `${key} - there is a cached response with time to live`
+            );
+            observer.complete();
+          }
         }
-      });
+      );
+
+      this.shouldReturnCache(key, observer, extraOptions);
     });
   }
 
-  private async getCache(
+  private async shouldRequestNetwork(
+    key: string,
+    extraOptions: ExtraOptions = {}
+  ) {
+    const cache: Response & { ttl: number } | any = await this.storage.get(key);
+
+    const useCache: boolean = extraOptions.useCache === false ? false : true;
+    const useNetwork: boolean =
+      extraOptions.useNetwork === false ? false : true;
+
+    //
+    // check for TTL
+    // should not call network
+    const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
+    // console.log(`seconds`, seconds);
+
+    //
+    // avoid the return of any cache (jump to network request at server level)
+    if (useCache === false && useNetwork !== false) return true;
+
+    //
+    // stop network request at server level
+    if (useCache && (cache && seconds < cache.ttl) && !isEmpty(cache.data)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private async shouldReturnCache(
     key: string,
     observer: PartialObserver<any>,
     extraOptions: ExtraOptions = {}
@@ -166,15 +205,12 @@ export class PlatformBrowser extends ReactiveRecord {
       typeof extraOptions.transformResponse === 'function'
         ? extraOptions.transformResponse
         : (data: Response) => data;
-
     if (extraOptions.transformData) {
       transformResponse = (data: Response) => data.data;
     }
-
     const useCache: boolean = extraOptions.useCache === false ? false : true;
     const useNetwork: boolean =
       extraOptions.useNetwork === false ? false : true;
-
     super.log().warn()(`${key} useNetwork? ${useNetwork ? true : false}`);
     super.log().warn()(`${key} useCache? ${useCache ? true : false}`);
     super.log().warn()(`${key} hasCache? ${cache ? true : false}`);
@@ -189,39 +225,15 @@ export class PlatformBrowser extends ReactiveRecord {
     );
 
     //
-    // avoid the return of any cache (jump to network request at server level)
-    if (useCache === false && useNetwork !== false) return true;
-
-    //
     // return cached response immediately to view
     if (
       (useCache && cache && !isEmpty(cache.data)) ||
       (useCache && isArray(cache) && !isEmpty(cache)) ||
       (useCache && isObject(cache) && !isEmpty(cache))
     ) {
+      // console.log(`response from cache`, transformResponse(cache));
       observer.next(transformResponse(cache));
     }
-
-    //
-    // check for TTL
-    // should not call network
-    const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-    // console.log(`seconds`, seconds);
-
-    //
-    // stop network request at server level
-    if (useCache && (cache && seconds < cache.ttl) && !isEmpty(cache.data)) {
-      observer.complete();
-      return false;
-    }
-
-    //
-    // should use network?
-    if (useNetwork) return true;
-
-    //
-    // otherwise
-    return false;
   }
 
   private async setCache(
@@ -279,14 +291,15 @@ export class PlatformBrowser extends ReactiveRecord {
       (cache && !isEqual(cache.data, network.data)) ||
       (cache && isEmpty(cache.data)) ||
       !cache ||
+      isEmpty(network.data) ||
       useNetwork !== false
     ) {
       //
       // return network response
       observer.next(transformResponse(network));
-      //
+
       // dispatch to store
-      if (network && network.data && network.data.length)
+      if (network && network.data)
         Config.store.dispatch(
           new SyncReactiveResponse(this.clearNetworkResponse(network))
         );
@@ -316,7 +329,6 @@ export class PlatformBrowser extends ReactiveRecord {
       }
     }
 
-    // console.log('useNetwork?', extraOptions.useNetwork);
     observer.complete();
   }
 }

@@ -20,6 +20,7 @@ export type PlayResponse = Response | any;
 export interface PlayCache {
   key: string;
   data: any;
+  collection: string;
 }
 
 export type PlayPlatform = 'browser' | 'server';

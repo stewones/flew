@@ -2,7 +2,6 @@ import { Options } from '../interfaces/options';
 import { isEmpty } from 'lodash';
 import { PlatformServer } from '../platforms/server';
 import { PlatformBrowser } from '../platforms/browser';
-import { merge } from 'rxjs';
 declare var module;
 
 export function Collection(options: Options) {
@@ -19,15 +18,11 @@ export function Collection(options: Options) {
     constructor.prototype.$collection = useCache
       ? new PlatformBrowser(options)
       : new PlatformServer(options);
-
-    // client service instance isnt keeping
-    // const beforeHttp = constructor.prototype.beforeHttp;
-    // if (typeof beforeHttp === 'function') {
-    //   constructor.prototype.$collection.beforeHttp = beforeHttp;
-    // constructor.prototype.$collection.beforeHttp(beforeHttp);
-    // }
   };
 }
+
+//
+// @experimental
 
 // export function Collection(options: Options) {
 //   return function<T extends { new (...args: any[]): {} }>(constructor: T) {
