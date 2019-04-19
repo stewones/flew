@@ -96,12 +96,12 @@ export class FirestoreDriver implements ReactiveDriver {
       //
       // run exceptions for firestore
       if (!this.collection) throw new Error('missing collection');
-      if (isEmpty(this.connector.firestore))
+      if (isEmpty(this.connector))
         throw new Error('missing firestore connector');
 
       //
       // define adapter
-      let firestore: any = this.connector.firestore.collection(this.collection);
+      let firestore: any = this.connector.collection(this.collection);
 
       //
       // set query
@@ -187,12 +187,11 @@ export class FirestoreDriver implements ReactiveDriver {
     //
     // run exceptions
     if (!this.collection) throw new Error('missing collection');
-    if (isEmpty(this.connector.firestore))
-      throw new Error('missing firestore connector');
+    if (isEmpty(this.connector)) throw new Error('missing firestore connector');
 
     //
     // define adapter
-    let firestore: any = this.connector.firestore.collection(this.collection);
+    let firestore: any = this.connector.collection(this.collection);
 
     //
     // set doc
@@ -240,13 +239,11 @@ export class FirestoreDriver implements ReactiveDriver {
       //
       // primary exceptions
       if (!this.collection) throw new Error('missing collection');
-      if (isEmpty(this.connector.firestore))
+      if (isEmpty(this.connector))
         throw new Error('missing firestore connector');
       //
       // define connector
-      const firestore: any = this.connector.firestore.collection(
-        this.collection
-      );
+      const firestore: any = this.connector.collection(this.collection);
       //
       // define return
       const response = r => {
@@ -268,13 +265,11 @@ export class FirestoreDriver implements ReactiveDriver {
       //
       // primary exceptions
       if (!this.collection) throw new Error('missing collection');
-      if (isEmpty(this.connector.firestore))
+      if (isEmpty(this.connector))
         throw new Error('missing firestore connector');
       //
       // define connector
-      const firestore: any = this.connector.firestore.collection(
-        this.collection
-      );
+      const firestore: any = this.connector.collection(this.collection);
       //
       // auto update timestamp
       if (this.timestamp) data.updated_at = moment().toISOString();

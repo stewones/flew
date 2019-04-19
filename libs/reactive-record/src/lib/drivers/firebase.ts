@@ -39,14 +39,14 @@ export class FirebaseDriver implements ReactiveDriver {
       //
       // run exceptions for firestore
       if (!this.collection) throw new Error('missing collection');
-      if (isEmpty(this.connector.firebase))
+      if (isEmpty(this.connector))
         throw new Error('missing firebase connector');
 
       //
       // define adapter
       const path = `${this.collection}/${_extraOptions.ref || ''}`;
 
-      const firebase: any = this.connector.firebase.database().ref(path);
+      const firebase: any = this.connector.database().ref(path);
 
       //
       // @todo add complete api
@@ -129,10 +129,9 @@ export class FirebaseDriver implements ReactiveDriver {
     //
     // run exceptions
     if (!this.collection) throw new Error('missing collection');
-    if (isEmpty(this.connector.firebase))
-      throw new Error('missing firebase connector');
+    if (isEmpty(this.connector)) throw new Error('missing firebase connector');
 
-    if (this.connector.firebase && isEmpty(this.connector.firebase.database))
+    if (this.connector && isEmpty(this.connector.database))
       throw new Error(
         `missing database sdk. did you add import 'firebase/database' at your app environment ?`
       );
@@ -140,7 +139,7 @@ export class FirebaseDriver implements ReactiveDriver {
     //
     // define adapter
     const path = `${this.collection}/${extraOptions.ref || ''}`;
-    const firebase: any = this.connector.firebase.database().ref(path);
+    const firebase: any = this.connector.database().ref(path);
 
     //
     // @todo add complete api
