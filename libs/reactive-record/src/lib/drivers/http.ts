@@ -83,7 +83,6 @@ export class HttpDriver implements ReactiveDriver {
 
       //
       // network handle
-
       switch (method) {
         case 'post':
           from(this.connector.post(requestPath, body))
@@ -113,5 +112,36 @@ export class HttpDriver implements ReactiveDriver {
             .catch(error);
       }
     });
+  }
+
+  public get<T extends Response>(
+    path: string = '',
+    key: string = ''
+  ): Observable<T> {
+    return this.executeRequest('get', path, key);
+  }
+
+  public post<T extends Response>(
+    path: string = '',
+    key: string = '',
+    body: any = {}
+  ): Observable<T> {
+    return this.executeRequest('post', path, key, body);
+  }
+
+  public patch<T extends Response>(
+    path: string = '',
+    key: string = '',
+    body: any = {}
+  ): Observable<T> {
+    return this.executeRequest('patch', path, key, body);
+  }
+
+  public delete<T extends Response>(
+    path: string = '',
+    key: string = '',
+    body?: any
+  ): Observable<T> {
+    return this.executeRequest('delete', path, key, body);
   }
 }

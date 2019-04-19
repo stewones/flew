@@ -46,8 +46,8 @@ export class UserService {
   $collection: ReactiveRecord;
 
   constructor(private store: Store) {
-    // this.$collection.setHook('http.pre', (config: AxiosRequestConfig) => {
-    //  config.headers['Authorization'] = `Bearer the-server-token`;
+    // this.$collection.http((config: AxiosRequestConfig) => {
+    //   config.headers['Authorization'] = `Bearer the-server-token`;
     // });
 
     this.$collection.$log.subscribe((log: Log) => {

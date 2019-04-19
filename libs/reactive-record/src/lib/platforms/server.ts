@@ -1,8 +1,8 @@
 import { AxiosRequestConfig } from 'axios';
-import { merge, isEmpty, cloneDeep, isBoolean } from 'lodash';
+import { merge, isEmpty, cloneDeep, isBoolean, isString } from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { ReactiveApi } from '../interfaces/api';
-import { ReactiveDriver, ReactiveDriverOption } from '../interfaces/driver';
+import { ReactiveDriverOption } from '../interfaces/driver';
 import { Request } from '../interfaces/request';
 import { Options, ExtraOptions } from '../interfaces/options';
 import { FirestoreDriver } from '../drivers/firestore';
@@ -14,6 +14,7 @@ import { Logger } from '../utils/logger';
 import { Config } from '../symbols/rr';
 import { SHA256 } from '../utils/sha';
 import { HttpDriver } from '../drivers/http';
+import { ReactiveVerb } from '../interfaces/verb';
 
 export class ReactiveRecord implements ReactiveApi {
   protected collection: string;
@@ -48,6 +49,44 @@ export class ReactiveRecord implements ReactiveApi {
   private _initial_options: Options;
   private _initialized: boolean;
 
+  //
+  // verbs
+  private verbs = {
+    firestore: {
+      find: true,
+      findOne: true,
+      on: true,
+      get: 'http.get',
+      post: 'http.post',
+      update: true,
+      patch: 'http.patch',
+      delete: 'http.delete',
+      set: true
+    },
+    firebase: {
+      find: true,
+      findOne: true,
+      on: true,
+      get: 'http.get',
+      post: 'http.post',
+      update: 'http.patch',
+      patch: 'http.patch',
+      delete: 'http.delete',
+      set: 'http.post'
+    },
+    http: {
+      find: 'http.get',
+      findOne: 'http.get',
+      on: false,
+      get: true,
+      post: true,
+      update: 'http.patch',
+      patch: true,
+      delete: true,
+      set: 'http.post'
+    }
+  };
+
   constructor(options: Options) {
     this._initial_options = options;
   }
@@ -59,12 +98,10 @@ export class ReactiveRecord implements ReactiveApi {
 
     if (!this.httpConfig.timeout) this.httpConfig.timeout = 60 * 1000;
     if (!this.httpConfig.baseURL) this.httpConfig.baseURL = options.baseURL;
-
-    this.beforeHttp(this.httpConfig);
+    if (!this.httpConfig.headers) this.httpConfig.headers = {};
 
     //
     // configure http client
-    // this._http = axios.create(this.httpConfig);
     this.driverHttpReload(options);
 
     //
@@ -168,6 +205,7 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   private driverHttpReload(options: Options) {
+    this.beforeHttp(this.httpConfig);
     this._drivers.http = new HttpDriver({
       ...{ _logger: this._logger },
       ...options,
@@ -176,11 +214,10 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   private driverException(_driver: string, _method: string) {
-    if (
-      !this._drivers[_driver] ||
-      typeof this._drivers[_driver].find !== 'function'
-    )
-      throw new Error(`${_driver} driver unavailable for method [${_method}]`);
+    if (this.verbs[_driver][_method] === false)
+      throw new Error(
+        `[${_method}] methond unavailable for driver [${_driver}]`
+      );
   }
 
   public useLog(active: boolean): ReactiveRecord {
@@ -194,26 +231,11 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   public find<T extends Response>(): Observable<T> {
-    const currentDriver = this.getDriver();
-    this.init({ driver: currentDriver });
-    const _request = cloneDeep(this.request);
-    const _key = this.createKey();
-    // console.log(`server key ${_key}`);
-    const _extraOptions = cloneDeep(this.extraOptions);
-    this._reset();
-    this.driverException(currentDriver, 'find');
-    return this._drivers[currentDriver].find(_request, _key, _extraOptions);
+    return this.call<T>('find');
   }
 
   public findOne<T extends Response>(): Observable<T> {
-    const currentDriver = this.getDriver();
-    this.init({ driver: currentDriver });
-    const _request = cloneDeep(this.request);
-    const _key = this.createKey();
-    const _extraOptions = cloneDeep(this.extraOptions);
-    this._reset();
-    this.driverException(currentDriver, 'findOne');
-    return this._drivers[currentDriver].findOne(_request, _key, _extraOptions);
+    return this.call<T>('findOne');
   }
 
   public set(
@@ -221,37 +243,28 @@ export class ReactiveRecord implements ReactiveApi {
     data: any,
     shouldMerge: boolean = true
   ): Observable<any> {
-    const currentDriver = this.getDriver();
-    this.init({ driver: currentDriver });
-    this._reset();
-    this.driverException(currentDriver, 'set');
-    return this._drivers[currentDriver].set(id, data, shouldMerge);
+    return this.call('set', null, {
+      id: id,
+      data: data,
+      shouldMerge: shouldMerge
+    });
   }
 
   public update(id: string, data: any): Observable<any> {
-    const currentDriver = this.getDriver();
-    this.init({ driver: currentDriver });
-    this._reset();
-    this.driverException(currentDriver, 'update');
-    return this._drivers[currentDriver].update(id, data);
+    return this.call('update', null, {
+      id: id,
+      data: data
+    });
   }
 
   public on<T>(
     onSuccess: (response: Response) => any = (response: Response) => {},
     onError: (response: any) => any = (response: any) => {}
   ): any {
-    const currentDriver = this.getDriver();
-    this.init({ driver: currentDriver });
-    const _request = cloneDeep(this.request);
-    const _extraOptions = cloneDeep(this.extraOptions);
-    this._reset();
-    this.driverException(currentDriver, 'on');
-    return this._drivers[currentDriver].on(
-      _request,
-      onSuccess,
-      onError,
-      _extraOptions
-    );
+    return this.call('on', null, {
+      onSuccess: onSuccess,
+      onError: onError
+    });
   }
 
   protected createKey(path = '', body = {}): string {
@@ -273,56 +286,97 @@ export class ReactiveRecord implements ReactiveApi {
     return cloneDeep(this.extraOptions);
   }
 
-  // @todo move to a separate http driver
-  private executeRequest<T extends Response>(
-    method: 'get' | 'post' | 'patch' | 'delete' = 'get',
+  private call<T extends Response>(
+    method: ReactiveVerb,
     path: string = '/',
-    body?: any
+    payload?: any
   ): Observable<T> {
+    let _method = method;
+    let _driver = this.getDriver();
+    let arg1, arg2, arg3, arg4;
+
+    const handler = this.verbs[_driver][_method];
+    if (isString(handler)) {
+      _driver = handler.split('.')[0] as ReactiveDriverOption;
+      _method = handler.split('.')[1] as ReactiveVerb;
+    }
+
     //
-    // ensure settings have been applied
-    const currentDriver = this.getDriver();
-    this.init({ driver: currentDriver });
+    // run exception
+    this.driverException(_driver, _method);
+
+    //
+    // init rr
+    this.init({ driver: _driver });
 
     //
     // define an unique key
-    const key = this.createKey(path, body);
+    const key = this.createKey(path, payload);
+
+    //
+    // firebase stuff
+    const request = cloneDeep(this.request);
+    const extraOptions = cloneDeep(this.extraOptions);
 
     //
     // reset the chain
     this._reset();
 
-    return this._drivers.http.executeRequest(
-      method,
-      path,
-      key,
-      body
-    ) as Observable<T>;
+    //
+    // define arguments
+    switch (_method) {
+      case 'find':
+      case 'findOne':
+        arg1 = request;
+        arg2 = key;
+        arg3 = extraOptions;
+        break;
+      case 'set':
+      case 'update':
+        arg1 = payload.id;
+        arg2 = payload.data;
+        arg3 = payload.shouldMerge;
+        break;
+      case 'on':
+        arg1 = request;
+        arg2 = payload.onSuccess;
+        arg3 = payload.onError;
+        arg4 = extraOptions;
+        break;
+      default:
+        arg1 = path;
+        arg2 = key;
+        arg3 = payload;
+    }
+
+    //
+    // execute request
+    return this._drivers[_driver][_method](arg1, arg2, arg3, arg4);
   }
 
   public get<T extends Response>(path: string = ''): Observable<T> {
-    return this.executeRequest('get', path);
+    return this.call<T>('get', path);
   }
 
   public post<T extends Response>(
     path: string = '',
     body: any = {}
   ): Observable<T> {
-    return this.executeRequest('post', path, body);
+    return this.call<T>('post', path, body);
   }
 
   public patch<T extends Response>(
     path: string = '',
     body: any = {}
   ): Observable<T> {
-    return this.executeRequest('patch', path, body);
+    return this.call<T>('patch', path, body);
   }
 
   public delete<T extends Response>(
     path: string = '',
     body?: any
   ): Observable<T> {
-    return this.executeRequest('delete', path, body);
+    return this.call<T>('delete', path, body);
   }
 
   /**
