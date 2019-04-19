@@ -20,7 +20,6 @@ export interface Todo extends Response<Todo> {
   providedIn: 'root'
 })
 @Collection({
-  ...environment.rr,
   name: 'todos',
   endpoint: '/todos'
 })

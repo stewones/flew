@@ -1,6 +1,6 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
-import { get, merge, isEmpty, cloneDeep, isBoolean } from 'lodash';
-import { Observable, PartialObserver, Subject } from 'rxjs';
+import { AxiosRequestConfig } from 'axios';
+import { merge, isEmpty, cloneDeep, isBoolean } from 'lodash';
+import { Observable, Subject } from 'rxjs';
 import { ReactiveApi } from '../interfaces/api';
 import { ReactiveDriver, ReactiveDriverOption } from '../interfaces/driver';
 import { Request } from '../interfaces/request';
@@ -13,30 +13,28 @@ import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
 import { Config } from '../symbols/rr';
 import { SHA256 } from '../utils/sha';
+import { HttpDriver } from '../drivers/http';
 
 export class ReactiveRecord implements ReactiveApi {
   protected collection: string;
   protected storage: StorageAdapter;
 
+  private _driver_initialized = {};
   private _driver: ReactiveDriverOption = 'firestore';
   private _drivers: {
-    // firestore: ReactiveDriver;
-    // firebase: ReactiveDriver;
-    // http: ReactiveDriver;
+    firestore: any;
+    firebase: any;
+    http: any;
   } = {
     firestore: {},
     firebase: {},
     http: {}
   };
-  _driver_initialized = {};
 
-  private _http: AxiosInstance;
   private httpConfig: AxiosRequestConfig = {};
   private beforeHttp = (config: AxiosRequestConfig) => {};
 
-  private baseURL: string;
   private endpoint: string;
-
   private request: Request = {};
   private extraOptions: ExtraOptions = {};
 
@@ -66,7 +64,8 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // configure http client
-    this._http = axios.create(this.httpConfig);
+    // this._http = axios.create(this.httpConfig);
+    this.driverHttpReload(options);
 
     //
     // settings initialized once
@@ -135,7 +134,7 @@ export class ReactiveRecord implements ReactiveApi {
     } else {
       this._driver_initialized[driver] = true;
     }
-    return this._drivers[driver].connector[driver];
+    return this._drivers[driver].connector;
   }
 
   private _reset(): void {
@@ -160,8 +159,20 @@ export class ReactiveRecord implements ReactiveApi {
         ...{ _logger: this._logger },
         ...options
       }),
-      http: {} // @todo
+      http: new HttpDriver({
+        ...{ _logger: this._logger },
+        ...options,
+        ...{ httpConfig: this.httpConfig }
+      })
     };
+  }
+
+  private driverHttpReload(options: Options) {
+    this._drivers.http = new HttpDriver({
+      ...{ _logger: this._logger },
+      ...options,
+      ...{ httpConfig: this.httpConfig }
+    });
   }
 
   private driverException(_driver: string, _method: string) {
@@ -191,7 +202,7 @@ export class ReactiveRecord implements ReactiveApi {
     const _extraOptions = cloneDeep(this.extraOptions);
     this._reset();
     this.driverException(currentDriver, 'find');
-    return this._drivers[currentDriver].find<T>(_request, _key, _extraOptions);
+    return this._drivers[currentDriver].find(_request, _key, _extraOptions);
   }
 
   public findOne<T extends Response>(): Observable<T> {
@@ -202,11 +213,7 @@ export class ReactiveRecord implements ReactiveApi {
     const _extraOptions = cloneDeep(this.extraOptions);
     this._reset();
     this.driverException(currentDriver, 'findOne');
-    return this._drivers[currentDriver].findOne<T>(
-      _request,
-      _key,
-      _extraOptions
-    );
+    return this._drivers[currentDriver].findOne(_request, _key, _extraOptions);
   }
 
   public set(
@@ -278,15 +285,6 @@ export class ReactiveRecord implements ReactiveApi {
     this.init({ driver: currentDriver });
 
     //
-    // call exceptions
-    if (!this.baseURL) throw new Error(`baseURL needed for [${method}]`);
-    if (!this.endpoint) throw new Error(`endpoint required for [${method}]`);
-
-    //
-    // set path to be requestes
-    const requestPath = `${this.endpoint}${path}`;
-
-    //
     // define an unique key
     const key = this.createKey(path, body);
 
@@ -294,64 +292,12 @@ export class ReactiveRecord implements ReactiveApi {
     // reset the chain
     this._reset();
 
-    return new Observable((observer: PartialObserver<T>) => {
-      //
-      // transform response
-      const success = async (r: AxiosResponse) => {
-        //
-        // build standard response
-        const response: Response = {
-          data: r.data,
-          response: r,
-          key: key,
-          collection: this.collection,
-          driver: 'http'
-        };
-        //
-        // success callback
-        observer.next(response as T);
-        observer.complete();
-      };
-
-      const error = err => {
-        const errData = get(err, 'response.data');
-        //
-        // error callback
-        observer.error(errData ? errData : err);
-        observer.complete();
-      };
-
-      //
-      // network handle
-      switch (method) {
-        case 'post':
-          this._http
-            .post(requestPath, body)
-            .then(success)
-            .catch(error);
-          break;
-
-        case 'patch':
-          this._http
-            .patch(requestPath, body)
-            .then(success)
-            .catch(error);
-          break;
-
-        case 'delete':
-          this._http
-            .delete(requestPath, body)
-            .then(success)
-            .catch(error);
-          break;
-
-        default:
-          this._http
-            .get(requestPath)
-            .then(success)
-            .catch(error);
-      }
-    });
+    return this._drivers.http.executeRequest(
+      method,
+      path,
+      key,
+      body
+    ) as Observable<T>;
   }
 
   public get<T extends Response>(path: string = ''): Observable<T> {

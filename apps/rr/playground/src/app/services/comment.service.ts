@@ -22,7 +22,6 @@ export interface Comment extends Response<Comment> {
   providedIn: 'root'
 })
 @Collection({
-  ...environment.rr,
   name: 'comments',
   endpoint: '/comments'
 })

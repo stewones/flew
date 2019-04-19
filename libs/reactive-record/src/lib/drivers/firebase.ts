@@ -6,20 +6,11 @@ import { Options, ExtraOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
 import { ReactiveDriverOption } from '../interfaces/driver';
-
 export class FirebaseDriver /*implements Driver*/ {
-  driver: ReactiveDriverOption = 'firebase';
-
-  //
-  // default params
-  collection: string;
-  timestamp = true;
-
-  //
-  // connectors
-  connector: Connector = {
-    firebase: {}
-  };
+  private driver: ReactiveDriverOption = 'firebase';
+  private collection: string;
+  private timestamp = true;
+  private connector: Connector = {};
 
   //
   // for unit test
@@ -27,6 +18,7 @@ export class FirebaseDriver /*implements Driver*/ {
 
   constructor(options: Options) {
     merge(this, options);
+    this.connector = options.connector.firebase;
   }
 
   public find(

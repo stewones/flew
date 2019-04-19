@@ -22,7 +22,6 @@ export interface Photo extends Response<Photo> {
   providedIn: 'root'
 })
 @Collection({
-  ...environment.rr,
   name: 'photos',
   endpoint: '/photos'
 })

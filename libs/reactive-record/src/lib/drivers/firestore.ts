@@ -10,18 +10,10 @@ import { Logger } from '../utils/logger';
 import { ReactiveDriverOption } from '../interfaces/driver';
 
 export class FirestoreDriver /*implements ReactiveDriver*/ {
-  driver: ReactiveDriverOption = 'firestore';
-
-  //
-  // default params
-  collection: string;
-  timestamp = true;
-
-  //
-  // connectors
-  connector: Connector = {
-    firestore: {}
-  };
+  private _driver: ReactiveDriverOption = 'firestore';
+  private collection: string;
+  private timestamp = true;
+  private connector: Connector = {};
 
   //
   // for unit test
@@ -33,6 +25,7 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
 
   constructor(options: Options) {
     merge(this, options);
+    this.connector = options.connector.firestore;
   }
 
   private where(query: any, firestore: any) {
@@ -137,7 +130,7 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
             data: data,
             key: key,
             collection: this.collection,
-            driver: this.driver,
+            driver: this._driver,
             response: {
               empty: snapshot.empty,
               size: snapshot.size,
@@ -169,7 +162,7 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
           data: r.data && r.data.length ? r.data[0] : {},
           key: r.key,
           collection: this.collection,
-          driver: this.driver,
+          driver: this._driver,
           response: r.response
         };
 
@@ -226,7 +219,7 @@ export class FirestoreDriver /*implements ReactiveDriver*/ {
         data: data,
         key: false,
         collection: this.collection,
-        driver: this.driver,
+        driver: this._driver,
         response: {
           empty: snapshot.empty,
           size: snapshot.size

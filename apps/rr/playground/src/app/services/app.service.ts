@@ -16,7 +16,6 @@ export interface App extends Response<App> {
   providedIn: 'root'
 })
 @Collection({
-  ...environment.rr,
   name: '',
   endpoint: '/'
 })

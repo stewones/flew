@@ -17,7 +17,6 @@ export interface UserServer extends Response<UserServer> {
   providedIn: 'root'
 })
 @Collection({
-  ...environment.rr,
   name: 'users',
   endpoint: '/users',
   useCache: false // to force the use of server platform

@@ -9,6 +9,7 @@ import { GroundModule } from './components/ground/ground.module';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { PlayState } from './+state/play.state';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,6 +17,7 @@ import { PlayState } from './+state/play.state';
     BrowserModule,
     BrowserAnimationsModule,
     GroundModule,
+    HttpClientModule,
     NgxsModule.forRoot([PlayState], {
       developmentMode: !environment.production
     }),
