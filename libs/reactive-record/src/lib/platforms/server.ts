@@ -295,10 +295,10 @@ export class ReactiveRecord implements ReactiveApi {
     let _driver = this.getDriver();
     let arg1, arg2, arg3, arg4;
 
-    const handler = this.verbs[_driver][_method];
-    if (isString(handler)) {
-      _driver = handler.split('.')[0] as ReactiveDriverOption;
-      _method = handler.split('.')[1] as ReactiveVerb;
+    const verb = this.verbs[_driver][_method];
+    if (isString(verb)) {
+      _driver = verb.split('.')[0] as ReactiveDriverOption;
+      _method = verb.split('.')[1] as ReactiveVerb;
     }
 
     //
