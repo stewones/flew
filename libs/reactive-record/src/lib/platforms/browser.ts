@@ -12,7 +12,7 @@ import { clearNetworkResponse } from '../utils/response';
 declare var navigator;
 
 export class PlatformBrowser extends ReactiveRecord {
-  protected storage: StorageAdapter; // storage adapter (see ionic storage for instance)
+  protected storage: StorageAdapter; // storage adapter (see ionic storage for reference)
 
   constructor(options: Options) {
     super(options);

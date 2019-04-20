@@ -405,9 +405,6 @@ export class ReactiveRecord implements ReactiveApi {
     return this;
   }
 
-  /**
-   * Set current driver
-   */
   public http(fn: (config: AxiosRequestConfig) => void): ReactiveRecord {
     this.beforeHttp = fn;
     return this;
