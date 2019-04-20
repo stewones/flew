@@ -175,12 +175,12 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   private getDriverInstance(driver) {
-    if (isEmpty(this._driver_initialized[driver])) {
+    if (!this._driver_initialized[driver]) {
       const options: Options = this.cloneOptions();
       this.driverInit(options);
-    } else {
       this._driver_initialized[driver] = true;
     }
+
     return this._drivers[driver].connector;
   }
 
@@ -547,6 +547,7 @@ export class ReactiveRecord implements ReactiveApi {
    */
   public reboot() {
     this._initialized = false;
+    this._driver_initialized = false;
     const currentDriver = this.getDriver();
     this.init({ driver: currentDriver });
   }
