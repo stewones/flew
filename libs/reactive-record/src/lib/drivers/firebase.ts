@@ -32,13 +32,13 @@ export class FirebaseDriver implements ReactiveDriver {
       // run exceptions
       if (!this.collection) throw new Error('missing collection');
 
+      if (isEmpty(this.connector))
+        throw new Error('missing firebase connector');
+
       if (!this.connector.database)
         throw new Error(
           `missing database instance. did you add import 'firebase/database'; to your environment file?`
         );
-
-      if (isEmpty(this.connector))
-        throw new Error('missing firebase connector');
 
       //
       // define adapter

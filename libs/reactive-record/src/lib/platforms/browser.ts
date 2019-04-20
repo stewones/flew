@@ -9,6 +9,8 @@ import { SyncReactiveResponse } from '../utils/store';
 import { ReactiveVerb } from '../interfaces/verb';
 import { clearNetworkResponse } from '../utils/response';
 
+declare var navigator;
+
 export class PlatformBrowser extends ReactiveRecord {
   protected storage: StorageAdapter; // storage adapter (see ionic storage for instance)
 
