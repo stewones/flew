@@ -6,6 +6,7 @@ import { ReactiveRecord } from './server';
 import { StorageAdapter } from '../interfaces/storage';
 import { Config } from '../symbols/rr';
 import { SyncReactiveResponse } from '../utils/store';
+import { ReactiveVerb } from '../interfaces/verb';
 
 export class PlatformBrowser extends ReactiveRecord {
   protected storage: StorageAdapter; // storage adapter (see ionic storage for instance)
@@ -48,119 +49,67 @@ export class PlatformBrowser extends ReactiveRecord {
   }
 
   public get<T extends Response>(path: string = ''): Observable<T> {
-    return this.httpRequest('get', path);
+    return this.call('get', path);
   }
 
   public post<T extends Response>(
     path: string = '',
     body: any = {}
   ): Observable<T> {
-    return this.httpRequest('post', path, body);
+    return this.call('post', path, body);
   }
 
   public patch<T extends Response>(
     path: string = '',
     body: any = {}
   ): Observable<T> {
-    return this.httpRequest('patch', path, body);
-  }
-
-  public delete<T extends Response>(
-    path: string = '',
-    body?: any
-  ): Observable<T> {
-    return this.httpRequest('delete', path, body);
+    return this.call('patch', path, body);
   }
 
   public find<T extends Response>(): Observable<T> {
-    return this.fireRequest<T>('find');
+    return this.call('find');
   }
 
   public findOne<T extends Response>(): Observable<T> {
-    return this.fireRequest<T>('findOne');
+    return this.call('findOne');
   }
 
-  private fireRequest<T extends Response>(method: 'find' | 'findOne' = 'find') {
-    const currentDriver = super.getDriver();
-    super.init({ driver: currentDriver });
-    return new Observable((observer: PartialObserver<T>) => {
-      const key = super.createKey();
-      const extraOptions = super.cloneExtraOptions();
-
-      this.shouldRequestNetwork(key, extraOptions).then(
-        shouldRequestNetwork => {
-          this.log().success()(
-            `${key} should request network? ${shouldRequestNetwork}`
-          );
-          if (shouldRequestNetwork) {
-            super[method]().subscribe(response => {
-              this.setCache(key, response, observer, extraOptions);
-            }, observer.error);
-          } else {
-            super.log().danger()(
-              `${key} - there is a cached response with time to live`
-            );
-            observer.complete();
-          }
-        }
-      );
-
-      this.shouldReturnCache(key, observer, extraOptions);
-    });
-  }
-
-  private httpRequest<T extends Response>(
-    method: 'get' | 'post' | 'patch' | 'delete' = 'get',
+  protected call<T extends Response>(
+    method: ReactiveVerb = 'get',
     path: string = '/',
-    body?: any
+    payload: any = {}
   ): Observable<T> {
+    // initialize so we can have access to stuff like `storage`
     const currentDriver = super.getDriver();
     super.init({ driver: currentDriver });
-    return new Observable((observer: PartialObserver<T>) => {
-      const key = super.createKey(path, body);
-      const extraOptions = super.cloneExtraOptions();
 
+    // stuff necessary for cache
+    const key = super.createKey(path, payload);
+    const extraOptions = super.cloneExtraOptions();
+
+    return new Observable((observer: PartialObserver<T>) => {
       this.shouldRequestNetwork(key, extraOptions).then(
         shouldRequestNetwork => {
           this.log().success()(
             `${key} should request network? ${shouldRequestNetwork}`
           );
           if (shouldRequestNetwork) {
-            //
-            // network handle
-            switch (method) {
-              case 'post':
-                return super.post(path, body).subscribe(response => {
-                  this.setCache(key, response, observer, extraOptions);
-                }, observer.error);
-                break;
-
-              case 'patch':
-                super.patch(path, body).subscribe(response => {
-                  this.setCache(key, response, observer, extraOptions);
-                }, observer.error);
-                break;
-
-              case 'delete':
-                super.delete(path, body).subscribe(response => {
-                  this.setCache(key, response, observer, extraOptions);
-                }, observer.error);
-                break;
-
-              default:
-                super.get(path).subscribe(response => {
-                  this.setCache(key, response, observer, extraOptions);
-                }, observer.error);
-            }
+            super.call<T>(method, path, payload).subscribe(
+              response => {
+                this.setCache(key, response, observer, extraOptions);
+              },
+              err => observer.error(err)
+            );
           } else {
             super.log().danger()(
-              `${key} - there is a cached response with time to live`
+              `${key} - there is a cached response with time to live. try to adjust the *ttl* property or remove the cache completely.`
             );
             observer.complete();
           }
         }
       );
-
+      //
+      // return cached response
       this.shouldReturnCache(key, observer, extraOptions);
     });
   }

@@ -1,5 +1,7 @@
 import { ReactiveRecord } from './server';
-import { FirestoreStub } from '../utils/firestore-stub';
+import { FirestoreStub } from '../drivers/stub';
+import { ReactiveDriverOption } from '../interfaces/driver';
+
 // import { fakeAsync, tick } from '@angular/core/testing';
 
 describe('ReactiveRecord', () => {
@@ -39,10 +41,10 @@ describe('ReactiveRecord', () => {
   it('should fail for unknown drivers', () => {
     expect(() => {
       lib
-        .driver('unknown')
+        .driver('unknown' as ReactiveDriverOption)
         .find()
         .toPromise();
-    }).toThrowError('unknown driver unavailable for method [find]');
+    }).toThrowError('[find] method unavailable for driver [unknown]');
   });
 
   it('should implement `find` method', () => {
@@ -76,14 +78,14 @@ describe('ReactiveRecord', () => {
     expect(spy).toBeCalled();
   });
 
-  fit('should implement `on` method', () => {
-    // const spy = jest.spyOn(ReactiveRecord.prototype, 'on');
+  it('should implement `on` method', () => {
+    const spy = jest.spyOn(ReactiveRecord.prototype, 'on');
     lib.on(
       r => {
         console.log(123, r);
       },
       r => console.log(r)
     );
-    // expect(spy).toBeCalled();
+    expect(spy).toBeCalled();
   });
 });

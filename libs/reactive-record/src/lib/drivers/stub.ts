@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { Observable, of, throwError } from 'rxjs';
 
 //
 // Firebase Stub
@@ -12,29 +13,7 @@ export const FirebaseStub = ({
   updateProfile = Promise.resolve(true),
   facebookCredential = Promise.resolve(true),
   googleCredential = Promise.resolve(true)
-}: {
-  signInEmail?: Promise<any>;
-  signInCredential?: Promise<any>;
-  createUser?: Promise<any>;
-  signOut?: Promise<any>;
-  resetPassword?: Promise<any>;
-  updatePassword?: Promise<any>;
-  updateProfile?: Promise<any>;
-  facebookCredential?: Promise<any>;
-  googleCredential?: Promise<any>;
-}): {
-  firebase: any;
-  auth: any;
-  signInWithEmailAndPassword: any;
-  signInWithCredential: any;
-  createUserWithEmailAndPassword: any;
-  signOut: any;
-  sendPasswordResetEmail: any;
-  updatePassword: any;
-  updateProfile: any;
-  facebookCredential: any;
-  googleCredential: any;
-} => {
+}) => {
   const firebaseFacebookAuthProviderCredentialStub: any = jasmine
     .createSpy('credential')
     .and.returnValue(facebookCredential);
@@ -75,8 +54,44 @@ export const FirebaseStub = ({
     }
   });
 
+  const firebaseOn: any = jasmine
+    .createSpy('on')
+    .and.returnValue({ toPromise: (arg1, arg2, arg3) => {} });
+
+  const firebaseRefStub: any = jasmine.createSpy('ref').and.returnValue({
+    once: (
+      type = 'value',
+      callback = (snapshot: any) => {
+        return of({
+          data: [{ a: 1 }, { b: 2 }, { c: 3 }],
+          key: 'mocked-key',
+          collection: 'mocked-collection',
+          driver: 'mocked-driver',
+          response: {}
+        });
+      },
+      error = (error: any) => {
+        return throwError(error);
+      }
+    ) => {
+      callback({
+        key: 'firebase-key',
+        toJSON: () => {
+          return { a: 1, b: 2, c: 3 };
+        }
+      });
+      error('zzz');
+    },
+    on: firebaseOn
+  });
+
+  const firebaseDbStub: any = jasmine.createSpy('database').and.returnValue({
+    ref: firebaseRefStub
+  });
+
   const firebaseStub: any = {
-    auth: firebaseAuthStub
+    auth: firebaseAuthStub,
+    database: firebaseDbStub
   };
 
   _.extend(firebaseStub.auth, {
@@ -100,5 +115,80 @@ export const FirebaseStub = ({
     updateProfile: firebaseUpdateProfileStub,
     facebookCredential: firebaseFacebookAuthProviderCredentialStub,
     googleCredential: firebaseGoogleAuthProviderCredentialStub
+  };
+};
+
+//
+// Firestore Stub
+export const FirestoreStub = ({
+  get = Promise.resolve([
+    {
+      data: () => {
+        return { foo: 'data' };
+      }
+    }
+  ]),
+  set = Promise.resolve(true),
+  update = Promise.resolve(true),
+  onSnapshot = (successFn, errorFn) => {}
+}: {
+  get?: Promise<any>;
+  set?: Promise<any>;
+  update?: Promise<any>;
+  onSnapshot?: any;
+}): {
+  firestore: any;
+  collection: any;
+  doc: any;
+  get: any;
+  set: any;
+  update: any;
+  onSnapshot: any;
+} => {
+  const firestoreCollectionDocGetStub: any = jasmine
+    .createSpy('get')
+    .and.returnValue(get);
+
+  const firestoreCollectionDocSetStub: any = jasmine
+    .createSpy('set')
+    .and.returnValue(set);
+
+  const firestoreCollectionDocUpdateStub: any = jasmine
+    .createSpy('update')
+    .and.returnValue(update);
+
+  const firestoreCollectionDocOnStub: any = jasmine
+    .createSpy('onSnapshot')
+    .and.returnValue(onSnapshot);
+
+  const firestoreCollectionDocStub: any = jasmine
+    .createSpy('doc')
+    .and.returnValue({
+      get: firestoreCollectionDocGetStub,
+      set: firestoreCollectionDocSetStub,
+      update: firestoreCollectionDocUpdateStub,
+      onSnapshot: firestoreCollectionDocOnStub
+    });
+
+  const firestoreCollectionStub: any = jasmine
+    .createSpy('collection')
+    .and.returnValue({
+      doc: firestoreCollectionDocStub,
+      get: firestoreCollectionDocGetStub,
+      onSnapshot: firestoreCollectionDocOnStub
+    });
+
+  const firestoreStub: any = {
+    collection: firestoreCollectionStub
+  };
+
+  return {
+    firestore: firestoreStub,
+    collection: firestoreCollectionStub,
+    doc: firestoreCollectionDocStub,
+    get: firestoreCollectionDocGetStub,
+    set: firestoreCollectionDocSetStub,
+    update: firestoreCollectionDocUpdateStub,
+    onSnapshot: firestoreCollectionDocOnStub
   };
 };

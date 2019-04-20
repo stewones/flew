@@ -1,5 +1,6 @@
 import 'firebase/firestore';
 import 'firebase/auth';
+import 'firebase/database';
 import * as Firebase from 'firebase/app';
 import {
   FirebaseConnector,

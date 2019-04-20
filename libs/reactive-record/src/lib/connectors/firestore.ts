@@ -20,6 +20,3 @@ export class FirestoreConnector {
     }
   }
 }
-
-// @deprecated
-export class RRFirestoreConnector extends FirestoreConnector {}

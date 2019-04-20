@@ -22,6 +22,9 @@ export class AppComponent implements OnInit {
   @Select(ReactiveState.key('baby-firestore', true))
   babyFirestore$: Observable<Response>;
 
+  @Select(ReactiveState.key('baby-firebase', true))
+  babyFirebase$: Observable<Response>;
+
   @Select(ReactiveState.key('cat', true))
   cat$: Observable<Response>;
 
@@ -51,13 +54,13 @@ export class AppComponent implements OnInit {
     //   .then(r => console.log(r))
     //   .catch(err => console.log(err));
 
-    this.todoService
-      .getCat()
-      //.toPromise()
-      .subscribe(r => console.log(r), err => console.log(err));
+    // this.todoService
+    //   .getCat()
+    //   //.toPromise()
+    //   .subscribe(r => console.log(r), err => console.log(err));
 
     this.userService.$collection
-      .key('cat')
+      .key('baby')
       .get('/images/search')
       .subscribe(r => console.log(r), err => console.log(err));
   }
@@ -74,6 +77,15 @@ export class AppComponent implements OnInit {
       .driver('firestore')
       .key('baby-firestore')
       .find()
+      //.toPromise()
+      .subscribe(r => console.log(r), err => console.log(err));
+  }
+
+  getCatFirebase() {
+    this.catService.$collection
+      .driver('firebase')
+      .key('baby-firebase')
+      .findOne()
       //.toPromise()
       .subscribe(r => console.log(r), err => console.log(err));
   }

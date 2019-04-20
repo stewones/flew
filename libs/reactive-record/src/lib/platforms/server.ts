@@ -1,51 +1,49 @@
 import { AxiosRequestConfig } from 'axios';
 import { merge, isEmpty, cloneDeep, isBoolean, isString } from 'lodash';
 import { Observable, Subject } from 'rxjs';
-import { ReactiveApi } from '../interfaces/api';
-import { ReactiveDriverOption } from '../interfaces/driver';
 import { Request } from '../interfaces/request';
-import { Options, ExtraOptions } from '../interfaces/options';
-import { FirestoreDriver } from '../drivers/firestore';
-import { FirebaseDriver } from '../drivers/firebase';
 import { Response } from '../interfaces/response';
+import { Options, ExtraOptions } from '../interfaces/options';
+import { ReactiveApi } from '../interfaces/api';
+import { ReactiveVerb } from '../interfaces/verb';
+import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
 import { StorageAdapter } from '../interfaces/storage';
 import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
 import { Config } from '../symbols/rr';
 import { SHA256 } from '../utils/sha';
+import { FirestoreDriver } from '../drivers/firestore';
+import { FirebaseDriver } from '../drivers/firebase';
 import { HttpDriver } from '../drivers/http';
-import { ReactiveVerb } from '../interfaces/verb';
 
 export class ReactiveRecord implements ReactiveApi {
   protected collection: string;
+  protected endpoint: string;
   protected storage: StorageAdapter;
-
-  private _driver_initialized = {};
-  private _driver: ReactiveDriverOption = 'firestore';
-  private _drivers: {
-    firestore: any;
-    firebase: any;
-    http: any;
-  } = {
-    firestore: {},
-    firebase: {},
-    http: {}
-  };
 
   private httpConfig: AxiosRequestConfig = {};
   private beforeHttp = (config: AxiosRequestConfig) => {};
 
-  private endpoint: string;
   private request: Request = {};
   private extraOptions: ExtraOptions = {};
 
-  //
-  // subject for handling logs
+  private _driver_initialized = {};
+  private _driver: ReactiveDriverOption = 'firestore';
+  private _drivers: {
+    firestore: ReactiveDriver;
+    firebase: ReactiveDriver;
+    http: ReactiveDriver;
+  } = {
+    firestore: {} as ReactiveDriver,
+    firebase: {} as ReactiveDriver,
+    http: {} as ReactiveDriver
+  };
+
   public $log: Subject<Log> = new Subject();
   protected _logger: Logger; // instance
 
   //
-  // runtime config
+  // runtime setup
   private _initial_options: Options;
   private _initialized: boolean;
 
@@ -213,11 +211,15 @@ export class ReactiveRecord implements ReactiveApi {
     });
   }
 
-  private driverException(_driver: string, _method: string) {
-    if (this.verbs[_driver][_method] === false)
-      throw new Error(
-        `[${_method}] methond unavailable for driver [${_driver}]`
-      );
+  private getVerbOrException(_driver: string, _method: string): ReactiveVerb {
+    const msg = `[${_method}] method unavailable for driver [${_driver}]`;
+    try {
+      const verb = this.verbs[_driver][_method];
+      if (verb === false) throw new Error(msg);
+      return verb;
+    } catch (err) {
+      throw new Error(msg);
+    }
   }
 
   public useLog(active: boolean): ReactiveRecord {
@@ -286,24 +288,27 @@ export class ReactiveRecord implements ReactiveApi {
     return cloneDeep(this.extraOptions);
   }
 
-  private call<T extends Response>(
+  protected call<T extends Response>(
     method: ReactiveVerb,
     path: string = '/',
-    payload?: any
+    payload: any = {}
   ): Observable<T> {
     let _method = method;
     let _driver = this.getDriver();
     let arg1, arg2, arg3, arg4;
 
-    const verb = this.verbs[_driver][_method];
+    //
+    // get verb
+    let verb = this.getVerbOrException(_driver, _method);
+
     if (isString(verb)) {
       _driver = verb.split('.')[0] as ReactiveDriverOption;
       _method = verb.split('.')[1] as ReactiveVerb;
     }
 
     //
-    // run exception
-    this.driverException(_driver, _method);
+    // run exception for new variables
+    this.getVerbOrException(_driver, _method);
 
     //
     // init rr
@@ -351,6 +356,7 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // execute request
+    // console.log(_driver, _method);
     return this._drivers[_driver][_method](arg1, arg2, arg3, arg4);
   }
 

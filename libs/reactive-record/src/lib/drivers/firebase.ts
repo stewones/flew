@@ -1,21 +1,17 @@
 import { Request } from '../interfaces/request';
 import { Observable, PartialObserver } from 'rxjs';
-import { merge, isEmpty } from 'lodash';
+import { merge, isEmpty, get } from 'lodash';
 import { Connector } from '../interfaces/connector';
 import { Options, ExtraOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
 import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
+
 export class FirebaseDriver implements ReactiveDriver {
   _driver: ReactiveDriverOption = 'firebase';
   connector: Connector = {};
   collection: string;
   timestamp = true;
-
-  //
-  // for unit test
-  _observer: PartialObserver<any>;
-
   constructor(options: Options) {
     merge(this, options);
     this.connector = options.connector.firebase;
@@ -33,12 +29,14 @@ export class FirebaseDriver implements ReactiveDriver {
       merge(_extraOptions, extraOptions);
 
       //
-      // for unit testing
-      this._observer = observer;
-
-      //
-      // run exceptions for firestore
+      // run exceptions
       if (!this.collection) throw new Error('missing collection');
+
+      if (!this.connector.database)
+        throw new Error(
+          `missing database instance. did you add import 'firebase/database'; to your environment file?`
+        );
+
       if (isEmpty(this.connector))
         throw new Error('missing firebase connector');
 
@@ -73,12 +71,7 @@ export class FirebaseDriver implements ReactiveDriver {
             key: key,
             collection: this.collection,
             driver: this._driver,
-            response: {
-              key:
-                !isEmpty(snapshot.key) && snapshot.key != 'undefined'
-                  ? snapshot.key
-                  : false
-            }
+            response: {}
           };
 
           //
@@ -101,8 +94,9 @@ export class FirebaseDriver implements ReactiveDriver {
   ): Observable<Response> {
     return this.find(request, key, extraOptions).pipe(
       map((r: Response) => {
+        const data = get(r, 'data[0]') || {};
         const response = <Response>{
-          data: r.data && r.data.length ? r.data[0] : {},
+          data: data,
           key: r.key,
           collection: this.collection,
           driver: this._driver,
