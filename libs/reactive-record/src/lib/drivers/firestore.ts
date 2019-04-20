@@ -8,6 +8,7 @@ import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
 import { Logger } from '../utils/logger';
 import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
+import { clearNetworkResponse } from '../utils/response';
 
 export class FirestoreDriver implements ReactiveDriver {
   _driver: ReactiveDriverOption = 'firestore';
@@ -126,7 +127,7 @@ export class FirestoreDriver implements ReactiveDriver {
           snapshot.forEach(doc => data.push(doc.data()));
           //
           // define standard response
-          const response: Response = {
+          const response: Response = clearNetworkResponse({
             data: data,
             key: key,
             collection: this.collection,
@@ -134,9 +135,9 @@ export class FirestoreDriver implements ReactiveDriver {
             response: {
               empty: snapshot.empty,
               size: snapshot.size,
-              metadata: snapshot.metadata
+              metadata: { ...snapshot.metadata }
             }
-          };
+          });
 
           //
           // success callback
@@ -214,7 +215,7 @@ export class FirestoreDriver implements ReactiveDriver {
     return firestore.onSnapshot((snapshot: any) => {
       const data: any[] = [];
       snapshot.forEach(doc => data.push(doc.data()));
-      const response: Response = {
+      const response: Response = clearNetworkResponse({
         data: data,
         key: false,
         collection: this.collection,
@@ -223,7 +224,7 @@ export class FirestoreDriver implements ReactiveDriver {
           empty: snapshot.empty,
           size: snapshot.size
         }
-      };
+      });
       //
       // callback
       onSuccess(transformResponse(response));

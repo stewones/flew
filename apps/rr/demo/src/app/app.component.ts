@@ -61,6 +61,7 @@ export class AppComponent implements OnInit {
 
     this.userService.$collection
       .key('baby')
+      .ttl(10)
       .get('/images/search')
       .subscribe(r => console.log(r), err => console.log(err));
   }

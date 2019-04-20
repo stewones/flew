@@ -2,6 +2,7 @@
 // platforms
 export * from './lib/platforms/browser';
 export * from './lib/platforms/server';
+export * from './lib/version';
 
 //
 // connectors
@@ -11,6 +12,8 @@ export * from './lib/connectors/firestore';
 //
 // drivers
 export * from './lib/drivers/firestore';
+export * from './lib/drivers/firebase';
+export * from './lib/drivers/http';
 
 //
 // symbols

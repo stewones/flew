@@ -1,11 +1,12 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Observable, PartialObserver, from } from 'rxjs';
-import { merge, get, isEmpty, isObject } from 'lodash';
+import { merge, get, isEmpty, isObject, omit } from 'lodash';
 import { Connector } from '../interfaces/connector';
 import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { Logger } from '../utils/logger';
 import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
+import { clearNetworkResponse } from '../utils/response';
 
 export class HttpDriver implements ReactiveDriver {
   _driver: ReactiveDriverOption = 'http';
@@ -58,13 +59,13 @@ export class HttpDriver implements ReactiveDriver {
       // transform response
       const success = async (r: AxiosResponse) => {
         // build standard response
-        const response: Response = {
+        const response: Response = clearNetworkResponse({
           data: r.data ? r.data : r,
           response: isObject(r) ? r : {},
           key: key,
           collection: this.collection,
           driver: this._driver
-        };
+        });
 
         //
         //

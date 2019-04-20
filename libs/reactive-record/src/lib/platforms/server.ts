@@ -1,5 +1,12 @@
 import { AxiosRequestConfig } from 'axios';
-import { merge, isEmpty, cloneDeep, isBoolean, isString } from 'lodash';
+import {
+  merge,
+  isEmpty,
+  cloneDeep,
+  isBoolean,
+  isString,
+  startCase
+} from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { Request } from '../interfaces/request';
 import { Response } from '../interfaces/response';
@@ -15,6 +22,7 @@ import { SHA256 } from '../utils/sha';
 import { FirestoreDriver } from '../drivers/firestore';
 import { FirebaseDriver } from '../drivers/firebase';
 import { HttpDriver } from '../drivers/http';
+import { RR_VERSION } from '../version';
 
 export class ReactiveRecord implements ReactiveApi {
   protected collection: string;
@@ -130,6 +138,10 @@ export class ReactiveRecord implements ReactiveApi {
     //
     // mark as initialized
     this._initialized = true;
+    if (this.collection)
+      this.log().success()(
+        `Collection ${startCase(this.collection)} initiated @ RR ${RR_VERSION}`
+      );
   }
 
   public firebase() {

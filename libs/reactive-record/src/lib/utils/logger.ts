@@ -44,6 +44,18 @@ export class Logger {
       : (msg: string) => this.add(msg, 'green');
   }
 
+  public info() {
+    return this.useLogTrace
+      ? this.useLog === false
+        ? msg => {}
+        : msg => {
+            console.groupCollapsed(`info | ${this.title(msg)}`);
+            console.trace(msg);
+            console.groupEnd();
+          }
+      : (msg: string) => this.add(msg, 'deepskyblue');
+  }
+
   public danger() {
     return this.useLogTrace
       ? this.useLog === false
@@ -70,7 +82,7 @@ export class Logger {
 
   private add(msg: string, bg: string = 'green') {
     const style = `background: ${bg}; color: ${
-      bg === 'yellow' ? '#333333' : '#ffffff'
+      bg === 'yellow' || bg === 'deepskyblue' ? '#333333' : '#ffffff'
     }; display: block`;
 
     const log =

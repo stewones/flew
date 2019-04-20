@@ -33,7 +33,7 @@ export const environment = {
 
 Config.options = {
   useLog: !environment.production,
-  useLogTrace: !environment.production,
+  // useLogTrace: !environment.production,
   baseURL: 'https://api.thecatapi.com',
   endpoint: '',
   connector: {

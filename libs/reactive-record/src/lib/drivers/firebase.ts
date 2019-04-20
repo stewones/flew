@@ -6,7 +6,7 @@ import { Options, ExtraOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
 import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
-
+import { clearNetworkResponse } from '../utils/response';
 export class FirebaseDriver implements ReactiveDriver {
   _driver: ReactiveDriverOption = 'firebase';
   connector: Connector = {};
@@ -66,13 +66,13 @@ export class FirebaseDriver implements ReactiveDriver {
 
           //
           // define standard response
-          const response: Response = {
+          const response: Response = clearNetworkResponse({
             data: data,
             key: key,
             collection: this.collection,
             driver: this._driver,
             response: {}
-          };
+          });
 
           //
           // success callback
@@ -156,7 +156,7 @@ export class FirebaseDriver implements ReactiveDriver {
     return firebase.on(
       'value',
       (snapshot: any) => {
-        const response: Response = {
+        const response: Response = clearNetworkResponse({
           data: snapshot.val(),
           key: false,
           collection: this.collection,
@@ -165,7 +165,7 @@ export class FirebaseDriver implements ReactiveDriver {
             empty: !snapshot.exists(),
             size: snapshot.numChildren()
           }
-        };
+        });
         //
         // callback
         onSuccess(transformResponse(response));

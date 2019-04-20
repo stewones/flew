@@ -7,6 +7,7 @@ import { StorageAdapter } from '../interfaces/storage';
 import { Config } from '../symbols/rr';
 import { SyncReactiveResponse } from '../utils/store';
 import { ReactiveVerb } from '../interfaces/verb';
+import { clearNetworkResponse } from '../utils/response';
 
 export class PlatformBrowser extends ReactiveRecord {
   protected storage: StorageAdapter; // storage adapter (see ionic storage for instance)
@@ -20,16 +21,6 @@ export class PlatformBrowser extends ReactiveRecord {
 
   public clearCache(): void {
     this.storage.clear();
-  }
-
-  public clearNetworkResponse(network) {
-    return omit(network, [
-      'config',
-      'request',
-      'response.config',
-      'response.data',
-      'response.request'
-    ]);
   }
 
   // feed store with cached responses
@@ -88,59 +79,71 @@ export class PlatformBrowser extends ReactiveRecord {
     const extraOptions = super.cloneExtraOptions();
 
     return new Observable((observer: PartialObserver<T>) => {
-      this.shouldRequestNetwork(key, extraOptions).then(
-        shouldRequestNetwork => {
-          this.log().success()(
-            `${key} should request network? ${shouldRequestNetwork}`
+      this.shouldRequestNetwork(key, extraOptions).then(evaluation => {
+        this.log().info()(
+          `${key} [call] should request network? ${evaluation.now}`
+        );
+        if (evaluation.now) {
+          super.call<T>(method, path, payload).subscribe(
+            response => {
+              this.setCache(key, response, observer, extraOptions);
+            },
+            err => observer.error(err)
           );
-          if (shouldRequestNetwork) {
-            super.call<T>(method, path, payload).subscribe(
-              response => {
-                this.setCache(key, response, observer, extraOptions);
-              },
-              err => observer.error(err)
-            );
-          } else {
-            super.log().danger()(
-              `${key} - there is a cached response with time to live. try to adjust the *ttl* property or remove the cache completely.`
-            );
-            observer.complete();
-          }
+        } else {
+          super.log().danger()(
+            `${key} [call] there is a cached response with time to live`
+          );
+          observer.next(evaluation.cache as T);
+          observer.complete();
         }
-      );
+      });
+
       //
       // return cached response
       this.shouldReturnCache(key, observer, extraOptions);
     });
   }
 
-  private async shouldRequestNetwork(
+  private shouldRequestNetwork(
     key: string,
     extraOptions: ExtraOptions = {}
-  ) {
-    const cache: Response & { ttl: number } | any = await this.storage.get(key);
+  ): Promise<{ now: boolean; cache?: Response }> {
+    return new Promise(async resolve => {
+      const cache: Response & { ttl: number } | any = await this.storage.get(
+        key
+      );
 
-    const useCache: boolean = extraOptions.useCache === false ? false : true;
-    const useNetwork: boolean =
-      extraOptions.useNetwork === false ? false : true;
+      const useCache: boolean = extraOptions.useCache === false ? false : true;
+      const useNetwork: boolean =
+        extraOptions.useNetwork === false ? false : true;
 
-    //
-    // check for TTL
-    // should not call network
-    const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-    // console.log(`seconds`, seconds);
+      //
+      // check for TTL
+      // should not call network
+      const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
+      // console.log(`seconds`, seconds);
 
-    //
-    // avoid the return of any cache (jump to network request at server level)
-    if (useCache === false && useNetwork !== false) return true;
+      //
+      // avoid the return of any cache (jump to network request at server level)
+      if (useCache === false && useNetwork !== false)
+        return resolve({
+          now: true
+        });
 
-    //
-    // stop network request at server level
-    if (useCache && (cache && seconds < cache.ttl) && !isEmpty(cache.data)) {
-      return false;
-    }
+      //
+      // stop network request at server level
+      if (useCache && (cache && seconds < cache.ttl) && !isEmpty(cache.data)) {
+        return resolve({
+          now: false,
+          cache: cache
+        });
+      }
 
-    return true;
+      return resolve({
+        now: true
+      });
+    });
   }
 
   private async shouldReturnCache(
@@ -158,13 +161,10 @@ export class PlatformBrowser extends ReactiveRecord {
       transformResponse = (data: Response) => data.data;
     }
     const useCache: boolean = extraOptions.useCache === false ? false : true;
-    const useNetwork: boolean =
-      extraOptions.useNetwork === false ? false : true;
-    super.log().warn()(`${key} useNetwork? ${useNetwork ? true : false}`);
-    super.log().warn()(`${key} useCache? ${useCache ? true : false}`);
-    super.log().warn()(`${key} hasCache? ${cache ? true : false}`);
-    super.log().warn()(
-      `${key} transformResponse? ${
+    super.log().info()(`${key} [should] useCache? ${useCache ? true : false}`);
+    super.log().info()(`${key} [should] hasCache? ${cache ? true : false}`);
+    super.log().info()(
+      `${key} [should] transformResponse? ${
         (extraOptions.transformResponse &&
           typeof extraOptions.transformResponse === 'function') ||
         extraOptions.transformData
@@ -213,17 +213,17 @@ export class PlatformBrowser extends ReactiveRecord {
     const useNetwork: boolean =
       extraOptions.useNetwork === false ? false : true;
 
-    super.log().warn()(`${key} hasCache? ${cache ? true : false}`);
-    super.log().warn()(
-      `${key} transformCache? ${
+    super.log().info()(`${key} [set] hasCache? ${cache ? true : false}`);
+    super.log().info()(
+      `${key} [set] transformCache? ${
         extraOptions.transformCache &&
         typeof extraOptions.transformCache === 'function'
           ? true
           : false
       }`
     );
-    super.log().warn()(
-      `${key} transformResponse? ${
+    super.log().info()(
+      `${key} [set] transformResponse? ${
         (extraOptions.transformResponse &&
           typeof extraOptions.transformResponse === 'function') ||
         extraOptions.transformData
@@ -231,8 +231,10 @@ export class PlatformBrowser extends ReactiveRecord {
           : false
       }`
     );
-    super.log().warn()(`${key} useNetwork? ${useNetwork ? true : false}`);
-    super.log().warn()(`${key} saveNetwork? ${saveNetwork ? true : false}`);
+    super.log().info()(`${key} [set] useNetwork? ${useNetwork ? true : false}`);
+    super.log().info()(
+      `${key} [set] saveNetwork? ${saveNetwork ? true : false}`
+    );
 
     //
     // defaults to return network response only if different from cache
@@ -250,31 +252,27 @@ export class PlatformBrowser extends ReactiveRecord {
       // dispatch to store
       if (network && network.data)
         Config.store.dispatch(
-          new SyncReactiveResponse(this.clearNetworkResponse(network))
+          new SyncReactiveResponse(clearNetworkResponse(network))
         );
     }
 
     //
-    // time to live
-    const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
+    // cache strategy
     if (saveNetwork) {
-      let ttl = extraOptions.ttl /*|| this.ttl*/ || 0;
+      let ttl = extraOptions.ttl || 0;
+      const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
 
-      if (
-        (isEmpty(network.data) && !isEmpty(cache)) ||
-        (isEmpty(cache) && !isEmpty(network.data)) ||
-        (!isEmpty(cache) && seconds >= cache.ttl)
-      ) {
-        super.log().danger()(`${key} cache updated`);
+      if (!isEqual(cache, network)) {
+        super.log().warn()(`${key} [set] cache updated`);
+
+        if (ttl > 0) {
+          ttl += seconds;
+          network.ttl = ttl;
+        }
+
         //
         // set cache response
-        ttl += seconds;
-        network.ttl = ttl;
-
-        this.storage.set(
-          key,
-          transformCache(this.clearNetworkResponse(network))
-        );
+        this.storage.set(key, transformCache(clearNetworkResponse(network)));
       }
     }
 
