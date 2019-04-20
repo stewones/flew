@@ -9,8 +9,6 @@ import { SyncReactiveResponse } from '../utils/store';
 import { ReactiveVerb } from '../interfaces/verb';
 import { clearNetworkResponse } from '../utils/response';
 
-declare var navigator;
-
 export class PlatformBrowser extends ReactiveRecord {
   protected storage: StorageAdapter; // storage adapter (see ionic storage for reference)
 
@@ -81,7 +79,7 @@ export class PlatformBrowser extends ReactiveRecord {
     const extraOptions = super.cloneExtraOptions();
 
     return new Observable((observer: PartialObserver<T>) => {
-      this.shouldRequestNetwork(key, extraOptions).then(evaluation => {
+      this.shouldCallNetwork(key, extraOptions).then(evaluation => {
         this.log().info()(
           `${key} [call] should request network? ${evaluation.now}`
         );
@@ -107,7 +105,7 @@ export class PlatformBrowser extends ReactiveRecord {
     });
   }
 
-  private shouldRequestNetwork(
+  private shouldCallNetwork(
     key: string,
     extraOptions: ExtraOptions = {}
   ): Promise<{ now: boolean; cache?: Response }> {

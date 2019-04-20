@@ -159,7 +159,7 @@ export class FirestoreDriver implements ReactiveDriver {
   ): Observable<Response> {
     return this.find(request, key, extraOptions).pipe(
       map((r: Response) => {
-        const response = <Response>{
+        const response: Response = <Response>{
           data: r.data && r.data.length ? r.data[0] : {},
           key: r.key,
           collection: this.collection,

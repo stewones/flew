@@ -17,32 +17,30 @@ export class FirebaseDriver implements ReactiveDriver {
     this.connector = options.connector.firebase;
   }
 
+  private exceptions() {
+    if (!this.collection) throw new Error('missing collection');
+
+    if (isEmpty(this.connector)) throw new Error('missing firebase connector');
+
+    if (isEmpty(this.connector.database))
+      throw new Error(
+        `missing database instance. did you add import 'firebase/database'; to your environment file?`
+      );
+  }
+
   public find(
     request: Request,
     key: string,
-    extraOptions?: ExtraOptions
+    extraOptions: ExtraOptions = {}
   ): Observable<Response> {
     return new Observable((observer: PartialObserver<any>) => {
       //
-      // set default options
-      const _extraOptions: ExtraOptions = {};
-      merge(_extraOptions, extraOptions);
-
-      //
       // run exceptions
-      if (!this.collection) throw new Error('missing collection');
-
-      if (isEmpty(this.connector))
-        throw new Error('missing firebase connector');
-
-      if (!this.connector.database)
-        throw new Error(
-          `missing database instance. did you add import 'firebase/database'; to your environment file?`
-        );
+      this.exceptions();
 
       //
       // define adapter
-      const path = `${this.collection}/${_extraOptions.ref || ''}`;
+      const path = `${this.collection}/${extraOptions.ref || ''}`;
 
       const firebase: any = this.connector.database().ref(path);
 
@@ -90,12 +88,12 @@ export class FirebaseDriver implements ReactiveDriver {
   public findOne(
     request: Request,
     key: string,
-    extraOptions?: ExtraOptions
+    extraOptions: ExtraOptions = {}
   ): Observable<Response> {
     return this.find(request, key, extraOptions).pipe(
       map((r: Response) => {
-        const data = get(r, 'data[0]') || {};
-        const response = <Response>{
+        const data = get(r, 'data[0]');
+        const response: Response = <Response>{
           data: data,
           key: r.key,
           collection: this.collection,
@@ -111,8 +109,12 @@ export class FirebaseDriver implements ReactiveDriver {
     request: Request,
     onSuccess: (response: Response) => any = (response: Response) => {},
     onError: (response: any) => any = (response: any) => {},
-    extraOptions: ExtraOptions
+    extraOptions: ExtraOptions = {}
   ): any {
+    //
+    // run exceptions
+    this.exceptions();
+
     //
     // network handle
     const transformResponse: any =
@@ -120,15 +122,6 @@ export class FirebaseDriver implements ReactiveDriver {
       typeof extraOptions.transformResponse === 'function'
         ? extraOptions.transformResponse
         : (data: Response) => data;
-    //
-    // run exceptions
-    if (!this.collection) throw new Error('missing collection');
-    if (isEmpty(this.connector)) throw new Error('missing firebase connector');
-
-    if (this.connector && isEmpty(this.connector.database))
-      throw new Error(
-        `missing database sdk. did you add import 'firebase/database' at your app environment ?`
-      );
 
     //
     // define adapter

@@ -145,11 +145,11 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   public firebase() {
-    return this.getDriverInstance('firebase');
+    return this.getConnector('firebase');
   }
 
   public firestore() {
-    return this.getDriverInstance('firestore');
+    return this.getConnector('firestore');
   }
 
   public cache() {
@@ -174,8 +174,8 @@ export class ReactiveRecord implements ReactiveApi {
     return this._driver;
   }
 
-  private getDriverInstance(driver) {
-    if (!this._driver_initialized[driver]) {
+  private getConnector(driver) {
+    if (isEmpty(this._driver_initialized[driver])) {
       const options: Options = this.cloneOptions();
       this.driverInit(options);
       this._driver_initialized[driver] = true;

@@ -24,6 +24,7 @@ describe('ReactiveRecord', () => {
       }
     });
     lib = new ReactiveRecord({
+      useLog: false,
       baseURL: baseURL,
       collection: collection,
       connector: {

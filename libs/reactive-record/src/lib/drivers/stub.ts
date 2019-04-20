@@ -54,10 +54,6 @@ export const FirebaseStub = ({
     }
   });
 
-  const firebaseOn: any = jasmine
-    .createSpy('on')
-    .and.returnValue({ toPromise: (arg1, arg2, arg3) => {} });
-
   const firebaseRefStub: any = jasmine.createSpy('ref').and.returnValue({
     once: (
       type = 'value',
@@ -82,7 +78,31 @@ export const FirebaseStub = ({
       });
       error('zzz');
     },
-    on: firebaseOn
+    on: (
+      type = 'value',
+      callback = (snapshot: any) => {
+        return of({
+          data: [{ a: 1 }, { b: 2 }, { c: 3 }],
+          key: 'mocked-key',
+          collection: 'mocked-collection',
+          driver: 'mocked-driver',
+          response: {}
+        });
+      },
+      error = (error: any) => {
+        return throwError(error);
+      }
+    ) => {
+      callback({
+        key: 'firebase-key',
+        val: () => {
+          return { a: 1, b: 2, c: 3 };
+        },
+        exists: () => true,
+        numChildren: () => 1
+      });
+      error('zzz');
+    }
   });
 
   const firebaseDbStub: any = jasmine.createSpy('database').and.returnValue({
