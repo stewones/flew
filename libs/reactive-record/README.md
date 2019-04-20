@@ -27,7 +27,6 @@
 
 - axios
 - lodash
-- moment
 - rxjs
 - firebase (optionally)
 
@@ -40,7 +39,7 @@ npm install --save @ionfire/reactive-record
 ## Install dependencies
 
 ```sh
-npm i -P axios && npm i -P lodash && npm i -P moment && npm i -P rxjs
+npm i -P axios && npm i -P lodash && npm i -P rxjs
 ```
 
 ## Angular setup using Firebase
@@ -130,11 +129,11 @@ export class MyComponent implements OnInit {
 
 | option     | type      | required | default   | interface                                                                                                                       |
 | ---------- | --------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| baseURL    | `string`  | false    | null      | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
-| endpoint   | `string`  | false    | null      | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
-| collection | `string`  | false    | null      | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
-| driver     | `string`  | false    | firestore | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
-| timestamp  | `boolean` | false    | true      | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)   |
+| baseURL    | `string`  | false    | null      | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)     |
+| endpoint   | `string`  | false    | null      | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)     |
+| collection | `string`  | false    | null      | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)     |
+| driver     | `string`  | false    | firestore | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)     |
+| timestamp  | `boolean` | false    | true      | [Options](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-options.ts)     |
 | hook       | `object`  | false    | {}        | [Hook](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-hook.ts)           |
 | connector  | `object`  | false    | {}        | [Connector](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-connector.ts) |
 
@@ -142,13 +141,13 @@ export class MyComponent implements OnInit {
 
 Almost all RR public methods must return a `rxjs` observable. Not all drivers are currently implemented, feel free to submit a PR.
 
-| method  | params                              | return                                                                                                                                        | info                   |
-| ------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| method  | params                              | return                                                                                                                                      | info                   |
+| ------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | find    | `*request/extraOptions/driver`      | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch all data         |
 | findOne | `*request/extraOptions/driver`      | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch one data         |
-| set     | `*id/*data/driver`                  | any                                                                                                                                           | set data               |
-| update  | `*id/*data/driver`                  | any                                                                                                                                           | set data               |
-| on      | `*request/onSuccess/onError/driver` | `**function`                                                                                                                                  | fetch realtime data    |
+| set     | `*id/*data/driver`                  | any                                                                                                                                         | set data               |
+| update  | `*id/*data/driver`                  | any                                                                                                                                         | set data               |
+| on      | `*request/onSuccess/onError/driver` | `**function`                                                                                                                                | fetch realtime data    |
 | get     | `*path/extraOptions`                | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch data using http  |
 | post    | `*path/*body/extraOptions`          | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | post data using http   |
 | patch   | `*path/*body/extraOptions`          | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | patch data using http  |

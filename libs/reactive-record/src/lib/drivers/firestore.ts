@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { Request } from '../interfaces/request';
 import { Observable, PartialObserver } from 'rxjs';
 import { merge, isEmpty, isArray, isNil } from 'lodash';
@@ -16,12 +15,6 @@ export class FirestoreDriver implements ReactiveDriver {
   timestamp = true;
   connector: Connector = {};
 
-  //
-  // for unit test
-  _observer: PartialObserver<any>;
-
-  //
-  // for log
   protected _logger: Logger;
 
   constructor(options: Options) {
@@ -29,9 +22,18 @@ export class FirestoreDriver implements ReactiveDriver {
     this.connector = options.connector.firestore;
   }
 
-  private where(query: any, firestore: any) {
+  private log() {
+    return this._logger;
+  }
+
+  private exceptions() {
+    if (!this.collection) throw new Error('missing collection');
+    if (isEmpty(this.connector)) throw new Error('missing firestore connector');
+  }
+
+  protected where(query: any, firestore: any) {
     if (isArray(query)) {
-      this._logger.success()(
+      this.log().success()(
         `firestore where array -> ${query[0].field} ${query[0].operator} ${
           query[0].value
         }`
@@ -46,7 +48,7 @@ export class FirestoreDriver implements ReactiveDriver {
       query.field &&
       query.operator
     ) {
-      this._logger.success()(
+      this.log().success()(
         `firestore where object -> ${query.field} ${query.operator} ${
           query.value
         }`
@@ -60,15 +62,13 @@ export class FirestoreDriver implements ReactiveDriver {
 
   private order(sort: any, firestore: any) {
     if (isArray(sort)) {
-      this._logger.success()(`firestore sort array -> ${sort}`);
+      this.log().success()(`firestore sort array -> ${sort}`);
       sort.map(s => {
         if (isEmpty(s)) throw new Error(`sort object in array can't be null`);
         for (const k in s) firestore = firestore.orderBy(k, s[k]);
       });
     } else if (<any>typeof sort === 'object') {
-      this._logger.success()(
-        `firestore sort object -> ${JSON.stringify(sort)}`
-      );
+      this.log().success()(`firestore sort object -> ${JSON.stringify(sort)}`);
       if (isEmpty(sort)) throw new Error(`sort object can't be null`);
       for (const k in sort) firestore = firestore.orderBy(k, sort[k]);
     }
@@ -82,23 +82,12 @@ export class FirestoreDriver implements ReactiveDriver {
   public find<T extends Response>(
     request: Request,
     key: string,
-    extraOptions?: ExtraOptions
+    extraOptions: ExtraOptions = {}
   ): Observable<T> {
     return new Observable((observer: PartialObserver<any>) => {
       //
-      // set default options
-      const _extraOptions: ExtraOptions = {};
-      merge(_extraOptions, extraOptions);
-
-      //
-      // for unit testing
-      this._observer = observer;
-
-      //
-      // run exceptions for firestore
-      if (!this.collection) throw new Error('missing collection');
-      if (isEmpty(this.connector))
-        throw new Error('missing firestore connector');
+      // run exceptions
+      this.exceptions();
 
       //
       // define adapter
@@ -155,7 +144,7 @@ export class FirestoreDriver implements ReactiveDriver {
   public findOne(
     request: Request,
     key: string,
-    extraOptions?: ExtraOptions
+    extraOptions: ExtraOptions = {}
   ): Observable<Response> {
     return this.find(request, key, extraOptions).pipe(
       map((r: Response) => {
@@ -176,8 +165,12 @@ export class FirestoreDriver implements ReactiveDriver {
     request: Request,
     onSuccess: (response: Response) => any = (response: Response) => {},
     onError: (response: any) => any = (response: any) => {},
-    extraOptions: ExtraOptions
+    extraOptions: ExtraOptions = {}
   ): any {
+    //
+    // run exceptions
+    this.exceptions();
+
     //
     // network handle
     const transformResponse: any =
@@ -185,10 +178,6 @@ export class FirestoreDriver implements ReactiveDriver {
       typeof extraOptions.transformResponse === 'function'
         ? extraOptions.transformResponse
         : (data: Response) => data;
-    //
-    // run exceptions
-    if (!this.collection) throw new Error('missing collection');
-    if (isEmpty(this.connector)) throw new Error('missing firestore connector');
 
     //
     // define adapter
@@ -238,10 +227,9 @@ export class FirestoreDriver implements ReactiveDriver {
   ): Observable<any> {
     return new Observable(observer => {
       //
-      // primary exceptions
-      if (!this.collection) throw new Error('missing collection');
-      if (isEmpty(this.connector))
-        throw new Error('missing firestore connector');
+      // run exceptions
+      this.exceptions();
+
       //
       // define connector
       const firestore: any = this.connector.collection(this.collection);
@@ -264,16 +252,17 @@ export class FirestoreDriver implements ReactiveDriver {
   public update(id: string, data: any): Observable<any> {
     return new Observable(observer => {
       //
-      // primary exceptions
-      if (!this.collection) throw new Error('missing collection');
-      if (isEmpty(this.connector))
-        throw new Error('missing firestore connector');
+      // run exceptions
+      this.exceptions();
+
       //
       // define connector
       const firestore: any = this.connector.collection(this.collection);
+
       //
       // auto update timestamp
-      if (this.timestamp) data.updated_at = moment().toISOString();
+      if (this.timestamp) data.updated_at = new Date().toISOString();
+
       //
       // define return
       const response = r => {

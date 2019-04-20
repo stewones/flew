@@ -11,7 +11,7 @@ export class FirebaseDriver implements ReactiveDriver {
   _driver: ReactiveDriverOption = 'firebase';
   connector: Connector = {};
   collection: string;
-  timestamp = true;
+
   constructor(options: Options) {
     merge(this, options);
     this.connector = options.connector.firebase;

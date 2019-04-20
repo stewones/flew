@@ -1,6 +1,5 @@
 import { Subject } from 'rxjs';
 import { Log, LogParams } from '../interfaces/log';
-import moment from 'moment';
 
 export class Logger {
   private useLog: boolean;
@@ -92,7 +91,10 @@ export class Logger {
 
     if (this.useLog === true) {
       console.log(`%c ${msg} `, style);
-      this.subject.next(<Log>{ created: moment().toISOString(), message: log });
+      this.subject.next(<Log>{
+        created: new Date().toISOString(),
+        message: log
+      });
     }
   }
 
