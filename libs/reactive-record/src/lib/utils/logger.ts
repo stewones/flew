@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Subject } from 'rxjs';
 import { Log, LogParams } from '../interfaces/log';
 
