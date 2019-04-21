@@ -7,10 +7,12 @@ import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
 import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
 import { clearNetworkResponse } from '../utils/response';
+import { Logger } from '../utils/logger';
 export class FirebaseDriver implements ReactiveDriver {
   _driver: ReactiveDriverOption = 'firebase';
   connector: Connector = {};
   collection: string;
+  logger: Logger;
 
   constructor(options: Options) {
     merge(this, options);
@@ -26,6 +28,10 @@ export class FirebaseDriver implements ReactiveDriver {
       throw new Error(
         `missing database instance. did you add import 'firebase/database'; to your environment file?`
       );
+  }
+
+  public log() {
+    return this.logger;
   }
 
   public find(

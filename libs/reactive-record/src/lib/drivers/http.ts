@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Observable, PartialObserver, from } from 'rxjs';
-import { merge, get, isEmpty, isObject, omit } from 'lodash';
+import { merge, get, isEmpty, isObject } from 'lodash';
 import { Connector } from '../interfaces/connector';
 import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
@@ -11,18 +11,12 @@ import { clearNetworkResponse } from '../utils/response';
 export class HttpDriver implements ReactiveDriver {
   _driver: ReactiveDriverOption = 'http';
   collection: string;
-  baseURL: string;
-  endpoint: string;
   connector: Connector = {};
+  logger: Logger;
+
+  private baseURL: string;
+  private endpoint: string;
   private httpConfig: AxiosRequestConfig = {};
-
-  //
-  // for unit test
-  _observer: PartialObserver<any>;
-
-  //
-  // for log
-  protected logger: Logger;
 
   constructor(options: Options) {
     merge(this, options);
@@ -33,6 +27,10 @@ export class HttpDriver implements ReactiveDriver {
       // configure http client
       this.connector = axios.create(this.httpConfig);
     }
+  }
+
+  public log() {
+    return this.logger;
   }
 
   public executeRequest<T extends Response>(

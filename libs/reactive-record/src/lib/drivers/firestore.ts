@@ -21,7 +21,7 @@ export class FirestoreDriver implements ReactiveDriver {
     this.connector = options.connector.firestore;
   }
 
-  private log() {
+  public log() {
     return this.logger;
   }
 
