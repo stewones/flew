@@ -10,15 +10,56 @@ class FirestoreDriverMock extends FirestoreDriver {
     useLog: false,
     useLogTrace: false
   });
+
   constructor(options) {
     super(options);
   }
+
   public where(query, firestore) {
     return super.where(query, firestore);
   }
 
   public order(sort, firestore) {
     return super.order(sort, firestore);
+  }
+
+  public limit(
+    limit,
+    firestore = {
+      limit: () => {
+        get: () => Promise.resolve();
+      }
+    }
+  ) {
+    return super.limit(limit, firestore);
+  }
+}
+
+class FirestoreFailMock extends FirestoreDriver {
+  logger = new Logger({
+    subject: new Subject(),
+    useLog: false,
+    useLogTrace: false
+  });
+
+  constructor(options) {
+    super(options);
+  }
+
+  public where(query, firestore) {
+    return super.where(query, firestore);
+  }
+
+  public limit(limit, firestore) {
+    return super.limit(limit, firestore);
+  }
+
+  //
+  // fail
+  public order(sort, firestore) {
+    return {
+      get: () => Promise.reject('find fail')
+    };
   }
 }
 
@@ -31,14 +72,6 @@ describe('FirestoreDriver', () => {
     firestoreMock = FirestoreStub({});
     driver = new FirestoreDriverMock({
       driver: 'firestore',
-      collection: collection,
-      connector: {
-        firestore: firestoreMock.firestore
-      }
-    });
-
-    lib = new ReactiveRecord({
-      useLog: false,
       collection: collection,
       connector: {
         firestore: firestoreMock.firestore
@@ -154,8 +187,52 @@ describe('FirestoreDriver', () => {
       }
     );
     expect(spy).toBeCalled();
-    expect(() => {
-      driver.order({}, { orderBy: () => {} });
-    }).toThrowError(`sort object can't be null`);
   });
+
+  it('should apply `limit`', () => {
+    driver = new FirestoreDriverMock({
+      driver: 'firestore',
+      collection: collection,
+      connector: {
+        firestore: firestoreMock.firestore
+      }
+    });
+    const spy = jest.spyOn(FirestoreDriverMock.prototype, 'limit');
+    driver.limit(54, {
+      limit: () => {}
+    });
+    expect(spy).toBeCalled();
+  });
+
+  // it('should apply the limit on `find` method', () => {
+  //   driver = new FirestoreDriverMock({
+  //     driver: 'firestore',
+  //     collection: collection,
+  //     connector: {
+  //       firestore: {
+  //         collection: () => {},
+  //         limit: () => {}
+  //       }
+  //     }
+  //   });
+  //   const spy = jest.spyOn(FirestoreDriverMock.prototype, 'limit');
+  //   driver.find({ size: 999 }, 'my-key').toPromise();
+  //   expect(spy).toBeCalled();
+  // });
+
+  // it('should fail on `find`', () => {
+  //   driver = new FirestoreFailMock({
+  //     driver: 'firestore',
+  //     collection: collection,
+  //     connector: {
+  //       firestore: {
+  //         collection: () => {}
+  //       }
+  //     }
+  //   });
+
+  //   expect(() => {
+  //     driver.find({}, 'my-key');
+  //   }).toThrowError(`sort object can't be null`);
+  // });
 });
