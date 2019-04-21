@@ -14,22 +14,30 @@ const ReactiveConfig: ReactiveOptions = {
   }
 };
 
+export const optionGet = function() {
+  return ReactiveConfig.options;
+};
+
+export const optionSet = function(options: Options) {
+  return (ReactiveConfig.options = options);
+};
+
+export const storeGet = function() {
+  return ReactiveConfig.store;
+};
+
+export const storeSet = function(store) {
+  return (ReactiveConfig.store = store);
+};
+
 Object.defineProperty(ReactiveConfig, 'o', {
-  get: function() {
-    return ReactiveConfig.options;
-  },
-  set: function(options: Options) {
-    return (ReactiveConfig.options = options);
-  }
+  get: optionGet,
+  set: optionSet
 });
 
 Object.defineProperty(ReactiveConfig, 's', {
-  get: function() {
-    return ReactiveConfig.store;
-  },
-  set: function(store) {
-    return (ReactiveConfig.store = store);
-  }
+  get: storeGet,
+  set: storeSet
 });
 
 export const Config = ReactiveConfig;
