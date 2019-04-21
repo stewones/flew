@@ -48,7 +48,7 @@ export class ReactiveRecord implements ReactiveApi {
   };
 
   public $log: Subject<Log> = new Subject();
-  protected _logger: Logger; // instance
+  protected logger: Logger; // instance
 
   //
   // runtime setup
@@ -118,7 +118,7 @@ export class ReactiveRecord implements ReactiveApi {
     // configure logger
     if (!isBoolean(options.useLog)) options.useLog = true;
     if (!isBoolean(options.useLogTrace)) options.useLogTrace = false;
-    this._logger = new Logger({
+    this.logger = new Logger({
       subject: this.$log,
       useLog: options.useLog,
       useLogTrace: options.useLogTrace
@@ -167,7 +167,7 @@ export class ReactiveRecord implements ReactiveApi {
   public feed(): void {}
 
   protected log(): Logger {
-    return this._logger;
+    return this.logger;
   }
 
   protected getDriver(): ReactiveDriverOption {
@@ -199,15 +199,15 @@ export class ReactiveRecord implements ReactiveApi {
     this._driver = options.driver || 'firestore';
     this._drivers = {
       firestore: new FirestoreDriver({
-        ...{ _logger: this._logger },
+        ...{ logger: this.logger },
         ...options
       }),
       firebase: new FirebaseDriver({
-        ...{ _logger: this._logger },
+        ...{ logger: this.logger },
         ...options
       }),
       http: new HttpDriver({
-        ...{ _logger: this._logger },
+        ...{ logger: this.logger },
         ...options,
         ...{ httpConfig: this.httpConfig }
       })
@@ -217,7 +217,7 @@ export class ReactiveRecord implements ReactiveApi {
   private driverHttpReload(options: Options) {
     this.beforeHttp(this.httpConfig);
     this._drivers.http = new HttpDriver({
-      ...{ _logger: this._logger },
+      ...{ logger: this.logger },
       ...options,
       ...{ httpConfig: this.httpConfig }
     });
@@ -235,12 +235,12 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   public useLog(active: boolean): ReactiveRecord {
-    this._logger.enabled(active);
+    this.logger.enabled(active);
     return this;
   }
 
   public useLogTrace(active: boolean): ReactiveRecord {
-    this._logger.traced(active);
+    this.logger.traced(active);
     return this;
   }
 

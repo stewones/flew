@@ -22,7 +22,7 @@ export class HttpDriver implements ReactiveDriver {
 
   //
   // for log
-  protected _logger: Logger;
+  protected logger: Logger;
 
   constructor(options: Options) {
     merge(this, options);

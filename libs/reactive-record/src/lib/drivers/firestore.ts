@@ -14,7 +14,7 @@ export class FirestoreDriver implements ReactiveDriver {
   collection: string;
   timestamp = true;
   connector: Connector = {};
-  _logger: Logger;
+  logger: Logger;
 
   constructor(options: Options) {
     merge(this, options);
@@ -22,7 +22,7 @@ export class FirestoreDriver implements ReactiveDriver {
   }
 
   private log() {
-    return this._logger;
+    return this.logger;
   }
 
   private exceptions() {

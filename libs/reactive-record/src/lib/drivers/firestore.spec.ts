@@ -5,7 +5,7 @@ import { Logger } from '../utils/logger';
 import { Subject } from 'rxjs';
 
 class FirestoreDriverMock extends FirestoreDriver {
-  protected _logger = new Logger({
+  logger = new Logger({
     subject: new Subject(),
     useLog: false,
     useLogTrace: false
@@ -156,6 +156,6 @@ describe('FirestoreDriver', () => {
     expect(spy).toBeCalled();
     expect(() => {
       driver.order({}, { orderBy: () => {} });
-    }).toThrowError(`sort object in object can't be null`);
+    }).toThrowError(`sort object can't be null`);
   });
 });
