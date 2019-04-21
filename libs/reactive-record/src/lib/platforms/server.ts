@@ -10,7 +10,7 @@ import {
 import { Observable, Subject } from 'rxjs';
 import { Request } from '../interfaces/request';
 import { Response } from '../interfaces/response';
-import { Options, ExtraOptions } from '../interfaces/options';
+import { Options, Chain } from '../interfaces/options';
 import { ReactiveApi } from '../interfaces/api';
 import { ReactiveVerb } from '../interfaces/verb';
 import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
@@ -33,7 +33,7 @@ export class ReactiveRecord implements ReactiveApi {
   private beforeHttp = (config: AxiosRequestConfig) => {};
 
   private request: Request = {};
-  private extraOptions: ExtraOptions = {};
+  private chain: Chain = {};
 
   private _driver_initialized = {};
   private _driver: ReactiveDriverOption = 'firestore';
@@ -186,7 +186,7 @@ export class ReactiveRecord implements ReactiveApi {
 
   private _reset(): void {
     this.request = {};
-    this.extraOptions = {};
+    this.chain = {};
   }
 
   private cloneOptions() {
@@ -282,22 +282,22 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   protected createKey(path = '', body = {}): string {
-    const extraOptions = this.cloneExtraOptions();
+    const chain = this.cloneChain();
     const requestPath = `${this.collection}:/${this.endpoint || ''}${path ||
       ''}/${SHA256(
       JSON.stringify({
         ...body,
         ...this.request,
-        ...{ ref: this.extraOptions.ref || '' },
+        ...{ ref: this.chain.ref || '' },
         ...{ driver: this._driver }
       })
     )}`;
     // requestPath += `/${JSON.stringify(this.request.query)}`;
-    return extraOptions.key || requestPath.replace('///', '//');
+    return chain.key || requestPath.replace('///', '//');
   }
 
-  protected cloneExtraOptions(): ExtraOptions {
-    return cloneDeep(this.extraOptions);
+  protected cloneChain(): Chain {
+    return cloneDeep(this.chain);
   }
 
   protected call<T extends Response>(
@@ -333,7 +333,7 @@ export class ReactiveRecord implements ReactiveApi {
     //
     // firebase stuff
     const request = cloneDeep(this.request);
-    const extraOptions = cloneDeep(this.extraOptions);
+    const chain = cloneDeep(this.chain);
 
     //
     // reset the chain
@@ -346,7 +346,7 @@ export class ReactiveRecord implements ReactiveApi {
       case 'findOne':
         arg1 = request;
         arg2 = key;
-        arg3 = extraOptions;
+        arg3 = chain;
         break;
       case 'set':
       case 'update':
@@ -358,7 +358,7 @@ export class ReactiveRecord implements ReactiveApi {
         arg1 = request;
         arg2 = payload.onSuccess;
         arg3 = payload.onError;
-        arg4 = extraOptions;
+        arg4 = chain;
         break;
       default:
         arg1 = path;
@@ -414,7 +414,7 @@ export class ReactiveRecord implements ReactiveApi {
    * Set whether to use network for first requests
    */
   public useNetwork(active: boolean): ReactiveRecord {
-    this.extraOptions.useNetwork = active;
+    this.chain.useNetwork = active;
     return this;
   }
 
@@ -422,7 +422,7 @@ export class ReactiveRecord implements ReactiveApi {
    * Set whether to cache network responses
    */
   public saveNetwork(active: boolean): ReactiveRecord {
-    this.extraOptions.saveNetwork = active;
+    this.chain.saveNetwork = active;
     return this;
   }
 
@@ -432,7 +432,7 @@ export class ReactiveRecord implements ReactiveApi {
   public transformResponse<T>(
     transformFn: (response: Response) => any
   ): ReactiveRecord {
-    this.extraOptions.transformResponse = transformFn;
+    this.chain.transformResponse = transformFn;
     return this;
   }
 
@@ -449,7 +449,7 @@ export class ReactiveRecord implements ReactiveApi {
    * Set cache time to live
    */
   public ttl(value: number): ReactiveRecord {
-    this.extraOptions.ttl = value;
+    this.chain.ttl = value;
     return this;
   }
 
@@ -457,7 +457,7 @@ export class ReactiveRecord implements ReactiveApi {
    * Set whether to use cache for first requests
    */
   public useCache(active: boolean): ReactiveRecord {
-    this.extraOptions.useCache = active;
+    this.chain.useCache = active;
     return this;
   }
 
@@ -467,7 +467,7 @@ export class ReactiveRecord implements ReactiveApi {
   public transformCache<T>(
     transformFn: (response: Response) => any
   ): ReactiveRecord {
-    this.extraOptions.transformCache = transformFn;
+    this.chain.transformCache = transformFn;
     return this;
   }
 
@@ -475,7 +475,7 @@ export class ReactiveRecord implements ReactiveApi {
    * Set cache key
    */
   public key(name: string): ReactiveRecord {
-    this.extraOptions.key = name;
+    this.chain.key = name;
     return this;
   }
 
@@ -533,12 +533,12 @@ export class ReactiveRecord implements ReactiveApi {
    * Set reference (for firebase)
    */
   public ref(path: string): ReactiveRecord {
-    this.extraOptions.ref = path;
+    this.chain.ref = path;
     return this;
   }
 
   public data(transform: boolean): ReactiveRecord {
-    this.extraOptions.transformData = transform;
+    this.chain.transformData = transform;
     return this;
   }
 

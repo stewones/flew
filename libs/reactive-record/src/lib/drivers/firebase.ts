@@ -2,7 +2,7 @@ import { Request } from '../interfaces/request';
 import { Observable, PartialObserver } from 'rxjs';
 import { merge, isEmpty, get } from 'lodash';
 import { Connector } from '../interfaces/connector';
-import { Options, ExtraOptions } from '../interfaces/options';
+import { Options, Chain } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
 import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
@@ -37,7 +37,7 @@ export class FirebaseDriver implements ReactiveDriver {
   public find(
     request: Request,
     key: string,
-    extraOptions: ExtraOptions = {}
+    chain: Chain = {}
   ): Observable<Response> {
     return new Observable((observer: PartialObserver<any>) => {
       //
@@ -46,7 +46,7 @@ export class FirebaseDriver implements ReactiveDriver {
 
       //
       // define adapter
-      const path = `${this.collection}/${extraOptions.ref || ''}`;
+      const path = `${this.collection}/${chain.ref || ''}`;
 
       const firebase: any = this.connector.database().ref(path);
 
@@ -94,9 +94,9 @@ export class FirebaseDriver implements ReactiveDriver {
   public findOne(
     request: Request,
     key: string,
-    extraOptions: ExtraOptions = {}
+    chain: Chain = {}
   ): Observable<Response> {
-    return this.find(request, key, extraOptions).pipe(
+    return this.find(request, key, chain).pipe(
       map((r: Response) => {
         const data = get(r, 'data[0]');
         const response: Response = <Response>{
@@ -115,7 +115,7 @@ export class FirebaseDriver implements ReactiveDriver {
     request: Request,
     onSuccess: (response: Response) => any = (response: Response) => {},
     onError: (response: any) => any = (response: any) => {},
-    extraOptions: ExtraOptions = {}
+    chain: Chain = {}
   ): any {
     //
     // run exceptions
@@ -124,14 +124,13 @@ export class FirebaseDriver implements ReactiveDriver {
     //
     // network handle
     const transformResponse: any =
-      extraOptions.transformResponse &&
-      typeof extraOptions.transformResponse === 'function'
-        ? extraOptions.transformResponse
+      chain.transformResponse && typeof chain.transformResponse === 'function'
+        ? chain.transformResponse
         : (data: Response) => data;
 
     //
     // define adapter
-    const path = `${this.collection}/${extraOptions.ref || ''}`;
+    const path = `${this.collection}/${chain.ref || ''}`;
     const firebase: any = this.connector.database().ref(path);
 
     //

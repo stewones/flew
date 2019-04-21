@@ -2,7 +2,7 @@ import { Request } from '../interfaces/request';
 import { Observable, PartialObserver } from 'rxjs';
 import { merge, isEmpty, isArray, isNil } from 'lodash';
 import { Connector } from '../interfaces/connector';
-import { Options, ExtraOptions } from '../interfaces/options';
+import { Options, Chain } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
 import { Logger } from '../utils/logger';
@@ -81,7 +81,7 @@ export class FirestoreDriver implements ReactiveDriver {
   public find<T extends Response>(
     request: Request,
     key: string,
-    extraOptions: ExtraOptions = {}
+    chain: Chain = {}
   ): Observable<T> {
     return new Observable((observer: PartialObserver<any>) => {
       //
@@ -143,9 +143,9 @@ export class FirestoreDriver implements ReactiveDriver {
   public findOne(
     request: Request,
     key: string,
-    extraOptions: ExtraOptions = {}
+    chain: Chain = {}
   ): Observable<Response> {
-    return this.find(request, key, extraOptions).pipe(
+    return this.find(request, key, chain).pipe(
       map((r: Response) => {
         const response: Response = <Response>{
           data: r.data && r.data.length ? r.data[0] : {},
@@ -164,7 +164,7 @@ export class FirestoreDriver implements ReactiveDriver {
     request: Request,
     onSuccess: (response: Response) => any = (response: Response) => {},
     onError: (response: any) => any = (response: any) => {},
-    extraOptions: ExtraOptions = {}
+    chain: Chain = {}
   ): any {
     //
     // run exceptions
@@ -173,9 +173,8 @@ export class FirestoreDriver implements ReactiveDriver {
     //
     // network handle
     const transformResponse: any =
-      extraOptions.transformResponse &&
-      typeof extraOptions.transformResponse === 'function'
-        ? extraOptions.transformResponse
+      chain.transformResponse && typeof chain.transformResponse === 'function'
+        ? chain.transformResponse
         : (data: Response) => data;
 
     //

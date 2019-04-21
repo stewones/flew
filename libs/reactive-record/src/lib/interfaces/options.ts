@@ -21,7 +21,7 @@ export interface Options {
   feed?: boolean; // whether should feed store with cached results
 }
 
-export interface ExtraOptions {
+export interface Chain {
   ttl?: number; // time to live (in seconds. default: 0)
   key?: string; // key used for cache. defaults to requested info
   useCache?: boolean; //  use cache for first response

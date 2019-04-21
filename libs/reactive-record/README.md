@@ -143,15 +143,15 @@ Almost all RR public methods must return a `rxjs` observable. Not all drivers ar
 
 | method  | params                              | return                                                                                                                                      | info                   |
 | ------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| find    | `*request/extraOptions/driver`      | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch all data         |
-| findOne | `*request/extraOptions/driver`      | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch one data         |
+| find    | `*request/chain/driver`             | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch all data         |
+| findOne | `*request/chain/driver`             | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch one data         |
 | set     | `*id/*data/driver`                  | any                                                                                                                                         | set data               |
 | update  | `*id/*data/driver`                  | any                                                                                                                                         | set data               |
 | on      | `*request/onSuccess/onError/driver` | `**function`                                                                                                                                | fetch realtime data    |
-| get     | `*path/extraOptions`                | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch data using http  |
-| post    | `*path/*body/extraOptions`          | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | post data using http   |
-| patch   | `*path/*body/extraOptions`          | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | patch data using http  |
-| delete  | `*path/extraOptions`                | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | delete data using http |
+| get     | `*path/chain`                       | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | fetch data using http  |
+| post    | `*path/*body/chain`                 | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | post data using http   |
+| patch   | `*path/*body/chain`                 | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | patch data using http  |
+| delete  | `*path/chain`                       | [`Observable<Response>`](https://github.com/ionfire/reactive-record/blob/master/projects/reactive-record/src/lib/interfaces/rr-response.ts) | delete data using http |
 
 > `* => required`
 >

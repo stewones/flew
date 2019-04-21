@@ -1,6 +1,6 @@
 import { omit, isEmpty, isEqual, isArray, isObject, merge } from 'lodash';
 import { PartialObserver, Observable } from 'rxjs';
-import { Options, ExtraOptions } from '../interfaces/options';
+import { Options, Chain } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { ReactiveRecord } from './server';
 import { StorageAdapter } from '../interfaces/storage';
@@ -76,17 +76,17 @@ export class PlatformBrowser extends ReactiveRecord {
 
     // stuff necessary for cache
     const key = super.createKey(path, payload);
-    const extraOptions = super.cloneExtraOptions();
+    const chain = super.cloneChain();
 
     return new Observable((observer: PartialObserver<T>) => {
-      this.shouldCallNetwork(key, extraOptions).then(evaluation => {
+      this.shouldCallNetwork(key, chain).then(evaluation => {
         this.log().info()(
           `${key} [call] should request network? ${evaluation.now}`
         );
         if (evaluation.now) {
           super.call<T>(method, path, payload).subscribe(
             response => {
-              this.setCache(key, response, observer, extraOptions);
+              this.setCache(key, response, observer, chain);
             },
             err => observer.error(err)
           );
@@ -101,22 +101,21 @@ export class PlatformBrowser extends ReactiveRecord {
 
       //
       // return cached response
-      this.shouldReturnCache(key, observer, extraOptions);
+      this.shouldReturnCache(key, observer, chain);
     });
   }
 
   private shouldCallNetwork(
     key: string,
-    extraOptions: ExtraOptions = {}
+    chain: Chain = {}
   ): Promise<{ now: boolean; cache?: Response }> {
     return new Promise(async resolve => {
       const cache: Response & { ttl: number } | any = await this.storage.get(
         key
       );
 
-      const useCache: boolean = extraOptions.useCache === false ? false : true;
-      const useNetwork: boolean =
-        extraOptions.useNetwork === false ? false : true;
+      const useCache: boolean = chain.useCache === false ? false : true;
+      const useNetwork: boolean = chain.useNetwork === false ? false : true;
 
       //
       // check for TTL
@@ -149,25 +148,24 @@ export class PlatformBrowser extends ReactiveRecord {
   private async shouldReturnCache(
     key: string,
     observer: PartialObserver<any>,
-    extraOptions: ExtraOptions = {}
+    chain: Chain = {}
   ) {
     const cache: Response & { ttl: number } | any = await this.storage.get(key);
     let transformResponse: any =
-      extraOptions.transformResponse &&
-      typeof extraOptions.transformResponse === 'function'
-        ? extraOptions.transformResponse
+      chain.transformResponse && typeof chain.transformResponse === 'function'
+        ? chain.transformResponse
         : (data: Response) => data;
-    if (extraOptions.transformData) {
+    if (chain.transformData) {
       transformResponse = (data: Response) => data.data;
     }
-    const useCache: boolean = extraOptions.useCache === false ? false : true;
+    const useCache: boolean = chain.useCache === false ? false : true;
     super.log().info()(`${key} [should] useCache? ${useCache ? true : false}`);
     super.log().info()(`${key} [should] hasCache? ${cache ? true : false}`);
     super.log().info()(
       `${key} [should] transformResponse? ${
-        (extraOptions.transformResponse &&
-          typeof extraOptions.transformResponse === 'function') ||
-        extraOptions.transformData
+        (chain.transformResponse &&
+          typeof chain.transformResponse === 'function') ||
+        chain.transformData
           ? true
           : false
       }`
@@ -189,44 +187,39 @@ export class PlatformBrowser extends ReactiveRecord {
     key: string,
     network: Response & { ttl?: number },
     observer: PartialObserver<any>,
-    extraOptions: ExtraOptions = {}
+    chain: Chain = {}
   ) {
     const cache: Response & { ttl?: number } = await this.storage.get(key);
     const transformCache: any =
-      extraOptions.transformCache &&
-      typeof extraOptions.transformCache === 'function'
-        ? extraOptions.transformCache
+      chain.transformCache && typeof chain.transformCache === 'function'
+        ? chain.transformCache
         : (data: Response) => data;
 
     let transformResponse: any =
-      extraOptions.transformResponse &&
-      typeof extraOptions.transformResponse === 'function'
-        ? extraOptions.transformResponse
+      chain.transformResponse && typeof chain.transformResponse === 'function'
+        ? chain.transformResponse
         : (data: Response) => data;
 
-    if (extraOptions.transformData) {
+    if (chain.transformData) {
       transformResponse = (data: Response) => data.data;
     }
 
-    const saveNetwork: boolean =
-      extraOptions.saveNetwork === false ? false : true;
-    const useNetwork: boolean =
-      extraOptions.useNetwork === false ? false : true;
+    const saveNetwork: boolean = chain.saveNetwork === false ? false : true;
+    const useNetwork: boolean = chain.useNetwork === false ? false : true;
 
     super.log().info()(`${key} [set] hasCache? ${cache ? true : false}`);
     super.log().info()(
       `${key} [set] transformCache? ${
-        extraOptions.transformCache &&
-        typeof extraOptions.transformCache === 'function'
+        chain.transformCache && typeof chain.transformCache === 'function'
           ? true
           : false
       }`
     );
     super.log().info()(
       `${key} [set] transformResponse? ${
-        (extraOptions.transformResponse &&
-          typeof extraOptions.transformResponse === 'function') ||
-        extraOptions.transformData
+        (chain.transformResponse &&
+          typeof chain.transformResponse === 'function') ||
+        chain.transformData
           ? true
           : false
       }`
@@ -259,7 +252,7 @@ export class PlatformBrowser extends ReactiveRecord {
     //
     // cache strategy
     if (saveNetwork) {
-      let ttl = extraOptions.ttl || 0;
+      let ttl = chain.ttl || 0;
       const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
 
       if (!isEqual(cache, network)) {

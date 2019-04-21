@@ -34,7 +34,7 @@ export * from './lib/utils/version';
 export { ReactiveApi } from './lib/interfaces/api';
 export { ReactiveDriver } from './lib/interfaces/driver';
 export { Response } from './lib/interfaces/response';
-export { Options, ExtraOptions } from './lib/interfaces/options';
+export { Options, Chain } from './lib/interfaces/options';
 export { Request } from './lib/interfaces/request';
 export { Connector } from './lib/interfaces/connector';
 export { StorageAdapter } from './lib/interfaces/storage';
