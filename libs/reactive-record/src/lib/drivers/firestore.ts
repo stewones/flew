@@ -14,8 +14,7 @@ export class FirestoreDriver implements ReactiveDriver {
   collection: string;
   timestamp = true;
   connector: Connector = {};
-
-  protected _logger: Logger;
+  _logger: Logger;
 
   constructor(options: Options) {
     merge(this, options);
@@ -60,14 +59,14 @@ export class FirestoreDriver implements ReactiveDriver {
     return firestore;
   }
 
-  private order(sort: any, firestore: any) {
+  protected order(sort: any, firestore: any) {
     if (isArray(sort)) {
       this.log().success()(`firestore sort array -> ${sort}`);
       sort.map(s => {
         if (isEmpty(s)) throw new Error(`sort object in array can't be null`);
         for (const k in s) firestore = firestore.orderBy(k, s[k]);
       });
-    } else if (<any>typeof sort === 'object') {
+    } else if (typeof sort === 'object') {
       this.log().success()(`firestore sort object -> ${JSON.stringify(sort)}`);
       if (isEmpty(sort)) throw new Error(`sort object can't be null`);
       for (const k in sort) firestore = firestore.orderBy(k, sort[k]);
@@ -75,7 +74,7 @@ export class FirestoreDriver implements ReactiveDriver {
     return firestore;
   }
 
-  private limit(limit: number, firestore: any) {
+  protected limit(limit: number, firestore: any) {
     return firestore.limit(limit);
   }
 

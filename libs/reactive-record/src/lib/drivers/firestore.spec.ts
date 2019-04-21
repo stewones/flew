@@ -16,6 +16,10 @@ class FirestoreDriverMock extends FirestoreDriver {
   public where(query, firestore) {
     return super.where(query, firestore);
   }
+
+  public order(sort, firestore) {
+    return super.order(sort, firestore);
+  }
 }
 
 describe('FirestoreDriver', () => {
@@ -124,5 +128,34 @@ describe('FirestoreDriver', () => {
         }
       );
     }).toThrowError(`value can't be null for firestore where`);
+  });
+
+  it('should apply `order` using array', () => {
+    const spy = jest.spyOn(FirestoreDriverMock.prototype, 'order');
+    driver.order([{ updated_at: 'desc' }], { orderBy: () => {} });
+    expect(spy).toBeCalled();
+    expect(() => {
+      driver.order([{}], {
+        orderBy: () => {
+          return { orderBy: () => {} };
+        }
+      });
+    }).toThrowError(`sort object in array can't be null`);
+  });
+
+  it('should apply `order` using object', () => {
+    const spy = jest.spyOn(FirestoreDriverMock.prototype, 'order');
+    driver.order(
+      { updated_at: 'desc', created_at: 'asc' },
+      {
+        orderBy: () => {
+          return { orderBy: () => {} };
+        }
+      }
+    );
+    expect(spy).toBeCalled();
+    expect(() => {
+      driver.order({}, { orderBy: () => {} });
+    }).toThrowError(`sort object in object can't be null`);
   });
 });
