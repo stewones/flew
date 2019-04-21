@@ -1,6 +1,6 @@
 import { Request } from '../interfaces/request';
 import { Observable, PartialObserver } from 'rxjs';
-import { merge, isEmpty, isArray, isNil } from 'lodash';
+import { merge, isEmpty, isArray, isObject, isNil } from 'lodash';
 import { Connector } from '../interfaces/connector';
 import { Options, Chain } from '../interfaces/options';
 import { Response } from '../interfaces/response';
@@ -66,7 +66,7 @@ export class FirestoreDriver implements ReactiveDriver {
         if (isEmpty(s)) throw new Error(`sort object in array can't be null`);
         for (const k in s) firestore = firestore.orderBy(k, s[k]);
       });
-    } else if (typeof sort === 'object') {
+    } else if (isObject(sort)) {
       this.log().success()(`firestore sort object -> ${JSON.stringify(sort)}`);
       if (isEmpty(sort)) throw new Error(`sort object can't be null`);
       for (const k in sort) firestore = firestore.orderBy(k, sort[k]);
@@ -83,7 +83,7 @@ export class FirestoreDriver implements ReactiveDriver {
     key: string,
     chain: Chain = {}
   ): Observable<T> {
-    return new Observable((observer: PartialObserver<any>) => {
+    return new Observable((observer: PartialObserver<T>) => {
       //
       // run exceptions
       this.exceptions();
@@ -129,11 +129,10 @@ export class FirestoreDriver implements ReactiveDriver {
 
           //
           // success callback
-          observer.next(response);
+          observer.next(response as T);
           observer.complete();
         })
         .catch(err => {
-          console.log(err);
           observer.error(err);
           observer.complete();
         });
@@ -234,8 +233,12 @@ export class FirestoreDriver implements ReactiveDriver {
       //
       // define return
       const response = r => {
-        observer.next(r);
+        observer.next(data);
         observer.complete();
+      };
+      const error = err => {
+        observer.error(err);
+        observer.complete;
       };
       //
       // call firestore
@@ -243,7 +246,7 @@ export class FirestoreDriver implements ReactiveDriver {
         .doc(id)
         .set(data, { merge: shouldMerge })
         .then(response)
-        .catch(response);
+        .catch(error);
     });
   }
 
@@ -264,7 +267,7 @@ export class FirestoreDriver implements ReactiveDriver {
       //
       // define return
       const response = r => {
-        observer.next(r);
+        observer.next(data);
         observer.complete();
       };
       //

@@ -2,13 +2,8 @@ import { ReactiveRecord } from './server';
 import { FirestoreStub } from '../drivers/stub';
 import { ReactiveDriverOption } from '../interfaces/driver';
 
-// import { fakeAsync, tick } from '@angular/core/testing';
-
 describe('ReactiveRecord', () => {
   let lib: ReactiveRecord;
-  // hookStub,
-  // exceptionServerStub,
-  // exceptionClientStub,
   const baseURL = 'http://firetask.dev';
   const collection = 'foo-collection';
 
@@ -72,21 +67,13 @@ describe('ReactiveRecord', () => {
 
   it('should implement `update` method', () => {
     const spy = jest.spyOn(ReactiveRecord.prototype, 'update');
-    lib
-      .update('some_id', { some: 'data' })
-      .toPromise()
-      .then(r => console.log(r));
+    lib.update('some_id', { some: 'data' }).toPromise();
     expect(spy).toBeCalled();
   });
 
   it('should implement `on` method', () => {
     const spy = jest.spyOn(ReactiveRecord.prototype, 'on');
-    lib.on(
-      r => {
-        console.log(123, r);
-      },
-      r => console.log(r)
-    );
+    lib.on(r => {}, r => {});
     expect(spy).toBeCalled();
   });
 });

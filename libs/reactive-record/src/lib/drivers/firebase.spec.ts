@@ -1,5 +1,19 @@
 import { FirebaseStub } from './stub';
 import { FirebaseDriver } from './firebase';
+import { Logger } from '../utils/logger';
+import { Subject } from 'rxjs';
+
+class FirebaseDriverMock extends FirebaseDriver {
+  logger = new Logger({
+    subject: new Subject(),
+    useLog: false,
+    useLogTrace: false
+  });
+
+  constructor(options) {
+    super(options);
+  }
+}
 
 describe('FirebaseDriver', () => {
   let driver: FirebaseDriver;
@@ -8,8 +22,7 @@ describe('FirebaseDriver', () => {
 
   beforeEach(() => {
     firebaseMock = FirebaseStub({});
-    driver = new FirebaseDriver({
-      driver: 'firebase',
+    driver = new FirebaseDriverMock({
       collection: collection,
       connector: {
         firebase: firebaseMock.firebase
@@ -39,6 +52,7 @@ describe('FirebaseDriver', () => {
     driver.on({});
     driver.on({}, r => {}, err => {});
     driver.on({}, r => {}, err => {}, { transformResponse: r => r.data });
+
     expect(spy).toBeCalledTimes(3);
   });
 
@@ -85,8 +99,7 @@ describe('FirebaseDriver', () => {
     );
   });
 
-  // fit('should return response for [find] method', () => {
-  //   driver.find({}, 'my-key').toPromise();
-  //   // expect(firebaseMock.onceCallback.mock.calls.length).toBe(2);
-  // });
+  it('should return a logger instance', () => {
+    return expect(driver.log()).toBeTruthy();
+  });
 });
