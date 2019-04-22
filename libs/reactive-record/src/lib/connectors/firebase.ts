@@ -13,6 +13,3 @@ export class FirebaseConnector {
     }
   }
 }
-
-// @deprecated
-export class RRFirebaseConnector extends FirebaseConnector {}

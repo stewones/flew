@@ -4,16 +4,17 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 
-import { NgxsModule, Store } from '@ngxs/store';
+import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 
-import { ReactiveState, Config } from '@firetask/reactive-record';
 import { DemoState } from './app.state';
+import { ReactiveModule, ReactiveState } from '@firetask/angular';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    ReactiveModule,
     NgxsModule.forRoot([ReactiveState, DemoState], {
       developmentMode: !environment.production
     }),
@@ -23,8 +24,5 @@ import { DemoState } from './app.state';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(public store: Store) {
-    // it's necessary to tell RR the store instance so it can dispatch actions
-    Config.store = store;
-  }
+  constructor() {}
 }

@@ -1,4 +1,5 @@
 import { Options } from '../interfaces/options';
+import { Subject } from 'rxjs';
 
 interface ReactiveOptions {
   options: Options;
@@ -10,7 +11,7 @@ const ReactiveConfig: ReactiveOptions = {
     driver: 'firestore'
   },
   store: {
-    dispatch: () => {}
+    dispatch: new Subject()
   }
 };
 

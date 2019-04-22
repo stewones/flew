@@ -1,6 +1,6 @@
 import { State, Action, StateContext, createSelector } from '@ngxs/store';
-import { Response } from '../interfaces/response';
 import { isEqual, cloneDeep } from 'lodash';
+import { Response } from '../../../reactive-record/src/lib/interfaces/response';
 
 export interface StateModel {
   responses: Response[];
@@ -52,4 +52,11 @@ export class ReactiveState {
   }
 
   constructor() {}
+}
+
+export function key(name: string, data?: boolean) {
+  return (state: any) => {
+    const response = state.ReactiveState.responses.find(it => it.key === name);
+    return response && data && response.data ? response.data : response;
+  };
 }

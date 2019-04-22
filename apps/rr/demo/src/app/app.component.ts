@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TodoService } from './todo.service';
 import { Subscription, Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
-import { ReactiveState, Response, key } from '@firetask/reactive-record';
+import { ReactiveState, key } from '@firetask/angular';
+import { Response } from '@firetask/reactive-record';
 import { UserService } from './user.service';
 import { CatService } from './cat.service';
 

@@ -1,11 +1,10 @@
-import { omit, isEmpty, isEqual, isArray, isObject, merge } from 'lodash';
+import { isEmpty, isEqual, isArray, isObject, merge } from 'lodash';
 import { PartialObserver, Observable } from 'rxjs';
 import { Options, Chain } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { ReactiveRecord } from './server';
 import { StorageAdapter } from '../interfaces/storage';
 import { Config } from '../symbols/rr';
-import { SyncReactiveResponse } from '../utils/store';
 import { ReactiveVerb } from '../interfaces/verb';
 import { clearNetworkResponse } from '../utils/response';
 
@@ -29,12 +28,12 @@ export class PlatformBrowser extends ReactiveRecord {
       !isEmpty(Config.options) && Config.options.storage
         ? Config.options.storage
         : false;
-    const store = !isEmpty(Config.store) ? Config.store : false;
 
-    if (store && storage) {
+    if (storage) {
       storage.forEach((value, key, index) => {
-        if (value.collection === this.collection)
-          store.dispatch(new SyncReactiveResponse(value));
+        if (value.collection === this.collection) {
+          Config.store.dispatch.next(value);
+        }
       });
     }
   }
@@ -244,9 +243,7 @@ export class PlatformBrowser extends ReactiveRecord {
 
       // dispatch to store
       if (network && network.data)
-        Config.store.dispatch(
-          new SyncReactiveResponse(clearNetworkResponse(network))
-        );
+        Config.store.dispatch.next(clearNetworkResponse(network));
     }
 
     //
