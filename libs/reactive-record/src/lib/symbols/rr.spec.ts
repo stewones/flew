@@ -1,10 +1,10 @@
 import { Config, optionGet, optionSet, storeGet, storeSet, key } from './rr';
 
 describe('RRSymbol', () => {
-  it('should have store with dispatch', () => {
-    const spy = jest.spyOn(Config.store, 'dispatch');
-    Config.store.dispatch();
-    expect(spy).toBeCalled();
+  it('should dispatch payloads to store', () => {
+    const spy = jest.spyOn(Config.store.dispatch, 'next');
+    Config.store.dispatch.next(`rr rulez!`);
+    expect(spy).toBeCalledWith(`rr rulez!`);
   });
 
   it('should get options', () => {

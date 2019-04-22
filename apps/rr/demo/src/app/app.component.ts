@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TodoService } from './todo.service';
 import { Subscription, Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
-import { ReactiveState, key } from '@firetask/angular';
+import { key } from '@firetask/angular';
 import { Response } from '@firetask/reactive-record';
 import { UserService } from './user.service';
 import { CatService } from './cat.service';
@@ -17,17 +17,10 @@ export class AppComponent implements OnInit {
 
   todos$: Subscription;
 
-  @Select(ReactiveState.key('baby', true))
-  baby$: Observable<Response>;
-
-  @Select(ReactiveState.key('baby-firestore', true))
-  babyFirestore$: Observable<Response>;
-
-  @Select(ReactiveState.key('baby-firebase', true))
-  babyFirebase$: Observable<Response>;
-
-  @Select(ReactiveState.key('cat', true))
-  cat$: Observable<Response>;
+  @Select(key('baby')) baby$: Observable<Response>;
+  @Select(key('baby-firestore', true)) babyFirestore$: Observable<any>;
+  @Select(key('baby-firebase', true)) babyFirebase$: Observable<any>;
+  @Select(key('cat', true)) cat$: Observable<any>;
 
   babyDynamic$: Observable<Response<{}>>;
 
