@@ -61,7 +61,7 @@ export class HttpDriver implements ReactiveDriver {
           data: r.data ? r.data : r,
           response: isObject(r) ? r : {},
           key: key,
-          collection: this.collection,
+          collection: this.collection || '',
           driver: this._driver
         });
 

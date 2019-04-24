@@ -5,7 +5,8 @@ import {
   cloneDeep,
   isBoolean,
   isString,
-  startCase
+  startCase,
+  omit
 } from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { Request } from '../interfaces/request';
@@ -283,17 +284,22 @@ export class ReactiveRecord implements ReactiveApi {
 
   protected createKey(path = '', body = {}): string {
     const chain = this.cloneChain();
-    const requestPath = `${this.collection}:/${this.endpoint || ''}${path ||
-      ''}/${SHA256(
-      JSON.stringify({
-        ...body,
-        ...this.request,
-        ...{ ref: this.chain.ref || '' },
-        ...{ driver: this._driver }
-      })
-    )}`;
-    // requestPath += `/${JSON.stringify(this.request.query)}`;
-    return chain.key || requestPath.replace('///', '//');
+    const payload = JSON.stringify({
+      ...body,
+      ...this.request,
+      ...{ path: path },
+      ...{ driver: this._driver },
+      ...omit(chain, [
+        'ttl',
+        'key',
+        'transformCache',
+        'transformResponse',
+        'transformNetwork'
+      ])
+    });
+    const key = `${this.collection || 'rr'}:/${this.endpoint || ''}${path ||
+      ''}/${SHA256(payload)}`;
+    return chain.key || key.split('///').join('//');
   }
 
   protected cloneChain(): Chain {
@@ -303,7 +309,8 @@ export class ReactiveRecord implements ReactiveApi {
   protected call<T extends Response>(
     method: ReactiveVerb,
     path: string = '/',
-    payload: any = {}
+    payload: any = {},
+    key: string = ''
   ): Observable<T> {
     let _method = method;
     let _driver = this.getDriver();
@@ -328,7 +335,7 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // define an unique key
-    const key = this.createKey(path, payload);
+    key = key ? key : this.createKey(path, payload);
 
     //
     // firebase stuff
