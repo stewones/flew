@@ -1,4 +1,4 @@
-import { isEmpty, isEqual, isArray, isObject, merge } from 'lodash';
+import { isEmpty, isEqual, isArray, isObject, merge, get } from 'lodash';
 import { PartialObserver, Observable } from 'rxjs';
 import { Options, Chain } from '../interfaces/options';
 import { Response } from '../interfaces/response';
@@ -64,14 +64,24 @@ export class PlatformBrowser extends ReactiveRecord {
     return this.call('findOne');
   }
 
-  private shouldTransformResponse(chain: Chain) {
+  private shouldTransformResponse(chain: Chain, response: Response) {
     let transformResponse: any =
       chain.transformResponse && typeof chain.transformResponse === 'function'
         ? chain.transformResponse
         : (data: Response) => data;
 
     if (chain.transformData) {
-      transformResponse = (data: Response) => data.data;
+      //
+      // transform elastic data
+      const hits = get(response, 'data.hits.hits');
+      if (hits) {
+        transformResponse = (data: Response) =>
+          data.data.hits.hits.map(h => h._source);
+      } else {
+        //
+        // default
+        transformResponse = (data: Response) => data.data;
+      }
     }
 
     return transformResponse;
@@ -108,7 +118,9 @@ export class PlatformBrowser extends ReactiveRecord {
           );
 
           observer.next(
-            this.shouldTransformResponse(chain)(evaluation.cache as T)
+            this.shouldTransformResponse(chain, evaluation.cache)(
+              evaluation.cache as T
+            )
           );
           observer.complete();
         }
@@ -166,7 +178,7 @@ export class PlatformBrowser extends ReactiveRecord {
     chain: Chain = {}
   ) {
     const cache: Response & { ttl: number } | any = await this.storage.get(key);
-    const transformResponse: any = this.shouldTransformResponse(chain);
+    const transformResponse: any = this.shouldTransformResponse(chain, cache);
     const useCache: boolean = chain.useCache === false ? false : true;
     super.log().info()(`${key} [should] useCache? ${useCache ? true : false}`);
     super.log().info()(`${key} [should] hasCache? ${cache ? true : false}`);
@@ -204,7 +216,7 @@ export class PlatformBrowser extends ReactiveRecord {
         ? chain.transformCache
         : (data: Response) => data;
 
-    const transformResponse: any = this.shouldTransformResponse(chain);
+    const transformResponse: any = this.shouldTransformResponse(chain, network);
     const saveNetwork: boolean = chain.saveNetwork === false ? false : true;
     const useNetwork: boolean = chain.useNetwork === false ? false : true;
 
