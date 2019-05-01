@@ -22,7 +22,6 @@ export class PlatformBrowser extends ReactiveRecord {
     this.storage.clear();
   }
 
-  // feed store with cached responses
   public feed() {
     const storage =
       !isEmpty(Config.options) && Config.options.storage
