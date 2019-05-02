@@ -38,6 +38,8 @@ export { Request } from './lib/interfaces/request';
 export { Connector } from './lib/interfaces/connector';
 export { StorageAdapter } from './lib/interfaces/storage';
 export { Log, LogParams } from './lib/interfaces/log';
+export { ReactiveVerb } from './lib/interfaces/verb';
+export { ReactiveDriverOption } from './lib/interfaces/driver';
 
 //
 // modules  (experimental)

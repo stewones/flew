@@ -272,11 +272,11 @@ export class ReactiveRecord implements ReactiveApi {
     });
   }
 
-  public on<T>(
+  public on<T extends Response>(
     onSuccess: (response: Response) => any = (response: Response) => {},
     onError: (response: any) => any = (response: any) => {}
   ): any {
-    return this.call('on', null, {
+    return this.call<T>('on', null, {
       onSuccess: onSuccess,
       onError: onError
     });

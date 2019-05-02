@@ -38,29 +38,29 @@ export class PlatformBrowser extends ReactiveRecord {
   }
 
   public get<T extends Response>(path: string = ''): Observable<T> {
-    return this.call('get', path);
+    return this.call$('get', path);
   }
 
   public post<T extends Response>(
     path: string = '',
     body: any = {}
   ): Observable<T> {
-    return this.call('post', path, body);
+    return this.call$('post', path, body);
   }
 
   public patch<T extends Response>(
     path: string = '',
     body: any = {}
   ): Observable<T> {
-    return this.call('patch', path, body);
+    return this.call$('patch', path, body);
   }
 
   public find<T extends Response>(): Observable<T> {
-    return this.call('find');
+    return this.call$('find');
   }
 
   public findOne<T extends Response>(): Observable<T> {
-    return this.call('findOne');
+    return this.call$('findOne');
   }
 
   private shouldTransformResponse(chain: Chain, response: Response) {
@@ -86,7 +86,7 @@ export class PlatformBrowser extends ReactiveRecord {
     return transformResponse;
   }
 
-  protected call<T extends Response>(
+  protected call$<T extends Response>(
     method: ReactiveVerb = 'get',
     path: string = '/',
     payload: any = {}
