@@ -21,7 +21,10 @@ export class FirestoreDriver implements ReactiveDriver {
     const connector = get(options, 'connector') || {};
     this.connector = connector.firestore;
     try {
-      if (this.chain.useCache !== false) this.connector.enablePersistence();
+      if (this.chain.useCache !== false)
+        this.connector.enablePersistence({
+          experimentalTabSynchronization: true
+        });
     } catch (err) {}
   }
 
