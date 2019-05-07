@@ -32,6 +32,8 @@ describe('FirebaseDriver', () => {
 
   it('should be created using minimal setup', () => {
     expect(driver).toBeTruthy();
+    driver = new FirebaseDriverMock({});
+    expect(driver).toBeTruthy();
   });
 
   it('should implement `find` method', () => {
@@ -43,15 +45,14 @@ describe('FirebaseDriver', () => {
   it('should implement `findOne` method', () => {
     const spy = jest.spyOn(FirebaseDriver.prototype, 'findOne');
     driver.findOne({}, 'my-key').toPromise();
-    driver.findOne({}, 'my-key', {}).toPromise();
-    expect(spy).toBeCalledTimes(2);
+    expect(spy).toBeCalledTimes(1);
   });
 
   it('should implement `on` method', () => {
     const spy = jest.spyOn(FirebaseDriver.prototype, 'on');
     driver.on({});
     driver.on({}, r => {}, err => {});
-    driver.on({}, r => {}, err => {}, { transformResponse: r => r.data });
+    driver.on({ transformResponse: r => r.data }, r => {}, err => {});
 
     expect(spy).toBeCalledTimes(3);
   });

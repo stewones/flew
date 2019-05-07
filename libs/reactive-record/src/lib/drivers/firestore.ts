@@ -86,10 +86,7 @@ export class FirestoreDriver implements ReactiveDriver {
     return firestore.limit(limit);
   }
 
-  public find<T extends Response>(
-    chain: Chain = {},
-    key: string
-  ): Observable<T> {
+  public find<T extends Response>(chain: Chain, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
       //
       // run exceptions
@@ -147,7 +144,7 @@ export class FirestoreDriver implements ReactiveDriver {
     });
   }
 
-  public findOne(chain: Chain = {}, key: string): Observable<Response> {
+  public findOne(chain: Chain, key: string): Observable<Response> {
     return this.find(chain, key).pipe(
       map((r: Response) => {
         const response: Response = <Response>{
@@ -164,7 +161,7 @@ export class FirestoreDriver implements ReactiveDriver {
   }
 
   public on(
-    chain: Chain = {},
+    chain: Chain,
     onSuccess: (response: Response) => any = (response: Response) => {},
     onError: (response: any) => any = (response: any) => {}
   ): any {

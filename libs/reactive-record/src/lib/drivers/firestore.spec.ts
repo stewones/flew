@@ -87,6 +87,12 @@ describe('FirestoreDriver', () => {
 
   it('should be created using minimal setup', () => {
     expect(driver).toBeTruthy();
+    driver = new FirestoreDriverMock({
+      chain: {
+        useCache: false
+      }
+    });
+    expect(driver).toBeTruthy();
   });
 
   it('should implement `find` method', () => {
@@ -116,6 +122,11 @@ describe('FirestoreDriver', () => {
     };
 
     const driver_ = new FirestoreDriver({
+      logger: new Logger({
+        subject: new Subject(),
+        useLog: false,
+        useLogTrace: false
+      }),
       collection: 'users',
       connector: {
         firestore: {
@@ -139,7 +150,7 @@ describe('FirestoreDriver', () => {
           limit: () => false
         }
       }
-    });
+    } as any);
     const spy = jest.spyOn(FirestoreDriver.prototype, 'on');
     driver_.on({});
     driver_.on(
@@ -149,7 +160,7 @@ describe('FirestoreDriver', () => {
       r => {},
       err => {}
     );
-    driver_.on({ id: 'asdf', size: 54 });
+    driver_.on({ doc: 'asdf', size: 54 }, () => {});
 
     expect(spy).toBeCalledTimes(3);
   });

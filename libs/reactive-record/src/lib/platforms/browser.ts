@@ -16,7 +16,7 @@ export class PlatformBrowser extends ReactiveRecord {
     super(options);
     merge(this, options);
 
-    if (!this.storage && options.chain.useCache)
+    if (!this.storage && options.chain && options.chain.useCache)
       throw new Error('missing storage instance');
   }
 
@@ -90,7 +90,7 @@ export class PlatformBrowser extends ReactiveRecord {
 
   protected call$<T extends Response>(
     method: ReactiveVerb = 'get',
-    path: string = '/',
+    path: string = '',
     payload: any = {}
   ): Observable<T> {
     // re-init so we can have access to stuff like `storage`

@@ -12,6 +12,8 @@ describe('HttpDriver', () => {
 
   it('should be created using minimal setup', () => {
     expect(driver).toBeTruthy();
+    driver = new HttpDriver({});
+    expect(driver).toBeTruthy();
   });
 
   it('should be able to use a different http connector', () => {
@@ -88,5 +90,124 @@ describe('HttpDriver', () => {
     expect(() => {
       driver.get().toPromise();
     }).toThrowError(`endpoint required for [get]`);
+  });
+
+  it('should respond with success', () => {
+    driver = new HttpDriver({
+      baseURL: 'http://google.com',
+      endpoint: '/',
+      connector: {
+        http: {
+          get: () =>
+            Promise.resolve({
+              data: [1, 2, 3]
+            })
+        }
+      }
+    });
+
+    driver
+      .get()
+      .toPromise()
+      .then(r => {
+        expect(r).toEqual({
+          data: [1, 2, 3],
+          response: {},
+          key: '',
+          collection: '',
+          driver: 'http'
+        });
+      });
+
+    driver = new HttpDriver({
+      baseURL: 'http://google.com',
+      endpoint: '/',
+      connector: {
+        http: {
+          get: () => Promise.resolve([1, 2, 3])
+        }
+      }
+    });
+
+    driver
+      .get()
+      .toPromise()
+      .then(r => {
+        expect(r).toEqual({
+          data: [1, 2, 3],
+          response: [1, 2, 3],
+          key: '',
+          collection: '',
+          driver: 'http'
+        });
+      });
+
+    driver = new HttpDriver({
+      baseURL: 'http://google.com',
+      endpoint: '/',
+      connector: {
+        http: {
+          get: () => Promise.resolve('okay')
+        }
+      }
+    });
+
+    driver
+      .get()
+      .toPromise()
+      .then(r => {
+        expect(r).toEqual({
+          data: 'okay',
+          response: {},
+          key: '',
+          collection: '',
+          driver: 'http'
+        });
+      });
+  });
+
+  it('should respond with error', () => {
+    driver = new HttpDriver({
+      baseURL: 'http://google.com',
+      endpoint: '/',
+      connector: {
+        http: {
+          get: () =>
+            Promise.reject({
+              response: { data: { message: 'error object', code: 54 } }
+            })
+        }
+      }
+    });
+
+    driver
+      .get()
+      .toPromise()
+      .then(
+        () => {},
+        err => {
+          expect(err).toEqual({ code: 54, message: 'error object' });
+        }
+      );
+
+    driver = new HttpDriver({
+      baseURL: 'http://google.com',
+      endpoint: '/',
+      connector: {
+        http: {
+          get: () => Promise.reject('error string')
+        }
+      }
+    });
+
+    driver
+      .get()
+      .toPromise()
+      .then(
+        () => {},
+        err => {
+          expect(err).toEqual('error string');
+        }
+      );
   });
 });

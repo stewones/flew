@@ -1,13 +1,5 @@
 import { AxiosRequestConfig } from 'axios';
-import {
-  merge,
-  isEmpty,
-  cloneDeep,
-  isBoolean,
-  isString,
-  startCase,
-  omit
-} from 'lodash';
+import { merge, isEmpty, isBoolean, isString, startCase, omit } from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { Response } from '../interfaces/response';
 import { Options, Chain } from '../interfaces/options';
@@ -111,6 +103,7 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // set use cache
+    if (!options.chain) options.chain = {};
     options.chain.useCache = options.useCache === false ? false : true;
     this.useCache(options.chain.useCache);
 
@@ -306,12 +299,12 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   protected cloneChain(): Chain {
-    return cloneDeep(this.chain);
+    return { ...this.chain };
   }
 
   protected call<T extends Response>(
     method: ReactiveVerb,
-    path: string = '/',
+    path: string = '',
     payload: any = {},
     chain = this.cloneChain(),
     key: string = ''

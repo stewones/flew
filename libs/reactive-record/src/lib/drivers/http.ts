@@ -35,8 +35,8 @@ export class HttpDriver implements ReactiveDriver {
   }
 
   public executeRequest<T extends Response>(
-    method: 'get' | 'post' | 'patch' | 'delete' = 'get',
-    path: string = '/',
+    method: 'get' | 'post' | 'patch' | 'delete',
+    path: string,
     key: string,
     body?: any
   ): Observable<T> {

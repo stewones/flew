@@ -32,7 +32,7 @@ export class FirebaseDriver implements ReactiveDriver {
     return this.logger;
   }
 
-  public find(chain: Chain = {}, key: string): Observable<Response> {
+  public find(chain: Chain, key: string): Observable<Response> {
     return new Observable((observer: PartialObserver<any>) => {
       //
       // run exceptions
@@ -85,7 +85,7 @@ export class FirebaseDriver implements ReactiveDriver {
     });
   }
 
-  public findOne(chain: Chain = {}, key: string): Observable<Response> {
+  public findOne(chain: Chain, key: string): Observable<Response> {
     return this.find(chain, key).pipe(
       map((r: Response) => {
         const data = get(r, 'data[0]');
@@ -102,7 +102,7 @@ export class FirebaseDriver implements ReactiveDriver {
   }
 
   public on(
-    chain: Chain = {},
+    chain: Chain,
     onSuccess: (response: Response) => any = (response: Response) => {},
     onError: (response: any) => any = (response: any) => {}
   ): any {
