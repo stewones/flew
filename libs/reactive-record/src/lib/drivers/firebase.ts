@@ -1,4 +1,3 @@
-import { Request } from '../interfaces/request';
 import { Observable, PartialObserver } from 'rxjs';
 import { merge, isEmpty, get } from 'lodash';
 import { Connector } from '../interfaces/connector';
@@ -16,7 +15,8 @@ export class FirebaseDriver implements ReactiveDriver {
 
   constructor(options: Options) {
     merge(this, options);
-    this.connector = options.connector.firebase;
+    const connector = get(options, 'connector') || {};
+    this.connector = connector.firebase;
   }
 
   private exceptions() {
@@ -32,11 +32,7 @@ export class FirebaseDriver implements ReactiveDriver {
     return this.logger;
   }
 
-  public find(
-    request: Request,
-    key: string,
-    chain: Chain = {}
-  ): Observable<Response> {
+  public find(chain: Chain = {}, key: string): Observable<Response> {
     return new Observable((observer: PartialObserver<any>) => {
       //
       // run exceptions
@@ -89,12 +85,8 @@ export class FirebaseDriver implements ReactiveDriver {
     });
   }
 
-  public findOne(
-    request: Request,
-    key: string,
-    chain: Chain = {}
-  ): Observable<Response> {
-    return this.find(request, key, chain).pipe(
+  public findOne(chain: Chain = {}, key: string): Observable<Response> {
+    return this.find(chain, key).pipe(
       map((r: Response) => {
         const data = get(r, 'data[0]');
         const response: Response = <Response>{
@@ -110,10 +102,9 @@ export class FirebaseDriver implements ReactiveDriver {
   }
 
   public on(
-    request: Request,
+    chain: Chain = {},
     onSuccess: (response: Response) => any = (response: Response) => {},
-    onError: (response: any) => any = (response: any) => {},
-    chain: Chain = {}
+    onError: (response: any) => any = (response: any) => {}
   ): any {
     //
     // run exceptions

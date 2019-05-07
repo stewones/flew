@@ -4,7 +4,6 @@ import { ReactiveRecord } from '../platforms/server';
 import { Logger } from '../utils/logger';
 import { Subject } from 'rxjs';
 import { Chain } from '../interfaces/options';
-import { Request } from '../interfaces/request';
 import { Response } from '../interfaces/response';
 class FirestoreDriverMock extends FirestoreDriver {
   logger = new Logger({
@@ -37,12 +36,11 @@ class FirestoreDriverMock extends FirestoreDriver {
   }
 
   public on(
-    request: Request,
+    chain: Chain = {},
     onSuccess: (response: Response) => any = (response: Response) => {},
-    onError: (response: any) => any = (response: any) => {},
-    chain: Chain = {}
+    onError: (response: any) => any = (response: any) => {}
   ): any {
-    return super.on(request, onSuccess, onError, chain);
+    return super.on(chain, onSuccess, onError);
   }
 }
 
@@ -100,8 +98,7 @@ describe('FirestoreDriver', () => {
   it('should implement `findOne` method', () => {
     const spy = jest.spyOn(FirestoreDriverMock.prototype, 'findOne');
     driver.findOne({}, 'my-key').toPromise();
-    driver.findOne({}, 'my-key', {}).toPromise();
-    expect(spy).toBeCalledTimes(2);
+    expect(spy).toBeCalledTimes(1);
   });
 
   it('should implement `on` method', () => {
@@ -145,9 +142,13 @@ describe('FirestoreDriver', () => {
     });
     const spy = jest.spyOn(FirestoreDriver.prototype, 'on');
     driver_.on({});
-    driver_.on({}, r => {}, err => {}, {
-      transformResponse: r => r.data
-    });
+    driver_.on(
+      {
+        transformResponse: r => r.data
+      },
+      r => {},
+      err => {}
+    );
     driver_.on({ id: 'asdf', size: 54 });
 
     expect(spy).toBeCalledTimes(3);

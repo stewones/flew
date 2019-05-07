@@ -1,6 +1,5 @@
-import { Request } from '../interfaces/request';
 import { Observable, PartialObserver } from 'rxjs';
-import { merge, isEmpty, isArray, isObject, isNil } from 'lodash';
+import { merge, isEmpty, isArray, isObject, isNil, get } from 'lodash';
 import { Connector } from '../interfaces/connector';
 import { Options, Chain } from '../interfaces/options';
 import { Response } from '../interfaces/response';
@@ -15,10 +14,15 @@ export class FirestoreDriver implements ReactiveDriver {
   timestamp = true;
   connector: Connector = {};
   logger: Logger;
+  chain: Chain;
 
   constructor(options: Options) {
     merge(this, options);
-    this.connector = options.connector.firestore;
+    const connector = get(options, 'connector') || {};
+    this.connector = connector.firestore;
+    try {
+      if (this.chain.useCache !== false) this.connector.enablePersistence();
+    } catch (err) {}
   }
 
   public log() {
@@ -75,13 +79,13 @@ export class FirestoreDriver implements ReactiveDriver {
   }
 
   protected limit(limit: number, firestore: any) {
+    this.log().success()(`firestore limit -> ${limit}`);
     return firestore.limit(limit);
   }
 
   public find<T extends Response>(
-    request: Request,
-    key: string,
-    chain: Chain = {}
+    chain: Chain = {},
+    key: string
   ): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
       //
@@ -94,15 +98,15 @@ export class FirestoreDriver implements ReactiveDriver {
 
       //
       // set query
-      firestore = this.where(request.query, firestore);
+      firestore = this.where(chain.query, firestore);
 
       //
       // set order
-      firestore = this.order(request.sort, firestore);
+      firestore = this.order(chain.sort, firestore);
 
       //
       // set limit
-      if (request.size) firestore = this.limit(request.size, firestore);
+      if (chain.size) firestore = this.limit(chain.size, firestore);
 
       //
       // network handle
@@ -113,6 +117,7 @@ export class FirestoreDriver implements ReactiveDriver {
           // format data
           const data: any[] = [];
           snapshot.forEach(doc => data.push(doc.data()));
+
           //
           // define standard response
           const response: Response = clearNetworkResponse({
@@ -139,12 +144,8 @@ export class FirestoreDriver implements ReactiveDriver {
     });
   }
 
-  public findOne(
-    request: Request,
-    key: string,
-    chain: Chain = {}
-  ): Observable<Response> {
-    return this.find(request, key, chain).pipe(
+  public findOne(chain: Chain = {}, key: string): Observable<Response> {
+    return this.find(chain, key).pipe(
       map((r: Response) => {
         const response: Response = <Response>{
           data: r.data && r.data.length ? r.data[0] : {},
@@ -160,10 +161,9 @@ export class FirestoreDriver implements ReactiveDriver {
   }
 
   public on(
-    request: Request,
+    chain: Chain = {},
     onSuccess: (response: Response) => any = (response: Response) => {},
-    onError: (response: any) => any = (response: any) => {},
-    chain: Chain = {}
+    onError: (response: any) => any = (response: any) => {}
   ): any {
     //
     // run exceptions
@@ -182,19 +182,19 @@ export class FirestoreDriver implements ReactiveDriver {
 
     //
     // set doc
-    if (request.id) firestore.doc(request.id);
+    if (chain.doc) firestore.doc(chain.doc);
 
     //
     // set where
-    firestore = this.where(request.query, firestore);
+    firestore = this.where(chain.query, firestore);
 
     //
     // set order
-    firestore = this.order(request.sort, firestore);
+    firestore = this.order(chain.sort, firestore);
 
     //
     // set limit
-    if (request.size) firestore = this.limit(request.size, firestore);
+    if (chain.size) firestore = this.limit(chain.size, firestore);
 
     //
     // fire in the hole

@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
       .key('baby')
       .ttl(10)
       .get('/images/search')
-      .subscribe(r => console.log(r), err => console.log(err));
+      .subscribe(r => console.log(r), err => console.log(`ERROR---->`, err));
   }
 
   postCat() {

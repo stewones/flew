@@ -20,7 +20,8 @@ export class HttpDriver implements ReactiveDriver {
 
   constructor(options: Options) {
     merge(this, options);
-    this.connector = options.connector.http;
+    const connector = get(options, 'connector') || {};
+    this.connector = connector.http;
 
     if (isEmpty(this.connector)) {
       //
@@ -47,14 +48,11 @@ export class HttpDriver implements ReactiveDriver {
     //
     // set path to be requestes
     const baseURL = this.httpConfig.baseURL || this.baseURL;
-    let requestPath = `${this.endpoint}${path}`;
-
-    if (requestPath[0] === '/' || requestPath[0] !== 'h')
-      requestPath = baseURL + requestPath;
+    const requestPath = `${baseURL}${this.endpoint}${path}`;
 
     return new Observable((observer: PartialObserver<T>) => {
       //
-      // transform response
+      // success callback
       const success = async (r: AxiosResponse) => {
         // build standard response
         const response: Response = clearNetworkResponse({
@@ -72,12 +70,14 @@ export class HttpDriver implements ReactiveDriver {
         observer.complete();
       };
 
+      //
+      // error callback
       const error = err => {
         const errData = get(err, 'response.data');
-        //
-        // error callback
-        observer.error(errData ? errData : err);
-        observer.complete();
+        try {
+          observer.error(errData ? errData : err);
+          observer.complete();
+        } catch (err) {}
       };
 
       //

@@ -19,6 +19,10 @@ export interface Options {
   storage?: StorageAdapter; // storage adapter
   version?: string; // add 'accept-version' to http headers
   feed?: boolean; // whether should feed store with cached results
+
+  //
+  // for internal initializations
+  chain?: Chain;
 }
 
 export interface Chain {
@@ -32,4 +36,8 @@ export interface Chain {
   transformNetwork?: (data: any) => any; // @deprecated same as transformResponse
   transformData?: boolean; // shortcut for transformResponse(r=>r.data)
   ref?: string; //  used for firebase driver
+  query?: any;
+  size?: number; // elastic/firestore
+  sort?: any | any[]; // elastic/firestore
+  doc?: string | number; // firestore `on`
 }

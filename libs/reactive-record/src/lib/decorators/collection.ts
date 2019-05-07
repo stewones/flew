@@ -12,7 +12,10 @@ export function Collection(options: Options) {
       : options.useCache;
 
   if (options.name) options.collection = options.name;
-  delete options.useCache;
+  if (!options.chain) options.chain = {};
+
+  options.chain.useCache = options.useCache;
+  delete options.useCache; // because it's part of public api
 
   return function(constructor: Function) {
     constructor.prototype.$collection = useCache
@@ -20,58 +23,3 @@ export function Collection(options: Options) {
       : new PlatformServer(options);
   };
 }
-
-//
-// @experimental
-
-// export function Collection(options: Options) {
-//   return function<T extends { new (...args: any[]): {} }>(constructor: T) {
-//     const isServer = typeof module !== 'undefined' && module.exports;
-//     const useCache =
-//       isEmpty(options.useCache) && !isServer && options.useCache !== false
-//         ? true
-//         : options.useCache;
-
-//     if (options.name) options.collection = options.name;
-//     delete options.useCache;
-
-//     return class extends constructor {
-//       $collection = useCache
-//         ? new PlatformBrowser(options)
-//         : new PlatformServer(options);
-//     };
-//   };
-// }
-
-// export function Collection(options: Options) {
-//   return function<T extends { new (...constructorArgs: any[]) }>(
-//     constructorFunction: T
-//   ) {
-//     const isServer = typeof module !== 'undefined' && module.exports;
-//     const useCache =
-//       isEmpty(options.useCache) && !isServer && options.useCache !== false
-//         ? true
-//         : options.useCache;
-
-//     if (options.name) options.collection = options.name;
-//     delete options.useCache;
-
-//     //new constructor function
-//     let newConstructorFunction: any = function(...args) {
-//       let func: any = function() {
-//         return new constructorFunction(...args);
-//       };
-//       func.prototype = constructorFunction.prototype;
-
-//       func.prototype.$collection = useCache
-//         ? new PlatformBrowser(options)
-//         : new PlatformServer(options);
-
-//       let result: any = new func();
-
-//       return result;
-//     };
-//     newConstructorFunction.prototype = constructorFunction.prototype;
-//     return newConstructorFunction;
-//   };
-// }

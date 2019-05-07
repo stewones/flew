@@ -1,5 +1,6 @@
 import { isEmpty, isEqual, isArray, isObject, merge, get } from 'lodash';
-import { PartialObserver, Observable } from 'rxjs';
+import { PartialObserver, Observable, from, of, concat } from 'rxjs';
+import { map, switchMap, filter, catchError } from 'rxjs/operators';
 import { Options, Chain } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { ReactiveRecord } from './server';
@@ -14,7 +15,8 @@ export class PlatformBrowser extends ReactiveRecord {
   constructor(options: Options) {
     super(options);
     merge(this, options);
-    if (!this.storage && options.useCache)
+
+    if (!this.storage && options.chain.useCache)
       throw new Error('missing storage instance');
   }
 
@@ -91,31 +93,84 @@ export class PlatformBrowser extends ReactiveRecord {
     path: string = '/',
     payload: any = {}
   ): Observable<T> {
-    // initialize so we can have access to stuff like `storage`
-    const currentDriver = super.getDriver();
-    super.init({ driver: currentDriver });
+    // re-init so we can have access to stuff like `storage`
+    super.init({
+      driver: super.getDriver()
+    });
 
-    // stuff necessary for cache
+    //
+    //
     const key = super.createKey(path, payload);
     const chain = super.cloneChain();
 
+    //
+    // reset for the next call
+    super.reset();
+
+    //
+    // request
     return new Observable((observer: PartialObserver<T>) => {
-      this.shouldCallNetwork(key, chain).then(evaluation => {
-        this.log().info()(
-          `${key} [call] should request network? ${evaluation.now}`
-        );
-        if (evaluation.now) {
-          super.call<T>(method, path, payload, key).subscribe(
-            response => {
-              this.setCache(key, response, observer, chain);
-            },
-            err => observer.error(err)
-          );
-        } else {
+      this.shouldCallNetwork(chain, key).then(evaluation =>
+        concat(
+          this.cache$(observer, chain, key),
+          this.ttl$(evaluation, observer, chain, key),
+          this.network$(evaluation, observer, method, path, payload, chain, key)
+        ).subscribe()
+      );
+    });
+
+    // return new Observable((observer: PartialObserver<T>) => {
+    //   this.shouldCallNetwork(chain, key).then(evaluation => {
+    //     this.log().info()(
+    //       `${key} [call] should request network? ${evaluation.now}`
+    //     );
+    //     if (evaluation.now) {
+    //       super.call<T>(method, path, payload, chain, key).subscribe(
+    //         response => {
+    //           this.setCache(chain, key, response, observer);
+    //         },
+    //         err => observer.error(err)
+    //       );
+    //     } else {
+    //       super.log().danger()(
+    //         `${key} [call] there is a cached response with time to live`
+    //       );
+
+    //       observer.next(
+    //         this.shouldTransformResponse(chain, evaluation.cache)(
+    //           evaluation.cache as T
+    //         )
+    //       );
+    //       observer.complete();
+    //     }
+    //   });
+    //   //
+    //   // return cached response
+    //   this.shouldReturnCache(chain, key, observer);
+    // });
+  }
+
+  private network$<T>(evaluation, observer, method, path, payload, chain, key) {
+    return of(evaluation).pipe(
+      filter(evaluation => evaluation.now === true),
+      switchMap(() =>
+        super.call<T>(method, path, payload, chain, key).pipe(
+          map(response => {
+            this.setCache(chain, key, response, observer);
+          }),
+          catchError(err => observer.error(err))
+        )
+      )
+    );
+  }
+
+  private ttl$<T>(evaluation, observer, chain, key) {
+    return of(evaluation).pipe(
+      map(evaluation => {
+        if (!evaluation.now) {
           super.log().danger()(
             `${key} [call] there is a cached response with time to live`
           );
-
           observer.next(
             this.shouldTransformResponse(chain, evaluation.cache)(
               evaluation.cache as T
@@ -123,17 +178,17 @@ export class PlatformBrowser extends ReactiveRecord {
           );
           observer.complete();
         }
-      });
+      })
+    );
+  }
 
-      //
-      // return cached response
-      this.shouldReturnCache(key, observer, chain);
-    });
+  private cache$<T>(observer, chain, key) {
+    return from(this.shouldReturnCache(chain, key, observer));
   }
 
   private shouldCallNetwork(
-    key: string,
-    chain: Chain = {}
+    chain: Chain = {},
+    key: string
   ): Promise<{ now: boolean; cache?: Response }> {
     return new Promise(async resolve => {
       const cache: Response & { ttl: number } | any = await this.storage.get(
@@ -172,9 +227,9 @@ export class PlatformBrowser extends ReactiveRecord {
   }
 
   private async shouldReturnCache(
+    chain: Chain = {},
     key: string,
-    observer: PartialObserver<any>,
-    chain: Chain = {}
+    observer: PartialObserver<any>
   ) {
     const cache: Response & { ttl: number } | any = await this.storage.get(key);
     const transformResponse: any = this.shouldTransformResponse(chain, cache);
@@ -204,10 +259,10 @@ export class PlatformBrowser extends ReactiveRecord {
   }
 
   private async setCache(
+    chain: Chain = {},
     key: string,
     network: Response & { ttl?: number },
-    observer: PartialObserver<any>,
-    chain: Chain = {}
+    observer: PartialObserver<any>
   ) {
     const cache: Response & { ttl?: number } = await this.storage.get(key);
     const transformCache: any =

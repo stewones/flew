@@ -9,7 +9,6 @@ import {
   omit
 } from 'lodash';
 import { Observable, Subject } from 'rxjs';
-import { Request } from '../interfaces/request';
 import { Response } from '../interfaces/response';
 import { Options, Chain } from '../interfaces/options';
 import { ReactiveApi } from '../interfaces/api';
@@ -33,7 +32,6 @@ export class ReactiveRecord implements ReactiveApi {
   private httpConfig: AxiosRequestConfig = {};
   private beforeHttp = (config: AxiosRequestConfig) => {};
 
-  private request: Request = {};
   private chain: Chain = {};
 
   private _driver_initialized = {};
@@ -53,7 +51,7 @@ export class ReactiveRecord implements ReactiveApi {
 
   //
   // runtime setup
-  private _initial_options: Options;
+  private _initial_options: Options = {};
   private _initialized: boolean;
 
   //
@@ -112,6 +110,11 @@ export class ReactiveRecord implements ReactiveApi {
     this.driverHttpReload(options);
 
     //
+    // set use cache
+    options.chain.useCache = options.useCache === false ? false : true;
+    this.useCache(options.chain.useCache);
+
+    //
     // settings initialized once
     if (this._initialized) return;
 
@@ -131,6 +134,7 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // apply class options
+    delete options.useCache;
     delete options.useLog;
     delete options.useLogTrace;
     delete options.driver;
@@ -186,7 +190,6 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   private _reset(): void {
-    this.request = {};
     this.chain = {};
   }
 
@@ -286,7 +289,7 @@ export class ReactiveRecord implements ReactiveApi {
     const chain = this.cloneChain();
     const payload = JSON.stringify({
       ...body,
-      ...this.request,
+      ...this.chain,
       ...{ path: path },
       ...{ driver: this._driver },
       ...omit(chain, [
@@ -310,11 +313,12 @@ export class ReactiveRecord implements ReactiveApi {
     method: ReactiveVerb,
     path: string = '/',
     payload: any = {},
+    chain = this.cloneChain(),
     key: string = ''
   ): Observable<T> {
     let _method = method;
     let _driver = this.getDriver();
-    let arg1, arg2, arg3, arg4;
+    let arg1, arg2, arg3;
 
     //
     // get verb
@@ -338,11 +342,6 @@ export class ReactiveRecord implements ReactiveApi {
     key = key ? key : this.createKey(path, payload);
 
     //
-    // firebase stuff
-    const request = cloneDeep(this.request);
-    const chain = cloneDeep(this.chain);
-
-    //
     // reset the chain
     this._reset();
 
@@ -351,9 +350,8 @@ export class ReactiveRecord implements ReactiveApi {
     switch (_method) {
       case 'find':
       case 'findOne':
-        arg1 = request;
+        arg1 = chain;
         arg2 = key;
-        arg3 = chain;
         break;
       case 'set':
       case 'update':
@@ -362,10 +360,9 @@ export class ReactiveRecord implements ReactiveApi {
         arg3 = payload.shouldMerge;
         break;
       case 'on':
-        arg1 = request;
+        arg1 = chain;
         arg2 = payload.onSuccess;
         arg3 = payload.onError;
-        arg4 = chain;
         break;
       default:
         arg1 = path;
@@ -376,7 +373,7 @@ export class ReactiveRecord implements ReactiveApi {
     //
     // execute request
     // console.log(_driver, _method);
-    return this._drivers[_driver][_method](arg1, arg2, arg3, arg4);
+    return this._drivers[_driver][_method]<T>(arg1, arg2, arg3);
   }
 
   public get<T extends Response>(path: string = ''): Observable<T> {
@@ -492,7 +489,7 @@ export class ReactiveRecord implements ReactiveApi {
   public query(
     by: { [key: string]: {} } | { [key: string]: {} }[]
   ): ReactiveRecord {
-    this.request.query = by;
+    this.chain.query = by;
     return this;
   }
 
@@ -504,10 +501,10 @@ export class ReactiveRecord implements ReactiveApi {
     operator: string,
     value: string | number | boolean
   ): ReactiveRecord {
-    if (isEmpty(this.request.query)) {
-      this.request.query = [];
+    if (isEmpty(this.chain.query)) {
+      this.chain.query = [];
     }
-    this.request.query.push({
+    this.chain.query.push({
       field: field,
       operator: operator,
       value: value
@@ -519,11 +516,11 @@ export class ReactiveRecord implements ReactiveApi {
    * Set request sort
    */
   public sort(by: { [key: string]: string }): ReactiveRecord {
-    if (isEmpty(this.request.sort)) {
-      this.request.sort = {};
+    if (isEmpty(this.chain.sort)) {
+      this.chain.sort = {};
     }
     for (const k in by) {
-      this.request.sort[k] = by[k];
+      this.chain.sort[k] = by[k];
     }
     return this;
   }
@@ -532,7 +529,7 @@ export class ReactiveRecord implements ReactiveApi {
    * Set request size
    */
   public size(value: number): ReactiveRecord {
-    this.request.size = value;
+    this.chain.size = value;
     return this;
   }
 
@@ -549,6 +546,16 @@ export class ReactiveRecord implements ReactiveApi {
     return this;
   }
 
+  public doc(value: string | number): ReactiveRecord {
+    this.chain.doc = value;
+    return this;
+  }
+
+  public reset(): ReactiveRecord {
+    this._reset();
+    return this;
+  }
+
   /**
    * experimental
    */
@@ -557,11 +564,6 @@ export class ReactiveRecord implements ReactiveApi {
     this._driver_initialized = false;
     const currentDriver = this.getDriver();
     this.init({ driver: currentDriver });
-  }
-
-  public reset(): ReactiveRecord {
-    this._reset();
-    return this;
   }
 }
 

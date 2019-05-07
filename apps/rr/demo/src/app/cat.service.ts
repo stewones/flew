@@ -16,6 +16,7 @@ export interface CatEntry extends Response {
   providedIn: 'root'
 })
 @Collection({
+  // useCache: false,
   name: 'cats',
   endpoint: '/v1'
 })

@@ -32,6 +32,7 @@ export const environment = {
 };
 
 Config.options = {
+  // useCache: false,
   useLog: !environment.production,
   // useLogTrace: !environment.production,
   baseURL: 'https://api.thecatapi.com',
