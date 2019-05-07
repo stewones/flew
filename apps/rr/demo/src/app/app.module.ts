@@ -9,12 +9,14 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 
 import { DemoState } from './app.state';
 import { ReactiveModule, ReactiveState } from '@firetask/angular';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     ReactiveModule,
+    HttpClientModule,
     NgxsModule.forRoot([ReactiveState, DemoState], {
       developmentMode: !environment.production
     }),

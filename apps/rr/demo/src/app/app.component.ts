@@ -3,9 +3,10 @@ import { TodoService } from './todo.service';
 import { Subscription, Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { key } from '@firetask/angular';
-import { Response } from '@firetask/reactive-record';
+import { Response, Config } from '@firetask/reactive-record';
 import { UserService } from './user.service';
 import { CatService } from './cat.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'firetask-root',
@@ -28,8 +29,11 @@ export class AppComponent implements OnInit {
     public todoService: TodoService,
     private catService: CatService,
     private store: Store,
-    private userService: UserService
-  ) {}
+    private userService: UserService,
+    private http: HttpClient
+  ) {
+    // Config.options.connector.http = http;
+  }
 
   ngOnInit() {
     this.babyDynamic$ = this.store.select(key('baby', true)); // return an Observable

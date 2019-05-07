@@ -1,5 +1,5 @@
 import { isEmpty, isEqual, isArray, isObject, merge, get } from 'lodash';
-import { PartialObserver, Observable, from, of, concat } from 'rxjs';
+import { PartialObserver, Observable, from, of, merge as merge$ } from 'rxjs';
 import { map, switchMap, filter, catchError } from 'rxjs/operators';
 import { Options, Chain } from '../interfaces/options';
 import { Response } from '../interfaces/response';
@@ -40,29 +40,29 @@ export class PlatformBrowser extends ReactiveRecord {
   }
 
   public get<T extends Response>(path: string = ''): Observable<T> {
-    return this.call$('get', path);
+    return this.call('get', path);
   }
 
   public post<T extends Response>(
     path: string = '',
     body: any = {}
   ): Observable<T> {
-    return this.call$('post', path, body);
+    return this.call('post', path, body);
   }
 
   public patch<T extends Response>(
     path: string = '',
     body: any = {}
   ): Observable<T> {
-    return this.call$('patch', path, body);
+    return this.call('patch', path, body);
   }
 
   public find<T extends Response>(): Observable<T> {
-    return this.call$('find');
+    return this.call('find');
   }
 
   public findOne<T extends Response>(): Observable<T> {
-    return this.call$('findOne');
+    return this.call('findOne');
   }
 
   private shouldTransformResponse(chain: Chain, response: Response) {
@@ -88,7 +88,7 @@ export class PlatformBrowser extends ReactiveRecord {
     return transformResponse;
   }
 
-  protected call$<T extends Response>(
+  protected call<T extends Response>(
     method: ReactiveVerb = 'get',
     path: string = '',
     payload: any = {}
@@ -111,43 +111,13 @@ export class PlatformBrowser extends ReactiveRecord {
     // request
     return new Observable((observer: PartialObserver<T>) => {
       this.shouldCallNetwork(chain, key).then(evaluation =>
-        concat(
+        merge$(
           this.cache$(observer, chain, key),
           this.ttl$(evaluation, observer, chain, key),
           this.network$(evaluation, observer, method, path, payload, chain, key)
         ).subscribe()
       );
     });
-
-    // return new Observable((observer: PartialObserver<T>) => {
-    //   this.shouldCallNetwork(chain, key).then(evaluation => {
-    //     this.log().info()(
-    //       `${key} [call] should request network? ${evaluation.now}`
-    //     );
-    //     if (evaluation.now) {
-    //       super.call<T>(method, path, payload, chain, key).subscribe(
-    //         response => {
-    //           this.setCache(chain, key, response, observer);
-    //         },
-    //         err => observer.error(err)
-    //       );
-    //     } else {
-    //       super.log().danger()(
-    //         `${key} [call] there is a cached response with time to live`
-    //       );
-
-    //       observer.next(
-    //         this.shouldTransformResponse(chain, evaluation.cache)(
-    //           evaluation.cache as T
-    //         )
-    //       );
-    //       observer.complete();
-    //     }
-    //   });
-    //   //
-    //   // return cached response
-    //   this.shouldReturnCache(chain, key, observer);
-    // });
   }
 
   private network$<T>(evaluation, observer, method, path, payload, chain, key) {

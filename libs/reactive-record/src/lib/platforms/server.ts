@@ -18,13 +18,12 @@ import { StorageAdapter } from '../interfaces/storage';
 import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
 import { Config } from '../symbols/rr';
-import { SHA256 } from '../utils/sha';
 import { FirestoreDriver } from '../drivers/firestore';
 import { FirebaseDriver } from '../drivers/firebase';
 import { HttpDriver } from '../drivers/http';
 import { RR_VERSION } from '../version';
 import { RR_DRIVER } from '../driver';
-
+import { SHA256 } from '../utils/sha';
 export class ReactiveRecord implements ReactiveApi {
   protected collection: string;
   protected endpoint: string;

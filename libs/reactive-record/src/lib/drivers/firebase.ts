@@ -78,8 +78,10 @@ export class FirebaseDriver implements ReactiveDriver {
           observer.complete();
         },
         err => {
-          observer.error(err);
-          observer.complete();
+          try {
+            observer.error(err);
+            observer.complete();
+          } catch (err) {}
         }
       );
     });

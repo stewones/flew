@@ -138,8 +138,10 @@ export class FirestoreDriver implements ReactiveDriver {
           observer.complete();
         })
         .catch(err => {
-          observer.error(err);
-          observer.complete();
+          try {
+            observer.error(err);
+            observer.complete();
+          } catch (err) {}
         });
     });
   }
