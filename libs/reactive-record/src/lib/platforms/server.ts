@@ -1,5 +1,13 @@
 import { AxiosRequestConfig } from 'axios';
-import { merge, isEmpty, isBoolean, isString, startCase, omit } from 'lodash';
+import {
+  merge,
+  isEmpty,
+  isArray,
+  isBoolean,
+  isString,
+  startCase,
+  omit
+} from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { Response } from '../interfaces/response';
 import { Options, Chain } from '../interfaces/options';
@@ -15,6 +23,7 @@ import { FirestoreDriver } from '../drivers/firestore';
 import { FirebaseDriver } from '../drivers/firebase';
 import { HttpDriver } from '../drivers/http';
 import { RR_VERSION } from '../version';
+import { RR_DRIVER } from '../driver';
 
 export class ReactiveRecord implements ReactiveApi {
   protected collection: string;
@@ -27,7 +36,7 @@ export class ReactiveRecord implements ReactiveApi {
   private chain: Chain = {};
 
   private _driver_initialized = {};
-  private _driver: ReactiveDriverOption = 'firestore';
+  private _driver: ReactiveDriverOption = RR_DRIVER;
   private _drivers: {
     firestore: ReactiveDriver;
     firebase: ReactiveDriver;
@@ -173,7 +182,7 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   private getConnector(driver) {
-    if (isEmpty(this._driver_initialized[driver])) {
+    if (!this._driver_initialized[driver]) {
       const options: Options = this.cloneOptions();
       this.driverInit(options);
       this._driver_initialized[driver] = true;
@@ -193,7 +202,7 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   private driverInit(options: Options) {
-    this._driver = options.driver || 'firestore';
+    this._driver = options.driver || RR_DRIVER;
     this._drivers = {
       firestore: new FirestoreDriver({
         ...{ logger: this.logger },
@@ -269,8 +278,8 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   public on<T extends Response>(
-    onSuccess: (response: Response) => any = (response: Response) => {},
-    onError: (response: any) => any = (response: any) => {}
+    onSuccess: (response: Response) => any,
+    onError: (response: any) => any
   ): any {
     return this.call<T>('on', null, {
       onSuccess: onSuccess,
@@ -278,7 +287,7 @@ export class ReactiveRecord implements ReactiveApi {
     });
   }
 
-  protected createKey(path = '', body = {}): string {
+  protected createKey(path, body): string {
     const chain = this.cloneChain();
     const payload = JSON.stringify({
       ...body,
@@ -395,11 +404,14 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   /**
-   * Set current driver
+   * Getter / Setter for the current driver
    */
-  public driver(name: ReactiveDriverOption): ReactiveRecord {
-    this._driver = name;
-    return this;
+  public driver(name?: ReactiveDriverOption): ReactiveRecord {
+    if (name) {
+      this._driver = name;
+      return this;
+    }
+    return this.getDriver() as any;
   }
 
   public http(fn: (config: AxiosRequestConfig) => void): ReactiveRecord {
@@ -494,7 +506,7 @@ export class ReactiveRecord implements ReactiveApi {
     operator: string,
     value: string | number | boolean
   ): ReactiveRecord {
-    if (isEmpty(this.chain.query)) {
+    if (!isArray(this.chain.query)) {
       this.chain.query = [];
     }
     this.chain.query.push({
@@ -554,9 +566,9 @@ export class ReactiveRecord implements ReactiveApi {
    */
   public reboot() {
     this._initialized = false;
-    this._driver_initialized = false;
-    const currentDriver = this.getDriver();
-    this.init({ driver: currentDriver });
+    this._driver_initialized = {};
+    this.reset();
+    this.init({ driver: RR_DRIVER });
   }
 }
 

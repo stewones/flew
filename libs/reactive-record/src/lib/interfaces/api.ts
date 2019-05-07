@@ -14,7 +14,7 @@ import { Options } from './options';
 export interface ReactiveApi {
   //
   // chained options
-  driver(name: string): ReactiveRecord; // firebase / firestore / http | [configurable]
+  driver(name?: string): ReactiveRecord; // firebase / firestore / http | [configurable]
   useNetwork(active: boolean): ReactiveRecord; // force the use of network call
   saveNetwork(active: boolean): ReactiveRecord; // as a cache
   transformResponse(transformFn: (response: Response) => any): ReactiveRecord; // transform the network/cache response
