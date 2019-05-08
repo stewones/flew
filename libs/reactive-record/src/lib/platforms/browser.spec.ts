@@ -4,8 +4,11 @@ import { Config } from '../symbols/rr';
 import { Subject, PartialObserver } from 'rxjs';
 import { Logger } from '../utils/logger';
 import { Chain } from '../interfaces/options';
+import { Response } from '../interfaces/response';
 
 class PlatformBrowserMock extends PlatformBrowser {
+  storage: StorageAdapter;
+
   constructor(options) {
     super(options);
   }
@@ -24,6 +27,15 @@ class PlatformBrowserMock extends PlatformBrowser {
     observer: PartialObserver<any>
   ) {
     return super.shouldReturnCache(chain, key, observer);
+  }
+
+  public setCache(
+    chain: Chain,
+    key: string,
+    network: Response & { ttl?: number },
+    observer: PartialObserver<any>
+  ) {
+    return super.setCache(chain, key, network, observer);
   }
 }
 
@@ -837,5 +849,243 @@ describe('Browser Platform', () => {
           }
         ]);
       });
+  });
+
+  it('should NOT set cache when saveNetwork is false', () => {
+    let lib_ = new PlatformBrowserMock({
+      useLog: false,
+      baseURL: baseURL,
+      endpoint: '/',
+      collection: collection,
+      connector: {},
+      storage: {
+        get: () => Promise.resolve({}),
+        set: () => Promise.resolve('saved')
+      } as any
+    });
+
+    lib_.init({
+      logger: new Logger({
+        subject: new Subject(),
+        useLog: false,
+        useLogTrace: false
+      })
+    } as any);
+
+    const observer = {
+      next: () => {},
+      complete: () => {}
+    };
+
+    lib_
+      .setCache({ saveNetwork: false }, 'a1', {} as Response, observer)
+      .then(r => {
+        expect(r).not.toEqual('saved');
+      });
+  });
+
+  it('should NOT set cache if response is the same as the current cache', () => {
+    let lib_ = new PlatformBrowserMock({
+      useLog: false,
+      baseURL: baseURL,
+      endpoint: '/',
+      collection: collection,
+      connector: {},
+      storage: {
+        get: () => Promise.resolve({ a: 1, b: 2, c: 3 }),
+        set: () => Promise.resolve('saved')
+      } as any
+    });
+
+    lib_.init({
+      logger: new Logger({
+        subject: new Subject(),
+        useLog: false,
+        useLogTrace: false
+      })
+    } as any);
+
+    const observer = {
+      next: () => {},
+      complete: () => {}
+    };
+
+    lib_
+      .setCache(
+        { saveNetwork: true },
+        'a1',
+        { a: 1, b: 2, c: 3 } as Response,
+        observer
+      )
+      .then(r => {
+        expect(r).not.toEqual('saved');
+      });
+  });
+
+  it('should set cache', () => {
+    let lib_ = new PlatformBrowserMock({
+      useLog: false,
+      baseURL: baseURL,
+      endpoint: '/',
+      collection: collection,
+      connector: {},
+      storage: {
+        get: () => Promise.resolve({ a: 1, b: 2, c: 3 }),
+        set: () => Promise.resolve('saved')
+      } as any
+    });
+
+    lib_.init({
+      logger: new Logger({
+        subject: new Subject(),
+        useLog: false,
+        useLogTrace: false
+      })
+    } as any);
+
+    const observer = {
+      next: () => {},
+      complete: () => {}
+    };
+
+    lib_
+      .setCache({ saveNetwork: true }, 'a1', { a: 1 } as Response, observer)
+      .then(r => {
+        expect(r).toEqual('saved');
+      });
+
+    lib_
+      .setCache(
+        { saveNetwork: true, ttl: 60 },
+        'a1',
+        { a: 1 } as Response,
+        observer
+      )
+      .then(r => {
+        expect(r).toEqual('saved');
+      });
+  });
+
+  it('should return network response from `setCache`', async () => {
+    let lib__ = new PlatformBrowserMock({
+      useLog: false,
+      baseURL: baseURL,
+      endpoint: '/',
+      collection: collection,
+      connector: {},
+      storage: {
+        get: () => Promise.resolve({ data: [1, 2, 3] }),
+        set: () => Promise.resolve('saved')
+      } as any
+    });
+
+    lib__.init({
+      logger: new Logger({
+        subject: new Subject(),
+        useLog: false,
+        useLogTrace: false
+      })
+    } as any);
+
+    const observer = {
+      next: () => {},
+      complete: () => {}
+    };
+
+    const spyNext = jest.spyOn(observer, 'next');
+    const spyDispatch = jest.spyOn(Config.store.dispatch, 'next');
+
+    await lib__.setCache(
+      { useNetwork: true },
+      'a1',
+      { data: [1, 2, 3] } as Response,
+      observer
+    );
+
+    expect(spyNext).toBeCalledWith({ data: [1, 2, 3] });
+    expect(spyDispatch).toBeCalledWith({ data: [1, 2, 3] });
+  });
+
+  it('should transform cache before it saves', async () => {
+    let lib__ = new PlatformBrowserMock({
+      useLog: false,
+      baseURL: baseURL,
+      endpoint: '/',
+      collection: collection,
+      connector: {},
+      storage: {
+        get: () => Promise.resolve({ data: [1, 2, 3] }),
+        set: (key, value) => Promise.resolve(value)
+      } as any
+    });
+
+    lib__.init({
+      logger: new Logger({
+        subject: new Subject(),
+        useLog: false,
+        useLogTrace: false
+      })
+    } as any);
+
+    const observer = {
+      next: () => {},
+      complete: () => {}
+    };
+
+    const spyNext = jest.spyOn(observer, 'next');
+    const spyDispatch = jest.spyOn(Config.store.dispatch, 'next');
+
+    const cache = await lib__.setCache(
+      { transformCache: r => r.data[0] },
+      'a1',
+      { data: [1, 2, 3, 4] } as Response,
+      observer
+    );
+    expect(spyNext).toBeCalledWith({ data: [1, 2, 3, 4] });
+    expect(spyDispatch).toBeCalledWith({ data: [1, 2, 3, 4] });
+
+    expect(cache).toBe(1);
+  });
+
+  it('should NOT return network response from `setCache`', async () => {
+    let lib_ = new PlatformBrowserMock({
+      useLog: false,
+      baseURL: baseURL,
+      endpoint: '/',
+      collection: collection,
+      connector: {},
+      storage: {
+        get: () => Promise.resolve({ data: [1, 2, 3] }),
+        set: () => Promise.resolve('saved')
+      } as any
+    });
+
+    lib_.init({
+      logger: new Logger({
+        subject: new Subject(),
+        useLog: false,
+        useLogTrace: false
+      })
+    } as any);
+
+    const observer = {
+      next: () => {},
+      complete: () => {}
+    };
+
+    const spyNext = jest.spyOn(observer, 'next');
+    const spyDispatch = jest.spyOn(Config.store.dispatch, 'next');
+    spyDispatch.mockClear();
+    spyNext.mockClear();
+
+    await lib_.setCache(
+      { useNetwork: false },
+      'a1',
+      { data: [1, 2, 3] } as Response,
+      observer
+    );
+
+    expect(spyNext).not.toBeCalled();
+    expect(spyDispatch).not.toBeCalled();
   });
 });

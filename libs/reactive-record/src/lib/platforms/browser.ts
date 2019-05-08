@@ -238,7 +238,7 @@ export class PlatformBrowser extends ReactiveRecord {
     }
   }
 
-  private async setCache(
+  protected async setCache(
     chain: Chain,
     key: string,
     network: Response & { ttl?: number },
@@ -254,7 +254,9 @@ export class PlatformBrowser extends ReactiveRecord {
     const saveNetwork: boolean = chain.saveNetwork === false ? false : true;
     const useNetwork: boolean = chain.useNetwork === false ? false : true;
 
-    super.log().info()(`${key} [set] hasCache? ${cache ? true : false}`);
+    super.log().info()(
+      `${key} [set] hasCache? ${!isEmpty(cache) ? true : false}`
+    );
     super.log().info()(
       `${key} [set] transformCache? ${
         chain.transformCache && typeof chain.transformCache === 'function'
@@ -281,7 +283,7 @@ export class PlatformBrowser extends ReactiveRecord {
     if (
       (cache && !isEqual(cache.data, network.data)) ||
       (cache && isEmpty(cache.data)) ||
-      !cache ||
+      isEmpty(cache) ||
       isEmpty(network.data) ||
       useNetwork !== false
     ) {
@@ -310,10 +312,13 @@ export class PlatformBrowser extends ReactiveRecord {
 
         //
         // set cache response
-        this.storage.set(key, transformCache(clearNetworkResponse(network)));
+        return this.storage.set(
+          key,
+          transformCache(clearNetworkResponse(network))
+        );
       }
     }
 
-    observer.complete();
+    return observer.complete();
   }
 }
