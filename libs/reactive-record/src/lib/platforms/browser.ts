@@ -180,7 +180,6 @@ export class PlatformBrowser extends ReactiveRecord {
       // check for TTL
       // should not call network
       const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-      // console.log(`seconds`, seconds);
 
       //
       // avoid the return of any cache (jump to network request at server level)
