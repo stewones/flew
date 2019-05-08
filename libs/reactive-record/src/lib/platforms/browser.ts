@@ -311,6 +311,7 @@ export class PlatformBrowser extends ReactiveRecord {
 
         //
         // set cache response
+        observer.complete();
         return this.storage.set(
           key,
           transformCache(clearNetworkResponse(network))
