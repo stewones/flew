@@ -144,10 +144,12 @@ export class ReactiveRecord implements ReactiveApi {
     //
     // mark as initialized
     this._initialized = true;
-    if (this.collection)
-      this.log().success()(
-        `Collection ${startCase(this.collection)} initiated @ RR ${RR_VERSION}`
-      );
+
+    const name = this.collection || this.endpoint;
+
+    this.log().success()(
+      `Collection ${startCase(name)} initiated @ RR ${RR_VERSION}`
+    );
   }
 
   public firebase() {
