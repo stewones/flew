@@ -34,7 +34,9 @@
     "rr:release:a": "standard-version release --release-as patch --prerelease alpha && tools/bin/patch-warning.sh",
     "rr:release:b": "standard-version release --release-as patch --prerelease beta && tools/bin/patch-warning.sh",
     "rr:publish": "npm run rr:build:p && cd dist/libs/reactive-record && npm publish && git push origin --tags",
-    "rr:test:w": "ng test reactive-record --watch"
+    "rr:test": "ng test reactive-record",
+    "rr:test:w": "ng test reactive-record --watch",
+    "rr:patch": "./tools/bin/patch-rr.sh"
   },
   "private": true,
   "dependencies": {

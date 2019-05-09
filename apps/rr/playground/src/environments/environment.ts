@@ -8,21 +8,13 @@ import {
 
 import { Storage } from '@ionic/storage';
 import { storageConfig } from '@firetask/ionic';
+import { firebaseConfig } from './firebase.config';
 
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
 const appVersion: number | string = 1000; // MAJOR.MINOR.PATCH.BUILD
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyDd0NPKiqB06EkCxRRai6rHphUVgkU38jA',
-  authDomain: 'reactive-record-demo.firebaseapp.com',
-  databaseURL: 'https://reactive-record-demo.firebaseio.com',
-  projectId: 'reactive-record-demo',
-  storageBucket: 'reactive-record-demo.appspot.com',
-  messagingSenderId: '244444899524'
-};
 
 export const environment = {
   production: false
