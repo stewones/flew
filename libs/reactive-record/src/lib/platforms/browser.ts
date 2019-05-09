@@ -169,10 +169,6 @@ export class PlatformBrowser extends ReactiveRecord {
     key: string
   ): Promise<{ now: boolean; cache?: Response }> {
     return new Promise(async resolve => {
-      const cache: Response & { ttl: number } | any = await this.storage.get(
-        key
-      );
-
       const useCache: boolean = chain.useCache === false ? false : true;
       const useNetwork: boolean = chain.useNetwork === false ? false : true;
 
@@ -187,6 +183,10 @@ export class PlatformBrowser extends ReactiveRecord {
         return resolve({
           now: true
         });
+
+      const cache: Response & { ttl: number } | any = await this.storage.get(
+        key
+      );
 
       //
       // stop network request at server level
@@ -208,10 +208,13 @@ export class PlatformBrowser extends ReactiveRecord {
     key: string,
     observer: PartialObserver<any>
   ) {
-    const cache: Response & { ttl: number } | any = await this.storage.get(key);
-    const transformResponse: any = this.shouldTransformResponse(chain, cache);
     const useCache: boolean = chain.useCache === false ? false : true;
     super.log().info()(`${key} [should] useCache? ${useCache ? true : false}`);
+
+    if (useCache === false) return Promise.resolve();
+
+    const cache: Response & { ttl: number } | any = await this.storage.get(key);
+    const transformResponse: any = this.shouldTransformResponse(chain, cache);
     super.log().info()(
       `${key} [should] hasCache? ${!isEmpty(cache) ? true : false}`
     );

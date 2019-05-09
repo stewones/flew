@@ -7,6 +7,7 @@ import { Response, Config } from '@firetask/reactive-record';
 import { UserService } from './user.service';
 import { CatService } from './cat.service';
 import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'firetask-root',
@@ -24,6 +25,9 @@ export class AppComponent implements OnInit {
   @Select(key('cat', true)) cat$: Observable<any>;
 
   babyDynamic$: Observable<Response<{}>>;
+
+  shouldUseCache = 'yes';
+  useCacheResult = [];
 
   constructor(
     public todoService: TodoService,
@@ -105,5 +109,17 @@ export class AppComponent implements OnInit {
       .signOut()
       .then(console.log)
       .catch(console.log);
+  }
+
+  useCache() {
+    this.useCacheResult = [];
+    const value = this.shouldUseCache === 'yes' ? true : false;
+    console.log(`SHOULD USE CACHE? ${value}`);
+    this.catService.$collection
+      .useCache(value)
+      .transformCache(r => r.data)
+      .post('/votes', { image_id: 'birm', value: 1 })
+      .pipe(tap(r => this.useCacheResult.push(r)))
+      .toPromise();
   }
 }

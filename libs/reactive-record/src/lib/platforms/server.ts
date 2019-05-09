@@ -113,7 +113,6 @@ export class ReactiveRecord implements ReactiveApi {
     // set use cache
     if (!options.chain) options.chain = {};
     options.chain.useCache = options.useCache === false ? false : true;
-    this.useCache(options.chain.useCache);
 
     //
     // settings initialized once
@@ -375,7 +374,6 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // execute request
-    // console.log(_driver, _method);
     return this._drivers[_driver][_method]<T>(arg1, arg2, arg3);
   }
 

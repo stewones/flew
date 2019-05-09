@@ -26,3 +26,16 @@ baby firebase:
 <br />
 {{ babyFirebase$ | async | json }}
 <br /><br />
+
+Should use cache?:
+<br />
+<input type="radio" name="useCache" [(ngModel)]="shouldUseCache" value="yes" />
+Yes
+<br />
+<input type="radio" name="useCache" [(ngModel)]="shouldUseCache" value="no" />
+No
+<br />
+<button (click)="useCache()">Post</button>
+<br />
+response total: {{ useCacheResult.length }}<br />
+{{ useCacheResult | json }}
