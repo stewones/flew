@@ -1,7 +1,6 @@
 <button (click)="getCat()">Get Cat</button>
 <button (click)="postCat()">Post Cat</button>
-<button (click)="getCatFirestore()">Get Cat from Firestore</button>
-<button (click)="getCatFirebase()">Get Cat from Firebase</button>
+
 <button (click)="loginFirebase()">Login Firebase</button>
 <button (click)="logoutFirebase()">Logout Firebase</button>
 
@@ -12,16 +11,25 @@ baby:
 {{ baby$ | async | json }}
 <br /><br />
 
-cat: <br />
-{{ cat$ | async | json }}
+<!-- cat: <br />
+{{ cat$ | async | json }} -->
 
 <br /><br />
-
+<button (click)="getCatFirestore()">Get Cat from Firestore</button
+><button (click)="getCatFirestoreNoCache()">
+  Get Cat from Firestore (NO CACHE)
+</button>
+<br />
 baby firestore:
 <br />
 {{ babyFirestore$ | async | json }}
 <br /><br />
 
+<button (click)="getCatFirebase()">Get Cat from Firebase</button>
+<button (click)="getCatFirebaseNoCache()">
+  Get Cat from Firebase (NO CACHE)
+</button>
+<br />
 baby firebase:
 <br />
 {{ babyFirebase$ | async | json }}

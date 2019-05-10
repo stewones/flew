@@ -20,12 +20,15 @@ export class FirestoreDriver implements ReactiveDriver {
     merge(this, options);
     const connector = get(options, 'connector') || {};
     this.connector = connector.firestore;
-    try {
-      if (this.chain.useCache !== false)
-        this.connector.enablePersistence({
-          experimentalTabSynchronization: true
-        });
-    } catch (err) {}
+
+    //
+    // @need more tests (capacitor showing warnings)
+    // try {
+    //   if (this.chain.useCache !== false)
+    //     this.connector.enablePersistence({
+    //       experimentalTabSynchronization: true
+    //     });
+    // } catch (err) {}
   }
 
   public log() {
@@ -113,6 +116,15 @@ export class FirestoreDriver implements ReactiveDriver {
       firestore
         .get()
         .then(async (snapshot: any) => {
+          //
+          // check for offline results
+          if (snapshot.empty && snapshot.metadata.fromCache) {
+            const message = `${key} [find] whoops, looks like you're offline`;
+            this.log().danger()(message);
+            observer.error(message);
+            return observer.complete();
+          }
+
           //
           // format data
           const data: any[] = [];
@@ -240,7 +252,7 @@ export class FirestoreDriver implements ReactiveDriver {
       };
       const error = err => {
         observer.error(err);
-        observer.complete;
+        observer.complete();
       };
       //
       // call firestore
@@ -272,13 +284,17 @@ export class FirestoreDriver implements ReactiveDriver {
         observer.next(data);
         observer.complete();
       };
+      const error = err => {
+        observer.error(err);
+        observer.complete();
+      };
       //
       // call firestore
       firestore
         .doc(id)
         .update(data)
         .then(response)
-        .catch(response);
+        .catch(error);
     });
   }
 }

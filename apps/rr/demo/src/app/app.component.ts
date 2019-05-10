@@ -84,10 +84,30 @@ export class AppComponent implements OnInit {
       .subscribe(r => console.log(r), err => console.log(err));
   }
 
+  getCatFirestoreNoCache() {
+    this.catService.$collection
+      .driver('firestore')
+      .key('baby-firestore')
+      .useCache(false)
+      .find()
+      //.toPromise()
+      .subscribe(r => console.log(r), err => console.log(err));
+  }
+
   getCatFirebase() {
     this.catService.$collection
       .driver('firebase')
       .key('baby-firebase')
+      .findOne()
+      //.toPromise()
+      .subscribe(r => console.log(r), err => console.log(err));
+  }
+
+  getCatFirebaseNoCache() {
+    this.catService.$collection
+      .driver('firebase')
+      .key('baby-firebase')
+      .useCache(false)
       .findOne()
       //.toPromise()
       .subscribe(r => console.log(r), err => console.log(err));
