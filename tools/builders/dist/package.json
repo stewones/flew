@@ -1,0 +1,42 @@
+{
+  "author": {
+    "name": "Stewan Silva"
+  },
+  "bugs": {
+    "url": "https://github.com/firetask/builders/issues"
+  },
+  "builders": "./src/builders.json",
+  "bundleDependencies": false,
+  "dependencies": {
+    "@angular-devkit/architect": "~0.13.1",
+    "@angular-devkit/build-webpack": "~0.13.1",
+    "copy-webpack-plugin": "4.6.0",
+    "fork-ts-checker-webpack-plugin": "0.4.9",
+    "license-webpack-plugin": "^1.4.0",
+    "rxjs": "6.3.3",
+    "ts-loader": "5.3.1",
+    "webpack": "4.29.0",
+    "webpack-dev-server": "3.1.14",
+    "webpack-node-externals": "1.7.2"
+  },
+  "description": "Firetask Extensions for Angular Builders",
+  "homepage": "https://github.com/firetask/builders#readme",
+  "keywords": [
+    "Test",
+    "Jest",
+    "Angular",
+    "Workspace",
+    "Builders",
+    "Angular CLI",
+    "Cypress"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "@firetask/builders",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firetask/builders.git"
+  },
+  "types": "index.d.js",
+  "version": "0.0.1"
+}

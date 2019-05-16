@@ -36,7 +36,8 @@
     "rr:publish": "npm run rr:build:p && cd dist/libs/reactive-record && npm publish && git push origin --tags",
     "rr:test": "ng test reactive-record",
     "rr:test:w": "ng test reactive-record --watch",
-    "rr:patch": "./tools/bin/patch-rr.sh"
+    "rr:patch": "./tools/bin/patch-rr.sh",
+    "node:release": "cd ./tools/node && ngc"
   },
   "private": true,
   "dependencies": {
