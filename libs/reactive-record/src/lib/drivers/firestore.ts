@@ -42,15 +42,13 @@ export class FirestoreDriver implements ReactiveDriver {
 
   protected where(query: any, firestore: any) {
     if (isArray(query)) {
-      this.log().success()(
-        `firestore where array -> ${query[0].field} ${query[0].operator} ${
-          query[0].value
-        }`
-      );
       query.map(q => {
         if (isNil(q.value))
           throw Error(`value can't be null for firestore where`);
         firestore = firestore.where(q.field, q.operator, q.value);
+        this.log().success()(
+          `firestore where array -> ${q.field} ${q.operator} ${q.value}`
+        );
       });
     } else if (
       <any>typeof query === 'object' &&
@@ -118,7 +116,11 @@ export class FirestoreDriver implements ReactiveDriver {
         .then(async (snapshot: any) => {
           //
           // check for offline results
-          if (snapshot.empty && snapshot.metadata.fromCache) {
+          if (
+            snapshot.empty &&
+            snapshot.metadata &&
+            snapshot.metadata.fromCache
+          ) {
             const message = `${key} [find] whoops, looks like you're offline`;
             this.log().danger()(message);
             observer.error(message);

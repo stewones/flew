@@ -2,6 +2,7 @@
 
 import { Subject } from 'rxjs';
 import { Log, LogParams } from '../interfaces/log';
+import { isServer } from './platform';
 
 export class Logger {
   private useLog: boolean;
@@ -24,10 +25,6 @@ export class Logger {
    * Getter/setter to set trace state
    */
   public traced(active?: boolean): boolean | void {
-    // console.log('additional data hidden inside collapsed group');
-    // console.trace(); // hidden in collapsed group
-    // console.groupEnd();
-
     return active || active === false
       ? (this.useLogTrace = active)
       : this.useLogTrace;
@@ -37,11 +34,7 @@ export class Logger {
     return this.useLogTrace
       ? this.useLog === false
         ? msg => {}
-        : msg => {
-            console.groupCollapsed(`success | ${this.title(msg)}`);
-            console.trace(msg);
-            console.groupEnd();
-          }
+        : msg => this.trace(msg, 'success')
       : (msg: string) => this.add(msg, 'green');
   }
 
@@ -49,11 +42,7 @@ export class Logger {
     return this.useLogTrace
       ? this.useLog === false
         ? msg => {}
-        : msg => {
-            console.groupCollapsed(`info | ${this.title(msg)}`);
-            console.trace(msg);
-            console.groupEnd();
-          }
+        : msg => this.trace(msg, 'info')
       : (msg: string) => this.add(msg, 'deepskyblue');
   }
 
@@ -61,11 +50,7 @@ export class Logger {
     return this.useLogTrace
       ? this.useLog === false
         ? msg => {}
-        : msg => {
-            console.groupCollapsed(`danger | ${this.title(msg)}`);
-            console.trace(msg);
-            console.groupEnd();
-          }
+        : msg => this.trace(msg, 'danger')
       : (msg: string) => this.add(msg, 'red');
   }
 
@@ -73,11 +58,7 @@ export class Logger {
     return this.useLogTrace
       ? this.useLog === false
         ? msg => {}
-        : msg => {
-            console.groupCollapsed(`warn | ${this.title(msg)}`);
-            console.trace(msg);
-            console.groupEnd();
-          }
+        : msg => this.trace(msg, 'warn')
       : (msg: string) => this.add(msg, 'yellow');
   }
 
@@ -92,6 +73,7 @@ export class Logger {
         : ` <span style="${style}">${msg}</span> `;
 
     if (this.useLog === true) {
+      if (isServer()) return console.log(msg);
       console.log(`%c ${msg} `, style);
       this.subject.next(<Log>{
         created: new Date().toISOString(),
@@ -100,11 +82,10 @@ export class Logger {
     }
   }
 
-  private title(msg: string) {
-    return msg;
-    // const title_ = msg.split(' ');
-    // return title_[0].includes('/')
-    //   ? title_[1] + (title_[2] ? ' ' + title_[2] : '')
-    //   : msg;
+  private trace(msg, type) {
+    if (isServer()) return console.log(msg);
+    console.groupCollapsed(`${type} | ${msg}`);
+    console.trace(msg);
+    console.groupEnd();
   }
 }

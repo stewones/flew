@@ -26,7 +26,7 @@ export interface ReactiveApi {
   where(
     field: string,
     operator: string,
-    value: string | number | boolean
+    value: string | number | boolean | []
   ): ReactiveRecord; // firestore only - short way as firebase sdk does
   sort(by: { [key: string]: string }): ReactiveRecord; // firestore only
   size(value: number): ReactiveRecord; // firestore only

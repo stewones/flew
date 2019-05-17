@@ -503,7 +503,7 @@ export class ReactiveRecord implements ReactiveApi {
   public where(
     field: string,
     operator: string,
-    value: string | number | boolean
+    value: string | number | boolean | []
   ): ReactiveRecord {
     if (!isArray(this.chain.query)) {
       this.chain.query = [];

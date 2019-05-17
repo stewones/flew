@@ -246,13 +246,23 @@ export class PlatformBrowser extends ReactiveRecord {
     network: Response & { ttl?: number },
     observer: PartialObserver<any>
   ) {
+    const useCache: boolean = chain.useCache === false ? false : true;
+    const transformResponse: any = this.shouldTransformResponse(chain, network);
+
+    super.log().info()(`${key} [set] useCache? ${useCache ? true : false}`);
+
+    if (useCache === false) {
+      super.log().success()(`${key} [set] return response from network`);
+      observer.next(transformResponse(network));
+      return observer.complete();
+    }
+
     const cache: Response & { ttl?: number } = await this.storage.get(key);
     const transformCache: any =
       chain.transformCache && typeof chain.transformCache === 'function'
         ? chain.transformCache
         : (data: Response) => data;
 
-    const transformResponse: any = this.shouldTransformResponse(chain, network);
     const saveNetwork: boolean = chain.saveNetwork === false ? false : true;
     const useNetwork: boolean = chain.useNetwork === false ? false : true;
 
