@@ -375,6 +375,114 @@
           }
         }
       }
+    },
+    "fire-app": {
+      "root": "apps/fire/app/",
+      "sourceRoot": "apps/fire/app/src",
+      "projectType": "application",
+      "prefix": "ft",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/fire/app",
+            "index": "apps/fire/app/src/index.html",
+            "main": "apps/fire/app/src/main.ts",
+            "polyfills": "apps/fire/app/src/polyfills.ts",
+            "tsConfig": "apps/fire/app/src/tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "apps/fire/app/src/assets",
+                "output": "assets"
+              },
+              {
+                "glob": "**/*.svg",
+                "input": "node_modules/ionicons/dist/ionicons/svg",
+                "output": "./svg"
+              }
+            ],
+            "styles": [
+              {
+                "input": "apps/fire/app/src/theme/variables.scss"
+              },
+              {
+                "input": "apps/fire/app/src/global.scss"
+              }
+            ],
+            "scripts": [],
+            "es5BrowserSupport": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/fire/app/src/environments/environment.ts",
+                  "with": "apps/fire/app/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
+            "ci": {
+              "progress": false
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "fire-app:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "fire-app:build:production"
+            },
+            "ci": {
+              "progress": false
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "fire-app:build"
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "apps/fire/app/jest.config.js",
+            "tsConfig": "apps/fire/app/tsconfig.spec.json",
+            "setupFile": "apps/fire/app/src/test-setup.ts"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/fire/app/tsconfig.app.json",
+              "apps/fire/app/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
     }
   },
   "cli": {
@@ -390,6 +498,12 @@
     },
     "@nrwl/schematics:library": {
       "style": "scss"
+    },
+    "@ionic/angular-toolkit:component": {
+      "styleext": "scss"
+    },
+    "@ionic/angular-toolkit:page": {
+      "styleext": "scss"
     }
   },
   "defaultProject": "rr-demo"
