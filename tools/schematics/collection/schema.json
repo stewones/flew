@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "rr-collection",
+  "id": "collection",
   "type": "object",
   "properties": {
     "name": {

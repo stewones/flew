@@ -1,6 +1,5 @@
 import {
   chain,
-  externalSchematic,
   Rule,
   apply,
   url,
@@ -12,7 +11,6 @@ import {
   Tree,
   mergeWith
 } from '@angular-devkit/schematics';
-import * as path from 'path';
 import { strings } from '@angular-devkit/core';
 import {
   getProject,
