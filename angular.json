@@ -390,7 +390,7 @@
             "index": "apps/fire/app/src/index.html",
             "main": "apps/fire/app/src/main.ts",
             "polyfills": "apps/fire/app/src/polyfills.ts",
-            "tsConfig": "apps/fire/app/src/tsconfig.app.json",
+            "tsConfig": "apps/fire/app/tsconfig.app.json",
             "assets": [
               {
                 "glob": "**/*",

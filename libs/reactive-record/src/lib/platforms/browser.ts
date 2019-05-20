@@ -1,4 +1,4 @@
-import { isEmpty, isEqual, isArray, isObject, merge, get } from 'lodash';
+import { isEmpty, isEqual, merge, get } from 'lodash';
 import { PartialObserver, Observable, from, of, merge as merge$ } from 'rxjs';
 import { map, switchMap, filter, catchError } from 'rxjs/operators';
 import { Options, Chain } from '../interfaces/options';
@@ -93,19 +93,15 @@ export class PlatformBrowser extends ReactiveRecord {
     path: string = '',
     payload: any = {}
   ): Observable<T> {
+    //
+    // get attributes
+    const key = super.createKey(path, payload);
+    const chain = super.cloneChain();
+
     // re-init so we can have access to stuff like `storage`
     super.init({
       driver: super.getDriver()
     });
-
-    //
-    //
-    const key = super.createKey(path, payload);
-    const chain = super.cloneChain();
-
-    //
-    // reset for the next call
-    super.reset();
 
     //
     // request
@@ -230,11 +226,8 @@ export class PlatformBrowser extends ReactiveRecord {
 
     //
     // return cached response immediately to view
-    if (
-      (useCache && cache && !isEmpty(cache.data)) ||
-      (useCache && isArray(cache) && !isEmpty(cache)) ||
-      (useCache && isObject(cache) && !isEmpty(cache))
-    ) {
+    if (useCache && !isEmpty(cache)) {
+      super.log().success()(`${key} [should] return response from cache`);
       const response = transformResponse(cache);
       observer.next(response);
     }
@@ -246,18 +239,7 @@ export class PlatformBrowser extends ReactiveRecord {
     network: Response & { ttl?: number },
     observer: PartialObserver<any>
   ) {
-    const useCache: boolean = chain.useCache === false ? false : true;
     const transformResponse: any = this.shouldTransformResponse(chain, network);
-
-    super.log().info()(`${key} [set] useCache? ${useCache ? true : false}`);
-
-    if (useCache === false) {
-      super.log().success()(`${key} [set] return response from network`);
-      observer.next(transformResponse(network));
-      return observer.complete();
-    }
-
-    const cache: Response & { ttl?: number } = await this.storage.get(key);
     const transformCache: any =
       chain.transformCache && typeof chain.transformCache === 'function'
         ? chain.transformCache
@@ -265,10 +247,27 @@ export class PlatformBrowser extends ReactiveRecord {
 
     const saveNetwork: boolean = chain.saveNetwork === false ? false : true;
     const useNetwork: boolean = chain.useNetwork === false ? false : true;
+    const useCache: boolean = chain.useCache === false ? false : true;
 
-    super.log().info()(
-      `${key} [set] hasCache? ${!isEmpty(cache) ? true : false}`
-    );
+    super.log().info()(`${key} [set] useCache? ${useCache ? true : false}`);
+    super.log().info()(`${key} [set] useNetwork? ${useNetwork ? true : false}`);
+
+    //
+    //
+    if (useNetwork === true && useCache === false) {
+      super.log().success()(
+        `${key} [set] complete and return response from network`
+      );
+      observer.next(transformResponse(network));
+      return observer.complete();
+    }
+
+    let cache: Response & { ttl?: number } = {};
+
+    try {
+      cache = await this.storage.get(key);
+    } catch (err) {}
+
     super.log().info()(
       `${key} [set] transformCache? ${
         chain.transformCache && typeof chain.transformCache === 'function'
@@ -285,53 +284,59 @@ export class PlatformBrowser extends ReactiveRecord {
           : false
       }`
     );
-    super.log().info()(`${key} [set] useNetwork? ${useNetwork ? true : false}`);
-    super.log().info()(
-      `${key} [set] saveNetwork? ${saveNetwork ? true : false}`
-    );
 
-    //
-    // defaults to return network response only if different from cache
-    if (
-      (cache && !isEqual(cache.data, network.data)) ||
-      (cache && isEmpty(cache.data)) ||
-      isEmpty(cache) ||
-      isEmpty(network.data) ||
-      useNetwork !== false
-    ) {
+    if (this.isDifferent(cache, network, transformCache, transformResponse)) {
       //
-      // return network response
-      observer.next(transformResponse(network));
-
-      // dispatch to store
-      if (network && network.data)
-        Config.store.dispatch.next(clearNetworkResponse(network));
-    }
-
-    //
-    // cache strategy
-    if (saveNetwork) {
+      // cache strategy
       let ttl = chain.ttl || 0;
       const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
 
-      if (!isEqual(cache, network)) {
-        super.log().warn()(`${key} [set] cache updated`);
-
-        if (ttl > 0) {
-          ttl += seconds;
-          network.ttl = ttl;
-        }
-
-        //
-        // set cache response
-        observer.complete();
-        return this.storage.set(
-          key,
-          transformCache(clearNetworkResponse(network))
+      //
+      // return network response
+      if (useNetwork === true && useCache === true) {
+        super.log().warn()(
+          `${key} [set] return response from network (cache outdated)`
         );
+        observer.next(transformResponse(network));
       }
+
+      //
+      // dispatch to store
+      Config.store.dispatch.next(clearNetworkResponse(network));
+
+      if (ttl > 0) {
+        ttl += seconds;
+        network.ttl = ttl;
+      }
+
+      super.log().info()(
+        `${key} [set] saveNetwork? ${saveNetwork ? true : false}`
+      );
+
+      if (saveNetwork) {
+        this.storage.set(key, transformCache(clearNetworkResponse(network)));
+        super.log().warn()(`${key} [set] cache updated`);
+      }
+
+      //
+      // set cache response
+      observer.complete();
     }
 
     return observer.complete();
+  }
+
+  private isDifferent(cache, network, transformCache, transformResponse) {
+    return (
+      !isEqual(cache, network) &&
+      !isEqual(
+        cache,
+        transformCache(transformResponse(clearNetworkResponse(network)))
+      ) &&
+      !isEqual(
+        transformResponse(cache),
+        transformCache(transformResponse(clearNetworkResponse(network)))
+      )
+    );
   }
 }
