@@ -259,13 +259,10 @@ export class PlatformBrowser extends ReactiveRecord {
     super.log().info()(`${key} [set] useNetwork? ${useNetwork ? true : false}`);
 
     //
-    //
-    if (useNetwork === true && useCache === false && !chain.transformCache) {
-      super.log().success()(
-        `${key} [set] complete and return response from network`
-      );
+    // should return response immediately
+    if (useNetwork === true && useCache === false) {
+      super.log().success()(`${key} [set] return response from network`);
       observer.next(transformResponse(network));
-      return observer.complete();
     }
 
     let cache: Response & { ttl?: number } = {};
