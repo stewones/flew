@@ -21,7 +21,9 @@ export class PlatformBrowser extends ReactiveRecord {
   }
 
   public clearCache(): void {
+    super.init({ driver: super.getDriver() });
     this.storage.clear();
+    Config.store.reset.next();
   }
 
   public feed() {
@@ -98,10 +100,15 @@ export class PlatformBrowser extends ReactiveRecord {
     const key = super.createKey(path, payload);
     const chain = super.cloneChain();
 
+    //
     // re-init so we can have access to stuff like `storage`
     super.init({
       driver: super.getDriver()
     });
+
+    //
+    // reset chain for subsequent calls
+    super.reset();
 
     //
     // request
@@ -249,12 +256,11 @@ export class PlatformBrowser extends ReactiveRecord {
     const useNetwork: boolean = chain.useNetwork === false ? false : true;
     const useCache: boolean = chain.useCache === false ? false : true;
 
-    super.log().info()(`${key} [set] useCache? ${useCache ? true : false}`);
     super.log().info()(`${key} [set] useNetwork? ${useNetwork ? true : false}`);
 
     //
     //
-    if (useNetwork === true && useCache === false) {
+    if (useNetwork === true && useCache === false && !chain.transformCache) {
       super.log().success()(
         `${key} [set] complete and return response from network`
       );
@@ -294,8 +300,8 @@ export class PlatformBrowser extends ReactiveRecord {
       //
       // return network response
       if (useNetwork === true && useCache === true) {
-        super.log().warn()(
-          `${key} [set] return response from network (cache outdated)`
+        super.log().danger()(
+          `${key} [set] return response from network because cache is outdated`
         );
         observer.next(transformResponse(network));
       }
@@ -331,10 +337,14 @@ export class PlatformBrowser extends ReactiveRecord {
       !isEqual(cache, network) &&
       !isEqual(
         cache,
+        !isEmpty(network) && network.data ? transformResponse(network) : network
+      ) &&
+      !isEqual(
+        cache,
         transformCache(transformResponse(clearNetworkResponse(network)))
       ) &&
       !isEqual(
-        transformResponse(cache),
+        !isEmpty(cache) && cache.data ? transformResponse(cache) : cache,
         transformCache(transformResponse(clearNetworkResponse(network)))
       )
     );

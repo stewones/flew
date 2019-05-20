@@ -11,6 +11,11 @@ export class SyncReactiveResponse {
   constructor(public payload: Response) {}
 }
 
+export class ResetReactiveResponse {
+  public static readonly type = '[ReactiveState] Reset Responses';
+  constructor() {}
+}
+
 @State<StateModel>({
   name: 'ReactiveState',
   defaults: {
@@ -48,6 +53,14 @@ export class ReactiveState {
 
     context.patchState({
       responses: result
+    });
+  }
+
+  @Action(ResetReactiveResponse) resetResponse(
+    context: StateContext<StateModel>
+  ) {
+    context.patchState({
+      responses: []
     });
   }
 

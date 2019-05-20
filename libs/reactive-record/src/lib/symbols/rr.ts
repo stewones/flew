@@ -11,7 +11,8 @@ const ReactiveConfig: ReactiveOptions = {
     driver: 'firestore'
   },
   store: {
-    dispatch: new Subject()
+    dispatch: new Subject(),
+    reset: new Subject()
   }
 };
 
