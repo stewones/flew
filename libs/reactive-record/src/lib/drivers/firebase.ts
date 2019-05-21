@@ -1,5 +1,5 @@
 import { Observable, PartialObserver } from 'rxjs';
-import { merge, isEmpty, get } from 'lodash';
+import { merge, isEmpty, isArray, get } from 'lodash';
 import { Connector } from '../interfaces/connector';
 import { Options, Chain } from '../interfaces/options';
 import { Response } from '../interfaces/response';
@@ -7,6 +7,8 @@ import { map } from 'rxjs/operators';
 import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
 import { clearNetworkResponse } from '../utils/response';
 import { Logger } from '../utils/logger';
+import { isObject } from 'util';
+
 export class FirebaseDriver implements ReactiveDriver {
   _driver: ReactiveDriverOption = 'firebase';
   connector: Connector = {};
@@ -21,8 +23,7 @@ export class FirebaseDriver implements ReactiveDriver {
 
   private exceptions() {
     if (!this.collection) throw new Error('missing collection');
-    if (isEmpty(this.connector)) throw new Error('missing firebase connector');
-    if (isEmpty(this.connector.database))
+    if (isEmpty(this.connector))
       throw new Error(
         `missing database instance. did you add import 'firebase/database'; to your environment file?`
       );
@@ -42,11 +43,29 @@ export class FirebaseDriver implements ReactiveDriver {
       // define adapter
       const path = `${this.collection}/${chain.ref || ''}`;
 
-      const firebase: any = this.connector.database().ref(path);
+      let firebase: any = this.connector.ref(path);
 
       //
       // @todo add complete api
       // https://firebase.google.com/docs/reference/js/firebase.database.Query
+
+      console.log(chain);
+
+      //
+      // add where
+      if (
+        isArray(chain.query) &&
+        isObject(chain.query[0]) &&
+        chain.query[0].operator === '=='
+      ) {
+        firebase = firebase.orderByChild(chain.query[0].field);
+        firebase = firebase.equalTo(chain.query[0].value);
+        this.log().success()(
+          `firebase where -> ${chain.query[0].field} ${
+            chain.query[0].operator
+          } ${chain.query[0].value}`
+        );
+      }
 
       //
       // fire in the hole
@@ -122,7 +141,7 @@ export class FirebaseDriver implements ReactiveDriver {
     //
     // define adapter
     const path = `${this.collection}/${chain.ref || ''}`;
-    const firebase: any = this.connector.database().ref(path);
+    const firebase: any = this.connector.ref(path);
 
     //
     // @todo add complete api
