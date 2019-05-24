@@ -48,8 +48,6 @@ export class FirebaseDriver implements ReactiveDriver {
       // @todo add complete api
       // https://firebase.google.com/docs/reference/js/firebase.database.Query
 
-      console.log(chain);
-
       //
       // add where
       if (
@@ -76,9 +74,8 @@ export class FirebaseDriver implements ReactiveDriver {
           const data: any[] = [];
           const val: any = snapshot.toJSON();
 
-          for (const k in val) {
-            data.push(val[k]);
-          }
+          if (isObject(val)) for (const k in val) data.push(val[k]);
+          else data.push(val);
 
           //
           // define standard response

@@ -192,6 +192,7 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   private _reset(): void {
+    this.driver(RR_DRIVER);
     this.chain = {};
   }
 
