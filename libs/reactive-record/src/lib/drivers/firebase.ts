@@ -1,5 +1,5 @@
 import { Observable, PartialObserver } from 'rxjs';
-import { merge, isEmpty, isArray, get } from 'lodash';
+import { merge, isEmpty, isArray, isObject, get } from 'lodash';
 import { Connector } from '../interfaces/connector';
 import { Options, Chain } from '../interfaces/options';
 import { Response } from '../interfaces/response';
@@ -7,7 +7,6 @@ import { map } from 'rxjs/operators';
 import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
 import { clearNetworkResponse } from '../utils/response';
 import { Logger } from '../utils/logger';
-import { isObject } from 'util';
 
 export class FirebaseDriver implements ReactiveDriver {
   _driver: ReactiveDriverOption = 'firebase';

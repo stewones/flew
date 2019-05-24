@@ -298,7 +298,7 @@ export class PlatformBrowser extends ReactiveRecord {
       // return network response
       if (useNetwork === true && useCache === true) {
         super.log().danger()(
-          `${key} [set] return response from network because cache is outdated`
+          `${key} [set] return response from network [cache outdated]`
         );
         observer.next(transformResponse(network));
       }
