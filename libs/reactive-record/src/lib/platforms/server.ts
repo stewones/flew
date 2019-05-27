@@ -251,11 +251,11 @@ export class ReactiveRecord implements ReactiveApi {
     return this;
   }
 
-  public find<T extends Response>(): Observable<T> {
+  public find<T>(): Observable<T> {
     return this.call<T>('find');
   }
 
-  public findOne<T extends Response>(): Observable<T> {
+  public findOne<T>(): Observable<T> {
     return this.call<T>('findOne');
   }
 
@@ -278,7 +278,7 @@ export class ReactiveRecord implements ReactiveApi {
     });
   }
 
-  public on<T extends Response>(
+  public on<T>(
     onSuccess: (response: Response) => any,
     onError: (response: any) => any
   ): any {
@@ -312,7 +312,7 @@ export class ReactiveRecord implements ReactiveApi {
     return { ...this.chain };
   }
 
-  protected call<T extends Response>(
+  protected call<T>(
     method: ReactiveVerb,
     path: string = '',
     payload: any = {},
@@ -378,28 +378,19 @@ export class ReactiveRecord implements ReactiveApi {
     return this._drivers[_driver][_method]<T>(arg1, arg2, arg3);
   }
 
-  public get<T extends Response>(path: string = ''): Observable<T> {
+  public get<T>(path: string = ''): Observable<T> {
     return this.call<T>('get', path);
   }
 
-  public post<T extends Response>(
-    path: string = '',
-    body: any = {}
-  ): Observable<T> {
+  public post<T>(path: string = '', body: any = {}): Observable<T> {
     return this.call<T>('post', path, body);
   }
 
-  public patch<T extends Response>(
-    path: string = '',
-    body: any = {}
-  ): Observable<T> {
+  public patch<T>(path: string = '', body: any = {}): Observable<T> {
     return this.call<T>('patch', path, body);
   }
 
-  public delete<T extends Response>(
-    path: string = '',
-    body?: any
-  ): Observable<T> {
+  public delete<T>(path: string = '', body?: any): Observable<T> {
     return this.call<T>('delete', path, body);
   }
 

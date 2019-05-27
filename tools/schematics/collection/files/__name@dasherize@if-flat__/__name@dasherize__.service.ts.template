@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Collection, ReactiveRecord, Response } from '@firetask/reactive-record';
+import { Collection, ReactiveRecord } from '@firetask/reactive-record';
 import { Observable } from 'rxjs';
 
-export interface <%= classify(name) %> extends Response<<%= classify(name) %>> {
+export interface <%= classify(name) %> {
   id: string;
   name: string;
 }

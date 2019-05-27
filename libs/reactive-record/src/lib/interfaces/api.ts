@@ -49,10 +49,10 @@ export interface ReactiveApi {
 
   //
   // fire verbs
-  find(): Observable<Response>; // firestore & firebase
-  findOne(): Observable<Response>; // firestore & firebase
-  set(id: string, data: any, merge?: boolean): Observable<any>; // firestore
-  update(id: string, data: any): Observable<any>; // firestore
+  find(); // firestore & firebase
+  findOne(); // firestore & firebase
+  set(id: string, data: any, merge?: boolean); // firestore
+  update(id: string, data: any); // firestore
   on( // firestore & firebase - real time calls doesn't has caching features
     onSuccess: (response: Response | any) => any,
     onError: (response: any) => any
@@ -60,10 +60,10 @@ export interface ReactiveApi {
 
   //
   // http verbs
-  get(path: string): Observable<Response>;
-  post(path: string, body: any): Observable<Response>;
-  patch(path: string, body: any): Observable<Response>;
-  delete(path: string, body?: any): Observable<Response>;
+  get(path: string);
+  post(path: string, body: any);
+  patch(path: string, body: any);
+  delete(path: string, body?: any);
 
   //
   // experimental
