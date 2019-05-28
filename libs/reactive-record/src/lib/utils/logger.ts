@@ -30,7 +30,8 @@ export class Logger {
       : this.useLogTrace;
   }
 
-  public success() {
+  public success(force?) {
+    if (force) return (msg: string) => this.log(msg, this.style('green'));
     return this.useLogTrace
       ? this.useLog === false
         ? msg => {}
@@ -38,7 +39,8 @@ export class Logger {
       : (msg: string) => this.add(msg, 'green');
   }
 
-  public info() {
+  public info(force?) {
+    if (force) return (msg: string) => this.log(msg, this.style('deepskyblue'));
     return this.useLogTrace
       ? this.useLog === false
         ? msg => {}
@@ -46,7 +48,8 @@ export class Logger {
       : (msg: string) => this.add(msg, 'deepskyblue');
   }
 
-  public danger() {
+  public danger(force?) {
+    if (force) return (msg: string) => this.log(msg, this.style('red'));
     return this.useLogTrace
       ? this.useLog === false
         ? msg => {}
@@ -54,7 +57,8 @@ export class Logger {
       : (msg: string) => this.add(msg, 'red');
   }
 
-  public warn() {
+  public warn(force?) {
+    if (force) return (msg: string) => this.log(msg, this.style('yellow'));
     return this.useLogTrace
       ? this.useLog === false
         ? msg => {}
@@ -63,9 +67,7 @@ export class Logger {
   }
 
   private add(msg: string, bg: string = 'green') {
-    const style = `background: ${bg}; color: ${
-      bg === 'yellow' || bg === 'deepskyblue' ? '#333333' : '#ffffff'
-    }; display: block`;
+    const style = this.style(bg);
 
     const log =
       this.useLogTrace === true
@@ -74,7 +76,7 @@ export class Logger {
 
     if (this.useLog === true) {
       if (isServer()) return console.log(msg);
-      console.log(`%c ${msg} `, style);
+      this.log(msg, style);
       this.subject.next(<Log>{
         created: new Date().toISOString(),
         message: log
@@ -87,5 +89,16 @@ export class Logger {
     console.groupCollapsed(`${type} | ${msg}`);
     console.trace(msg);
     console.groupEnd();
+  }
+
+  private log(msg, style) {
+    if (isServer()) return console.log(msg);
+    return console.log(`%c ${msg} `, style);
+  }
+
+  private style(bg) {
+    return `background: ${bg}; color: ${
+      bg === 'yellow' || bg === 'deepskyblue' ? '#333333' : '#ffffff'
+    }; display: block`;
   }
 }

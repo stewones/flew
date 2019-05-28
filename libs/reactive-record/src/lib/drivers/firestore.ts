@@ -1,12 +1,13 @@
 import { Observable, PartialObserver } from 'rxjs';
 import { merge, isEmpty, isArray, isObject, isNil, get } from 'lodash';
 import { Connector } from '../interfaces/connector';
-import { Options, Chain } from '../interfaces/options';
+import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
 import { Logger } from '../utils/logger';
 import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
 import { clearNetworkResponse } from '../utils/response';
+import { Chain } from '../interfaces/chain';
 
 export class FirestoreDriver implements ReactiveDriver {
   _driver: ReactiveDriverOption = 'firestore';

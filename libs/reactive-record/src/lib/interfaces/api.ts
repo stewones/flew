@@ -34,7 +34,8 @@ export interface ReactiveApi {
   data(transform: boolean): ReactiveRecord;
   useLog(active: boolean): ReactiveRecord; // [configurable]
   useLogTrace(active: boolean): ReactiveRecord; // [configurable]
-
+  diff(fn): ReactiveRecord;
+  
   //
   // utils
   $log: Subject<Log>;
@@ -69,6 +70,7 @@ export interface ReactiveApi {
   // experimental
   reboot(): void; // reload rr initialization
   reset(): ReactiveRecord;
+
 
   //
   // Legacy

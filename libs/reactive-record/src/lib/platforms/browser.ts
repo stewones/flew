@@ -1,16 +1,21 @@
-import { isEmpty, isEqual, merge, get } from 'lodash';
+import { isEmpty, isEqual, merge, get, isFunction } from 'lodash';
 import { PartialObserver, Observable, from, of, merge as merge$ } from 'rxjs';
 import { map, switchMap, filter, catchError } from 'rxjs/operators';
-import { Options, Chain } from '../interfaces/options';
+import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { ReactiveRecord } from './server';
 import { StorageAdapter } from '../interfaces/storage';
 import { Config } from '../symbols/rr';
 import { ReactiveVerb } from '../interfaces/verb';
 import { clearNetworkResponse } from '../utils/response';
+import { Chain } from '../interfaces/chain';
+import * as differential from '../utils/diff';
+const deepDiff = differential.diff;
 
 export class PlatformBrowser extends ReactiveRecord {
   protected storage: StorageAdapter; // storage adapter (see ionic storage for reference)
+
+  // private responses = {};
 
   constructor(options: Options) {
     super(options);
@@ -152,11 +157,13 @@ export class PlatformBrowser extends ReactiveRecord {
           super.log().danger()(
             `${key} [call] there is a cached response with time to live`
           );
-          observer.next(
+          this.dispatch(
+            observer,
             this.shouldTransformResponse(chain, evaluation.cache)(
               evaluation.cache as T
             )
           );
+
           observer.complete();
         }
       })
@@ -236,7 +243,7 @@ export class PlatformBrowser extends ReactiveRecord {
     if (useCache && !isEmpty(cache)) {
       super.log().success()(`${key} [should] return response from cache`);
       const response = transformResponse(cache);
-      observer.next(response);
+      this.dispatch(observer, response);
     }
   }
 
@@ -262,7 +269,7 @@ export class PlatformBrowser extends ReactiveRecord {
     // should return response immediately
     if (useNetwork === true && useCache === false) {
       super.log().success()(`${key} [set] return response from network`);
-      observer.next(transformResponse(network));
+      this.dispatch(observer, transformResponse(network));
     }
 
     let cache: Response & { ttl?: number } = {};
@@ -288,7 +295,16 @@ export class PlatformBrowser extends ReactiveRecord {
       }`
     );
 
-    if (this.isDifferent(cache, network, transformCache, transformResponse)) {
+    if (
+      this.isDifferent(
+        chain,
+        key,
+        cache,
+        network,
+        transformCache,
+        transformResponse
+      )
+    ) {
       //
       // cache strategy
       let ttl = chain.ttl || 0;
@@ -300,7 +316,7 @@ export class PlatformBrowser extends ReactiveRecord {
         super.log().danger()(
           `${key} [set] return response from network [cache outdated]`
         );
-        observer.next(transformResponse(network));
+        this.dispatch(observer, transformResponse(network));
       }
 
       //
@@ -329,7 +345,30 @@ export class PlatformBrowser extends ReactiveRecord {
     return observer.complete();
   }
 
-  private isDifferent(cache, network, transformCache, transformResponse) {
+  private isDifferent(
+    chain,
+    key,
+    cache,
+    network,
+    transformCache,
+    transformResponse
+  ) {
+    const hasDiffFn = isFunction(chain.diff);
+    const diffFn = hasDiffFn
+      ? chain.diff
+      : (cache, network) => !isEqual(get(cache, 'data'), network.data);
+
+    if (hasDiffFn) {
+      super.log().danger()(
+        `${key} [diff] is network data different? ${diffFn(cache, network)}`
+      );
+      if (super.log().enabled())
+        console.log(
+          `${key} [diff] deep difference`,
+          deepDiff(get(cache, 'data'), network.data)
+        );
+    }
+
     return (
       !isEqual(cache, network) &&
       !isEqual(
@@ -343,7 +382,14 @@ export class PlatformBrowser extends ReactiveRecord {
       !isEqual(
         !isEmpty(cache) && cache.data ? transformResponse(cache) : cache,
         transformCache(transformResponse(clearNetworkResponse(network)))
-      )
+      ) &&
+      //
+      // a custom diff fn
+      diffFn(cache, network)
     );
+  }
+
+  private dispatch(observer, data) {
+    observer.next(data);
   }
 }

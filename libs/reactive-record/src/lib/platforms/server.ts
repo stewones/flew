@@ -10,7 +10,7 @@ import {
 } from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { Response } from '../interfaces/response';
-import { Options, Chain } from '../interfaces/options';
+import { Options } from '../interfaces/options';
 import { ReactiveApi } from '../interfaces/api';
 import { ReactiveVerb } from '../interfaces/verb';
 import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
@@ -24,6 +24,7 @@ import { HttpDriver } from '../drivers/http';
 import { RR_VERSION } from '../version';
 import { RR_DRIVER } from '../driver';
 import { SHA256 } from '../utils/sha';
+import { Chain } from '../interfaces/chain';
 export class ReactiveRecord implements ReactiveApi {
   protected collection: string;
   protected endpoint: string;
@@ -560,6 +561,11 @@ export class ReactiveRecord implements ReactiveApi {
     this._driver_initialized = {};
     this.reset();
     this.init({ driver: RR_DRIVER });
+  }
+
+  public diff(fn): ReactiveRecord {
+    this.chain.diff = fn;
+    return this;
   }
 }
 
