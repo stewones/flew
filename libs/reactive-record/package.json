@@ -1,6 +1,6 @@
 {
   "name": "@firetask/reactive-record",
-  "version": "0.0.15",
+  "version": "0.1.0",
   "homepage": "https://github.com/firetask/reactive-record#readme",
   "license": "MIT",
   "author": {
@@ -15,12 +15,12 @@
   "peerDependencies": {
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
-    "rxjs": "6.4.0"
+    "rxjs": "6.5.2"
   },
   "description": "It has never been easier to work with cross-platform data using firebase, firestore and http.",
   "dependencies": {
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
-    "rxjs": "6.4.0"
+    "rxjs": "6.5.2"
   }
 }
