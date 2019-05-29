@@ -364,7 +364,7 @@ export class PlatformBrowser extends ReactiveRecord {
       );
       if (super.log().enabled())
         console.log(
-          `${key} [diff] deep difference`,
+          `${key} [diff] deep data difference`,
           deepDiff(get(cache, 'data'), network.data)
         );
     }
