@@ -17,7 +17,8 @@
     "paths": {
       "@firetask/reactive-record": ["libs/reactive-record/src/index.ts"],
       "@firetask/ionic": ["libs/ionic/src/index.ts"],
-      "@firetask/angular": ["libs/angular/src/index.ts"]
+      "@firetask/angular": ["libs/angular/src/index.ts"],
+      "@firetask/app": ["apps/app/src/index.ts"]
     },
     "resolveJsonModule": true,
     "esModuleInterop": true,

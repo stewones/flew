@@ -11,6 +11,9 @@
     "reactive-record": {
       "tags": []
     },
+    "app": {
+      "tags": []
+    },
     "ionic": {
       "tags": []
     },

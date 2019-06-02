@@ -68,6 +68,7 @@
     "localforage-cordovasqlitedriver": "^1.7.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "ngx-textarea-autosize": "^2.0.3",
     "prismjs": "^1.15.0",
     "rxjs": "6.4.0",
     "zone.js": "^0.8.26"

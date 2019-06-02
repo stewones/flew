@@ -376,9 +376,9 @@
         }
       }
     },
-    "fire-app": {
-      "root": "apps/fire/app/",
-      "sourceRoot": "apps/fire/app/src",
+    "app": {
+      "root": "apps/app/",
+      "sourceRoot": "apps/app/src",
       "projectType": "application",
       "prefix": "ft",
       "schematics": {},
@@ -386,15 +386,16 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/apps/fire/app",
-            "index": "apps/fire/app/src/index.html",
-            "main": "apps/fire/app/src/main.ts",
-            "polyfills": "apps/fire/app/src/polyfills.ts",
-            "tsConfig": "apps/fire/app/tsconfig.app.json",
+            "showCircularDependencies": false,
+            "outputPath": "dist/apps/app",
+            "index": "apps/app/src/index.html",
+            "main": "apps/app/src/main.ts",
+            "polyfills": "apps/app/src/polyfills.ts",
+            "tsConfig": "apps/app/tsconfig.app.json",
             "assets": [
               {
                 "glob": "**/*",
-                "input": "apps/fire/app/src/assets",
+                "input": "apps/app/src/assets",
                 "output": "assets"
               },
               {
@@ -405,10 +406,10 @@
             ],
             "styles": [
               {
-                "input": "apps/fire/app/src/theme/variables.scss"
+                "input": "apps/app/src/theme/variables.scss"
               },
               {
-                "input": "apps/fire/app/src/global.scss"
+                "input": "apps/app/src/global.scss"
               }
             ],
             "scripts": [],
@@ -418,8 +419,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/fire/app/src/environments/environment.ts",
-                  "with": "apps/fire/app/src/environments/environment.prod.ts"
+                  "replace": "apps/app/src/environments/environment.ts",
+                  "with": "apps/app/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -447,11 +448,11 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "fire-app:build"
+            "browserTarget": "app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "fire-app:build:production"
+              "browserTarget": "app:build:production"
             },
             "ci": {
               "progress": false
@@ -461,23 +462,23 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "fire-app:build"
+            "browserTarget": "app:build"
           }
         },
         "test": {
           "builder": "@nrwl/builders:jest",
           "options": {
-            "jestConfig": "apps/fire/app/jest.config.js",
-            "tsConfig": "apps/fire/app/tsconfig.spec.json",
-            "setupFile": "apps/fire/app/src/test-setup.ts"
+            "jestConfig": "apps/app/jest.config.js",
+            "tsConfig": "apps/app/tsconfig.spec.json",
+            "setupFile": "apps/app/src/test-setup.ts"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "apps/fire/app/tsconfig.app.json",
-              "apps/fire/app/tsconfig.spec.json"
+              "apps/app/tsconfig.app.json",
+              "apps/app/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
