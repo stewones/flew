@@ -11,6 +11,9 @@
     "reactive-record": {
       "tags": []
     },
+    "app": {
+      "tags": []
+    },
     "ionic": {
       "tags": []
     },
@@ -27,6 +30,9 @@
       "tags": []
     },
     "rr-playground-e2e": {
+      "tags": []
+    },
+    "core": {
       "tags": []
     }
   }

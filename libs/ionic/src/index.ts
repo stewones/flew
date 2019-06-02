@@ -1,3 +1,2 @@
-export * from './lib/storage/helper';
-export * from './lib/storage/module';
-export * from './lib/storage/storage';
+export * from './lib/services/ui.service';
+export * from './lib/modules/ion.module';

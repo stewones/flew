@@ -15,9 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@firetask/reactive-record": ["libs/reactive-record/src/index.ts"],
+      "@firetask/app": ["apps/app/src/index.ts"],
+      "@firetask/core": ["libs/core/src/index.ts"],
       "@firetask/ionic": ["libs/ionic/src/index.ts"],
-      "@firetask/angular": ["libs/angular/src/index.ts"]
+      "@firetask/angular": ["libs/angular/src/index.ts"],
+      "@firetask/reactive-record": ["libs/reactive-record/src/index.ts"]
     },
     "resolveJsonModule": true,
     "esModuleInterop": true,

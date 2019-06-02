@@ -7,7 +7,7 @@ import {
 } from '@firetask/reactive-record';
 
 import { Storage } from '@ionic/storage';
-import { storageConfig } from '@firetask/ionic';
+import { storageConfig } from '@firetask/reactive-record';
 import { firebaseConfig } from './firebase.config';
 
 // This file can be replaced during build by using the `fileReplacements` array.
