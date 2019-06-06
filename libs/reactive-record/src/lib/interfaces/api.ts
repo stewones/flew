@@ -35,7 +35,7 @@ export interface ReactiveApi {
   useLog(active: boolean): ReactiveRecord; // [configurable]
   useLogTrace(active: boolean): ReactiveRecord; // [configurable]
   diff(fn): ReactiveRecord;
-  
+
   //
   // utils
   $log: Subject<Log>;
@@ -51,7 +51,11 @@ export interface ReactiveApi {
   //
   // fire verbs
   find(); // firestore & firebase
-  findOne(); // firestore & firebase
+  // @todo better types
+  // findOne<T>(): Observable<T>;
+  // findOne<T>(): Observable<Response<T>>;
+  // findOne(): Observable<Response>;
+  findOne();
   set(id: string, data: any, merge?: boolean); // firestore
   update(id: string, data: any); // firestore
   on( // firestore & firebase - real time calls doesn't has caching features
@@ -70,7 +74,6 @@ export interface ReactiveApi {
   // experimental
   reboot(): void; // reload rr initialization
   reset(): ReactiveRecord;
-
 
   //
   // Legacy

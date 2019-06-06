@@ -161,7 +161,7 @@ export class FirestoreDriver implements ReactiveDriver {
     });
   }
 
-  public findOne(chain: Chain, key: string): Observable<Response> {
+  public findOne<T>(chain: Chain, key: string): Observable<T> {
     return this.find(chain, key).pipe(
       map((r: Response) => {
         const response: Response = <Response>{
@@ -172,66 +172,60 @@ export class FirestoreDriver implements ReactiveDriver {
           response: r.response
         };
 
-        return response;
+        return response as T;
       })
     );
   }
 
-  public on(
-    chain: Chain,
-    onSuccess: (response: Response) => any = (response: Response) => {},
-    onError: (response: any) => any = (response: any) => {}
-  ): any {
-    //
-    // run exceptions
-    this.exceptions();
-
-    //
-    // network handle
-    const transformResponse: any =
-      chain.transformResponse && typeof chain.transformResponse === 'function'
-        ? chain.transformResponse
-        : (data: Response) => data;
-
-    //
-    // define adapter
-    let firestore: any = this.connector.collection(this.collection);
-
-    //
-    // set doc
-    if (chain.doc) firestore.doc(chain.doc);
-
-    //
-    // set where
-    firestore = this.where(chain.query, firestore);
-
-    //
-    // set order
-    firestore = this.order(chain.sort, firestore);
-
-    //
-    // set limit
-    if (chain.size) firestore = this.limit(chain.size, firestore);
-
-    //
-    // fire in the hole
-    return firestore.onSnapshot((snapshot: any) => {
-      const data: any[] = [];
-      snapshot.forEach(doc => data.push(doc.data()));
-      const response: Response = clearNetworkResponse({
-        data: data,
-        key: false,
-        collection: this.collection,
-        driver: this._driver,
-        response: {
-          empty: snapshot.empty,
-          size: snapshot.size
-        }
-      });
+  public on<T>(chain: Chain): Observable<T> {
+    return new Observable(observer => {
       //
-      // callback
-      onSuccess(transformResponse(response));
-    }, onError);
+      // run exceptions
+      this.exceptions();
+
+      //
+      // define adapter
+      let firestore: any = this.connector.collection(this.collection);
+
+      //
+      // set doc
+      if (chain.doc) firestore.doc(chain.doc);
+
+      //
+      // set where
+      firestore = this.where(chain.query, firestore);
+
+      //
+      // set order
+      firestore = this.order(chain.sort, firestore);
+
+      //
+      // set limit
+      if (chain.size) firestore = this.limit(chain.size, firestore);
+
+      //
+      // fire in the hole
+      firestore.onSnapshot(
+        (snapshot: any) => {
+          const data: any[] = [];
+          snapshot.forEach(doc => data.push(doc.data()));
+          const response: Response = clearNetworkResponse({
+            data: data,
+            key: false,
+            collection: this.collection,
+            driver: this._driver,
+            response: {
+              empty: snapshot.empty,
+              size: snapshot.size
+            }
+          });
+          //
+          // callback
+          observer.next(response as T);
+        },
+        err => observer.error(err)
+      );
+    });
   }
 
   public set(

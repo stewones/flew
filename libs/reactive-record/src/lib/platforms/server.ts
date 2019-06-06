@@ -279,14 +279,8 @@ export class ReactiveRecord implements ReactiveApi {
     });
   }
 
-  public on<T>(
-    onSuccess: (response: Response) => any,
-    onError: (response: any) => any
-  ): any {
-    return this.call<T>('on', null, {
-      onSuccess: onSuccess,
-      onError: onError
-    });
+  public on<T>(): Observable<T> {
+    return this.call<T>('on');
   }
 
   protected createKey(path, body): string {

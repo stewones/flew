@@ -1,5 +1,5 @@
 import { isEmpty, isEqual, merge, get, isFunction } from 'lodash';
-import { PartialObserver, Observable, from, of, merge as merge$ } from 'rxjs';
+import { Observable, from, of, merge as merge$ } from 'rxjs';
 import { map, switchMap, filter, catchError } from 'rxjs/operators';
 import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
@@ -66,6 +66,10 @@ export class PlatformBrowser extends ReactiveRecord {
     return this.call$('findOne');
   }
 
+  public on<T>(): Observable<T> {
+    return this.call$<T>('on');
+  }
+
   private shouldTransformResponse(chain: Chain, response: Response) {
     let transformResponse: any =
       chain.transformResponse && typeof chain.transformResponse === 'function'
@@ -90,7 +94,7 @@ export class PlatformBrowser extends ReactiveRecord {
   }
 
   protected call$<T>(
-    method: ReactiveVerb,
+    verb: ReactiveVerb,
     path: string = '',
     payload: any = {}
   ): Observable<T> {
@@ -111,37 +115,28 @@ export class PlatformBrowser extends ReactiveRecord {
 
     //
     // request
-    return new Observable((observer: PartialObserver<T>) => {
+    return new Observable(observer => {
       this.shouldCallNetwork(chain, key).then(evaluation =>
         merge$(
           this.cache$(observer, chain, key),
           this.ttl$(evaluation, observer, chain, key),
-          this.network$(evaluation, observer, method, path, payload, chain, key)
+          this.network$(evaluation, observer, verb, path, payload, chain, key)
         ).subscribe()
       );
     });
   }
 
-  protected network$<T>(
-    evaluation,
-    observer,
-    method,
-    path,
-    payload,
-    chain,
-    key
-  ) {
+  protected network$<T>(evaluation, observer, verb, path, payload, chain, key) {
     return of(evaluation).pipe(
       filter(evaluation => evaluation.now === true),
-      switchMap(() => {
-        console.log(method, path, payload, chain, key);
-        return super.call<T>(method, path, payload, chain, key).pipe(
+      switchMap(() =>
+        super.call<T>(verb, path, payload, chain, key).pipe(
           map(response => {
-            this.setCache(chain, key, response, observer);
+            this.setCache(verb, chain, key, response, observer);
           }),
           catchError(err => observer.error(err))
-        );
-      })
+        )
+      )
     );
   }
 
@@ -208,11 +203,7 @@ export class PlatformBrowser extends ReactiveRecord {
     });
   }
 
-  protected async shouldReturnCache(
-    chain: Chain,
-    key: string,
-    observer: PartialObserver<any>
-  ) {
+  protected async shouldReturnCache(chain: Chain, key: string, observer) {
     const useCache: boolean = chain.useCache === false ? false : true;
     super.log().info()(`${key} [should] useCache? ${useCache ? true : false}`);
 
@@ -243,10 +234,11 @@ export class PlatformBrowser extends ReactiveRecord {
   }
 
   protected async setCache(
+    verb: ReactiveRecord,
     chain: Chain,
     key: string,
     network: Response & { ttl?: number },
-    observer: PartialObserver<any>
+    observer
   ) {
     const transformResponse: any = this.shouldTransformResponse(chain, network);
     const transformCache: any =
@@ -331,13 +323,8 @@ export class PlatformBrowser extends ReactiveRecord {
         this.storage.set(key, transformCache(clearNetworkResponse(network)));
         super.log().warn()(`${key} [set] cache updated`);
       }
-
-      //
-      // set cache response
-      observer.complete();
     }
-
-    return observer.complete();
+    if (!['on'].includes(verb as any)) return observer.complete();
   }
 
   private isDifferent(
