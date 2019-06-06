@@ -46,29 +46,23 @@ export class PlatformBrowser extends ReactiveRecord {
     }
   }
 
-  public get<T extends Response>(path: string = ''): Observable<T> {
+  public get<T>(path: string = ''): Observable<T> {
     return this.call$('get', path);
   }
 
-  public post<T extends Response>(
-    path: string = '',
-    body: any = {}
-  ): Observable<T> {
+  public post<T>(path: string = '', body: any = {}): Observable<T> {
     return this.call$('post', path, body);
   }
 
-  public patch<T extends Response>(
-    path: string = '',
-    body: any = {}
-  ): Observable<T> {
+  public patch<T>(path: string = '', body: any = {}): Observable<T> {
     return this.call$('patch', path, body);
   }
 
-  public find<T extends Response>(): Observable<T> {
+  public find<T>(): Observable<T> {
     return this.call$('find');
   }
 
-  public findOne<T extends Response>(): Observable<T> {
+  public findOne<T>(): Observable<T> {
     return this.call$('findOne');
   }
 
@@ -95,7 +89,7 @@ export class PlatformBrowser extends ReactiveRecord {
     return transformResponse;
   }
 
-  protected call$<T extends Response>(
+  protected call$<T>(
     method: ReactiveVerb,
     path: string = '',
     payload: any = {}
@@ -139,14 +133,15 @@ export class PlatformBrowser extends ReactiveRecord {
   ) {
     return of(evaluation).pipe(
       filter(evaluation => evaluation.now === true),
-      switchMap(() =>
-        super.call<T>(method, path, payload, chain, key).pipe(
+      switchMap(() => {
+        console.log(method, path, payload, chain, key);
+        return super.call<T>(method, path, payload, chain, key).pipe(
           map(response => {
             this.setCache(chain, key, response, observer);
           }),
           catchError(err => observer.error(err))
-        )
-      )
+        );
+      })
     );
   }
 

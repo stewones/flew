@@ -88,7 +88,7 @@ export class FirestoreDriver implements ReactiveDriver {
     return firestore.limit(limit);
   }
 
-  public find<T extends Response>(chain: Chain, key: string): Observable<T> {
+  public find<T>(chain: Chain, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
       //
       // run exceptions

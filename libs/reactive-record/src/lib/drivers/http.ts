@@ -34,7 +34,7 @@ export class HttpDriver implements ReactiveDriver {
     return this.logger;
   }
 
-  public executeRequest<T extends Response>(
+  public executeRequest<T>(
     method: 'get' | 'post' | 'patch' | 'delete',
     path: string,
     key: string,
@@ -113,14 +113,14 @@ export class HttpDriver implements ReactiveDriver {
     });
   }
 
-  public get<T extends Response>(
+  public get<T>(
     path: string = '',
     key: string = ''
   ): Observable<T> {
     return this.executeRequest('get', path, key);
   }
 
-  public post<T extends Response>(
+  public post<T>(
     path: string = '',
     key: string = '',
     body: any = {}
@@ -128,7 +128,7 @@ export class HttpDriver implements ReactiveDriver {
     return this.executeRequest('post', path, key, body);
   }
 
-  public patch<T extends Response>(
+  public patch<T>(
     path: string = '',
     key: string = '',
     body: any = {}
@@ -136,7 +136,7 @@ export class HttpDriver implements ReactiveDriver {
     return this.executeRequest('patch', path, key, body);
   }
 
-  public delete<T extends Response>(
+  public delete<T>(
     path: string = '',
     key: string = '',
     body?: any
