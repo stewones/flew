@@ -231,10 +231,10 @@ export class ReactiveRecord implements ReactiveApi {
     });
   }
 
-  private getVerbOrException(_driver: string, _method: string): ReactiveVerb {
-    const msg = `[${_method}] method unavailable for driver [${_driver}]`;
+  private getVerbOrException(_driver: string, _verb: string): ReactiveVerb {
+    const msg = `[${_verb}] method unavailable for driver [${_driver}]`;
     try {
-      const verb = this.verbs[_driver][_method];
+      const verb = this.verbs[_driver][_verb];
       if (verb === false) throw new Error(msg);
       return verb;
     } catch (err) {
@@ -283,9 +283,10 @@ export class ReactiveRecord implements ReactiveApi {
     return this.call<T>('on');
   }
 
-  protected createKey(path, body): string {
+  protected createKey(verb, path, body): string {
     const chain = this.cloneChain();
     const payload = JSON.stringify({
+      ...verb,
       ...body,
       ...this.chain,
       ...{ path: path },
@@ -314,22 +315,22 @@ export class ReactiveRecord implements ReactiveApi {
     chain = this.cloneChain(),
     key: string = ''
   ): Observable<T> {
-    let _method = method;
+    let _verb = method;
     let _driver = this.getDriver();
     let arg1, arg2, arg3;
 
     //
     // get verb
-    let verb = this.getVerbOrException(_driver, _method);
+    let verb = this.getVerbOrException(_driver, _verb);
 
     if (isString(verb)) {
       _driver = verb.split('.')[0] as ReactiveDriverOption;
-      _method = verb.split('.')[1] as ReactiveVerb;
+      _verb = verb.split('.')[1] as ReactiveVerb;
     }
 
     //
     // run exception for new variables
-    this.getVerbOrException(_driver, _method);
+    this.getVerbOrException(_driver, _verb);
 
     //
     // init rr
@@ -337,7 +338,7 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // define an unique key
-    key = key ? key : this.createKey(path, payload);
+    key = key ? key : this.createKey(_verb, path, payload);
 
     //
     // reset the chain
@@ -345,7 +346,7 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // define arguments
-    switch (_method) {
+    switch (_verb) {
       case 'find':
       case 'findOne':
         arg1 = chain;
@@ -370,7 +371,7 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // execute request
-    return this._drivers[_driver][_method]<T>(arg1, arg2, arg3);
+    return this._drivers[_driver][_verb]<T>(arg1, arg2, arg3);
   }
 
   public get<T>(path: string = ''): Observable<T> {

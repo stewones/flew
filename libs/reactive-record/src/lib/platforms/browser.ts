@@ -100,7 +100,7 @@ export class PlatformBrowser extends ReactiveRecord {
   ): Observable<T> {
     //
     // get attributes
-    const key = super.createKey(path, payload);
+    const key = super.createKey(verb, path, payload);
     const chain = super.cloneChain();
 
     //
