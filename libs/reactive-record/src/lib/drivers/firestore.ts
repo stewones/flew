@@ -143,7 +143,7 @@ export class FirestoreDriver implements ReactiveDriver {
             response: {
               empty: snapshot.empty,
               size: snapshot.size,
-              metadata: { ...snapshot.metadata }
+              meta: snapshot.metadata
             }
           });
 
@@ -230,7 +230,8 @@ export class FirestoreDriver implements ReactiveDriver {
             driver: this._driver,
             response: {
               empty: snapshot.empty,
-              size: snapshot.size
+              size: snapshot.size,
+              meta: snapshot.metadata
             }
           });
           //
