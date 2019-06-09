@@ -205,7 +205,7 @@ export class FirestoreDriver implements ReactiveDriver {
 
       //
       // fire in the hole
-      firestore.onSnapshot(
+      const turnOff = firestore.onSnapshot(
         (snapshot: any) => {
           //
           // check for offline results
@@ -217,7 +217,8 @@ export class FirestoreDriver implements ReactiveDriver {
             const message = `${key} [on] whoops, looks like you're offline`;
             this.log().danger()(message);
             observer.error(message);
-            return observer.complete();
+            observer.complete();
+            return turnOff();
           }
 
           const data: any[] = [];
