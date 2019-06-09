@@ -177,7 +177,7 @@ export class FirestoreDriver implements ReactiveDriver {
     );
   }
 
-  public on<T>(chain: Chain): Observable<T> {
+  public on<T>(chain: Chain, key: string): Observable<T> {
     return new Observable(observer => {
       //
       // run exceptions
@@ -207,6 +207,19 @@ export class FirestoreDriver implements ReactiveDriver {
       // fire in the hole
       firestore.onSnapshot(
         (snapshot: any) => {
+          //
+          // check for offline results
+          if (
+            snapshot.empty &&
+            snapshot.metadata &&
+            snapshot.metadata.fromCache
+          ) {
+            const message = `${key} [on] whoops, looks like you're offline`;
+            this.log().danger()(message);
+            observer.error(message);
+            return observer.complete();
+          }
+
           const data: any[] = [];
           snapshot.forEach(doc => data.push(doc.data()));
           const response: Response = clearNetworkResponse({

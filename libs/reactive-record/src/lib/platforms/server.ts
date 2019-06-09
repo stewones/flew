@@ -360,8 +360,7 @@ export class ReactiveRecord implements ReactiveApi {
         break;
       case 'on':
         arg1 = chain;
-        arg2 = payload.onSuccess;
-        arg3 = payload.onError;
+        arg2 = key;
         break;
       default:
         arg1 = path;
