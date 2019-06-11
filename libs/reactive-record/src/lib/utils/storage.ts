@@ -4,7 +4,7 @@
 export function storageConfig(
   db = 'app:db',
   store = 'app:store',
-  driver = ['sqlite', 'indexeddb', 'websql', 'localstorage']
+  driver = ['sqlite', 'indexeddb', 'localstorage']
 ) {
   return {
     name: db,

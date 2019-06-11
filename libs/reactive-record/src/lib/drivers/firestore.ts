@@ -124,7 +124,6 @@ export class FirestoreDriver implements ReactiveDriver {
           ) {
             const message = `${key} [find] whoops, looks like you're offline`;
             this.log().danger()(message);
-            observer.error(message);
             return observer.complete();
           }
 
@@ -216,7 +215,6 @@ export class FirestoreDriver implements ReactiveDriver {
           ) {
             const message = `${key} [on] whoops, looks like you're offline`;
             this.log().danger()(message);
-            observer.error(message);
             observer.complete();
             return turnOff();
           }

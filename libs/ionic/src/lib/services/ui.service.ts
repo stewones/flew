@@ -5,7 +5,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 export class Ui {
   constructor(
     private alertCtrl: AlertController,
-    public toastController: ToastController
+    private toastController: ToastController
   ) {}
 
   // https://ionicframework.com/docs/api/alert
