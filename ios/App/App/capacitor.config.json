@@ -3,5 +3,8 @@
   "appName": "Firetask App",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "dist/apps/app"
+  "webDir": "dist/apps/app",
+  "server": {
+    "url": "http://192.168.1.4:8100"
+  }
 }
