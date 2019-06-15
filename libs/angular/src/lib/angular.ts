@@ -6,8 +6,7 @@ import {
   Config,
   FirebaseConnector,
   FirestoreConnector,
-  Options,
-  storageConfig
+  Options
 } from '@firetask/reactive-record';
 
 import {
@@ -17,9 +16,10 @@ import {
   Inject
 } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { SyncReactiveResponse, ResetReactiveResponse } from './store';
+import { ReactiveResponseSync, ReactiveResponseReset } from './store';
 
 import { Storage } from '@ionic/storage';
+import { storageConfig } from './storage';
 
 @Injectable()
 export class ReactiveBrowser {
@@ -42,10 +42,10 @@ export class ReactiveBrowser {
     //
     // configure store
     Config.store.dispatch.subscribe(r =>
-      store.dispatch(new SyncReactiveResponse(r))
+      store.dispatch(new ReactiveResponseSync(r))
     );
     Config.store.reset.subscribe(() =>
-      store.dispatch(new ResetReactiveResponse())
+      store.dispatch(new ReactiveResponseReset())
     );
   }
 }
