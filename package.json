@@ -37,7 +37,11 @@
     "rr:test": "ng test reactive-record",
     "rr:test:w": "ng test reactive-record --watch",
     "rr:patch": "./tools/bin/patch-rr.sh",
-    "app:serve:prod": "ng build app --prod && cp -rf ./dist/apps/app/index.html ./dist/apps/app/404.html && ./node_modules/.bin/http-server -p 8080 -c-1 ./dist/apps/app"
+    "app:build": "ng build app",
+    "app:build:prod": "ng build app --prod && cp -rf ./dist/apps/app/index.html ./dist/apps/app/404.html",
+    "app:serve:prod": "npm run app:build:prod && ./node_modules/.bin/http-server -p 8080 -c-1 ./dist/apps/app",
+    "app:run:ios": "npm run app:build && npx cap copy ios && npx cap open ios",
+    "app:run:ios:prod": "npm run app:build:prod && npx cap copy ios && npx cap open ios"
   },
   "private": true,
   "dependencies": {

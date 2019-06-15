@@ -1,0 +1,7 @@
+{
+  "appId": "io.capacitor.starter",
+  "appName": "Firetask App",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist/apps/app"
+}
