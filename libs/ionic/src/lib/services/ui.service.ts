@@ -26,6 +26,6 @@ export class Ui {
       duration: duration
     });
 
-    return toast;
+    return toast.present();
   }
 }

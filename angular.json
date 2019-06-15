@@ -377,7 +377,7 @@
       }
     },
     "app": {
-      "root": "apps/app/",
+      "root": "apps/app",
       "sourceRoot": "apps/app/src",
       "projectType": "application",
       "prefix": "ft",
