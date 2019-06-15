@@ -20,12 +20,16 @@ export class Ui {
     return alert;
   }
 
-  async say(something: string, duration = 2000) {
+  async say(something: string, duration = 1500) {
     const toast = await this.toastController.create({
       message: something,
       duration: duration
     });
 
     return toast.present();
+  }
+
+  unsay() {
+    this.toastController.dismiss();
   }
 }

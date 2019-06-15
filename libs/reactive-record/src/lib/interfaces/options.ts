@@ -13,13 +13,16 @@ export interface Options {
   connector?: Connector;
   useLog?: boolean;
   useLogTrace?: boolean;
+  firebaseConfig?: any;
 
   //
   // browser
   useCache?: boolean; // whether or not use cache (works only in browser)
   storage?: StorageAdapter; // storage adapter
-  version?: string; // add 'accept-version' to http headers
   feed?: boolean; // whether should feed store with cached results
+  persistence?: boolean;
+  dbName?: string;
+  dbStore?: string;
 
   //
   // for internal initializations

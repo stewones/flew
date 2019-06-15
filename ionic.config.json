@@ -1,0 +1,7 @@
+{
+  "name": "Firetask App",
+  "integrations": {
+    "capacitor": true
+  },
+  "type": "angular"
+}

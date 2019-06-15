@@ -40,7 +40,7 @@
     "app:build": "ng build app",
     "app:build:prod": "ng build app --prod && cp -rf ./dist/apps/app/index.html ./dist/apps/app/404.html",
     "app:serve:prod": "npm run app:build:prod && ./node_modules/.bin/http-server -p 8080 -c-1 ./dist/apps/app",
-    "app:run:ios": "npm run app:build && npx cap copy ios && npx cap open ios",
+    "app:run:ios": "ionic cap run ios --livereload && npx cap copy ios && npx cap open ios",
     "app:run:ios:prod": "npm run app:build:prod && npx cap copy ios && npx cap open ios"
   },
   "private": true,

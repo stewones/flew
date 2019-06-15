@@ -16,6 +16,7 @@ export class FirestoreDriver implements ReactiveDriver {
   connector: Connector = {};
   logger: Logger;
   chain: Chain;
+  persistence: boolean;
 
   constructor(options: Options) {
     merge(this, options);
@@ -23,13 +24,18 @@ export class FirestoreDriver implements ReactiveDriver {
     this.connector = connector.firestore;
 
     //
-    // @need more tests (capacitor showing warnings)
-    // try {
-    //   if (this.chain.useCache !== false)
-    //     this.connector.enablePersistence({
-    //       experimentalTabSynchronization: true
-    //     });
-    // } catch (err) {}
+    // @todo need more tests (capacitor showing warnings)
+    if (this.chain.useCache !== false && this.persistence) {
+      if (this.log())
+        this.log().danger()(
+          `[persistence + tabs] using experimental features from firestore`
+        );
+      try {
+        this.connector.enablePersistence({
+          experimentalTabSynchronization: true
+        });
+      } catch (err) {}
+    }
   }
 
   public log() {
