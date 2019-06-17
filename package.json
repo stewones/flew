@@ -94,7 +94,6 @@
     "@angular/cli": "7.3.5",
     "@angular/compiler-cli": "7.2.8",
     "@angular/language-service": "7.2.8",
-    "@firetask/reactive-record": "0.0.12",
     "@ionic/angular-toolkit": "^1.5.1",
     "@ngxs/schematics": "^0.0.1-alpha.5",
     "@nrwl/schematics": "~7.6.2",

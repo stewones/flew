@@ -10,10 +10,8 @@ export type SemanticTarget = 'major' | 'minor' | 'patch';
 
 export function bumpRR(target: SemanticTarget = 'patch') {
   fs.writeFile(
-    './reactive-record/src/lib/version',
-    `
-      export const RR_VERSION = '${bumpNumber(RR_VERSION, target)}';
-    `,
+    './reactive-record/src/lib/version.ts',
+    `export const RR_VERSION = '${bumpNumber(RR_VERSION, target)}';`,
     function(err) {
       if (err) {
         console.log(err);
@@ -34,7 +32,7 @@ export function bumpPackage(target: SemanticTarget = 'patch') {
       pkg.version = bumpNumber(pkg.version, target);
       fs.writeFile(
         `../libs/${libName}/package.json`,
-        JSON.stringify(pkg),
+        JSON.stringify(pkg, null, '\t'),
         function(err) {
           if (err) {
             console.log(err);

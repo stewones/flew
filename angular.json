@@ -88,7 +88,7 @@
       "root": "libs/angular",
       "sourceRoot": "libs/angular/src",
       "projectType": "library",
-      "prefix": "firetask",
+      "prefix": "ft",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -501,6 +501,9 @@
           "options": {
             "tsConfig": "libs/core/tsconfig.lib.json",
             "project": "libs/core/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
           }
         },
         "lint": {

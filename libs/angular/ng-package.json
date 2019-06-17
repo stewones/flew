@@ -12,7 +12,9 @@
     "umdModuleIds": {
       "lodash": "_",
       "axios": "axios",
+      "firebase/app": "firebase/app",
       "@ngxs/store": "@ngxs/store",
+      "@ionic/storage": "@ionic/storage",
       "@firetask/reactive-record": "@firetask/reactive-record"
     }
   }
