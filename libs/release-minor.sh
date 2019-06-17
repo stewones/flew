@@ -1,0 +1,11 @@
+npm run lint:app
+npm run lint:api
+npm run build:app
+npm run build:api
+npm run bump:minor
+npm run changelog:minor
+npm run build:app 
+npm run build:api
+npm run deploy:app
+npm run deploy:api
+npm run deploy:git

@@ -68,8 +68,8 @@ export const FirebaseStub = ({
           response: {}
         });
       },
-      error = (error: any) => {
-        return throwError(error);
+      error = (err: any) => {
+        return throwError(err);
       }
     ) => {
       callback({
@@ -91,8 +91,8 @@ export const FirebaseStub = ({
           response: {}
         });
       },
-      error = (error: any) => {
-        return throwError(error);
+      error = (err: any) => {
+        return throwError(err);
       }
     ) => {
       callback({

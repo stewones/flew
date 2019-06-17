@@ -13,11 +13,12 @@ const diff = (lhs, rhs) => {
   }, {});
 
   if (isDate(l) || isDate(r)) {
-    if (l.valueOf() == r.valueOf()) return {};
+    if (l.valueOf() === r.valueOf()) return {};
     return r;
   }
 
   if (Array.isArray(r) && Array.isArray(l)) {
+    // tslint:disable-next-line
     const deletedValues = l.reduce((acc, item, index) => {
       return r.hasOwnProperty(index) ? acc.concat(item) : acc.concat(undefined);
     }, []);
@@ -35,7 +36,10 @@ const diff = (lhs, rhs) => {
         return acc; // return no diff
       }
 
-      return acc.slice(0, index).concat(rightItem).concat(acc.slice(index + 1)); // return updated key
+      return acc
+        .slice(0, index)
+        .concat(rightItem)
+        .concat(acc.slice(index + 1)); // return updated key
     }, deletedValues);
   }
 
@@ -44,7 +48,8 @@ const diff = (lhs, rhs) => {
 
     const difference = diff(l[key], r[key]);
 
-    if (isObject(difference) && isEmpty(difference) && !isDate(difference)) return acc; // return no diff
+    if (isObject(difference) && isEmpty(difference) && !isDate(difference))
+      return acc; // return no diff
 
     return { ...acc, [key]: difference }; // return updated key
   }, deletedValues);

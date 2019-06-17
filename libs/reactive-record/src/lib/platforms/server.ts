@@ -1,3 +1,4 @@
+// tslint:disable
 import { AxiosRequestConfig } from 'axios';
 import {
   merge,
@@ -321,7 +322,7 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // get verb
-    let verb = this.getVerbOrException(_driver, _verb);
+    const verb = this.getVerbOrException(_driver, _verb);
 
     if (isString(verb)) {
       _driver = verb.split('.')[0] as ReactiveDriverOption;
@@ -510,6 +511,7 @@ export class ReactiveRecord implements ReactiveApi {
     if (isEmpty(this.chain.sort)) {
       this.chain.sort = {};
     }
+    // tslint:disable-next-line
     for (const k in by) {
       this.chain.sort[k] = by[k];
     }

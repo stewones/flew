@@ -1,3 +1,4 @@
+// tslint:disable
 import { isEmpty, isEqual, merge, get, isFunction } from 'lodash';
 import { Observable, from, of, merge as merge$ } from 'rxjs';
 import { map, switchMap, filter, catchError } from 'rxjs/operators';
@@ -14,7 +15,6 @@ const deepDiff = differential.diff;
 
 export class PlatformBrowser extends ReactiveRecord {
   protected storage: StorageAdapter; // storage adapter (see ionic storage for reference)
-
   // private responses = {};
 
   constructor(options: Options) {

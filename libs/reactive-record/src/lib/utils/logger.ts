@@ -87,6 +87,7 @@ export class Logger {
   private trace(msg, type) {
     if (isServer()) return console.log(msg);
     console.groupCollapsed(`${type} | ${msg}`);
+    /* tslint:disable */
     console.trace(msg);
     console.groupEnd();
   }

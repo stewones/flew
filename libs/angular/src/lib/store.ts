@@ -1,6 +1,6 @@
 import { State, Action, StateContext, createSelector } from '@ngxs/store';
 import { isEqual, cloneDeep } from 'lodash';
-import { Response } from '../../../reactive-record/src/lib/interfaces/response';
+import { Response } from '@firetask/reactive-record';
 
 export interface StateModel {
   responses: Response[];

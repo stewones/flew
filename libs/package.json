@@ -1,0 +1,26 @@
+{
+  "name": "firetask-libs",
+  "version": "0.0.0",
+  "description": "scripts used for release all the packages at same time",
+  "scripts": {
+    "bump": "tsc && node ./.compiled/bump.js",
+    "bump:major": "tsc && node ./.compiled/bump-major.js",
+    "bump:minor": "tsc && node ./.compiled/bump-minor.js",
+    "bump:patch": "tsc && node ./.compiled/bump-patch.js",
+    "lint:app": "cd .. && ./node_modules/.bin/ng lint client-app",
+    "lint:api": "cd .. && ./node_modules/.bin/ng lint server-api",
+    "build:app": "cd .. && ./node_modules/.bin/ng build client-app --prod",
+    "build:api": "cd .. && ./node_modules/.bin/ng build server-api --prod",
+    "deploy:git": "./deploy-git.sh",
+    "changelog:major": "cd .. && ./node_modules/.bin/standard-version release --release-as major",
+    "changelog:minor": "cd .. && ./node_modules/.bin/standard-version release --release-as minor",
+    "changelog:patch": "cd .. && ./node_modules/.bin/standard-version release --release-as patch",
+    "release:major": "./release-major.sh",
+    "release:minor": "./release-minor.sh",
+    "release:patch": "./release-patch.sh",
+    "tada": "tsc && node ./.compiled/tada.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {}
+}

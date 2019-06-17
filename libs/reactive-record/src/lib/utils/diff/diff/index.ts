@@ -13,7 +13,7 @@ const diff = (lhs, rhs) => {
   }, {});
 
   if (isDate(l) || isDate(r)) {
-    if (l.valueOf() == r.valueOf()) return {};
+    if (l.valueOf() === r.valueOf()) return {};
     return r;
   }
 
@@ -22,7 +22,8 @@ const diff = (lhs, rhs) => {
 
     const difference = diff(l[key], r[key]);
 
-    if (isObject(difference) && isEmpty(difference) && !isDate(difference)) return acc; // return no diff
+    if (isObject(difference) && isEmpty(difference) && !isDate(difference))
+      return acc; // return no diff
 
     return { ...acc, [key]: difference }; // return updated key
   }, deletedValues);
