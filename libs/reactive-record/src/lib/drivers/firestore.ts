@@ -229,7 +229,7 @@ export class FirestoreDriver implements ReactiveDriver {
           snapshot.forEach(doc => data.push(doc.data()));
           const response: Response = clearNetworkResponse({
             data: data,
-            key: false,
+            key: key,
             collection: this.collection,
             driver: this._driver,
             response: {
