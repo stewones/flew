@@ -1,21 +1,21 @@
 {
-  "name": "@firetask/reactive-record",
-  "version": "0.1.0",
-  "homepage": "https://github.com/firetask/reactive-record#readme",
-  "license": "MIT",
-  "author": {
-    "name": "Firetask Team",
-    "email": "support@firetask.io",
-    "url": "https://firetask.io"
-  },
-  "bugs": {
-    "url": "https://github.com/firetask/reactive-record/issues",
-    "email": "support@firetask.io"
-  },
-  "peerDependencies": {
-    "axios": "^0.18.0",
-    "lodash": "^4.17.11",
-    "rxjs": "^6.5.2"
-  },
-  "description": "It has never been easier to work with cross-platform data using firebase, firestore and http."
+	"name": "@firetask/reactive-record",
+	"version": "0.1.1",
+	"homepage": "https://github.com/firetask/reactive-record#readme",
+	"license": "MIT",
+	"author": {
+		"name": "Firetask Team",
+		"email": "support@firetask.io",
+		"url": "https://firetask.io"
+	},
+	"bugs": {
+		"url": "https://github.com/firetask/reactive-record/issues",
+		"email": "support@firetask.io"
+	},
+	"peerDependencies": {
+		"axios": "^0.18.0",
+		"lodash": "^4.17.11",
+		"rxjs": "^6.5.2"
+	},
+	"description": "It has never been easier to work with cross-platform data using firebase, firestore and http."
 }
