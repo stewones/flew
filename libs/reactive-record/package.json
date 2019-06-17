@@ -15,7 +15,7 @@
   "peerDependencies": {
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
-    "rxjs": "6.5.2"
+    "rxjs": "^6.5.2"
   },
   "description": "It has never been easier to work with cross-platform data using firebase, firestore and http."
 }

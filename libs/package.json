@@ -16,6 +16,7 @@
     "build:core": "cd .. && ./node_modules/.bin/ng build core --prod",
     "build:rr": "cd .. && ./node_modules/.bin/ng build reactive-record --prod",
     "deploy:git": "./deploy-git.sh",
+    "deploy:npm": "tsc && node ./.compiled/publish.js",
     "changelog:major": "cd .. && ./node_modules/.bin/standard-version release --release-as major",
     "changelog:minor": "cd .. && ./node_modules/.bin/standard-version release --release-as minor",
     "changelog:patch": "cd .. && ./node_modules/.bin/standard-version release --release-as patch",

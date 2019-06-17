@@ -1,3 +1,3 @@
-// import { saveVersion, bump } from './bump';
+import { bump } from './bump';
 
-// saveVersion(bump('major'));
+bump(`major`);

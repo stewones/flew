@@ -1,10 +1,6 @@
 import { RR_VERSION } from './reactive-record/src/lib/version';
 import * as fs from 'fs';
-
-export const LIBS = [
-  'core'
-  // 'angular', 'ionic', 'reactive-record'
-];
+import { LIBS } from './libs';
 
 export type SemanticTarget = 'major' | 'minor' | 'patch';
 
@@ -71,4 +67,4 @@ export function bump(target: SemanticTarget = 'patch') {
 
 //
 // test
-console.log(bump());
+// console.log(bump());

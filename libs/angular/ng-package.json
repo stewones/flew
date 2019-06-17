@@ -1,12 +1,7 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/libs/angular",
-  "whitelistedNonPeerDependencies": [
-    "lodash",
-    "axios",
-    "@ngxs/store",
-    "@firetask/reactive-record"
-  ],
+  "whitelistedNonPeerDependencies": [],
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
