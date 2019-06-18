@@ -9,8 +9,7 @@ LIBS.map(libName => {
   );
   shell.exec(`cp -rf ./readme/${libName}.md ./.build/${libName}/README.md`);
   shell.exec(`cp -rf ../../libs/${libName}/.travis.yml ./.build/${libName}`);
-  shell.exec(`cd ./.build/${libName}`);
-  shell.exec(`git add -A`);
-  shell.exec(`git commit --amend --no-edit`);
-  shell.exec(`git push test-${libName} master --force`);
+  shell.exec(
+    `cd ./.build/${libName} && git add -A && git commit --amend --no-edit && git push test-${libName} master --force`
+  );
 });
