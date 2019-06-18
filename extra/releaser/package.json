@@ -1,0 +1,32 @@
+{
+  "name": "firetask-libs",
+  "version": "0.0.0",
+  "description": "scripts used for release all the packages at same time",
+  "scripts": {
+    "bump": "tsc && node ./.compiled/extra/releaser/bump.js",
+    "bump:major": "tsc && node ./.compiled/extra/releaser/bump-major.js",
+    "bump:minor": "tsc && node ./.compiled/extra/releaser/bump-minor.js",
+    "bump:patch": "tsc && node ./.compiled/extra/releaser/bump-patch.js",
+    "lint:angular": "cd ../../ && ./node_modules/.bin/ng lint angular",
+    "lint:ionic": "cd ../../ && ./node_modules/.bin/ng lint ionic",
+    "lint:core": "cd ../../ && ./node_modules/.bin/ng lint core",
+    "lint:rr": "cd ../../ && ./node_modules/.bin/ng lint reactive-record",
+    "build:angular": "cd ../../ && ./node_modules/.bin/ng build angular --prod",
+    "build:ionic": "cd ../../ && ./node_modules/.bin/ng build ionic --prod",
+    "build:core": "cd ../../ && ./node_modules/.bin/ng build core --prod",
+    "build:rr": "cd ../../ && ./node_modules/.bin/ng build reactive-record --prod",
+    "deploy:git": "./deploy-git.sh",
+    "deploy:npm": "tsc && node ./.compiled/extra/releaser/deploy-npm.js",
+    "deploy:test": "tsc && node ./.compiled/extra/releaser/deploy-test.js",
+    "changelog:major": "cd ../../ && ./node_modules/.bin/standard-version release --release-as major",
+    "changelog:minor": "cd ../../ && ./node_modules/.bin/standard-version release --release-as minor",
+    "changelog:patch": "cd ../../ && ./node_modules/.bin/standard-version release --release-as patch",
+    "release:major": "./release-major.sh",
+    "release:minor": "./release-minor.sh",
+    "release:patch": "./release-patch.sh",
+    "tada": "tsc && node ./.compiled/extra/releaser/tada.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {}
+}

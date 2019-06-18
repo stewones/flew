@@ -10,4 +10,5 @@ npm run bump:patch
 npm run changelog:patch
 npm run deploy:git
 npm run deploy:npm
+npm run deploy:test
 npm run tada

@@ -113,7 +113,7 @@
     "ng-packagr": "^4.2.0",
     "np": "3.0.4",
     "prettier": "1.16.4",
-    "rimraf": "^2.6.2",
+    "rimraf": "^2.6.3",
     "shelljs": "^0.8.3",
     "standard-version": "^6.0.1",
     "tailwindcss": "^0.7.4",

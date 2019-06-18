@@ -1,4 +1,4 @@
-import { RR_VERSION } from './reactive-record/src/lib/version';
+import { RR_VERSION } from '../../libs/reactive-record/src/lib/version';
 import * as fs from 'fs';
 import { LIBS } from './libs';
 
@@ -6,7 +6,7 @@ export type SemanticTarget = 'major' | 'minor' | 'patch';
 
 export function bumpRR(target: SemanticTarget = 'patch') {
   fs.writeFile(
-    './reactive-record/src/lib/version.ts',
+    '../../libs/reactive-record/src/lib/version.ts',
     `export const RR_VERSION = '${bumpNumber(RR_VERSION, target)}';`,
     function(err) {
       if (err) {
@@ -20,14 +20,14 @@ export function bumpRR(target: SemanticTarget = 'patch') {
 
 export function bumpPackage(target: SemanticTarget = 'patch') {
   LIBS.map(libName => {
-    fs.readFile(`../libs/${libName}/package.json`, 'utf8', function(
+    fs.readFile(`../../libs/${libName}/package.json`, 'utf8', function(
       err,
       contents
     ) {
       const pkg = JSON.parse(contents);
       pkg.version = bumpNumber(pkg.version, target);
       fs.writeFile(
-        `../libs/${libName}/package.json`,
+        `../../libs/${libName}/package.json`,
         JSON.stringify(pkg, null, '\t'),
         function(err) {
           if (err) {
