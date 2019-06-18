@@ -1,11 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc/libs/reactive-record",
+    "outDir": "../../dist/libs/reactive-record",
     "module": "commonjs",
     "types": ["jest", "node"]
   },
   "files": ["src/test-setup.ts"],
-  "include": ["**/*.spec.ts", "**/*.d.ts"],
-  "exclude": ["**/*.test.js"]
+  "include": ["**/*.spec.ts", "**/*.d.ts"]
 }

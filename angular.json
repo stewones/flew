@@ -74,7 +74,8 @@
           "builder": "@nrwl/builders:jest",
           "options": {
             "jestConfig": "libs/ionic/jest.config.js",
-            "tsConfig": "libs/ionic/tsconfig.spec.json"
+            "tsConfig": "libs/ionic/tsconfig.spec.json",
+            "setupFile": "libs/ionic/src/test-setup.ts"
           }
         }
       },
