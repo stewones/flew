@@ -12,10 +12,7 @@ npm run build:core
 npm run build:rr
 npm run bump:patch
 npm run changelog:patch
-
 npm run deploy:copy
-
-
 npm run deploy:git
 npm run deploy:npm
 npm run deploy:ci
