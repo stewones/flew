@@ -14,5 +14,5 @@ npm run bump:minor
 npm run changelog:minor
 npm run deploy:git
 npm run deploy:npm
-npm run deploy:test
+npm run deploy:ci
 npm run tada
