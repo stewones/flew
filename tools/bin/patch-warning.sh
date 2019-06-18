@@ -1,1 +1,0 @@
-echo 'project patched. bump version inside libs/.../package.json and then issue npm run publish'

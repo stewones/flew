@@ -270,18 +270,18 @@
             "styles": [
               "node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "node_modules/prismjs/themes/prism.css",
-              "tools/tailwind/common.bundle.css",
+              "extra/tailwind/common.bundle.css",
               "apps/rr/playground/src/styles.scss"
             ],
             "scripts": [
               {
-                "input": "tools/jsonTreeViewer/app.js"
+                "input": "extra/tailwind/app.js"
               },
               {
-                "input": "tools/jsonTreeViewer/jsonTree.js"
+                "input": "extra/tailwind/jsonTree.js"
               },
               {
-                "input": "tools/jsonTreeViewer/jsonTreeViewer.js"
+                "input": "extra/tailwind/jsonTreeViewer.js"
               }
             ],
             "es5BrowserSupport": true
