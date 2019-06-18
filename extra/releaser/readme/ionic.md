@@ -1,4 +1,4 @@
-# Firetask Ionic [![Build Status](https://travis-ci.org/Firetask/reactive-record.svg?branch=master)](https://travis-ci.org/Firetask/reactive-record) [![codecov](https://codecov.io/gh/Firetask/reactive-record/branch/master/graph/badge.svg)](https://codecov.io/gh/Firetask/reactive-record) [![Conventional Commits](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://conventionalcommits.org)
+# Firetask Ionic [![Build Status](https://travis-ci.org/Firetask/ionic.svg?branch=master)](https://travis-ci.org/Firetask/ionic) [![codecov](https://codecov.io/gh/Firetask/ionic/branch/master/graph/badge.svg)](https://codecov.io/gh/Firetask/ionic) [![Conventional Commits](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://conventionalcommits.org)
 
 > Attention
 >

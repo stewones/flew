@@ -1,4 +1,4 @@
-# Firetask Angular [![Build Status](https://travis-ci.org/Firetask/reactive-record.svg?branch=master)](https://travis-ci.org/Firetask/reactive-record) [![codecov](https://codecov.io/gh/Firetask/reactive-record/branch/master/graph/badge.svg)](https://codecov.io/gh/Firetask/reactive-record) [![Conventional Commits](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://conventionalcommits.org)
+# Firetask Angular [![Build Status](https://travis-ci.org/Firetask/angular.svg?branch=master)](https://travis-ci.org/Firetask/angular) [![codecov](https://codecov.io/gh/Firetask/angular/branch/master/graph/badge.svg)](https://codecov.io/gh/Firetask/angular) [![Conventional Commits](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://conventionalcommits.org)
 
 > Attention
 >
