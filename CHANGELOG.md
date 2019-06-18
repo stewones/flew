@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/stewwan/firetask/compare/v0.1.1...v0.1.2) (2019-06-18)
+
+
+### Bug Fixes
+
+* **ionic:** jest setup ([4fe0702](https://github.com/stewwan/firetask/commit/4fe0702))
+* **rr:** fix specs ([788d2de](https://github.com/stewwan/firetask/commit/788d2de))
+
+
+### Features
+
+* add test setup to the other libs ([91f5aea](https://github.com/stewwan/firetask/commit/91f5aea))
+
+
+
 ### [0.1.1](https://github.com/stewwan/firetask/compare/v0.1.0...v0.1.1) (2019-06-17)
 
 
