@@ -234,11 +234,11 @@ export class PlatformBrowser extends ReactiveRecord {
   }
 
   protected async setCache(
-    verb: ReactiveRecord,
+    verb: ReactiveVerb,
     chain: Chain,
     key: string,
     network: Response & { ttl?: number },
-    observer
+    observer = { next: () => {}, complete: () => {} }
   ) {
     const transformResponse: any = this.shouldTransformResponse(chain, network);
     const transformCache: any =
@@ -257,6 +257,7 @@ export class PlatformBrowser extends ReactiveRecord {
     if (useNetwork === true && useCache === false) {
       super.log().success()(`${key} [set] return response from network`);
       this.dispatch(observer, transformResponse(network));
+      return observer.complete();
     }
 
     let cache: Response & { ttl?: number } = {};
@@ -306,10 +307,6 @@ export class PlatformBrowser extends ReactiveRecord {
         this.dispatch(observer, transformResponse(network));
       }
 
-      //
-      // dispatch to store
-      Config.store.dispatch.next(clearNetworkResponse(network));
-
       if (ttl > 0) {
         ttl += seconds;
         network.ttl = ttl;
@@ -324,7 +321,7 @@ export class PlatformBrowser extends ReactiveRecord {
         super.log().warn()(`${key} [set] cache updated`);
       }
     }
-    if (!['on'].includes(verb as any)) return observer.complete();
+    if (!['on'].includes(verb)) return observer.complete();
   }
 
   private isDifferent(
@@ -371,7 +368,8 @@ export class PlatformBrowser extends ReactiveRecord {
     );
   }
 
-  private dispatch(observer, data) {
+  protected dispatch(observer = { next: data => {} }, data) {
     observer.next(data);
+    Config.store.dispatch.next(clearNetworkResponse(data));
   }
 }

@@ -113,7 +113,12 @@ export const FirebaseStub = ({
 
   const firebaseStub: any = {
     auth: firebaseAuthStub,
-    database: firebaseDbStub
+    database: firebaseDbStub,
+    ref: () => {
+      return {
+        on: () => {}
+      };
+    }
   };
 
   _.extend(firebaseStub.auth, {

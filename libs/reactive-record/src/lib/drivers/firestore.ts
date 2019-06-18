@@ -22,7 +22,7 @@ export class FirestoreDriver implements ReactiveDriver {
     merge(this, options);
     const connector = get(options, 'connector') || {};
     this.connector = connector.firestore;
-
+    this.chain = this.chain ? this.chain : {};
     //
     // @todo need more tests (capacitor showing warnings)
     if (this.chain.useCache !== false && this.persistence) {

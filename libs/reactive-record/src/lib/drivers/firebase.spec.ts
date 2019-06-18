@@ -1,7 +1,6 @@
-import { FirebaseStub } from './stub';
 import { FirebaseDriver } from './firebase';
 import { Logger } from '../utils/logger';
-import { Subject } from 'rxjs';
+import { Subject, Observable, of, throwError } from 'rxjs';
 
 class FirebaseDriverMock extends FirebaseDriver {
   logger = new Logger({
@@ -15,17 +14,70 @@ class FirebaseDriverMock extends FirebaseDriver {
   }
 }
 
+export const firebaseStub = {
+  ref: data => {
+    return {
+      on: (
+        type = 'value',
+        callback = (snapshot: any) => {
+          return of({
+            data: [{ a: 1 }, { b: 2 }, { c: 3 }],
+            key: 'mocked-key',
+            collection: 'mocked-collection',
+            driver: 'mocked-driver',
+            response: {}
+          });
+        },
+        error = (err: any) => {
+          return throwError(err);
+        }
+      ) => {
+        callback({
+          key: 'firebase-key',
+          val: () => {
+            return { a: 1, b: 2, c: 3 };
+          },
+          exists: () => true,
+          numChildren: () => 1
+        });
+        // error('zzz');
+      },
+      once: (
+        type = 'value',
+        callback = (snapshot: any) => {
+          return of({
+            data: [{ a: 1 }, { b: 2 }, { c: 3 }],
+            key: 'mocked-key',
+            collection: 'mocked-collection',
+            driver: 'mocked-driver',
+            response: {}
+          });
+        },
+        error = (err: any) => {
+          return throwError(err);
+        }
+      ) => {
+        callback({
+          key: 'firebase-key',
+          toJSON: () => {
+            return { a: 1, b: 2, c: 3 };
+          }
+        });
+        // error('zzz');
+      }
+    };
+  }
+};
+
 describe('FirebaseDriver', () => {
   let driver: FirebaseDriver;
   const collection = 'foo-collection';
-  let firebaseMock;
 
   beforeEach(() => {
-    firebaseMock = FirebaseStub({});
     driver = new FirebaseDriverMock({
       collection: collection,
       connector: {
-        firebase: firebaseMock.firebase
+        firebase: firebaseStub
       }
     });
   });
@@ -39,13 +91,13 @@ describe('FirebaseDriver', () => {
   it('should implement `find` method', () => {
     const spy = jest.spyOn(FirebaseDriver.prototype, 'find');
     driver.find({}, 'my-key').toPromise();
-    expect(spy).toBeCalled();
+    expect(spy).toHaveBeenCalled();
   });
 
   it('should implement `findOne` method', () => {
     const spy = jest.spyOn(FirebaseDriver.prototype, 'findOne');
     driver.findOne({}, 'my-key').toPromise();
-    expect(spy).toBeCalledTimes(1);
+    expect(spy).toHaveBeenCalledTimes(1);
   });
 
   it('should implement `on` method', () => {
@@ -54,14 +106,14 @@ describe('FirebaseDriver', () => {
     driver.on({}, r => {}, err => {});
     driver.on({ transformResponse: r => r.data }, r => {}, err => {});
 
-    expect(spy).toBeCalledTimes(3);
+    expect(spy).toHaveBeenCalledTimes(3);
   });
 
   it('should fail on missing `collection` for [find] method', () => {
     driver = new FirebaseDriver({
       driver: 'firebase',
       connector: {
-        firebase: FirebaseStub({}).firebase
+        firebase: firebaseStub
       }
     });
 
@@ -74,11 +126,7 @@ describe('FirebaseDriver', () => {
     driver = new FirebaseDriver({
       driver: 'firebase',
       collection: 'users',
-      connector: {
-        firebase: {
-          database: {}
-        }
-      }
+      connector: {}
     });
 
     return expect(driver.find({}, 'my-key').toPromise()).rejects.toThrowError(
@@ -90,13 +138,11 @@ describe('FirebaseDriver', () => {
     driver = new FirebaseDriver({
       driver: 'firebase',
       collection: 'users',
-      connector: {
-        firebase: {}
-      }
+      connector: {}
     });
 
     return expect(driver.find({}, 'my-key').toPromise()).rejects.toThrowError(
-      'missing firebase connector'
+      `missing database instance. did you add import 'firebase/database'; to your environment file?`
     );
   });
 

@@ -1,10 +1,9 @@
-import { FirestoreStub } from './stub';
 import { FirestoreDriver } from './firestore';
 import { ReactiveRecord } from '../platforms/server';
 import { Logger } from '../utils/logger';
-import { Subject } from 'rxjs';
-import { Chain } from '../interfaces/options';
+import { Subject, of, throwError } from 'rxjs';
 import { Response } from '../interfaces/response';
+import { Chain } from '../interfaces/chain';
 class FirestoreDriverMock extends FirestoreDriver {
   logger = new Logger({
     subject: new Subject(),
@@ -35,12 +34,8 @@ class FirestoreDriverMock extends FirestoreDriver {
     return super.limit(limit, firestore);
   }
 
-  public on(
-    chain: Chain = {},
-    onSuccess: (response: Response) => any = (response: Response) => {},
-    onError: (response: any) => any = (response: any) => {}
-  ): any {
-    return super.on(chain, onSuccess, onError);
+  public on(chain: Chain = {}, key: string = ''): any {
+    return super.on(chain, key);
   }
 }
 
@@ -69,18 +64,63 @@ class FirestoreFailMock extends FirestoreDriver {
     return super.order(sort, firestore);
   }
 }
+const get = Promise.resolve([
+  {
+    data: () => {
+      return { foo: 'data' };
+    }
+  }
+]);
+const set = Promise.resolve(true);
+const update = Promise.resolve(true);
+const onSnapshot = (successFn, errorFn) => {};
+
+const firestoreCollectionDocGetStub: any = jasmine
+  .createSpy('get')
+  .and.returnValue(get);
+
+const firestoreCollectionDocSetStub: any = jasmine
+  .createSpy('set')
+  .and.returnValue(set);
+
+const firestoreCollectionDocUpdateStub: any = jasmine
+  .createSpy('update')
+  .and.returnValue(update);
+
+const firestoreCollectionDocOnStub: any = jasmine
+  .createSpy('onSnapshot')
+  .and.returnValue(onSnapshot);
+
+const firestoreCollectionDocStub: any = jasmine
+  .createSpy('doc')
+  .and.returnValue({
+    get: firestoreCollectionDocGetStub,
+    set: firestoreCollectionDocSetStub,
+    update: firestoreCollectionDocUpdateStub,
+    onSnapshot: firestoreCollectionDocOnStub
+  });
+
+const firestoreCollectionStub: any = jasmine
+  .createSpy('collection')
+  .and.returnValue({
+    doc: firestoreCollectionDocStub,
+    get: firestoreCollectionDocGetStub,
+    onSnapshot: firestoreCollectionDocOnStub
+  });
+
+export const firestoreStub: any = {
+  collection: firestoreCollectionStub
+};
 
 describe('FirestoreDriver', () => {
   let driver: FirestoreDriverMock, lib: ReactiveRecord;
   const collection = 'foo-collection';
-  let firestoreMock;
 
   beforeEach(() => {
-    firestoreMock = FirestoreStub({});
     driver = new FirestoreDriverMock({
       collection: collection,
       connector: {
-        firestore: firestoreMock.firestore
+        firestore: firestoreStub
       }
     });
   });
@@ -98,13 +138,13 @@ describe('FirestoreDriver', () => {
   it('should implement `find` method', () => {
     const spy = jest.spyOn(FirestoreDriverMock.prototype, 'find');
     driver.find({}, 'my-key').toPromise();
-    expect(spy).toBeCalled();
+    expect(spy).toHaveBeenCalled();
   });
 
   it('should implement `findOne` method', () => {
     const spy = jest.spyOn(FirestoreDriverMock.prototype, 'findOne');
     driver.findOne({}, 'my-key').toPromise();
-    expect(spy).toBeCalledTimes(1);
+    expect(spy).toHaveBeenCalledTimes(1);
   });
 
   it('should implement `on` method', () => {
@@ -121,7 +161,7 @@ describe('FirestoreDriver', () => {
       fn(snapshot);
     };
 
-    const driver_ = new FirestoreDriver({
+    const driver_ = new FirestoreDriverMock({
       logger: new Logger({
         subject: new Subject(),
         useLog: false,
@@ -151,18 +191,14 @@ describe('FirestoreDriver', () => {
         }
       }
     } as any);
-    const spy = jest.spyOn(FirestoreDriver.prototype, 'on');
+    const spy = jest.spyOn(FirestoreDriverMock.prototype, 'on');
     driver_.on({});
-    driver_.on(
-      {
-        transformResponse: r => r.data
-      },
-      r => {},
-      err => {}
-    );
-    driver_.on({ doc: 'asdf', size: 54 }, () => {});
+    driver_.on({
+      transformResponse: r => r.data
+    });
+    driver_.on({ doc: 'asdf', size: 54 });
 
-    expect(spy).toBeCalledTimes(3);
+    expect(spy).toHaveBeenCalledTimes(3);
   });
 
   it('should fail for `on` method', () => {
@@ -195,21 +231,14 @@ describe('FirestoreDriver', () => {
       }
     });
 
-    driver_.on(
-      {},
-      () => {}
-      // LOL this is messing up coverage
-      // err => {
-      //   expect(err).toBe(`on failed`);
-      // }
-    );
+    driver_.on({}, '');
   });
 
   it('should fail on missing `collection` for [find] method', () => {
     driver = new FirestoreDriverMock({
       driver: 'firestore',
       connector: {
-        firebase: FirestoreStub({}).firestore
+        firestore: firestoreStub
       }
     });
 
@@ -236,7 +265,7 @@ describe('FirestoreDriver', () => {
     driver.where([{ field: 'uid', operator: '==', value: 'a1b2c3' }], {
       where: () => {}
     });
-    expect(spy).toBeCalled();
+    expect(spy).toHaveBeenCalled();
     expect(() => {
       driver.where([{ field: 'uid', operator: '==', value: null }], {
         where: () => {}
@@ -252,7 +281,7 @@ describe('FirestoreDriver', () => {
         where: () => {}
       }
     );
-    expect(spy).toBeCalled();
+    expect(spy).toHaveBeenCalled();
     expect(() => {
       driver.where(
         { field: 'uid', operator: '==', value: null },
@@ -266,7 +295,7 @@ describe('FirestoreDriver', () => {
   it('should apply `order` using array', () => {
     const spy = jest.spyOn(FirestoreDriverMock.prototype, 'order');
     driver.order([{ updated_at: 'desc' }], { orderBy: () => {} });
-    expect(spy).toBeCalled();
+    expect(spy).toHaveBeenCalled();
     expect(() => {
       driver.order([{}], {
         orderBy: () => {
@@ -286,7 +315,7 @@ describe('FirestoreDriver', () => {
         }
       }
     );
-    expect(spy).toBeCalled();
+    expect(spy).toHaveBeenCalled();
   });
 
   it('should apply `limit`', () => {
@@ -294,14 +323,14 @@ describe('FirestoreDriver', () => {
       driver: 'firestore',
       collection: collection,
       connector: {
-        firestore: firestoreMock.firestore
+        firestore: firestoreStub
       }
     });
     const spy = jest.spyOn(FirestoreDriverMock.prototype, 'limit');
     driver.limit(54, {
       limit: () => {}
     });
-    expect(spy).toBeCalled();
+    expect(spy).toHaveBeenCalled();
   });
 
   it('should apply the limit on `find` method', () => {
@@ -329,7 +358,7 @@ describe('FirestoreDriver', () => {
     });
     const spy = jest.spyOn(FirestoreDriverMock.prototype, 'limit');
     driver.find({ size: 999 }, 'my-key').toPromise();
-    expect(spy).toBeCalled();
+    expect(spy).toHaveBeenCalled();
   });
 
   it('should fail on `sort`', () => {
@@ -340,7 +369,8 @@ describe('FirestoreDriver', () => {
         firestore: {
           collection: () => {}
         }
-      }
+      },
+      chain: { a: 123 }
     });
 
     expect(() => {
@@ -396,7 +426,7 @@ describe('FirestoreDriver', () => {
       }
     });
     driver_.set('a1b2c3', { lol: 123 }).toPromise();
-    expect(spy).toBeCalled();
+    expect(spy).toHaveBeenCalled();
   });
 
   it('should fail on `set`', () => {

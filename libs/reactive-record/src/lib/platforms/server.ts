@@ -205,6 +205,7 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   private driverInit(options: Options) {
+    if (!options.chain) options.chain = {};
     this._driver = options.driver || RR_DRIVER;
     this._drivers = {
       firestore: new FirestoreDriver({
