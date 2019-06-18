@@ -521,7 +521,8 @@
           "builder": "@nrwl/builders:jest",
           "options": {
             "jestConfig": "libs/core/jest.config.js",
-            "tsConfig": "libs/core/tsconfig.spec.json"
+            "tsConfig": "libs/core/tsconfig.spec.json",
+            "setupFile": "libs/core/src/test-setup.ts"
           }
         }
       },
