@@ -147,12 +147,7 @@ export class PlatformBrowser extends ReactiveRecord {
           super.log().danger()(
             `${key} [call] there is a cached response with time to live`
           );
-          this.dispatch(
-            observer,
-            this.shouldTransformResponse(chain, evaluation.cache)(
-              evaluation.cache as T
-            )
-          );
+          this.dispatch(observer, evaluation.cache, chain);
 
           observer.complete();
         }
@@ -229,7 +224,7 @@ export class PlatformBrowser extends ReactiveRecord {
     if (useCache && !isEmpty(cache)) {
       super.log().success()(`${key} [should] return response from cache`);
       const response = transformResponse(cache);
-      this.dispatch(observer, response);
+      this.dispatch(observer, response, chain);
     }
   }
 
@@ -238,7 +233,7 @@ export class PlatformBrowser extends ReactiveRecord {
     chain: Chain,
     key: string,
     network: Response & { ttl?: number },
-    observer = { next: () => {}, complete: () => {} }
+    observer = { next: data => {}, complete: () => {} }
   ) {
     const transformResponse: any = this.shouldTransformResponse(chain, network);
     const transformCache: any =
@@ -256,7 +251,7 @@ export class PlatformBrowser extends ReactiveRecord {
     // should return response immediately
     if (useNetwork === true && useCache === false) {
       super.log().success()(`${key} [set] return response from network`);
-      this.dispatch(observer, transformResponse(network));
+      this.dispatch(observer, network, chain);
     }
 
     let cache: Response & { ttl?: number } = {};
@@ -303,7 +298,7 @@ export class PlatformBrowser extends ReactiveRecord {
         super.log().danger()(
           `${key} [set] return response from network [cache outdated]`
         );
-        this.dispatch(observer, transformResponse(network));
+        this.dispatch(observer, network, chain);
       }
 
       if (ttl > 0) {
@@ -367,8 +362,9 @@ export class PlatformBrowser extends ReactiveRecord {
     );
   }
 
-  protected dispatch(observer = { next: data => {} }, data) {
-    observer.next(data);
-    Config.store.dispatch.next(clearNetworkResponse(data));
+  protected dispatch(observer = { next: data => {} }, data, chain) {
+    const transformResponse: any = this.shouldTransformResponse(chain, data);
+    observer.next(transformResponse(data));
+    Config.store.dispatch.next(data);
   }
 }
