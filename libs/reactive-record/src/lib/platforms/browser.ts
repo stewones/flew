@@ -357,7 +357,7 @@ export class PlatformBrowser extends ReactiveRecord {
         transformCache(transformResponse(clearNetworkResponse(network)))
       ) &&
       //
-      // a custom diff fn
+      // a custom diff fn passed via chaining
       diffFn(cache, network)
     );
   }
