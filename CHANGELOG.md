@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.2](https://github.com/stewwan/firetask/compare/v0.2.1...v0.2.2) (2019-06-21)
+
+
+### Bug Fixes
+
+* edge case on deploy script and add travis to the newer packages ([c40a31e](https://github.com/stewwan/firetask/commit/c40a31e))
+
+
+
 ### [0.2.1](https://github.com/stewwan/firetask/compare/v0.2.0...v0.2.1) (2019-06-21)
 
 
