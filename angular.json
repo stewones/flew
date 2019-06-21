@@ -531,6 +531,47 @@
           "styleext": "scss"
         }
       }
+    },
+    "state": {
+      "root": "libs/state",
+      "sourceRoot": "libs/state/src",
+      "projectType": "library",
+      "prefix": "ft",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/state/tsconfig.lib.json",
+            "project": "libs/state/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/state/tsconfig.lib.json",
+              "libs/state/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/state/jest.config.js",
+            "tsConfig": "libs/state/tsconfig.spec.json",
+            "setupFile": "libs/state/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {

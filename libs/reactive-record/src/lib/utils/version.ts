@@ -1,11 +1,4 @@
 export class Version {
-  /**
-   * @static
-   * @param {(number|string)} num
-   * @param {boolean} [full=false]
-   * @returns
-   * @memberof Version
-   */
   public static get(num: number | string, full: boolean = false) {
     const version = num ? num.toString() : '0000';
     return (

@@ -20,6 +20,12 @@
     "angular": {
       "tags": []
     },
+    "core": {
+      "tags": []
+    },
+    "state": {
+      "tags": []
+    },
     "rr-demo": {
       "tags": []
     },
@@ -30,9 +36,6 @@
       "tags": []
     },
     "rr-playground-e2e": {
-      "tags": []
-    },
-    "core": {
       "tags": []
     }
   }

@@ -8,9 +8,6 @@ import { Options } from './options';
 
 /**
  * Public RR Api
- *
- * @export
- * @interface Api
  */
 export interface ReactiveApi {
   //
