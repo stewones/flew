@@ -223,8 +223,7 @@ export class PlatformBrowser extends ReactiveRecord {
     // return cached response immediately to view
     if (useCache && !isEmpty(cache)) {
       super.log().success()(`${key} [should] return response from cache`);
-      const response = transformResponse(cache);
-      this.dispatch(observer, response, chain);
+      this.dispatch(observer, cache, chain);
     }
   }
 
