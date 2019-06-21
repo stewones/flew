@@ -4,13 +4,12 @@ import 'firebase/database';
 import * as Firebase from 'firebase/app';
 import {
   FirebaseConnector,
-  FirestoreConnector,
-  Version,
-  storageConfig
+  FirestoreConnector
 } from '@firetask/reactive-record';
 
 import { Storage } from '@ionic/storage';
 import { Config } from '@firetask/reactive-record';
+import { storageConfig } from '@firetask/core';
 import { firebaseConfig } from './firebase.config';
 
 // This file can be replaced during build by using the `fileReplacements` array.
@@ -35,7 +34,6 @@ Config.options = {
   },
 
   // extra options
-  version: Version.get(appVersion),
   storage: new Storage(storageConfig())
 };
 
