@@ -48,7 +48,7 @@
       "root": "libs/ionic",
       "sourceRoot": "libs/ionic/src",
       "projectType": "library",
-      "prefix": "firetask",
+      "prefix": "firebasetask",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -130,7 +130,7 @@
       "root": "apps/rr/demo/",
       "sourceRoot": "apps/rr/demo/src",
       "projectType": "application",
-      "prefix": "firetask",
+      "prefix": "firebasetask",
       "schematics": {
         "@nrwl/schematics:component": {
           "style": "scss"
@@ -495,7 +495,7 @@
       "root": "libs/core",
       "sourceRoot": "libs/core/src",
       "projectType": "library",
-      "prefix": "firetask",
+      "prefix": "firebasetask",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -564,6 +564,47 @@
             "jestConfig": "libs/state/jest.config.js",
             "tsConfig": "libs/state/tsconfig.spec.json",
             "setupFile": "libs/state/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "firebase": {
+      "root": "libs/firebase",
+      "sourceRoot": "libs/firebase/src",
+      "projectType": "library",
+      "prefix": "ft",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/firebase/tsconfig.lib.json",
+            "project": "libs/firebase/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/firebase/tsconfig.lib.json",
+              "libs/firebase/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/firebase/jest.config.js",
+            "tsConfig": "libs/firebase/tsconfig.spec.json",
+            "setupFile": "libs/firebase/src/test-setup.ts"
           }
         }
       },

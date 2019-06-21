@@ -37,6 +37,9 @@
     },
     "rr-playground-e2e": {
       "tags": []
+    },
+    "fire": {
+      "tags": []
     }
   }
 }

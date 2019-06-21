@@ -1,14 +1,4 @@
-import 'firebase/firestore';
-import 'firebase/database';
-import 'firebase/auth';
-import * as Firebase from 'firebase/app';
-import {
-  Config,
-  FirebaseConnector,
-  FirestoreConnector,
-  Options
-} from '@firetask/reactive-record';
-import { storageConfig } from '@firetask/core';
+import { Config, Options } from '@firetask/reactive-record';
 
 import {
   NgModule,
@@ -16,43 +6,30 @@ import {
   Injectable,
   Inject
 } from '@angular/core';
-
-import { Storage } from '@ionic/storage';
-
 @Injectable()
-export class ReactiveAngular {
-  constructor(@Inject('Options') public options) {
+export class ReactiveAngularSetup {
+  constructor(@Inject('ReactiveAngularOptions') public options) {
     //
     // configure reactive record
     Config.options = {
       ...Config.options,
-      ...options,
-      ...{
-        storage: new Storage(storageConfig(options.dbName, options.dbStore))
-      },
-      ...{
-        connector: {
-          firebase: new FirebaseConnector(Firebase, options.firebaseConfig),
-          firestore: new FirestoreConnector(Firebase, options.firebaseConfig)
-        }
-      }
+      ...options
     };
   }
 }
-
 @NgModule()
 export class ReactiveModule {
   public static forRoot(options: Options = {}): ModuleWithProviders {
     return {
       ngModule: ReactiveModule,
       providers: [
-        ReactiveAngular,
+        ReactiveAngularSetup,
         {
-          provide: 'Options',
+          provide: 'ReactiveAngularOptions',
           useValue: options
         }
       ]
     };
   }
-  constructor(private angular: ReactiveAngular) {}
+  constructor(private angular: ReactiveAngularSetup) {}
 }

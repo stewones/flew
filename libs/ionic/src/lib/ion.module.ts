@@ -21,11 +21,10 @@ export interface ReactiveIonicOptions {
 }
 
 @Injectable()
-export class ReactiveIonic {
-  constructor(@Inject('Options') public options) {
+export class ReactiveIonicSetup {
+  constructor(@Inject('ReactiveIonicOptions') public options) {
     Config.options = {
       ...Config.options,
-      ...options,
       ...{
         storage: new Storage(storageConfig(options.dbName, options.dbStore))
       }
@@ -46,14 +45,14 @@ export class ReactiveIonicModule {
       ngModule: ReactiveIonicModule,
       providers: [
         Ui,
-        ReactiveIonic,
+        ReactiveIonicSetup,
         {
-          provide: 'Options',
+          provide: 'ReactiveIonicOptions',
           useValue: options
         },
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
       ]
     };
   }
-  constructor(private ionic: ReactiveIonic) {}
+  constructor(private ionic: ReactiveIonicSetup) {}
 }

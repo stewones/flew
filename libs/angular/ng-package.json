@@ -6,7 +6,6 @@
     "entryFile": "src/index.ts",
     "umdModuleIds": {
       "lodash": "_",
-      "firebase/app": "firebase/app",
       "@firetask/reactive-record": "@firetask/reactive-record",
       "@firetask/core": "@firetask/core"
     }
