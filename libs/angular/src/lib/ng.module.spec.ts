@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ReactiveModule } from './module';
+import { ReactiveModule } from './ng.module';
 
 describe(`ReactiveModule`, () => {
   beforeEach(() => {

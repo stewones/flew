@@ -8,6 +8,7 @@ import {
   FirestoreConnector,
   Options
 } from '@firetask/reactive-record';
+import { storageConfig } from '@firetask/core';
 
 import {
   NgModule,
@@ -15,18 +16,16 @@ import {
   Injectable,
   Inject
 } from '@angular/core';
-import { Store } from '@ngxs/store';
-import { ReactiveResponseSync, ReactiveResponseReset } from './store';
 
 import { Storage } from '@ionic/storage';
-import { storageConfig } from './storage';
 
 @Injectable()
-export class ReactiveBrowser {
-  constructor(@Inject('Options') public options, public store: Store) {
+export class ReactiveAngular {
+  constructor(@Inject('Options') public options) {
     //
     // configure reactive record
     Config.options = {
+      ...Config.options,
       ...options,
       ...{
         storage: new Storage(storageConfig(options.dbName, options.dbStore))
@@ -38,15 +37,6 @@ export class ReactiveBrowser {
         }
       }
     };
-
-    //
-    // configure store
-    Config.store.dispatch.subscribe(r =>
-      store.dispatch(new ReactiveResponseSync(r))
-    );
-    Config.store.reset.subscribe(() =>
-      store.dispatch(new ReactiveResponseReset())
-    );
   }
 }
 
@@ -56,8 +46,7 @@ export class ReactiveModule {
     return {
       ngModule: ReactiveModule,
       providers: [
-        Store,
-        ReactiveBrowser,
+        ReactiveAngular,
         {
           provide: 'Options',
           useValue: options
@@ -65,5 +54,5 @@ export class ReactiveModule {
       ]
     };
   }
-  constructor(public browser: ReactiveBrowser) {}
+  constructor(private angular: ReactiveAngular) {}
 }
