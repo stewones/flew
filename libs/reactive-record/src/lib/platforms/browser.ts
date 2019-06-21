@@ -1,7 +1,7 @@
 // tslint:disable
 import { isEmpty, isEqual, merge, get, isFunction } from 'lodash';
 import { Observable, from, of, merge as merge$ } from 'rxjs';
-import { map, switchMap, filter, catchError } from 'rxjs/operators';
+import { map, switchMap, filter, catchError, tap } from 'rxjs/operators';
 import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { ReactiveRecord } from './server';
@@ -102,16 +102,17 @@ export class PlatformBrowser extends ReactiveRecord {
     // get attributes
     const key = super.createKey(verb, path, payload);
     const chain = super.cloneChain();
-
-    //
-    // re-init so we can have access to stuff like `storage`
-    super.init({
-      driver: super.getDriver()
-    });
+    const driver = super.getDriver();
 
     //
     // reset chain for subsequent calls
     super.reset();
+
+    //
+    // re-init so we can have access to stuff like `storage`
+    super.init({
+      driver: driver
+    });
 
     //
     // request
@@ -130,10 +131,8 @@ export class PlatformBrowser extends ReactiveRecord {
     return of(evaluation).pipe(
       filter(evaluation => evaluation.now === true),
       switchMap(() =>
-        super.call<T>(verb, path, payload, chain, key).pipe(
-          map(response => {
-            this.setCache(verb, chain, key, response, observer);
-          }),
+        from(super.call<T>(verb, path, payload, chain, key)).pipe(
+          tap(response => this.setCache(verb, chain, key, response, observer)),
           catchError(err => observer.error(err))
         )
       )

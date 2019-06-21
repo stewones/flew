@@ -33,7 +33,7 @@ export class FirebaseDriver implements ReactiveDriver {
     return this.logger;
   }
 
-  public find(chain: Chain, key: string): Observable<Response> {
+  public find<T>(chain: Chain, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<any>) => {
       //
       // run exceptions
@@ -43,7 +43,7 @@ export class FirebaseDriver implements ReactiveDriver {
       // define adapter
       const path = `${this.collection}/${chain.ref || ''}`;
 
-      let firebase: any = this.connector.ref(path);
+      let firebase: any = this.connector.database().ref(path);
 
       //
       // @todo add complete api
@@ -90,7 +90,7 @@ export class FirebaseDriver implements ReactiveDriver {
 
           //
           // success callback
-          observer.next(response);
+          observer.next(response as T);
           observer.complete();
         },
         err => {
@@ -103,79 +103,70 @@ export class FirebaseDriver implements ReactiveDriver {
     });
   }
 
-  public findOne(chain: Chain, key: string): Observable<Response> {
-    return this.find(chain, key).pipe(
+  public findOne<T>(chain: Chain, key: string): Observable<T> {
+    return this.find<T>(chain, key).pipe(
       map((r: Response) => {
         const data = get(r, 'data[0]');
-        const response: Response = <Response>{
+        const response: Response = {
           data: data,
           key: r.key,
           collection: this.collection,
           driver: this._driver,
           response: r.response
         };
-        return response;
+        return response as T;
       })
     );
   }
 
-  public on(
-    chain: Chain,
-    onSuccess: (response: Response) => any = (response: Response) => {},
-    onError: (response: any) => any = (response: any) => {}
-  ): any {
-    //
-    // run exceptions
-    this.exceptions();
+  public on<T>(chain: Chain, key: string): Observable<T> {
+    return new Observable(observer => {
+      //
+      // run exceptions
+      this.exceptions();
 
-    //
-    // network handle
-    const transformResponse: any =
-      chain.transformResponse && typeof chain.transformResponse === 'function'
-        ? chain.transformResponse
-        : (data: Response) => data;
+      //
+      // define adapter
+      const path = `${this.collection}/${chain.ref || ''}`;
+      const firebase: any = this.connector.database().ref(path);
 
-    //
-    // define adapter
-    const path = `${this.collection}/${chain.ref || ''}`;
-    const firebase: any = this.connector.ref(path);
+      //
+      // @todo add complete api
+      // https://firebase.google.com/docs/reference/js/firebase.database.Query
 
-    //
-    // @todo add complete api
-    // https://firebase.google.com/docs/reference/js/firebase.database.Query
+      // //
+      // // set where
+      // firestore = this.where(request.query, firestore);
 
-    // //
-    // // set where
-    // firestore = this.where(request.query, firestore);
+      // //
+      // // set order
+      // firestore = this.order(request.sort, firestore);
 
-    // //
-    // // set order
-    // firestore = this.order(request.sort, firestore);
+      //
+      // set limit
+      // if (request.size) firestore = this.limit(request.size, firestore);
 
-    //
-    // set limit
-    // if (request.size) firestore = this.limit(request.size, firestore);
-
-    //
-    // fire in the hole
-    return firebase.on(
-      'value',
-      (snapshot: any) => {
-        const response: Response = clearNetworkResponse({
-          data: snapshot.val(),
-          key: false,
-          collection: this.collection,
-          driver: this._driver,
-          response: {
-            empty: !snapshot.exists(),
-            size: snapshot.numChildren()
-          }
-        });
-        //
-        // callback
-        onSuccess(transformResponse(response));
-      },
-      onError
-    );
+      //
+      // fire in the hole
+      firebase.on(
+        'value',
+        (snapshot: any) => {
+          const response: Response = clearNetworkResponse({
+            data: snapshot.val(),
+            key: key,
+            collection: this.collection,
+            driver: this._driver,
+            response: {
+              empty: !snapshot.exists(),
+              size: snapshot.numChildren()
+            }
+          });
+          //
+          // callback
+          observer.next(response as T);
+        },
+        err => observer.error(err)
+      );
+    });
   }
 }
