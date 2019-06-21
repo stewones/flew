@@ -23,12 +23,9 @@ export interface ReactiveIonicOptions {
 @Injectable()
 export class ReactiveIonicSetup {
   constructor(@Inject('ReactiveIonicOptions') public options) {
-    Config.options = {
-      ...Config.options,
-      ...{
-        storage: new Storage(storageConfig(options.dbName, options.dbStore))
-      }
-    };
+    Config.options.storage = new Storage(
+      storageConfig(options.dbName, options.dbStore)
+    );
   }
 }
 

@@ -23,14 +23,9 @@ export interface ReactiveFirebaseOptions {
 @Injectable()
 export class ReactiveFirebaseSetup {
   constructor(@Inject('ReactiveFirebaseOptions') public options) {
-    Config.options = {
-      ...Config.options,
-      ...{
-        connector: {
-          firebase: new FirebaseConnector(Firebase, options.config),
-          firestore: new FirestoreConnector(Firebase, options.config)
-        }
-      }
+    Config.options.connector = {
+      firebase: new FirebaseConnector(Firebase, options.config),
+      firestore: new FirestoreConnector(Firebase, options.config)
     };
   }
 }

@@ -9,12 +9,9 @@ import {
 @Injectable()
 export class ReactiveAngularSetup {
   constructor(@Inject('ReactiveAngularOptions') public options) {
-    //
-    // configure reactive record
-    Config.options = {
-      ...Config.options,
-      ...options
-    };
+    for (const k in options) {
+      Config.options[k] = options[k];
+    }
   }
 }
 @NgModule()
