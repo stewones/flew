@@ -1,1 +1,2 @@
-export * from './lib/utils/guid';
+export * from './lib/guid';
+export * from './lib/storage';
