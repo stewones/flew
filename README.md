@@ -13,6 +13,10 @@
 | **State**           | [`@firetask/state`](https://www.npmjs.com/package/@firetask/state)                     | [![version](https://img.shields.io/npm/v/@firetask/angular/latest.svg)](https://www.npmjs.com/package/@firetask/state)                   |      [`README.md`](libs/state/README.md)      |
 | **Firebase**        | [`@firetask/ionic`](https://www.npmjs.com/package/@firetask/firebase)                  | [![version](https://img.shields.io/npm/v/@firetask/angular/latest.svg)](https://www.npmjs.com/package/@firetask/firebase)                |    [`README.md`](libs/firebase/README.md)     |
 
+## Changelog
+
+Yes we have a [`changelog`](/CHANGELOG.md) 🍭
+
 ## Docs
 
 Coming soon
