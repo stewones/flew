@@ -1,1 +1,8 @@
-export const LIBS = ['core', 'angular', 'ionic', 'reactive-record'];
+export const LIBS = [
+  'angular',
+  'core',
+  'firebase',
+  'ionic',
+  'state',
+  'reactive-record'
+];
