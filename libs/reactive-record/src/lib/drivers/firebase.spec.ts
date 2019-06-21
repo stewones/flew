@@ -15,55 +15,59 @@ class FirebaseDriverMock extends FirebaseDriver {
 }
 
 export const firebaseStub = {
-  ref: data => {
+  database: () => {
     return {
-      on: (
-        type = 'value',
-        callback = (snapshot: any) => {
-          return of({
-            data: [{ a: 1 }, { b: 2 }, { c: 3 }],
-            key: 'mocked-key',
-            collection: 'mocked-collection',
-            driver: 'mocked-driver',
-            response: {}
-          });
-        },
-        error = (err: any) => {
-          return throwError(err);
-        }
-      ) => {
-        callback({
-          key: 'firebase-key',
-          val: () => {
-            return { a: 1, b: 2, c: 3 };
+      ref: data => {
+        return {
+          on: (
+            type = 'value',
+            callback = (snapshot: any) => {
+              return of({
+                data: [{ a: 1 }, { b: 2 }, { c: 3 }],
+                key: 'mocked-key',
+                collection: 'mocked-collection',
+                driver: 'mocked-driver',
+                response: {}
+              });
+            },
+            error = (err: any) => {
+              return throwError(err);
+            }
+          ) => {
+            callback({
+              key: 'firebase-key',
+              val: () => {
+                return { a: 1, b: 2, c: 3 };
+              },
+              exists: () => true,
+              numChildren: () => 1
+            });
+            // error('zzz');
           },
-          exists: () => true,
-          numChildren: () => 1
-        });
-        // error('zzz');
-      },
-      once: (
-        type = 'value',
-        callback = (snapshot: any) => {
-          return of({
-            data: [{ a: 1 }, { b: 2 }, { c: 3 }],
-            key: 'mocked-key',
-            collection: 'mocked-collection',
-            driver: 'mocked-driver',
-            response: {}
-          });
-        },
-        error = (err: any) => {
-          return throwError(err);
-        }
-      ) => {
-        callback({
-          key: 'firebase-key',
-          toJSON: () => {
-            return { a: 1, b: 2, c: 3 };
+          once: (
+            type = 'value',
+            callback = (snapshot: any) => {
+              return of({
+                data: [{ a: 1 }, { b: 2 }, { c: 3 }],
+                key: 'mocked-key',
+                collection: 'mocked-collection',
+                driver: 'mocked-driver',
+                response: {}
+              });
+            },
+            error = (err: any) => {
+              return throwError(err);
+            }
+          ) => {
+            callback({
+              key: 'firebase-key',
+              toJSON: () => {
+                return { a: 1, b: 2, c: 3 };
+              }
+            });
+            // error('zzz');
           }
-        });
-        // error('zzz');
+        };
       }
     };
   }
@@ -102,9 +106,9 @@ describe('FirebaseDriver', () => {
 
   it('should implement `on` method', () => {
     const spy = jest.spyOn(FirebaseDriver.prototype, 'on');
-    driver.on({});
-    driver.on({}, r => {}, err => {});
-    driver.on({ transformResponse: r => r.data }, r => {}, err => {});
+    driver.on({ transformResponse: r => r.data }, 'some-key');
+    driver.on({ transformResponse: r => r.data }, 'some-key');
+    driver.on({ transformResponse: r => r.data }, 'some-key');
 
     expect(spy).toHaveBeenCalledTimes(3);
   });

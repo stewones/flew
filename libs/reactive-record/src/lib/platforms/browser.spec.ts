@@ -40,8 +40,8 @@ class PlatformBrowserMock extends PlatformBrowser {
     return super.setCache(verb, chain, key, network, observer);
   }
 
-  public dispatch(observer = { next: data => {} }, data) {
-    return super.dispatch(observer, data);
+  public dispatch(observer = { next: data => {} }, data, chain) {
+    return super.dispatch(observer, data, chain);
   }
 }
 

@@ -8,5 +8,8 @@
     "@firetask/reactive-record": "^0.1.5",
     "@firetask/core": "^0.1.5",
     "firebase": "^5.11.1"
+  },
+  "dependencies": {
+    "@firetask/reactive-record": "^0.1.5"
   }
 }
