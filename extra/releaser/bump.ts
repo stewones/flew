@@ -49,9 +49,12 @@ export function bumpNumber(num: string, target: SemanticTarget) {
   switch (target) {
     case 'major':
       major += 1;
+      minor = 0;
+      patch = 0;
       break;
     case 'minor':
       minor += 1;
+      patch = 0;
       break;
     case 'patch':
       patch += 1;
