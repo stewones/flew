@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/stewwan/firetask/compare/v0.1.5...v0.2.0) (2019-06-21)
+
+
+### Bug Fixes
+
+* angular package, makes it more independent ([7310ae5](https://github.com/stewwan/firetask/commit/7310ae5))
+* **rr:** firebase specs ([2a0c797](https://github.com/stewwan/firetask/commit/2a0c797))
+* **rr:** move storage helper to the core package ([23c0b78](https://github.com/stewwan/firetask/commit/23c0b78))
+* **rr:** update demo app to use latest packages ([0bc1b58](https://github.com/stewwan/firetask/commit/0bc1b58))
+* **rr:** verb `on` for firebase should return an observable ([d2fa134](https://github.com/stewwan/firetask/commit/d2fa134))
+* **rr:** was transforming response twice ([b27bfd6](https://github.com/stewwan/firetask/commit/b27bfd6))
+* bump tool ([a587137](https://github.com/stewwan/firetask/commit/a587137))
+* ionic package ([a5e75be](https://github.com/stewwan/firetask/commit/a5e75be))
+
+
+### Features
+
+* add new lib firebase ([5a24461](https://github.com/stewwan/firetask/commit/5a24461))
+* add state package ([256ad1d](https://github.com/stewwan/firetask/commit/256ad1d))
+
+
+
 ### [0.1.5](https://github.com/stewwan/firetask/compare/v0.1.4...v0.1.5) (2019-06-19)
 
 
