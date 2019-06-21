@@ -1,10 +1,13 @@
 {
-	"name": "@firetask/ionic",
-	"version": "0.1.5",
-	"peerDependencies": {
-		"@angular/common": "^7.2.0",
-		"@angular/core": "^7.2.0",
-		"@angular/router": "^7.2.8",
-		"@ionic/angular": "^4.4.0"
-	}
+  "name": "@firetask/ionic",
+  "version": "0.1.5",
+  "peerDependencies": {
+    "@angular/common": "^7.2.0",
+    "@angular/core": "^7.2.0",
+    "@angular/router": "^7.2.8",
+    "@ionic/angular": "^4.4.0",
+    "@ionic/storage": "^2.2.0",
+    "@firetask/core": "^0.1.5",
+    "@firetask/reactive-record": "^0.1.5"
+  }
 }

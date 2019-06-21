@@ -1,2 +1,2 @@
-export * from './lib/services/ui.service';
-export * from './lib/modules/ion.module';
+export * from './lib/ui.service';
+export * from './lib/ion.module';

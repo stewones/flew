@@ -4,7 +4,10 @@
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
-      "@ionic/angular": "@ionic/angular"
+      "@ionic/angular": "@ionic/angular",
+      "@ionic/storage": "@ionic/storage",
+      "@firetask/core": "@firetask/core",
+      "@firetask/reactive-record": "@firetask/reactive-record"
     }
   }
 }
