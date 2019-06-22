@@ -140,6 +140,7 @@ export class ReactiveRecord implements ReactiveApi {
     delete options.useLog;
     delete options.useLogTrace;
     delete options.driver;
+
     merge(this, options);
 
     //
@@ -194,7 +195,7 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   private _reset(): void {
-    this.driver(RR_DRIVER);
+    // this.driver(RR_DRIVER);
     this.chain = {};
   }
 
@@ -206,7 +207,7 @@ export class ReactiveRecord implements ReactiveApi {
 
   private driverInit(options: Options) {
     if (!options.chain) options.chain = {};
-    this._driver = options.driver || RR_DRIVER;
+    this._driver = this._initial_options.driver || options.driver || RR_DRIVER;
     this._drivers = {
       firestore: new FirestoreDriver({
         ...{ logger: this.logger },
@@ -296,6 +297,7 @@ export class ReactiveRecord implements ReactiveApi {
       ...omit(chain, [
         'ttl',
         'key',
+        'transform',
         'transformCache',
         'transformResponse',
         'transformNetwork'
@@ -426,19 +428,30 @@ export class ReactiveRecord implements ReactiveApi {
   /**
    * Set a transform fn for the responses
    */
-  public transformResponse<T>(
+  public transform<T>(
     transformFn: (response: Response) => any
   ): ReactiveRecord {
     this.chain.transformResponse = transformFn;
     return this;
   }
 
-  //
-  // legacy method
+  /**
+   * @deprecated use just `transform` instead
+   */
+  public transformResponse<T>(
+    transformFn: (response: Response) => any
+  ): ReactiveRecord {
+    this.transform(transformFn);
+    return this;
+  }
+
+  /**
+   * @deprecated use just `transform` instead
+   */
   public transformNetwork<T>(
     transformFn: (response: Response) => any
   ): ReactiveRecord {
-    this.transformResponse(transformFn);
+    this.transform(transformFn);
     return this;
   }
 
@@ -459,7 +472,7 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   /**
-   * Set transform fn for cache
+   * @deprecated RR should not transform cache before saving it anymore
    */
   public transformCache<T>(
     transformFn: (response: Response) => any
