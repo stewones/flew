@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.5](https://github.com/stewwan/firetask/compare/v0.2.4...v0.2.5) (2019-06-22)
+
+
+### Bug Fixes
+
+* **rr:** browser needs to merge options ([cd7457e](https://github.com/stewwan/firetask/commit/cd7457e))
+* **rr:** driver initialization bug ([caebaa2](https://github.com/stewwan/firetask/commit/caebaa2))
+* **rr:** now we have just a single `transform` fn in the chain for better readability ([9ab568c](https://github.com/stewwan/firetask/commit/9ab568c))
+* **rr:** weird behaviors on browser platform when testing from a vue app ([cfe7b56](https://github.com/stewwan/firetask/commit/cfe7b56))
+
+
+
 ### [0.2.4](https://github.com/stewwan/firetask/compare/v0.2.3...v0.2.4) (2019-06-21)
 
 
