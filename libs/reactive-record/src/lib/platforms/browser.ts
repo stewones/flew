@@ -19,7 +19,7 @@ export class PlatformBrowser extends ReactiveRecord {
 
   constructor(options: Options) {
     super(options);
-    merge(this, options);
+    // merge(this, options);
 
     if (!this.storage && options.chain && options.chain.useCache)
       throw new Error('missing storage instance');
@@ -27,7 +27,7 @@ export class PlatformBrowser extends ReactiveRecord {
 
   public clearCache(): void {
     super.init({ driver: super.getDriver() });
-    this.storage.clear();
+    this.$storage().clear();
     Config.store.reset.next();
   }
 
@@ -178,7 +178,7 @@ export class PlatformBrowser extends ReactiveRecord {
           now: true
         });
 
-      const cache: Response & { ttl: number } | any = await this.storage.get(
+      const cache: Response & { ttl: number } | any = await this.$storage().get(
         key
       );
 
@@ -203,7 +203,9 @@ export class PlatformBrowser extends ReactiveRecord {
 
     if (useCache === false) return Promise.resolve();
 
-    const cache: Response & { ttl: number } | any = await this.storage.get(key);
+    const cache: Response & { ttl: number } | any = await this.$storage().get(
+      key
+    );
     const transformResponse: any = this.shouldTransformResponse(chain, cache);
     super.log().info()(
       `${key} [should] hasCache? ${!isEmpty(cache) ? true : false}`
@@ -255,7 +257,7 @@ export class PlatformBrowser extends ReactiveRecord {
     let cache: Response & { ttl?: number } = {};
 
     try {
-      cache = await this.storage.get(key);
+      cache = await this.$storage().get(key);
     } catch (err) {}
 
     super.log().info()(
@@ -290,15 +292,6 @@ export class PlatformBrowser extends ReactiveRecord {
       let ttl = chain.ttl || 0;
       const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
 
-      //
-      // return network response
-      if (useNetwork === true && useCache === true) {
-        super.log().danger()(
-          `${key} [set] return response from network [cache outdated]`
-        );
-        this.dispatch(observer, network, chain);
-      }
-
       if (ttl > 0) {
         ttl += seconds;
         network.ttl = ttl;
@@ -309,8 +302,17 @@ export class PlatformBrowser extends ReactiveRecord {
       );
 
       if (saveNetwork) {
-        this.storage.set(key, transformCache(clearNetworkResponse(network)));
+        this.$storage().set(key, transformCache(clearNetworkResponse(network)));
         super.log().warn()(`${key} [set] cache updated`);
+      }
+
+      //
+      // return network response
+      if (useNetwork === true && useCache === true) {
+        super.log().danger()(
+          `${key} [set] return response from network [cache outdated]`
+        );
+        this.dispatch(observer, network, chain);
       }
     }
     if (!['on'].includes(verb)) return observer.complete();
@@ -364,5 +366,17 @@ export class PlatformBrowser extends ReactiveRecord {
     const transformResponse: any = this.shouldTransformResponse(chain, data);
     observer.next(transformResponse(data));
     Config.store.dispatch.next(data);
+  }
+
+  protected $storage() {
+    const storage = !isEmpty(this.storage)
+      ? this.storage
+      : {
+          get: key => {},
+          set: (key, val) => {},
+          clear: () => {}
+        };
+
+    return storage;
   }
 }
