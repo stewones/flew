@@ -15,10 +15,8 @@ export interface ReactiveApi {
   driver(name?: string): ReactiveRecord; // firebase / firestore / http | [configurable]
   useNetwork(active: boolean): ReactiveRecord; // force the use of network call
   saveNetwork(active: boolean): ReactiveRecord; // as a cache
-  transformResponse(transformFn: (response: Response) => any): ReactiveRecord; // transform the network/cache response
   ttl(value: number): ReactiveRecord; // set a max time to cache
   useCache(active: boolean): ReactiveRecord; // when true the first response should be from the cache if exists
-  transformCache(transformFn: (response: Response) => any): ReactiveRecord; // transform the response from cache
   key(name: string): ReactiveRecord; // cache name
   query(by: { [key: string]: {} } | { [key: string]: {} }[]): ReactiveRecord; // firestore only - this is an object literal way of `where`
   where(
@@ -30,6 +28,7 @@ export interface ReactiveApi {
   size(value: number): ReactiveRecord; // firestore only
   ref(path: string): ReactiveRecord; // firebase only
   data(transform: boolean): ReactiveRecord;
+  transform(transformFn: (response: Response) => any): ReactiveRecord; // transform the network/cache response
   useLog(active: boolean): ReactiveRecord; // [configurable]
   useLogTrace(active: boolean): ReactiveRecord; // [configurable]
   diff(fn): ReactiveRecord;
@@ -76,4 +75,6 @@ export interface ReactiveApi {
   //
   // Legacy
   transformNetwork(transformFn: (response: Response) => any): ReactiveRecord; // scheduled to @deprecate. use `transformResponse` instead
+  transformCache(transformFn: (response: Response) => any): ReactiveRecord; // transform the response from cache
+  transformResponse(transformFn: (response: Response) => any): ReactiveRecord; // transform the network/cache response
 }
