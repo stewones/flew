@@ -19,7 +19,7 @@ export class PlatformBrowser extends ReactiveRecord {
 
   constructor(options: Options) {
     super(options);
-    // merge(this, options);
+    merge(this, options);
 
     if (!this.storage && options.chain && options.chain.useCache)
       throw new Error('missing storage instance');
@@ -36,7 +36,6 @@ export class PlatformBrowser extends ReactiveRecord {
       !isEmpty(Config.options) && Config.options.storage
         ? Config.options.storage
         : false;
-
     if (storage) {
       storage.forEach((value, key, index) => {
         if (value.collection === this.collection) {
