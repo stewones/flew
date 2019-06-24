@@ -1,10 +1,10 @@
 {
-  "name": "@firetask/state",
-  "version": "0.2.5",
-  "peerDependencies": {
-    "@angular/common": "^7.2.0",
-    "@angular/core": "^7.2.0",
-    "@ngxs/store": "^3.4.3",
-    "@firetask/reactive-record": "^0.2.0"
-  }
+	"name": "@firetask/state",
+	"version": "0.2.6",
+	"peerDependencies": {
+		"@angular/common": "^7.2.0",
+		"@angular/core": "^7.2.0",
+		"@ngxs/store": "^3.4.3",
+		"@firetask/reactive-record": "^0.2.0"
+	}
 }
