@@ -95,13 +95,13 @@ export class ReactiveRecord implements ReactiveApi {
   };
 
   constructor(options: Options) {
-    this._initial_options = options;
+    this._initial_options = { ...options };
   }
 
   public init(runtime: Options = {}) {
     //
     // settings that needs runtime evaluation
-    const options: Options = { ...this.cloneOptions(), ...runtime };
+    const options: Options & any = { ...this.cloneOptions(), ...runtime };
 
     if (!this.httpConfig.timeout) this.httpConfig.timeout = 60 * 1000;
     if (!this.httpConfig.baseURL) this.httpConfig.baseURL = options.baseURL;
@@ -115,6 +115,10 @@ export class ReactiveRecord implements ReactiveApi {
     // set use cache
     if (!options.chain) options.chain = {};
     options.chain.useCache = options.useCache === false ? false : true;
+
+    //
+    // set storage
+    if (options.storage) options._storage = options.storage;
 
     //
     // settings initialized once
@@ -136,10 +140,7 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // apply class options
-    delete options.useCache;
-    delete options.useLog;
-    delete options.useLogTrace;
-    delete options.driver;
+    this.clearOptions(options);
 
     merge(this, options);
 
@@ -152,6 +153,16 @@ export class ReactiveRecord implements ReactiveApi {
     this.log().success()(
       `Collection ${startCase(name)} initiated @ RR ${RR_VERSION}`
     );
+  }
+
+  protected clearOptions(options) {
+    const newOptions = { ...options };
+    delete newOptions.useCache;
+    delete newOptions.useLog;
+    delete newOptions.useLogTrace;
+    delete newOptions.driver;
+    delete newOptions.storage;
+    return newOptions;
   }
 
   public firebase() {
