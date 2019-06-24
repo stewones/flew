@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.6](https://github.com/stewwan/firetask/compare/v0.2.5...v0.2.6) (2019-06-24)
+
+
+### Bug Fixes
+
+* **rr:** tests ([31f6782](https://github.com/stewwan/firetask/commit/31f6782))
+
+
+### Features
+
+* **rr:** implement use case `cache true` with `network false` ([cf5ee17](https://github.com/stewwan/firetask/commit/cf5ee17))
+* **rr:** improve reactivity system ([dcf2bb7](https://github.com/stewwan/firetask/commit/dcf2bb7))
+
+
+
 ### [0.2.5](https://github.com/stewwan/firetask/compare/v0.2.4...v0.2.5) (2019-06-22)
 
 
