@@ -302,12 +302,13 @@ export class ReactiveRecord implements ReactiveApi {
     const payload = JSON.stringify({
       ...verb,
       ...body,
-      ...this.chain,
       ...{ path: path },
       ...{ driver: this._driver },
       ...omit(chain, [
         'ttl',
         'key',
+        'useCache',
+        'useNetwork',
         'transform',
         'transformCache',
         'transformResponse',

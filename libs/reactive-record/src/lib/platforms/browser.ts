@@ -301,16 +301,7 @@ export class PlatformBrowser extends ReactiveRecord {
       }`
     );
 
-    if (
-      this.isDifferent(
-        chain,
-        key,
-        cache,
-        network,
-        transformCache,
-        transformResponse
-      )
-    ) {
+    if (this.isDifferent(chain, key, cache, network)) {
       //
       // cache strategy
       let ttl = chain.ttl || 0;
@@ -345,18 +336,15 @@ export class PlatformBrowser extends ReactiveRecord {
     if (!['on'].includes(verb)) return observer.complete();
   }
 
-  private isDifferent(
-    chain,
-    key,
-    cache,
-    network,
-    transformCache,
-    transformResponse
-  ) {
+  private isDifferent(chain, key, cache, network) {
+    const _cache = cache && cache.data ? cache : { data: {} };
+    const _network = network && network.data ? network : { data: {} };
+
     const hasDiffFn = isFunction(chain.diff);
     const diffFn = hasDiffFn
       ? chain.diff
-      : (cache, network) => !isEqual(get(cache, 'data'), network.data);
+      : (c, n) =>
+          !isEqual(clearNetworkResponse(c).data, clearNetworkResponse(n).data);
 
     if (hasDiffFn) {
       super.log().danger()(
@@ -365,27 +353,18 @@ export class PlatformBrowser extends ReactiveRecord {
       if (super.log().enabled())
         console.log(
           `${key} [diff] deep data difference`,
-          deepDiff(get(cache, 'data'), network.data)
+          deepDiff(_cache.data, _network.data)
         );
     }
 
     return (
-      !isEqual(cache, network) &&
       !isEqual(
-        cache,
-        !isEmpty(network) && network.data ? transformResponse(network) : network
-      ) &&
-      !isEqual(
-        cache,
-        transformCache(transformResponse(clearNetworkResponse(network)))
-      ) &&
-      !isEqual(
-        !isEmpty(cache) && cache.data ? transformResponse(cache) : cache,
-        transformCache(transformResponse(clearNetworkResponse(network)))
+        clearNetworkResponse(_cache).data,
+        clearNetworkResponse(_network).data
       ) &&
       //
       // a custom diff fn passed via chaining
-      diffFn(cache, network)
+      diffFn(_cache, _network)
     );
   }
 

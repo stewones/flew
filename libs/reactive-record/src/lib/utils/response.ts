@@ -1,7 +1,7 @@
 import { omit } from 'lodash';
 
-export function clearNetworkResponse(network) {
-  return omit(network, [
+export function clearNetworkResponse(data) {
+  return omit(data, [
     'config',
     'request',
     'response.config',

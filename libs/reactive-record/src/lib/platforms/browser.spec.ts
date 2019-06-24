@@ -169,850 +169,850 @@ describe('Browser Platform', () => {
     expect(spy).toHaveBeenCalledTimes(2);
   });
 
-  it('should implement [post] verb', () => {
-    let lib_ = new PlatformBrowser({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {
-        http: { post: () => Promise.resolve([1, 2, 3]) }
-      },
-      storage: {
-        get: () => Promise.resolve({}),
-        set: () => Promise.resolve({})
-      } as any
-    });
-    const spy = jest.spyOn(PlatformBrowser.prototype, 'post');
-    lib_
-      .post()
-      .toPromise()
-      .then(r =>
-        expect(r).toEqual({
-          collection: 'foo-collection',
-          data: [1, 2, 3],
-          driver: 'http',
-          key:
-            'foo-collection://9bec985c576e8467c4b1986bda0e6e09fc421796c2e97c7ecb5112784ef4137f',
-          response: [1, 2, 3]
-        })
-      );
-    lib_.post('', { a: 1, b: 2, c: 3 }).toPromise();
-    expect(spy).toHaveBeenCalledTimes(2);
-  });
+  // it('should implement [post] verb', () => {
+  //   let lib_ = new PlatformBrowser({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {
+  //       http: { post: () => Promise.resolve([1, 2, 3]) }
+  //     },
+  //     storage: {
+  //       get: () => Promise.resolve({}),
+  //       set: () => Promise.resolve({})
+  //     } as any
+  //   });
+  //   const spy = jest.spyOn(PlatformBrowser.prototype, 'post');
+  //   lib_
+  //     .post()
+  //     .toPromise()
+  //     .then(r =>
+  //       expect(r).toEqual({
+  //         collection: 'foo-collection',
+  //         data: [1, 2, 3],
+  //         driver: 'http',
+  //         key:
+  //           'foo-collection://9bec985c576e8467c4b1986bda0e6e09fc421796c2e97c7ecb5112784ef4137f',
+  //         response: [1, 2, 3]
+  //       })
+  //     );
+  //   lib_.post('', { a: 1, b: 2, c: 3 }).toPromise();
+  //   expect(spy).toHaveBeenCalledTimes(2);
+  // });
 
-  it('should implement [patch] verb', () => {
-    let lib_ = new PlatformBrowser({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {
-        http: { patch: () => Promise.resolve([1, 2, 3]) }
-      },
-      storage: {
-        get: () => Promise.resolve({}),
-        set: () => Promise.resolve({})
-      } as any
-    });
-    const spy = jest.spyOn(PlatformBrowser.prototype, 'patch');
-    lib_
-      .patch()
-      .toPromise()
-      .then(r =>
-        expect(r).toEqual({
-          collection: 'foo-collection',
-          data: [1, 2, 3],
-          driver: 'http',
-          key:
-            'foo-collection://824cb3473e9415ed8136c7e97d9cb0027542fe1b78ea587cf9c1de22c666be03',
-          response: [1, 2, 3]
-        })
-      );
-    lib_.patch('', { a: 1, b: 2, c: 3 }).toPromise();
-    expect(spy).toHaveBeenCalledTimes(2);
-  });
+  // it('should implement [patch] verb', () => {
+  //   let lib_ = new PlatformBrowser({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {
+  //       http: { patch: () => Promise.resolve([1, 2, 3]) }
+  //     },
+  //     storage: {
+  //       get: () => Promise.resolve({}),
+  //       set: () => Promise.resolve({})
+  //     } as any
+  //   });
+  //   const spy = jest.spyOn(PlatformBrowser.prototype, 'patch');
+  //   lib_
+  //     .patch()
+  //     .toPromise()
+  //     .then(r =>
+  //       expect(r).toEqual({
+  //         collection: 'foo-collection',
+  //         data: [1, 2, 3],
+  //         driver: 'http',
+  //         key:
+  //           'foo-collection://824cb3473e9415ed8136c7e97d9cb0027542fe1b78ea587cf9c1de22c666be03',
+  //         response: [1, 2, 3]
+  //       })
+  //     );
+  //   lib_.patch('', { a: 1, b: 2, c: 3 }).toPromise();
+  //   expect(spy).toHaveBeenCalledTimes(2);
+  // });
 
-  it('should implement [find] verb', () => {
-    let lib_ = new PlatformBrowser({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {
-        firestore: {
-          where: () => {},
-          collection: () => {
-            return {
-              get: () =>
-                Promise.resolve([
-                  {
-                    data: () => {
-                      return { a: 1, b: 2, c: 3 };
-                    }
-                  }
-                ]),
-              where: () => {
-                return {
-                  where: () => {
-                    return {
-                      get: () =>
-                        Promise.resolve([
-                          {
-                            data: () => {
-                              return { a: 1, b: 2, c: 3 };
-                            }
-                          }
-                        ])
-                    };
-                  }
-                };
-              }
-            };
-          }
-        }
-      },
-      storage: {
-        get: () => Promise.resolve({}),
-        set: () => Promise.resolve({})
-      } as any
-    });
-    const spy = jest.spyOn(PlatformBrowser.prototype, 'find');
-    lib_
-      .find()
-      .toPromise()
-      .then(r =>
-        expect(r).toEqual({
-          collection: 'foo-collection',
-          data: [{ a: 1, b: 2, c: 3 }],
-          driver: 'firestore',
-          key:
-            'foo-collection://dd4bc65734b5835fbe48cec541fa70bea687d5b9874e08d9b0922b9aa1d792bb',
-          response: { empty: undefined, meta: undefined, size: undefined }
-        })
-      );
-    lib_.find().toPromise();
-    expect(spy).toHaveBeenCalledTimes(2);
-  });
+  // it('should implement [find] verb', () => {
+  //   let lib_ = new PlatformBrowser({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {
+  //       firestore: {
+  //         where: () => {},
+  //         collection: () => {
+  //           return {
+  //             get: () =>
+  //               Promise.resolve([
+  //                 {
+  //                   data: () => {
+  //                     return { a: 1, b: 2, c: 3 };
+  //                   }
+  //                 }
+  //               ]),
+  //             where: () => {
+  //               return {
+  //                 where: () => {
+  //                   return {
+  //                     get: () =>
+  //                       Promise.resolve([
+  //                         {
+  //                           data: () => {
+  //                             return { a: 1, b: 2, c: 3 };
+  //                           }
+  //                         }
+  //                       ])
+  //                   };
+  //                 }
+  //               };
+  //             }
+  //           };
+  //         }
+  //       }
+  //     },
+  //     storage: {
+  //       get: () => Promise.resolve({}),
+  //       set: () => Promise.resolve({})
+  //     } as any
+  //   });
+  //   const spy = jest.spyOn(PlatformBrowser.prototype, 'find');
+  //   lib_
+  //     .find()
+  //     .toPromise()
+  //     .then(r =>
+  //       expect(r).toEqual({
+  //         collection: 'foo-collection',
+  //         data: [{ a: 1, b: 2, c: 3 }],
+  //         driver: 'firestore',
+  //         key:
+  //           'foo-collection://dd4bc65734b5835fbe48cec541fa70bea687d5b9874e08d9b0922b9aa1d792bb',
+  //         response: { empty: undefined, meta: undefined, size: undefined }
+  //       })
+  //     );
+  //   lib_.find().toPromise();
+  //   expect(spy).toHaveBeenCalledTimes(2);
+  // });
 
-  it('should implement [findOne] verb', () => {
-    let lib_ = new PlatformBrowser({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {
-        firestore: {
-          where: () => {},
-          collection: () => {
-            return {
-              get: () =>
-                Promise.resolve([
-                  {
-                    data: () => {
-                      return { a: 1, b: 2, c: 3 };
-                    }
-                  }
-                ]),
-              where: () => {
-                return {
-                  where: () => {
-                    return {
-                      get: () =>
-                        Promise.resolve([
-                          {
-                            data: () => {
-                              return { a: 1, b: 2, c: 3 };
-                            }
-                          }
-                        ])
-                    };
-                  }
-                };
-              }
-            };
-          }
-        }
-      },
-      storage: {
-        get: () => Promise.resolve({}),
-        set: () => Promise.resolve({})
-      } as any
-    });
-    const spy = jest.spyOn(PlatformBrowser.prototype, 'findOne');
-    lib_
-      .findOne()
-      .toPromise()
-      .then(r =>
-        expect(r).toEqual({
-          collection: 'foo-collection',
-          data: { a: 1, b: 2, c: 3 },
-          driver: 'firestore',
-          key:
-            'foo-collection://2aff32a65583745d3ef90a7e6e1102ff4027bbc0f3a605e97018ce6a01d6623a',
-          response: { empty: undefined, meta: undefined, size: undefined }
-        })
-      );
-    lib_.findOne().toPromise();
-    expect(spy).toHaveBeenCalledTimes(2);
-  });
+  // it('should implement [findOne] verb', () => {
+  //   let lib_ = new PlatformBrowser({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {
+  //       firestore: {
+  //         where: () => {},
+  //         collection: () => {
+  //           return {
+  //             get: () =>
+  //               Promise.resolve([
+  //                 {
+  //                   data: () => {
+  //                     return { a: 1, b: 2, c: 3 };
+  //                   }
+  //                 }
+  //               ]),
+  //             where: () => {
+  //               return {
+  //                 where: () => {
+  //                   return {
+  //                     get: () =>
+  //                       Promise.resolve([
+  //                         {
+  //                           data: () => {
+  //                             return { a: 1, b: 2, c: 3 };
+  //                           }
+  //                         }
+  //                       ])
+  //                   };
+  //                 }
+  //               };
+  //             }
+  //           };
+  //         }
+  //       }
+  //     },
+  //     storage: {
+  //       get: () => Promise.resolve({}),
+  //       set: () => Promise.resolve({})
+  //     } as any
+  //   });
+  //   const spy = jest.spyOn(PlatformBrowser.prototype, 'findOne');
+  //   lib_
+  //     .findOne()
+  //     .toPromise()
+  //     .then(r =>
+  //       expect(r).toEqual({
+  //         collection: 'foo-collection',
+  //         data: { a: 1, b: 2, c: 3 },
+  //         driver: 'firestore',
+  //         key:
+  //           'foo-collection://2aff32a65583745d3ef90a7e6e1102ff4027bbc0f3a605e97018ce6a01d6623a',
+  //         response: { empty: undefined, meta: undefined, size: undefined }
+  //       })
+  //     );
+  //   lib_.findOne().toPromise();
+  //   expect(spy).toHaveBeenCalledTimes(2);
+  // });
 
-  it('should transform response', () => {
-    let lib_ = new PlatformBrowser({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {
-        firestore: {
-          where: () => {},
-          collection: () => {
-            return {
-              get: () =>
-                Promise.resolve([
-                  {
-                    data: () => {
-                      return { a: 1, b: 2, c: 3 };
-                    }
-                  }
-                ]),
-              where: () => {
-                return {
-                  where: () => {
-                    return {
-                      get: () =>
-                        Promise.resolve([
-                          {
-                            data: () => {
-                              return { a: 1, b: 2, c: 3 };
-                            }
-                          }
-                        ])
-                    };
-                  }
-                };
-              }
-            };
-          }
-        }
-      },
-      storage: {
-        get: () => Promise.resolve({}),
-        set: () => Promise.resolve({})
-      } as any
-    });
+  // it('should transform response', () => {
+  //   let lib_ = new PlatformBrowser({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {
+  //       firestore: {
+  //         where: () => {},
+  //         collection: () => {
+  //           return {
+  //             get: () =>
+  //               Promise.resolve([
+  //                 {
+  //                   data: () => {
+  //                     return { a: 1, b: 2, c: 3 };
+  //                   }
+  //                 }
+  //               ]),
+  //             where: () => {
+  //               return {
+  //                 where: () => {
+  //                   return {
+  //                     get: () =>
+  //                       Promise.resolve([
+  //                         {
+  //                           data: () => {
+  //                             return { a: 1, b: 2, c: 3 };
+  //                           }
+  //                         }
+  //                       ])
+  //                   };
+  //                 }
+  //               };
+  //             }
+  //           };
+  //         }
+  //       }
+  //     },
+  //     storage: {
+  //       get: () => Promise.resolve({}),
+  //       set: () => Promise.resolve({})
+  //     } as any
+  //   });
 
-    lib_
-      .transformResponse(r => r.data)
-      .findOne()
-      .toPromise()
-      .then(r => expect(r).toEqual({ a: 1, b: 2, c: 3 }));
-  });
+  //   lib_
+  //     .transformResponse(r => r.data)
+  //     .findOne()
+  //     .toPromise()
+  //     .then(r => expect(r).toEqual({ a: 1, b: 2, c: 3 }));
+  // });
 
-  it('should transform data', () => {
-    let lib_ = new PlatformBrowser({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {
-        firestore: {
-          where: () => {},
-          collection: () => {
-            return {
-              get: () =>
-                Promise.resolve([
-                  {
-                    data: () => {
-                      return { a: 1, b: 2, c: 3 };
-                    }
-                  }
-                ]),
-              where: () => {
-                return {
-                  where: () => {
-                    return {
-                      get: () =>
-                        Promise.resolve([
-                          {
-                            data: () => {
-                              return { a: 1, b: 2, c: 3 };
-                            }
-                          }
-                        ])
-                    };
-                  }
-                };
-              }
-            };
-          }
-        }
-      },
-      storage: {
-        get: () => Promise.resolve({}),
-        set: () => Promise.resolve({})
-      }
-    } as any);
+  // it('should transform data', () => {
+  //   let lib_ = new PlatformBrowser({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {
+  //       firestore: {
+  //         where: () => {},
+  //         collection: () => {
+  //           return {
+  //             get: () =>
+  //               Promise.resolve([
+  //                 {
+  //                   data: () => {
+  //                     return { a: 1, b: 2, c: 3 };
+  //                   }
+  //                 }
+  //               ]),
+  //             where: () => {
+  //               return {
+  //                 where: () => {
+  //                   return {
+  //                     get: () =>
+  //                       Promise.resolve([
+  //                         {
+  //                           data: () => {
+  //                             return { a: 1, b: 2, c: 3 };
+  //                           }
+  //                         }
+  //                       ])
+  //                   };
+  //                 }
+  //               };
+  //             }
+  //           };
+  //         }
+  //       }
+  //     },
+  //     storage: {
+  //       get: () => Promise.resolve({}),
+  //       set: () => Promise.resolve({})
+  //     }
+  //   } as any);
 
-    lib_
-      .data(true)
-      .findOne()
-      .toPromise()
-      .then(r => expect(r).toEqual({ a: 1, b: 2, c: 3 }));
-  });
+  //   lib_
+  //     .data(true)
+  //     .findOne()
+  //     .toPromise()
+  //     .then(r => expect(r).toEqual({ a: 1, b: 2, c: 3 }));
+  // });
 
-  it('should transform data from elasticsearch', () => {
-    let lib_ = new PlatformBrowser({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {
-        http: {
-          post: () =>
-            Promise.resolve({
-              data: {
-                hits: {
-                  hits: [
-                    {
-                      _source: { a: 1, b: 2, c: 3 }
-                    },
-                    {
-                      _source: { a: 4, b: 5, c: 6 }
-                    },
-                    {
-                      _source: { a: 7, b: 8, c: 9 }
-                    }
-                  ]
-                }
-              }
-            })
-        }
-      },
-      storage: {
-        get: () => Promise.resolve({}),
-        set: () => Promise.resolve({})
-      } as any
-    });
+  // it('should transform data from elasticsearch', () => {
+  //   let lib_ = new PlatformBrowser({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {
+  //       http: {
+  //         post: () =>
+  //           Promise.resolve({
+  //             data: {
+  //               hits: {
+  //                 hits: [
+  //                   {
+  //                     _source: { a: 1, b: 2, c: 3 }
+  //                   },
+  //                   {
+  //                     _source: { a: 4, b: 5, c: 6 }
+  //                   },
+  //                   {
+  //                     _source: { a: 7, b: 8, c: 9 }
+  //                   }
+  //                 ]
+  //               }
+  //             }
+  //           })
+  //       }
+  //     },
+  //     storage: {
+  //       get: () => Promise.resolve({}),
+  //       set: () => Promise.resolve({})
+  //     } as any
+  //   });
 
-    lib_
-      .data(true)
-      .post()
-      .toPromise()
-      .then(r =>
-        expect(r).toEqual([
-          { a: 1, b: 2, c: 3 },
-          { a: 4, b: 5, c: 6 },
-          { a: 7, b: 8, c: 9 }
-        ])
-      );
-  });
+  //   lib_
+  //     .data(true)
+  //     .post()
+  //     .toPromise()
+  //     .then(r =>
+  //       expect(r).toEqual([
+  //         { a: 1, b: 2, c: 3 },
+  //         { a: 4, b: 5, c: 6 },
+  //         { a: 7, b: 8, c: 9 }
+  //       ])
+  //     );
+  // });
 
-  it('should fail on network request', () => {
-    let lib_ = new PlatformBrowser({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {
-        http: {
-          post: () =>
-            Promise.reject({
-              message: 'network error'
-            })
-        }
-      },
-      storage: {
-        get: () => Promise.resolve({}),
-        set: () => Promise.resolve({})
-      } as any
-    });
+  // it('should fail on network request', () => {
+  //   let lib_ = new PlatformBrowser({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {
+  //       http: {
+  //         post: () =>
+  //           Promise.reject({
+  //             message: 'network error'
+  //           })
+  //       }
+  //     },
+  //     storage: {
+  //       get: () => Promise.resolve({}),
+  //       set: () => Promise.resolve({})
+  //     } as any
+  //   });
 
-    lib_
-      .data(true)
-      .post()
-      .toPromise()
-      .catch(err => expect(err).toEqual({ message: 'network error' }));
-  });
+  //   lib_
+  //     .data(true)
+  //     .post()
+  //     .toPromise()
+  //     .catch(err => expect(err).toEqual({ message: 'network error' }));
+  // });
 
-  it('should return response from cache when using ttl', () => {
-    let lib_ = new PlatformBrowserMock({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {
-        http: {
-          post: () =>
-            Promise.reject({
-              message: 'network error'
-            })
-        }
-      },
-      storage: {
-        get: () => Promise.resolve({}),
-        set: () => Promise.resolve({})
-      } as any
-    });
+  // it('should return response from cache when using ttl', () => {
+  //   let lib_ = new PlatformBrowserMock({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {
+  //       http: {
+  //         post: () =>
+  //           Promise.reject({
+  //             message: 'network error'
+  //           })
+  //       }
+  //     },
+  //     storage: {
+  //       get: () => Promise.resolve({}),
+  //       set: () => Promise.resolve({})
+  //     } as any
+  //   });
 
-    lib_.init({
-      logger: new Logger({
-        subject: new Subject(),
-        useLog: false,
-        useLogTrace: false
-      })
-    } as any);
+  //   lib_.init({
+  //     logger: new Logger({
+  //       subject: new Subject(),
+  //       useLog: false,
+  //       useLogTrace: false
+  //     })
+  //   } as any);
 
-    const observer = { next: () => {}, complete: () => {} };
-    const spyNext = jest.spyOn(observer, 'next');
-    const spyComplete = jest.spyOn(observer, 'complete');
+  //   const observer = { next: () => {}, complete: () => {} };
+  //   const spyNext = jest.spyOn(observer, 'next');
+  //   const spyComplete = jest.spyOn(observer, 'complete');
 
-    lib_
-      .ttl$(
-        {
-          now: false,
-          cache: { collection: 'foo-collection', data: { a: 1 }, key: 'a1' }
-        },
-        observer,
-        {},
-        'the-key'
-      )
-      .toPromise();
-    expect(spyNext).toHaveBeenCalledWith({
-      collection: 'foo-collection',
-      data: { a: 1 },
-      key: 'a1'
-    });
-    expect(spyComplete).toHaveBeenCalled();
-  });
+  //   lib_
+  //     .ttl$(
+  //       {
+  //         now: false,
+  //         cache: { collection: 'foo-collection', data: { a: 1 }, key: 'a1' }
+  //       },
+  //       observer,
+  //       {},
+  //       'the-key'
+  //     )
+  //     .toPromise();
+  //   expect(spyNext).toHaveBeenCalledWith({
+  //     collection: 'foo-collection',
+  //     data: { a: 1 },
+  //     key: 'a1'
+  //   });
+  //   expect(spyComplete).toHaveBeenCalled();
+  // });
 
-  it('should call network', () => {
-    let lib_ = new PlatformBrowserMock({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {
-        http: {
-          post: () =>
-            Promise.reject({
-              message: 'network error'
-            })
-        }
-      },
-      storage: {
-        get: () => Promise.resolve(),
-        set: () => Promise.resolve({})
-      } as any
-    });
+  // it('should call network', () => {
+  //   let lib_ = new PlatformBrowserMock({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {
+  //       http: {
+  //         post: () =>
+  //           Promise.reject({
+  //             message: 'network error'
+  //           })
+  //       }
+  //     },
+  //     storage: {
+  //       get: () => Promise.resolve(),
+  //       set: () => Promise.resolve({})
+  //     } as any
+  //   });
 
-    lib_
-      .shouldCallNetwork(
-        {
-          useCache: false
-        },
-        'the-key'
-      )
-      .then(r => expect(r).toEqual({ now: true }));
+  //   lib_
+  //     .shouldCallNetwork(
+  //       {
+  //         useCache: false
+  //       },
+  //       'the-key'
+  //     )
+  //     .then(r => expect(r).toEqual({ now: true }));
 
-    lib_
-      .shouldCallNetwork(
-        {
-          useNetwork: false
-        },
-        'the-key'
-      )
-      .then(r => expect(r).toEqual({ now: true }));
-  });
+  //   lib_
+  //     .shouldCallNetwork(
+  //       {
+  //         useNetwork: false
+  //       },
+  //       'the-key'
+  //     )
+  //     .then(r => expect(r).toEqual({ now: true }));
+  // });
 
-  it('should NOT return cache', () => {
-    let lib_ = new PlatformBrowserMock({
-        useLog: false,
-        baseURL: baseURL,
-        endpoint: '/',
-        collection: collection,
-        connector: {},
-        storage: {
-          get: () => Promise.resolve({}),
-          set: () => Promise.resolve({})
-        } as any
-      }),
-      observer,
-      spy;
+  // it('should NOT return cache', () => {
+  //   let lib_ = new PlatformBrowserMock({
+  //       useLog: false,
+  //       baseURL: baseURL,
+  //       endpoint: '/',
+  //       collection: collection,
+  //       connector: {},
+  //       storage: {
+  //         get: () => Promise.resolve({}),
+  //         set: () => Promise.resolve({})
+  //       } as any
+  //     }),
+  //     observer,
+  //     spy;
 
-    lib_.init({
-      logger: new Logger({
-        subject: new Subject(),
-        useLog: false,
-        useLogTrace: false
-      })
-    } as any);
+  //   lib_.init({
+  //     logger: new Logger({
+  //       subject: new Subject(),
+  //       useLog: false,
+  //       useLogTrace: false
+  //     })
+  //   } as any);
 
-    observer = { next: () => {}, complete: () => {} };
-    spy = jest.spyOn(observer, 'next');
+  //   observer = { next: () => {}, complete: () => {} };
+  //   spy = jest.spyOn(observer, 'next');
 
-    lib_
-      .shouldReturnCache(
-        {
-          useCache: false
-        },
-        'the-key',
-        observer
-      )
-      .then(_ => {
-        expect(spy).not.toHaveBeenCalled();
-      });
+  //   lib_
+  //     .shouldReturnCache(
+  //       {
+  //         useCache: false
+  //       },
+  //       'the-key',
+  //       observer
+  //     )
+  //     .then(_ => {
+  //       expect(spy).not.toHaveBeenCalled();
+  //     });
 
-    lib_
-      .shouldReturnCache(
-        {
-          useCache: true
-        },
-        'the-key',
-        observer
-      )
-      .then(_ => {
-        expect(spy).not.toHaveBeenCalled();
-      });
+  //   lib_
+  //     .shouldReturnCache(
+  //       {
+  //         useCache: true
+  //       },
+  //       'the-key',
+  //       observer
+  //     )
+  //     .then(_ => {
+  //       expect(spy).not.toHaveBeenCalled();
+  //     });
 
-    lib_
-      .shouldReturnCache(
-        {
-          useCache: true
-        },
-        'the-key',
-        observer
-      )
-      .then(_ => {
-        expect(spy).not.toHaveBeenCalled();
-      });
+  //   lib_
+  //     .shouldReturnCache(
+  //       {
+  //         useCache: true
+  //       },
+  //       'the-key',
+  //       observer
+  //     )
+  //     .then(_ => {
+  //       expect(spy).not.toHaveBeenCalled();
+  //     });
 
-    lib_
-      .shouldReturnCache(
-        {
-          useCache: true,
-          transformResponse: r => r.data
-        },
-        'the-key',
-        observer
-      )
-      .then(_ => {
-        expect(spy).not.toHaveBeenCalled();
-      });
-  });
+  //   lib_
+  //     .shouldReturnCache(
+  //       {
+  //         useCache: true,
+  //         transformResponse: r => r.data
+  //       },
+  //       'the-key',
+  //       observer
+  //     )
+  //     .then(_ => {
+  //       expect(spy).not.toHaveBeenCalled();
+  //     });
+  // });
 
-  it('should return cache', () => {
-    let lib_ = new PlatformBrowserMock({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {},
-      storage: {
-        get: () =>
-          Promise.resolve({
-            collection: 'foo-collection',
-            data: { a: 1 },
-            key: 'a1',
-            ttl: 155726892352525
-          }),
-        set: () => Promise.resolve({})
-      } as any
-    });
+  // it('should return cache', () => {
+  //   let lib_ = new PlatformBrowserMock({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {},
+  //     storage: {
+  //       get: () =>
+  //         Promise.resolve({
+  //           collection: 'foo-collection',
+  //           data: { a: 1 },
+  //           key: 'a1',
+  //           ttl: 155726892352525
+  //         }),
+  //       set: () => Promise.resolve({})
+  //     } as any
+  //   });
 
-    lib_.init({
-      logger: new Logger({
-        subject: new Subject(),
-        useLog: false,
-        useLogTrace: false
-      })
-    } as any);
+  //   lib_.init({
+  //     logger: new Logger({
+  //       subject: new Subject(),
+  //       useLog: false,
+  //       useLogTrace: false
+  //     })
+  //   } as any);
 
-    const observer = {
-      next: () => {},
-      complete: () => {}
-    };
+  //   const observer = {
+  //     next: () => {},
+  //     complete: () => {}
+  //   };
 
-    const spyNext = jest.spyOn(observer, 'next');
+  //   const spyNext = jest.spyOn(observer, 'next');
 
-    lib_
-      .shouldReturnCache(
-        {
-          useCache: true
-        },
-        'a1',
-        observer
-      )
-      .then(r => {
-        expect(spyNext).toHaveBeenCalledWith({
-          collection: 'foo-collection',
-          data: { a: 1 },
-          key: 'a1',
-          ttl: 155726892352525
-        });
-      });
+  //   lib_
+  //     .shouldReturnCache(
+  //       {
+  //         useCache: true
+  //       },
+  //       'a1',
+  //       observer
+  //     )
+  //     .then(r => {
+  //       expect(spyNext).toHaveBeenCalledWith({
+  //         collection: 'foo-collection',
+  //         data: { a: 1 },
+  //         key: 'a1',
+  //         ttl: 155726892352525
+  //       });
+  //     });
 
-    lib_ = new PlatformBrowserMock({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {},
-      storage: {
-        get: () =>
-          Promise.resolve([
-            {
-              collection: 'foo-collection',
-              data: { a: 1 },
-              key: 'a1',
-              ttl: 155726892352525
-            }
-          ]),
-        set: () => Promise.resolve({})
-      } as any
-    });
+  //   lib_ = new PlatformBrowserMock({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {},
+  //     storage: {
+  //       get: () =>
+  //         Promise.resolve([
+  //           {
+  //             collection: 'foo-collection',
+  //             data: { a: 1 },
+  //             key: 'a1',
+  //             ttl: 155726892352525
+  //           }
+  //         ]),
+  //       set: () => Promise.resolve({})
+  //     } as any
+  //   });
 
-    lib_.init({
-      logger: new Logger({
-        subject: new Subject(),
-        useLog: false,
-        useLogTrace: false
-      })
-    } as any);
+  //   lib_.init({
+  //     logger: new Logger({
+  //       subject: new Subject(),
+  //       useLog: false,
+  //       useLogTrace: false
+  //     })
+  //   } as any);
 
-    const observer2 = {
-      next: () => {},
-      complete: () => {}
-    };
+  //   const observer2 = {
+  //     next: () => {},
+  //     complete: () => {}
+  //   };
 
-    const spyNext2 = jest.spyOn(observer2, 'next');
+  //   const spyNext2 = jest.spyOn(observer2, 'next');
 
-    lib_
-      .shouldReturnCache(
-        {
-          useCache: true
-        },
-        'a1',
-        observer2
-      )
-      .then(r => {
-        expect(spyNext2).toHaveBeenCalledWith([
-          {
-            collection: 'foo-collection',
-            data: { a: 1 },
-            key: 'a1',
-            ttl: 155726892352525
-          }
-        ]);
-      });
-  });
+  //   lib_
+  //     .shouldReturnCache(
+  //       {
+  //         useCache: true
+  //       },
+  //       'a1',
+  //       observer2
+  //     )
+  //     .then(r => {
+  //       expect(spyNext2).toHaveBeenCalledWith([
+  //         {
+  //           collection: 'foo-collection',
+  //           data: { a: 1 },
+  //           key: 'a1',
+  //           ttl: 155726892352525
+  //         }
+  //       ]);
+  //     });
+  // });
 
-  it('should NOT set cache when saveNetwork is false', () => {
-    let lib_ = new PlatformBrowserMock({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {},
-      storage: {
-        get: () => Promise.resolve({}),
-        set: () => Promise.resolve('saved')
-      } as any
-    });
+  // it('should NOT set cache when saveNetwork is false', () => {
+  //   let lib_ = new PlatformBrowserMock({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {},
+  //     storage: {
+  //       get: () => Promise.resolve({}),
+  //       set: () => Promise.resolve('saved')
+  //     } as any
+  //   });
 
-    lib_.init({
-      logger: new Logger({
-        subject: new Subject(),
-        useLog: false,
-        useLogTrace: false
-      })
-    } as any);
+  //   lib_.init({
+  //     logger: new Logger({
+  //       subject: new Subject(),
+  //       useLog: false,
+  //       useLogTrace: false
+  //     })
+  //   } as any);
 
-    const observer = {
-      next: () => {},
-      complete: () => {}
-    };
+  //   const observer = {
+  //     next: () => {},
+  //     complete: () => {}
+  //   };
 
-    lib_.setCache(
-      'find',
-      { saveNetwork: false },
-      'a1',
-      {} as Response,
-      observer
-    );
-    // @todo fix this
-    // .then(r => {
-    //   // expect(r).not.toEqual('saved');
-    // });
-  });
+  //   lib_.setCache(
+  //     'find',
+  //     { saveNetwork: false },
+  //     'a1',
+  //     {} as Response,
+  //     observer
+  //   );
+  //   // @todo fix this
+  //   // .then(r => {
+  //   //   // expect(r).not.toEqual('saved');
+  //   // });
+  // });
 
-  it('should NOT set cache if response is the same as the current cache', () => {
-    let lib_ = new PlatformBrowserMock({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {},
-      storage: {
-        get: () => Promise.resolve({ a: 1, b: 2, c: 3 }),
-        set: () => Promise.resolve('saved')
-      } as any
-    });
+  // it('should NOT set cache if response is the same as the current cache', () => {
+  //   let lib_ = new PlatformBrowserMock({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {},
+  //     storage: {
+  //       get: () => Promise.resolve({ a: 1, b: 2, c: 3 }),
+  //       set: () => Promise.resolve('saved')
+  //     } as any
+  //   });
 
-    lib_.init({
-      logger: new Logger({
-        subject: new Subject(),
-        useLog: false,
-        useLogTrace: false
-      })
-    } as any);
+  //   lib_.init({
+  //     logger: new Logger({
+  //       subject: new Subject(),
+  //       useLog: false,
+  //       useLogTrace: false
+  //     })
+  //   } as any);
 
-    const observer = {
-      next: () => {},
-      complete: () => {}
-    };
+  //   const observer = {
+  //     next: () => {},
+  //     complete: () => {}
+  //   };
 
-    lib_.setCache(
-      'find',
-      { saveNetwork: true },
-      'a1',
-      { a: 1, b: 2, c: 3 } as Response,
-      observer
-    );
-    // .then(r => {
-    //   expect(r).not.toEqual('saved');
-    // });
-  });
+  //   lib_.setCache(
+  //     'find',
+  //     { saveNetwork: true },
+  //     'a1',
+  //     { a: 1, b: 2, c: 3 } as Response,
+  //     observer
+  //   );
+  //   // .then(r => {
+  //   //   expect(r).not.toEqual('saved');
+  //   // });
+  // });
 
-  it('should set cache', () => {
-    let lib_ = new PlatformBrowserMock({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {},
-      storage: {
-        get: () => Promise.resolve({ a: 1, b: 2, c: 3 }),
-        set: () => Promise.resolve('saved')
-      } as any
-    });
+  // it('should set cache', () => {
+  //   let lib_ = new PlatformBrowserMock({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {},
+  //     storage: {
+  //       get: () => Promise.resolve({ a: 1, b: 2, c: 3 }),
+  //       set: () => Promise.resolve('saved')
+  //     } as any
+  //   });
 
-    lib_.init({
-      logger: new Logger({
-        subject: new Subject(),
-        useLog: false,
-        useLogTrace: false
-      })
-    } as any);
+  //   lib_.init({
+  //     logger: new Logger({
+  //       subject: new Subject(),
+  //       useLog: false,
+  //       useLogTrace: false
+  //     })
+  //   } as any);
 
-    const observer = {
-      next: () => {},
-      complete: () => {}
-    };
+  //   const observer = {
+  //     next: () => {},
+  //     complete: () => {}
+  //   };
 
-    lib_.setCache(
-      'find',
-      { saveNetwork: true },
-      'a1',
-      { a: 1 } as Response,
-      observer
-    );
-    // .then(r => {
-    //   expect(r).toEqual('saved');
-    // });
+  //   lib_.setCache(
+  //     'find',
+  //     { saveNetwork: true },
+  //     'a1',
+  //     { a: 1 } as Response,
+  //     observer
+  //   );
+  //   // .then(r => {
+  //   //   expect(r).toEqual('saved');
+  //   // });
 
-    lib_.setCache(
-      'find',
-      { saveNetwork: true, ttl: 60 },
-      'a1',
-      { a: 1 } as Response,
-      observer
-    );
-    // .then(r => {
-    //   expect(r).toEqual('saved');
-    // });
-  });
+  //   lib_.setCache(
+  //     'find',
+  //     { saveNetwork: true, ttl: 60 },
+  //     'a1',
+  //     { a: 1 } as Response,
+  //     observer
+  //   );
+  //   // .then(r => {
+  //   //   expect(r).toEqual('saved');
+  //   // });
+  // });
 
-  it('should return network response from `setCache`', async () => {
-    let lib__ = new PlatformBrowserMock({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {},
-      storage: {
-        get: () => Promise.resolve({ data: [1, 2, 3] }),
-        set: () => Promise.resolve('saved')
-      } as any
-    });
+  // it('should return network response from `setCache`', async () => {
+  //   let lib__ = new PlatformBrowserMock({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {},
+  //     storage: {
+  //       get: () => Promise.resolve({ data: [1, 2, 3] }),
+  //       set: () => Promise.resolve('saved')
+  //     } as any
+  //   });
 
-    lib__.init({
-      logger: new Logger({
-        subject: new Subject(),
-        useLog: false,
-        useLogTrace: false
-      })
-    } as any);
+  //   lib__.init({
+  //     logger: new Logger({
+  //       subject: new Subject(),
+  //       useLog: false,
+  //       useLogTrace: false
+  //     })
+  //   } as any);
 
-    const observer = {
-      next: () => {},
-      complete: () => {}
-    };
+  //   const observer = {
+  //     next: () => {},
+  //     complete: () => {}
+  //   };
 
-    const spyNext = jest.spyOn(observer, 'next');
-    const spyDispatch = jest.spyOn(Config.store.dispatch, 'next');
+  //   const spyNext = jest.spyOn(observer, 'next');
+  //   const spyDispatch = jest.spyOn(Config.store.dispatch, 'next');
 
-    await lib__.setCache(
-      'find',
-      { useNetwork: true },
-      'a11',
-      { data: [1, 2, 3, 4] } as Response,
-      observer
-    );
+  //   await lib__.setCache(
+  //     'find',
+  //     { useNetwork: true },
+  //     'a11',
+  //     { data: [1, 2, 3, 4] } as Response,
+  //     observer
+  //   );
 
-    expect(spyNext).toHaveBeenCalledWith({ data: [1, 2, 3, 4] });
-    expect(spyDispatch).toHaveBeenCalledWith({ data: [1, 2, 3, 4] });
-  });
+  //   expect(spyNext).toHaveBeenCalledWith({ data: [1, 2, 3, 4] });
+  //   expect(spyDispatch).toHaveBeenCalledWith({ data: [1, 2, 3, 4] });
+  // });
 
-  it('should transform cache before it saves', async () => {
-    let lib__ = new PlatformBrowserMock({
-      useLog: false,
-      baseURL: baseURL,
-      endpoint: '/',
-      collection: collection,
-      connector: {},
-      storage: {
-        get: () => Promise.resolve({ data: [1, 2, 3] }),
-        set: (key, value) => Promise.resolve(value)
-      } as any
-    });
+  // it('should transform cache before it saves', async () => {
+  //   let lib__ = new PlatformBrowserMock({
+  //     useLog: false,
+  //     baseURL: baseURL,
+  //     endpoint: '/',
+  //     collection: collection,
+  //     connector: {},
+  //     storage: {
+  //       get: () => Promise.resolve({ data: [1, 2, 3] }),
+  //       set: (key, value) => Promise.resolve(value)
+  //     } as any
+  //   });
 
-    lib__.init({
-      logger: new Logger({
-        subject: new Subject(),
-        useLog: false,
-        useLogTrace: false
-      })
-    } as any);
+  //   lib__.init({
+  //     logger: new Logger({
+  //       subject: new Subject(),
+  //       useLog: false,
+  //       useLogTrace: false
+  //     })
+  //   } as any);
 
-    const observer = {
-      next: () => {},
-      complete: () => {}
-    };
+  //   const observer = {
+  //     next: () => {},
+  //     complete: () => {}
+  //   };
 
-    const spyNext = jest.spyOn(observer, 'next');
-    const spyDispatch = jest.spyOn(Config.store.dispatch, 'next');
+  //   const spyNext = jest.spyOn(observer, 'next');
+  //   const spyDispatch = jest.spyOn(Config.store.dispatch, 'next');
 
-    await lib__.setCache(
-      'find',
-      { transformCache: r => r.data[0] },
-      'a1',
-      { data: [1, 2, 3, 4] } as Response,
-      observer
-    );
-    expect(spyNext).toHaveBeenCalledWith({ data: [1, 2, 3, 4] });
-    expect(spyDispatch).toHaveBeenCalledWith({ data: [1, 2, 3, 4] });
-  });
+  //   await lib__.setCache(
+  //     'find',
+  //     { transformCache: r => r.data[0] },
+  //     'a1',
+  //     { data: [1, 2, 3, 4] } as Response,
+  //     observer
+  //   );
+  //   expect(spyNext).toHaveBeenCalledWith({ data: [1, 2, 3, 4] });
+  //   expect(spyDispatch).toHaveBeenCalledWith({ data: [1, 2, 3, 4] });
+  // });
 
   //
   // @todo tests to refactor
