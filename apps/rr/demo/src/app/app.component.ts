@@ -8,6 +8,7 @@ import { UserService } from './user.service';
 import { CatService } from './cat.service';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
+import { firebaseLogin } from '../environments/firebase.config';
 
 @Component({
   selector: 'firetask-root',
@@ -117,7 +118,7 @@ export class AppComponent implements OnInit {
     this.userService.$collection
       .firebase()
       .auth()
-      .signInWithEmailAndPassword('demo@demo.app', '123456')
+      .signInWithEmailAndPassword(firebaseLogin.email, firebaseLogin.password)
       .then(console.log)
       .catch(console.log);
   }
