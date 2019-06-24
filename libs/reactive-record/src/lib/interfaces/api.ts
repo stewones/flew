@@ -13,10 +13,10 @@ export interface ReactiveApi {
   //
   // chained options
   driver(name?: string): ReactiveRecord; // firebase / firestore / http | [configurable]
-  useNetwork(active: boolean): ReactiveRecord; // force the use of network call
-  saveNetwork(active: boolean): ReactiveRecord; // as a cache
+  network(active: boolean): ReactiveRecord; // force the use of network call
+  save(active: boolean): ReactiveRecord; // as a cache
   ttl(value: number): ReactiveRecord; // set a max time to cache
-  useCache(active: boolean): ReactiveRecord; // when true the first response should be from the cache if exists
+  cache(active: boolean): ReactiveRecord; // when true the first response should be from the cache if exists
   key(name: string): ReactiveRecord; // cache name
   query(by: { [key: string]: {} } | { [key: string]: {} }[]): ReactiveRecord; // firestore only - this is an object literal way of `where`
   where(
@@ -40,25 +40,18 @@ export interface ReactiveApi {
   clearCache(): void;
   firebase(): any; // firebase instance
   firestore(): any; // firebase instance
-  cache(): any; // storage instance
+  storage(): any; // storage instance
   http(transformFn: (config: AxiosRequestConfig) => void): ReactiveRecord;
   feed(): void; // add response from cache to store
   init(): void; // init rr manually
 
   //
   // fire verbs
-  find(); // firestore & firebase
-  // @todo better types
-  // findOne<T>(): Observable<T>;
-  // findOne<T>(): Observable<Response<T>>;
-  // findOne(): Observable<Response>;
+  find();
   findOne();
-  set(id: string, data: any, merge?: boolean); // firestore
-  update(id: string, data: any); // firestore
-  on( // firestore & firebase - real time calls doesn't has caching features
-    onSuccess: (response: Response | any) => any,
-    onError: (response: any) => any
-  ): any;
+  set(id: string, data: any, merge?: boolean);
+  update(id: string, data: any);
+  on();
 
   //
   // http verbs
@@ -73,8 +66,11 @@ export interface ReactiveApi {
   reset(): ReactiveRecord;
 
   //
-  // Legacy
-  transformNetwork(transformFn: (response: Response) => any): ReactiveRecord; // scheduled to @deprecate. use `transformResponse` instead
-  transformCache(transformFn: (response: Response) => any): ReactiveRecord; // transform the response from cache
-  transformResponse(transformFn: (response: Response) => any): ReactiveRecord; // transform the network/cache response
+  // Legacy @deprecated
+  useCache(active: boolean): ReactiveRecord;
+  useNetwork(active: boolean): ReactiveRecord;
+  saveNetwork(active: boolean): ReactiveRecord;
+  transformNetwork(transformFn: (response: Response) => any): ReactiveRecord;
+  transformCache(transformFn: (response: Response) => any): ReactiveRecord;
+  transformResponse(transformFn: (response: Response) => any): ReactiveRecord;
 }

@@ -14,7 +14,7 @@ import * as differential from '../utils/diff';
 const deepDiff = differential.diff;
 
 export class PlatformBrowser extends ReactiveRecord {
-  protected storage: StorageAdapter; // storage adapter (see ionic storage for reference)
+  protected _storage: StorageAdapter; // storage adapter (see ionic storage for reference)
   // private responses = {};
 
   constructor(options: Options) {
@@ -129,6 +129,7 @@ export class PlatformBrowser extends ReactiveRecord {
   protected network$<T>(evaluation, observer, verb, path, payload, chain, key) {
     return of(evaluation).pipe(
       filter(evaluation => evaluation.now === true),
+      tap(() => super.log().warn()(`${key} [network] request`)),
       switchMap(() =>
         from(super.call<T>(verb, path, payload, chain, key)).pipe(
           tap(response => this.setCache(verb, chain, key, response, observer)),
@@ -142,9 +143,11 @@ export class PlatformBrowser extends ReactiveRecord {
     return of(evaluation).pipe(
       map(evaluation => {
         if (!evaluation.now) {
-          super.log().danger()(
-            `${key} [call] there is a cached response with time to live`
-          );
+          if (evaluation.ttl) {
+            super.log().danger()(`${key} [cache] response from TTL`);
+          } else {
+            super.log().danger()(`${key} [cache] response`);
+          }
           this.dispatch(observer, evaluation.cache, chain);
 
           observer.complete();
@@ -160,7 +163,7 @@ export class PlatformBrowser extends ReactiveRecord {
   protected shouldCallNetwork(
     chain: Chain,
     key: string
-  ): Promise<{ now: boolean; cache?: Response }> {
+  ): Promise<{ now: boolean; cache?: Response; ttl?: boolean }> {
     return new Promise(async resolve => {
       const useCache: boolean = chain.useCache === false ? false : true;
       const useNetwork: boolean = chain.useNetwork === false ? false : true;
@@ -177,16 +180,37 @@ export class PlatformBrowser extends ReactiveRecord {
           now: true
         });
 
-      const cache: Response & { ttl: number } | any = await this.$storage().get(
-        key
-      );
+      const hasCache:
+        | Response & { ttl: number }
+        | any = await this.$storage().get(key);
 
       //
-      // stop network request at server level
-      if (useCache && (cache && seconds < cache.ttl) && !isEmpty(cache.data)) {
+      // stop network request at server level - case 1
+      if (
+        useCache &&
+        hasCache &&
+        !isEmpty(hasCache.data) &&
+        useNetwork === false
+      ) {
+        super.log().info()(`${key} [should] stop network request`);
         return resolve({
           now: false,
-          cache: cache
+          cache: hasCache
+        });
+      }
+
+      //
+      // stop network request at server level - case 2
+      if (
+        useCache &&
+        (hasCache && seconds < hasCache.ttl) &&
+        !isEmpty(hasCache.data)
+      ) {
+        super.log().info()(`${key} [should] stop network request due to TTL`);
+        return resolve({
+          now: false,
+          ttl: true,
+          cache: hasCache
         });
       }
 
@@ -205,7 +229,7 @@ export class PlatformBrowser extends ReactiveRecord {
     const cache: Response & { ttl: number } | any = await this.$storage().get(
       key
     );
-    const transformResponse: any = this.shouldTransformResponse(chain, cache);
+
     super.log().info()(
       `${key} [should] hasCache? ${!isEmpty(cache) ? true : false}`
     );
@@ -222,7 +246,6 @@ export class PlatformBrowser extends ReactiveRecord {
     //
     // return cached response immediately to view
     if (useCache && !isEmpty(cache)) {
-      super.log().success()(`${key} [should] return response from cache`);
       this.dispatch(observer, cache, chain);
     }
   }
@@ -249,7 +272,7 @@ export class PlatformBrowser extends ReactiveRecord {
     //
     // should return response immediately
     if (useNetwork === true && useCache === false) {
-      super.log().success()(`${key} [set] return response from network`);
+      super.log().warn()(`${key} [network] response`);
       this.dispatch(observer, network, chain);
     }
 
@@ -259,13 +282,14 @@ export class PlatformBrowser extends ReactiveRecord {
       cache = await this.$storage().get(key);
     } catch (err) {}
 
-    super.log().info()(
-      `${key} [set] transformCache? ${
-        chain.transformCache && typeof chain.transformCache === 'function'
-          ? true
-          : false
-      }`
-    );
+    // @todo remove all transformCache related stuff (now RR should never transform cache before saving)
+    // super.log().info()(
+    //   `${key} [set] transformCache? ${
+    //     chain.transformCache && typeof chain.transformCache === 'function'
+    //       ? true
+    //       : false
+    //   }`
+    // );
     super.log().info()(
       `${key} [set] transformResponse? ${
         (chain.transformResponse &&
@@ -307,9 +331,12 @@ export class PlatformBrowser extends ReactiveRecord {
 
       //
       // return network response
-      if (useNetwork === true && useCache === true) {
+      if (
+        (useNetwork === true && useCache === true) ||
+        (useNetwork === false && useCache === true)
+      ) {
         super.log().danger()(
-          `${key} [set] return response from network [cache outdated]`
+          `${key} [network] response [cache might be outdated]`
         );
         this.dispatch(observer, network, chain);
       }
@@ -367,7 +394,7 @@ export class PlatformBrowser extends ReactiveRecord {
     Config.store.dispatch.next(data);
   }
 
-  protected $storage() {
+  protected $storage(): any {
     const storage = !isEmpty(this.storage)
       ? this.storage
       : {

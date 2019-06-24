@@ -29,7 +29,7 @@ import { Chain } from '../interfaces/chain';
 export class ReactiveRecord implements ReactiveApi {
   protected collection: string;
   protected endpoint: string;
-  protected storage: StorageAdapter;
+  protected _storage: StorageAdapter;
 
   private httpConfig: AxiosRequestConfig = {};
   private beforeHttp = (config: AxiosRequestConfig) => {};
@@ -162,8 +162,8 @@ export class ReactiveRecord implements ReactiveApi {
     return this.getConnector('firestore');
   }
 
-  public cache() {
-    return this.storage;
+  public storage() {
+    return this._storage;
   }
 
   /**
@@ -412,16 +412,34 @@ export class ReactiveRecord implements ReactiveApi {
   /**
    * Set whether to use network for first requests
    */
-  public useNetwork(active: boolean): ReactiveRecord {
+  public network(active: boolean): ReactiveRecord {
     this.chain.useNetwork = active;
+    return this;
+  }
+
+  /**
+   * @deprecated
+   * use just `network` instead
+   */
+  public useNetwork(active: boolean): ReactiveRecord {
+    this.network(active);
     return this;
   }
 
   /**
    * Set whether to cache network responses
    */
-  public saveNetwork(active: boolean): ReactiveRecord {
+  public save(active: boolean): ReactiveRecord {
     this.chain.saveNetwork = active;
+    return this;
+  }
+
+  /**
+   * @deprecated
+   * use just `save` instead
+   */
+  public saveNetwork(active: boolean): ReactiveRecord {
+    this.save(active);
     return this;
   }
 
@@ -466,13 +484,23 @@ export class ReactiveRecord implements ReactiveApi {
   /**
    * Set whether to use cache for first requests
    */
-  public useCache(active: boolean): ReactiveRecord {
+  public cache(active: boolean): ReactiveRecord {
     this.chain.useCache = active;
     return this;
   }
 
   /**
-   * @deprecated RR should not transform cache before saving it anymore
+   * @deprecated
+   * use `cache` instead
+   */
+  public useCache(active: boolean): ReactiveRecord {
+    this.cache(active);
+    return this;
+  }
+
+  /**
+   * @deprecated
+   * RR should not transform cache before saving it anymore
    */
   public transformCache<T>(
     transformFn: (response: Response) => any
