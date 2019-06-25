@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.7](https://github.com/stewwan/firetask/compare/v0.2.6...v0.2.7) (2019-06-25)
+
+
+### Features
+
+* **rr:** expose instance using `storage()` method ([825cc21](https://github.com/stewwan/firetask/commit/825cc21))
+
+
+
 ### [0.2.6](https://github.com/stewwan/firetask/compare/v0.2.5...v0.2.6) (2019-06-24)
 
 
