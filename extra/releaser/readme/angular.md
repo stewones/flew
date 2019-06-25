@@ -1,4 +1,4 @@
-# Firetask Angular [![Build Status](https://travis-ci.org/Firetask/angular.svg?branch=master)](https://travis-ci.org/Firetask/angular) [![codecov](https://codecov.io/gh/Firetask/angular/branch/master/graph/badge.svg)](https://codecov.io/gh/Firetask/angular) [![Conventional Commits](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://conventionalcommits.org)
+# Firetask Angular [![pipeline status](https://gitlab.com/firetask/test-angular/badges/master/pipeline.svg)](https://gitlab.com/firetask/test-angular/commits/master) [![coverage report](https://gitlab.com/firetask/test-angular/badges/master/coverage.svg)](https://gitlab.com/firetask/test-angular/commits/master) [![Conventional Commits](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://conventionalcommits.org)
 
 > Attention
 >

@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "scripts used for release all the packages at same time",
   "scripts": {
+    "add:remote": "tsc && node ./.compiled/extra/releaser/add-remote.js",
     "bump": "tsc && node ./.compiled/extra/releaser/bump.js",
     "bump:major": "tsc && node ./.compiled/extra/releaser/bump-major.js",
     "bump:minor": "tsc && node ./.compiled/extra/releaser/bump-minor.js",

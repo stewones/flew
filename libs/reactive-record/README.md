@@ -1,4 +1,4 @@
-# Reactive Record [![Build Status](https://travis-ci.org/Firetask/reactive-record.svg?branch=master)](https://travis-ci.org/Firetask/reactive-record) [![codecov](https://codecov.io/gh/Firetask/reactive-record/branch/master/graph/badge.svg)](https://codecov.io/gh/Firetask/reactive-record) [![Conventional Commits](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://conventionalcommits.org)
+# Reactive Record [![pipeline status](https://gitlab.com/firetask/test-reactive-record/badges/master/pipeline.svg)](https://gitlab.com/firetask/test-reactive-record/commits/master) [![coverage report](https://gitlab.com/firetask/test-reactive-record/badges/master/coverage.svg)](https://gitlab.com/firetask/test-reactive-record/commits/master) [![Conventional Commits](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://conventionalcommits.org)
 
 ## Docs
 
