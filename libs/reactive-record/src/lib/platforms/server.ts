@@ -49,6 +49,8 @@ export class ReactiveRecord implements ReactiveApi {
   };
 
   public $log: Subject<Log> = new Subject();
+  public $ready: Subject<void> = new Subject();
+
   protected logger: Logger; // instance
 
   //
@@ -140,13 +142,14 @@ export class ReactiveRecord implements ReactiveApi {
 
     //
     // apply class options
-    this.clearOptions(options);
-
-    merge(this, options);
+    merge(this, this.clearOptions(options));
 
     //
     // mark as initialized
     this._initialized = true;
+
+    this.$ready.next();
+    this.$ready.complete();
 
     const name = this.collection || this.endpoint;
 
@@ -173,7 +176,7 @@ export class ReactiveRecord implements ReactiveApi {
     return this.getConnector('firestore');
   }
 
-  public storage() {
+  public storage(): StorageAdapter {
     return this._storage;
   }
 
@@ -517,7 +520,6 @@ export class ReactiveRecord implements ReactiveApi {
   public transformCache<T>(
     transformFn: (response: Response) => any
   ): ReactiveRecord {
-    this.chain.transformCache = transformFn;
     return this;
   }
 

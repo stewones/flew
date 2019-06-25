@@ -4,9 +4,7 @@ export interface Chain {
   useCache?: boolean; //  use cache for first response
   useNetwork?: boolean; // use network for first response
   saveNetwork?: boolean; // save network response
-  transformCache?: (data: any) => any; // transform function for cache data
   transformResponse?: (data: any) => any; // transform function for network data response
-  transformNetwork?: (data: any) => any; // @deprecated same as transformResponse
   transformData?: boolean; // shortcut for transformResponse(r=>r.data)
   ref?: string; //  used for firebase driver
   query?: any;

@@ -14,8 +14,12 @@ import * as differential from '../utils/diff';
 const deepDiff = differential.diff;
 
 export class PlatformBrowser extends ReactiveRecord {
-  protected _storage: StorageAdapter; // storage adapter (see ionic storage for reference)
-  // private responses = {};
+  /**
+   * Storage Adapter
+   * see ionic storage for reference
+   * https://github.com/ionic-team/ionic-storage/blob/master/src/storage.ts
+   */
+  protected _storage: StorageAdapter;
 
   constructor(options: Options) {
     super(options);
@@ -258,17 +262,9 @@ export class PlatformBrowser extends ReactiveRecord {
     network: Response & { ttl?: number },
     observer = { next: data => {}, complete: () => {} }
   ) {
-    const transformResponse: any = this.shouldTransformResponse(chain, network);
-    const transformCache: any =
-      chain.transformCache && typeof chain.transformCache === 'function'
-        ? chain.transformCache
-        : (data: Response) => data;
-
     const saveNetwork: boolean = chain.saveNetwork === false ? false : true;
     const useNetwork: boolean = chain.useNetwork === false ? false : true;
     const useCache: boolean = chain.useCache === false ? false : true;
-
-    super.log().info()(`${key} [set] useNetwork? ${useNetwork ? true : false}`);
 
     //
     // should return response immediately
@@ -283,41 +279,23 @@ export class PlatformBrowser extends ReactiveRecord {
       cache = await this.$storage().get(key);
     } catch (err) {}
 
-    // @todo remove all transformCache related stuff (now RR should never transform cache before saving)
-    // super.log().info()(
-    //   `${key} [set] transformCache? ${
-    //     chain.transformCache && typeof chain.transformCache === 'function'
-    //       ? true
-    //       : false
-    //   }`
-    // );
-    super.log().info()(
-      `${key} [set] transformResponse? ${
-        (chain.transformResponse &&
-          typeof chain.transformResponse === 'function') ||
-        chain.transformData
-          ? true
-          : false
-      }`
-    );
+    //
+    // cache strategy
+    let ttl = chain.ttl || 0;
+    const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
+
+    if (ttl > 0) {
+      ttl += seconds;
+      network.ttl = ttl;
+    }
 
     if (this.isDifferent(chain, key, cache, network)) {
-      //
-      // cache strategy
-      let ttl = chain.ttl || 0;
-      const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-
-      if (ttl > 0) {
-        ttl += seconds;
-        network.ttl = ttl;
-      }
-
       super.log().info()(
         `${key} [set] saveNetwork? ${saveNetwork ? true : false}`
       );
 
       if (saveNetwork) {
-        this.$storage().set(key, transformCache(clearNetworkResponse(network)));
+        this.$storage().set(key, clearNetworkResponse(network));
         super.log().warn()(`${key} [set] cache updated`);
       }
 
@@ -331,6 +309,17 @@ export class PlatformBrowser extends ReactiveRecord {
           `${key} [network] response [cache might be outdated]`
         );
         this.dispatch(observer, network, chain);
+      }
+    } else {
+      //
+      // edge case: update cache because of ttl
+
+      if (chain.ttl && !cache.ttl) {
+        if (saveNetwork) {
+          console.log(chain.ttl, cache.ttl);
+          this.$storage().set(key, clearNetworkResponse(network));
+          super.log().warn()(`${key} [set] cache updated [ttl]`);
+        }
       }
     }
     if (!['on'].includes(verb)) return observer.complete();
@@ -347,12 +336,16 @@ export class PlatformBrowser extends ReactiveRecord {
           !isEqual(clearNetworkResponse(c).data, clearNetworkResponse(n).data);
 
     if (hasDiffFn) {
+      super.log().danger()(`${key} [diff] applying a custom function`);
       super.log().danger()(
-        `${key} [diff] is network data different? ${diffFn(cache, network)}`
+        `${key} [diff] network data is different from cache? ${diffFn(
+          _cache,
+          _network
+        )}`
       );
       if (super.log().enabled())
         console.log(
-          `${key} [diff] deep data difference`,
+          `${key} [diff] deep data difference between them [original data]`,
           deepDiff(_cache.data, _network.data)
         );
     }

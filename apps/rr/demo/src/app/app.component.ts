@@ -138,7 +138,7 @@ export class AppComponent implements OnInit {
     console.log(`SHOULD USE CACHE? ${value}`);
     this.catService.$collection
       .useCache(value)
-      .transformCache(r => r.data)
+      // .transformCache(r => r.data)
       .post('/votes', { image_id: 'birm', value: 1 })
       .pipe(tap(r => this.useCacheResult.push(r)))
       .toPromise();
