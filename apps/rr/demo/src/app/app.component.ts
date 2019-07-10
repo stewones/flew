@@ -87,11 +87,12 @@ export class AppComponent implements OnInit {
   getCatFirestoreFail() {
     this.catService.$collection
       .driver('firestore')
-      .key('baby-firestore')
+      // .key('baby-firestore')
       .where('user.id', '==', 'asdf')
-      .find()
+      .diff(() => true)
+      .findOne()
       //.toPromise()
-      .subscribe(r => console.log(r), err => console.log(err));
+      .subscribe(r => console.log(`result`, r), err => console.log(err));
   }
 
   getCatFirestoreNoCache() {

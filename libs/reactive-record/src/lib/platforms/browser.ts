@@ -350,15 +350,7 @@ export class PlatformBrowser extends ReactiveRecord {
         );
     }
 
-    return (
-      !isEqual(
-        clearNetworkResponse(_cache).data,
-        clearNetworkResponse(_network).data
-      ) &&
-      //
-      // a custom diff fn passed via chaining
-      diffFn(_cache, _network)
-    );
+    return diffFn(_cache, _network);
   }
 
   protected dispatch(observer = { next: data => {} }, data, chain) {
