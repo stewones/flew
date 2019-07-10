@@ -15,8 +15,10 @@ baby:
 {{ cat$ | async | json }} -->
 
 <br /><br />
-<button (click)="getCatFirestore()">Get Cat from Firestore</button
-><button (click)="getCatFirestoreNoCache()">
+<button (click)="getCatFirestore()">Get Cat from Firestore</button>
+
+<button (click)="getCatFirestoreFail()">Get Cat from Firestore Fail</button>
+<button (click)="getCatFirestoreNoCache()">
   Get Cat from Firestore (NO CACHE)
 </button>
 <br />

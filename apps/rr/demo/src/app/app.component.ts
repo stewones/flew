@@ -84,6 +84,15 @@ export class AppComponent implements OnInit {
       //.toPromise()
       .subscribe(r => console.log(r), err => console.log(err));
   }
+  getCatFirestoreFail() {
+    this.catService.$collection
+      .driver('firestore')
+      .key('baby-firestore')
+      .where('user.id', '==', 'asdf')
+      .find()
+      //.toPromise()
+      .subscribe(r => console.log(r), err => console.log(err));
+  }
 
   getCatFirestoreNoCache() {
     this.catService.$collection
