@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.9](https://github.com/stewwan/firetask/compare/v0.2.7...v0.2.9) (2019-07-12)
+
+
+### Bug Fixes
+
+* **rr:** diff function ([5617f62](https://github.com/stewwan/firetask/commit/5617f62))
+
+
+### Features
+
+* **rr:** add isOnline method and fix diff strategy ([0a4450d](https://github.com/stewwan/firetask/commit/0a4450d))
+* **storybook:** add storysource plugin ([376dd65](https://github.com/stewwan/firetask/commit/376dd65))
+
+
+
 ### [0.2.8](https://github.com/stewwan/firetask/compare/v0.2.7...v0.2.8) (2019-07-10)
 
 
