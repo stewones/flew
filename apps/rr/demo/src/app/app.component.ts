@@ -89,7 +89,7 @@ export class AppComponent implements OnInit {
       .driver('firestore')
       // .key('baby-firestore')
       .where('user.id', '==', 'asdf')
-      .diff(() => true)
+      // .diff(() => false)
       .findOne()
       //.toPromise()
       .subscribe(r => console.log(`result`, r), err => console.log(err));

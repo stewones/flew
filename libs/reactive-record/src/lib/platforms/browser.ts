@@ -313,10 +313,8 @@ export class PlatformBrowser extends ReactiveRecord {
     } else {
       //
       // edge case: update cache because of ttl
-
       if (chain.ttl && !cache.ttl) {
         if (saveNetwork) {
-          console.log(chain.ttl, cache.ttl);
           this.$storage().set(key, clearNetworkResponse(network));
           super.log().warn()(`${key} [set] cache updated [ttl]`);
         }
@@ -326,16 +324,15 @@ export class PlatformBrowser extends ReactiveRecord {
   }
 
   private isDifferent(chain, key, cache, network) {
-    const _cache = cache && cache.data ? cache : { data: {} };
-    const _network = network && network.data ? network : { data: {} };
+    const _cache = cache && cache.data ? cache.data : null;
+    const _network = network && network.data ? network.data : null;
 
-    const hasDiffFn = isFunction(chain.diff);
-    const diffFn = hasDiffFn
+    const isCustomDiff = isFunction(chain.diff);
+    const diffFn = isCustomDiff
       ? chain.diff
-      : (c, n) =>
-          !isEqual(clearNetworkResponse(c).data, clearNetworkResponse(n).data);
+      : (c, n) => !isEqual(clearNetworkResponse(c), clearNetworkResponse(n));
 
-    if (hasDiffFn) {
+    if (isCustomDiff) {
       super.log().danger()(`${key} [diff] applying a custom function`);
       super.log().danger()(
         `${key} [diff] network data is different from cache? ${diffFn(
@@ -346,11 +343,13 @@ export class PlatformBrowser extends ReactiveRecord {
       if (super.log().enabled())
         console.log(
           `${key} [diff] deep data difference between them [original data]`,
-          deepDiff(_cache.data, _network.data)
+          deepDiff(_cache, _network)
         );
     }
 
-    return diffFn(_cache, _network);
+    return isCustomDiff
+      ? diffFn(_cache, _network)
+      : diffFn(_cache, _network) || (isEmpty(_cache) || isEmpty(_network));
   }
 
   protected dispatch(observer = { next: data => {} }, data, chain) {
@@ -369,5 +368,9 @@ export class PlatformBrowser extends ReactiveRecord {
         };
 
     return storage;
+  }
+
+  public isOnline() {
+    return window.navigator.onLine;
   }
 }

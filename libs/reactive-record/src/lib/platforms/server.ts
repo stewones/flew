@@ -180,6 +180,8 @@ export class ReactiveRecord implements ReactiveApi {
     return this._storage;
   }
 
+  public isOnline(): any {}
+
   /**
    * Clear browser cache
    */
