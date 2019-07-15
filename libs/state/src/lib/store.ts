@@ -1,5 +1,5 @@
 import { State, Action, StateContext, createSelector } from '@ngxs/store';
-import { isEqual, cloneDeep } from 'lodash';
+import { isEqual, cloneDeep, merge } from 'lodash';
 import { Response, shouldTransformResponse } from '@firetask/reactive-record';
 
 export interface StateModel {
@@ -29,7 +29,12 @@ export class ReactiveState {
       // @dynamic
       (state: StateModel) => {
         const response = state.responses.find(it => it.key === name);
-        return response && data && response.data ? response.data : response;
+
+        const transformResponse: any = shouldTransformResponse(
+          { transformData: data },
+          response
+        );
+        return response && transformResponse(response);
       }
     );
   }
@@ -41,18 +46,18 @@ export class ReactiveState {
     const state = context.getState();
     const responses = cloneDeep(state.responses);
     const exists = responses.find(it => it.key === action.payload.key);
-    const changed = exists && !isEqual(exists, action.payload);
+
+    const changed =
+      exists && !isEqual(cloneDeep(exists), cloneDeep(action.payload));
 
     if (changed) {
-      Object.assign(exists, action.payload);
+      merge(exists, action.payload);
+    } else if (!exists) {
+      responses.push(action.payload);
     }
 
-    const result = changed
-      ? [...responses]
-      : [...responses, ...[action.payload]];
-
     context.patchState({
-      responses: result
+      responses: responses
     });
   }
 

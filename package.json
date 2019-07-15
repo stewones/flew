@@ -1,6 +1,6 @@
 {
   "name": "firetask",
-  "version": "0.2.10",
+  "version": "0.2.9",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -99,7 +99,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.4.5",
     "@firetask/core": "^0.2.0",
-    "@firetask/reactive-record": "^0.2.0",
+    "@firetask/reactive-record": "dist/libs/reactive-record",
     "@ionic/angular-toolkit": "^1.5.1",
     "@ngxs/schematics": "^0.0.1-alpha.5",
     "@nrwl/builders": "7.6.2",
