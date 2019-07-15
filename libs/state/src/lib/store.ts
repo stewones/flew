@@ -72,7 +72,7 @@ export class ReactiveState {
   constructor() {}
 }
 
-export function key(name: string, data?: boolean) {
+export function key(name: string, data = true) {
   return (state: any) => {
     const response = state.ReactiveState.responses.find(it => it.key === name);
     const transformResponse: any = shouldTransformResponse(
