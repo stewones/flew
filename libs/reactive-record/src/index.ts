@@ -26,6 +26,7 @@ export * from './lib/decorators/collection';
 //
 // utils
 export * from './lib/utils/version';
+export * from './lib/utils/response';
 
 //
 // interfaces

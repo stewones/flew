@@ -1,4 +1,4 @@
-import { Config, optionGet, optionSet, storeGet, storeSet, key } from './rr';
+import { Config, optionGet, optionSet, storeGet, storeSet } from './rr';
 
 describe('RRSymbol', () => {
   it('should dispatch payloads to store', () => {
@@ -26,21 +26,22 @@ describe('RRSymbol', () => {
     expect(Config.store).toBe(store);
   });
 
-  it('should return a state response from a key', () => {
-    expect(
-      key('kitty')({
-        ReactiveState: {
-          responses: [{ key: 'kitty', data: { name: 'kitty', color: 'grey' } }]
-        }
-      })
-    ).toBeTruthy();
+  // @todo move to rr state
+  // it('should return a state response from a key', () => {
+  //   expect(
+  //     key('kitty')({
+  //       ReactiveState: {
+  //         responses: [{ key: 'kitty', data: { name: 'kitty', color: 'grey' } }]
+  //       }
+  //     })
+  //   ).toBeTruthy();
 
-    expect(
-      key('kitty', true)({
-        ReactiveState: {
-          responses: [{ key: 'kitty', data: { name: 'kitty', color: 'grey' } }]
-        }
-      })
-    ).toEqual({ name: 'kitty', color: 'grey' });
-  });
+  //   expect(
+  //     key('kitty', true)({
+  //       ReactiveState: {
+  //         responses: [{ key: 'kitty', data: { name: 'kitty', color: 'grey' } }]
+  //       }
+  //     })
+  //   ).toEqual({ name: 'kitty', color: 'grey' });
+  // });
 });

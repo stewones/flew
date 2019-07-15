@@ -8,7 +8,10 @@ import { ReactiveRecord } from './server';
 import { StorageAdapter } from '../interfaces/storage';
 import { Config } from '../symbols/rr';
 import { ReactiveVerb } from '../interfaces/verb';
-import { clearNetworkResponse } from '../utils/response';
+import {
+  clearNetworkResponse,
+  shouldTransformResponse
+} from '../utils/response';
 import { Chain } from '../interfaces/chain';
 import * as differential from '../utils/diff';
 const deepDiff = differential.diff;
@@ -72,29 +75,6 @@ export class PlatformBrowser extends ReactiveRecord {
 
   public on<T>(): Observable<T> {
     return this.call$<T>('on');
-  }
-
-  private shouldTransformResponse(chain: Chain, response: Response) {
-    let transformResponse: any =
-      chain.transformResponse && typeof chain.transformResponse === 'function'
-        ? chain.transformResponse
-        : (data: Response) => data;
-
-    if (chain.transformData) {
-      //
-      // transform elastic data
-      const hits = get(response, 'data.hits.hits');
-      if (hits) {
-        transformResponse = (data: Response) =>
-          data.data.hits.hits.map(h => h._source);
-      } else {
-        //
-        // default
-        transformResponse = (data: Response) => data.data;
-      }
-    }
-
-    return transformResponse;
   }
 
   protected call$<T>(
@@ -300,7 +280,7 @@ export class PlatformBrowser extends ReactiveRecord {
       }
 
       //
-      // return network response
+      // return network response\
       if (
         (useNetwork === true && useCache === true) ||
         (useNetwork === false && useCache === true)
@@ -313,7 +293,7 @@ export class PlatformBrowser extends ReactiveRecord {
     } else {
       //
       // edge case: update cache because of ttl
-      if (chain.ttl && !cache.ttl) {
+      if (chain.ttl && cache && !cache.ttl) {
         if (saveNetwork) {
           this.$storage().set(key, clearNetworkResponse(network));
           super.log().warn()(`${key} [set] cache updated [ttl]`);
@@ -353,7 +333,7 @@ export class PlatformBrowser extends ReactiveRecord {
   }
 
   protected dispatch(observer = { next: data => {} }, data, chain) {
-    const transformResponse: any = this.shouldTransformResponse(chain, data);
+    const transformResponse: any = shouldTransformResponse(chain, data);
     observer.next(transformResponse(data));
     Config.store.dispatch.next(data);
   }

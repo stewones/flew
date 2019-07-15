@@ -1,6 +1,6 @@
 import { State, Action, StateContext, createSelector } from '@ngxs/store';
 import { isEqual, cloneDeep } from 'lodash';
-import { Response } from '@firetask/reactive-record';
+import { Response, shouldTransformResponse } from '@firetask/reactive-record';
 
 export interface StateModel {
   responses: Response[];
@@ -70,6 +70,10 @@ export class ReactiveState {
 export function key(name: string, data?: boolean) {
   return (state: any) => {
     const response = state.ReactiveState.responses.find(it => it.key === name);
-    return response && data && response.data ? response.data : response;
+    const transformResponse: any = shouldTransformResponse(
+      { transformData: data },
+      response
+    );
+    return response && transformResponse(response);
   };
 }
