@@ -23,7 +23,7 @@ export class ReactiveResponseReset {
   }
 })
 export class ReactiveState {
-  static key(name: string, data?: boolean) {
+  static key(name: string, data = true) {
     return createSelector(
       [ReactiveState],
       // @dynamic
