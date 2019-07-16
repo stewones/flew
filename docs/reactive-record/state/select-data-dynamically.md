@@ -1,7 +1,6 @@
 # Select Dynamically
 
 However you might need to select state dynamically, such as on a search feature.
-
 To accomplish that we are going to use NGXS' **Store** directly to get the result through a RR key.
 
 {% code-tabs %}
