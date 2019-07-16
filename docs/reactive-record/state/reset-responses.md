@@ -6,7 +6,6 @@ For that you can just
 
 {% code-tabs %}
 {% code-tabs-item title="reset-state.ts" %}
-
 ```typescript
 import { Store } from '@ngxs/store';
 import { ResponseReset } from '@firetask/state';
@@ -15,6 +14,6 @@ import { ResponseReset } from '@firetask/state';
 
 this.store.dispatch(new ResponseReset());
 ```
-
 {% endcode-tabs-item %}
 {% endcode-tabs %}
+
