@@ -1,17 +1,15 @@
 import { Config } from '@firetask/reactive-record';
 import { NgModule, ModuleWithProviders, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { ReactiveResponseSync, ReactiveResponseReset } from './store';
+import { ResponseSync, ResponseReset } from './store';
 
 @Injectable()
 export class StateSetup {
   constructor(public store: Store) {
     Config.store.dispatch.subscribe(r => {
-      store.dispatch(new ReactiveResponseSync(r));
+      store.dispatch(new ResponseSync(r));
     });
-    Config.store.reset.subscribe(() =>
-      store.dispatch(new ReactiveResponseReset())
-    );
+    Config.store.reset.subscribe(() => store.dispatch(new ResponseReset()));
   }
 }
 

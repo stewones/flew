@@ -6,12 +6,12 @@ export interface StateModel {
   responses: Response[];
 }
 
-export class ReactiveResponseSync {
+export class ResponseSync {
   public static readonly type = '[ReactiveState] Sync Response';
   constructor(public payload: Response) {}
 }
 
-export class ReactiveResponseReset {
+export class ResponseReset {
   public static readonly type = '[ReactiveState] Reset Responses';
   constructor() {}
 }
@@ -39,9 +39,9 @@ export class ReactiveState {
     );
   }
 
-  @Action(ReactiveResponseSync) syncResponse(
+  @Action(ResponseSync) syncResponse(
     context: StateContext<StateModel>,
-    action: ReactiveResponseSync
+    action: ResponseSync
   ) {
     const state = context.getState();
     const responses = cloneDeep(state.responses);
@@ -61,9 +61,7 @@ export class ReactiveState {
     });
   }
 
-  @Action(ReactiveResponseReset) resetResponse(
-    context: StateContext<StateModel>
-  ) {
+  @Action(ResponseReset) resetResponse(context: StateContext<StateModel>) {
     context.patchState({
       responses: []
     });
