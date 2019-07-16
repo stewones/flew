@@ -1,6 +1,6 @@
 {
   "name": "firetask-libs",
-  "version": "0.0.0",
+  "version": "0.2.14",
   "description": "scripts used for release all the packages at same time",
   "scripts": {
     "add:remote": "tsc && node ./.compiled/extra/releaser/add-remote.js",
