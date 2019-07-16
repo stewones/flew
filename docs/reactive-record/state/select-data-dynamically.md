@@ -41,7 +41,7 @@ export class TodoContainerComponent implements OnInit {
     // and then execute query    
     this.todoService
       .$collection
-      .key(`todos`)
+      .key(storeKey)
       .post(`/search?q=${query}`)
       .subscribe();
   }
