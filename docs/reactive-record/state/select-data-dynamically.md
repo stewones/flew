@@ -1,2 +1,2 @@
-# Select data Dynamically
+# Select Dynamically
 
