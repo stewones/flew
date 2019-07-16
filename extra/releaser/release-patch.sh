@@ -39,3 +39,4 @@ npm run deploy:git
 npm run deploy:npm
 npm run deploy:ci
 npm run tada
+git push origin --tags
