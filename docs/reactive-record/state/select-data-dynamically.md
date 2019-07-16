@@ -35,7 +35,7 @@ export class TodoContainerComponent implements OnInit {
     //
     // first we set the observable
     if (this.todos$) delete this.todos$;
-      this.todos$ = this.store.selectOnce(key(storeKey));
+      this.todos$ = this.store.select(key(storeKey));
     
     //
     // and then execute query    
