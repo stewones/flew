@@ -287,17 +287,21 @@ export class FirestoreDriver implements ReactiveDriver {
       this.exceptions();
 
       //
+      // clone state
+      const newData = { ...data };
+
+      //
       // define connector
       const firestore: any = this.connector.collection(this.collection);
 
       //
       // auto update timestamp
-      if (this.timestamp) data.updated_at = new Date().toISOString();
+      if (this.timestamp) newData.updated_at = new Date().toISOString();
 
       //
       // define return
       const response = r => {
-        observer.next(data);
+        observer.next(newData);
         observer.complete();
       };
       const error = err => {
@@ -308,7 +312,7 @@ export class FirestoreDriver implements ReactiveDriver {
       // call firestore
       firestore
         .doc(id)
-        .update(data)
+        .update(newData)
         .then(response)
         .catch(error);
     });
