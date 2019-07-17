@@ -16,6 +16,14 @@ export class StateSetup {
       const state = get(snapshot, 'ReactiveState.responses') || [];
       return state.find(s => s.key === key);
     };
+    Config.store.change = (key, val) => {
+      const snapshot = this.store.snapshot();
+      const store = get(snapshot, 'ReactiveState.responses') || [];
+      const state = store.find(s => s.key === key);
+      const newState = { key: key, ...val };
+      Config.store.dispatch.next(newState);
+      return state;
+    };
     Config.store.enabled = true;
   }
 }

@@ -44,14 +44,17 @@ export class ReactiveState {
     action: ResponseSync
   ) {
     const state = context.getState();
-    const responses = cloneDeep(state.responses);
+    let responses = cloneDeep(state.responses);
     const exists = responses.find(it => it.key === action.payload.key);
 
     const changed =
       exists && !isEqual(cloneDeep(exists), cloneDeep(action.payload));
 
     if (changed) {
-      merge(exists, action.payload);
+      responses = [
+        ...responses.filter(r => r.key !== action.payload.key),
+        ...[action.payload]
+      ];
     } else if (!exists) {
       responses.push(action.payload);
     }
