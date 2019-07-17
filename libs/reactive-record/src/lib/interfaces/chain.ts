@@ -1,6 +1,7 @@
 export interface Chain {
   ttl?: number; // time to live (in seconds. default: 0)
   key?: string; // key used for cache. defaults to requested info
+  useState?: boolean; //  use state for first response
   useCache?: boolean; //  use cache for first response
   useNetwork?: boolean; // use network for first response
   saveNetwork?: boolean; // save network response

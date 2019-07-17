@@ -103,6 +103,7 @@ export class PlatformBrowser extends ReactiveRecord {
     return new Observable(observer => {
       this.shouldCallNetwork(chain, key).then(evaluation =>
         merge$(
+          this.state$(observer, chain, key),
           this.cache$(observer, chain, key),
           this.ttl$(evaluation, observer, chain, key),
           this.network$(evaluation, observer, verb, path, payload, chain, key)
@@ -143,6 +144,10 @@ export class PlatformBrowser extends ReactiveRecord {
 
   protected cache$<T>(observer, chain, key) {
     return from(this.shouldReturnCache(chain, key, observer));
+  }
+
+  protected state$<T>(observer, chain, key) {
+    return from(this.shouldReturnState(chain, key, observer));
   }
 
   protected shouldCallNetwork(
@@ -207,6 +212,11 @@ export class PlatformBrowser extends ReactiveRecord {
 
   protected async shouldReturnCache(chain: Chain, key: string, observer) {
     const useCache: boolean = chain.useCache === false ? false : true;
+    const useState: boolean = chain.useState === false ? false : true;
+    const stateAvailable = Config.store.enabled;
+
+    if (useState && stateAvailable) return Promise.resolve();
+
     super.log().info()(`${key} [should] useCache? ${useCache ? true : false}`);
 
     if (useCache === false) return Promise.resolve();
@@ -218,6 +228,7 @@ export class PlatformBrowser extends ReactiveRecord {
     super.log().info()(
       `${key} [should] hasCache? ${!isEmpty(cache) ? true : false}`
     );
+
     super.log().info()(
       `${key} [should] transformResponse? ${
         (chain.transformResponse &&
@@ -232,6 +243,36 @@ export class PlatformBrowser extends ReactiveRecord {
     // return cached response immediately to view
     if (useCache && !isEmpty(cache)) {
       this.dispatch(observer, cache, chain);
+    }
+  }
+
+  protected async shouldReturnState(chain: Chain, key: string, observer) {
+    const useState = chain.useState === false ? false : true;
+    const stateAvailable = Config.store.enabled;
+
+    if (useState === false || !stateAvailable) return Promise.resolve();
+
+    super.log().info()(`${key} [should] useState? ${useState ? true : false}`);
+
+    const state: Response = this.$state(key);
+
+    super.log().info()(
+      `${key} [should] hasState? ${!isEmpty(state) ? true : false}`
+    );
+    super.log().info()(
+      `${key} [should] transformResponse? ${
+        (chain.transformResponse &&
+          typeof chain.transformResponse === 'function') ||
+        chain.transformData
+          ? true
+          : false
+      }`
+    );
+
+    //
+    // return cached response immediately to view
+    if (useState && !isEmpty(state)) {
+      this.dispatch(observer, state, chain);
     }
   }
 
@@ -322,8 +363,8 @@ export class PlatformBrowser extends ReactiveRecord {
       );
       if (super.log().enabled())
         console.log(
-          `${key} [diff] deep data difference between them [original data]`,
-          deepDiff(_cache, _network)
+          `${key} [diff] deep data difference between them`,
+          deepDiff(clearNetworkResponse(_cache), clearNetworkResponse(_network))
         );
     }
 
@@ -348,6 +389,10 @@ export class PlatformBrowser extends ReactiveRecord {
         };
 
     return storage;
+  }
+
+  protected $state(key: string): Response {
+    return Config.store.search ? Config.store.search(key) : {};
   }
 
   public isOnline() {

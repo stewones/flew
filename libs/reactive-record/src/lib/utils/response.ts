@@ -4,6 +4,7 @@ import { Response } from '../interfaces/response';
 
 export function clearNetworkResponse(data) {
   return omit(data, [
+    'took',
     'config',
     'request',
     'response.config',

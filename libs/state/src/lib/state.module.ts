@@ -2,6 +2,7 @@ import { Config } from '@firetask/reactive-record';
 import { NgModule, ModuleWithProviders, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { ResponseSync, ResponseReset } from './store';
+import { get } from 'lodash';
 
 @Injectable()
 export class StateSetup {
@@ -10,6 +11,12 @@ export class StateSetup {
       store.dispatch(new ResponseSync(r));
     });
     Config.store.reset.subscribe(() => store.dispatch(new ResponseReset()));
+    Config.store.search = key => {
+      const snapshot = this.store.snapshot();
+      const state = get(snapshot, 'ReactiveState.responses') || [];
+      return state.find(s => s.key === key);
+    };
+    Config.store.enabled = true;
   }
 }
 

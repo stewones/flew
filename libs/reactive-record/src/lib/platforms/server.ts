@@ -506,6 +506,11 @@ export class ReactiveRecord implements ReactiveApi {
     return this;
   }
 
+  public state(active: boolean): ReactiveRecord {
+    this.chain.useState = active;
+    return this;
+  }
+
   /**
    * @deprecated
    * use `cache` instead

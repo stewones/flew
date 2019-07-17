@@ -17,6 +17,7 @@ export interface ReactiveApi {
   save(active: boolean): ReactiveRecord; // as a cache
   ttl(value: number): ReactiveRecord; // set a max time to cache
   cache(active: boolean): ReactiveRecord; // when true the first response should be from the cache if exists
+  state(active: boolean): ReactiveRecord;
   key(name: string): ReactiveRecord; // cache name
   query(by: { [key: string]: {} } | { [key: string]: {} }[]): ReactiveRecord; // firestore only - this is an object literal way of `where`
   where(
