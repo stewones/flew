@@ -36,7 +36,7 @@ export class TodoContainerComponent implements OnInit {
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
-Although we can write even less code and not use any dependency from _NGXS_
+Although we can write even less code
 
 {% code-tabs %}
 {% code-tabs-item title="todo-container.component.ts" %}
