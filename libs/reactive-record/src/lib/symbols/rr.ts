@@ -1,5 +1,5 @@
 import { Options } from '../interfaces/options';
-import { Subject } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { StorageAdapter } from '../interfaces/storage';
 import { Connector } from '../interfaces/connector';
 
@@ -8,10 +8,11 @@ interface ReactiveOptions {
   connector: Connector;
   store?: {
     enabled: boolean;
-    sync: Subject<any>;
-    reset: Subject<void>;
+    sync: (val: any) => void;
+    reset: () => void;
     get: (key: string) => any;
-    set: (key: string, val: any) => any;
+    set: (key: string, val: any) => void;
+    select: (key: string) => Observable<any>;
   };
   storage?: StorageAdapter;
 }
@@ -23,12 +24,17 @@ const ReactiveConfig: ReactiveOptions = {
   connector: {} as Connector,
   store: {
     enabled: false,
-    sync: new Subject(),
-    reset: new Subject(),
+    sync: (val: any) => {},
+    reset: () => {},
     get: (key: string) => {},
-    set: (key: string, val: any) => {}
+    set: (key: string, val: any) => {},
+    select: (key: string) => of({})
   },
-  storage: {} as StorageAdapter
+  storage: {
+    get: key => {},
+    set: (key, val) => {},
+    clear: () => {}
+  } as StorageAdapter
 };
 
 /**

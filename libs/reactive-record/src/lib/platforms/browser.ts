@@ -28,15 +28,12 @@ export class PlatformBrowser extends ReactiveRecord {
     super(options);
 
     merge(this, super.clearOptions(options));
-
-    if (!this._storage && options.chain && options.chain.useCache)
-      throw new Error('missing storage instance');
   }
 
   public clearCache(): void {
     super.init({ driver: super.getDriver() });
     this.$storage().clear();
-    Reactive.store.reset.next();
+    Reactive.store.reset();
   }
 
   public feed() {
@@ -45,7 +42,7 @@ export class PlatformBrowser extends ReactiveRecord {
     if (storage) {
       storage.forEach((value, key, index) => {
         if (value.collection === this.collection) {
-          Reactive.store.sync.next(value);
+          Reactive.store.sync(value);
         }
       });
     }
@@ -375,19 +372,11 @@ export class PlatformBrowser extends ReactiveRecord {
   protected dispatch(observer = { next: data => {} }, data, chain) {
     const transformResponse: any = shouldTransformResponse(chain, data);
     observer.next(transformResponse(data));
-    Reactive.store.sync.next(data);
+    Reactive.store.sync(data);
   }
 
   protected $storage(): any {
-    const storage = !isEmpty(this._storage)
-      ? this._storage
-      : {
-          get: key => {},
-          set: (key, val) => {},
-          clear: () => {}
-        };
-
-    return storage;
+    return Reactive.storage;
   }
 
   public isOnline() {

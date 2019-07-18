@@ -5,9 +5,19 @@ import {
   Response,
   shouldTransformResponse
 } from '@firetask/reactive-record';
+import { Observable } from 'rxjs';
 
 export interface StateModel {
   responses: Response[];
+}
+
+export interface SetStateOptions {
+  merge?: boolean;
+  save?: boolean;
+}
+
+export interface GetStateOptions {
+  raw?: boolean;
 }
 
 export class ResponseSync {
@@ -68,35 +78,48 @@ export function key(name: string, data = true) {
   };
 }
 
+export function select<T>(key: string) {
+  return Reactive.store.select(key) as Observable<T>;
+}
+
 export function enabledState() {
   return Reactive.store.enabled;
 }
 
 export function resetState() {
-  return Reactive.store.reset.next();
+  return Reactive.store.reset();
 }
 
 export function syncState(data: Response) {
-  return Reactive.store.sync.next(data);
+  return Reactive.store.sync(data);
 }
 
-export function getState(key: string, data = true): any {
+export function getState(
+  key: string,
+  options: GetStateOptions = { raw: false }
+): any {
   const response = Reactive.store.get && Reactive.store.get(key);
   const transform: any = shouldTransformResponse(
-    { transformData: data },
+    { transformData: !options.raw },
     response
   );
   return transform(response);
 }
 
-export function setState(key: string, value: any, merge = true) {
-  const currentState: any = getState(key, false) || {};
+export function setState(
+  key: string,
+  value: any,
+  options: SetStateOptions = { merge: true, save: true }
+) {
+  const currentState: any = getState(key, { raw: true }) || {};
   const isElastic = get(currentState, 'data.hits.hits');
-  let newState = merge ? { ...currentState, data: value } : { ...value };
+  let newState = options.merge
+    ? { ...currentState, data: value }
+    : { ...value };
 
   //
   // elastic case
-  if (merge && isElastic) {
+  if (options.merge && isElastic) {
     const currentStateSource = currentState.data.hits.hits.find(
       h => h._source.id === value.id
     );
@@ -121,5 +144,6 @@ export function setState(key: string, value: any, merge = true) {
 
   //
   // set the new state
+  if (Reactive.storage && options.save) Reactive.storage.set(key, newState);
   return Reactive.store.set && Reactive.store.set(key, newState);
 }
