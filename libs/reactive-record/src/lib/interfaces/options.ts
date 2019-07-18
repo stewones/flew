@@ -11,8 +11,9 @@ export interface Options {
   driver?: ReactiveDriverOption;
   timestamp?: boolean; // whether or not to add `updated_at` timestamp
   connector?: Connector;
-  useLog?: boolean;
-  useLogTrace?: boolean;
+  silent?: boolean; // controls whether or not show internal logs
+  useLog?: boolean; // @deprecated use `silent` instead
+  useLogTrace?: boolean; // @experimental `silent` must be off
   firebaseConfig?: any;
 
   //

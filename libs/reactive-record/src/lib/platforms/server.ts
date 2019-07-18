@@ -130,6 +130,13 @@ export class ReactiveRecord implements ReactiveApi {
     // configure logger
     if (!isBoolean(options.useLog)) options.useLog = true;
     if (!isBoolean(options.useLogTrace)) options.useLogTrace = false;
+    if (!isBoolean(options.silent)) options.useLog = true;
+
+    if (options.silent === true) {
+      options.useLog = false;
+      options.useLogTrace = false;
+    }
+
     this.logger = new Logger({
       subject: this.$log,
       useLog: options.useLog,
