@@ -1,6 +1,12 @@
+---
+description: >-
+  Working with redux patterns can be annoying, but with Reactive Record, it's
+  not.
+---
+
 # Select Data
 
-This is an elegant way to select data and keep it connected directly, so screen should react to every manipulation that occurs in _RR State_.
+This is an elegant way to select data and keep it connected directly with store, so screen should react to every manipulation that occurs in _RR State_.
 
 {% hint style="info" %}
 1. define a key on the chaining
