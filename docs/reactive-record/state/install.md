@@ -20,6 +20,36 @@ $ npm i -P @ngxs/store && npm i -P lodash
 {% code-tabs-item title="app.module.ts" %}
 ```typescript
 import { NgxsModule } from '@ngxs/store';
+import { ReactiveState, ReactiveStateModule } from '@firetask/state';
+import { environment } from '../environments/environment';
+
+@NgModule({
+  // ...
+  imports: [
+    //
+    // ngxs
+    NgxsModule.forRoot([ReactiveState], {
+      developmentMode: !environment.production
+    }),
+    //
+    // rr state
+    ReactiveStateModule.forRoot()
+  ]
+})
+export class AppModule {}
+
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+
+### Freeze Data
+
+This is powerful when developing to make sure we're not going to mutate app state.
+
+{% code-tabs %}
+{% code-tabs-item title="app.module.ts" %}
+```typescript
+import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { ReactiveState, ReactiveStateModule } from '@firetask/state';
 import { environment } from '../environments/environment';
@@ -28,18 +58,17 @@ import { environment } from '../environments/environment';
   // ...
   imports: [
     //
-    // init ngxs stuff
+    // ngxs
     NgxsModule.forRoot([ReactiveState], {
       developmentMode: !environment.production
     }),
     NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production }),
     //
-    // init rr state
+    // rr state
     ReactiveStateModule.forRoot()
   ]
 })
 export class AppModule {}
-
 ```
 {% endcode-tabs-item %}
 {% endcode-tabs %}
