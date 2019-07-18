@@ -1,12 +1,11 @@
 # Select Dynamically
 
-However you might need to select state dynamically, such as on a search feature. To accomplish that we are going to use NGXS' **Store** directly to get the result through a RR key.
+However you might need to select state dynamically, such as on a search feature. To accomplish that we don't need to grab anything from NGXS.
 
 {% code-tabs %}
 {% code-tabs-item title="todo-container.component.ts" %}
 ```typescript
-import { Store } from '@ngxs/store';
-import { key } from '@firetask/state';
+import { select } from '@firetask/state';
 
 @Component({
   selector: 'app-todo-container',
@@ -18,8 +17,7 @@ export class TodoContainerComponent implements OnInit {
   todos$: Observable<Todo[]>;
 
   constructor(
-    private todoService: TodoService,
-    private store: Store
+    private todoService: TodoService
   ) {}
 
   ngOnInit() {
@@ -32,7 +30,7 @@ export class TodoContainerComponent implements OnInit {
 
     //
     // first we set the observable
-    this.todos$ = this.store.select(key(storeKey));
+    this.todos$ = select(storeKey);
 
     //
     // and then execute a query    
@@ -46,4 +44,12 @@ export class TodoContainerComponent implements OnInit {
 ```
 {% endcode-tabs-item %}
 {% endcode-tabs %}
+
+
+
+### Cleaning the view
+
+```typescript
+this.todos$ = null;
+```
 
