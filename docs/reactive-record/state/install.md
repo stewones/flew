@@ -1,3 +1,7 @@
+---
+description: 'Easy as cake, start work with redux today using the state package.'
+---
+
 # Getting Started
 
 ## Installation
