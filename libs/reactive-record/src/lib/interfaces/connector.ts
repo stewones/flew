@@ -1,7 +1,7 @@
 import { AxiosInstance } from 'axios';
 
-/**
- * @export
- * @interface Connector
- */
-export type Connector = AxiosInstance | any;
+export type Connector = {
+  http?: AxiosInstance | any;
+  firestore?: any;
+  firebase?: any;
+};

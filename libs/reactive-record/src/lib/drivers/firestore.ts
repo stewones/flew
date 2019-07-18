@@ -8,19 +8,20 @@ import { Logger } from '../utils/logger';
 import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
 import { clearNetworkResponse } from '../utils/response';
 import { Chain } from '../interfaces/chain';
+import { Reactive } from '../symbols/rr';
 
 export class FirestoreDriver implements ReactiveDriver {
   _driver: ReactiveDriverOption = 'firestore';
   collection: string;
   timestamp = true;
-  connector: Connector = {};
+  connector: any;
   logger: Logger;
   chain: Chain;
   persistence: boolean;
 
   constructor(options: Options) {
     merge(this, options);
-    const connector = get(options, 'connector') || {};
+    const connector: Connector = Reactive.connector || ({} as Connector);
     this.connector = connector.firestore;
     this.chain = this.chain ? this.chain : {};
     //

@@ -41,9 +41,7 @@ export class PlatformBrowser extends ReactiveRecord {
 
   public feed() {
     const storage =
-      !isEmpty(Reactive.options) && Reactive.options.storage
-        ? Reactive.options.storage
-        : false;
+      !isEmpty(Reactive.options) && Reactive.storage ? Reactive.storage : false;
     if (storage) {
       storage.forEach((value, key, index) => {
         if (value.collection === this.collection) {

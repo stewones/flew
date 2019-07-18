@@ -7,7 +7,7 @@ describe('HttpDriver', () => {
   beforeEach(() => {
     driver = new HttpDriver({
       connector: {}
-    });
+    } as any);
   });
 
   it('should be created using minimal setup', () => {
@@ -21,7 +21,7 @@ describe('HttpDriver', () => {
       connector: {
         http: { x: 'any other http instance' }
       }
-    });
+    } as any);
     expect(driver.connector.x).toBeTruthy();
   });
 
@@ -30,7 +30,7 @@ describe('HttpDriver', () => {
       baseURL: 'http://google.com',
       endpoint: '/',
       connector: {}
-    });
+    } as any);
     expect(driver.get().toPromise()).toBeTruthy();
     expect(driver.get('/', 'key').toPromise()).toBeTruthy();
   });
@@ -40,7 +40,7 @@ describe('HttpDriver', () => {
       baseURL: 'http://google.com',
       endpoint: '/',
       connector: {}
-    });
+    } as any);
     expect(driver.post().toPromise()).toBeTruthy();
     expect(driver.post('/', 'key', {}).toPromise()).toBeTruthy();
   });
@@ -50,7 +50,7 @@ describe('HttpDriver', () => {
       baseURL: 'http://google.com',
       endpoint: '/',
       connector: {}
-    });
+    } as any);
     expect(driver.patch().toPromise()).toBeTruthy();
     expect(driver.patch('/', 'key', {}).toPromise()).toBeTruthy();
   });
@@ -60,7 +60,7 @@ describe('HttpDriver', () => {
       baseURL: 'http://google.com',
       endpoint: '/',
       connector: {}
-    });
+    } as any);
     expect(driver.delete().toPromise()).toBeTruthy();
     expect(driver.delete('/', 'key').toPromise()).toBeTruthy();
   });
@@ -86,7 +86,7 @@ describe('HttpDriver', () => {
     driver = new HttpDriver({
       baseURL: 'http://google.com',
       connector: {}
-    });
+    } as any);
     expect(() => {
       driver.get().toPromise();
     }).toThrowError(`endpoint required for [get]`);
@@ -104,7 +104,7 @@ describe('HttpDriver', () => {
             })
         }
       }
-    });
+    } as any);
 
     driver
       .get()
@@ -127,7 +127,7 @@ describe('HttpDriver', () => {
           get: () => Promise.resolve([1, 2, 3])
         }
       }
-    });
+    } as any);
 
     driver
       .get()
@@ -150,7 +150,7 @@ describe('HttpDriver', () => {
           get: () => Promise.resolve('okay')
         }
       }
-    });
+    } as any);
 
     driver
       .get()
@@ -178,7 +178,7 @@ describe('HttpDriver', () => {
             })
         }
       }
-    });
+    } as any);
 
     driver
       .get()
@@ -198,7 +198,7 @@ describe('HttpDriver', () => {
           get: () => Promise.reject('error string')
         }
       }
-    });
+    } as any);
 
     driver
       .get()

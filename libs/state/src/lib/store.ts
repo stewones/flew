@@ -68,6 +68,18 @@ export function key(name: string, data = true) {
   };
 }
 
+export function enabledState() {
+  return Reactive.store.enabled;
+}
+
+export function resetState() {
+  return Reactive.store.reset.next();
+}
+
+export function syncState(data: Response) {
+  return Reactive.store.sync.next(data);
+}
+
 export function getState(key: string, data = true): any {
   const response = Reactive.store.get && Reactive.store.get(key);
   const transform: any = shouldTransformResponse(

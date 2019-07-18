@@ -119,10 +119,6 @@ export class ReactiveRecord implements ReactiveApi {
     options.chain.useCache = options.useCache === false ? false : true;
 
     //
-    // set storage
-    if (options.storage) options._storage = options.storage;
-
-    //
     // settings initialized once
     if (this._initialized) return;
 
@@ -171,7 +167,6 @@ export class ReactiveRecord implements ReactiveApi {
     delete newOptions.useLog;
     delete newOptions.useLogTrace;
     delete newOptions.driver;
-    delete newOptions.storage;
     return newOptions;
   }
 
@@ -183,8 +178,13 @@ export class ReactiveRecord implements ReactiveApi {
     return this.getConnector('firestore');
   }
 
+  /**
+   * @deprecated
+   * import the function `storage`
+   * from @firetask/cache
+   */
   public storage(): StorageAdapter {
-    return this._storage;
+    return Reactive.storage || ({} as StorageAdapter);
   }
 
   public isOnline(): any {}

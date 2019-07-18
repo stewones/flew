@@ -7,11 +7,12 @@ import { Response } from '../interfaces/response';
 import { Logger } from '../utils/logger';
 import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
 import { clearNetworkResponse } from '../utils/response';
+import { Reactive } from '../symbols/rr';
 
 export class HttpDriver implements ReactiveDriver {
   _driver: ReactiveDriverOption = 'http';
   collection: string;
-  connector: Connector = {};
+  connector: any;
   logger: Logger;
 
   private baseURL: string;
@@ -20,7 +21,7 @@ export class HttpDriver implements ReactiveDriver {
 
   constructor(options: Options) {
     merge(this, options);
-    const connector = get(options, 'connector') || {};
+    const connector: Connector = Reactive.connector || ({} as Connector);
     this.connector = connector.http;
 
     if (isEmpty(this.connector)) {
@@ -113,10 +114,7 @@ export class HttpDriver implements ReactiveDriver {
     });
   }
 
-  public get<T>(
-    path: string = '',
-    key: string = ''
-  ): Observable<T> {
+  public get<T>(path: string = '', key: string = ''): Observable<T> {
     return this.executeRequest('get', path, key);
   }
 

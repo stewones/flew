@@ -3,9 +3,10 @@ import 'firebase/database';
 import 'firebase/auth';
 import * as Firebase from 'firebase/app';
 import {
-  Config,
+  Reactive,
   FirebaseConnector,
-  FirestoreConnector
+  FirestoreConnector,
+  Connector
 } from '@firetask/reactive-record';
 
 import {
@@ -23,10 +24,10 @@ export interface ReactiveFirebaseOptions {
 @Injectable()
 export class ReactiveFirebaseSetup {
   constructor(@Inject('ReactiveFirebaseOptions') public options) {
-    Reactive.options.connector = {
+    Reactive.connector = {
       firebase: new FirebaseConnector(Firebase, options.config),
       firestore: new FirestoreConnector(Firebase, options.config)
-    };
+    } as Connector;
   }
 }
 

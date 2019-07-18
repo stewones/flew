@@ -1,46 +1,35 @@
 import { Options } from '../interfaces/options';
 import { Subject } from 'rxjs';
+import { StorageAdapter } from '../interfaces/storage';
+import { Connector } from '../interfaces/connector';
 
 interface ReactiveOptions {
   options: Options;
-  store?: any;
+  connector: Connector;
+  store?: {
+    enabled: boolean;
+    sync: Subject<any>;
+    reset: Subject<void>;
+    get: (key: string) => any;
+    set: (key: string, val: any) => any;
+  };
+  storage?: StorageAdapter;
 }
 
 const ReactiveConfig: ReactiveOptions = {
   options: {
     driver: 'firestore'
   },
+  connector: {} as Connector,
   store: {
-    dispatch: new Subject(),
-    reset: new Subject()
-  }
+    enabled: false,
+    sync: new Subject(),
+    reset: new Subject(),
+    get: (key: string) => {},
+    set: (key: string, val: any) => {}
+  },
+  storage: {} as StorageAdapter
 };
-
-export const optionGet = function() {
-  return ReactiveConfig.options;
-};
-
-export const optionSet = function(options: Options) {
-  return (ReactiveConfig.options = options);
-};
-
-export const storeGet = function() {
-  return ReactiveConfig.store;
-};
-
-export const storeSet = function(store) {
-  return (ReactiveConfig.store = store);
-};
-
-Object.defineProperty(ReactiveConfig, 'o', {
-  get: optionGet,
-  set: optionSet
-});
-
-Object.defineProperty(ReactiveConfig, 's', {
-  get: storeGet,
-  set: storeSet
-});
 
 /**
  * @name Config

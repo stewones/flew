@@ -1,4 +1,4 @@
-import { Reactive, optionGet, optionSet, storeGet, storeSet } from './rr';
+import { Reactive } from './rr';
 
 describe('RRSymbol', () => {
   it('should dispatch payloads to store', () => {
@@ -7,24 +7,24 @@ describe('RRSymbol', () => {
     expect(spy).toBeCalledWith(`rr rulez!`);
   });
 
-  it('should get options', () => {
-    expect(optionGet()).toEqual({ driver: 'firestore' });
-  });
+  // it('should get options', () => {
+  //   expect(optionGet()).toEqual({ driver: 'firestore' });
+  // });
 
-  it('should set options', () => {
-    optionSet({ useLog: false });
-    expect(Reactive.options.useLog).toBe(false);
-  });
+  // it('should set options', () => {
+  //   optionSet({ useLog: false });
+  //   expect(Reactive.options.useLog).toBe(false);
+  // });
 
-  it('should get store', () => {
-    expect(storeGet()).toBeTruthy();
-  });
+  // it('should get store', () => {
+  //   expect(storeGet()).toBeTruthy();
+  // });
 
-  it('should set store', () => {
-    const store = { _: 'ngxs' };
-    storeSet(store);
-    expect(Reactive.store).toBe(store);
-  });
+  // it('should set store', () => {
+  //   const store = { _: 'ngxs' };
+  //   storeSet(store);
+  //   expect(Reactive.store).toBe(store);
+  // });
 
   // @todo move to rr state
   // it('should return a state response from a key', () => {

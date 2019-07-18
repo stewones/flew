@@ -86,7 +86,7 @@ describe('Browser Platform', () => {
   });
 
   it('should NOT `feed` responses from cache into rr store', () => {
-    Reactive.options.storage = null;
+    Reactive.storage = null;
 
     const lib_ = new PlatformBrowser({
       useLog: false,
@@ -102,7 +102,7 @@ describe('Browser Platform', () => {
   });
 
   it('should `feed` responses from cache into rr store', () => {
-    Reactive.options.storage = {
+    Reactive.storage = {
       forEach: (cb: any) => {
         const result = [
           { data: { a: 1 }, collection: collection, key: 'a1' },
