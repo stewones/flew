@@ -94,7 +94,7 @@ describe('Browser Platform', () => {
       collection: collection
     });
 
-    const spy = jest.spyOn(Reactive.store.dispatch, 'next');
+    const spy = jest.spyOn(Reactive.store.sync, 'next');
 
     lib_.feed();
 
@@ -115,7 +115,7 @@ describe('Browser Platform', () => {
       }
     } as StorageAdapter;
 
-    const spy = jest.spyOn(Reactive.store.dispatch, 'next');
+    const spy = jest.spyOn(Reactive.store.sync, 'next');
 
     lib.feed();
 
@@ -960,7 +960,7 @@ describe('Browser Platform', () => {
   //   };
 
   //   const spyNext = jest.spyOn(observer, 'next');
-  //   const spyDispatch = jest.spyOn(Reactive.store.dispatch, 'next');
+  //   const spyDispatch = jest.spyOn(Reactive.store.sync, 'next');
 
   //   await lib__.setCache(
   //     'find',
@@ -1001,7 +1001,7 @@ describe('Browser Platform', () => {
   //   };
 
   //   const spyNext = jest.spyOn(observer, 'next');
-  //   const spyDispatch = jest.spyOn(Reactive.store.dispatch, 'next');
+  //   const spyDispatch = jest.spyOn(Reactive.store.sync, 'next');
 
   //   await lib__.setCache(
   //     'find',

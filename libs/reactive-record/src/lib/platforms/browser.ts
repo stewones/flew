@@ -47,7 +47,7 @@ export class PlatformBrowser extends ReactiveRecord {
     if (storage) {
       storage.forEach((value, key, index) => {
         if (value.collection === this.collection) {
-          Reactive.store.dispatch.next(value);
+          Reactive.store.sync.next(value);
         }
       });
     }
@@ -377,7 +377,7 @@ export class PlatformBrowser extends ReactiveRecord {
   protected dispatch(observer = { next: data => {} }, data, chain) {
     const transformResponse: any = shouldTransformResponse(chain, data);
     observer.next(transformResponse(data));
-    Reactive.store.dispatch.next(data);
+    Reactive.store.sync.next(data);
   }
 
   protected $storage(): any {
@@ -397,6 +397,6 @@ export class PlatformBrowser extends ReactiveRecord {
   }
 
   private $state(key: string) {
-    return Reactive.store.search ? Reactive.store.search(key) : {};
+    return Reactive.store.get ? Reactive.store.get(key) : {};
   }
 }

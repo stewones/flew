@@ -69,7 +69,7 @@ export function key(name: string, data = true) {
 }
 
 export function getState(key: string, data = true): any {
-  const response = Reactive.store.search && Reactive.store.search(key);
+  const response = Reactive.store.get && Reactive.store.get(key);
   const transform: any = shouldTransformResponse(
     { transformData: data },
     response
@@ -109,5 +109,5 @@ export function setState(key: string, value: any, merge = true) {
 
   //
   // set the new state
-  return Reactive.store.change && Reactive.store.change(key, newState);
+  return Reactive.store.set && Reactive.store.set(key, newState);
 }

@@ -2,8 +2,8 @@ import { Reactive, optionGet, optionSet, storeGet, storeSet } from './rr';
 
 describe('RRSymbol', () => {
   it('should dispatch payloads to store', () => {
-    const spy = jest.spyOn(Reactive.store.dispatch, 'next');
-    Reactive.store.dispatch.next(`rr rulez!`);
+    const spy = jest.spyOn(Reactive.store.sync, 'next');
+    Reactive.store.sync.next(`rr rulez!`);
     expect(spy).toBeCalledWith(`rr rulez!`);
   });
 
