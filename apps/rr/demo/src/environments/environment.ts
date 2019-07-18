@@ -8,7 +8,7 @@ import {
 } from '@firetask/reactive-record';
 
 import { Storage } from '@ionic/storage';
-import { Config } from '@firetask/reactive-record';
+import { Reactive } from '@firetask/reactive-record';
 import { storageConfig } from '@firetask/core';
 import { firebaseConfig } from './firebase.config';
 
@@ -22,7 +22,7 @@ export const environment = {
   production: false
 };
 
-Config.options = {
+Reactive.options = {
   // useCache: false,
   useLog: !environment.production,
   // useLogTrace: !environment.production,

@@ -1,12 +1,12 @@
 // tslint:disable
-import { isEmpty, isEqual, merge, get, isFunction } from 'lodash';
+import { isEmpty, isEqual, merge, isFunction } from 'lodash';
 import { Observable, from, of, merge as merge$ } from 'rxjs';
 import { map, switchMap, filter, catchError, tap } from 'rxjs/operators';
 import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { ReactiveRecord } from './server';
 import { StorageAdapter } from '../interfaces/storage';
-import { Config } from '../symbols/rr';
+import { Reactive } from '../symbols/rr';
 import { ReactiveVerb } from '../interfaces/verb';
 import {
   clearNetworkResponse,
@@ -36,18 +36,18 @@ export class PlatformBrowser extends ReactiveRecord {
   public clearCache(): void {
     super.init({ driver: super.getDriver() });
     this.$storage().clear();
-    Config.store.reset.next();
+    Reactive.store.reset.next();
   }
 
   public feed() {
     const storage =
-      !isEmpty(Config.options) && Config.options.storage
-        ? Config.options.storage
+      !isEmpty(Reactive.options) && Reactive.options.storage
+        ? Reactive.options.storage
         : false;
     if (storage) {
       storage.forEach((value, key, index) => {
         if (value.collection === this.collection) {
-          Config.store.dispatch.next(value);
+          Reactive.store.dispatch.next(value);
         }
       });
     }
@@ -213,7 +213,7 @@ export class PlatformBrowser extends ReactiveRecord {
   protected async shouldReturnCache(chain: Chain, key: string, observer) {
     const useCache: boolean = chain.useCache === false ? false : true;
     const useState: boolean = chain.useState === false ? false : true;
-    const stateAvailable = Config.store.enabled;
+    const stateAvailable = Reactive.store.enabled;
     const state: Response = this.$state(key);
 
     if (useState && stateAvailable && !isEmpty(state)) return Promise.resolve();
@@ -249,7 +249,7 @@ export class PlatformBrowser extends ReactiveRecord {
 
   protected async shouldReturnState(chain: Chain, key: string, observer) {
     const useState = chain.useState === false ? false : true;
-    const stateAvailable = Config.store.enabled;
+    const stateAvailable = Reactive.store.enabled;
 
     if (useState === false || !stateAvailable) return Promise.resolve();
 
@@ -377,7 +377,7 @@ export class PlatformBrowser extends ReactiveRecord {
   protected dispatch(observer = { next: data => {} }, data, chain) {
     const transformResponse: any = shouldTransformResponse(chain, data);
     observer.next(transformResponse(data));
-    Config.store.dispatch.next(data);
+    Reactive.store.dispatch.next(data);
   }
 
   protected $storage(): any {
@@ -397,6 +397,6 @@ export class PlatformBrowser extends ReactiveRecord {
   }
 
   private $state(key: string) {
-    return Config.store.search ? Config.store.search(key) : {};
+    return Reactive.store.search ? Reactive.store.search(key) : {};
   }
 }

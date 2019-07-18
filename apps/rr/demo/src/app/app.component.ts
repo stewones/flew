@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
     private userService: UserService,
     private http: HttpClient
   ) {
-    // Config.options.connector.http = http;
+    // Reactive.options.connector.http = http;
   }
 
   ngOnInit() {

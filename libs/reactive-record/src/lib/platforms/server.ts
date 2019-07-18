@@ -18,7 +18,7 @@ import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
 import { StorageAdapter } from '../interfaces/storage';
 import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
-import { Config } from '../symbols/rr';
+import { Reactive } from '../symbols/rr';
 import { FirestoreDriver } from '../drivers/firestore';
 import { FirebaseDriver } from '../drivers/firebase';
 import { HttpDriver } from '../drivers/http';
@@ -217,7 +217,7 @@ export class ReactiveRecord implements ReactiveApi {
 
   private cloneOptions() {
     const consumer: Options = this._initial_options;
-    const general: Options = Config.options;
+    const general: Options = Reactive.options;
     return { ...general, ...consumer };
   }
 

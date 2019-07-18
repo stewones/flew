@@ -1,9 +1,9 @@
-import { Config, optionGet, optionSet, storeGet, storeSet } from './rr';
+import { Reactive, optionGet, optionSet, storeGet, storeSet } from './rr';
 
 describe('RRSymbol', () => {
   it('should dispatch payloads to store', () => {
-    const spy = jest.spyOn(Config.store.dispatch, 'next');
-    Config.store.dispatch.next(`rr rulez!`);
+    const spy = jest.spyOn(Reactive.store.dispatch, 'next');
+    Reactive.store.dispatch.next(`rr rulez!`);
     expect(spy).toBeCalledWith(`rr rulez!`);
   });
 
@@ -13,7 +13,7 @@ describe('RRSymbol', () => {
 
   it('should set options', () => {
     optionSet({ useLog: false });
-    expect(Config.options.useLog).toBe(false);
+    expect(Reactive.options.useLog).toBe(false);
   });
 
   it('should get store', () => {
@@ -23,7 +23,7 @@ describe('RRSymbol', () => {
   it('should set store', () => {
     const store = { _: 'ngxs' };
     storeSet(store);
-    expect(Config.store).toBe(store);
+    expect(Reactive.store).toBe(store);
   });
 
   // @todo move to rr state

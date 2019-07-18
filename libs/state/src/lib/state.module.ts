@@ -1,4 +1,4 @@
-import { Config } from '@firetask/reactive-record';
+import { Reactive } from '@firetask/reactive-record';
 import { NgModule, ModuleWithProviders, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { ResponseSync, ResponseReset } from './store';
@@ -7,16 +7,16 @@ import { get } from 'lodash';
 @Injectable()
 export class StateSetup {
   constructor(public store: Store) {
-    Config.store.dispatch.subscribe(r => {
+    Reactive.store.dispatch.subscribe(r => {
       store.dispatch(new ResponseSync(r));
     });
-    Config.store.reset.subscribe(() => store.dispatch(new ResponseReset()));
-    Config.store.search = key => {
+    Reactive.store.reset.subscribe(() => store.dispatch(new ResponseReset()));
+    Reactive.store.search = key => {
       const snapshot = this.store.snapshot();
       const state = get(snapshot, 'ReactiveState.responses') || [];
       return state.find(s => s.key === key);
     };
-    Config.store.change = (key, val) => {
+    Reactive.store.change = (key, val) => {
       const snapshot = this.store.snapshot();
       const responses = get(snapshot, 'ReactiveState.responses') || [];
       const state = responses.find(s => s.key === key);
@@ -24,7 +24,7 @@ export class StateSetup {
       store.dispatch(new ResponseSync(newState));
       return state;
     };
-    Config.store.enabled = true;
+    Reactive.store.enabled = true;
   }
 }
 

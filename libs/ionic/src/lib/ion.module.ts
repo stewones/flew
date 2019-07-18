@@ -2,7 +2,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { storageConfig } from '@firetask/core';
-import { Config } from '@firetask/reactive-record';
+import { Reactive } from '@firetask/reactive-record';
 
 import { Ui } from './ui.service';
 
@@ -23,7 +23,7 @@ export interface ReactiveIonicOptions {
 @Injectable()
 export class ReactiveIonicSetup {
   constructor(@Inject('ReactiveIonicOptions') public options) {
-    Config.options.storage = new Storage(
+    Reactive.options.storage = new Storage(
       storageConfig(options.dbName, options.dbStore)
     );
   }

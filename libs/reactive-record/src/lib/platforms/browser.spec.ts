@@ -1,6 +1,6 @@
 import { PlatformBrowser } from './browser';
 import { StorageAdapter } from '../interfaces/storage';
-import { Config } from '../symbols/rr';
+import { Reactive } from '../symbols/rr';
 import { Subject, PartialObserver } from 'rxjs';
 import { Logger } from '../utils/logger';
 import { Response } from '../interfaces/response';
@@ -86,7 +86,7 @@ describe('Browser Platform', () => {
   });
 
   it('should NOT `feed` responses from cache into rr store', () => {
-    Config.options.storage = null;
+    Reactive.options.storage = null;
 
     const lib_ = new PlatformBrowser({
       useLog: false,
@@ -94,7 +94,7 @@ describe('Browser Platform', () => {
       collection: collection
     });
 
-    const spy = jest.spyOn(Config.store.dispatch, 'next');
+    const spy = jest.spyOn(Reactive.store.dispatch, 'next');
 
     lib_.feed();
 
@@ -102,7 +102,7 @@ describe('Browser Platform', () => {
   });
 
   it('should `feed` responses from cache into rr store', () => {
-    Config.options.storage = {
+    Reactive.options.storage = {
       forEach: (cb: any) => {
         const result = [
           { data: { a: 1 }, collection: collection, key: 'a1' },
@@ -115,7 +115,7 @@ describe('Browser Platform', () => {
       }
     } as StorageAdapter;
 
-    const spy = jest.spyOn(Config.store.dispatch, 'next');
+    const spy = jest.spyOn(Reactive.store.dispatch, 'next');
 
     lib.feed();
 
@@ -960,7 +960,7 @@ describe('Browser Platform', () => {
   //   };
 
   //   const spyNext = jest.spyOn(observer, 'next');
-  //   const spyDispatch = jest.spyOn(Config.store.dispatch, 'next');
+  //   const spyDispatch = jest.spyOn(Reactive.store.dispatch, 'next');
 
   //   await lib__.setCache(
   //     'find',
@@ -1001,7 +1001,7 @@ describe('Browser Platform', () => {
   //   };
 
   //   const spyNext = jest.spyOn(observer, 'next');
-  //   const spyDispatch = jest.spyOn(Config.store.dispatch, 'next');
+  //   const spyDispatch = jest.spyOn(Reactive.store.dispatch, 'next');
 
   //   await lib__.setCache(
   //     'find',

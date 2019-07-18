@@ -47,7 +47,7 @@ export class TodoService {
     //
     // setTimeout(() => {
     //   console.log('reboot');
-    //   Config.options.useLog = false;
+    //   Reactive.options.useLog = false;
     //   this.$collection.reboot();
     // }, 5000);
   }

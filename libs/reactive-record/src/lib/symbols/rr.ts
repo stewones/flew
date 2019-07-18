@@ -42,4 +42,9 @@ Object.defineProperty(ReactiveConfig, 's', {
   set: storeSet
 });
 
+/**
+ * @name Config
+ * @deprecated use `Reactive` instead
+ */
 export const Config = ReactiveConfig;
+export const Reactive = ReactiveConfig;

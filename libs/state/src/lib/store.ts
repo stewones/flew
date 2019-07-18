@@ -1,9 +1,9 @@
 import { State, Action, StateContext } from '@ngxs/store';
-import { isEqual, cloneDeep, get, isArray, isObject } from 'lodash';
+import { get } from 'lodash';
 import {
+  Reactive,
   Response,
-  shouldTransformResponse,
-  Config
+  shouldTransformResponse
 } from '@firetask/reactive-record';
 
 export interface StateModel {
@@ -69,7 +69,7 @@ export function key(name: string, data = true) {
 }
 
 export function getState(key: string, data = true): any {
-  const response = Config.store.search && Config.store.search(key);
+  const response = Reactive.store.search && Reactive.store.search(key);
   const transform: any = shouldTransformResponse(
     { transformData: data },
     response
@@ -77,14 +77,14 @@ export function getState(key: string, data = true): any {
   return transform(response);
 }
 
-export function setState(key: string, value: any) {
+export function setState(key: string, value: any, merge = true) {
   const currentState: any = getState(key, false) || {};
   const isElastic = get(currentState, 'data.hits.hits');
-  let newState = { ...currentState, data: value };
+  let newState = merge ? { ...currentState, data: value } : { ...value };
 
   //
   // elastic case
-  if (isElastic) {
+  if (merge && isElastic) {
     const currentStateSource = currentState.data.hits.hits.find(
       h => h._source.id === value.id
     );
@@ -109,5 +109,5 @@ export function setState(key: string, value: any) {
 
   //
   // set the new state
-  return Config.store.change && Config.store.change(key, newState);
+  return Reactive.store.change && Reactive.store.change(key, newState);
 }

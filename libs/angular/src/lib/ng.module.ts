@@ -1,4 +1,4 @@
-import { Config, Options } from '@firetask/reactive-record';
+import { Reactive, Options } from '@firetask/reactive-record';
 
 import {
   NgModule,
@@ -10,7 +10,7 @@ import {
 export class ReactiveAngularSetup {
   constructor(@Inject('ReactiveAngularOptions') public options) {
     for (const k in options) {
-      Config.options[k] = options[k];
+      Reactive.options[k] = options[k];
     }
   }
 }
