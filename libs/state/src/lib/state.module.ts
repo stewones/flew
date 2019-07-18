@@ -18,10 +18,10 @@ export class StateSetup {
     };
     Config.store.change = (key, val) => {
       const snapshot = this.store.snapshot();
-      const store = get(snapshot, 'ReactiveState.responses') || [];
-      const state = store.find(s => s.key === key);
+      const responses = get(snapshot, 'ReactiveState.responses') || [];
+      const state = responses.find(s => s.key === key);
       const newState = { key: key, ...val };
-      Config.store.dispatch.next(newState);
+      store.dispatch(new ResponseSync(newState));
       return state;
     };
     Config.store.enabled = true;

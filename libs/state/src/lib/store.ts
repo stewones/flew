@@ -1,5 +1,5 @@
-import { State, Action, StateContext, createSelector } from '@ngxs/store';
-import { isEqual, cloneDeep, isEmpty, get } from 'lodash';
+import { State, Action, StateContext } from '@ngxs/store';
+import { isEqual, cloneDeep, get, isArray, isObject } from 'lodash';
 import {
   Response,
   shouldTransformResponse,
@@ -27,44 +27,24 @@ export class ResponseReset {
   }
 })
 export class ReactiveState {
-  static key(name: string, data = true) {
-    return createSelector(
-      [ReactiveState],
-      // @dynamic
-      (state: StateModel) => {
-        const response = state.responses.find(it => it.key === name);
-
-        const transformResponse: any = shouldTransformResponse(
-          { transformData: data },
-          response
-        );
-        return response && transformResponse(response);
-      }
-    );
-  }
-
   @Action(ResponseSync) syncResponse(
     context: StateContext<StateModel>,
     action: ResponseSync
   ) {
     const state = context.getState();
-    let responses = cloneDeep(state.responses);
+    const responses = [...state.responses];
     const exists = responses.find(it => it.key === action.payload.key);
 
-    const changed =
-      exists && !isEqual(cloneDeep(exists), cloneDeep(action.payload));
-
-    if (changed) {
-      responses = [
-        ...responses.filter(r => r.key !== action.payload.key),
-        ...[action.payload]
-      ];
-    } else if (!exists) {
+    if (!exists) {
       responses.push(action.payload);
     }
 
     context.patchState({
-      responses: responses
+      responses: exists
+        ? Object.assign(responses, {
+            [responses.indexOf(exists)]: action.payload
+          })
+        : responses
     });
   }
 
@@ -80,27 +60,30 @@ export class ReactiveState {
 export function key(name: string, data = true) {
   return (state: any) => {
     const response = state.ReactiveState.responses.find(it => it.key === name);
-    const transformResponse: any = shouldTransformResponse(
+    const transform: any = shouldTransformResponse(
       { transformData: data },
       response
     );
-    return response && transformResponse(response);
+    return response && transform(response);
   };
 }
 
-export function state(key: string, value?: any): any {
-  const shouldSetState = !isEmpty(value) || value === {} || value === [];
-  if (shouldSetState && Config.store.change) Config.store.change(key, value);
-  return Config.store.search ? Config.store.search(key) : {};
+export function getState(key: string, data = true): any {
+  const response = Config.store.search && Config.store.search(key);
+  const transform: any = shouldTransformResponse(
+    { transformData: data },
+    response
+  );
+  return transform(response);
 }
 
 export function setState(key: string, value: any) {
-  if (!value.id) throw new Error('value must contain an id property');
-
-  const currentState: any = state(key);
+  const currentState: any = getState(key, false) || {};
   const isElastic = get(currentState, 'data.hits.hits');
-  let newStateData = { ...currentState.data };
+  let newState = { ...currentState, data: value };
 
+  //
+  // elastic case
   if (isElastic) {
     const currentStateSource = currentState.data.hits.hits.find(
       h => h._source.id === value.id
@@ -116,13 +99,15 @@ export function setState(key: string, value: any) {
       ]
     ];
 
-    const newStateHits = { ...currentState.data.hits, hits: newStateHitsHits };
-    newStateData = { ...currentState.data, hits: newStateHits };
+    const newStateHits = {
+      ...currentState.data.hits,
+      hits: newStateHitsHits
+    };
+    const newStateData = { ...currentState.data, hits: newStateHits };
+    newState = { ...currentState, data: newStateData };
   }
-
-  const newState = { ...currentState, data: newStateData };
 
   //
   // set the new state
-  state(key, newState);
+  return Config.store.change && Config.store.change(key, newState);
 }
