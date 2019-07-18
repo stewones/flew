@@ -1,6 +1,6 @@
 # Select Data
 
-This is the simplest way to select data from RR Store. To accomplish that you must make sure to
+This is an elegant way to select data and keep it connected directly, so screen should react to every manipulation that occurs in _RR State_.
 
 {% hint style="info" %}
 1. define a key on the chaining
