@@ -1,6 +1,6 @@
 # Get State
 
-Once you make a verb call and response arrives, it should automatically be synced with the internal store. But what if we need to pick a specific portion of data later on.
+Once you've made a verb call and response has arrived, it should automatically be synced with the internal store. But what if we need to pick a specific portion of data later on.
 
 ```typescript
 import { getState } from '@firetask/state';
