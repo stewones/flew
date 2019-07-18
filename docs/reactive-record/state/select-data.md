@@ -36,6 +36,36 @@ export class TodoContainerComponent implements OnInit {
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
+Although we can write even less code and not use any dependency from _NGXS_
+
+{% code-tabs %}
+{% code-tabs-item title="todo-container.component.ts" %}
+```typescript
+import { select } from '@firetask/state';
+
+@Component({
+  selector: 'app-todo-container',
+  templateUrl: './todo-container.component.html',
+  styleUrls: ['./todo-container.component.scss']
+})
+export class TodoContainerComponent implements OnInit {
+
+  todos$: Observable<Todo[]> = select('todos');
+  
+  constructor(private todoService: TodoService) {}
+ 
+  ngOnInit() {
+    this.todoService
+      .$collection
+      .key(`todos`)
+      .post('/todos')
+      .subscribe();
+  }
+}
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+
 Now that we have selected and set an **Observable** of _Todos_, we can just iterate it in our html using the **async** pipe
 
 {% hint style="info" %}

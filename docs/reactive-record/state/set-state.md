@@ -38,7 +38,7 @@ import { select, setState } from '@firetask/state';
 })
 export class TodoContainerComponent implements OnInit {
 
-  todos$: Observable<Todo[]>;
+  todos$: Observable<Todo[]> = select('todos');
   
   constructor(private todoService: TodoService) {}
  
