@@ -94,18 +94,20 @@ export function state(key: string, value?: any): any {
   return Config.store.search ? Config.store.search(key) : {};
 }
 
-export function setState(id: string | number, key: string, value: any) {
+export function setState(key: string, value: any) {
+  if (!value.id) throw new Error('value must contain an id property');
+
   const currentState: any = state(key);
   const isElastic = get(currentState, 'data.hits.hits');
   let newStateData = { ...currentState.data };
 
   if (isElastic) {
     const currentStateSource = currentState.data.hits.hits.find(
-      h => h._source.id === id
+      h => h._source.id === value.id
     );
 
     const newStateHitsHits = [
-      ...currentState.data.hits.hits.filter(h => h._source.id != id),
+      ...currentState.data.hits.hits.filter(h => h._source.id != value.id),
       ...[
         {
           ...currentStateSource,
