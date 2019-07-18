@@ -1,6 +1,10 @@
 import { State, Action, StateContext, createSelector } from '@ngxs/store';
-import { isEqual, cloneDeep, merge } from 'lodash';
-import { Response, shouldTransformResponse } from '@firetask/reactive-record';
+import { isEqual, cloneDeep, isEmpty } from 'lodash';
+import {
+  Response,
+  shouldTransformResponse,
+  Config
+} from '@firetask/reactive-record';
 
 export interface StateModel {
   responses: Response[];
@@ -82,4 +86,10 @@ export function key(name: string, data = true) {
     );
     return response && transformResponse(response);
   };
+}
+
+export function state(key: string, value?: any): any {
+  const shouldSetState = !isEmpty(value) || value === {} || value === [];
+  if (shouldSetState && Config.store.change) Config.store.change(key, value);
+  return Config.store.search ? Config.store.search(key) : {};
 }

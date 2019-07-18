@@ -214,7 +214,7 @@ export class PlatformBrowser extends ReactiveRecord {
     const useCache: boolean = chain.useCache === false ? false : true;
     const useState: boolean = chain.useState === false ? false : true;
     const stateAvailable = Config.store.enabled;
-    const state: Response = super.$state(key);
+    const state: Response = this.$state(key);
 
     if (useState && stateAvailable && !isEmpty(state)) return Promise.resolve();
 
@@ -255,7 +255,7 @@ export class PlatformBrowser extends ReactiveRecord {
 
     super.log().info()(`${key} [should] useState? ${useState ? true : false}`);
 
-    const state: Response = super.$state(key);
+    const state: Response = this.$state(key);
 
     super.log().info()(
       `${key} [should] hasState? ${!isEmpty(state) ? true : false}`
@@ -394,5 +394,9 @@ export class PlatformBrowser extends ReactiveRecord {
 
   public isOnline() {
     return window.navigator.onLine;
+  }
+
+  private $state(key: string) {
+    return Config.store.search ? Config.store.search(key) : {};
   }
 }

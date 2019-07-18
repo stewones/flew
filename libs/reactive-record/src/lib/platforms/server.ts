@@ -506,12 +506,9 @@ export class ReactiveRecord implements ReactiveApi {
     return this;
   }
 
-  public state(arg?: boolean | string, value?: any): ReactiveRecord {
-    const shouldSetChain = isBoolean(arg);
-    const shouldSetState = !isEmpty(value) || value === {} || value === [];
-    if (shouldSetChain) this.chain.useState = arg as boolean;
-    if (shouldSetState) this.$state(arg as string, value);
-    return shouldSetChain ? this : this.$state(arg as string);
+  public state(active: boolean): ReactiveRecord {
+    this.chain.useState = active;
+    return this;
   }
 
   /**
@@ -628,12 +625,6 @@ export class ReactiveRecord implements ReactiveApi {
   public diff(fn): ReactiveRecord {
     this.chain.diff = fn;
     return this;
-  }
-
-  protected $state(key: string, value?: any) {
-    const shouldSetState = !isEmpty(value) || value === {} || value === [];
-    if (shouldSetState && Config.store.change) Config.store.change(key, value);
-    return Config.store.search ? Config.store.search(key) : {};
   }
 }
 
