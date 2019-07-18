@@ -1,5 +1,5 @@
 import { State, Action, StateContext, createSelector } from '@ngxs/store';
-import { isEqual, cloneDeep, isEmpty } from 'lodash';
+import { isEqual, cloneDeep, isEmpty, get } from 'lodash';
 import {
   Response,
   shouldTransformResponse,
@@ -92,4 +92,35 @@ export function state(key: string, value?: any): any {
   const shouldSetState = !isEmpty(value) || value === {} || value === [];
   if (shouldSetState && Config.store.change) Config.store.change(key, value);
   return Config.store.search ? Config.store.search(key) : {};
+}
+
+export function setState(id: string | number, key: string, value: any) {
+  const currentState: any = state(key);
+  const isElastic = get(currentState, 'data.hits.hits');
+  let newStateData = { ...currentState.data };
+
+  if (isElastic) {
+    const currentStateSource = currentState.data.hits.hits.find(
+      h => h._source.id === id
+    );
+
+    const newStateHitsHits = [
+      ...currentState.data.hits.hits.filter(h => h._source.id != id),
+      ...[
+        {
+          ...currentStateSource,
+          _source: value
+        }
+      ]
+    ];
+
+    const newStateHits = { ...currentState.data.hits, hits: newStateHitsHits };
+    newStateData = { ...currentState.data, hits: newStateHits };
+  }
+
+  const newState = { ...currentState, data: newStateData };
+
+  //
+  // set the new state
+  state(key, newState);
 }
