@@ -78,8 +78,8 @@ export function key(name: string, data = true) {
   };
 }
 
-export function select<T>(key: string) {
-  return Reactive.store.select(key) as Observable<T>;
+export function select<T>(key: string, data?) {
+  return Reactive.store.select(key, data) as Observable<T>;
 }
 
 export function enabledState() {

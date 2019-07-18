@@ -12,7 +12,7 @@ interface ReactiveOptions {
     reset: () => void;
     get: (key: string) => any;
     set: (key: string, val: any) => void;
-    select: (key: string) => Observable<any>;
+    select: (key: string, data?: boolean) => Observable<any>;
   };
   storage?: StorageAdapter;
 }
@@ -28,7 +28,7 @@ const ReactiveConfig: ReactiveOptions = {
     reset: () => {},
     get: (key: string) => {},
     set: (key: string, val: any) => {},
-    select: (key: string) => of({})
+    select: (key: string, data?: boolean) => of({})
   },
   storage: {
     get: key => {},

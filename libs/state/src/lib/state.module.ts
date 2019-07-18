@@ -25,8 +25,8 @@ export class StateSetup {
       store.dispatch(new ResponseSync(newState));
       return state;
     };
-    Reactive.store.select = collectionKey => {
-      return this.store.select(key(collectionKey));
+    Reactive.store.select = (_key, data?) => {
+      return this.store.select(key(_key, data));
     };
   }
 }
