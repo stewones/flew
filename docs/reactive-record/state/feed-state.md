@@ -1,0 +1,14 @@
+# Feed State
+
+Once you've done all state work you might need to preload it when app starts. Make sure to call this method only once.
+
+```typescript
+import { feedState } from '@firetask/state';
+
+//...
+
+feedState();
+```
+
+A good place to put this method would be the **app.module** file.
+
