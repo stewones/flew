@@ -10,5 +10,5 @@ import { feedState } from '@firetask/state';
 feedState();
 ```
 
-A good place to put this method would be the **app.module** file.
+A good place to put this method is the **app.module** file.
 
