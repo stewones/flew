@@ -178,15 +178,6 @@ export class ReactiveRecord implements ReactiveApi {
     return this.getConnector('firestore');
   }
 
-  /**
-   * @deprecated
-   * import the function `storage`
-   * from @firetask/cache
-   */
-  public storage(): StorageAdapter {
-    return Reactive.storage || ({} as StorageAdapter);
-  }
-
   public isOnline(): any {}
 
   /**
@@ -266,16 +257,6 @@ export class ReactiveRecord implements ReactiveApi {
     } catch (err) {
       throw new Error(msg);
     }
-  }
-
-  public useLog(active: boolean): ReactiveRecord {
-    this.logger.enabled(active);
-    return this;
-  }
-
-  public useLogTrace(active: boolean): ReactiveRecord {
-    this.logger.traced(active);
-    return this;
   }
 
   public find<T>(): Observable<T> {
@@ -442,28 +423,10 @@ export class ReactiveRecord implements ReactiveApi {
   }
 
   /**
-   * @deprecated
-   * use just `network` instead
-   */
-  public useNetwork(active: boolean): ReactiveRecord {
-    this.network(active);
-    return this;
-  }
-
-  /**
    * Set whether to cache network responses
    */
   public save(active: boolean): ReactiveRecord {
     this.chain.saveNetwork = active;
-    return this;
-  }
-
-  /**
-   * @deprecated
-   * use just `save` instead
-   */
-  public saveNetwork(active: boolean): ReactiveRecord {
-    this.save(active);
     return this;
   }
 
@@ -474,26 +437,6 @@ export class ReactiveRecord implements ReactiveApi {
     transformFn: (response: Response) => any
   ): ReactiveRecord {
     this.chain.transformResponse = transformFn;
-    return this;
-  }
-
-  /**
-   * @deprecated use just `transform` instead
-   */
-  public transformResponse<T>(
-    transformFn: (response: Response) => any
-  ): ReactiveRecord {
-    this.transform(transformFn);
-    return this;
-  }
-
-  /**
-   * @deprecated use just `transform` instead
-   */
-  public transformNetwork<T>(
-    transformFn: (response: Response) => any
-  ): ReactiveRecord {
-    this.transform(transformFn);
     return this;
   }
 
@@ -515,25 +458,6 @@ export class ReactiveRecord implements ReactiveApi {
 
   public state(active: boolean): ReactiveRecord {
     this.chain.useState = active;
-    return this;
-  }
-
-  /**
-   * @deprecated
-   * use `cache` instead
-   */
-  public useCache(active: boolean): ReactiveRecord {
-    this.cache(active);
-    return this;
-  }
-
-  /**
-   * @deprecated
-   * RR should not transform cache before saving it anymore
-   */
-  public transformCache<T>(
-    transformFn: (response: Response) => any
-  ): ReactiveRecord {
     return this;
   }
 
@@ -604,24 +528,100 @@ export class ReactiveRecord implements ReactiveApi {
     return this;
   }
 
-  public data(transform: boolean): ReactiveRecord {
-    this.chain.transformData = transform;
-    return this;
-  }
-
   public doc(value: string | number): ReactiveRecord {
     this.chain.doc = value;
     return this;
   }
 
-  public reset(): ReactiveRecord {
-    this._reset();
+  public raw(active: boolean): ReactiveRecord {
+    this.chain.transformData = !active;
+    return this;
+  }
+
+  /**
+   * @deprecated
+   * use just `save` instead
+   */
+  public saveNetwork(active: boolean): ReactiveRecord {
+    this.save(active);
+    return this;
+  }
+
+  /**
+   * @deprecated use just `transform` instead
+   */
+  public transformResponse<T>(
+    transformFn: (response: Response) => any
+  ): ReactiveRecord {
+    this.transform(transformFn);
+    return this;
+  }
+
+  /**
+   * @deprecated
+   * use `cache` instead
+   */
+  public useCache(active: boolean): ReactiveRecord {
+    this.cache(active);
+    return this;
+  }
+
+  /**
+   * @deprecated use just `transform` instead
+   */
+  public transformNetwork<T>(
+    transformFn: (response: Response) => any
+  ): ReactiveRecord {
+    this.transform(transformFn);
+    return this;
+  }
+
+  /**
+   * @deprecated
+   * use just `network` instead
+   */
+  public useNetwork(active: boolean): ReactiveRecord {
+    this.network(active);
+    return this;
+  }
+
+  /**
+   * @deprecated
+   * import the function `storage`
+   * from @firetask/cache
+   */
+  public storage(): StorageAdapter {
+    return Reactive.storage || ({} as StorageAdapter);
+  }
+
+  /**
+   * @deprecated now rr should return data formatted properly by default
+   * if you're looking for disable this behavior, just add `.raw(true)` in your chaining
+   */
+  public data(transform: boolean): ReactiveRecord {
+    this.chain.transformData = transform;
+    return this;
+  }
+
+  /**
+   * @deprecated
+   * RR wont transform cache before saving it anymore
+   */
+  public transformCache<T>(
+    transformFn: (response: Response) => any
+  ): ReactiveRecord {
     return this;
   }
 
   /**
    * experimental
    */
+
+  public reset(): ReactiveRecord {
+    this._reset();
+    return this;
+  }
+
   public reboot() {
     this._initialized = false;
     this._driver_initialized = {};

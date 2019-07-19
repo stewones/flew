@@ -6,11 +6,11 @@ export interface Chain {
   useNetwork?: boolean; // use network for first response
   saveNetwork?: boolean; // save network response
   transformResponse?: (data: any) => any; // transform function for network data response
-  transformData?: boolean; // shortcut for transformResponse(r=>r.data)
+  transformData?: boolean; // shortcut for transform(r=>r.data)
   ref?: string; //  used for firebase driver
-  query?: any;
+  query?: any; // @deprecated
   size?: number; // elastic/firestore
   sort?: any | any[]; // elastic/firestore
   doc?: string | number; // firestore `on`
-  diff?: (fn: any) => any;
+  diff?: (fn: (cache: any, network: any) => boolean) => any; // customize rr response behavior
 }

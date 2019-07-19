@@ -1,9 +1,9 @@
 // tslint:disable
-import { Response } from './response';
 import { Subject } from 'rxjs';
+import { AxiosRequestConfig } from 'axios';
+import { Response } from './response';
 import { ReactiveRecord } from '../platforms/server';
 import { Log } from './log';
-import { AxiosRequestConfig } from 'axios';
 import { Options } from './options';
 
 /**
@@ -12,14 +12,14 @@ import { Options } from './options';
 export interface ReactiveApi {
   //
   // chained options
-  driver(name?: string): ReactiveRecord; // firebase / firestore / http | [configurable]
-  network(active: boolean): ReactiveRecord; // force the use of network call
-  save(active: boolean): ReactiveRecord; // as a cache
-  ttl(value: number): ReactiveRecord; // set a max time to cache
-  cache(active: boolean): ReactiveRecord; // when true the first response should be from the cache if exists
-  state(active: boolean): ReactiveRecord; // return response from state
-  key(name: string): ReactiveRecord; // cache name
-  query(by: { [key: string]: {} } | { [key: string]: {} }[]): ReactiveRecord; // firestore only - this is an object literal way of `where`
+  driver(name?: string): ReactiveRecord; // firebase / firestore / http
+  network(active: boolean): ReactiveRecord; // response using network call
+  save(active: boolean): ReactiveRecord; // save response to cache
+  ttl(value: number): ReactiveRecord; // set a max time before next network call
+  state(active: boolean): ReactiveRecord; // use first response from state if available
+  cache(active: boolean): ReactiveRecord; // use first response from cache if available
+  key(name: string): ReactiveRecord; // define an unique name for cache/state
+  query(by: { [key: string]: {} } | { [key: string]: {} }[]): ReactiveRecord; // firestore only - this is an object literal way for `where`
   where(
     field: string,
     operator: string,
@@ -28,23 +28,22 @@ export interface ReactiveApi {
   sort(by: { [key: string]: string }): ReactiveRecord; // firestore only
   size(value: number): ReactiveRecord; // firestore only
   ref(path: string): ReactiveRecord; // firebase only
-  data(transform: boolean): ReactiveRecord;
-  transform(transformFn: (response: Response) => any): ReactiveRecord; // transform the network/cache response
-  useLog(active: boolean): ReactiveRecord; // [configurable]
-  useLogTrace(active: boolean): ReactiveRecord; // [configurable]
-  diff(fn): ReactiveRecord;
+  data(transform: boolean): ReactiveRecord; // @deprecated
+  raw(active: boolean): ReactiveRecord; // return original data with metadata
+  transform(transformFn: (response: Response) => any): ReactiveRecord; // transform network/state/cache responses
+  diff(fn: (cache: any, network: any) => any): ReactiveRecord; // infer into rr response behavior
 
   //
   // utils
   $log: Subject<Log>;
-  init(runtime?: Options): void;
-  clearCache(): void;
-  firebase(): any; // firebase instance
-  firestore(): any; // firebase instance
-  storage(): any; // storage instance
   http(transformFn: (config: AxiosRequestConfig) => void): ReactiveRecord;
   feed(): void; // add response from cache to store
-  init(): void; // init rr manually
+  init(runtime?: Options): void; // init rr manually
+
+  clearCache(): void; // @todo deprecate and create an exported function from cache package
+  firebase(): any; // firebase instance @todo deprecate and create an exported function from firebase package
+  firestore(): any; // firebase instance @todo deprecate and create an exported function from firebase package
+  storage(): any; // storage instance @todo deprecate and create an exported function from cache package
 
   //
   // fire verbs

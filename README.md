@@ -2,6 +2,11 @@
 
 [Firetask](https://firetask.io/) is an open-source development toolkit that makes it easy to build top quality apps with web technologies.
 
+## Requirements
+
+- typescript 3.2.4
+- rxjs 6.5.2
+
 ## Packages
 
 | Project                                            | Package                                                                                | Version                                                                                                                                  |                                                                               Build                                                                                |

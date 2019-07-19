@@ -1,5 +1,5 @@
 // tslint:disable
-import { isEmpty, isEqual, merge, isFunction } from 'lodash';
+import { isEmpty, isEqual, merge, isFunction, isBoolean } from 'lodash';
 import { Observable, from, of, merge as merge$ } from 'rxjs';
 import { map, switchMap, filter, catchError, tap } from 'rxjs/operators';
 import { Options } from '../interfaces/options';
@@ -82,6 +82,10 @@ export class PlatformBrowser extends ReactiveRecord {
     const key = super.createKey(verb, path, payload);
     const chain = super.cloneChain();
     const driver = super.getDriver();
+
+    //
+    // set default attr
+    if (!isBoolean(chain.transformData)) chain.transformData = true;
 
     //
     // reset chain for subsequent calls
