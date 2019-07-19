@@ -1,6 +1,6 @@
 # Select Dynamically
 
-However you might need to select state dynamically, such as on a search feature. To accomplish that we don't need to grab anything from NGXS.
+Sometimes you might need to select state dynamically, such as on a search feature. To accomplish that let's use the **select** method.
 
 {% code-tabs %}
 {% code-tabs-item title="todo-container.component.ts" %}

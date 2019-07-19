@@ -1,6 +1,6 @@
 # Sync Response
 
-By default RR will automatically take care of this. But if you find yourself in a situation where you need, you can just
+By default _RR_ will automatically take care of this. But if you find yourself in a situation where you need, you can manually sync some response into _RR_  internal store.
 
 {% code-tabs %}
 {% code-tabs-item title="sync-state.ts" %}

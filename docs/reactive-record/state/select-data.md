@@ -1,6 +1,12 @@
+---
+description: >-
+  Working with redux patterns can be annoying, but with Reactive Record, it's
+  not.
+---
+
 # Select Data
 
-This is the simplest way to select data from RR Store. To accomplish that you must make sure to
+This is an elegant way to select data and keep it connected directly with store, so screen should react to every manipulation that occurs in _RR State_.
 
 {% hint style="info" %}
 1. define a key on the chaining
@@ -21,6 +27,36 @@ import { key } from '@firetask/state';
 export class TodoContainerComponent implements OnInit {
 
   @Select(key('todos')) todos$: Observable<Todo[]>;
+  
+  constructor(private todoService: TodoService) {}
+ 
+  ngOnInit() {
+    this.todoService
+      .$collection
+      .key(`todos`)
+      .post('/todos')
+      .subscribe();
+  }
+}
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+
+Although we can write even less code
+
+{% code-tabs %}
+{% code-tabs-item title="todo-container.component.ts" %}
+```typescript
+import { select } from '@firetask/state';
+
+@Component({
+  selector: 'app-todo-container',
+  templateUrl: './todo-container.component.html',
+  styleUrls: ['./todo-container.component.scss']
+})
+export class TodoContainerComponent implements OnInit {
+
+  todos$: Observable<Todo[]> = select('todos');
   
   constructor(private todoService: TodoService) {}
  
