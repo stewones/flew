@@ -53,6 +53,7 @@
     * [Get State](reactive-record/state/get-state.md)
     * [Set State](reactive-record/state/set-state.md)
     * [Reset State](reactive-record/state/reset-responses.md)
+    * [Feed State](reactive-record/state/feed-state.md)
     * [Sync Response](reactive-record/state/sync-responses.md)
   * [Use Cases](reactive-record/use-case/README.md)
     * [TTL](reactive-record/use-case/ttl.md)

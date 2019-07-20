@@ -45,11 +45,3 @@ export class TodoContainerComponent implements OnInit {
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
-
-
-### Cleaning the view
-
-```typescript
-this.todos$ = null;
-```
-
