@@ -1,0 +1,28 @@
+
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy
+} from '@angular/core';
+
+import { Observable } from 'rxjs';
+import { select } from '@firetask/state';
+
+@Component({
+  selector: '<%= selector %>',
+  templateUrl: './<%= dasherize(name) %>-container.component.html',
+  styleUrls: ['./<%= dasherize(name) %>-container.component.<%= style %>'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class <%= classify(name) %>ContainerComponent implements OnInit {
+
+  entries$: Observable<any[]>;
+
+  constructor(protected detector: ChangeDetectorRef) {}
+
+  ngOnInit() {
+    this.entries$ = select('entries');
+  }
+
+}

@@ -18,12 +18,8 @@ export class StateSetup {
       return state.find(s => s.key === key);
     };
     Reactive.store.set = (key, val) => {
-      const snapshot = this.store.snapshot();
-      const responses = get(snapshot, 'ReactiveState.responses') || [];
-      const state = responses.find(s => s.key === key);
-      const newState = { key: key, ...val };
+      const newState = { ...val, key: key };
       store.dispatch(new ResponseSync(newState));
-      return state;
     };
     Reactive.store.select = (_key, data?) => {
       return this.store.select(key(_key, data));

@@ -1,5 +1,5 @@
 import { State, Action, StateContext } from '@ngxs/store';
-import { get } from 'lodash';
+import { get, isEmpty, isArray, isObject } from 'lodash';
 import {
   Reactive,
   Response,
@@ -49,7 +49,7 @@ export class ReactiveState {
       responses.push(action.payload);
     }
 
-    context.patchState({
+    context.setState({
       responses: exists
         ? Object.assign(responses, {
             [responses.indexOf(exists)]: action.payload
@@ -59,7 +59,7 @@ export class ReactiveState {
   }
 
   @Action(ResponseReset) resetResponse(context: StateContext<StateModel>) {
-    context.patchState({
+    context.setState({
       responses: []
     });
   }
@@ -119,7 +119,8 @@ export function setState(
 
   //
   // elastic case
-  if (options.merge && isElastic) {
+  // for a given object
+  if (options.merge && isElastic && isObject(value)) {
     const currentStateSource = currentState.data.hits.hits.find(
       h => h._source.id === value.id
     );
@@ -146,4 +147,17 @@ export function setState(
   // set the new state
   if (Reactive.storage && options.save) Reactive.storage.set(key, newState);
   return Reactive.store.set && Reactive.store.set(key, newState);
+}
+
+/**
+ * method to fully load entries from cache into store
+ * make sure to call this only once
+ */
+export function feedState() {
+  const hasStorage = !isEmpty(Reactive.storage);
+  if (hasStorage)
+    return Reactive.storage.forEach((value, key, index) =>
+      Reactive.store.sync(value)
+    );
+  throw `can't locate storage instance`;
 }

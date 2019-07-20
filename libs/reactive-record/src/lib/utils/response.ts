@@ -29,7 +29,7 @@ export function shouldTransformResponse(chain: Chain, response: Response) {
     } else {
       //
       // default
-      transformResponse = (data: Response) => data.data;
+      transformResponse = (data: Response) => data && data.data;
     }
   }
 
