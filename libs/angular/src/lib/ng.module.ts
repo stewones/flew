@@ -1,4 +1,4 @@
-import { Reactive, Options } from '@firetask/reactive-record';
+import { Reactive, Options } from '@reactive/records';
 
 import {
   NgModule,

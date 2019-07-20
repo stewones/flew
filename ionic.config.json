@@ -1,5 +1,5 @@
 {
-  "name": "Firetask App",
+  "name": "Reactive App",
   "integrations": {
     "capacitor": true
   },

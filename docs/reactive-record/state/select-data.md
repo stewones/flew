@@ -1,6 +1,6 @@
 ---
 description: >-
-  Working with redux patterns can be annoying, but with Reactive Record, it's
+  Working with redux patterns can be annoying, but with Reactive Records, it's
   not.
 ---
 
@@ -17,7 +17,7 @@ This is an elegant way to select data and keep it connected directly with store,
 {% code-tabs-item title="todo-container.component.ts" %}
 ```typescript
 import { Select } from '@ngxs/store';
-import { key } from '@firetask/state';
+import { key } from '@reactive/state';
 
 @Component({
   selector: 'app-todo-container',
@@ -47,7 +47,7 @@ Although we can write even less code
 {% code-tabs %}
 {% code-tabs-item title="todo-container.component.ts" %}
 ```typescript
-import { select } from '@firetask/state';
+import { select } from '@reactive/state';
 
 @Component({
   selector: 'app-todo-container',

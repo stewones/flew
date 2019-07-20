@@ -1,4 +1,4 @@
-import { Reactive } from '@firetask/reactive-record';
+import { Reactive } from '@reactive/records';
 import { NgModule, ModuleWithProviders, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { ResponseSync, ResponseReset, key } from './store';

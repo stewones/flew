@@ -6,7 +6,7 @@
     "umdModuleIds": {
       "lodash": "_",
       "@ngxs/store": "@ngxs/store",
-      "@firetask/reactive-record": "@firetask/reactive-record"
+      "@reactive/records": "@reactive/records"
     }
   }
 }

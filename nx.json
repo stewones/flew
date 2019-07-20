@@ -1,5 +1,5 @@
 {
-  "npmScope": "firetask",
+  "npmScope": "reactive",
   "implicitDependencies": {
     "angular.json": "*",
     "package.json": "*",
@@ -8,7 +8,7 @@
     "nx.json": "*"
   },
   "projects": {
-    "reactive-record": {
+    "records": {
       "tags": []
     },
     "app": {

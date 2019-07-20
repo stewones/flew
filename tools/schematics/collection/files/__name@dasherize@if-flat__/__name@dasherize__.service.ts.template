@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Collection, ReactiveRecord } from '@firetask/reactive-record';
+import { Collection, ReactiveRecord } from '@reactive/records';
 import { Observable } from 'rxjs';
 
 export interface <%= classify(name) %> {

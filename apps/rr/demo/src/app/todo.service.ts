@@ -4,7 +4,7 @@ import {
   ReactiveRecord,
   Response,
   Config
-} from '@firetask/reactive-record';
+} from '@reactive/records';
 import { Observable } from 'rxjs';
 import { AxiosRequestConfig } from 'axios';
 import { UserService } from './user.service';

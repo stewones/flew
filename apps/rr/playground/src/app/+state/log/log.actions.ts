@@ -1,4 +1,4 @@
-import { Log } from '@firetask/reactive-record';
+import { Log } from '@reactive/records';
 
 export class AddLog {
   public static readonly type = '[Log] Add log';

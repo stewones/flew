@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc/libs/reactive-record",
+    "outDir": "../../dist/out-tsc/libs/records",
     "target": "es2015",
     "module": "es2015",
     "moduleResolution": "node",

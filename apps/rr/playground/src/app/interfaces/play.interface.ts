@@ -1,4 +1,4 @@
-import { Response } from '@firetask/reactive-record';
+import { Response } from '@reactive/records';
 
 import { UserService } from '../services/user.service';
 import { AlbumService } from '../services/album.service';

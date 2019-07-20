@@ -5,8 +5,8 @@ By default _RR_ will automatically take care of this. But if you find yourself i
 {% code-tabs %}
 {% code-tabs-item title="sync-state.ts" %}
 ```typescript
-import { syncState } from '@firetask/state';
-import { Response } from '@firetask/reactive-record';
+import { syncState } from '@reactive/state';
+import { Response } from '@reactive/records';
 
 // ...
 const result:Response = {

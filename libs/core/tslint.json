@@ -1,7 +1,7 @@
 {
   "extends": "../../tslint.json",
   "rules": {
-    "directive-selector": [true, "attribute", "firetask", "camelCase"],
-    "component-selector": [true, "element", "firetask", "kebab-case"]
+    "directive-selector": [true, "attribute", "reactive", "camelCase"],
+    "component-selector": [true, "element", "reactive", "kebab-case"]
   }
 }

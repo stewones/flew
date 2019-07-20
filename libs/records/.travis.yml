@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+  - '10.11.0'
+
+install:
+  - npm install -g codecov
+
+script: npm install -f && ./node_modules/.bin/ng test records && codecov

@@ -5,7 +5,7 @@ Sometimes you might need to select state dynamically, such as on a search featur
 {% code-tabs %}
 {% code-tabs-item title="todo-container.component.ts" %}
 ```typescript
-import { select } from '@firetask/state';
+import { select } from '@reactive/state';
 
 @Component({
   selector: 'app-todo-container',

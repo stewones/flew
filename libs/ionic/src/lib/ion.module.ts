@@ -1,8 +1,8 @@
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
-import { storageConfig } from '@firetask/core';
-import { Reactive } from '@firetask/reactive-record';
+import { storageConfig } from '@reactive/core';
+import { Reactive } from '@reactive/records';
 
 import { Ui } from './ui.service';
 

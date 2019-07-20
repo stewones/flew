@@ -47,7 +47,7 @@ class PlatformBrowserMock extends PlatformBrowser {
 
 describe('Browser Platform', () => {
   let lib: PlatformBrowser;
-  const baseURL = 'http://firetask.dev';
+  const baseURL = 'http://reactive.dev';
   const collection = 'foo-collection';
 
   beforeEach(() => {

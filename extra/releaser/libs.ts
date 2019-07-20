@@ -4,5 +4,5 @@ export const LIBS = [
   'firebase',
   'ionic',
   'state',
-  'reactive-record'
+  'records'
 ];

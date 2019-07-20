@@ -32,7 +32,7 @@ class ReactiveRecordMock extends ReactiveRecord {
 
 describe('ReactiveRecord', () => {
   let lib: ReactiveRecord;
-  const baseURL = 'http://firetask.dev';
+  const baseURL = 'http://reactive.dev';
   const collection = 'foo-collection';
 
   beforeEach(() => {

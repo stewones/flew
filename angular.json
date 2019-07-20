@@ -3,17 +3,17 @@
   "version": 1,
   "newProjectRoot": "",
   "projects": {
-    "reactive-record": {
-      "root": "libs/reactive-record",
-      "sourceRoot": "libs/reactive-record/src",
+    "records": {
+      "root": "libs/records",
+      "sourceRoot": "libs/records/src",
       "projectType": "library",
       "prefix": "rr",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "libs/reactive-record/tsconfig.lib.json",
-            "project": "libs/reactive-record/ng-package.json"
+            "tsConfig": "libs/records/tsconfig.lib.json",
+            "project": "libs/records/ng-package.json"
           },
           "configurations": {
             "production": {}
@@ -23,8 +23,8 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/reactive-record/tsconfig.lib.json",
-              "libs/reactive-record/tsconfig.spec.json"
+              "libs/records/tsconfig.lib.json",
+              "libs/records/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
@@ -32,9 +32,9 @@
         "test": {
           "builder": "@nrwl/builders:jest",
           "options": {
-            "jestConfig": "libs/reactive-record/jest.config.js",
-            "tsConfig": "libs/reactive-record/tsconfig.spec.json",
-            "setupFile": "libs/reactive-record/src/test-setup.ts"
+            "jestConfig": "libs/records/jest.config.js",
+            "tsConfig": "libs/records/tsconfig.spec.json",
+            "setupFile": "libs/records/src/test-setup.ts"
           }
         }
       },

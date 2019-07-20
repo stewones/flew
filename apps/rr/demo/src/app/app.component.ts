@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TodoService } from './todo.service';
 import { Subscription, Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
-import { key } from '@firetask/state';
-import { Response, Config } from '@firetask/reactive-record';
+import { key } from '@reactive/state';
+import { Response, Config } from '@reactive/records';
 import { UserService } from './user.service';
 import { CatService } from './cat.service';
 import { HttpClient } from '@angular/common/http';
@@ -11,12 +11,12 @@ import { tap } from 'rxjs/operators';
 import { firebaseLogin } from '../environments/firebase.config';
 
 @Component({
-  selector: 'firetask-root',
+  selector: 'reactive-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'Reactive Record Demo';
+  title = 'Reactive Records Demo';
 
   todos$: Subscription;
 

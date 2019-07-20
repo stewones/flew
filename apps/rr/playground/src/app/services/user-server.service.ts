@@ -3,7 +3,7 @@ import {
   Collection,
   ReactiveRecord,
   Response
-} from '@firetask/reactive-record';
+} from '@reactive/records';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 // import { AxiosRequestConfig } from 'axios';

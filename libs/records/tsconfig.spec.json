@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/libs/reactive-record",
+    "outDir": "../../dist/libs/records",
     "module": "commonjs",
     "types": ["jest", "node"]
   },

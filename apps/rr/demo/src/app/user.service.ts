@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ReactiveRecord, Collection } from '@firetask/reactive-record';
+import { ReactiveRecord, Collection } from '@reactive/records';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
-import { Response } from '@firetask/reactive-record';
+import { Response } from '@reactive/records';
 import { AxiosRequestConfig } from 'axios';
 
 // import { AxiosRequestConfig } from 'axios';

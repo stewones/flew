@@ -3,7 +3,7 @@
     "name": "Stewan Silva"
   },
   "bugs": {
-    "url": "https://github.com/firetask/builders/issues"
+    "url": "https://github.com/stewwan/builders/issues"
   },
   "builders": "./src/builders.json",
   "bundleDependencies": false,
@@ -19,8 +19,8 @@
     "webpack-dev-server": "3.1.14",
     "webpack-node-externals": "1.7.2"
   },
-  "description": "Firetask Extensions for Angular Builders",
-  "homepage": "https://github.com/firetask/builders#readme",
+  "description": "Reactive Extensions for Angular Builders",
+  "homepage": "https://github.com/stewwan/builders#readme",
   "keywords": [
     "Test",
     "Jest",
@@ -32,10 +32,10 @@
   ],
   "license": "MIT",
   "main": "index.js",
-  "name": "@firetask/builders",
+  "name": "@reactive/builders",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/firetask/builders.git"
+    "url": "git+https://github.com/stewwan/builders.git"
   },
   "types": "index.d.js",
   "version": "0.0.1"

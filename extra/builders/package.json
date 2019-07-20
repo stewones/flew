@@ -1,10 +1,10 @@
 {
-  "name": "@firetask/builders",
+  "name": "@reactive/builders",
   "version": "0.0.1",
   "description": "Builders for Angular",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/firetask/builders.git"
+    "url": "git+https://github.com/stewwan/builders.git"
   },
   "keywords": [
     "node",
@@ -19,9 +19,9 @@
   "author": "Stewan Silva",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/firetask/builders/issues"
+    "url": "https://github.com/stewwan/builders/issues"
   },
-  "homepage": "https://firetask.io",
+  "homepage": "https://reative.dev",
   "schematics": "./collection.json",
   "builders": "./builders.json",
   "ng-update": {

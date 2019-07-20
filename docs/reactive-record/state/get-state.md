@@ -3,7 +3,7 @@
 Once you've made a verb call and response has arrived, it should automatically be synced with the internal store. But what if we need to pick a specific portion of data later on.
 
 ```typescript
-import { getState } from '@firetask/state';
+import { getState } from '@reactive/state';
 
 // ...
 
@@ -63,7 +63,7 @@ The **getState** method is prepared to handle even elastic search responses, whe
 Perhaps there may be a case where you need the original data without any filter. 
 
 ```typescript
-import { getState } from '@firetask/state';
+import { getState } from '@reactive/state';
 
 // ...
 

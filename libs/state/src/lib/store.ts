@@ -4,7 +4,7 @@ import {
   Reactive,
   Response,
   shouldTransformResponse
-} from '@firetask/reactive-record';
+} from '@reactive/records';
 import { Observable } from 'rxjs';
 
 export interface StateModel {

@@ -588,7 +588,7 @@ export class ReactiveRecord implements ReactiveApi {
   /**
    * @deprecated
    * import the function `storage`
-   * from @firetask/cache
+   * from @reactive/cache
    */
   public storage(): StorageAdapter {
     return Reactive.storage || ({} as StorageAdapter);

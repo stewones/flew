@@ -12,10 +12,10 @@ import { DemoState } from './app.state';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { firebaseConfig } from '../environments/firebase.config';
-import { ReactiveFirebaseModule } from '@firetask/firebase';
-import { ReactiveIonicModule } from '@firetask/ionic';
-import { ReactiveModule } from '@firetask/angular';
-import { ReactiveState, ReactiveStateModule } from '@firetask/state';
+import { ReactiveFirebaseModule } from '@reactive/firebase';
+import { ReactiveIonicModule } from '@reactive/ionic';
+import { ReactiveModule } from '@reactive/angular';
+import { ReactiveState, ReactiveStateModule } from '@reactive/state';
 @NgModule({
   declarations: [AppComponent],
   imports: [

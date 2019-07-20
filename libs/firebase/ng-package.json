@@ -1,12 +1,12 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/libs/firebase",
-  "whitelistedNonPeerDependencies": ["@firetask/reactive-record"],
+  "whitelistedNonPeerDependencies": ["@reactive/records"],
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
       "firebase/app": "firebase/app",
-      "@firetask/reactive-record": "@firetask/reactive-record"
+      "@reactive/records": "@reactive/records"
     }
   }
 }

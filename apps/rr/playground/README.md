@@ -1,4 +1,4 @@
-# Reactive Record Playground
+# Reactive Records Playground
 
 ## use cases
 

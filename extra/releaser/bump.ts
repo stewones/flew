@@ -1,4 +1,4 @@
-import { RR_VERSION } from '../../libs/reactive-record/src/lib/version';
+import { RR_VERSION } from '../../libs/records/src/lib/version';
 import * as fs from 'fs';
 import { LIBS } from './libs';
 
@@ -6,7 +6,7 @@ export type SemanticTarget = 'major' | 'minor' | 'patch';
 
 export function bumpRR(target: SemanticTarget = 'patch') {
   fs.writeFile(
-    '../../libs/reactive-record/src/lib/version.ts',
+    '../../libs/records/src/lib/version.ts',
     `export const RR_VERSION = '${bumpNumber(RR_VERSION, target)}';`,
     function(err) {
       if (err) {

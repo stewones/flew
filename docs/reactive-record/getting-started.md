@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-$ npm install --save @firetask/reactive-record
+$ npm install --save @reactive/records
 ```
 
 {% hint style="info" %}

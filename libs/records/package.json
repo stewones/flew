@@ -1,0 +1,21 @@
+{
+  "name": "@reactive/records",
+  "version": "0.2.15",
+  "homepage": "https://github.com/stewwan/records#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Reactive Team",
+    "email": "support@reative.dev",
+    "url": "https://reative.dev"
+  },
+  "bugs": {
+    "url": "https://github.com/stewwan/records/issues",
+    "email": "support@reative.dev"
+  },
+  "peerDependencies": {
+    "axios": "^0.18.0",
+    "lodash": "^4.17.11",
+    "rxjs": "^6.5.2"
+  },
+  "description": "It has never been easier to work with cross-platform data using firebase, firestore and http."
+}

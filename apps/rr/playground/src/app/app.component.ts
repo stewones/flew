@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Config } from '@firetask/reactive-record';
+import { Config } from '@reactive/records';
 
 @Component({
   selector: 'rr',

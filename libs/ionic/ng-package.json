@@ -6,8 +6,8 @@
     "umdModuleIds": {
       "@ionic/angular": "@ionic/angular",
       "@ionic/storage": "@ionic/storage",
-      "@firetask/core": "@firetask/core",
-      "@firetask/reactive-record": "@firetask/reactive-record"
+      "@reactive/core": "@reactive/core",
+      "@reactive/records": "@reactive/records"
     }
   }
 }

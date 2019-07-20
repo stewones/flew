@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { select } from '@firetask/state';
+import { select } from '@reactive/state';
 
 @Component({
   selector: '',

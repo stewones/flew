@@ -1,4 +1,4 @@
-# Firetask iOS
+# Reactive iOS
 
 This folder contains native files for the premium app, which is shipped within source code on every new release.
 

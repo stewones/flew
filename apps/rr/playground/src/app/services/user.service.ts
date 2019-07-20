@@ -3,9 +3,9 @@ import {
   Collection,
   ReactiveRecord,
   Response
-} from '@firetask/reactive-record';
+} from '@reactive/records';
 import { Observable } from 'rxjs';
-import { Log } from '@firetask/reactive-record';
+import { Log } from '@reactive/records';
 import { Store } from '@ngxs/store';
 import { AddLog } from '../+state/log/log.actions';
 

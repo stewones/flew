@@ -7,7 +7,7 @@ import {
   FirebaseConnector,
   FirestoreConnector,
   Connector
-} from '@firetask/reactive-record';
+} from '@reactive/records';
 
 import {
   NgModule,

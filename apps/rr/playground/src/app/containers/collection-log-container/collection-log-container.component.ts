@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Log } from '@firetask/reactive-record';
+import { Log } from '@reactive/records';
 import { Select } from '@ngxs/store';
 import { PlayState } from '../../+state/play.state';
 
