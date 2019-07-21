@@ -4,26 +4,22 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [0.2.15](https://github.com/stewwan/reactive/compare/v0.2.14...v0.2.15) (2019-07-18)
 
-
 ### Bug Fixes
 
-* changelog ([d02ebad](https://github.com/stewwan/reactive/commit/d02ebad))
-* **firestore:** return a new state ([5e8a040](https://github.com/stewwan/reactive/commit/5e8a040))
-* **rr:** move storage and connector out of options ([834d5d0](https://github.com/stewwan/reactive/commit/834d5d0))
-* **state:** make it work using just 2 params ([44bc467](https://github.com/stewwan/reactive/commit/44bc467))
-
+- changelog ([d02ebad](https://github.com/stewwan/reactive/commit/d02ebad))
+- **firestore:** return a new state ([5e8a040](https://github.com/stewwan/reactive/commit/5e8a040))
+- **rr:** move storage and connector out of options ([834d5d0](https://github.com/stewwan/reactive/commit/834d5d0))
+- **state:** make it work using just 2 params ([44bc467](https://github.com/stewwan/reactive/commit/44bc467))
 
 ### Features
 
-* **r:** add a way to retrieve states synchronously through rr api ([667d565](https://github.com/stewwan/reactive/commit/667d565))
-* **rr:** add useState ([d420fdc](https://github.com/stewwan/reactive/commit/d420fdc))
-* **rr:** introduce  the `silent` option ([bd92f52](https://github.com/stewwan/reactive/commit/bd92f52))
-* **state:** add select ([1512fd0](https://github.com/stewwan/reactive/commit/1512fd0))
-* **state:** move state getter/setter from rr ([1c83e29](https://github.com/stewwan/reactive/commit/1c83e29))
-* **store:** add getState ([18bd10f](https://github.com/stewwan/reactive/commit/18bd10f))
-* **store:** add setState ([6d3f0fe](https://github.com/stewwan/reactive/commit/6d3f0fe))
-
-
+- **rr:** add a way to retrieve states synchronously through rr api ([667d565](https://github.com/stewwan/reactive/commit/667d565))
+- **rr:** add useState ([d420fdc](https://github.com/stewwan/reactive/commit/d420fdc))
+- **rr:** introduce the `silent` option ([bd92f52](https://github.com/stewwan/reactive/commit/bd92f52))
+- **state:** add select ([1512fd0](https://github.com/stewwan/reactive/commit/1512fd0))
+- **state:** move state getter/setter from rr ([1c83e29](https://github.com/stewwan/reactive/commit/1c83e29))
+- **store:** add getState ([18bd10f](https://github.com/stewwan/reactive/commit/18bd10f))
+- **store:** add setState ([6d3f0fe](https://github.com/stewwan/reactive/commit/6d3f0fe))
 
 ### [0.2.14](https://github.com/stewwan/reactive/compare/v0.2.13...v0.2.14) (2019-07-16)
 

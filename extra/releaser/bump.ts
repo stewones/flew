@@ -101,10 +101,10 @@ export function changelog() {
 
 export function bump(target: SemanticTarget = 'patch') {
   bumpRR(target);
-  bumpPackage(target);
   bumpPackages(target);
-  gitTag();
-  changelog();
+  // bumpPackage(target);
+  // gitTag();
+  // changelog();
 }
 
 //
