@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Initial page](README.md)
+* [Init](README.md)
 * [Records](records/README.md)
   * [Getting Started](records/getting-started.md)
   * [Config](records/config.md)
