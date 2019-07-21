@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/stewwan/reactive/compare/v0.2.14...v1.0.0) (2019-07-21)
+
+
+### Bug Fixes
+
+* **firestore:** return a new state ([5e8a040](https://github.com/stewwan/reactive/commit/5e8a040))
+* **rr:** move storage and connector out of options ([834d5d0](https://github.com/stewwan/reactive/commit/834d5d0))
+* **state:** make it work using just 2 params ([44bc467](https://github.com/stewwan/reactive/commit/44bc467))
+* **store:** add data as second param for the select method ([3bcc78c](https://github.com/stewwan/reactive/commit/3bcc78c))
+* changelog ([8e6bd94](https://github.com/stewwan/reactive/commit/8e6bd94))
+* changelog ([d02ebad](https://github.com/stewwan/reactive/commit/d02ebad))
+
+
+### Features
+
+* add schematics for component and containers ([b82988b](https://github.com/stewwan/reactive/commit/b82988b))
+* **cache:** add getter function ([29d68e6](https://github.com/stewwan/reactive/commit/29d68e6))
+* **r:** add a way to retrieve states synchronously through rr api ([667d565](https://github.com/stewwan/reactive/commit/667d565))
+* **rr:** **deprecation** now by default RR should return data formatted, unless you deactive this behavior via `raw` method. ([b28bf9d](https://github.com/stewwan/reactive/commit/b28bf9d))
+* **rr:** add useState ([d420fdc](https://github.com/stewwan/reactive/commit/d420fdc))
+* **rr:** introduce  the `silent` option ([bd92f52](https://github.com/stewwan/reactive/commit/bd92f52))
+* **state:** add select ([1512fd0](https://github.com/stewwan/reactive/commit/1512fd0))
+* **state:** move state getter/setter from rr ([1c83e29](https://github.com/stewwan/reactive/commit/1c83e29))
+* **store:** add getState ([18bd10f](https://github.com/stewwan/reactive/commit/18bd10f))
+* **store:** add setState ([6d3f0fe](https://github.com/stewwan/reactive/commit/6d3f0fe))
+
+
+
 ### [0.2.15](https://github.com/stewwan/reative/compare/v0.2.14...v0.2.15) (2019-07-18)
 
 ### Bug Fixes
