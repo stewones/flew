@@ -4,7 +4,6 @@
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
-      "@ionic/angular": "@ionic/angular",
       "@ionic/storage": "@ionic/storage",
       "@reactive/records": "@reactive/records"
     }

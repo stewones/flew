@@ -21,9 +21,9 @@
     "test:state": "cd ../../ && ./node_modules/.bin/ng test state",
     "test:firebase": "cd ../../ && ./node_modules/.bin/ng test firebase",
     "build:angular": "cd ../../ && ./node_modules/.bin/ng build angular --prod",
-    "build:ionic": "cd ../../ && ./node_modules/.bin/ng build ionic --prod",
+    "build:cache": "cd ../../ && ./node_modules/.bin/ng build cache --prod",
     "build:core": "cd ../../ && ./node_modules/.bin/ng build core --prod",
-    "build:rr": "cd ../../ && ./node_modules/.bin/ng build records --prod",
+    "build:records": "cd ../../ && ./node_modules/.bin/ng build records --prod",
     "build:state": "cd ../../ && ./node_modules/.bin/ng build state --prod",
     "build:firebase": "cd ../../ && ./node_modules/.bin/ng build firebase --prod",
     "deploy:git": "./deploy-git.sh",
@@ -40,5 +40,7 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {}
+  "devDependencies": {
+    "conventional-changelog-cli": "^2.0.21"
+  }
 }

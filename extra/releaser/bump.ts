@@ -1,13 +1,17 @@
 import { RR_VERSION } from '../../libs/records/src/lib/version';
 import * as fs from 'fs';
 import { LIBS } from './libs';
+import * as shell from 'shelljs';
+
+let newVersion = '';
 
 export type SemanticTarget = 'major' | 'minor' | 'patch';
 
 export function bumpRR(target: SemanticTarget = 'patch') {
+  newVersion = bumpNumber(RR_VERSION, target);
   fs.writeFile(
     '../../libs/records/src/lib/version.ts',
-    `export const RR_VERSION = '${bumpNumber(RR_VERSION, target)}';`,
+    `export const RR_VERSION = '${newVersion}';`,
     function(err) {
       if (err) {
         console.log(err);
@@ -18,7 +22,7 @@ export function bumpRR(target: SemanticTarget = 'patch') {
   );
 }
 
-export function bumpPackage(target: SemanticTarget = 'patch') {
+export function bumpPackages(target: SemanticTarget = 'patch') {
   LIBS.map(libName => {
     fs.readFile(`../../libs/${libName}/package.json`, 'utf8', function(
       err,
@@ -28,6 +32,26 @@ export function bumpPackage(target: SemanticTarget = 'patch') {
       pkg.version = bumpNumber(pkg.version, target);
       fs.writeFile(
         `../../libs/${libName}/package.json`,
+        JSON.stringify(pkg, null, '\t'),
+        function(err) {
+          if (err) {
+            console.log(err);
+            process.exit(1);
+          }
+          console.log(`${libName} package updated`);
+        }
+      );
+    });
+  });
+}
+
+export function bumpPackage(target: SemanticTarget = 'patch') {
+  LIBS.map(libName => {
+    fs.readFile(`../../package.json`, 'utf8', function(err, contents) {
+      const pkg = JSON.parse(contents);
+      pkg.version = bumpNumber(pkg.version, target);
+      fs.writeFile(
+        `../../package.json`,
         JSON.stringify(pkg, null, '\t'),
         function(err) {
           if (err) {
@@ -63,9 +87,24 @@ export function bumpNumber(num: string, target: SemanticTarget) {
   return `${major}.${minor}.${patch}`;
 }
 
+export function gitTag() {
+  shell.exec(
+    `cd ../../ && git tag -a v${newVersion} -m "chore(release): ${newVersion}"`
+  );
+}
+
+export function changelog() {
+  shell.exec(
+    `cd ../../ && ./node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s -r 0`
+  );
+}
+
 export function bump(target: SemanticTarget = 'patch') {
   bumpRR(target);
   bumpPackage(target);
+  bumpPackages(target);
+  gitTag();
+  changelog();
 }
 
 //

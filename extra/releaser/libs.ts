@@ -1,8 +1,1 @@
-export const LIBS = [
-  'angular',
-  'core',
-  'firebase',
-  'ionic',
-  'state',
-  'records'
-];
+export const LIBS = ['angular', 'firebase', 'cache', 'state', 'records'];

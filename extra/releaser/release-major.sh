@@ -12,28 +12,19 @@
 # npm run test:state
 # npm run test:firebase
 
-# -- BUILD -- ##
-npm run build:angular
-npm run build:ionic
-npm run build:core
-npm run build:rr
-npm run build:state
-npm run build:firebase
-# -- /BUILD -- ##
-
 # -- BUMP -- ##
 npm run bump:major
 npm run changelog:major
 # -- /BUMP -- ##
 
-# -- REBUILD -- ##
-# npm run build:angular
-# npm run build:ionic
-# npm run build:core
-# npm run build:rr
-# npm run build:state
-# npm run build:firebase
-# -- /REBUILD -- ##
+# -- BUILD -- ##
+npm run build:angular
+npm run build:cache
+npm run build:state
+npm run build:firebase
+npm run build:records
+# -- /BUILD -- ##
+
 
 # npm run deploy:git
 # npm run deploy:npm
