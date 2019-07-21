@@ -9,7 +9,7 @@ import { Options } from './options';
 /**
  * Public RR Api
  */
-export interface ReactiveApi {
+export interface ReativeApi {
   //
   // chained options
   driver(name?: string): Records; // firebase / firestore / http

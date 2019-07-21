@@ -1,4 +1,4 @@
-import { Reactive, Options } from '@reactive/records';
+import { Reative, Options } from '@reative/records';
 
 import {
   NgModule,
@@ -7,10 +7,10 @@ import {
   Inject
 } from '@angular/core';
 @Injectable()
-export class ReactiveAngularSetup {
-  constructor(@Inject('ReactiveAngularOptions') public options) {
+export class ReativeAngularSetup {
+  constructor(@Inject('ReativeAngularOptions') public options) {
     for (const k in options) {
-      Reactive.options[k] = options[k];
+      Reative.options[k] = options[k];
     }
   }
 }
@@ -20,13 +20,13 @@ export class RecordsModule {
     return {
       ngModule: RecordsModule,
       providers: [
-        ReactiveAngularSetup,
+        ReativeAngularSetup,
         {
-          provide: 'ReactiveAngularOptions',
+          provide: 'ReativeAngularOptions',
           useValue: options
         }
       ]
     };
   }
-  constructor(private angular: ReactiveAngularSetup) {}
+  constructor(private angular: ReativeAngularSetup) {}
 }

@@ -5,7 +5,7 @@ The **setState** method act in three different ways. When a side effect happen i
 ### Merge state
 
 ```typescript
-import { setState } from '@reactive/state';
+import { setState } from '@reative/state';
 
 setState('numbers', { id:2, code: '2' });
 ```
@@ -15,7 +15,7 @@ setState('numbers', { id:2, code: '2' });
 This will totally reset the state for a given _key_.
 
 ```typescript
-import { setState } from '@reactive/state';
+import { setState } from '@reative/state';
 
 setState('numbers', { data: [] }, { merge: false });
 ```
@@ -26,7 +26,7 @@ By default if _RR_ detects that you're using the cache package, _setState_ will 
 So here is a way to disable it.
 
 ```typescript
-import { setState } from '@reactive/state';
+import { setState } from '@reative/state';
 
 setState('numbers', { id:3, code: '3' }, { save: false });
 ```
@@ -34,7 +34,7 @@ setState('numbers', { id:3, code: '3' }, { save: false });
 ### Play around select + setState
 
 ```typescript
-import { select, setState } from '@reactive/state';
+import { select, setState } from '@reative/state';
 
 @Component({
   selector: 'app-todo-container',

@@ -12,7 +12,7 @@ addDecorator(
      * name to display in the top left corner
      * @type {String}
      */
-    name: 'Reactive',
+    name: 'Reative',
     /**
      * URL for name in top left corner to link to
      * @type {String}

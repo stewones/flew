@@ -4,21 +4,21 @@ import { Connector } from '../interfaces/connector';
 import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
-import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
+import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
 import { clearNetworkResponse } from '../utils/response';
 import { Logger } from '../utils/logger';
 import { Chain } from '../interfaces/chain';
-import { Reactive } from '../symbols/rr';
+import { Reative } from '../symbols/rr';
 
-export class FirebaseDriver implements ReactiveDriver {
-  _driver: ReactiveDriverOption = 'firebase';
+export class FirebaseDriver implements ReativeDriver {
+  _driver: ReativeDriverOption = 'firebase';
   connector: any;
   collection: string;
   logger: Logger;
 
   constructor(options: Options) {
     merge(this, options);
-    const connector: Connector = Reactive.connector || ({} as Connector);
+    const connector: Connector = Reative.connector || ({} as Connector);
     this.connector = connector.firebase;
   }
 

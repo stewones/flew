@@ -1,10 +1,10 @@
 import { PlatformBrowser } from './browser';
 import { StorageAdapter } from '../interfaces/storage';
-import { Reactive } from '../symbols/rr';
+import { Reative } from '../symbols/rr';
 import { Subject, PartialObserver } from 'rxjs';
 import { Logger } from '../utils/logger';
 import { Response } from '../interfaces/response';
-import { ReactiveVerb } from '../interfaces/verb';
+import { ReativeVerb } from '../interfaces/verb';
 import { Chain } from '../interfaces/chain';
 
 class PlatformBrowserMock extends PlatformBrowser {
@@ -31,7 +31,7 @@ class PlatformBrowserMock extends PlatformBrowser {
   }
 
   public setCache(
-    verb: ReactiveVerb,
+    verb: ReativeVerb,
     chain: Chain,
     key: string,
     network: Response & { ttl?: number },
@@ -47,7 +47,7 @@ class PlatformBrowserMock extends PlatformBrowser {
 
 describe('Browser Platform', () => {
   let lib: PlatformBrowser;
-  const baseURL = 'http://reactive.dev';
+  const baseURL = 'http://reative.dev';
   const collection = 'foo-collection';
 
   beforeEach(() => {
@@ -86,7 +86,7 @@ describe('Browser Platform', () => {
   });
 
   it('should NOT `feed` responses from cache into rr store', () => {
-    Reactive.storage = null;
+    Reative.storage = null;
 
     const lib_ = new PlatformBrowser({
       useLog: false,
@@ -94,7 +94,7 @@ describe('Browser Platform', () => {
       collection: collection
     });
 
-    const spy = jest.spyOn(Reactive.store.sync, 'next');
+    const spy = jest.spyOn(Reative.store.sync, 'next');
 
     lib_.feed();
 
@@ -102,7 +102,7 @@ describe('Browser Platform', () => {
   });
 
   it('should `feed` responses from cache into rr store', () => {
-    Reactive.storage = {
+    Reative.storage = {
       forEach: (cb: any) => {
         const result = [
           { data: { a: 1 }, collection: collection, key: 'a1' },
@@ -115,7 +115,7 @@ describe('Browser Platform', () => {
       }
     } as StorageAdapter;
 
-    const spy = jest.spyOn(Reactive.store.sync, 'next');
+    const spy = jest.spyOn(Reative.store.sync, 'next');
 
     lib.feed();
 
@@ -960,7 +960,7 @@ describe('Browser Platform', () => {
   //   };
 
   //   const spyNext = jest.spyOn(observer, 'next');
-  //   const spyDispatch = jest.spyOn(Reactive.store.sync, 'next');
+  //   const spyDispatch = jest.spyOn(Reative.store.sync, 'next');
 
   //   await lib__.setCache(
   //     'find',
@@ -1001,7 +1001,7 @@ describe('Browser Platform', () => {
   //   };
 
   //   const spyNext = jest.spyOn(observer, 'next');
-  //   const spyDispatch = jest.spyOn(Reactive.store.sync, 'next');
+  //   const spyDispatch = jest.spyOn(Reative.store.sync, 'next');
 
   //   await lib__.setCache(
   //     'find',

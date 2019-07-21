@@ -12,13 +12,13 @@ import {
 import { Observable, Subject } from 'rxjs';
 import { Response } from '../interfaces/response';
 import { Options } from '../interfaces/options';
-import { ReactiveApi } from '../interfaces/api';
-import { ReactiveVerb } from '../interfaces/verb';
-import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
+import { ReativeApi } from '../interfaces/api';
+import { ReativeVerb } from '../interfaces/verb';
+import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
 import { StorageAdapter } from '../interfaces/storage';
 import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
-import { Reactive } from '../symbols/rr';
+import { Reative } from '../symbols/rr';
 import { FirestoreDriver } from '../drivers/firestore';
 import { FirebaseDriver } from '../drivers/firebase';
 import { HttpDriver } from '../drivers/http';
@@ -26,7 +26,7 @@ import { RR_VERSION } from '../version';
 import { RR_DRIVER } from '../driver';
 import { SHA256 } from '../utils/sha';
 import { Chain } from '../interfaces/chain';
-export class Records implements ReactiveApi {
+export class Records implements ReativeApi {
   protected collection: string;
   protected endpoint: string;
   protected _storage: StorageAdapter;
@@ -37,15 +37,15 @@ export class Records implements ReactiveApi {
   private chain: Chain = {};
 
   private _driver_initialized = {};
-  private _driver: ReactiveDriverOption = RR_DRIVER;
+  private _driver: ReativeDriverOption = RR_DRIVER;
   private _drivers: {
-    firestore: ReactiveDriver;
-    firebase: ReactiveDriver;
-    http: ReactiveDriver;
+    firestore: ReativeDriver;
+    firebase: ReativeDriver;
+    http: ReativeDriver;
   } = {
-    firestore: {} as ReactiveDriver,
-    firebase: {} as ReactiveDriver,
-    http: {} as ReactiveDriver
+    firestore: {} as ReativeDriver,
+    firebase: {} as ReativeDriver,
+    http: {} as ReativeDriver
   };
 
   public $log: Subject<Log> = new Subject();
@@ -150,8 +150,8 @@ export class Records implements ReactiveApi {
     // mark as initialized
     this._initialized = true;
 
-    Reactive.ready$.next();
-    Reactive.ready$.complete();
+    Reative.ready$.next();
+    Reative.ready$.complete();
 
     const name = this.collection || this.endpoint;
 
@@ -193,7 +193,7 @@ export class Records implements ReactiveApi {
     return this.logger;
   }
 
-  protected getDriver(): ReactiveDriverOption {
+  protected getDriver(): ReativeDriverOption {
     return this._driver;
   }
 
@@ -214,7 +214,7 @@ export class Records implements ReactiveApi {
 
   private cloneOptions() {
     const consumer: Options = this._initial_options;
-    const general: Options = Reactive.options;
+    const general: Options = Reative.options;
     return { ...general, ...consumer };
   }
 
@@ -247,7 +247,7 @@ export class Records implements ReactiveApi {
     });
   }
 
-  private getVerbOrException(_driver: string, _verb: string): ReactiveVerb {
+  private getVerbOrException(_driver: string, _verb: string): ReativeVerb {
     const msg = `[${_verb}] method unavailable for driver [${_driver}]`;
     try {
       const verb = this.verbs[_driver][_verb];
@@ -317,7 +317,7 @@ export class Records implements ReactiveApi {
   }
 
   protected call<T>(
-    method: ReactiveVerb,
+    method: ReativeVerb,
     path: string = '',
     payload: any = {},
     chain = this.cloneChain(),
@@ -332,8 +332,8 @@ export class Records implements ReactiveApi {
     const verb = this.getVerbOrException(_driver, _verb);
 
     if (isString(verb)) {
-      _driver = verb.split('.')[0] as ReactiveDriverOption;
-      _verb = verb.split('.')[1] as ReactiveVerb;
+      _driver = verb.split('.')[0] as ReativeDriverOption;
+      _verb = verb.split('.')[1] as ReativeVerb;
     }
 
     //
@@ -400,7 +400,7 @@ export class Records implements ReactiveApi {
   /**
    * Getter / Setter for the current driver
    */
-  public driver(name?: ReactiveDriverOption): Records {
+  public driver(name?: ReativeDriverOption): Records {
     if (name) {
       this._driver = name;
       return this;
@@ -587,10 +587,10 @@ export class Records implements ReactiveApi {
   /**
    * @deprecated
    * import the function `storage`
-   * from @reactive/cache
+   * from @reative/cache
    */
   public storage(): StorageAdapter {
-    return Reactive.storage || ({} as StorageAdapter);
+    return Reative.storage || ({} as StorageAdapter);
   }
 
   /**

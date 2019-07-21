@@ -377,9 +377,9 @@
         }
       }
     },
-    "app": {
-      "root": "apps/app",
-      "sourceRoot": "apps/app/src",
+    "firetask": {
+      "root": "apps/firetask",
+      "sourceRoot": "apps/firetask/src",
       "projectType": "application",
       "prefix": "ft",
       "schematics": {},
@@ -387,15 +387,15 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/apps/app",
-            "index": "apps/app/src/index.html",
-            "main": "apps/app/src/main.ts",
-            "polyfills": "apps/app/src/polyfills.ts",
-            "tsConfig": "apps/app/tsconfig.app.json",
+            "outputPath": "dist/apps/firetask",
+            "index": "apps/firetask/src/index.html",
+            "main": "apps/firetask/src/main.ts",
+            "polyfills": "apps/firetask/src/polyfills.ts",
+            "tsConfig": "apps/firetask/tsconfig.app.json",
             "assets": [
               {
                 "glob": "**/*",
-                "input": "apps/app/src/assets",
+                "input": "apps/firetask/src/assets",
                 "output": "assets"
               },
               {
@@ -403,14 +403,14 @@
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
               },
-              "apps/app/src/manifest.json"
+              "apps/firetask/src/manifest.json"
             ],
             "styles": [
               {
-                "input": "apps/app/src/theme/variables.scss"
+                "input": "apps/firetask/src/theme/variables.scss"
               },
               {
-                "input": "apps/app/src/global.scss"
+                "input": "apps/firetask/src/global.scss"
               },
               {
                 "input": "node_modules/@ctrl/ngx-emoji-mart/picker.css"
@@ -423,8 +423,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/app/src/environments/environment.ts",
-                  "with": "apps/app/src/environments/environment.prod.ts"
+                  "replace": "apps/firetask/src/environments/environment.ts",
+                  "with": "apps/firetask/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -444,7 +444,7 @@
                 }
               ],
               "serviceWorker": true,
-              "ngswConfigPath": "apps/app/ngsw-config.json"
+              "ngswConfigPath": "apps/firetask/ngsw-config.json"
             },
             "ci": {
               "progress": false
@@ -454,11 +454,11 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "app:build"
+            "browserTarget": "firetask:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "app:build:production"
+              "browserTarget": "firetask:build:production"
             },
             "ci": {
               "progress": false
@@ -474,17 +474,17 @@
         "test": {
           "builder": "@nrwl/builders:jest",
           "options": {
-            "jestConfig": "apps/app/jest.config.js",
-            "tsConfig": "apps/app/tsconfig.spec.json",
-            "setupFile": "apps/app/src/test-setup.ts"
+            "jestConfig": "apps/firetask/jest.config.js",
+            "tsConfig": "apps/firetask/tsconfig.spec.json",
+            "setupFile": "apps/firetask/src/test-setup.ts"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "apps/app/tsconfig.app.json",
-              "apps/app/tsconfig.spec.json"
+              "apps/firetask/tsconfig.app.json",
+              "apps/firetask/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }

@@ -6,7 +6,7 @@ import {
   Sanitizer,
   ViewEncapsulation
 } from '@angular/core';
-import { Log } from '@reactive/records';
+import { Log } from '@reative/records';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({

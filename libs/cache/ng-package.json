@@ -5,7 +5,7 @@
     "entryFile": "src/index.ts",
     "umdModuleIds": {
       "@ionic/storage": "@ionic/storage",
-      "@reactive/records": "@reactive/records"
+      "@reative/records": "@reative/records"
     }
   }
 }

@@ -3,7 +3,7 @@
 Once you've done all state work you might need to preload it when app starts. Make sure to call this method only once.
 
 ```typescript
-import { feedState } from '@reactive/state';
+import { feedState } from '@reative/state';
 
 //...
 

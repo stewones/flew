@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReativeFormsModule } from '@angular/forms';
 
 import { FieldBooleanComponent } from './field-boolean/field-boolean.component';
 import { FieldCallbackComponent } from './field-callback/field-callback.component';
@@ -42,7 +42,7 @@ import { FieldSelectComponent } from './field-select/field-select.component';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
+    ReativeFormsModule,
     MatCheckboxModule,
     MatFormFieldModule,
     MatInputModule,

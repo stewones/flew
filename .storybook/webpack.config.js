@@ -8,7 +8,7 @@ module.exports = function({ config }) {
       }
     ],
     enforce: 'pre',
-    include: require('path').resolve(__dirname, '../apps/app')
+    include: require('path').resolve(__dirname, '../apps/firetask')
   });
   if (process.env.NODE_ENV !== `test`) {
     config.node = { fs: 'empty' };

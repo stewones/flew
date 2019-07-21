@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Collection, Records } from '@reactive/records';
+import { Collection, Records } from '@reative/records';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
-import { Response } from '@reactive/records';
+import { Response } from '@reative/records';
 import { AxiosRequestConfig } from 'axios';
 
 // import { AxiosRequestConfig } from 'axios';

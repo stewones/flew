@@ -1,7 +1,7 @@
 {
   "appId": "io.capacitor.starter",
-  "appName": "Reactive App",
+  "appName": "Reative App",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "dist/apps/app"
+  "webDir": "dist/apps/firetask"
 }

@@ -1,6 +1,6 @@
-# Reactive Records
+# Reative Records
 
-**Reactive Records** allows you to build your app really fast with a lot of fun. Its concept is based on reactive programming but it doesn't mean you're going to be stuck on redux patterns. You can work with it using **Observables**, **Promises** or even its built-in mini **Store** powered by NGXS.
+**Reative Records** allows you to build your app really fast with a lot of fun. Its concept is based on reative programming but it doesn't mean you're going to be stuck on redux patterns. You can work with it using **Observables**, **Promises** or even its built-in mini **Store** powered by NGXS.
 
 The lib is available on server side and client side. However in browser it has a lot of cool features such as the cache and state management. You can use the old but gold vanilla.js or take advantage of typescript to level up your code integrity/quality while you reduce the boilerplate.
 

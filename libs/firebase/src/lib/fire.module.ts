@@ -3,11 +3,11 @@ import 'firebase/database';
 import 'firebase/auth';
 import * as Firebase from 'firebase/app';
 import {
-  Reactive,
+  Reative,
   FirebaseConnector,
   FirestoreConnector,
   Connector
-} from '@reactive/records';
+} from '@reative/records';
 
 import {
   NgModule,
@@ -16,15 +16,15 @@ import {
   Inject
 } from '@angular/core';
 
-export interface ReactiveFirebaseOptions {
+export interface ReativeFirebaseOptions {
   config: any;
   persistence: boolean;
 }
 
 @Injectable()
-export class ReactiveFirebaseSetup {
-  constructor(@Inject('ReactiveFirebaseOptions') public options) {
-    Reactive.connector = {
+export class ReativeFirebaseSetup {
+  constructor(@Inject('ReativeFirebaseOptions') public options) {
+    Reative.connector = {
       firebase: new FirebaseConnector(Firebase, options.config),
       firestore: new FirestoreConnector(Firebase, options.config)
     } as Connector;
@@ -34,18 +34,18 @@ export class ReactiveFirebaseSetup {
 @NgModule()
 export class FirebaseModule {
   public static forRoot(
-    options: ReactiveFirebaseOptions = {} as ReactiveFirebaseOptions
+    options: ReativeFirebaseOptions = {} as ReativeFirebaseOptions
   ): ModuleWithProviders {
     return {
       ngModule: FirebaseModule,
       providers: [
-        ReactiveFirebaseSetup,
+        ReativeFirebaseSetup,
         {
-          provide: 'ReactiveFirebaseOptions',
+          provide: 'ReativeFirebaseOptions',
           useValue: options
         }
       ]
     };
   }
-  constructor(private fire: ReactiveFirebaseSetup) {}
+  constructor(private fire: ReativeFirebaseSetup) {}
 }

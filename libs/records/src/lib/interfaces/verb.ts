@@ -1,4 +1,4 @@
-export type ReactiveVerb =
+export type ReativeVerb =
   | 'get'
   | 'post'
   | 'patch'

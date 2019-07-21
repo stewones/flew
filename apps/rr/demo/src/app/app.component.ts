@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TodoService } from './todo.service';
 import { Subscription, Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
-import { key } from '@reactive/state';
-import { Response, Config } from '@reactive/records';
+import { key } from '@reative/state';
+import { Response, Config } from '@reative/records';
 import { UserService } from './user.service';
 import { CatService } from './cat.service';
 import { HttpClient } from '@angular/common/http';
@@ -11,12 +11,12 @@ import { tap } from 'rxjs/operators';
 import { firebaseLogin } from '../environments/firebase.config';
 
 @Component({
-  selector: 'reactive-root',
+  selector: 'reative-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'Reactive Records Demo';
+  title = 'Reative Records Demo';
 
   todos$: Subscription;
 
@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
     private userService: UserService,
     private http: HttpClient
   ) {
-    // Reactive.options.connector.http = http;
+    // Reative.options.connector.http = http;
   }
 
   ngOnInit() {

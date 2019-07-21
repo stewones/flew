@@ -1,9 +1,9 @@
 import { Records } from './server';
 import { FirestoreStub, FirebaseStub } from '../drivers/stub';
-import { ReactiveDriverOption } from '../interfaces/driver';
+import { ReativeDriverOption } from '../interfaces/driver';
 import { Logger } from '../utils/logger';
 import { Subject, Observable } from 'rxjs';
-import { ReactiveVerb } from '../interfaces/verb';
+import { ReativeVerb } from '../interfaces/verb';
 import { RR_DRIVER } from '../driver';
 
 class RecordsMock extends Records {
@@ -16,7 +16,7 @@ class RecordsMock extends Records {
   }
 
   public call$(
-    method: ReactiveVerb,
+    method: ReativeVerb,
     path: string = '',
     payload: any = {},
     chain = this.cloneChain(),
@@ -32,7 +32,7 @@ class RecordsMock extends Records {
 
 describe('Records', () => {
   let lib: Records;
-  const baseURL = 'http://reactive.dev';
+  const baseURL = 'http://reative.dev';
   const collection = 'foo-collection';
 
   beforeEach(() => {
@@ -81,7 +81,7 @@ describe('Records', () => {
   // it('should fail for unknown drivers', () => {
   //   expect(() => {
   //     lib
-  //       .driver('unknown' as ReactiveDriverOption)
+  //       .driver('unknown' as ReativeDriverOption)
   //       .find()
   //       .toPromise();
   //   }).toThrowError('[find] method unavailable for driver [unknown]');

@@ -1,7 +1,7 @@
 # Table of contents
 
 - [Initial page](README.md)
-- [Reactive Records](records/README.md)
+- [Reative Records](records/README.md)
   - [Getting Started](records/getting-started.md)
   - [Config](records/config.md)
   - [Options](records/options.md)

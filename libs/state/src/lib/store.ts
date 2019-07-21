@@ -1,6 +1,6 @@
 import { State as Store, Action, StateContext } from '@ngxs/store';
 import { get, isFunction, isObject } from 'lodash';
-import { Reactive, Response, shouldTransformResponse } from '@reactive/records';
+import { Reative, Response, shouldTransformResponse } from '@reative/records';
 import { Observable } from 'rxjs';
 
 export interface StateModel {
@@ -27,7 +27,7 @@ export class ResponseReset {
 }
 
 @Store<StateModel>({
-  name: 'Reactive',
+  name: 'Reative',
   defaults: {
     Records: []
   }
@@ -65,7 +65,7 @@ export class State {
 
 export function key(name: string, data = true) {
   return (state: any) => {
-    const response = state.Reactive.Records.find(it => it.key === name);
+    const response = state.Reative.Records.find(it => it.key === name);
     const transform: any = shouldTransformResponse(
       { transformData: data },
       response
@@ -75,26 +75,26 @@ export function key(name: string, data = true) {
 }
 
 export function select<T>(key: string, data?) {
-  return Reactive.store.select(key, data) as Observable<T>;
+  return Reative.store.select(key, data) as Observable<T>;
 }
 
 export function enabledState() {
-  return Reactive.store.enabled;
+  return Reative.store.enabled;
 }
 
 export function resetState() {
-  return Reactive.store.reset();
+  return Reative.store.reset();
 }
 
 export function syncState(data: Response) {
-  return Reactive.store.sync(data);
+  return Reative.store.sync(data);
 }
 
 export function getState(
   key: string,
   options: GetStateOptions = { raw: false }
 ): any {
-  const response = Reactive.store.get && Reactive.store.get(key);
+  const response = Reative.store.get && Reative.store.get(key);
   const transform: any = shouldTransformResponse(
     { transformData: !options.raw },
     response
@@ -141,8 +141,8 @@ export function setState(
 
   //
   // set the new state
-  if (Reactive.storage && options.save) Reactive.storage.set(key, newState);
-  return Reactive.store.set && Reactive.store.set(key, newState);
+  if (Reative.storage && options.save) Reative.storage.set(key, newState);
+  return Reative.store.set && Reative.store.set(key, newState);
 }
 
 /**
@@ -150,10 +150,10 @@ export function setState(
  * make sure to call this only once
  */
 export function feedState() {
-  const hasStorage = isFunction(Reactive.storage.forEach);
+  const hasStorage = isFunction(Reative.storage.forEach);
   if (hasStorage)
-    return Reactive.storage.forEach((value, key, index) =>
-      Reactive.store.sync(value)
+    return Reative.storage.forEach((value, key, index) =>
+      Reative.store.sync(value)
     );
   throw new Error(
     `Can't locate storage instance. Did you try to call feedState inside the AppModule constructor?`

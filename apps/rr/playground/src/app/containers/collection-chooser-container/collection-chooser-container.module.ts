@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CollectionChooserContainerComponent } from './collection-chooser-container.component';
 import { MatFormFieldModule, MatSelectModule } from '@angular/material';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReativeFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [CollectionChooserContainerComponent],
@@ -11,7 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatSelectModule,
     FormsModule,
-    ReactiveFormsModule
+    ReativeFormsModule
   ],
   exports: [CollectionChooserContainerComponent]
 })

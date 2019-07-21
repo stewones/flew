@@ -1,7 +1,7 @@
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
-import { Reactive } from '@reactive/records';
+import { Reative } from '@reative/records';
 import { storageConfig } from './utils';
 
 import {
@@ -21,7 +21,7 @@ export interface CacheOptions {
 @Injectable()
 export class CacheSetup {
   constructor(@Inject('CacheOptions') public options) {
-    Reactive.storage = new Storage(
+    Reative.storage = new Storage(
       storageConfig(options.dbName, options.dbStore)
     );
   }

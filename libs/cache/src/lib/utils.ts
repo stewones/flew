@@ -1,4 +1,4 @@
-import { Reactive, StorageAdapter } from '@reactive/records';
+import { Reative, StorageAdapter } from '@reative/records';
 
 /**
  * A simple helper for getting the ionic storage config
@@ -16,6 +16,6 @@ export function storageConfig(
 }
 
 export function storage(): StorageAdapter {
-  const hasStorage = Reactive.storage && Reactive.storage.forEach;
-  return hasStorage ? Reactive.storage : ({} as StorageAdapter);
+  const hasStorage = Reative.storage && Reative.storage.forEach;
+  return hasStorage ? Reative.storage : ({} as StorageAdapter);
 }

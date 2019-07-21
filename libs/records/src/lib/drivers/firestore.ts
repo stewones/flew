@@ -5,13 +5,13 @@ import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
 import { Logger } from '../utils/logger';
-import { ReactiveDriverOption, ReactiveDriver } from '../interfaces/driver';
+import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
 import { clearNetworkResponse } from '../utils/response';
 import { Chain } from '../interfaces/chain';
-import { Reactive } from '../symbols/rr';
+import { Reative } from '../symbols/rr';
 
-export class FirestoreDriver implements ReactiveDriver {
-  _driver: ReactiveDriverOption = 'firestore';
+export class FirestoreDriver implements ReativeDriver {
+  _driver: ReativeDriverOption = 'firestore';
   collection: string;
   timestamp = true;
   connector: any;
@@ -21,7 +21,7 @@ export class FirestoreDriver implements ReactiveDriver {
 
   constructor(options: Options) {
     merge(this, options);
-    const connector: Connector = Reactive.connector || ({} as Connector);
+    const connector: Connector = Reative.connector || ({} as Connector);
     this.connector = connector.firestore;
     this.chain = this.chain ? this.chain : {};
     //

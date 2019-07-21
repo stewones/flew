@@ -19,7 +19,7 @@
     "webpack-dev-server": "3.1.14",
     "webpack-node-externals": "1.7.2"
   },
-  "description": "Reactive Extensions for Angular Builders",
+  "description": "Reative Extensions for Angular Builders",
   "homepage": "https://github.com/stewwan/builders#readme",
   "keywords": [
     "Test",
@@ -32,7 +32,7 @@
   ],
   "license": "MIT",
   "main": "index.js",
-  "name": "@reactive/builders",
+  "name": "@reative/builders",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/stewwan/builders.git"

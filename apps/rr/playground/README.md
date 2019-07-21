@@ -1,8 +1,8 @@
-# Reactive Records Playground
+# Reative Records Playground
 
 ## use cases
 
-- fully reactive using rxjs pattern
+- fully reative using rxjs pattern
 - separete of concerns for dumb components and containers
 - dynamic load of components (fields from FormModule)
 - tailwincss as framework

@@ -3,7 +3,7 @@ import {
   Collection,
   Records,
   Response
-} from '@reactive/records';
+} from '@reative/records';
 import { environment } from '../../environments/environment';
 import { Subject } from 'rxjs';
 

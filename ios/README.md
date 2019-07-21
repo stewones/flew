@@ -1,6 +1,6 @@
-# Reactive App iOS
+# Reative App iOS
 
-This folder contains native files for the premium app
+This folder contains native files for the Firetask app
 
 ## Docs
 

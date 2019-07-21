@@ -1,10 +1,10 @@
 {
-  "name": "@reactive/records",
+  "name": "@reative/records",
   "version": "0.2.15",
   "homepage": "https://github.com/stewwan/records#readme",
   "license": "MIT",
   "author": {
-    "name": "Reactive Team",
+    "name": "Reative Team",
     "email": "support@reative.dev",
     "url": "https://reative.dev"
   },

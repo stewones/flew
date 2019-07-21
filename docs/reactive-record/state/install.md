@@ -7,7 +7,7 @@ description: 'Easy as cake, start work with redux today using the state package.
 ## Installation
 
 ```bash
-$ npm install --save @reactive/state
+$ npm install --save @reative/state
 ```
 
 {% hint style="info" %}
@@ -25,7 +25,7 @@ $ npm i -P @ngxs/store && npm i -P lodash
 
 ```typescript
 import { NgxsModule } from '@ngxs/store';
-import { State, StateModule } from '@reactive/state';
+import { State, StateModule } from '@reative/state';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -57,7 +57,7 @@ This is powerful when developing to make sure we're not going to mutate app stat
 ```typescript
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
-import { State, StateModule } from '@reactive/state';
+import { State, StateModule } from '@reative/state';
 import { environment } from '../environments/environment';
 
 @NgModule({

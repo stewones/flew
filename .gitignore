@@ -42,4 +42,4 @@ firebase.config.ts
 .build
 
 # custom
-apps/app
+apps/firetask

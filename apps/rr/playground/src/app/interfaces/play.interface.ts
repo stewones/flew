@@ -1,4 +1,4 @@
-import { Response } from '@reactive/records';
+import { Response } from '@reative/records';
 
 import { UserService } from '../services/user.service';
 import { AlbumService } from '../services/album.service';

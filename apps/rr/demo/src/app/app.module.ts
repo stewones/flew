@@ -10,19 +10,19 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { DemoState } from './app.state';
 
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReativeFormsModule } from '@angular/forms';
 import { firebaseConfig } from '../environments/firebase.config';
-import { FirebaseModule } from '@reactive/firebase';
-import { CacheModule } from '@reactive/cache';
-import { RecordsModule } from '@reactive/angular';
-import { State, StateModule } from '@reactive/state';
+import { FirebaseModule } from '@reative/firebase';
+import { CacheModule } from '@reative/cache';
+import { RecordsModule } from '@reative/angular';
+import { State, StateModule } from '@reative/state';
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule,
+    ReativeFormsModule,
     NgxsModule.forRoot([State, DemoState], {
       developmentMode: !environment.production
     }),

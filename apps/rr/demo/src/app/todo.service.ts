@@ -4,7 +4,7 @@ import {
   Records,
   Response,
   Config
-} from '@reactive/records';
+} from '@reative/records';
 import { Observable } from 'rxjs';
 import { AxiosRequestConfig } from 'axios';
 import { UserService } from './user.service';
@@ -47,7 +47,7 @@ export class TodoService {
     //
     // setTimeout(() => {
     //   console.log('reboot');
-    //   Reactive.options.useLog = false;
+    //   Reative.options.useLog = false;
     //   this.$collection.reboot();
     // }, 5000);
   }

@@ -15,12 +15,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@reactive/app": ["apps/app/src/index.ts"],
-      "@reactive/cache": ["libs/cache/src/index.ts"],
-      "@reactive/angular": ["libs/angular/src/index.ts"],
-      "@reactive/state": ["libs/state/src/index.ts"],
-      "@reactive/records": ["libs/records/src/index.ts"],
-      "@reactive/firebase": ["libs/firebase/src/index.ts"]
+      "@reative/firetask": ["apps/firetask/src/index.ts"],
+      "@reative/cache": ["libs/cache/src/index.ts"],
+      "@reative/angular": ["libs/angular/src/index.ts"],
+      "@reative/state": ["libs/state/src/index.ts"],
+      "@reative/records": ["libs/records/src/index.ts"],
+      "@reative/firebase": ["libs/firebase/src/index.ts"]
     },
     "resolveJsonModule": true,
     "esModuleInterop": true,

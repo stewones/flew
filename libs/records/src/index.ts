@@ -31,16 +31,16 @@ export * from './lib/utils/guid';
 
 //
 // interfaces
-export { ReactiveApi } from './lib/interfaces/api';
-export { ReactiveDriver } from './lib/interfaces/driver';
+export { ReativeApi } from './lib/interfaces/api';
+export { ReativeDriver } from './lib/interfaces/driver';
 export { Response } from './lib/interfaces/response';
 export { Options } from './lib/interfaces/options';
 export { Chain } from './lib/interfaces/chain';
 export { Connector } from './lib/interfaces/connector';
 export { StorageAdapter } from './lib/interfaces/storage';
 export { Log, LogParams } from './lib/interfaces/log';
-export { ReactiveVerb } from './lib/interfaces/verb';
-export { ReactiveDriverOption } from './lib/interfaces/driver';
+export { ReativeVerb } from './lib/interfaces/verb';
+export { ReativeDriverOption } from './lib/interfaces/driver';
 
 //
 // modules  (experimental)

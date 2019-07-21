@@ -6,8 +6,8 @@ import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { Records } from './server';
 import { StorageAdapter } from '../interfaces/storage';
-import { Reactive } from '../symbols/rr';
-import { ReactiveVerb } from '../interfaces/verb';
+import { Reative } from '../symbols/rr';
+import { ReativeVerb } from '../interfaces/verb';
 import {
   clearNetworkResponse,
   shouldTransformResponse
@@ -33,16 +33,16 @@ export class PlatformBrowser extends Records {
   public clearCache(): void {
     super.init({ driver: super.getDriver() });
     this.$storage().clear();
-    Reactive.store.reset();
+    Reative.store.reset();
   }
 
   public feed() {
     const storage =
-      !isEmpty(Reactive.options) && Reactive.storage ? Reactive.storage : false;
+      !isEmpty(Reative.options) && Reative.storage ? Reative.storage : false;
     if (storage) {
       storage.forEach((value, key, index) => {
         if (value.collection === this.collection) {
-          Reactive.store.sync(value);
+          Reative.store.sync(value);
         }
       });
     }
@@ -73,7 +73,7 @@ export class PlatformBrowser extends Records {
   }
 
   protected call$<T>(
-    verb: ReactiveVerb,
+    verb: ReativeVerb,
     path: string = '',
     payload: any = {}
   ): Observable<T> {
@@ -212,7 +212,7 @@ export class PlatformBrowser extends Records {
   protected async shouldReturnCache(chain: Chain, key: string, observer) {
     const useCache: boolean = chain.useCache === false ? false : true;
     const useState: boolean = chain.useState === false ? false : true;
-    const stateAvailable = Reactive.store.enabled;
+    const stateAvailable = Reative.store.enabled;
     const state: Response = this.$state(key);
 
     if (useState && stateAvailable && !isEmpty(state)) return Promise.resolve();
@@ -248,7 +248,7 @@ export class PlatformBrowser extends Records {
 
   protected async shouldReturnState(chain: Chain, key: string, observer) {
     const useState = chain.useState === false ? false : true;
-    const stateAvailable = Reactive.store.enabled;
+    const stateAvailable = Reative.store.enabled;
 
     if (useState === false || !stateAvailable) return Promise.resolve();
 
@@ -277,7 +277,7 @@ export class PlatformBrowser extends Records {
   }
 
   protected async setCache(
-    verb: ReactiveVerb,
+    verb: ReativeVerb,
     chain: Chain,
     key: string,
     network: Response & { ttl?: number },
@@ -376,11 +376,11 @@ export class PlatformBrowser extends Records {
   protected dispatch(observer = { next: data => {} }, data, chain) {
     const transformResponse: any = shouldTransformResponse(chain, data);
     observer.next(transformResponse(data));
-    Reactive.store.sync(data);
+    Reative.store.sync(data);
   }
 
   protected $storage(): any {
-    return Reactive.storage;
+    return Reative.storage;
   }
 
   public isOnline() {
@@ -388,6 +388,6 @@ export class PlatformBrowser extends Records {
   }
 
   private $state(key: string) {
-    return Reactive.store.get ? Reactive.store.get(key) : {};
+    return Reative.store.get ? Reative.store.get(key) : {};
   }
 }

@@ -1,5 +1,5 @@
 {
-  "extends": "../apps/app/tsconfig.app.json",
+  "extends": "../apps/firetask/tsconfig.app.json",
   "compilerOptions": {
     "types": [
       "node"

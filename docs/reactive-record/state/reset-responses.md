@@ -7,7 +7,7 @@ For that you can just
 {% code-tabs %}
 {% code-tabs-item title="reset-state.ts" %}
 ```typescript
-import { resetState } from '@reactive/state';
+import { resetState } from '@reative/state';
 
 // ...
 

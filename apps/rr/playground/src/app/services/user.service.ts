@@ -3,9 +3,9 @@ import {
   Collection,
   Records,
   Response
-} from '@reactive/records';
+} from '@reative/records';
 import { Observable } from 'rxjs';
-import { Log } from '@reactive/records';
+import { Log } from '@reative/records';
 import { Store } from '@ngxs/store';
 import { AddLog } from '../+state/log/log.actions';
 

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Config } from '@reactive/records';
+import { Config } from '@reative/records';
 
 @Component({
   selector: 'rr',

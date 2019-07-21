@@ -1,6 +1,6 @@
 import { Connector } from './connector';
 import { StorageAdapter } from './storage';
-import { ReactiveDriverOption } from './driver';
+import { ReativeDriverOption } from './driver';
 import { Chain } from './chain';
 
 export interface Options {
@@ -10,7 +10,7 @@ export interface Options {
   baseURL?: string; // eg: http://35.102.182.155:9200
   endpoint?: string; // eg: /api
 
-  driver?: ReactiveDriverOption;
+  driver?: ReativeDriverOption;
   timestamp?: boolean; // whether or not to add `updated_at` timestamp
 
   silent?: boolean; // controls whether or not show internal logs

@@ -1,5 +1,5 @@
 {
-  "npmScope": "reactive",
+  "npmScope": "reative",
   "implicitDependencies": {
     "angular.json": "*",
     "package.json": "*",

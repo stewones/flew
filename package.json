@@ -1,5 +1,5 @@
 {
-  "name": "reactive",
+  "name": "reative",
   "version": "0.2.15",
   "license": "MIT",
   "scripts": {
@@ -35,8 +35,8 @@
     "release:minor": "cd ./extra/releaser && npm run release:minor",
     "release:patch": "cd ./extra/releaser && npm run release:patch",
     "app:build": "ng build app",
-    "app:build:prod": "ng build app --prod && cp -rf ./dist/apps/app/index.html ./dist/apps/app/404.html",
-    "app:serve:prod": "npm run app:build:prod && ./node_modules/.bin/http-server -p 8080 -c-1 ./dist/apps/app",
+    "app:build:prod": "ng build app --prod && cp -rf ./dist/apps/firetask/index.html ./dist/apps/firetask/404.html",
+    "app:serve:prod": "npm run app:build:prod && ./node_modules/.bin/http-server -p 8080 -c-1 ./dist/apps/firetask",
     "app:run:ios": "ionic cap run ios --livereload && npx cap copy ios && npx cap open ios",
     "app:run:ios:prod": "npm run app:build:prod && npx cap copy ios && npx cap open ios",
     "storybook": "start-storybook -p 6006",
@@ -98,7 +98,7 @@
     "@babel/core": "^7.4.5",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.4.5",
-    "@reactive/records": "dist/libs/records",
+    "@reative/records": "dist/libs/records",
     "@ionic/angular-toolkit": "^1.5.1",
     "@ngxs/schematics": "^0.0.1-alpha.5",
     "@nrwl/builders": "7.6.2",
