@@ -1,10 +1,10 @@
-import { State, Action, StateContext } from '@ngxs/store';
+import { State as Store, Action, StateContext } from '@ngxs/store';
 import { get, isFunction, isObject } from 'lodash';
 import { Reactive, Response, shouldTransformResponse } from '@reactive/records';
 import { Observable } from 'rxjs';
 
 export interface StateModel {
-  responses: Response[];
+  Records: Response[];
 }
 
 export interface SetStateOptions {
@@ -17,28 +17,28 @@ export interface GetStateOptions {
 }
 
 export class ResponseSync {
-  public static readonly type = '[ReactiveState] Sync Response';
+  public static readonly type = '[State] Sync Response';
   constructor(public payload: Response) {}
 }
 
 export class ResponseReset {
-  public static readonly type = '[ReactiveState] Reset Responses';
+  public static readonly type = '[State] Reset Responses';
   constructor() {}
 }
 
-@State<StateModel>({
-  name: 'ReactiveState',
+@Store<StateModel>({
+  name: 'Reactive',
   defaults: {
-    responses: []
+    Records: []
   }
 })
-export class ReactiveState {
+export class State {
   @Action(ResponseSync) syncResponse(
     context: StateContext<StateModel>,
     action: ResponseSync
   ) {
     const state = context.getState();
-    const responses = [...state.responses];
+    const responses = [...state.Records];
     const exists = responses.find(it => it.key === action.payload.key);
 
     if (!exists) {
@@ -46,7 +46,7 @@ export class ReactiveState {
     }
 
     context.setState({
-      responses: exists
+      Records: exists
         ? Object.assign(responses, {
             [responses.indexOf(exists)]: action.payload
           })
@@ -56,7 +56,7 @@ export class ReactiveState {
 
   @Action(ResponseReset) resetResponse(context: StateContext<StateModel>) {
     context.setState({
-      responses: []
+      Records: []
     });
   }
 
@@ -65,7 +65,7 @@ export class ReactiveState {
 
 export function key(name: string, data = true) {
   return (state: any) => {
-    const response = state.ReactiveState.responses.find(it => it.key === name);
+    const response = state.Reactive.Records.find(it => it.key === name);
     const transform: any = shouldTransformResponse(
       { transformData: data },
       response
@@ -155,5 +155,7 @@ export function feedState() {
     return Reactive.storage.forEach((value, key, index) =>
       Reactive.store.sync(value)
     );
-  throw `can't locate storage instance`;
+  throw new Error(
+    `Can't locate storage instance. Did you try to call feedState inside the AppModule constructor?`
+  );
 }

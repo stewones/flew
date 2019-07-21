@@ -25,7 +25,7 @@ $ npm i -P @ngxs/store && npm i -P lodash
 
 ```typescript
 import { NgxsModule } from '@ngxs/store';
-import { ReactiveState, StateModule } from '@reactive/state';
+import { State, StateModule } from '@reactive/state';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -33,7 +33,7 @@ import { environment } from '../environments/environment';
   imports: [
     //
     // ngxs
-    NgxsModule.forRoot([ReactiveState], {
+    NgxsModule.forRoot([State], {
       developmentMode: !environment.production
     }),
     //
@@ -57,7 +57,7 @@ This is powerful when developing to make sure we're not going to mutate app stat
 ```typescript
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
-import { ReactiveState, StateModule } from '@reactive/state';
+import { State, StateModule } from '@reactive/state';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -65,7 +65,7 @@ import { environment } from '../environments/environment';
   imports: [
     //
     // ngxs
-    NgxsModule.forRoot([ReactiveState], {
+    NgxsModule.forRoot([State], {
       developmentMode: !environment.production
     }),
     NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production }),

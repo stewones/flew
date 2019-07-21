@@ -30,7 +30,7 @@ describe('RRSymbol', () => {
   // it('should return a state response from a key', () => {
   //   expect(
   //     key('kitty')({
-  //       ReactiveState: {
+  //       State: {
   //         responses: [{ key: 'kitty', data: { name: 'kitty', color: 'grey' } }]
   //       }
   //     })
@@ -38,7 +38,7 @@ describe('RRSymbol', () => {
 
   //   expect(
   //     key('kitty', true)({
-  //       ReactiveState: {
+  //       State: {
   //         responses: [{ key: 'kitty', data: { name: 'kitty', color: 'grey' } }]
   //       }
   //     })

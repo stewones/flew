@@ -14,7 +14,7 @@ export class StateSetup {
     };
     Reactive.store.get = key => {
       const snapshot = this.store.snapshot();
-      const state = get(snapshot, 'ReactiveState.responses') || [];
+      const state = get(snapshot, 'Reactive.Records') || [];
       return state.find(s => s.key === key);
     };
     Reactive.store.set = (key, val) => {
