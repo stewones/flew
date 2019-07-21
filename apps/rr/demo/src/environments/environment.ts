@@ -2,14 +2,11 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/database';
 import * as Firebase from 'firebase/app';
-import {
-  FirebaseConnector,
-  FirestoreConnector
-} from '@reactive/records';
+import { FirebaseConnector, FirestoreConnector } from '@reactive/records';
 
 import { Storage } from '@ionic/storage';
 import { Reactive } from '@reactive/records';
-import { storageConfig } from '@reactive/core';
+import { storageConfig } from '@reactive/cache';
 import { firebaseConfig } from './firebase.config';
 
 // This file can be replaced during build by using the `fileReplacements` array.

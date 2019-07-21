@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReactiveRecord, Collection } from '@reactive/records';
+import { Records, Collection } from '@reactive/records';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
 import { Response } from '@reactive/records';
@@ -20,7 +20,7 @@ export interface UserEntry extends Response {
   endpoint: '/v1'
 })
 export class UserService {
-  $collection: ReactiveRecord;
+  $collection: Records;
 
   constructor() {
     this.$collection.feed();

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Collection, ReactiveRecord } from '@reactive/records';
+import { Collection, Records } from '@reactive/records';
 import { Observable } from 'rxjs';
 
 export interface <%= classify(name) %> {
@@ -15,7 +15,7 @@ export interface <%= classify(name) %> {
   endpoint: '<%= endpoint %><%= dasherize(name) %>s'
 })
 export class <%= classify(name) %>Service {
-  $collection: ReactiveRecord;
+  $collection: Records;
 
   constructor() {
     // this.$collection.setHook('http.pre', (config: AxiosRequestConfig) => {

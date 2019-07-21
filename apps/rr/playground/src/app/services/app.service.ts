@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   Collection,
-  ReactiveRecord,
+  Records,
   Response
 } from '@reactive/records';
 import { environment } from '../../environments/environment';
@@ -20,7 +20,7 @@ export interface App extends Response<App> {
   endpoint: '/'
 })
 export class AppService {
-  $collection: ReactiveRecord; // just 4 fun
+  $collection: Records; // just 4 fun
 
   loadCache$: Subject<void> = new Subject();
   clearCache$: Subject<void> = new Subject();

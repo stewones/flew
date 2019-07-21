@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   Collection,
-  ReactiveRecord,
+  Records,
   Response,
   Log
 } from '@reactive/records';
@@ -23,7 +23,7 @@ export interface Album extends Response<Album> {
   endpoint: '/albums'
 })
 export class AlbumService {
-  $collection: ReactiveRecord;
+  $collection: Records;
 
   constructor(private store: Store) {
     // this.$collection.setHook('http.pre', (config: AxiosRequestConfig) => {

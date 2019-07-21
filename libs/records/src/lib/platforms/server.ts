@@ -26,7 +26,7 @@ import { RR_VERSION } from '../version';
 import { RR_DRIVER } from '../driver';
 import { SHA256 } from '../utils/sha';
 import { Chain } from '../interfaces/chain';
-export class ReactiveRecord implements ReactiveApi {
+export class Records implements ReactiveApi {
   protected collection: string;
   protected endpoint: string;
   protected _storage: StorageAdapter;
@@ -49,7 +49,6 @@ export class ReactiveRecord implements ReactiveApi {
   };
 
   public $log: Subject<Log> = new Subject();
-  public $ready: Subject<void> = new Subject();
 
   protected logger: Logger; // instance
 
@@ -151,8 +150,8 @@ export class ReactiveRecord implements ReactiveApi {
     // mark as initialized
     this._initialized = true;
 
-    this.$ready.next();
-    this.$ready.complete();
+    Reactive.ready$.next();
+    Reactive.ready$.complete();
 
     const name = this.collection || this.endpoint;
 
@@ -401,7 +400,7 @@ export class ReactiveRecord implements ReactiveApi {
   /**
    * Getter / Setter for the current driver
    */
-  public driver(name?: ReactiveDriverOption): ReactiveRecord {
+  public driver(name?: ReactiveDriverOption): Records {
     if (name) {
       this._driver = name;
       return this;
@@ -409,7 +408,7 @@ export class ReactiveRecord implements ReactiveApi {
     return this.getDriver() as any;
   }
 
-  public http(fn: (config: AxiosRequestConfig) => void): ReactiveRecord {
+  public http(fn: (config: AxiosRequestConfig) => void): Records {
     this.beforeHttp = fn;
     return this;
   }
@@ -417,7 +416,7 @@ export class ReactiveRecord implements ReactiveApi {
   /**
    * Set whether to use network for first requests
    */
-  public network(active: boolean): ReactiveRecord {
+  public network(active: boolean): Records {
     this.chain.useNetwork = active;
     return this;
   }
@@ -425,7 +424,7 @@ export class ReactiveRecord implements ReactiveApi {
   /**
    * Set whether to cache network responses
    */
-  public save(active: boolean): ReactiveRecord {
+  public save(active: boolean): Records {
     this.chain.saveNetwork = active;
     return this;
   }
@@ -435,7 +434,7 @@ export class ReactiveRecord implements ReactiveApi {
    */
   public transform<T>(
     transformFn: (response: Response) => any
-  ): ReactiveRecord {
+  ): Records {
     this.chain.transformResponse = transformFn;
     return this;
   }
@@ -443,7 +442,7 @@ export class ReactiveRecord implements ReactiveApi {
   /**
    * Set cache time to live
    */
-  public ttl(value: number): ReactiveRecord {
+  public ttl(value: number): Records {
     this.chain.ttl = value;
     return this;
   }
@@ -451,12 +450,12 @@ export class ReactiveRecord implements ReactiveApi {
   /**
    * Set whether to use cache for first requests
    */
-  public cache(active: boolean): ReactiveRecord {
+  public cache(active: boolean): Records {
     this.chain.useCache = active;
     return this;
   }
 
-  public state(active: boolean): ReactiveRecord {
+  public state(active: boolean): Records {
     this.chain.useState = active;
     return this;
   }
@@ -464,7 +463,7 @@ export class ReactiveRecord implements ReactiveApi {
   /**
    * Set cache key
    */
-  public key(name: string): ReactiveRecord {
+  public key(name: string): Records {
     this.chain.key = name;
     return this;
   }
@@ -474,7 +473,7 @@ export class ReactiveRecord implements ReactiveApi {
    */
   public query(
     by: { [key: string]: {} } | { [key: string]: {} }[]
-  ): ReactiveRecord {
+  ): Records {
     this.chain.query = by;
     return this;
   }
@@ -486,7 +485,7 @@ export class ReactiveRecord implements ReactiveApi {
     field: string,
     operator: string,
     value: string | number | boolean | []
-  ): ReactiveRecord {
+  ): Records {
     if (!isArray(this.chain.query)) {
       this.chain.query = [];
     }
@@ -501,7 +500,7 @@ export class ReactiveRecord implements ReactiveApi {
   /**
    * Set request sort
    */
-  public sort(by: { [key: string]: string }): ReactiveRecord {
+  public sort(by: { [key: string]: string }): Records {
     if (isEmpty(this.chain.sort)) {
       this.chain.sort = {};
     }
@@ -515,7 +514,7 @@ export class ReactiveRecord implements ReactiveApi {
   /**
    * Set request size
    */
-  public size(value: number): ReactiveRecord {
+  public size(value: number): Records {
     this.chain.size = value;
     return this;
   }
@@ -523,17 +522,17 @@ export class ReactiveRecord implements ReactiveApi {
   /**
    * Set reference (for firebase)
    */
-  public ref(path: string): ReactiveRecord {
+  public ref(path: string): Records {
     this.chain.ref = path;
     return this;
   }
 
-  public doc(value: string | number): ReactiveRecord {
+  public doc(value: string | number): Records {
     this.chain.doc = value;
     return this;
   }
 
-  public raw(active: boolean): ReactiveRecord {
+  public raw(active: boolean): Records {
     this.chain.transformData = !active;
     return this;
   }
@@ -542,7 +541,7 @@ export class ReactiveRecord implements ReactiveApi {
    * @deprecated
    * use just `save` instead
    */
-  public saveNetwork(active: boolean): ReactiveRecord {
+  public saveNetwork(active: boolean): Records {
     this.save(active);
     return this;
   }
@@ -552,7 +551,7 @@ export class ReactiveRecord implements ReactiveApi {
    */
   public transformResponse<T>(
     transformFn: (response: Response) => any
-  ): ReactiveRecord {
+  ): Records {
     this.transform(transformFn);
     return this;
   }
@@ -561,7 +560,7 @@ export class ReactiveRecord implements ReactiveApi {
    * @deprecated
    * use `cache` instead
    */
-  public useCache(active: boolean): ReactiveRecord {
+  public useCache(active: boolean): Records {
     this.cache(active);
     return this;
   }
@@ -571,7 +570,7 @@ export class ReactiveRecord implements ReactiveApi {
    */
   public transformNetwork<T>(
     transformFn: (response: Response) => any
-  ): ReactiveRecord {
+  ): Records {
     this.transform(transformFn);
     return this;
   }
@@ -580,7 +579,7 @@ export class ReactiveRecord implements ReactiveApi {
    * @deprecated
    * use just `network` instead
    */
-  public useNetwork(active: boolean): ReactiveRecord {
+  public useNetwork(active: boolean): Records {
     this.network(active);
     return this;
   }
@@ -598,7 +597,7 @@ export class ReactiveRecord implements ReactiveApi {
    * @deprecated now rr should return data formatted properly by default
    * if you're looking for disable this behavior, just add `.raw(true)` in your chaining
    */
-  public data(transform: boolean): ReactiveRecord {
+  public data(transform: boolean): Records {
     this.chain.transformData = transform;
     return this;
   }
@@ -609,7 +608,7 @@ export class ReactiveRecord implements ReactiveApi {
    */
   public transformCache<T>(
     transformFn: (response: Response) => any
-  ): ReactiveRecord {
+  ): Records {
     return this;
   }
 
@@ -617,7 +616,7 @@ export class ReactiveRecord implements ReactiveApi {
    * experimental
    */
 
-  public reset(): ReactiveRecord {
+  public reset(): Records {
     this._reset();
     return this;
   }
@@ -629,10 +628,10 @@ export class ReactiveRecord implements ReactiveApi {
     this.init({ driver: RR_DRIVER });
   }
 
-  public diff(fn): ReactiveRecord {
+  public diff(fn): Records {
     this.chain.diff = fn;
     return this;
   }
 }
 
-export class PlatformServer extends ReactiveRecord {}
+export class PlatformServer extends Records {}

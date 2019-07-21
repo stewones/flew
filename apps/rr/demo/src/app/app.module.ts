@@ -12,10 +12,10 @@ import { DemoState } from './app.state';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { firebaseConfig } from '../environments/firebase.config';
-import { ReactiveFirebaseModule } from '@reactive/firebase';
-import { ReactiveIonicModule } from '@reactive/ionic';
-import { ReactiveModule } from '@reactive/angular';
-import { ReactiveState, ReactiveStateModule } from '@reactive/state';
+import { FirebaseModule } from '@reactive/firebase';
+import { CacheModule } from '@reactive/cache';
+import { RecordsModule } from '@reactive/angular';
+import { ReactiveState, StateModule } from '@reactive/state';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -31,21 +31,21 @@ import { ReactiveState, ReactiveStateModule } from '@reactive/state';
     // rr stuff
     //
     // init rr state
-    ReactiveStateModule.forRoot(),
+    StateModule.forRoot(),
     //
     // init rr
-    ReactiveModule.forRoot({
+    RecordsModule.forRoot({
       useLog: !environment.production
     }),
     //
     // use rr with firebase
-    ReactiveFirebaseModule.forRoot({
+    FirebaseModule.forRoot({
       config: firebaseConfig,
       persistence: true
     }),
     //
     // use rr with ionic (for cache)
-    ReactiveIonicModule.forRoot({
+    CacheModule.forRoot({
       dbName: 'rr',
       dbStore: 'demo'
     })

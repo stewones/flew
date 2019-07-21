@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReactiveRecord, Collection } from '@reactive/records';
+import { Collection, Records } from '@reactive/records';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
 import { Response } from '@reactive/records';
@@ -21,7 +21,7 @@ export interface CatEntry extends Response {
   endpoint: '/v1'
 })
 export class CatService {
-  $collection: ReactiveRecord;
+  $collection: Records;
 
   constructor() {
     this.$collection.feed();

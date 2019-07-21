@@ -28,10 +28,10 @@ export class StateSetup {
 }
 
 @NgModule()
-export class ReactiveStateModule {
+export class StateModule {
   public static forRoot(): ModuleWithProviders {
     return {
-      ngModule: ReactiveStateModule,
+      ngModule: StateModule,
       providers: [Store, StateSetup]
     };
   }

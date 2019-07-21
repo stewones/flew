@@ -1,10 +1,6 @@
 import { State, Action, StateContext } from '@ngxs/store';
-import { get, isEmpty, isArray, isObject } from 'lodash';
-import {
-  Reactive,
-  Response,
-  shouldTransformResponse
-} from '@reactive/records';
+import { get, isFunction, isObject } from 'lodash';
+import { Reactive, Response, shouldTransformResponse } from '@reactive/records';
 import { Observable } from 'rxjs';
 
 export interface StateModel {
@@ -154,7 +150,7 @@ export function setState(
  * make sure to call this only once
  */
 export function feedState() {
-  const hasStorage = !isEmpty(Reactive.storage);
+  const hasStorage = isFunction(Reactive.storage.forEach);
   if (hasStorage)
     return Reactive.storage.forEach((value, key, index) =>
       Reactive.store.sync(value)

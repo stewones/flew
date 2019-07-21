@@ -4,7 +4,7 @@ import { Observable, from, of, merge as merge$ } from 'rxjs';
 import { map, switchMap, filter, catchError, tap } from 'rxjs/operators';
 import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
-import { ReactiveRecord } from './server';
+import { Records } from './server';
 import { StorageAdapter } from '../interfaces/storage';
 import { Reactive } from '../symbols/rr';
 import { ReactiveVerb } from '../interfaces/verb';
@@ -16,7 +16,7 @@ import { Chain } from '../interfaces/chain';
 import * as differential from '../utils/diff';
 const deepDiff = differential.diff;
 
-export class PlatformBrowser extends ReactiveRecord {
+export class PlatformBrowser extends Records {
   /**
    * Storage Adapter
    * see ionic storage for reference

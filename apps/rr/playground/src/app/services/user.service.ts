@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   Collection,
-  ReactiveRecord,
+  Records,
   Response
 } from '@reactive/records';
 import { Observable } from 'rxjs';
@@ -43,7 +43,7 @@ export interface User extends Response<User> {
   endpoint: '/users'
 })
 export class UserService {
-  $collection: ReactiveRecord;
+  $collection: Records;
 
   constructor(private store: Store) {
     // this.$collection.http((config: AxiosRequestConfig) => {

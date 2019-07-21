@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   Collection,
-  ReactiveRecord,
+  Records,
   Response
 } from '@reactive/records';
 import { environment } from '../../environments/environment';
@@ -22,7 +22,7 @@ export interface UserServer extends Response<UserServer> {
   useCache: false // to force the use of server platform
 })
 export class UserServerService {
-  $collection: ReactiveRecord;
+  $collection: Records;
 
   constructor() {
     // this.$collection.setHook('http.pre', (config: AxiosRequestConfig) => {

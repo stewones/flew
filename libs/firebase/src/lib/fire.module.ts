@@ -32,12 +32,12 @@ export class ReactiveFirebaseSetup {
 }
 
 @NgModule()
-export class ReactiveFirebaseModule {
+export class FirebaseModule {
   public static forRoot(
     options: ReactiveFirebaseOptions = {} as ReactiveFirebaseOptions
   ): ModuleWithProviders {
     return {
-      ngModule: ReactiveFirebaseModule,
+      ngModule: FirebaseModule,
       providers: [
         ReactiveFirebaseSetup,
         {

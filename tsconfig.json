@@ -16,8 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@reactive/app": ["apps/app/src/index.ts"],
-      "@reactive/core": ["libs/core/src/index.ts"],
-      "@reactive/ionic": ["libs/ionic/src/index.ts"],
+      "@reactive/cache": ["libs/cache/src/index.ts"],
       "@reactive/angular": ["libs/angular/src/index.ts"],
       "@reactive/state": ["libs/state/src/index.ts"],
       "@reactive/records": ["libs/records/src/index.ts"],

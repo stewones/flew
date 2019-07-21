@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   Collection,
-  ReactiveRecord,
+  Records,
   Response,
   Config
 } from '@reactive/records';
@@ -23,7 +23,7 @@ export interface TodoEntry extends Response {
   endpoint: '/v1'
 })
 export class TodoService {
-  $collection: ReactiveRecord;
+  $collection: Records;
   token: string = 'd0c108d0-2568-4373-84f2-c7de7e7a18b4';
   rr = 'rulez!';
 

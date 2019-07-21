@@ -44,17 +44,17 @@
         }
       }
     },
-    "ionic": {
-      "root": "libs/ionic",
-      "sourceRoot": "libs/ionic/src",
+    "cache": {
+      "root": "libs/cache",
+      "sourceRoot": "libs/cache/src",
       "projectType": "library",
       "prefix": "firebasetask",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "libs/ionic/tsconfig.lib.json",
-            "project": "libs/ionic/ng-package.json"
+            "tsConfig": "libs/cache/tsconfig.lib.json",
+            "project": "libs/cache/ng-package.json"
           },
           "configurations": {
             "production": {}
@@ -64,8 +64,8 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/ionic/tsconfig.lib.json",
-              "libs/ionic/tsconfig.spec.json"
+              "libs/cache/tsconfig.lib.json",
+              "libs/cache/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
@@ -73,9 +73,9 @@
         "test": {
           "builder": "@nrwl/builders:jest",
           "options": {
-            "jestConfig": "libs/ionic/jest.config.js",
-            "tsConfig": "libs/ionic/tsconfig.spec.json",
-            "setupFile": "libs/ionic/src/test-setup.ts"
+            "jestConfig": "libs/cache/jest.config.js",
+            "tsConfig": "libs/cache/tsconfig.spec.json",
+            "setupFile": "libs/cache/src/test-setup.ts"
           }
         }
       },

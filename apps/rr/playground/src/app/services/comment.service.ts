@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   Collection,
-  ReactiveRecord,
+  Records,
   Response,
   Log
 } from '@reactive/records';
@@ -26,7 +26,7 @@ export interface Comment extends Response<Comment> {
   endpoint: '/comments'
 })
 export class CommentService {
-  $collection: ReactiveRecord;
+  $collection: Records;
 
   constructor(private store: Store) {
     // this.$collection.setHook('http.pre', (config: AxiosRequestConfig) => {

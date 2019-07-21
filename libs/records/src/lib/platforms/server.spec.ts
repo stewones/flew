@@ -1,4 +1,4 @@
-import { ReactiveRecord } from './server';
+import { Records } from './server';
 import { FirestoreStub, FirebaseStub } from '../drivers/stub';
 import { ReactiveDriverOption } from '../interfaces/driver';
 import { Logger } from '../utils/logger';
@@ -6,7 +6,7 @@ import { Subject, Observable } from 'rxjs';
 import { ReactiveVerb } from '../interfaces/verb';
 import { RR_DRIVER } from '../driver';
 
-class ReactiveRecordMock extends ReactiveRecord {
+class RecordsMock extends Records {
   constructor(options) {
     super(options);
   }
@@ -30,8 +30,8 @@ class ReactiveRecordMock extends ReactiveRecord {
   }
 }
 
-describe('ReactiveRecord', () => {
-  let lib: ReactiveRecord;
+describe('Records', () => {
+  let lib: Records;
   const baseURL = 'http://reactive.dev';
   const collection = 'foo-collection';
 
@@ -47,7 +47,7 @@ describe('ReactiveRecord', () => {
       }
     });
 
-    lib = new ReactiveRecord({
+    lib = new Records({
       useLog: false,
       baseURL: baseURL,
       collection: collection,
@@ -59,12 +59,12 @@ describe('ReactiveRecord', () => {
   });
 
   it('should be created using minimal setup', () => {
-    lib = new ReactiveRecord({ useLog: false });
+    lib = new Records({ useLog: false });
     expect(lib).toBeTruthy();
   });
 
   it('should initialise with cache disabled', () => {
-    lib = new ReactiveRecord({ useLog: false, useCache: false });
+    lib = new Records({ useLog: false, useCache: false });
     expect(lib).toBeTruthy();
     //
     // and/or
@@ -73,7 +73,7 @@ describe('ReactiveRecord', () => {
   });
 
   // it('should initialise with logs disabled', () => {
-  //   lib = new ReactiveRecord({ useLog: false });
+  //   lib = new Records({ useLog: false });
   //   lib.init({ useLog: false, useLogTrace: false });
   //   expect(lib).toBeTruthy();
   // });
@@ -88,19 +88,19 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should implement `find` method', () => {
-  //   const spy = jest.spyOn(ReactiveRecord.prototype, 'find');
+  //   const spy = jest.spyOn(Records.prototype, 'find');
   //   lib.find().toPromise();
   //   expect(spy).toBeCalled();
   // });
 
   // it('should implement `findOne` method', () => {
-  //   const spy = jest.spyOn(ReactiveRecord.prototype, 'findOne');
+  //   const spy = jest.spyOn(Records.prototype, 'findOne');
   //   lib.findOne().toPromise();
   //   expect(spy).toBeCalled();
   // });
 
   // it('should implement `set` method', () => {
-  //   const spy = jest.spyOn(ReactiveRecord.prototype, 'set');
+  //   const spy = jest.spyOn(Records.prototype, 'set');
   //   lib.set('some_id', { some: 'data' }).toPromise();
   //   expect(spy).toBeCalled();
 
@@ -110,19 +110,19 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should implement `update` method', () => {
-  //   const spy = jest.spyOn(ReactiveRecord.prototype, 'update');
+  //   const spy = jest.spyOn(Records.prototype, 'update');
   //   lib.update('some_id', { some: 'data' }).toPromise();
   //   expect(spy).toBeCalled();
   // });
 
   // it('should implement `on` method', () => {
-  //   const spy = jest.spyOn(ReactiveRecord.prototype, 'on');
+  //   const spy = jest.spyOn(Records.prototype, 'on');
   //   lib.on(r => {}, r => {});
   //   expect(spy).toBeCalled();
   // });
 
   // it('should return `firebase` connector instance', () => {
-  //   lib = new ReactiveRecord({
+  //   lib = new Records({
   //     useLog: false,
   //     baseURL: baseURL,
   //     collection: collection,
@@ -135,7 +135,7 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should return `firestore` connector instance', () => {
-  //   lib = new ReactiveRecord({
+  //   lib = new Records({
   //     useLog: false,
   //     baseURL: baseURL,
   //     collection: collection,
@@ -148,7 +148,7 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should return `storage` adapter', () => {
-  //   lib = new ReactiveRecord({
+  //   lib = new Records({
   //     useLog: false,
   //     baseURL: baseURL,
   //     collection: collection
@@ -158,13 +158,13 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should clear cache', () => {
-  //   lib = new ReactiveRecord({
+  //   lib = new Records({
   //     useLog: false,
   //     baseURL: baseURL,
   //     collection: collection
   //   });
 
-  //   const spy = jest.spyOn(ReactiveRecord.prototype, 'clearCache');
+  //   const spy = jest.spyOn(Records.prototype, 'clearCache');
   //   lib.init({ storage: { _: 'adapter' } } as any);
   //   lib.clearCache();
 
@@ -172,13 +172,13 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should feed collections', () => {
-  //   lib = new ReactiveRecord({
+  //   lib = new Records({
   //     useLog: false,
   //     baseURL: baseURL,
   //     collection: collection
   //   });
 
-  //   const spy = jest.spyOn(ReactiveRecord.prototype, 'feed');
+  //   const spy = jest.spyOn(Records.prototype, 'feed');
   //   lib.init();
   //   lib.feed();
 
@@ -186,7 +186,7 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should not reinitialise drivers', () => {
-  //   const lib_ = new ReactiveRecord({
+  //   const lib_ = new Records({
   //     useLog: false,
   //     baseURL: baseURL,
   //     collection: collection,
@@ -196,7 +196,7 @@ describe('ReactiveRecord', () => {
   //       firestore: { _: 'firestore instance' }
   //     }
   //   });
-  //   const spy = jest.spyOn(ReactiveRecord.prototype, 'driverInit' as any);
+  //   const spy = jest.spyOn(Records.prototype, 'driverInit' as any);
 
   //   lib_.firebase();
   //   lib_.firebase();
@@ -206,7 +206,7 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should initialise with `firestore` as a default driver', () => {
-  //   const lib_ = new ReactiveRecord({
+  //   const lib_ = new Records({
   //     useLog: false,
   //     baseURL: baseURL,
   //     collection: collection,
@@ -221,7 +221,7 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should fail when verbs and drivers does not match', () => {
-  //   const lib_ = new ReactiveRecord({
+  //   const lib_ = new Records({
   //     useLog: false,
   //     baseURL: baseURL,
   //     collection: collection,
@@ -248,12 +248,12 @@ describe('ReactiveRecord', () => {
   //     })
   //   } as any);
 
-  //   expect(lib.useLog(false)).toBeInstanceOf(ReactiveRecord);
-  //   expect(lib.useLogTrace(true)).toBeInstanceOf(ReactiveRecord);
+  //   expect(lib.useLog(false)).toBeInstanceOf(Records);
+  //   expect(lib.useLogTrace(true)).toBeInstanceOf(Records);
   // });
 
   // it('should create unique keys', () => {
-  //   let lib_ = new ReactiveRecordMock({
+  //   let lib_ = new RecordsMock({
   //     useLog: false,
   //     baseURL: baseURL,
   //     collection: collection,
@@ -275,7 +275,7 @@ describe('ReactiveRecord', () => {
   //     'foo-collection://path/to/data/source/01ebc7d3672dd189de1e1369b5ed5a89450d8f8fdd8cad538f621446bd7424cb'
   //   );
 
-  //   lib_ = new ReactiveRecordMock({
+  //   lib_ = new RecordsMock({
   //     useLog: false,
   //     baseURL: baseURL,
   //     endpoint: '/',
@@ -296,7 +296,7 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should implement [get] verb', () => {
-  //   let lib_ = new ReactiveRecordMock({
+  //   let lib_ = new RecordsMock({
   //     useLog: false,
   //     baseURL: baseURL,
   //     endpoint: '/',
@@ -305,7 +305,7 @@ describe('ReactiveRecord', () => {
   //       http: { get: () => Promise.resolve([1, 2, 3]) }
   //     }
   //   });
-  //   const spy = jest.spyOn(ReactiveRecord.prototype, 'get');
+  //   const spy = jest.spyOn(Records.prototype, 'get');
   //   lib_
   //     .get()
   //     .toPromise()
@@ -324,7 +324,7 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should implement [post] verb', () => {
-  //   let lib_ = new ReactiveRecordMock({
+  //   let lib_ = new RecordsMock({
   //     useLog: false,
   //     baseURL: baseURL,
   //     endpoint: '/',
@@ -333,7 +333,7 @@ describe('ReactiveRecord', () => {
   //       http: { post: () => Promise.resolve([1, 2, 3]) }
   //     }
   //   });
-  //   const spy = jest.spyOn(ReactiveRecord.prototype, 'post');
+  //   const spy = jest.spyOn(Records.prototype, 'post');
   //   lib_
   //     .post()
   //     .toPromise()
@@ -353,7 +353,7 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should implement [patch] verb', () => {
-  //   let lib_ = new ReactiveRecordMock({
+  //   let lib_ = new RecordsMock({
   //     useLog: false,
   //     baseURL: baseURL,
   //     endpoint: '/',
@@ -362,7 +362,7 @@ describe('ReactiveRecord', () => {
   //       http: { patch: () => Promise.resolve([1, 2, 3]) }
   //     }
   //   });
-  //   const spy = jest.spyOn(ReactiveRecord.prototype, 'patch');
+  //   const spy = jest.spyOn(Records.prototype, 'patch');
   //   lib_
   //     .patch()
   //     .toPromise()
@@ -382,7 +382,7 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should implement [delete] verb', () => {
-  //   let lib_ = new ReactiveRecordMock({
+  //   let lib_ = new RecordsMock({
   //     useLog: false,
   //     baseURL: baseURL,
   //     endpoint: '/',
@@ -391,7 +391,7 @@ describe('ReactiveRecord', () => {
   //       http: { delete: () => Promise.resolve([1, 2, 3]) }
   //     }
   //   });
-  //   const spy = jest.spyOn(ReactiveRecord.prototype, 'delete');
+  //   const spy = jest.spyOn(Records.prototype, 'delete');
   //   lib_
   //     .delete()
   //     .toPromise()
@@ -413,50 +413,50 @@ describe('ReactiveRecord', () => {
   // it('should implement [http] chaining', () => {
   //   expect(
   //     lib.http(config => (config.headers['token'] = 'a1b2c3'))
-  //   ).toBeInstanceOf(ReactiveRecord);
+  //   ).toBeInstanceOf(Records);
   // });
 
   // it('should implement [useNetwork] chaining', () => {
-  //   expect(lib.useNetwork(true)).toBeInstanceOf(ReactiveRecord);
+  //   expect(lib.useNetwork(true)).toBeInstanceOf(Records);
   // });
 
   // it('should implement [saveNetwork] chaining', () => {
-  //   expect(lib.saveNetwork(false)).toBeInstanceOf(ReactiveRecord);
+  //   expect(lib.saveNetwork(false)).toBeInstanceOf(Records);
   // });
 
   // it('should implement [transformResponse] chaining', () => {
-  //   expect(lib.transformResponse(r => r.data)).toBeInstanceOf(ReactiveRecord);
+  //   expect(lib.transformResponse(r => r.data)).toBeInstanceOf(Records);
   // });
 
   // // @todo scheduled to remove in favor of `transformResponse`
   // it('should implement [transformNetwork] chaining', () => {
-  //   expect(lib.transformNetwork(r => r.data)).toBeInstanceOf(ReactiveRecord);
+  //   expect(lib.transformNetwork(r => r.data)).toBeInstanceOf(Records);
   // });
 
   // it('should implement [ttl] chaining', () => {
   //   expect(
   //     lib.ttl(60) // in seconds
-  //   ).toBeInstanceOf(ReactiveRecord);
+  //   ).toBeInstanceOf(Records);
   // });
 
   // it('should implement [transformCache] chaining', () => {
-  //   expect(lib.transformCache(r => r.data)).toBeInstanceOf(ReactiveRecord);
+  //   expect(lib.transformCache(r => r.data)).toBeInstanceOf(Records);
   // });
 
   // it('should implement [key] chaining', () => {
-  //   expect(lib.key('yo!')).toBeInstanceOf(ReactiveRecord);
+  //   expect(lib.key('yo!')).toBeInstanceOf(Records);
   // });
 
   // it('should implement [query] chaining', () => {
   //   expect(
   //     lib.query([{ field: 'uid', operator: '==', value: 'a1b2c3' }])
-  //   ).toBeInstanceOf(ReactiveRecord);
+  //   ).toBeInstanceOf(Records);
   // });
 
   // it('should implement [where] chaining', () => {
-  //   expect(lib.where('uid', '==', 'a1b2c3')).toBeInstanceOf(ReactiveRecord);
+  //   expect(lib.where('uid', '==', 'a1b2c3')).toBeInstanceOf(Records);
 
-  //   const lib_ = new ReactiveRecordMock({
+  //   const lib_ = new RecordsMock({
   //     useLog: false,
   //     baseURL: baseURL,
   //     collection: collection,
@@ -492,9 +492,9 @@ describe('ReactiveRecord', () => {
   //     .query([{ field: 'a', operator: 'b', value: 'c' }])
   //     .where('uid', '==', 'a1b2c3');
 
-  //   expect(request).toBeInstanceOf(ReactiveRecord);
+  //   expect(request).toBeInstanceOf(Records);
 
-  //   const spy = jest.spyOn(ReactiveRecord.prototype, 'call' as any);
+  //   const spy = jest.spyOn(Records.prototype, 'call' as any);
 
   //   const chain = lib_.cloneChain();
 
@@ -510,31 +510,31 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should implement [sort] chaining', () => {
-  //   expect(lib.sort({ created_at: 'desc' })).toBeInstanceOf(ReactiveRecord);
+  //   expect(lib.sort({ created_at: 'desc' })).toBeInstanceOf(Records);
   //   lib.reboot();
   //   expect(
   //     lib.sort({ created_at: 'desc' }).sort({ updated_at: 'desc' })
-  //   ).toBeInstanceOf(ReactiveRecord);
+  //   ).toBeInstanceOf(Records);
   // });
 
   // it('should implement [size] chaining', () => {
-  //   expect(lib.size(54)).toBeInstanceOf(ReactiveRecord);
+  //   expect(lib.size(54)).toBeInstanceOf(Records);
   // });
 
   // it('should implement [ref] chaining', () => {
-  //   expect(lib.ref('path/to/firebase/ref')).toBeInstanceOf(ReactiveRecord);
+  //   expect(lib.ref('path/to/firebase/ref')).toBeInstanceOf(Records);
   // });
 
   // it('should implement [data] chaining', () => {
-  //   expect(lib.data(true)).toBeInstanceOf(ReactiveRecord);
+  //   expect(lib.data(true)).toBeInstanceOf(Records);
   // });
 
   // it('should implement [doc] chaining', () => {
-  //   expect(lib.doc('a1b2c3')).toBeInstanceOf(ReactiveRecord);
+  //   expect(lib.doc('a1b2c3')).toBeInstanceOf(Records);
   // });
 
   // it('should implement [reset] chaining', () => {
-  //   expect(lib.reset()).toBeInstanceOf(ReactiveRecord);
+  //   expect(lib.reset()).toBeInstanceOf(Records);
   // });
 
   // it('should implement [reboot] chaining', () => {
@@ -544,7 +544,7 @@ describe('ReactiveRecord', () => {
   // });
 
   // it('should call network with a customized key', () => {
-  //   let lib_ = new ReactiveRecordMock({
+  //   let lib_ = new RecordsMock({
   //     useLog: false,
   //     baseURL: baseURL,
   //     endpoint: '/',

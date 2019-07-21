@@ -15,10 +15,10 @@ export class ReactiveAngularSetup {
   }
 }
 @NgModule()
-export class ReactiveModule {
+export class RecordsModule {
   public static forRoot(options: Options = {}): ModuleWithProviders {
     return {
-      ngModule: ReactiveModule,
+      ngModule: RecordsModule,
       providers: [
         ReactiveAngularSetup,
         {

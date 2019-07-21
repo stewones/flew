@@ -1,10 +1,8 @@
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
-import { storageConfig } from '@reactive/core';
 import { Reactive } from '@reactive/records';
-
-import { Ui } from './ui.service';
+import { storageConfig } from './utils';
 
 import {
   NgModule,
@@ -15,14 +13,14 @@ import {
 
 import { Storage } from '@ionic/storage';
 
-export interface ReactiveIonicOptions {
+export interface CacheOptions {
   dbName: string;
   dbStore: string;
 }
 
 @Injectable()
-export class ReactiveIonicSetup {
-  constructor(@Inject('ReactiveIonicOptions') public options) {
+export class CacheSetup {
+  constructor(@Inject('CacheOptions') public options) {
     Reactive.storage = new Storage(
       storageConfig(options.dbName, options.dbStore)
     );
@@ -34,22 +32,21 @@ export class ReactiveIonicSetup {
   imports: [IonicModule.forRoot()],
   exports: [IonicModule]
 })
-export class ReactiveIonicModule {
+export class CacheModule {
   public static forRoot(
-    options: ReactiveIonicOptions = {} as ReactiveIonicOptions
+    options: CacheOptions = {} as CacheOptions
   ): ModuleWithProviders {
     return {
-      ngModule: ReactiveIonicModule,
+      ngModule: CacheModule,
       providers: [
-        Ui,
-        ReactiveIonicSetup,
+        CacheSetup,
         {
-          provide: 'ReactiveIonicOptions',
+          provide: 'CacheOptions',
           useValue: options
         },
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
       ]
     };
   }
-  constructor(private ionic: ReactiveIonicSetup) {}
+  constructor(private cache: CacheSetup) {}
 }

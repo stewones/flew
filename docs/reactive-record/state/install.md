@@ -22,9 +22,10 @@ $ npm i -P @ngxs/store && npm i -P lodash
 
 {% code-tabs %}
 {% code-tabs-item title="app.module.ts" %}
+
 ```typescript
 import { NgxsModule } from '@ngxs/store';
-import { ReactiveState, ReactiveStateModule } from '@reactive/state';
+import { ReactiveState, StateModule } from '@reactive/state';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -37,12 +38,12 @@ import { environment } from '../environments/environment';
     }),
     //
     // rr state
-    ReactiveStateModule.forRoot()
+    StateModule.forRoot()
   ]
 })
 export class AppModule {}
-
 ```
+
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
@@ -52,10 +53,11 @@ This is powerful when developing to make sure we're not going to mutate app stat
 
 {% code-tabs %}
 {% code-tabs-item title="app.module.ts" %}
+
 ```typescript
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
-import { ReactiveState, ReactiveStateModule } from '@reactive/state';
+import { ReactiveState, StateModule } from '@reactive/state';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -69,11 +71,11 @@ import { environment } from '../environments/environment';
     NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production }),
     //
     // rr state
-    ReactiveStateModule.forRoot()
+    StateModule.forRoot()
   ]
 })
 export class AppModule {}
 ```
+
 {% endcode-tabs-item %}
 {% endcode-tabs %}
-

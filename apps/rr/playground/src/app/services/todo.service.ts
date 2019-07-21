@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   Collection,
-  ReactiveRecord,
+  Records,
   Response,
   Log
 } from '@reactive/records';
@@ -24,7 +24,7 @@ export interface Todo extends Response<Todo> {
   endpoint: '/todos'
 })
 export class TodoService {
-  $collection: ReactiveRecord;
+  $collection: Records;
 
   constructor(private store: Store) {
     // this.$collection.setHook('http.pre', (config: AxiosRequestConfig) => {

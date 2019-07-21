@@ -1,5 +1,5 @@
 import { FirestoreDriver } from './firestore';
-import { ReactiveRecord } from '../platforms/server';
+import { Records } from '../platforms/server';
 import { Logger } from '../utils/logger';
 import { Subject, of, throwError } from 'rxjs';
 import { Response } from '../interfaces/response';
@@ -113,7 +113,7 @@ export const firestoreStub: any = {
 };
 
 describe('FirestoreDriver', () => {
-  let driver: FirestoreDriverMock, lib: ReactiveRecord;
+  let driver: FirestoreDriverMock, lib: Records;
   const collection = 'foo-collection';
 
   beforeEach(() => {

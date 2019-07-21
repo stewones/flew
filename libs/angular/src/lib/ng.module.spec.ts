@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ReactiveModule } from './ng.module';
+import { RecordsModule } from './ng.module';
 
-describe(`ReactiveModule`, () => {
+describe(`RecordsModule`, () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveModule]
+      imports: [RecordsModule]
     });
   });
 

@@ -98,7 +98,6 @@
     "@babel/core": "^7.4.5",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.4.5",
-    "@reactive/core": "^0.2.0",
     "@reactive/records": "dist/libs/records",
     "@ionic/angular-toolkit": "^1.5.1",
     "@ngxs/schematics": "^0.0.1-alpha.5",

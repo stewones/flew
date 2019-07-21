@@ -6,8 +6,7 @@
     "entryFile": "src/index.ts",
     "umdModuleIds": {
       "lodash": "_",
-      "@reactive/records": "@reactive/records",
-      "@reactive/core": "@reactive/core"
+      "@reactive/records": "@reactive/records"
     }
   }
 }

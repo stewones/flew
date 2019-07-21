@@ -265,7 +265,7 @@ All notable changes to this project will be documented in this file. See [standa
 - **rr:** finish server tests ([686b698](https://github.com/stewwan/reactive/commit/686b698))
 - **rr:** implement store and key selector ([dd7e77e](https://github.com/stewwan/reactive/commit/dd7e77e))
 - **rr:** improve traced log ([c7cbffc](https://github.com/stewwan/reactive/commit/c7cbffc))
-- **rr:** make it fully initializable via angular ReactiveModule ([72ba484](https://github.com/stewwan/reactive/commit/72ba484))
+- **rr:** make it fully initializable via angular RecordsModule ([72ba484](https://github.com/stewwan/reactive/commit/72ba484))
 - **rr:** move http stuff to a separate driver and add the possibility to use a custom http connector, like the angular http client ([7f785e4](https://github.com/stewwan/reactive/commit/7f785e4))
 - **rr:** only feed the specific collection ([0d30c44](https://github.com/stewwan/reactive/commit/0d30c44))
 - **rr:** reduce redundant code and apply the verb mapping ([e61e9e7](https://github.com/stewwan/reactive/commit/e61e9e7))

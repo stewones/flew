@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/libs/ionic",
+    "outDir": "../../dist/libs/cache",
     "module": "commonjs",
     "types": ["jest", "node"],
     "allowJs": true
