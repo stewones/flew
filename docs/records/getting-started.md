@@ -14,5 +14,3 @@ Dependencies
 $ npm i -P @ngxs/store && npm i -P rxjs && npm i -P axios && npm i -P lodash && npm i -P moment
 ```
 
-
-

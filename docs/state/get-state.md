@@ -56,11 +56,11 @@ The **getState** method is prepared to handle even elastic search responses, whe
 }
 ```
 
-### 
+#### 
 
-### Get raw data
+#### Get raw data
 
-Perhaps there may be a case where you need the original data without any filter. 
+Perhaps there may be a case where you need the original data without any filter.
 
 ```typescript
 import { getState } from '@reative/state';
