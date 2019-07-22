@@ -572,20 +572,6 @@
           "styleext": "scss"
         }
       }
-    },
-    "schematics": {
-      "root": "libs/schematics",
-      "sourceRoot": "libs/schematics/src",
-      "projectType": "library",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "libs/schematics/tsconfig.lib.json",
-            "project": "libs/schematics/ng-package.json"
-          }
-        }
-      }
     }
   },
   "cli": {
@@ -609,5 +595,5 @@
       "styleext": "scss"
     }
   },
-  "defaultProject": "app"
+  "defaultProject": "firetask"
 }

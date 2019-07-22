@@ -11,16 +11,10 @@
     "records": {
       "tags": []
     },
-    "app": {
-      "tags": []
-    },
-    "ionic": {
+    "firetask": {
       "tags": []
     },
     "angular": {
-      "tags": []
-    },
-    "core": {
       "tags": []
     },
     "state": {
@@ -39,9 +33,6 @@
       "tags": []
     },
     "firebase": {
-      "tags": []
-    },
-    "schematics": {
       "tags": []
     }
   }
