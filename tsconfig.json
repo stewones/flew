@@ -20,8 +20,7 @@
       "@reative/angular": ["libs/angular/src/index.ts"],
       "@reative/state": ["libs/state/src/index.ts"],
       "@reative/records": ["libs/records/src/index.ts"],
-      "@reative/firebase": ["libs/firebase/src/index.ts"],
-      "@reative/schematics": ["libs/schematics/src/index.ts"]
+      "@reative/firebase": ["libs/firebase/src/index.ts"]
     },
     "resolveJsonModule": true,
     "esModuleInterop": true,
