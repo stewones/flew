@@ -3,7 +3,7 @@ import { Observable, of, Subject } from 'rxjs';
 import { StorageAdapter } from '../interfaces/storage';
 import { Connector } from '../interfaces/connector';
 
-interface ReativeOptions {
+interface ReativeProtocol {
   options: Options;
   connector: Connector;
   store?: {
@@ -18,7 +18,7 @@ interface ReativeOptions {
   ready$: Subject<void>;
 }
 
-const ReativeConfig: ReativeOptions = {
+export const Reative: ReativeProtocol = {
   options: {
     driver: 'firestore'
   },
@@ -38,10 +38,3 @@ const ReativeConfig: ReativeOptions = {
   } as StorageAdapter,
   ready$: new Subject()
 };
-
-/**
- * @name Config
- * @deprecated use `Reative` instead
- */
-export const Config = ReativeConfig;
-export const Reative = ReativeConfig;

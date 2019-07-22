@@ -39,7 +39,7 @@ export class State {
   ) {
     const state = context.getState();
     const responses = [...state.Records];
-    const exists = responses.find(it => it.key === action.payload.key);
+    const exists = responses.find(it => it && it.key === action.payload.key);
 
     if (!exists) {
       responses.push(action.payload);

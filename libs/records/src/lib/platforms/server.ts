@@ -18,7 +18,7 @@ import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
 import { StorageAdapter } from '../interfaces/storage';
 import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
-import { Reative } from '../symbols/rr';
+import { Reative } from '../symbols/reative';
 import { FirestoreDriver } from '../drivers/firestore';
 import { FirebaseDriver } from '../drivers/firebase';
 import { HttpDriver } from '../drivers/http';
@@ -432,9 +432,7 @@ export class Records implements ReativeApi {
   /**
    * Set a transform fn for the responses
    */
-  public transform<T>(
-    transformFn: (response: Response) => any
-  ): Records {
+  public transform<T>(transformFn: (response: Response) => any): Records {
     this.chain.transformResponse = transformFn;
     return this;
   }
@@ -471,9 +469,7 @@ export class Records implements ReativeApi {
   /**
    * Set request query
    */
-  public query(
-    by: { [key: string]: {} } | { [key: string]: {} }[]
-  ): Records {
+  public query(by: { [key: string]: {} } | { [key: string]: {} }[]): Records {
     this.chain.query = by;
     return this;
   }
@@ -606,9 +602,7 @@ export class Records implements ReativeApi {
    * @deprecated
    * RR wont transform cache before saving it anymore
    */
-  public transformCache<T>(
-    transformFn: (response: Response) => any
-  ): Records {
+  public transformCache<T>(transformFn: (response: Response) => any): Records {
     return this;
   }
 

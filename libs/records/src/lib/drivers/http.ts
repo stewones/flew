@@ -7,7 +7,7 @@ import { Response } from '../interfaces/response';
 import { Logger } from '../utils/logger';
 import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
 import { clearNetworkResponse } from '../utils/response';
-import { Reative } from '../symbols/rr';
+import { Reative } from '../symbols/reative';
 
 export class HttpDriver implements ReativeDriver {
   _driver: ReativeDriverOption = 'http';

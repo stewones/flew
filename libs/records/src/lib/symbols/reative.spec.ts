@@ -1,4 +1,4 @@
-import { Reative } from './rr';
+import { Reative } from './reative';
 
 describe('RRSymbol', () => {
   it('should dispatch payloads to store', () => {

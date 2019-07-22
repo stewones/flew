@@ -17,7 +17,7 @@ export * from './lib/drivers/http';
 
 //
 // symbols
-export * from './lib/symbols/rr';
+export * from './lib/symbols/reative';
 
 //
 // decorators

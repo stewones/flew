@@ -6,7 +6,7 @@ import { Reative, StorageAdapter } from '@reative/records';
 export function storageConfig(
   db = 'app:db',
   store = 'app:store',
-  driver = ['sqlite', 'indexeddb', 'localstorage', 'websql']
+  driver = ['sqlite', 'indexeddb', 'localstorage']
 ) {
   return {
     name: db,

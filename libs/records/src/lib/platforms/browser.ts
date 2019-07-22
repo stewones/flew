@@ -6,7 +6,7 @@ import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { Records } from './server';
 import { StorageAdapter } from '../interfaces/storage';
-import { Reative } from '../symbols/rr';
+import { Reative } from '../symbols/reative';
 import { ReativeVerb } from '../interfaces/verb';
 import {
   clearNetworkResponse,

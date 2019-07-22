@@ -8,7 +8,7 @@ import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
 import { clearNetworkResponse } from '../utils/response';
 import { Logger } from '../utils/logger';
 import { Chain } from '../interfaces/chain';
-import { Reative } from '../symbols/rr';
+import { Reative } from '../symbols/reative';
 
 export class FirebaseDriver implements ReativeDriver {
   _driver: ReativeDriverOption = 'firebase';
