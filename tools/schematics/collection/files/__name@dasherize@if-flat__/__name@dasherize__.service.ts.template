@@ -29,7 +29,6 @@ export class <%= classify(name) %>Service {
 
   findOne(id: string): Observable<<%= classify(name) %>> {
     return this.$collection
-      .data(true)
       .where(`id`, `==`, id)
       .findOne();
   }
