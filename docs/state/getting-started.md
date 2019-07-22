@@ -47,7 +47,7 @@ export class AppModule {}
 
 #### Freeze Data
 
-This is powerful when developing to make sure we're not going to mutate app state.
+This is very powerful on development stage to make sure we're not going to mutate app state.
 
 ```bash
 $ npm install --save-dev @ngxs/devtools-plugin
