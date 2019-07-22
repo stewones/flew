@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## Migration to v1
+
+- Delete `node_modules`
+- Remove `@firetask/core` (if exists)
+- Replace `firetask` to `reative`
+- Make sure all reative packages are in version `^1.0.1`
+- Replace `.useLog` to `.silent`
+- Replace `@reative/ionic` to `@reative/cache`
+- Replace `reactive-record` to `records`
+- Replace `ReactiveRecord` to `Records`
+- Replace `ReactiveModule` to `RecordsModule`
+- Replace `ReactiveIonicModule` to `CacheModule`
+- Replace `ReactiveFirebaseModule` to `FirebaseModule`
+- Replace `$collection.storage()` to the pure function `storage()` exported by cache package.
+  `ts // before this.storage = this.$collection.storage(); // after import { storage } from “@reative/cache”; this.storage = storage();`
+
+### Now data is formatted by default, so you don't need to transform it at all. Disable this behaviour by passing `.raw(true)` within the chain
+
+- Remove `.data(true)`
+- Remove any `.transformNetwork` or `.transform` that acts as a shortcut to get pure data eg: `.transform(r=>r.data)`
+- replace `.useNetwork` to just `network`
+- replace `.useCache` to just `cache`
+
 ### [1.0.1](https://github.com/stewwan/reative/compare/v1.0.0...v1.0.1) (2019-07-22)
 
 ### Bug Fixes
