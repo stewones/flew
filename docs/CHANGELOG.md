@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## Migration to v1
+## Migration Guide to v1
 
 - Delete `node_modules`
 - Remove `@firetask/core` (if exists)
@@ -16,7 +16,14 @@ All notable changes to this project will be documented in this file. See [standa
 - Replace `ReactiveIonicModule` to `CacheModule`
 - Replace `ReactiveFirebaseModule` to `FirebaseModule`
 - Replace `$collection.storage()` to the pure function `storage()` exported by cache package.
-  `ts // before this.storage = this.$collection.storage(); // after import { storage } from “@reative/cache”; this.storage = storage();`
+
+```ts
+// before
+this.storage = this.$collection.storage();
+// after
+import { storage } from '@reative/cache';
+this.storage = storage();
+```
 
 ### Now data is formatted by default, so you don't need to transform it at all. Disable this behaviour by passing `.raw(true)` within the chain
 
