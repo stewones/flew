@@ -24,7 +24,7 @@ export class <%= classify(name) %>Service {
   }
 
   find(): Observable<<%= classify(name) %>[]> {
-    return this.$collection.find<<%= classify(name) %>[]>();
+    return this.$collection.find();
   }
 
   findOne(id: string): Observable<<%= classify(name) %>> {
