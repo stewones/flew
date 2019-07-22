@@ -49,6 +49,10 @@ export class AppModule {}
 
 This is powerful when developing to make sure we're not going to mutate app state.
 
+```bash
+$ npm install --save-dev @ngxs/devtools-plugin
+```
+
 ```typescript
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
