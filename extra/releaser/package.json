@@ -26,6 +26,7 @@
     "build:records": "cd ../../ && ./node_modules/.bin/ng build records --prod",
     "build:state": "cd ../../ && ./node_modules/.bin/ng build state --prod",
     "build:firebase": "cd ../../ && ./node_modules/.bin/ng build firebase --prod",
+    "build:schematics": "cd ../../ && npm run schematics:build",
     "deploy:git": "./deploy-git.sh",
     "deploy:npm": "tsc && node ./.compiled/extra/releaser/deploy-npm.js",
     "deploy:ci": "tsc && node ./.compiled/extra/releaser/deploy-ci.js",

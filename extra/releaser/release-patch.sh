@@ -23,6 +23,7 @@ npm run build:cache
 npm run build:state
 npm run build:firebase
 npm run build:records
+npm run build:schematics
 # -- /BUILD -- ##
 
 

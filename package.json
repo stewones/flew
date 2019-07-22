@@ -40,7 +40,8 @@
     "app:run:ios": "ionic cap run ios --livereload && npx cap copy ios && npx cap open ios",
     "app:run:ios:prod": "npm run app:build:prod && npx cap copy ios && npx cap open ios",
     "storybook": "start-storybook -p 6006",
-    "storybook:build": "build-storybook"
+    "storybook:build": "build-storybook",
+    "schematics:build": "tsc -p tools/tsconfig.tools.json && ./tools/copy.sh"
   },
   "private": true,
   "dependencies": {

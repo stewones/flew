@@ -40,6 +40,9 @@
     },
     "firebase": {
       "tags": []
+    },
+    "schematics": {
+      "tags": []
     }
   }
 }

@@ -1,0 +1,22 @@
+{
+  "schematics": {
+    "container": {
+      "aliases": ["con"],
+      "factory": "./container",
+      "description": "Create a Reative container",
+      "schema": "./container/schema.json"
+    },
+    "component": {
+      "aliases": ["com"],
+      "factory": "./component",
+      "description": "Create a Reative component",
+      "schema": "./component/schema.json"
+    },
+    "collection": {
+      "aliases": ["c"],
+      "factory": "./collection",
+      "description": "Create a Reative service",
+      "schema": "./collection/schema.json"
+    }
+  }
+}
