@@ -65,7 +65,7 @@ export class State {
 
 export function key(name: string, data = true) {
   return (state: any) => {
-    const response = state.Reative.Records.find(it => it.key === name);
+    const response = state.Reative.Records.find(it => it && it.key === name);
     const transform: any = shouldTransformResponse(
       { transformData: data },
       response
