@@ -1,6 +1,6 @@
 # Reative
 
-A set of open-source tools that makes it easy to build high-quality apps using web technologies.
+Reative is a set of open-source tools which makes it easy to build high-quality apps using web technologies.
 
 ## Requirements
 
@@ -22,9 +22,9 @@ A set of open-source tools that makes it easy to build high-quality apps using w
 
 Yes we have a [`changelog`](/CHANGELOG.md) 🍭
 
-## Docs
+## Documentation
 
-Coming soon
+https://docs.reative.dev
 
 ## License
 
