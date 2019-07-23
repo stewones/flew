@@ -186,7 +186,7 @@ export class UsersModule { }
 
 ### Default schematics
 
-If you want to avoid typing **@reative/schematics** every time you go to create a new piece, you can just set our schematics as default schematics collection for cli. You will still be able to use the angular ones. 
+If you want to avoid typing **@reative/schematics** every time you go to create a new piece, you can just set our schematics as the default collection for cli. You will still be able to use the angular ones. 
 
 {% code-tabs %}
 {% code-tabs-item title="angular.json" %}
