@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Init](README.md)
+* [Reative](README.md)
 * [Records](records/README.md)
   * [Getting Started](records/getting-started.md)
   * [Config](records/config.md)
