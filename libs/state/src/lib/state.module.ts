@@ -2,7 +2,7 @@ import { Reative } from '@reative/records';
 import { NgModule, ModuleWithProviders, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { ResponseSync, ResponseReset, key } from './store';
-import { get } from 'lodash';
+import { get, isObject } from 'lodash';
 
 @Injectable()
 export class StateSetup {
@@ -15,7 +15,7 @@ export class StateSetup {
     Reative.store.get = key => {
       const snapshot = this.store.snapshot();
       const state = get(snapshot, 'Reative.Records') || [];
-      return state.find(s => s.key === key);
+      return state.find(s => isObject(s) && s.key === key);
     };
     Reative.store.set = (key, val) => {
       const newState = { ...val, key: key };
