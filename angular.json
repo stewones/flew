@@ -579,7 +579,7 @@
       "typescriptMismatch": false,
       "versionMismatch": false
     },
-    "defaultCollection": "@ngxs/schematics"
+    "defaultCollection": "@reative/schematics"
   },
   "schematics": {
     "@nrwl/schematics:application": {

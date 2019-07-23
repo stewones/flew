@@ -1,4 +1,6 @@
 {
+  "extends": ["@schematics/angular"],
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
   "schematics": {
     "container": {
       "aliases": ["con"],
@@ -13,9 +15,9 @@
       "schema": "./component/schema.json"
     },
     "collection": {
-      "aliases": ["c"],
+      "aliases": ["col"],
       "factory": "./collection",
-      "description": "Create a Reative service",
+      "description": "Create a Reative service collection",
       "schema": "./collection/schema.json"
     }
   }
