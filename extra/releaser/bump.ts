@@ -93,18 +93,11 @@ export function gitTag() {
   );
 }
 
-export function changelog() {
-  shell.exec(
-    `cd ../../ && ./node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s -r 0`
-  );
-}
-
 export function bump(target: SemanticTarget = 'patch') {
   bumpRR(target);
   bumpPackages(target);
-  // bumpPackage(target);
-  // gitTag();
-  // changelog();
+  bumpPackage(target);
+  gitTag();
 }
 
 //

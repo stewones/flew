@@ -34,6 +34,7 @@
     "changelog:major": "cd ../../ && ./node_modules/.bin/standard-version release --release-as major",
     "changelog:minor": "cd ../../ && ./node_modules/.bin/standard-version release --release-as minor",
     "changelog:patch": "cd ../../ && ./node_modules/.bin/standard-version release --release-as patch",
+    "changelog": "cd ../../ && conventional-changelog -p angular -i CHANGELOG.md -s",
     "release:major": "./release-major.sh",
     "release:minor": "./release-minor.sh",
     "release:patch": "./release-patch.sh",
