@@ -1,3 +1,7 @@
+## [1.0.2](https://github.com/stewwan/reative/compare/v1.0.22...v1.0.2) (2019-07-23)
+
+
+
 ## Migration Guide to v1
 
 - Delete `node_modules`
