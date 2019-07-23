@@ -14,7 +14,7 @@
 
 # -- BUMP -- ##
 npm run bump:minor
-npm run changelog
+npm run changelog:minor
 # -- /BUMP -- ##
 
 # -- BUILD -- ##
