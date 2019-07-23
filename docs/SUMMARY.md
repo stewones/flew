@@ -59,5 +59,6 @@
   * [Reset State](state/reset-state.md)
   * [Feed State](state/feed-state.md)
   * [Sync Response](state/sync-response.md)
+* [Schematics](schematics.md)
 * [Changelog](changelog.md)
 
