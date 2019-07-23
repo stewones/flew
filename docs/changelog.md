@@ -1,6 +1,35 @@
-## [1.0.2](https://github.com/stewwan/reative/compare/v1.0.22...v1.0.2) (2019-07-23)
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [1.0.3](https://github.com/stewwan/reative/compare/v1.0.2...v1.0.3) (2019-07-23)
 
 
+### Bug Fixes
+
+* **state:** check for payload existence ([cdf9daf](https://github.com/stewwan/reative/commit/cdf9daf))
+* **store:** correct check for payload ([3f9a45d](https://github.com/stewwan/reative/commit/3f9a45d))
+
+
+
+## [1.0.2](https://github.com/stewwan/reative/compare/v1.0.1...v1.0.2) (2019-07-23)
+
+- fix(store): check for record existence
+
+### [1.0.1](https://github.com/stewwan/reative/compare/v1.0.0...v1.0.1) (2019-07-22)
+
+### Bug Fixes
+
+- **schematics:** adjust find method in template ([b77f72a](https://github.com/stewwan/reative/commit/b77f72a))
+- **schematics:** collection http config ([b400e75](https://github.com/stewwan/reative/commit/b400e75))
+- **schematics:** remove .data method from chaining ([3f7f90f](https://github.com/stewwan/reative/commit/3f7f90f))
+
+### Features
+
+- add schematics for component and containers ([b82988b](https://github.com/stewwan/reative/commit/b82988b))
+- set schematics up ([501660b](https://github.com/stewwan/reative/commit/501660b))
+
+## [1.0.0](https://github.com/stewwan/reative/compare/v0.2.14...v1.0.0) (2019-07-21)
 
 ## Migration Guide to v1
 
@@ -31,21 +60,6 @@ this.storage = storage();
 - Remove any `.transformNetwork` or `.transform` that acts as a shortcut to get pure data eg: `.transform(r=>r.data)`
 - replace `.useNetwork` to just `network`
 - replace `.useCache` to just `cache`
-
-### [1.0.1](https://github.com/stewwan/reative/compare/v1.0.0...v1.0.1) (2019-07-22)
-
-### Bug Fixes
-
-- **schematics:** adjust find method in template ([b77f72a](https://github.com/stewwan/reative/commit/b77f72a))
-- **schematics:** collection http config ([b400e75](https://github.com/stewwan/reative/commit/b400e75))
-- **schematics:** remove .data method from chaining ([3f7f90f](https://github.com/stewwan/reative/commit/3f7f90f))
-
-### Features
-
-- add schematics for component and containers ([b82988b](https://github.com/stewwan/reative/commit/b82988b))
-- set schematics up ([501660b](https://github.com/stewwan/reative/commit/501660b))
-
-## [1.0.0](https://github.com/stewwan/reative/compare/v0.2.14...v1.0.0) (2019-07-21)
 
 ### Bug Fixes
 
