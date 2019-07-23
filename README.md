@@ -1,6 +1,6 @@
 # Reative
 
-Reative is a set of open-source tools which makes it easy to build high-quality apps using web technologies.
+Reative is a set of open-source tools which makes it easy to build high-quality apps using just web technologies.
 
 ## Requirements
 
