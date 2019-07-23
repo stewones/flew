@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: '<%= selector %>',
+  selector: '<% if(selector) { %><%= selector %>-<% } %><%= dasherize(name) %>',
   templateUrl: './<%= dasherize(name) %>.component.html',
   styleUrls: ['./<%= dasherize(name) %>.component.<%= style %>'],
   changeDetection: ChangeDetectionStrategy.OnPush
