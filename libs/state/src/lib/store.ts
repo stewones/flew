@@ -39,8 +39,8 @@ export class State {
   ) {
     const state = context.getState();
     const responses = [...state.Records];
-    const exists = responses.find(
-      it => it && it.key === action.payload && action.payload.key
+    const exists = responses.find(it =>
+      it && action.payload && it.key === action.payload.key ? true : false
     );
 
     if (!exists) {
