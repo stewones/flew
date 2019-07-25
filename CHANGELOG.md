@@ -53,7 +53,9 @@ All notable changes to this project will be documented in this file. See [standa
 - Replace `ReactiveModule` to `RecordsModule`
 - Replace `ReactiveIonicModule` to `CacheModule`
 - Replace `ReactiveFirebaseModule` to `FirebaseModule`
-- Replace `$collection.storage()` to the pure function `storage()` exported by cache package.
+- Replace `$collection.storage()` to the pure function `storage()` exported by cache package
+- Replace `ReactiveState` to `State`
+- Replace `ReactiveStateModule` to `StateModule`
 
 ```ts
 // before
