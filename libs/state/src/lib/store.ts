@@ -173,7 +173,14 @@ export function setState(
         ...currentStatePath.filter(
           item => item[options.identifier] !== value[options.identifier]
         ),
-        ...[value]
+        ...[
+          {
+            ...currentStatePath.find(
+              item => item[options.identifier] === value[options.identifier]
+            ),
+            ...value
+          }
+        ]
       ];
 
       const currentState_ = cloneDeep(currentState);
