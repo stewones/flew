@@ -1,5 +1,13 @@
 import { State as Store, Action, StateContext } from '@ngxs/store';
-import { get, isFunction, isObject } from 'lodash';
+import {
+  get,
+  isFunction,
+  isObject,
+  cloneDeep,
+  set,
+  isArray,
+  isEmpty
+} from 'lodash';
 import { Reative, Response, shouldTransformResponse } from '@reative/records';
 import { Observable } from 'rxjs';
 
@@ -10,6 +18,8 @@ export interface StateModel {
 export interface SetStateOptions {
   merge?: boolean;
   save?: boolean;
+  path?: string;
+  identifier?: string;
 }
 
 export interface GetStateOptions {
@@ -25,6 +35,13 @@ export class ResponseReset {
   public static readonly type = '[State] Reset Responses';
   constructor() {}
 }
+
+export const defaultStateOptions: SetStateOptions = {
+  merge: true,
+  save: true,
+  path: 'data',
+  identifier: 'id'
+};
 
 @Store<StateModel>({
   name: 'Reative',
@@ -107,8 +124,9 @@ export function getState(
 export function setState(
   key: string,
   value: any,
-  options: SetStateOptions = { merge: true, save: true }
+  options_: SetStateOptions = { merge: true, save: true }
 ) {
+  const options = { ...defaultStateOptions, ...options_ };
   const currentState: any = getState(key, { raw: true }) || {};
   const isElastic = get(currentState, 'data.hits.hits');
   let newState = options.merge
@@ -118,27 +136,62 @@ export function setState(
   //
   // elastic case
   // for a given object
-  if (options.merge && isElastic && isObject(value)) {
-    const currentStateSource = currentState.data.hits.hits.find(
-      h => h._source.id === value.id
-    );
+  if (isElastic) {
+    if (options.merge && isObject(value)) {
+      const currentStateSource = currentState.data.hits.hits.find(
+        h => h._source.id === value.id
+      );
 
-    const newStateHitsHits = [
-      ...currentState.data.hits.hits.filter(h => h._source.id != value.id),
-      ...[
-        {
-          ...currentStateSource,
-          _source: value
-        }
-      ]
-    ];
+      const newStateHitsHits = [
+        ...currentState.data.hits.hits.filter(h => h._source.id != value.id),
+        ...[
+          {
+            ...currentStateSource,
+            _source: value
+          }
+        ]
+      ];
 
-    const newStateHits = {
-      ...currentState.data.hits,
-      hits: newStateHitsHits
-    };
-    const newStateData = { ...currentState.data, hits: newStateHits };
-    newState = { ...currentState, data: newStateData };
+      const newStateHits = {
+        ...currentState.data.hits,
+        hits: newStateHitsHits
+      };
+      const newStateData = { ...currentState.data, hits: newStateHits };
+      newState = { ...currentState, data: newStateData };
+    }
+  } else {
+    //
+    // for a given object
+    // merge by identifier
+    let currentStatePath = cloneDeep(get(currentState, options.path));
+    const currentStatePathIsEmpty = isEmpty(currentStatePath);
+
+    if (currentStatePathIsEmpty) currentStatePath = [];
+
+    if (options.merge && isObject(value) && isArray(currentStatePath)) {
+      const newStateData = [
+        ...currentStatePath.filter(
+          item => item[options.identifier] !== value[options.identifier]
+        ),
+        ...[value]
+      ];
+
+      const currentState_ = cloneDeep(currentState);
+      set(currentState_, options.path, newStateData);
+
+      newState = { ...currentState_ };
+    }
+
+    //
+    // for a given array
+    if (options.merge && isArray(value) && isArray(currentStatePath)) {
+      const newStateData = [...currentStatePath, ...value];
+
+      const currentState_ = cloneDeep(currentState);
+      set(currentState_, options.path, newStateData);
+
+      newState = { ...currentState_ };
+    }
   }
 
   //
