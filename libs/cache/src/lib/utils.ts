@@ -19,3 +19,7 @@ export function storage(): StorageAdapter {
   const hasStorage = Reative.storage && Reative.storage.forEach;
   return hasStorage ? Reative.storage : ({} as StorageAdapter);
 }
+
+export function resetCache() {
+  Reative.storage.clear();
+}

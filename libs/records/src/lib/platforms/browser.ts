@@ -30,6 +30,12 @@ export class PlatformBrowser extends Records {
     merge(this, super.clearOptions(options));
   }
 
+  /**
+   * Clear browser cache
+   * @deprecated
+   * import the pure function `resetCache`
+   * from cache package
+   */
   public clearCache(): void {
     super.init({ driver: super.getDriver() });
     this.$storage().clear();
@@ -381,10 +387,6 @@ export class PlatformBrowser extends Records {
 
   protected $storage(): any {
     return Reative.storage;
-  }
-
-  public isOnline() {
-    return window.navigator.onLine;
   }
 
   private $state(key: string) {

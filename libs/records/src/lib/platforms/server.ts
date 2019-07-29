@@ -169,18 +169,29 @@ export class Records implements ReativeApi {
     return newOptions;
   }
 
+  /**
+   * @deprecated
+   * import the pure function `firebase`
+   * from firebase package
+   */
   public firebase() {
-    return this.getConnector('firebase');
+    return Reative.connector.firebase;
   }
 
+  /**
+   * @deprecated
+   * import the pure function `firestore`
+   * from firebase package
+   */
   public firestore() {
-    return this.getConnector('firestore');
+    return Reative.connector.firestore;
   }
-
-  public isOnline(): any {}
 
   /**
    * Clear browser cache
+   * @deprecated
+   * import the pure function `resetCache`
+   * from cache package
    */
   public clearCache(): void {}
 
@@ -195,16 +206,6 @@ export class Records implements ReativeApi {
 
   protected getDriver(): ReativeDriverOption {
     return this._driver;
-  }
-
-  private getConnector(driver) {
-    if (!this._driver_initialized[driver]) {
-      const options: Options = this.cloneOptions();
-      this.driverInit(options);
-      this._driver_initialized[driver] = true;
-    }
-
-    return this._drivers[driver].connector;
   }
 
   private _reset(): void {
