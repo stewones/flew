@@ -8,6 +8,7 @@
     "bump:major": "tsc && node ./.compiled/extra/releaser/bump-major.js",
     "bump:minor": "tsc && node ./.compiled/extra/releaser/bump-minor.js",
     "bump:patch": "tsc && node ./.compiled/extra/releaser/bump-patch.js",
+    "git:tag": "tsc && node ./.compiled/extra/releaser/git-tag.js",
     "lint:angular": "cd ../../ && ./node_modules/.bin/ng lint angular",
     "lint:ionic": "cd ../../ && ./node_modules/.bin/ng lint ionic",
     "lint:core": "cd ../../ && ./node_modules/.bin/ng lint core",

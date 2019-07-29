@@ -90,7 +90,7 @@ export function bumpNumber(num: string, target: SemanticTarget) {
 export function gitTag() {
   // re-create tag due to standard-version bug
   shell.exec(
-    `cd ../../ && git tag -a v${newVersion} -m "chore(release): ${newVersion}" --force`
+    `cd ../../ && git tag -a v${RR_VERSION} -m "chore(release): ${RR_VERSION}" --force`
   );
 }
 
@@ -98,7 +98,7 @@ export function bump(target: SemanticTarget = 'patch') {
   bumpRR(target);
   bumpPackages(target);
   // bumpPackage(target);
-  gitTag();
+  // gitTag();
 }
 
 //

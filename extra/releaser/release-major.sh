@@ -15,6 +15,7 @@
 # -- BUMP -- ##
 npm run bump:major
 npm run changelog:major
+npm run git:tag
 # -- /BUMP -- ##
 
 # -- BUILD -- ##
