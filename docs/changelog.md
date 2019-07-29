@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.8](https://github.com/stewwan/reative/compare/v1.0.7...v1.0.8) (2019-07-29)
+
+
+### Features
+
+* export pure functions for isOnline, firebase, firestore and resetCache ([5379891](https://github.com/stewwan/reative/commit/5379891))
+
+
+
 ### [1.0.7](https://github.com/stewwan/reative/compare/v1.0.6...v1.0.7) (2019-07-29)
 
 
