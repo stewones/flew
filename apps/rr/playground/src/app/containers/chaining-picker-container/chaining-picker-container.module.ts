@@ -7,7 +7,7 @@ import {
   MatFormFieldModule,
   MatButtonModule
 } from '@angular/material';
-import { FormsModule, ReativeFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CacheExplorerModule } from '../../components/cache-explorer/cache-explorer.module';
 import { CollectionChooserContainerModule } from '../collection-chooser-container/collection-chooser-container.module';
 
@@ -20,7 +20,7 @@ import { CollectionChooserContainerModule } from '../collection-chooser-containe
     MatFormFieldModule,
     MatButtonModule,
     FormsModule,
-    ReativeFormsModule,
+    ReactiveFormsModule,
     CacheExplorerModule,
     CollectionChooserContainerModule
   ],
