@@ -127,7 +127,7 @@ export function setState(
   options_: SetStateOptions = { merge: true, save: true }
 ) {
   const options = { ...defaultStateOptions, ...options_ };
-  const currentState: any = getState(key, { raw: true }) || {};
+  const currentState: any = cloneDeep(getState(key, { raw: true })) || {};
   const isElastic = get(currentState, 'data.hits.hits');
   let newState = options.merge
     ? { ...currentState, data: value }
@@ -142,15 +142,28 @@ export function setState(
         h => h._source.id === value.id
       );
 
-      const newStateHitsHits = [
-        ...currentState.data.hits.hits.filter(h => h._source.id != value.id),
-        ...[
-          {
-            ...currentStateSource,
-            _source: value
+      let newStateHitsHits = [];
+      if (!isEmpty(currentStateSource)) {
+        currentState.data.hits.hits[
+          currentState.data.hits.hits.indexOf(currentStateSource)
+        ] = {
+          ...currentStateSource,
+          _source: {
+            ...currentStateSource._source,
+            ...value
           }
-        ]
-      ];
+        };
+        newStateHitsHits = [...currentState.data.hits.hits];
+      } else {
+        newStateHitsHits = [
+          ...currentState.data.hits.hits,
+          ...[
+            {
+              _source: value
+            }
+          ]
+        ];
+      }
 
       const newStateHits = {
         ...currentState.data.hits,
@@ -169,19 +182,19 @@ export function setState(
     if (currentStatePathIsEmpty) currentStatePath = [];
 
     if (options.merge && isObject(value) && isArray(currentStatePath)) {
-      const newStateData = [
-        ...currentStatePath.filter(
-          item => item[options.identifier] !== value[options.identifier]
-        ),
-        ...[
-          {
-            ...currentStatePath.find(
-              item => item[options.identifier] === value[options.identifier]
-            ),
-            ...value
-          }
-        ]
-      ];
+      let newStateHasItem = currentStatePath.find(
+        item => item[options.identifier] === value[options.identifier]
+      );
+      let newStateData = [];
+      if (!isEmpty(newStateHasItem)) {
+        currentStatePath[currentStatePath.indexOf(newStateHasItem)] = {
+          ...newStateHasItem,
+          ...value
+        };
+        newStateData = [...currentStatePath];
+      } else {
+        newStateData = [...currentStatePath, ...value];
+      }
 
       const currentState_ = cloneDeep(currentState);
       set(currentState_, options.path, newStateData);
@@ -217,7 +230,5 @@ export function feedState() {
     return Reative.storage.forEach((value, key, index) =>
       Reative.store.sync(value)
     );
-  throw new Error(
-    `Can't locate storage instance. Did you try to call feedState inside the AppModule constructor?`
-  );
+  throw new Error(`Can't locate storage instance`);
 }

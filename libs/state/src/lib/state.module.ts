@@ -35,5 +35,5 @@ export class StateModule {
       providers: [Store, StateSetup]
     };
   }
-  constructor(private state: StateSetup) {}
+  constructor(private _: StateSetup) {}
 }
