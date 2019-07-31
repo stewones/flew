@@ -82,19 +82,19 @@ export class State {
   constructor() {}
 }
 
-export function key(name: string, data = true) {
+export function key(name: string, raw = false) {
   return (state: any) => {
     const response = state.Reative.Records.find(it => it && it.key === name);
     const transform: any = shouldTransformResponse(
-      { transformData: data },
+      { transformData: !raw },
       response
     );
     return response && transform(response);
   };
 }
 
-export function select<T>(key: string, data?) {
-  return Reative.store.select(key, data) as Observable<T>;
+export function select<T>(key: string, raw?: boolean) {
+  return Reative.store.select(key, raw) as Observable<T>;
 }
 
 export function enabledState() {

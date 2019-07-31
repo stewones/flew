@@ -12,7 +12,7 @@ interface ReativeProtocol {
     reset: () => void;
     get: (key: string) => any;
     set: (key: string, val: any) => void;
-    select: (key: string, data?: boolean) => Observable<any>;
+    select: (key: string, raw?: boolean) => Observable<any>;
   };
   storage?: StorageAdapter;
   ready$: Subject<void>;
@@ -29,7 +29,7 @@ export const Reative: ReativeProtocol = {
     reset: () => {},
     get: (key: string) => {},
     set: (key: string, val: any) => {},
-    select: (key: string, data?: boolean) => of({})
+    select: (key: string, raw?: boolean) => of({})
   },
   storage: {
     get: key => {},

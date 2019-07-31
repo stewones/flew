@@ -17,7 +17,7 @@ export function shouldTransformResponse(chain: Chain, response: Response) {
   const customTransform = isFunction(chain.transformResponse);
   let transformResponse: any = customTransform
     ? chain.transformResponse
-    : (data: Response) => data && data.data;
+    : (data: Response) => data;
 
   if (chain.transformData) {
     //
@@ -26,6 +26,8 @@ export function shouldTransformResponse(chain: Chain, response: Response) {
     if (hits) {
       transformResponse = (data: Response) =>
         data.data.hits.hits.map(h => h._source);
+    } else {
+      transformResponse = (data: Response) => data && data.data;
     }
   }
 

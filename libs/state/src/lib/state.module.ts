@@ -21,8 +21,8 @@ export class StateSetup {
       const newState = { ...val, key: key };
       store.dispatch(new ResponseSync(newState));
     };
-    Reative.store.select = (_key, data?) => {
-      return this.store.select(key(_key, data));
+    Reative.store.select = (_key, _raw?) => {
+      return this.store.select(key(_key, _raw));
     };
   }
 }
