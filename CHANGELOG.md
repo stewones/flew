@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.10](https://github.com/stewwan/reative/compare/v1.0.7...v1.0.10) (2019-07-31)
+
+
+### Bug Fixes
+
+* **state:** add raw param for the select function ([81f5a5b](https://github.com/stewwan/reative/commit/81f5a5b))
+* **state:** make setState update an existing result without moving its position ([b6e9280](https://github.com/stewwan/reative/commit/b6e9280))
+
+
+### Features
+
+* export pure functions for isOnline, firebase, firestore and resetCache ([5379891](https://github.com/stewwan/reative/commit/5379891))
+
+
+
 ### [1.0.9](https://github.com/stewwan/reative/compare/v1.0.7...v1.0.9) (2019-07-31)
 
 
