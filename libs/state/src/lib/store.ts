@@ -57,7 +57,7 @@ export class State {
     const newState: any = {
       ...state,
       ...{
-        [action.payload.key]: action.payload
+        [action.payload.key as string]: action.payload
       }
     };
 

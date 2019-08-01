@@ -1,6 +1,3 @@
-import { RouteReuseStrategy } from '@angular/router';
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-
 import { Reative } from '@reative/records';
 import { storageConfig } from './utils';
 
@@ -27,11 +24,7 @@ export class CacheSetup {
   }
 }
 
-@NgModule({
-  declarations: [],
-  imports: [IonicModule.forRoot()],
-  exports: [IonicModule]
-})
+@NgModule()
 export class CacheModule {
   public static forRoot(
     options: CacheOptions = {} as CacheOptions
@@ -43,8 +36,7 @@ export class CacheModule {
         {
           provide: 'CacheOptions',
           useValue: options
-        },
-        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+        }
       ]
     };
   }

@@ -24,15 +24,14 @@ Reative.options = {
   useLog: !environment.production,
   // useLogTrace: !environment.production,
   baseURL: 'https://api.thecatapi.com',
-  endpoint: '',
-  connector: {
-    firebase: new FirebaseConnector(Firebase, firebaseConfig),
-    firestore: new FirestoreConnector(Firebase, firebaseConfig)
-  },
-
-  // extra options
-  storage: new Storage(storageConfig())
+  endpoint: ''
 };
+Reative.connector = {
+  firebase: new FirebaseConnector(Firebase, firebaseConfig),
+  firestore: new FirestoreConnector(Firebase, firebaseConfig)
+};
+// extra options
+Reative.storage = new Storage(storageConfig());
 
 /*
  * For easier debugging in development mode, you can import the following file
