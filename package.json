@@ -99,7 +99,7 @@
     "@babel/core": "^7.4.5",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.4.5",
-    "@reative/records": "dist/libs/records",
+    "@reative/records": "^1.1.1",
     "@ionic/angular-toolkit": "^1.5.1",
     "@ngxs/schematics": "^0.0.1-alpha.5",
     "@nrwl/builders": "7.6.2",
