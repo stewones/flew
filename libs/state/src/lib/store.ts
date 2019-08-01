@@ -130,8 +130,8 @@ export function setState(
   const currentState: any = cloneDeep(getState(key, { raw: true })) || {};
   const isElastic = get(currentState, 'data.hits.hits');
   let newState = options.merge
-    ? { ...currentState, data: value }
-    : { ...value };
+    ? { ...currentState, data: value, key: key }
+    : { ...value, key: key };
 
   //
   // elastic case
@@ -174,43 +174,47 @@ export function setState(
     }
   } else {
     //
-    // for a given object
-    // merge by identifier
-    let currentStatePath = cloneDeep(get(currentState, options.path));
-    const currentStatePathIsEmpty = isEmpty(currentStatePath);
+    // natural case
+    if (options.merge) {
+      //
+      // for a given object
+      // merge by identifier
+      let currentStatePath = cloneDeep(get(currentState, options.path));
+      const currentStatePathIsEmpty = isEmpty(currentStatePath);
 
-    if (currentStatePathIsEmpty) currentStatePath = [];
+      if (currentStatePathIsEmpty) currentStatePath = [];
 
-    if (options.merge && isObject(value) && isArray(currentStatePath)) {
-      let newStateHasItem = currentStatePath.find(
-        item => item[options.identifier] === value[options.identifier]
-      );
-      let newStateData = [];
-      if (!isEmpty(newStateHasItem)) {
-        currentStatePath[currentStatePath.indexOf(newStateHasItem)] = {
-          ...newStateHasItem,
-          ...value
-        };
-        newStateData = [...currentStatePath];
-      } else {
-        newStateData = [...currentStatePath, ...value];
+      if (isObject(value) && isArray(currentStatePath)) {
+        let newStateHasItem = currentStatePath.find(
+          item => item[options.identifier] === value[options.identifier]
+        );
+        let newStateData = [];
+        if (!isEmpty(newStateHasItem)) {
+          currentStatePath[currentStatePath.indexOf(newStateHasItem)] = {
+            ...newStateHasItem,
+            ...value
+          };
+          newStateData = [...currentStatePath];
+        } else {
+          newStateData = [...currentStatePath, ...value];
+        }
+
+        const currentState_ = cloneDeep(currentState);
+        set(currentState_, options.path, newStateData);
+
+        newState = { ...currentState_ };
       }
 
-      const currentState_ = cloneDeep(currentState);
-      set(currentState_, options.path, newStateData);
+      //
+      // for a given array
+      if (isArray(value) && isArray(currentStatePath)) {
+        const newStateData = [...currentStatePath, ...value];
 
-      newState = { ...currentState_ };
-    }
+        const currentState_ = cloneDeep(currentState);
+        set(currentState_, options.path, newStateData);
 
-    //
-    // for a given array
-    if (options.merge && isArray(value) && isArray(currentStatePath)) {
-      const newStateData = [...currentStatePath, ...value];
-
-      const currentState_ = cloneDeep(currentState);
-      set(currentState_, options.path, newStateData);
-
-      newState = { ...currentState_ };
+        newState = { ...currentState_ };
+      }
     }
   }
 
