@@ -4,83 +4,39 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [1.1.0](https://github.com/stewwan/reative/compare/v1.0.7...v1.1.0) (2019-08-01)
 
-
-### Bug Fixes
-
-* **state:** add raw param for the select function ([81f5a5b](https://github.com/stewwan/reative/commit/81f5a5b))
-* **state:** make setState update an existing result without moving its position ([b6e9280](https://github.com/stewwan/reative/commit/b6e9280))
-* **state:** make sure key is being set ([af6fcfd](https://github.com/stewwan/reative/commit/af6fcfd))
-
-
 ### Features
 
-* export pure functions for isOnline, firebase, firestore and resetCache ([5379891](https://github.com/stewwan/reative/commit/5379891))
-* **state:** rework of how records are being persisted on state. now it should assume a top level object on state, rather than live in a single array index. ([6c3719b](https://github.com/stewwan/reative/commit/6c3719b))
-
-
+- **state:** rework of how records are being persisted on state. now it should assume a top level object on state, rather than live in a single array index. ([6c3719b](https://github.com/stewwan/reative/commit/6c3719b))
 
 ### [1.0.11](https://github.com/stewwan/reative/compare/v1.0.7...v1.0.11) (2019-08-01)
 
-
 ### Bug Fixes
 
-* **state:** add raw param for the select function ([81f5a5b](https://github.com/stewwan/reative/commit/81f5a5b))
-* **state:** make setState update an existing result without moving its position ([b6e9280](https://github.com/stewwan/reative/commit/b6e9280))
-* **state:** make sure key is being set ([af6fcfd](https://github.com/stewwan/reative/commit/af6fcfd))
-
-
-### Features
-
-* export pure functions for isOnline, firebase, firestore and resetCache ([5379891](https://github.com/stewwan/reative/commit/5379891))
-
-
+- **state:** make sure key is being set ([af6fcfd](https://github.com/stewwan/reative/commit/af6fcfd))
 
 ### [1.0.10](https://github.com/stewwan/reative/compare/v1.0.7...v1.0.10) (2019-07-31)
 
-
 ### Bug Fixes
 
-* **state:** add raw param for the select function ([81f5a5b](https://github.com/stewwan/reative/commit/81f5a5b))
-* **state:** make setState update an existing result without moving its position ([b6e9280](https://github.com/stewwan/reative/commit/b6e9280))
-
-
-### Features
-
-* export pure functions for isOnline, firebase, firestore and resetCache ([5379891](https://github.com/stewwan/reative/commit/5379891))
-
-
+- **state:** make setState update an existing result without moving its position ([b6e9280](https://github.com/stewwan/reative/commit/b6e9280))
 
 ### [1.0.9](https://github.com/stewwan/reative/compare/v1.0.7...v1.0.9) (2019-07-31)
 
-
 ### Bug Fixes
 
-* **state:** add raw param for the select function ([81f5a5b](https://github.com/stewwan/reative/commit/81f5a5b))
-
-
-### Features
-
-* export pure functions for isOnline, firebase, firestore and resetCache ([5379891](https://github.com/stewwan/reative/commit/5379891))
-
-
+- **state:** add raw param for the select function ([81f5a5b](https://github.com/stewwan/reative/commit/81f5a5b))
 
 ### [1.0.8](https://github.com/stewwan/reative/compare/v1.0.7...v1.0.8) (2019-07-29)
 
-
 ### Features
 
-* export pure functions for isOnline, firebase, firestore and resetCache ([5379891](https://github.com/stewwan/reative/commit/5379891))
-
-
+- export pure functions for isOnline, firebase, firestore and resetCache ([5379891](https://github.com/stewwan/reative/commit/5379891))
 
 ### [1.0.7](https://github.com/stewwan/reative/compare/v1.0.6...v1.0.7) (2019-07-29)
 
-
 ### Bug Fixes
 
-* **rr:** transformResponse was not working properly ([ac89875](https://github.com/stewwan/reative/commit/ac89875))
-
-
+- **rr:** transformResponse was not working properly ([ac89875](https://github.com/stewwan/reative/commit/ac89875))
 
 ### [1.0.6](https://github.com/stewwan/reative/compare/v1.0.5...v1.0.6) (2019-07-29)
 
