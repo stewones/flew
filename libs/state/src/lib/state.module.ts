@@ -1,25 +1,25 @@
 import { Reative } from '@reative/records';
 import { NgModule, ModuleWithProviders, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { ResponseSync, ResponseReset, key } from './store';
-import { get, isObject } from 'lodash';
-
+import { StateSync, StateReset, key } from './store';
+import { get } from 'lodash';
+import { STATE_GLOBAL_NAMESPACE } from './config';
 @Injectable()
 export class StateSetup {
   constructor(public store: Store) {
     Reative.store.enabled = true;
-    Reative.store.reset = () => store.dispatch(new ResponseReset());
+    Reative.store.reset = () => store.dispatch(new StateReset());
     Reative.store.sync = r => {
-      store.dispatch(new ResponseSync(r));
+      store.dispatch(new StateSync(r));
     };
     Reative.store.get = key => {
       const snapshot = this.store.snapshot();
-      const state = get(snapshot, 'Reative.Records') || [];
-      return state.find(s => isObject(s) && s.key === key);
+      const state = get(snapshot, `${STATE_GLOBAL_NAMESPACE}.${key}`) || {};
+      return state;
     };
     Reative.store.set = (key, val) => {
       const newState = { ...val, key: key };
-      store.dispatch(new ResponseSync(newState));
+      store.dispatch(new StateSync(newState));
     };
     Reative.store.select = (_key, _raw?) => {
       return this.store.select(key(_key, _raw));

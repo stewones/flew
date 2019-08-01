@@ -1,0 +1,1 @@
+export const STATE_GLOBAL_NAMESPACE = `Records`;

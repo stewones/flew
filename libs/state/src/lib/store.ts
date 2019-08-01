@@ -10,9 +10,10 @@ import {
 } from 'lodash';
 import { Reative, Response, shouldTransformResponse } from '@reative/records';
 import { Observable } from 'rxjs';
+import { STATE_GLOBAL_NAMESPACE } from './config';
 
 export interface StateModel {
-  Records: Response[];
+  [key: string]: Response;
 }
 
 export interface SetStateOptions {
@@ -26,13 +27,13 @@ export interface GetStateOptions {
   raw?: boolean;
 }
 
-export class ResponseSync {
-  public static readonly type = '[State] Sync Response';
+export class StateSync {
+  public static readonly type = `[${STATE_GLOBAL_NAMESPACE}] Sync State`;
   constructor(public payload: Response) {}
 }
 
-export class ResponseReset {
-  public static readonly type = '[State] Reset Responses';
+export class StateReset {
+  public static readonly type = `[${STATE_GLOBAL_NAMESPACE}] Reset State`;
   constructor() {}
 }
 
@@ -44,39 +45,27 @@ export const defaultStateOptions: SetStateOptions = {
 };
 
 @Store<StateModel>({
-  name: 'Reative',
-  defaults: {
-    Records: []
-  }
+  name: STATE_GLOBAL_NAMESPACE,
+  defaults: {}
 })
 export class State {
-  @Action(ResponseSync) syncResponse(
+  @Action(StateSync) syncResponse(
     context: StateContext<StateModel>,
-    action: ResponseSync
+    action: StateSync
   ) {
     const state = context.getState();
-    const responses = [...state.Records];
-    const exists = responses.find(it =>
-      it && action.payload && it.key === action.payload.key ? true : false
-    );
+    const newState: any = {
+      ...state,
+      ...{
+        [action.payload.key]: action.payload
+      }
+    };
 
-    if (!exists) {
-      responses.push(action.payload);
-    }
-
-    context.setState({
-      Records: exists
-        ? Object.assign(responses, {
-            [responses.indexOf(exists)]: action.payload
-          })
-        : responses
-    });
+    context.setState(newState);
   }
 
-  @Action(ResponseReset) resetResponse(context: StateContext<StateModel>) {
-    context.setState({
-      Records: []
-    });
+  @Action(StateReset) resetResponse(context: StateContext<StateModel>) {
+    context.setState({});
   }
 
   constructor() {}
@@ -84,7 +73,7 @@ export class State {
 
 export function key(name: string, raw = false) {
   return (state: any) => {
-    const response = state.Reative.Records.find(it => it && it.key === name);
+    const response = state[STATE_GLOBAL_NAMESPACE][name];
     const transform: any = shouldTransformResponse(
       { transformData: !raw },
       response
