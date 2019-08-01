@@ -1,13 +1,13 @@
 {
-  "name": "@reative/firebase",
-  "version": "1.1.0",
-  "peerDependencies": {
-    "@angular/common": "^7.2.9",
-    "@angular/core": "^7.2.9",
-    "@reative/records": "^1.1.1",
-    "firebase": "6.3.3"
-  },
-  "dependencies": {
-    "@reative/records": "^1.1.1"
-  }
+	"name": "@reative/firebase",
+	"version": "1.1.1",
+	"peerDependencies": {
+		"@angular/common": "^7.2.9",
+		"@angular/core": "^7.2.9",
+		"@reative/records": "^1.1.1",
+		"firebase": "6.3.3"
+	},
+	"dependencies": {
+		"@reative/records": "^1.1.1"
+	}
 }
