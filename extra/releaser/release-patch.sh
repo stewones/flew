@@ -15,7 +15,6 @@
 # -- BUMP -- ##
 npm run bump:patch
 npm run changelog:patch
-npm run git:tag
 # -- /BUMP -- ##
 
 # -- BUILD -- ##
@@ -27,7 +26,7 @@ npm run build:records
 npm run build:schematics
 # -- /BUILD -- ##
 
-
+npm run git:tag
 npm run deploy:git
 npm run deploy:npm
 # npm run deploy:ci
