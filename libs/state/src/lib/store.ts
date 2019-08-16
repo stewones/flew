@@ -53,11 +53,13 @@ export class State {
     context: StateContext<StateModel>,
     action: StateSync
   ) {
+    const key: string = get(action, 'payload.key');
+    if (!key) return;
     const state = context.getState();
     const newState: any = {
       ...state,
       ...{
-        [action.payload.key as string]: action.payload
+        [key]: action.payload
       }
     };
 

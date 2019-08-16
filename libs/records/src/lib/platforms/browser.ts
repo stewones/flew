@@ -120,7 +120,7 @@ export class PlatformBrowser extends Records {
   protected network$<T>(evaluation, observer, verb, path, payload, chain, key) {
     return of(evaluation).pipe(
       filter(evaluation => evaluation.now === true),
-      tap(() => super.log().warn()(`${key} [network] request`)),
+      tap(() => super.log().warn()(`${key} [network$] request`)),
       switchMap(() =>
         from(super.call<T>(verb, path, payload, chain, key)).pipe(
           tap(response => this.setCache(verb, chain, key, response, observer)),
@@ -135,12 +135,9 @@ export class PlatformBrowser extends Records {
       map(evaluation => {
         if (!evaluation.now) {
           if (evaluation.ttl) {
-            super.log().danger()(`${key} [cache] response from TTL`);
-          } else {
-            super.log().danger()(`${key} [cache] response`);
+            super.log().danger()(`${key} [ttl$] response`);
           }
           this.dispatch(observer, evaluation.cache, chain);
-
           observer.complete();
         }
       })
@@ -161,51 +158,50 @@ export class PlatformBrowser extends Records {
   ): Promise<{ now: boolean; cache?: Response; ttl?: boolean }> {
     return new Promise(async resolve => {
       const useCache: boolean = chain.useCache === false ? false : true;
+      const useState: boolean = chain.useState === false ? false : true;
       const useNetwork: boolean = chain.useNetwork === false ? false : true;
 
       //
       // check for TTL
       // should not call network
       const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-
+      let state: any = this.$state(key) || { data: {} };
+      if (isEmpty(state.data)) {
+        state = (await this.$storage().get(key)) || { data: {} };
+      }
+      const hasState = state && !isEmpty(state.data) ? true : false;
       //
       // avoid the return of any cache (jump to network request at server level)
-      if (useCache === false && useNetwork !== false)
+      if ((useCache === false || useState === false) && useNetwork !== false)
         return resolve({
           now: true
         });
 
-      const hasCache:
-        | Response & { ttl: number }
-        | any = await this.$storage().get(key);
-
       //
       // stop network request at server level - case 1
-      if (
-        useCache &&
-        hasCache &&
-        !isEmpty(hasCache.data) &&
-        useNetwork === false
-      ) {
-        super.log().info()(`${key} [should] stop network request`);
+      if ((useCache || useState) && hasState && useNetwork === false) {
+        super.log().info()(`${key} [shouldCallNetwork] stop request`);
         return resolve({
           now: false,
-          cache: hasCache
+          cache: state
         });
       }
 
       //
       // stop network request at server level - case 2
       if (
-        useCache &&
-        (hasCache && seconds < hasCache.ttl) &&
-        !isEmpty(hasCache.data)
+        (useCache || useState) &&
+        (hasState && seconds < state.ttl) &&
+        chain.ttl > 0
       ) {
-        super.log().info()(`${key} [should] stop network request due to TTL`);
+        super.log().info()(
+          `${key} [shouldCallNetwork] stop request due to TTL`
+        );
+
         return resolve({
           now: false,
           ttl: true,
-          cache: hasCache
+          cache: state
         });
       }
 
@@ -223,7 +219,9 @@ export class PlatformBrowser extends Records {
 
     if (useState && stateAvailable && !isEmpty(state)) return Promise.resolve();
 
-    super.log().info()(`${key} [should] useCache? ${useCache ? true : false}`);
+    super.log().info()(
+      `${key} [shouldReturnCache] useCache? ${useCache ? true : false}`
+    );
 
     if (useCache === false) return Promise.resolve();
 
@@ -232,11 +230,11 @@ export class PlatformBrowser extends Records {
     );
 
     super.log().info()(
-      `${key} [should] hasCache? ${!isEmpty(cache) ? true : false}`
+      `${key} [shouldReturnCache] hasCache? ${!isEmpty(cache) ? true : false}`
     );
 
     super.log().info()(
-      `${key} [should] transformResponse? ${
+      `${key} [shouldReturnCache] transformResponse? ${
         (chain.transformResponse &&
           typeof chain.transformResponse === 'function') ||
         chain.transformData
@@ -258,15 +256,17 @@ export class PlatformBrowser extends Records {
 
     if (useState === false || !stateAvailable) return Promise.resolve();
 
-    super.log().info()(`${key} [should] useState? ${useState ? true : false}`);
+    super.log().info()(
+      `${key} [shouldReturnState] useState? ${useState ? true : false}`
+    );
 
     const state: Response = this.$state(key);
 
     super.log().info()(
-      `${key} [should] hasState? ${!isEmpty(state) ? true : false}`
+      `${key} [shouldReturnState] hasState? ${!isEmpty(state) ? true : false}`
     );
     super.log().info()(
-      `${key} [should] transformResponse? ${
+      `${key} [shouldReturnState] transformResponse? ${
         (chain.transformResponse &&
           typeof chain.transformResponse === 'function') ||
         chain.transformData
@@ -296,7 +296,7 @@ export class PlatformBrowser extends Records {
     //
     // should return response immediately
     if (useNetwork === true && useCache === false) {
-      super.log().warn()(`${key} [network] response`);
+      super.log().warn()(`${key} [setCache] response`);
       this.dispatch(observer, network, chain);
     }
 
@@ -318,12 +318,12 @@ export class PlatformBrowser extends Records {
 
     if (this.isDifferent(chain, key, cache, network)) {
       super.log().info()(
-        `${key} [set] saveNetwork? ${saveNetwork ? true : false}`
+        `${key} [setCache] saveNetwork? ${saveNetwork ? true : false}`
       );
 
       if (saveNetwork) {
         this.$storage().set(key, clearNetworkResponse(network));
-        super.log().warn()(`${key} [set] cache updated`);
+        super.log().warn()(`${key} [setCache] cache updated`);
       }
 
       //
@@ -333,7 +333,7 @@ export class PlatformBrowser extends Records {
         (useNetwork === false && useCache === true)
       ) {
         super.log().danger()(
-          `${key} [network] response [cache might be outdated]`
+          `${key} [setCache] response [cache might be outdated]`
         );
         this.dispatch(observer, network, chain);
       }
@@ -343,7 +343,8 @@ export class PlatformBrowser extends Records {
       if (chain.ttl && cache && !cache.ttl) {
         if (saveNetwork) {
           this.$storage().set(key, clearNetworkResponse(network));
-          super.log().warn()(`${key} [set] cache updated [ttl]`);
+          super.log().warn()(`${key} [setCache] cache updated [ttl]`);
+          Reative.store.sync(network);
         }
       }
     }
@@ -390,6 +391,6 @@ export class PlatformBrowser extends Records {
   }
 
   private $state(key: string) {
-    return Reative.store.get ? Reative.store.get(key) : {};
+    return Reative.store.get ? Reative.store.get(key) : { data: {} };
   }
 }
