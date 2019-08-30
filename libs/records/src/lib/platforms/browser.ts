@@ -27,7 +27,7 @@ export class PlatformBrowser extends Records {
   constructor(options: Options) {
     super(options);
 
-    merge(this, super.clearOptions(options));
+    merge(this, this.clearOptions(options));
   }
 
   /**
@@ -37,7 +37,7 @@ export class PlatformBrowser extends Records {
    * from cache package
    */
   public clearCache(): void {
-    super.init({ driver: super.getDriver() });
+    this.init({ driver: this.getDriver() });
     this.$storage().clear();
     Reative.store.reset();
   }
@@ -85,9 +85,9 @@ export class PlatformBrowser extends Records {
   ): Observable<T> {
     //
     // get attributes
-    const key = super.createKey(verb, path, payload);
-    const chain = super.cloneChain();
-    const driver = super.getDriver();
+    const key = this.createKey(verb, path, payload);
+    const chain = this.cloneChain();
+    const driver = this.getDriver();
 
     //
     // set default attr
@@ -95,11 +95,11 @@ export class PlatformBrowser extends Records {
 
     //
     // reset chain for subsequent calls
-    super.reset();
+    this.reset();
 
     //
     // re-init so we can have access to stuff like `storage`
-    super.init({
+    this.init({
       driver: driver
     });
 
@@ -120,9 +120,9 @@ export class PlatformBrowser extends Records {
   protected network$<T>(evaluation, observer, verb, path, payload, chain, key) {
     return of(evaluation).pipe(
       filter(evaluation => evaluation.now === true),
-      tap(() => super.log().warn()(`${key} [network$] request`)),
+      tap(() => this.log().warn()(`${key} [network$] request`)),
       switchMap(() =>
-        from(super.call<T>(verb, path, payload, chain, key)).pipe(
+        from(this.call<T>(verb, path, payload, chain, key)).pipe(
           tap(response => this.setCache(verb, chain, key, response, observer)),
           catchError(err => observer.error(err))
         )
@@ -135,7 +135,7 @@ export class PlatformBrowser extends Records {
       map(evaluation => {
         if (!evaluation.now) {
           if (evaluation.ttl) {
-            super.log().danger()(`${key} [ttl$] response`);
+            this.log().danger()(`${key} [ttl$] response`);
           }
           this.dispatch(observer, evaluation.cache, chain);
           observer.complete();
@@ -180,7 +180,7 @@ export class PlatformBrowser extends Records {
       //
       // stop network request at server level - case 1
       if ((useCache || useState) && hasState && useNetwork === false) {
-        super.log().info()(`${key} [shouldCallNetwork] stop request`);
+        this.log().info()(`${key} [shouldCallNetwork] stop request`);
         return resolve({
           now: false,
           cache: state
@@ -194,9 +194,7 @@ export class PlatformBrowser extends Records {
         (hasState && seconds < state.ttl) &&
         chain.ttl > 0
       ) {
-        super.log().info()(
-          `${key} [shouldCallNetwork] stop request due to TTL`
-        );
+        this.log().info()(`${key} [shouldCallNetwork] stop request due to TTL`);
 
         return resolve({
           now: false,
@@ -219,7 +217,7 @@ export class PlatformBrowser extends Records {
 
     if (useState && stateAvailable && !isEmpty(state)) return Promise.resolve();
 
-    super.log().info()(
+    this.log().info()(
       `${key} [shouldReturnCache] useCache? ${useCache ? true : false}`
     );
 
@@ -229,11 +227,11 @@ export class PlatformBrowser extends Records {
       key
     );
 
-    super.log().info()(
+    this.log().info()(
       `${key} [shouldReturnCache] hasCache? ${!isEmpty(cache) ? true : false}`
     );
 
-    super.log().info()(
+    this.log().info()(
       `${key} [shouldReturnCache] transformResponse? ${
         (chain.transformResponse &&
           typeof chain.transformResponse === 'function') ||
@@ -256,16 +254,16 @@ export class PlatformBrowser extends Records {
 
     if (useState === false || !stateAvailable) return Promise.resolve();
 
-    super.log().info()(
+    this.log().info()(
       `${key} [shouldReturnState] useState? ${useState ? true : false}`
     );
 
     const state: Response = this.$state(key);
 
-    super.log().info()(
+    this.log().info()(
       `${key} [shouldReturnState] hasState? ${!isEmpty(state) ? true : false}`
     );
-    super.log().info()(
+    this.log().info()(
       `${key} [shouldReturnState] transformResponse? ${
         (chain.transformResponse &&
           typeof chain.transformResponse === 'function') ||
@@ -296,7 +294,7 @@ export class PlatformBrowser extends Records {
     //
     // should return response immediately
     if (useNetwork === true && useCache === false) {
-      super.log().warn()(`${key} [setCache] response`);
+      this.log().warn()(`${key} [setCache] response`);
       this.dispatch(observer, network, chain);
     }
 
@@ -317,13 +315,13 @@ export class PlatformBrowser extends Records {
     }
 
     if (this.isDifferent(chain, key, cache, network)) {
-      super.log().info()(
+      this.log().info()(
         `${key} [setCache] saveNetwork? ${saveNetwork ? true : false}`
       );
 
       if (saveNetwork) {
         this.$storage().set(key, clearNetworkResponse(network));
-        super.log().warn()(`${key} [setCache] cache updated`);
+        this.log().warn()(`${key} [setCache] cache updated`);
       }
 
       //
@@ -332,7 +330,7 @@ export class PlatformBrowser extends Records {
         (useNetwork === true && useCache === true) ||
         (useNetwork === false && useCache === true)
       ) {
-        super.log().danger()(
+        this.log().danger()(
           `${key} [setCache] response [cache might be outdated]`
         );
         this.dispatch(observer, network, chain);
@@ -343,7 +341,7 @@ export class PlatformBrowser extends Records {
       if (chain.ttl && cache && !cache.ttl) {
         if (saveNetwork) {
           this.$storage().set(key, clearNetworkResponse(network));
-          super.log().warn()(`${key} [setCache] cache updated [ttl]`);
+          this.log().warn()(`${key} [setCache] cache updated [ttl]`);
           Reative.store.sync(network);
         }
       }
@@ -361,14 +359,14 @@ export class PlatformBrowser extends Records {
       : (c, n) => !isEqual(clearNetworkResponse(c), clearNetworkResponse(n));
 
     if (isCustomDiff) {
-      super.log().danger()(`${key} [diff] applying a custom function`);
-      super.log().danger()(
+      this.log().danger()(`${key} [diff] applying a custom function`);
+      this.log().danger()(
         `${key} [diff] network data is different from cache? ${diffFn(
           _cache,
           _network
         )}`
       );
-      if (super.log().enabled())
+      if (this.log().enabled())
         console.log(
           `${key} [diff] deep data difference between them`,
           deepDiff(clearNetworkResponse(_cache), clearNetworkResponse(_network))
