@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/stewwan/reative/compare/v1.1.0...v1.1.2) (2019-08-30)
+
+
+### Bug Fixes
+
+* upgrade firebase and remove ionic from cache module ([62edbf6](https://github.com/stewwan/reative/commit/62edbf6))
+* **browser:** replace `super` calls with `this` ([92d469a](https://github.com/stewwan/reative/commit/92d469a))
+* **rr:** store and browser support for ttl ([77ecf43](https://github.com/stewwan/reative/commit/77ecf43))
+
 ### [1.1.1](https://github.com/stewwan/reative/compare/v1.1.0...v1.1.1) (2019-08-01)
 
 
