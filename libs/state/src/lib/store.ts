@@ -11,7 +11,6 @@ import {
 import { Reative, Response, shouldTransformResponse } from '@reative/records';
 import { Observable, from, of } from 'rxjs';
 import { STATE_GLOBAL_NAMESPACE } from './config';
-import { storage } from '../../../cache/src';
 
 export interface StateModel {
   [key: string]: Response;
@@ -127,7 +126,7 @@ export function getState$<T = any>(
     ? of(state)
     : (from(
         new Promise((resolve, reject) => {
-          storage()
+          Reative.storage
             .get(key)
             .then(r => resolve(transform(r) as T))
             .catch(err => reject(err));
