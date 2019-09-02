@@ -29,6 +29,7 @@ export * from './lib/utils/version';
 export * from './lib/utils/response';
 export * from './lib/utils/guid';
 export * from './lib/utils/platform';
+export * from './lib/utils/diff';
 
 //
 // interfaces
