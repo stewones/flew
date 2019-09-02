@@ -11,6 +11,7 @@ import {
 import { Reative, Response, shouldTransformResponse } from '@reative/records';
 import { Observable } from 'rxjs';
 import { STATE_GLOBAL_NAMESPACE } from './config';
+import { storage } from '../../../cache/src';
 
 export interface StateModel {
   [key: string]: Response;
@@ -100,16 +101,27 @@ export function syncState(data: Response) {
   return Reative.store.sync(data);
 }
 
-export function getState(
+export function getState<T = any>(
   key: string,
   options: GetStateOptions = { raw: false }
-): any {
+): Promise<T> | T {
   const response = Reative.store.get && Reative.store.get(key);
   const transform: any = shouldTransformResponse(
     { transformData: !options.raw },
     response
   );
-  return transform(response);
+  const state = transform(response) as T;
+
+  if (isEmpty(response)) {
+    return new Promise((resolve, reject) => {
+      storage()
+        .get(key)
+        .then(r => resolve(transform(r) as T))
+        .catch(err => reject(err));
+    });
+  }
+
+  return state;
 }
 
 export function setState(
