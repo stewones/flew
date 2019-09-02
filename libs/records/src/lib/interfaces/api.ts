@@ -27,8 +27,11 @@ export interface ReativeApi {
   ): Records; // firestore only - short way as firebase sdk does
   sort(by: { [key: string]: string }): Records; // firestore only
   size(value: number): Records; // firestore only
+  at(value: string | number);
+  after(value: string | number);
+
   ref(path: string): Records; // firebase only
-  data(transform: boolean): Records; // @deprecated
+
   raw(active: boolean): Records; // return original data with metadata
   transform(transformFn: (response: Response) => any): Records; // transform network/state/cache responses
   diff(fn: (cache: any, network: any) => any): Records; // infer into rr response behavior
@@ -67,6 +70,7 @@ export interface ReativeApi {
 
   //
   // Legacy @deprecated
+  data(transform: boolean): Records;
   useCache(active: boolean): Records;
   useNetwork(active: boolean): Records;
   saveNetwork(active: boolean): Records;

@@ -517,6 +517,22 @@ export class Records implements ReativeApi {
   }
 
   /**
+   * Set request startAt
+   */
+  public at(value): Records {
+    this.chain.at = value;
+    return this;
+  }
+
+  /**
+   * Set request startAfter
+   */
+  public after(value): Records {
+    this.chain.after = value;
+    return this;
+  }
+
+  /**
    * Set reference (for firebase)
    */
   public ref(path: string): Records {

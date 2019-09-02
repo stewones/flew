@@ -9,7 +9,7 @@ import {
   isEmpty
 } from 'lodash';
 import { Reative, Response, shouldTransformResponse } from '@reative/records';
-import { Observable } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { STATE_GLOBAL_NAMESPACE } from './config';
 import { storage } from '../../../cache/src';
 
@@ -104,24 +104,35 @@ export function syncState(data: Response) {
 export function getState<T = any>(
   key: string,
   options: GetStateOptions = { raw: false }
-): Promise<T> | T {
+): T {
   const response = Reative.store.get && Reative.store.get(key);
   const transform: any = shouldTransformResponse(
     { transformData: !options.raw },
     response
   );
-  const state = transform(response) as T;
+  return transform(response) as T;
+}
 
-  if (isEmpty(response)) {
-    return new Promise((resolve, reject) => {
-      storage()
-        .get(key)
-        .then(r => resolve(transform(r) as T))
-        .catch(err => reject(err));
-    });
-  }
-
-  return state;
+export function getState$<T = any>(
+  key: string,
+  options: GetStateOptions = { raw: false }
+): Observable<T> {
+  const response = Reative.store.get && Reative.store.get(key);
+  const transform: any = shouldTransformResponse(
+    { transformData: !options.raw },
+    response
+  );
+  const state = transform(response);
+  return state
+    ? of(state)
+    : (from(
+        new Promise((resolve, reject) => {
+          storage()
+            .get(key)
+            .then(r => resolve(transform(r) as T))
+            .catch(err => reject(err));
+        })
+      ) as Observable<T>);
 }
 
 export function setState(

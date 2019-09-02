@@ -12,5 +12,8 @@ export interface Chain {
   size?: number; // elastic/firestore
   sort?: any | any[]; // elastic/firestore
   doc?: string | number; // firestore `on`
+  at?: string | number; // firestore
+  after?: string | number; // firestore
+
   diff?: (fn: (cache: any, network: any) => boolean) => any; // customize rr response behavior
 }
