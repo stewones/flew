@@ -238,14 +238,20 @@ export function setState(
 }
 
 /**
- * method to fully load entries from cache into store
- * make sure to call this only once
+ * method to load state from cache into store
  */
-export function feedState() {
+export function feedState(key?: string) {
   const hasStorage = isFunction(Reative.storage.forEach);
-  if (hasStorage)
-    return Reative.storage.forEach((value, key, index) =>
-      Reative.store.sync(value)
-    );
+  if (hasStorage) {
+    if (key) {
+      return Reative.storage.forEach((value, k, index) => {
+        if (k === key) Reative.store.sync(value);
+      });
+    } else {
+      return Reative.storage.forEach((value, k, index) =>
+        Reative.store.sync(value)
+      );
+    }
+  }
   throw new Error(`Can't locate storage instance`);
 }
