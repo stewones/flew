@@ -240,13 +240,13 @@ export function setState(
 /**
  * method to load state from cache into store
  */
-export function feedState(key?: string) {
+export async function feedState(key?: string) {
   const hasStorage = isFunction(Reative.storage.forEach);
   if (hasStorage) {
     if (key) {
-      return Reative.storage.forEach((value, k, index) => {
-        if (k === key) Reative.store.sync(value);
-      });
+      const cache = await Reative.storage.get(key);
+      if (!isEmpty(cache)) Reative.store.sync(cache);
+      return;
     } else {
       return Reative.storage.forEach((value, k, index) =>
         Reative.store.sync(value)
