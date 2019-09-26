@@ -25,6 +25,7 @@ export interface SetStateOptions {
 
 export interface GetStateOptions {
   raw?: boolean;
+  mutable?: boolean;
 }
 
 export class StateSync {
@@ -102,14 +103,16 @@ export function syncState(data: Response) {
 
 export function getState<T = any>(
   key: string,
-  options: GetStateOptions = { raw: false }
+  options: GetStateOptions = { raw: false, mutable: false }
 ): T {
   const response = Reative.store.get && Reative.store.get(key);
   const transform: any = shouldTransformResponse(
     { transformData: !options.raw },
     response
   );
-  return transform(response) as T;
+  return options.mutable
+    ? cloneDeep(transform(response) as T)
+    : (transform(response) as T);
 }
 
 export function getState$<T = any>(
