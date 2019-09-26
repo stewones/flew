@@ -37,8 +37,8 @@
     "app:build": "ng build app",
     "app:build:prod": "ng build firetask --prod && cp -rf ./dist/apps/firetask/index.html ./dist/apps/firetask/404.html",
     "app:serve:prod": "npm run app:build:prod && ./node_modules/.bin/http-server -p 8080 -c-1 ./dist/apps/firetask",
-    "app:run:ios": "ionic cap run ios --livereload && npx cap copy ios && npx cap open ios",
-    "app:run:ios:prod": "npm run app:build:prod && npx cap copy ios && npx cap open ios",
+    "app:serve:ios": "ionic cap run ios --project firetask --livereload --port=8100 --address=0.0.0.0 && npx cap copy ios && npx cap open ios",
+    "app:serve:ios:prod": "npm run app:build:prod && npx cap copy ios && npx cap open ios",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook",
     "schematics:build": "tsc -p tools/tsconfig.tools.json && ./tools/copy.sh"
