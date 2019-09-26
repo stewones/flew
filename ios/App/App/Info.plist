@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>Reative App</string>
+	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -31,6 +31,18 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>IonApi</key>
+	<string>https://api.ionicjs.com</string>
+	<key>IonAppId</key>
+	<string>810f0acf</string>
+	<key>IonChannelName</key>
+	<string>Master</string>
+	<key>IonMaxVersions</key>
+	<string>2</string>
+	<key>IonMinBackgroundDuration</key>
+	<string>30</string>
+	<key>IonUpdateMethod</key>
+	<string>background</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
