@@ -10,15 +10,17 @@ interface ReativeProtocol {
     enabled: boolean;
     sync: (val: any) => void;
     reset: () => void;
-    get: (key: string) => any;
+    get: <T>(key: string) => T;
     set: (key: string, val: any) => void;
-    select: (key: string, raw?: boolean) => Observable<any>;
+    select: <T>(key: string, raw?: boolean) => Observable<T>;
   };
   storage?: StorageAdapter;
   ready$: Subject<void>;
+  events?: { [key: string]: Subject<any> };
 }
 
 export const Reative: ReativeProtocol = {
+  ready$: new Subject(), // experimental
   options: {
     driver: 'firestore'
   },
@@ -27,14 +29,14 @@ export const Reative: ReativeProtocol = {
     enabled: false,
     sync: (val: any) => {},
     reset: () => {},
-    get: (key: string) => {},
+    get: <T>(key: string) => ({} as T),
     set: (key: string, val: any) => {},
-    select: (key: string, raw?: boolean) => of({})
+    select: <T>(key: string, raw?: boolean) => of({} as T)
   },
   storage: {
     get: key => {},
     set: (key, val) => {},
     clear: () => {}
   } as StorageAdapter,
-  ready$: new Subject()
+  events: {}
 };

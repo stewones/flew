@@ -30,6 +30,7 @@ export * from './lib/utils/response';
 export * from './lib/utils/guid';
 export * from './lib/utils/platform';
 export * from './lib/utils/diff';
+export * from './lib/utils/events';
 
 //
 // interfaces
