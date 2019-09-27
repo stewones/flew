@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/stewwan/reative/compare/v1.1.0...v1.3.0) (2019-09-27)
+
+
+### Bug Fixes
+
+* upgrade firebase and remove ionic from cache module ([62edbf6](https://github.com/stewwan/reative/commit/62edbf6))
+* **browser:** replace `super` calls with `this` ([92d469a](https://github.com/stewwan/reative/commit/92d469a))
+* **rr:** store and browser support for ttl ([77ecf43](https://github.com/stewwan/reative/commit/77ecf43))
+* **state:** feedState with key should use the get method rather loop ([16becd2](https://github.com/stewwan/reative/commit/16becd2))
+* **store:** cant import storage from here ([51c18bf](https://github.com/stewwan/reative/commit/51c18bf))
+
+
+### Features
+
+* **firestore:** add `at` and `after` to api ([00b1723](https://github.com/stewwan/reative/commit/00b1723))
+* **rr:** add pub/sub api ([2716b9b](https://github.com/stewwan/reative/commit/2716b9b))
+* **rr:** export diff function ([d520fa2](https://github.com/stewwan/reative/commit/d520fa2))
+* **state:** make feedState also accept a key ([246e5fb](https://github.com/stewwan/reative/commit/246e5fb))
+* **state:** make getState also return from cache if needed ([1009945](https://github.com/stewwan/reative/commit/1009945))
+* **store:** add mutable option to getState ([3cfed3b](https://github.com/stewwan/reative/commit/3cfed3b))
+
 ### [1.2.1](https://github.com/stewwan/reative/compare/v1.1.0...v1.2.1) (2019-09-13)
 
 
