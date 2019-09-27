@@ -270,7 +270,7 @@
             "styles": [
               "node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "node_modules/prismjs/themes/prism.css",
-              "extra/tailwind/common.bundle.css",
+              "tailwind.bundle.css",
               "apps/rr/playground/src/styles.scss"
             ],
             "scripts": [
