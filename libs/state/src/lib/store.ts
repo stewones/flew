@@ -249,7 +249,7 @@ export async function feedState(key?: string) {
     if (key) {
       const cache = await Reative.storage.get(key);
       if (!isEmpty(cache)) Reative.store.sync(cache);
-      return;
+      return cache;
     } else {
       return Reative.storage.forEach((value, k, index) =>
         Reative.store.sync(value)
