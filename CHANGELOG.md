@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/stewwan/reative/compare/v1.1.0...v1.3.1) (2019-10-03)
+
+### Bug Fixes
+
+- **store:** value is not iterable ([3835ebc](https://github.com/stewwan/reative/commit/3835ebc))
+
+### Features
+
+- **firestore:** add `at` and `after` to api ([00b1723](https://github.com/stewwan/reative/commit/00b1723))
+- **rr:** add pub/sub api ([2716b9b](https://github.com/stewwan/reative/commit/2716b9b))
+- **rr:** export diff function ([d520fa2](https://github.com/stewwan/reative/commit/d520fa2))
+- **state:** make feedState also accept a key ([246e5fb](https://github.com/stewwan/reative/commit/246e5fb))
+- **state:** make getState also return from cache if needed ([1009945](https://github.com/stewwan/reative/commit/1009945))
+- **store:** add mutable option to getState ([3cfed3b](https://github.com/stewwan/reative/commit/3cfed3b))
+
 ## [1.3.0](https://github.com/stewwan/reative/compare/v1.1.0...v1.3.0) (2019-09-27)
 
 ### Bug Fixes
