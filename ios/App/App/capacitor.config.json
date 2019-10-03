@@ -3,8 +3,5 @@
   "appName": "Reative App",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "dist/apps/firetask",
-  "server": {
-    "url": "http://192.168.1.2:8100"
-  }
+  "webDir": "dist/apps/firetask"
 }

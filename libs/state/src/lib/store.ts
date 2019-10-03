@@ -212,7 +212,7 @@ export function setState(
           };
           newStateData = [...currentStatePath];
         } else {
-          newStateData = [...currentStatePath, ...value];
+          newStateData = [...currentStatePath, ...[value]];
         }
 
         const currentState_ = cloneDeep(currentState);
