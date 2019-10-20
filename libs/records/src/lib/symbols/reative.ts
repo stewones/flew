@@ -17,6 +17,7 @@ interface ReativeProtocol {
   storage?: StorageAdapter;
   ready$: Subject<void>;
   events?: { [key: string]: Subject<any> };
+  parse?: any;
 }
 
 export const Reative: ReativeProtocol = {
@@ -38,5 +39,6 @@ export const Reative: ReativeProtocol = {
     set: (key, val) => {},
     clear: () => {}
   } as StorageAdapter,
-  events: {}
+  events: {},
+  parse: {}
 };

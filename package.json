@@ -41,7 +41,11 @@
     "app:serve:ios:prod": "npm run app:build:prod && npx cap copy ios && npx cap open ios",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook",
-    "schematics:build": "tsc -p tools/tsconfig.tools.json && ./tools/copy.sh"
+    "schematics:build": "tsc -p tools/tsconfig.tools.json && ./tools/copy.sh",
+    "mongo:serve": "mongodb-runner start",
+    "parse:serve": "parse-server --appId FiretaskServer --masterKey parseRulez --databaseURI mongodb://localhost/test",
+    "parse:server": "cd apps/server && PARSE_MOUNT=/api npm run start",
+    "parse:dashboard": "parse-dashboard --dev --appId FiretaskServer --masterKey parseRulez --serverURL 'http://localhost:1337/api' --appName Firetask"
   },
   "private": true,
   "dependencies": {
@@ -86,6 +90,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "ngx-textarea-autosize": "^2.0.3",
+    "parse": "^2.8.0",
     "prismjs": "^1.17.1",
     "rxjs": "6.5.2",
     "zone.js": "^0.10.2"
@@ -124,6 +129,7 @@
     "@types/jest": "24.0.18",
     "@types/jquery": "3.3.31",
     "@types/node": "^12.7.2",
+    "@types/parse": "^2.2.14",
     "@webcomponents/webcomponentsjs": "^2.2.10",
     "babel-loader": "^8.0.6",
     "canonical-path": "1.0.0",

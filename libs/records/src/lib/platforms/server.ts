@@ -21,6 +21,7 @@ import { Logger } from '../utils/logger';
 import { Reative } from '../symbols/reative';
 import { FirestoreDriver } from '../drivers/firestore';
 import { FirebaseDriver } from '../drivers/firebase';
+import { ParseDriver } from '../drivers/parse';
 import { HttpDriver } from '../drivers/http';
 import { RR_VERSION } from '../version';
 import { RR_DRIVER } from '../driver';
@@ -42,10 +43,12 @@ export class Records implements ReativeApi {
     firestore: ReativeDriver;
     firebase: ReativeDriver;
     http: ReativeDriver;
+    parse: ReativeDriver;
   } = {
     firestore: {} as ReativeDriver,
     firebase: {} as ReativeDriver,
-    http: {} as ReativeDriver
+    http: {} as ReativeDriver,
+    parse: {} as ReativeDriver
   };
 
   public $log: Subject<Log> = new Subject();
@@ -92,6 +95,17 @@ export class Records implements ReativeApi {
       patch: true,
       delete: true,
       set: 'http.post'
+    },
+    parse: {
+      find: true,
+      findOne: true,
+      on: true,
+      get: 'parse.find',
+      post: 'parse.find',
+      update: 'parse.set',
+      patch: 'parse.set',
+      delete: false,
+      set: true
     }
   };
 
@@ -232,6 +246,11 @@ export class Records implements ReativeApi {
         ...options
       }),
       http: new HttpDriver({
+        ...{ logger: this.logger },
+        ...options,
+        ...{ httpConfig: this.httpConfig }
+      }),
+      parse: new ParseDriver({
         ...{ logger: this.logger },
         ...options,
         ...{ httpConfig: this.httpConfig }
@@ -478,11 +497,7 @@ export class Records implements ReativeApi {
   /**
    * Set request where
    */
-  public where(
-    field: string,
-    operator: string,
-    value: string | number | boolean | []
-  ): Records {
+  public where(field: string, operator: string, value: any): Records {
     if (!isArray(this.chain.query)) {
       this.chain.query = [];
     }
@@ -642,6 +657,10 @@ export class Records implements ReativeApi {
   public diff(fn): Records {
     this.chain.diff = fn;
     return this;
+  }
+
+  public model(): any {
+    return Reative.parse.model(this.collection);
   }
 }
 

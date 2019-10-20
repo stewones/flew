@@ -1,7 +1,7 @@
 import { Connector } from './connector';
 import { Logger } from '../utils/logger';
 
-export type ReativeDriverOption = 'http' | 'firebase' | 'firestore';
+export type ReativeDriverOption = 'http' | 'firebase' | 'firestore' | 'parse';
 
 //
 // @experimental

@@ -67,6 +67,7 @@ export interface ReativeApi {
   // experimental
   reboot(): void; // reload rr initialization
   reset(): Records;
+  model(): any; // parse object
 
   //
   // Legacy @deprecated
