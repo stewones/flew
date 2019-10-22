@@ -64,9 +64,7 @@ export class FirestoreDriver implements ReativeDriver {
       query.operator
     ) {
       this.log().success()(
-        `firestore where object -> ${query.field} ${query.operator} ${
-          query.value
-        }`
+        `firestore where object -> ${query.field} ${query.operator} ${query.value}`
       );
       if (!query.value)
         throw new Error(`value can't be null for firestore where`);
@@ -107,7 +105,7 @@ export class FirestoreDriver implements ReativeDriver {
 
       //
       // set query
-      firestore = this.where(chain.query, firestore);
+      firestore = this.where(chain.where, firestore);
 
       //
       // set order
@@ -199,7 +197,7 @@ export class FirestoreDriver implements ReativeDriver {
 
       //
       // set where
-      firestore = this.where(chain.query, firestore);
+      firestore = this.where(chain.where, firestore);
 
       //
       // set order

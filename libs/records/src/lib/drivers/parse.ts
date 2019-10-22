@@ -10,6 +10,7 @@ import { clearNetworkResponse } from '../utils/response';
 import { Chain } from '../interfaces/chain';
 import { Reative } from '../symbols/reative';
 import { subscribe } from '../utils/events';
+import { isFunction } from 'util';
 
 export class ParseDriver implements ReativeDriver {
   _driver: ReativeDriverOption = 'parse';
@@ -18,6 +19,7 @@ export class ParseDriver implements ReativeDriver {
   connector: any;
   logger: Logger;
   chain: Chain;
+  skipActions = ['aggregate'];
   // persistence: boolean;
 
   constructor(options: Options) {
@@ -126,6 +128,8 @@ export class ParseDriver implements ReativeDriver {
 
   public find<T>(chain: Chain, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
+      const verb = chain.query['aggregate'] ? 'aggregate' : 'find';
+
       //
       // run exceptions
       this.exceptions();
@@ -135,8 +139,21 @@ export class ParseDriver implements ReativeDriver {
       this.connector = Reative.parse.query(this.collection);
 
       //
-      // set query
-      this.where(chain.query);
+      // set arbitrary query
+      for (const k in chain.query) {
+        if (!this.skipActions.includes(k)) {
+          const value = chain.query[k];
+          if (isFunction(value)) {
+            this.connector[k](...value());
+          } else {
+            this.connector[k](value);
+          }
+        }
+      }
+
+      //
+      // set where
+      this.where(chain.where);
 
       //
       // set order
@@ -148,37 +165,52 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // network handle
-      this.connector
-        .find()
-        .then(async (data: any[]) => {
-          const result = [];
-          for (const item of data) {
-            result.push(item.toJSON());
+      const success = async (data: any[]) => {
+        const result = [];
+        for (const item of data) {
+          result.push(isFunction(item.toJSON) ? item.toJSON() : item);
+        }
+        //
+        // define standard response
+        const response: Response = clearNetworkResponse({
+          data: result,
+          key: key,
+          collection: this.collection,
+          driver: this._driver,
+          response: {
+            empty: !result.length,
+            size: result.length
           }
-          //
-          // define standard response
-          const response: Response = clearNetworkResponse({
-            data: result,
-            key: key,
-            collection: this.collection,
-            driver: this._driver,
-            response: {
-              empty: !result.length,
-              size: result.length
-            }
-          });
-
-          //
-          // success callback
-          observer.next(response as T);
-          observer.complete();
-        })
-        .catch(err => {
-          try {
-            observer.error(err);
-            observer.complete();
-          } catch (err) {}
         });
+
+        //
+        // success callback
+        observer.next(response as T);
+        observer.complete();
+      };
+
+      const error = err => {
+        try {
+          observer.error(err);
+          observer.complete();
+        } catch (err) {}
+      };
+
+      switch (verb) {
+        case 'aggregate':
+          this.connector
+            .aggregate(chain.query['aggregate'])
+            .then(success)
+            .catch(error);
+          break;
+
+        default:
+          this.connector
+            .find()
+            .then(success)
+            .catch(error);
+          break;
+      }
     });
   }
 
@@ -209,8 +241,19 @@ export class ParseDriver implements ReativeDriver {
       this.connector = Reative.parse.query(this.collection);
 
       //
-      // set query
-      this.where(chain.query);
+      // set arbitrary query
+      for (const k in chain.query) {
+        const value = chain.query[k];
+        if (isFunction(value)) {
+          this.connector[k](...value());
+        } else {
+          this.connector[k](value);
+        }
+      }
+
+      //
+      // set where
+      this.where(chain.where);
 
       //
       // set order
@@ -262,6 +305,7 @@ export class ParseDriver implements ReativeDriver {
         });
 
         handler.on('close', () => {
+          console.log('close');
           observer.complete();
         });
 

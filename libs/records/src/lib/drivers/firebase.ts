@@ -53,16 +53,14 @@ export class FirebaseDriver implements ReativeDriver {
       //
       // add where
       if (
-        isArray(chain.query) &&
-        isObject(chain.query[0]) &&
-        chain.query[0].operator === '=='
+        isArray(chain.where) &&
+        isObject(chain.where[0]) &&
+        chain.where[0].operator === '=='
       ) {
-        firebase = firebase.orderByChild(chain.query[0].field);
-        firebase = firebase.equalTo(chain.query[0].value);
+        firebase = firebase.orderByChild(chain.where[0].field);
+        firebase = firebase.equalTo(chain.where[0].value);
         this.log().success()(
-          `firebase where -> ${chain.query[0].field} ${
-            chain.query[0].operator
-          } ${chain.query[0].value}`
+          `firebase where -> ${chain.where[0].field} ${chain.where[0].operator} ${chain.where[0].value}`
         );
       }
 

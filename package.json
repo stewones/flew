@@ -42,7 +42,7 @@
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook",
     "schematics:build": "tsc -p tools/tsconfig.tools.json && ./tools/copy.sh",
-    "mongo:serve": "mongodb-runner start",
+    "mongo": "mongodb-runner start",
     "parse:serve": "parse-server --appId FiretaskServer --masterKey parseRulez --databaseURI mongodb://localhost/test",
     "parse:server": "cd apps/server && PARSE_MOUNT=/api npm run start",
     "parse:dashboard": "parse-dashboard --dev --appId FiretaskServer --masterKey parseRulez --serverURL 'http://localhost:1337/api' --appName Firetask"

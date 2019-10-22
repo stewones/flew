@@ -1,3 +1,9 @@
+export interface ChainWhere {
+  field: string;
+  operator: string;
+  value: any;
+}
+
 export interface Chain {
   ttl?: number; // time to live (in seconds. default: 0)
   key?: string; // key used for cache. defaults to requested info
@@ -8,7 +14,8 @@ export interface Chain {
   transformResponse?: (data: any) => any; // transform function for network data response
   transformData?: boolean; // shortcut for transform(r=>r.data)
   ref?: string; //  used for firebase driver
-  query?: any; // @deprecated
+  query?: any; // for any kind of query
+  where?: ChainWhere[];
   size?: number; // elastic/firestore
   sort?: any | any[]; // elastic/firestore
   doc?: string | number; // firestore `on`

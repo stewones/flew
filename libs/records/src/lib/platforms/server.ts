@@ -498,10 +498,10 @@ export class Records implements ReativeApi {
    * Set request where
    */
   public where(field: string, operator: string, value: any): Records {
-    if (!isArray(this.chain.query)) {
-      this.chain.query = [];
+    if (!isArray(this.chain.where)) {
+      this.chain.where = [];
     }
-    this.chain.query.push({
+    this.chain.where.push({
       field: field,
       operator: operator,
       value: value

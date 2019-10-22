@@ -12,6 +12,7 @@ import Parse from 'parse';
 export interface ParseOptions {
   serverURL: string;
   appID: string;
+  masterKey?: string;
 }
 
 @Injectable()
@@ -19,6 +20,7 @@ export class ParseSetup {
   constructor(@Inject('ParseOptions') public options) {
     Parse.initialize(options.appID);
     Parse.serverURL = options.serverURL;
+    Parse.masterKey = options.masterKey;
 
     Reative.parse = {
       model: collection,
