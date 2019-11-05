@@ -325,7 +325,7 @@ export class PlatformBrowser extends Records {
       }
 
       //
-      // return network response\
+      // return network response
       if (
         (useNetwork === true && useCache === true) ||
         (useNetwork === false && useCache === true)

@@ -34,6 +34,12 @@
     },
     "firebase": {
       "tags": []
+    },
+    "rr-parse-e2e": {
+      "tags": []
+    },
+    "rr-parse": {
+      "tags": []
     }
   }
 }
