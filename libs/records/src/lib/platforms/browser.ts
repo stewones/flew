@@ -134,11 +134,11 @@ export class PlatformBrowser extends Records {
     return of(evaluation).pipe(
       map(evaluation => {
         if (!evaluation.now) {
+          this.dispatch(observer, evaluation.cache, chain);
           if (evaluation.ttl) {
             this.log().danger()(`${key} [ttl$] response`);
+            observer.complete();
           }
-          this.dispatch(observer, evaluation.cache, chain);
-          observer.complete();
         }
       })
     );
@@ -356,7 +356,10 @@ export class PlatformBrowser extends Records {
     const isCustomDiff = isFunction(chain.diff);
     const diffFn = isCustomDiff
       ? chain.diff
-      : (c, n) => !isEqual(clearNetworkResponse(c), clearNetworkResponse(n));
+      : (c, n) =>
+          !isEqual(clearNetworkResponse(c), clearNetworkResponse(n)) ||
+          isEmpty(_cache) ||
+          isEmpty(_network);
 
     if (isCustomDiff) {
       this.log().danger()(`${key} [diff] applying a custom function`);
@@ -373,9 +376,7 @@ export class PlatformBrowser extends Records {
         );
     }
 
-    return isCustomDiff
-      ? diffFn(_cache, _network)
-      : diffFn(_cache, _network) || (isEmpty(_cache) || isEmpty(_network));
+    return diffFn(_cache, _network);
   }
 
   protected dispatch(observer = { next: data => {} }, data, chain) {
