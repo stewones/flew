@@ -5,7 +5,8 @@ import {
   merge,
   isFunction,
   isBoolean,
-  cloneDeep
+  cloneDeep,
+  isUndefined
 } from 'lodash';
 import { Observable, from, of, merge as merge$ } from 'rxjs';
 import { map, switchMap, filter, catchError, tap } from 'rxjs/operators';
@@ -21,6 +22,7 @@ import {
 } from '../utils/response';
 import { Chain } from '../interfaces/chain';
 import * as differential from '../utils/diff';
+
 const deepDiff = differential.diff;
 
 export class PlatformBrowser extends Records {
@@ -131,40 +133,48 @@ export class PlatformBrowser extends Records {
   }
 
   protected network$<T>(observer, verb, path, payload, chain, key) {
-    return new Observable(innerObserver => {
-      this.isNetworkAllowed$(chain, key).subscribe(allowed => {
-        if (allowed) {
-          this.log().warn()(`${key} [network$] request`);
+    this.isNetworkAllowed(chain, key).then(allowed => {
+      // console.log(`is network allowed?`, allowed);
+      if (allowed) {
+        this.log().warn()(`${key} [network$] request`);
 
-          from(this.call<T>(verb, path, payload, chain, key)).subscribe(
-            response => {
-              this.dispatch(observer, response, chain);
-              if (!['on'].includes(verb)) {
-                observer.complete();
-                innerObserver.complete();
-              }
+        from(this.call<T>(verb, path, payload, chain, key)).subscribe(
+          response => {
+            const networkData = cloneDeep(response);
+            //
+            // cache strategy
+            let ttl = chain.ttl || 0;
+            const seconds =
+                new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
 
-              this.setCache(chain, key, response);
-            },
-            err => {
-              observer.error(err);
-              if (!['on'].includes(verb)) {
-                observer.complete();
-                innerObserver.complete();
-              }
+            if (ttl > 0) {
+              ttl += seconds;
+              networkData.ttl = ttl;
             }
-          );
-        } else {
-          this.log().danger()(
-            `${key} network not allowed. probably because there's some ttl defined`
-          );
-          if (!['on'].includes(verb)) {
-            observer.complete();
-            innerObserver.complete();
+            this.dispatch(observer, networkData, chain);
+            this.setCache(chain, key, networkData);
+
+            if (!['on'].includes(verb)) {
+              observer.complete();
+            }
+          },
+          err => {
+            observer.error(err);
+            if (!['on'].includes(verb)) {
+              observer.complete();
+            }
           }
+        );
+      } else {
+        this.log().danger()(
+          `${key} network not allowed. probably because there's some ttl defined`
+        );
+        if (!['on'].includes(verb)) {
+          observer.complete();
         }
-      });
+      }
     });
+    return of();
   }
 
   protected cache$<T>(observer, chain, key) {
@@ -190,8 +200,6 @@ export class PlatformBrowser extends Records {
         //
         // return cached response immediately to view
         if (!isEmpty(cache)) this.dispatch(observer, cache, chain);
-
-        return of();
       })
       .catch(err => {
         this.log().warn()(err);
@@ -220,48 +228,27 @@ export class PlatformBrowser extends Records {
     return of();
   }
 
-  protected isNetworkAllowed$(chain: Chain, key: string): Observable<boolean> {
-    return new Observable(innerObserver => {
-      const useCache: boolean = chain.useCache === false ? false : true;
-      const useState: boolean = chain.useState === false ? false : true;
-      const useNetwork: boolean = chain.useNetwork === false ? false : true;
-
+  protected isNetworkAllowed(chain: Chain, key: string): Promise<boolean> {
+    return new Promise(async resolve => {
       //
       // check for TTL
       // should not call network
       const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-      let state: any = this.getState(key) || { data: {} };
+      let state: any = cloneDeep(this.getState(key)) || { data: {} };
       if (isEmpty(state.data)) {
-        state = Reative.storage.get(key) || { data: {} };
+        state = (await Reative.storage.get(key)) || { data: {} };
       }
+      if (!state.ttl) state.ttl = 0;
+      if (!chain.ttl) chain.ttl = 0;
+
       const hasState = state && !isEmpty(state.data) ? true : false;
-      //
-      // avoid the return of any cache (jump to network request at server level)
-      if ((useCache === false || useState === false) && useNetwork !== false) {
-        innerObserver.next(true);
-        return innerObserver.complete();
+      // console.log(key, hasState, seconds, state.ttl, chain.ttl);
+
+      if (hasState && seconds < state.ttl && chain.ttl > 0) {
+        return resolve(false);
       }
 
-      //
-      // stop network request at server level - case 1
-      if ((useCache || useState) && hasState && useNetwork === false) {
-        innerObserver.next(false);
-        return innerObserver.complete();
-      }
-
-      //
-      // stop network request at server level - case 2
-      if (
-        (useCache || useState) &&
-        (hasState && seconds < state.ttl) &&
-        chain.ttl > 0
-      ) {
-        innerObserver.next(false);
-        return innerObserver.complete();
-      }
-
-      innerObserver.next(true);
-      return innerObserver.complete();
+      return resolve(true);
     });
   }
 
@@ -271,19 +258,9 @@ export class PlatformBrowser extends Records {
     network: Response & { ttl?: number }
   ): Promise<void> {
     const saveNetwork: boolean = chain.saveNetwork === false ? false : true;
-    const networkData = cloneDeep(network);
+    const networkData = network;
     let cacheData: Response & { ttl?: number } = {};
     if (!saveNetwork) return Promise.resolve();
-
-    //
-    // cache strategy
-    let ttl = chain.ttl || 0;
-    const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-
-    if (ttl > 0) {
-      ttl += seconds;
-      networkData.ttl = ttl;
-    }
 
     try {
       cacheData = await Reative.storage.get(key);
@@ -291,7 +268,7 @@ export class PlatformBrowser extends Records {
 
     if (this.isDifferent(chain, key, cacheData, networkData)) {
       Reative.storage.set(key, clearNetworkResponse(networkData));
-      this.log().warn()(`${key} [setCache] cache updated`);
+      this.log().warn()(`${key} cache updated`);
     }
   }
 
@@ -325,11 +302,15 @@ export class PlatformBrowser extends Records {
     return diffFn(_cache, _network);
   }
 
-  protected dispatch(observer = { next: data => {} }, data, chain) {
+  protected dispatch(
+    observer = { next: data => {} },
+    data: Response,
+    chain: Chain
+  ) {
     // console.log(`dispatch`, data);
     const transformResponse: any = shouldTransformResponse(chain, data);
     observer.next(transformResponse(data));
-    Reative.store.sync(data);
+    if (chain.useState || isUndefined(chain.useState)) Reative.store.sync(data);
   }
 
   private getState(key: string) {
