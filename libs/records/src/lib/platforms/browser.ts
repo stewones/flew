@@ -9,7 +9,6 @@ import {
   isUndefined
 } from 'lodash';
 import { Observable, from, of, merge as merge$ } from 'rxjs';
-import { map, switchMap, filter, catchError, tap } from 'rxjs/operators';
 import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { Records } from './server';
@@ -35,7 +34,6 @@ export class PlatformBrowser extends Records {
 
   constructor(options: Options) {
     super(options);
-
     merge(this, this.clearOptions(options));
   }
 
@@ -183,7 +181,7 @@ export class PlatformBrowser extends Records {
     const stateAvailable = Reative.store.enabled;
     const state: Response = this.getState(key);
 
-    if (useState && stateAvailable && !isEmpty(state)) return of();
+    if (useState && stateAvailable && !isEmpty(state.data)) return of();
 
     this.log().info()(`${key} return from cache? ${useCache ? true : false}`);
 
@@ -199,7 +197,7 @@ export class PlatformBrowser extends Records {
 
         //
         // return cached response immediately to view
-        if (!isEmpty(cache)) this.dispatch(observer, cache, chain);
+        if (cache && cache.data) this.dispatch(observer, cache, chain);
       })
       .catch(err => {
         this.log().warn()(err);
@@ -217,13 +215,15 @@ export class PlatformBrowser extends Records {
 
     const state: Response = this.getState(key);
 
-    this.log().info()(`${key} has state? ${!isEmpty(state) ? true : false}`);
+    this.log().info()(
+      `${key} has state? ${!isEmpty(state.data) ? true : false}`
+    );
 
     //
     // return cached response immediately to view
     // console.log(`state`, state);
 
-    if (!isEmpty(state)) this.dispatch(observer, state, chain);
+    if (state && state.data) this.dispatch(observer, state, chain);
 
     return of();
   }
