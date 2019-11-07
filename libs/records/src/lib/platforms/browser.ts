@@ -184,9 +184,11 @@ export class PlatformBrowser extends Records {
     const useCache: boolean = chain.useCache === false ? false : true;
     const useState: boolean = chain.useState === false ? false : true;
     const stateAvailable = Reative.store.enabled;
-    const state: Response = this.getState(key);
+    const cacheAvailable = isFunction(Reative.storage.get);
+    const state: Response = this.getCurrentState(key);
 
-    if (useState && stateAvailable && !isEmpty(state.data)) return of();
+    if ((useState && stateAvailable && !isEmpty(state.data)) || !cacheAvailable)
+      return of();
 
     this.log().info()(`${key} return from cache? ${useCache ? true : false}`);
 
@@ -205,7 +207,6 @@ export class PlatformBrowser extends Records {
           // return cached response immediately to view
           if (cache && cache.data) this.dispatch(observer, cache, chain);
         })
-
         .catch(err => {
           this.log().warn()(err);
         })
@@ -220,7 +221,7 @@ export class PlatformBrowser extends Records {
 
     this.log().info()(`${key} use state? ${useState ? true : false}`);
 
-    const state: Response = this.getState(key);
+    const state: Response = this.getCurrentState(key);
 
     this.log().info()(
       `${key} has state? ${!isEmpty(state.data) ? true : false}`
@@ -229,7 +230,6 @@ export class PlatformBrowser extends Records {
     //
     // return cached response immediately to view
     // console.log(`state`, state);
-
     if (state && state.data) this.dispatch(observer, state, chain);
 
     return of();
@@ -241,7 +241,7 @@ export class PlatformBrowser extends Records {
       // check for TTL
       // should not call network
       const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-      let state: any = cloneDeep(this.getState(key)) || { data: {} };
+      let state: any = cloneDeep(this.getCurrentState(key)) || { data: {} };
       if (isEmpty(state.data)) {
         state = (await Reative.storage.get(key)) || { data: {} };
       }
@@ -314,13 +314,15 @@ export class PlatformBrowser extends Records {
     data: Response,
     chain: Chain
   ) {
-    console.log(`dispatch`, data);
+    // console.log(`dispatch`, data);
     const transformResponse: any = shouldTransformResponse(chain, data);
     observer.next(transformResponse(data));
     if (chain.useState || isUndefined(chain.useState)) Reative.store.sync(data);
   }
 
-  private getState(key: string) {
-    return Reative.store.get ? Reative.store.get(key) : { data: {} };
+  private getCurrentState(key: string) {
+    return Reative.store && isFunction(Reative.store.get)
+      ? Reative.store.get(key)
+      : { data: {} };
   }
 }
