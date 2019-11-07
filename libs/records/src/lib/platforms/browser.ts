@@ -137,29 +137,34 @@ export class PlatformBrowser extends Records {
     this.isNetworkAllowed(chain, key).then(allowed => {
       // console.log(`is network allowed?`, allowed);
       if (allowed) {
-        this.log().warn()(`${key} [network$] request`);
-
+        this.log().warn()(`${key} network$ request`);
         from(this.call<T>(verb, path, payload, chain, key))
           .pipe(take(1))
           .subscribe(
             response => {
-              const networkData = cloneDeep(response);
-              //
-              // cache strategy
-              let ttl = chain.ttl || 0;
-              const seconds =
-                  new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
+              this.getCurrentState$(key)
+                .pipe(take(1))
+                .subscribe(stateData => {
+                  const networkData = cloneDeep(response);
+                  if (this.isDifferent(chain, key, stateData, networkData)) {
+                    //
+                    // cache strategy
+                    let ttl = chain.ttl || 0;
+                    const seconds =
+                        new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
 
-              if (ttl > 0) {
-                ttl += seconds;
-                networkData.ttl = ttl;
-              }
-              this.dispatch(observer, networkData, chain);
-              this.setCache(chain, key, networkData);
-
-              if (!['on'].includes(verb)) {
-                observer.complete();
-              }
+                    if (ttl > 0) {
+                      ttl += seconds;
+                      networkData.ttl = ttl;
+                    }
+                    this.dispatch(observer, networkData, chain);
+                    this.setCache(chain, key, networkData);
+                    this.log().info()(`${key} dispatch from network$`);
+                  }
+                  if (!['on'].includes(verb)) {
+                    observer.complete();
+                  }
+                });
             },
             err => {
               observer.error(err);
@@ -169,9 +174,7 @@ export class PlatformBrowser extends Records {
             }
           );
       } else {
-        this.log().danger()(
-          `${key} network not allowed. probably because there's some ttl defined`
-        );
+        this.log().danger()(`${key} network not allowed. ttl condition met.`);
         if (!['on'].includes(verb)) {
           observer.complete();
         }
@@ -190,22 +193,18 @@ export class PlatformBrowser extends Records {
     if ((useState && stateAvailable && !isEmpty(state.data)) || !cacheAvailable)
       return of();
 
-    this.log().info()(`${key} return from cache? ${useCache ? true : false}`);
-
     if (useCache === false) return of();
 
     return from(
       Reative.storage
         .get(key)
         .then(cache => {
-          // console.log(`cache`, cache);
-          this.log().info()(
-            `${key} cache available ? ${!isEmpty(cache) ? true : false}`
-          );
-
           //
           // return cached response immediately to view
-          if (cache && cache.data) this.dispatch(observer, cache, chain);
+          if (cache && cache.data) {
+            this.dispatch(observer, cache, chain);
+            this.log().info()(`${key} dispatch from cache$`);
+          }
         })
         .catch(err => {
           this.log().warn()(err);
@@ -219,19 +218,15 @@ export class PlatformBrowser extends Records {
 
     if (useState === false || !stateAvailable) return of();
 
-    this.log().info()(`${key} use state? ${useState ? true : false}`);
-
     const state: Response = this.getCurrentState(key);
-
-    this.log().info()(
-      `${key} has state? ${!isEmpty(state.data) ? true : false}`
-    );
 
     //
     // return cached response immediately to view
     // console.log(`state`, state);
-    if (state && state.data) this.dispatch(observer, state, chain);
-
+    if (state && state.data) {
+      this.dispatch(observer, state, chain);
+      this.log().info()(`${key} dispatch from state$`);
+    }
     return of();
   }
 
@@ -241,7 +236,9 @@ export class PlatformBrowser extends Records {
       // check for TTL
       // should not call network
       const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-      let state: any = cloneDeep(this.getCurrentState(key)) || { data: {} };
+      let state: Response = cloneDeep(
+        await this.getCurrentState$(key).toPromise()
+      ) || { data: {} };
       if (isEmpty(state.data)) {
         state = (await Reative.storage.get(key)) || { data: {} };
       }
@@ -266,17 +263,10 @@ export class PlatformBrowser extends Records {
   ): Promise<void> {
     const saveNetwork: boolean = chain.saveNetwork === false ? false : true;
     const networkData = network;
-    let cacheData: Response & { ttl?: number } = {};
     if (!saveNetwork) return Promise.resolve();
 
-    try {
-      cacheData = await Reative.storage.get(key);
-    } catch (err) {}
-
-    if (this.isDifferent(chain, key, cacheData, networkData)) {
-      Reative.storage.set(key, clearNetworkResponse(networkData));
-      this.log().warn()(`${key} cache updated`);
-    }
+    Reative.storage.set(key, clearNetworkResponse(networkData));
+    this.log().warn()(`${key} cache updated`);
   }
 
   private isDifferent(chain, key, cache, network) {
@@ -320,9 +310,32 @@ export class PlatformBrowser extends Records {
     if (chain.useState || isUndefined(chain.useState)) Reative.store.sync(data);
   }
 
-  private getCurrentState(key: string) {
-    return Reative.store && isFunction(Reative.store.get)
-      ? Reative.store.get(key)
-      : { data: {} };
+  private getCurrentState(key: string): Response {
+    const hasStore = Reative.store && isFunction(Reative.store.get);
+    if (!hasStore) return null;
+    const state = hasStore ? Reative.store.get(key) : null;
+    return state ? state : null;
+  }
+
+  private getCurrentState$(key: string): Observable<Response> {
+    const hasStore = Reative.store && isFunction(Reative.store.get);
+    const hasStorage = Reative.storage && isFunction(Reative.storage.get);
+
+    if (!hasStore && !hasStorage) return of();
+
+    const state = hasStore ? Reative.store.get(key) : null;
+
+    return state
+      ? of(state)
+      : hasStorage
+      ? (from(
+          new Promise((resolve, reject) => {
+            Reative.storage
+              .get(key)
+              .then(r => resolve(r as Observable<Response>))
+              .catch(err => reject(err));
+          })
+        ) as Observable<Response>)
+      : of();
   }
 }
