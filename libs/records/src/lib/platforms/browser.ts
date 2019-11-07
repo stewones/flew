@@ -21,6 +21,7 @@ import {
 } from '../utils/response';
 import { Chain } from '../interfaces/chain';
 import * as differential from '../utils/diff';
+import { take } from 'rxjs/operators';
 
 const deepDiff = differential.diff;
 
@@ -117,16 +118,18 @@ export class PlatformBrowser extends Records {
     // 2 - cache
     // 3 - network
     //
-    // in both case check for ttl condition existence, where when met
-    // it should return the response from (state or cache) and doesnt
-    // request network
+    // check for ttl condition, when met it should
+    // only return the response from (state or cache)
+    // rather than request network
     //
     return new Observable(observer => {
       merge$(
-        this.state$(observer, chain, key),
-        this.cache$(observer, chain, key),
-        this.network$(observer, verb, path, payload, chain, key)
-      ).subscribe();
+        this.state$(observer, chain, key).pipe(take(1)),
+        this.cache$(observer, chain, key).pipe(take(1)),
+        this.network$(observer, verb, path, payload, chain, key).pipe(take(1))
+      )
+        .pipe(take(2))
+        .subscribe();
     });
   }
 
@@ -136,33 +139,35 @@ export class PlatformBrowser extends Records {
       if (allowed) {
         this.log().warn()(`${key} [network$] request`);
 
-        from(this.call<T>(verb, path, payload, chain, key)).subscribe(
-          response => {
-            const networkData = cloneDeep(response);
-            //
-            // cache strategy
-            let ttl = chain.ttl || 0;
-            const seconds =
-                new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
+        from(this.call<T>(verb, path, payload, chain, key))
+          .pipe(take(1))
+          .subscribe(
+            response => {
+              const networkData = cloneDeep(response);
+              //
+              // cache strategy
+              let ttl = chain.ttl || 0;
+              const seconds =
+                  new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
 
-            if (ttl > 0) {
-              ttl += seconds;
-              networkData.ttl = ttl;
-            }
-            this.dispatch(observer, networkData, chain);
-            this.setCache(chain, key, networkData);
+              if (ttl > 0) {
+                ttl += seconds;
+                networkData.ttl = ttl;
+              }
+              this.dispatch(observer, networkData, chain);
+              this.setCache(chain, key, networkData);
 
-            if (!['on'].includes(verb)) {
-              observer.complete();
+              if (!['on'].includes(verb)) {
+                observer.complete();
+              }
+            },
+            err => {
+              observer.error(err);
+              if (!['on'].includes(verb)) {
+                observer.complete();
+              }
             }
-          },
-          err => {
-            observer.error(err);
-            if (!['on'].includes(verb)) {
-              observer.complete();
-            }
-          }
-        );
+          );
       } else {
         this.log().danger()(
           `${key} network not allowed. probably because there's some ttl defined`
@@ -187,22 +192,24 @@ export class PlatformBrowser extends Records {
 
     if (useCache === false) return of();
 
-    Reative.storage
-      .get(key)
-      .then(cache => {
-        // console.log(`cache`, cache);
-        this.log().info()(
-          `${key} cache available ? ${!isEmpty(cache) ? true : false}`
-        );
+    return from(
+      Reative.storage
+        .get(key)
+        .then(cache => {
+          // console.log(`cache`, cache);
+          this.log().info()(
+            `${key} cache available ? ${!isEmpty(cache) ? true : false}`
+          );
 
-        //
-        // return cached response immediately to view
-        if (cache && cache.data) this.dispatch(observer, cache, chain);
-      })
-      .catch(err => {
-        this.log().warn()(err);
-      });
-    return of();
+          //
+          // return cached response immediately to view
+          if (cache && cache.data) this.dispatch(observer, cache, chain);
+        })
+
+        .catch(err => {
+          this.log().warn()(err);
+        })
+    );
   }
 
   protected state$<T>(observer, chain, key) {
@@ -307,7 +314,7 @@ export class PlatformBrowser extends Records {
     data: Response,
     chain: Chain
   ) {
-    // console.log(`dispatch`, data);
+    console.log(`dispatch`, data);
     const transformResponse: any = shouldTransformResponse(chain, data);
     observer.next(transformResponse(data));
     if (chain.useState || isUndefined(chain.useState)) Reative.store.sync(data);
