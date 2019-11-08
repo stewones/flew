@@ -150,13 +150,13 @@ export class PlatformBrowser extends Records {
                     //
                     // cache strategy
                     let ttl = chain.ttl || 0;
-                    const seconds =
-                        new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
 
                     if (ttl > 0) {
-                      ttl += seconds;
+                      ttl +=
+                        new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/; // increase seconds
                       networkData.ttl = ttl;
                     }
+
                     this.dispatch(observer, networkData, chain);
                     this.setCache(chain, key, networkData);
                     this.log().info()(`${key} dispatch from network$`);
@@ -214,9 +214,9 @@ export class PlatformBrowser extends Records {
 
   protected state$<T>(observer, chain, key) {
     const useState = chain.useState === false ? false : true;
-    const stateAvailable = Reative.store.enabled;
+    const hasState = Reative.store.enabled;
 
-    if (useState === false || !stateAvailable) return of();
+    if (useState === false || !hasState) return of();
 
     const state: Response = this.getCurrentState(key);
 
@@ -239,9 +239,7 @@ export class PlatformBrowser extends Records {
       let state: Response = cloneDeep(
         await this.getCurrentState$(key).toPromise()
       ) || { data: {} };
-      if (isEmpty(state.data)) {
-        state = (await Reative.storage.get(key)) || { data: {} };
-      }
+
       if (!state.ttl) state.ttl = 0;
       if (!chain.ttl) chain.ttl = 0;
 
@@ -262,10 +260,9 @@ export class PlatformBrowser extends Records {
     network: Response & { ttl?: number }
   ): Promise<void> {
     const saveNetwork: boolean = chain.saveNetwork === false ? false : true;
-    const networkData = network;
-    if (!saveNetwork) return Promise.resolve();
-
-    Reative.storage.set(key, clearNetworkResponse(networkData));
+    const hasStorage = Reative.storage && isFunction(Reative.storage.get);
+    if (!saveNetwork || !hasStorage) return Promise.resolve();
+    Reative.storage.set(key, clearNetworkResponse(network));
     this.log().warn()(`${key} cache updated`);
   }
 
@@ -314,7 +311,7 @@ export class PlatformBrowser extends Records {
     const hasStore = Reative.store && isFunction(Reative.store.get);
     if (!hasStore) return null;
     const state = hasStore ? Reative.store.get(key) : null;
-    return state ? state : null;
+    return state;
   }
 
   private getCurrentState$(key: string): Observable<Response> {
