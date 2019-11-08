@@ -322,7 +322,7 @@ export class PlatformBrowser extends Records {
 
     const state = hasStore ? Reative.store.get(key) : null;
 
-    return state
+    return !isEmpty(state)
       ? of(state)
       : hasStorage
       ? (from(
