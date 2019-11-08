@@ -262,8 +262,15 @@ export class PlatformBrowser extends Records {
     const saveNetwork: boolean = chain.saveNetwork === false ? false : true;
     const hasStorage = Reative.storage && isFunction(Reative.storage.get);
     if (!saveNetwork || !hasStorage) return Promise.resolve();
-    Reative.storage.set(key, clearNetworkResponse(network));
-    this.log().warn()(`${key} cache updated`);
+    try {
+      Reative.storage.set(key, clearNetworkResponse(network));
+      this.log().warn()(`${key} cache updated`);
+    } catch (err) {
+      this.log().danger()(`${key} unable to save cache`);
+      if (this.log().enabled()) {
+        console.log(err);
+      }
+    }
   }
 
   private isDifferent(chain, key, cache, network) {
