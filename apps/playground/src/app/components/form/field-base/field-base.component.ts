@@ -9,7 +9,7 @@ import {
 import { FormField, FormFieldChange } from '../form.interface';
 
 @Component({
-  selector: 'rr-play-field-base',
+  selector: 'play-field-base',
   template: ``,
   styleUrls: [],
   changeDetection: ChangeDetectionStrategy.OnPush

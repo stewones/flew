@@ -29,7 +29,7 @@ import { TodoService } from '../../services/todo.service';
 import { Reative } from '@reative/records';
 
 @Component({
-  selector: 'rr-play-verb-chooser-container',
+  selector: 'play-verb-chooser-container',
   templateUrl: './verb-chooser-container.component.html',
   styleUrls: ['./verb-chooser-container.component.css']
 })
@@ -120,7 +120,7 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
 
   getInstrumentation() {
     const text = document.getElementsByTagName<any>(
-      'rr-play-chaining-api-container'
+      'play-chaining-api-container'
     )[0].innerText;
 
     return text

@@ -5,7 +5,7 @@ import { PlayResponse } from '../../interfaces/play.interface';
 import { PlayState } from '../../+state/play.state';
 
 @Component({
-  selector: 'rr-play-collection-response-container',
+  selector: 'play-collection-response-container',
   templateUrl: './collection-response-container.component.html',
   styleUrls: ['./collection-response-container.component.css']
 })

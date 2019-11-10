@@ -11,7 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
-  selector: 'rr-play-collection-log',
+  selector: 'play-collection-log',
   templateUrl: './collection-log.component.html',
   styleUrls: ['./collection-log.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

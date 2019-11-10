@@ -9,7 +9,7 @@ import { FormFieldBoolean } from '../field-boolean/field-boolean.interface';
 import { MatRadioChange } from '@angular/material';
 
 @Component({
-  selector: 'rr-play-field-assert',
+  selector: 'play-field-assert',
   templateUrl: './field-assert.component.html',
   styleUrls: ['./field-assert.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush

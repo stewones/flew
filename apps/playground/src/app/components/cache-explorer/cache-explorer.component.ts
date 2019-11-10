@@ -7,7 +7,7 @@ import {
 import { PlayCache } from '../../interfaces/play.interface';
 
 @Component({
-  selector: 'rr-play-cache-explorer',
+  selector: 'play-cache-explorer',
   templateUrl: './cache-explorer.component.html',
   styleUrls: ['./cache-explorer.component.css']
   // changeDetection: ChangeDetectionStrategy.OnPush

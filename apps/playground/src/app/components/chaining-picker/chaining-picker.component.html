@@ -2,7 +2,7 @@
   <li *ngFor="let method of methods">
     <div class="flex flex-col">
       <!-- FIRST FIELD (THE DECISION) -->
-      <rr-play-field
+      <play-field
         [data]="{
           type: 'boolean',
           checked: showInput[method.name],
@@ -12,7 +12,7 @@
           color: 'primary'
         }"
         (onChange)="didFieldChange($event)"
-      ></rr-play-field>
+      ></play-field>
       <div class="mb-3" *ngIf="showInput[method.name]">
         <div class="flex flex-col mb-3 mt-1">
           <small class="text-grey-darker text-xs">{{
@@ -23,7 +23,7 @@
           >
         </div>
         <!-- SECOND FIELD (THE USER INPUT) -->
-        <rr-play-field
+        <play-field
           [data]="{
             name: method.name,
             placeholder: method.placeholder,
@@ -33,7 +33,7 @@
             target: method.target
           }"
           (onChange)="didFieldValueChange($event)"
-        ></rr-play-field>
+        ></play-field>
       </div>
     </div>
   </li>

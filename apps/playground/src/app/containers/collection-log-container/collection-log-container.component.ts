@@ -5,7 +5,7 @@ import { Select } from '@ngxs/store';
 import { PlayState } from '../../+state/play.state';
 
 @Component({
-  selector: 'rr-play-collection-log-container',
+  selector: 'play-collection-log-container',
   templateUrl: './collection-log-container.component.html',
   styleUrls: ['./collection-log-container.component.css']
 })

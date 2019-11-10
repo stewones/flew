@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'rr-play-chaining-picker',
+  selector: 'play-chaining-picker',
   templateUrl: './chaining-picker.component.html',
   styleUrls: ['./chaining-picker.component.scss']
 })

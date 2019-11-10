@@ -19,7 +19,7 @@ import {
 } from '../../+state/method/method.actions';
 
 @Component({
-  selector: 'rr-play-chaining-picker-container',
+  selector: 'play-chaining-picker-container',
   templateUrl: './chaining-picker-container.component.html',
   styleUrls: ['./chaining-picker-container.component.css']
 })

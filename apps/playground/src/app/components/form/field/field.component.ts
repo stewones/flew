@@ -18,7 +18,7 @@ import { FieldAssertComponent } from '../field-assert/field-assert.component';
 import { FieldSelectComponent } from '../field-select/field-select.component';
 
 @Component({
-  selector: 'rr-play-field',
+  selector: 'play-field',
   templateUrl: './field.component.html',
   styleUrls: [],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -26,7 +26,7 @@ import { FieldSelectComponent } from '../field-select/field-select.component';
 export class FieldComponent implements OnInit {
   @Input() data: FormField = <FormField>{};
   @Output() onChange = new EventEmitter<FormFieldChange>();
-  @ViewChild('container', { static: false, read: ViewContainerRef })
+  @ViewChild('container', { static: true, read: ViewContainerRef })
   private container: ViewContainerRef;
 
   readonly fieldMapper = {

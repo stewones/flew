@@ -10,7 +10,7 @@ import { PlayCollection } from '../../interfaces/collection.interface';
 declare var document;
 
 @Component({
-  selector: 'rr-play-collection-scheme',
+  selector: 'play-collection-scheme',
   templateUrl: './collection-scheme.component.html',
   styleUrls: ['./collection-scheme.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -29,7 +29,7 @@ export class CollectionSchemeComponent implements OnInit {
           .clientHeight;
         if (height < 300) {
           document
-            .getElementsByTagName('rr-play-collection-scheme')[0]
+            .getElementsByTagName('play-collection-scheme')[0]
             .getElementsByClassName('CodeMirror')[0].style.height = `${height +
             18}px`;
         }

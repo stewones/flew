@@ -9,7 +9,7 @@ import { UpdateCollection } from '../../+state/collection/collection.actions';
 import { MatSelectChange } from '@angular/material';
 
 @Component({
-  selector: 'rr-play-collection-chooser-container',
+  selector: 'play-collection-chooser-container',
   templateUrl: './collection-chooser-container.component.html',
   styleUrls: ['./collection-chooser-container.component.css']
 })

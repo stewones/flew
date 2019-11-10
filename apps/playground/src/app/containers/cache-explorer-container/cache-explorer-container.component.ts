@@ -8,7 +8,7 @@ import { Reative } from '@reative/records';
 declare var window;
 
 @Component({
-  selector: 'rr-play-cache-explorer-container',
+  selector: 'play-cache-explorer-container',
   templateUrl: './cache-explorer-container.component.html',
   styleUrls: ['./cache-explorer-container.component.css']
 })

@@ -9,7 +9,7 @@ import { js } from 'js-beautify';
 import Prism from 'prismjs';
 
 @Component({
-  selector: 'rr-play-chaining-api',
+  selector: 'play-chaining-api',
   templateUrl: './chaining-api.component.html',
   styleUrls: ['./chaining-api.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -10,7 +10,7 @@ import { PlayResponse } from '../../interfaces/play.interface';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
-  selector: 'rr-play-collection-response',
+  selector: 'play-collection-response',
   templateUrl: './collection-response.component.html',
   styleUrls: ['./collection-response.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

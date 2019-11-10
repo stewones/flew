@@ -8,7 +8,7 @@ import { FieldBaseComponent } from '../field-base/field-base.component';
 import { FormField } from '../form.interface';
 
 @Component({
-  selector: 'rr-play-field-callback',
+  selector: 'play-field-callback',
   templateUrl: './field-callback.component.html',
   styleUrls: ['./field-callback.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

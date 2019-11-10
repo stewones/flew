@@ -9,7 +9,7 @@ import { FieldBaseComponent } from '../field-base/field-base.component';
 import { MatSelectChange } from '@angular/material';
 
 @Component({
-  selector: 'rr-play-field-select',
+  selector: 'play-field-select',
   templateUrl: './field-select.component.html',
   styleUrls: ['./field-select.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush

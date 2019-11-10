@@ -9,7 +9,7 @@ import { FormFieldBoolean } from './field-boolean.interface';
 import { MatCheckboxChange } from '@angular/material';
 
 @Component({
-  selector: 'rr-play-field-boolean',
+  selector: 'play-field-boolean',
   templateUrl: './field-boolean.component.html',
   styleUrls: ['./field-boolean.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush

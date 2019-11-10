@@ -5,7 +5,7 @@ import { Select } from '@ngxs/store';
 import { PlayState } from '../../+state/play.state';
 
 @Component({
-  selector: 'rr-play-collection-scheme-container',
+  selector: 'play-collection-scheme-container',
   templateUrl: './collection-scheme-container.component.html',
   styleUrls: ['./collection-scheme-container.component.css']
 })
