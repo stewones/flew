@@ -1,7 +1,7 @@
 module.exports = {
-  name: 'rr-playground',
+  name: 'playground',
   preset: '../../../jest.config.js',
-  coverageDirectory: '../../../coverage/apps/rr/playground/',
+  coverageDirectory: '../../../coverage/apps/playground/',
   snapshotSerializers: [
     'jest-preset-angular/AngularSnapshotSerializer.js',
     'jest-preset-angular/HTMLCommentSerializer.js'
