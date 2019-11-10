@@ -145,7 +145,7 @@ export class PlatformBrowser extends Records {
               this.getCurrentState$(key)
                 .pipe(take(1))
                 .subscribe(stateData => {
-                  const networkData = cloneDeep(response);
+                  const networkData: Response = cloneDeep(response);
                   if (this.isDifferent(chain, key, stateData, networkData)) {
                     //
                     // cache strategy
