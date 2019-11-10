@@ -26,6 +26,7 @@ import { AlbumService } from '../../services/album.service';
 import { CommentService } from '../../services/comment.service';
 import { PhotoService } from '../../services/photo.service';
 import { TodoService } from '../../services/todo.service';
+import { Reative } from '@reative/records';
 
 @Component({
   selector: 'rr-play-verb-chooser-container',
@@ -171,19 +172,16 @@ export class VerbChooserContainerComponent implements OnInit, OnDestroy {
           return r;
         }),
         last((value: Response, index: number, source: Observable<any>) => {
-          this.appService.$collection
-            .cache()
-            .length()
-            .then(totalCached => {
-              // console.log(value, index, source);
-              if (!totalCached) {
-                setTimeout(() => this.loadCache(), 0); // force load of cache for the very first request
-              } else if (index >= 1) {
-                //
-                // load cache viewer
-                setTimeout(() => this.loadCache(), 0);
-              }
-            });
+          Reative.storage.length().then(totalCached => {
+            // console.log(value, index, source);
+            if (!totalCached) {
+              setTimeout(() => this.loadCache(), 0); // force load of cache for the very first request
+            } else if (index >= 1) {
+              //
+              // load cache viewer
+              setTimeout(() => this.loadCache(), 0);
+            }
+          });
 
           return true;
         })

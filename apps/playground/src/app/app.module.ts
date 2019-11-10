@@ -10,6 +10,12 @@ import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { PlayState } from './+state/play.state';
 import { HttpClientModule } from '@angular/common/http';
+import { FIREBASE_CONFIG } from '../environments/firebase.config';
+
+import { RecordsModule } from '@reative/angular';
+import { FirebaseModule } from '@reative/firebase';
+import { CacheModule } from '@reative/cache';
+import { State, StateModule } from '@reative/state';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,12 +24,47 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     GroundModule,
     HttpClientModule,
-    NgxsModule.forRoot([PlayState], {
-      developmentMode: !environment.production
+
+    //
+    // rr stuff
+    //
+    // init rr state
+    StateModule.forRoot(),
+    //
+    // init rr
+    RecordsModule.forRoot({
+      silent: !isDev(),
+      baseURL: 'https://jsonplaceholder.typicode.com'
     }),
-    NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production })
+    //
+    // use rr with firebase
+    FirebaseModule.forRoot({
+      config: FIREBASE_CONFIG,
+      persistence: true
+    }),
+    //
+    // use rr with ionic (for cache)
+    CacheModule.forRoot({
+      dbName: environment.dbName,
+      dbStore: environment.dbStoreName
+    }),
+    // store stuff
+    NgxsModule.forRoot([State, PlayState], {
+      developmentMode: isDev()
+    }),
+    NgxsReduxDevtoolsPluginModule.forRoot({ disabled: isProd() })
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
+
+//
+// some helpers
+export function isDev() {
+  return !environment.production;
+}
+
+export function isProd() {
+  return environment.production;
+}

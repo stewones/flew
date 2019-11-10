@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { PlayCache } from '../../interfaces/play.interface';
 import { AppService } from '../../services/app.service';
+import { Reative } from '@reative/records';
 
 declare var window;
 
@@ -33,7 +34,7 @@ export class CacheExplorerContainerComponent implements OnInit, OnDestroy {
   loadCache() {
     this.data = [];
     this.app.$collection.init();
-    this.app.$collection.cache().forEach((value, key, index) => {
+    Reative.storage.forEach((value, key, index) => {
       const className = `cache-tree-${index}`;
       const cache: PlayCache = {
         key: key,

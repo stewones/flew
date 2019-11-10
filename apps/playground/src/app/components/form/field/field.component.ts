@@ -26,7 +26,7 @@ import { FieldSelectComponent } from '../field-select/field-select.component';
 export class FieldComponent implements OnInit {
   @Input() data: FormField = <FormField>{};
   @Output() onChange = new EventEmitter<FormFieldChange>();
-  @ViewChild('container', { read: ViewContainerRef })
+  @ViewChild('container', { static: false, read: ViewContainerRef })
   private container: ViewContainerRef;
 
   readonly fieldMapper = {

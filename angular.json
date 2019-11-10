@@ -158,13 +158,13 @@
             ],
             "scripts": [
               {
-                "input": "apps/assets/jsonTreeViewer/app.js"
+                "input": "apps/playground/src/assets/jsonTreeViewer/app.js"
               },
               {
-                "input": "apps/assets/jsonTreeViewer/jsonTree.js"
+                "input": "apps/playground/src/assets/jsonTreeViewer/jsonTree.js"
               },
               {
-                "input": "apps/assets/jsonTreeViewer/jsonTreeViewer.js"
+                "input": "apps/playground/src/assets/jsonTreeViewer/jsonTreeViewer.js"
               }
             ],
             "es5BrowserSupport": true

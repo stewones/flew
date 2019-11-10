@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Config } from '@reative/records';
+import { Reative } from '@reative/records';
 
 @Component({
   selector: 'rr',
@@ -9,6 +9,6 @@ import { Config } from '@reative/records';
 })
 export class AppComponent {
   constructor(http: HttpClient) {
-    // Config.options.connector.http = http;
+    Reative.connector.http = http;
   }
 }
