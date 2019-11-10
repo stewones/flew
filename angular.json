@@ -158,13 +158,13 @@
             ],
             "scripts": [
               {
-                "input": "extra/tailwind/app.js"
+                "input": "apps/rr/assets/jsonTreeViewer/app.js"
               },
               {
-                "input": "extra/tailwind/jsonTree.js"
+                "input": "apps/rr/assets/jsonTreeViewer/jsonTree.js"
               },
               {
-                "input": "extra/tailwind/jsonTreeViewer.js"
+                "input": "apps/rr/assets/jsonTreeViewer/jsonTreeViewer.js"
               }
             ],
             "es5BrowserSupport": true
