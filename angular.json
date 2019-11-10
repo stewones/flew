@@ -126,7 +126,88 @@
         }
       }
     },
-
+    "state": {
+      "root": "libs/state",
+      "sourceRoot": "libs/state/src",
+      "projectType": "library",
+      "prefix": "ft",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/state/tsconfig.lib.json",
+            "project": "libs/state/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/state/tsconfig.lib.json",
+              "libs/state/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/state/jest.config.js",
+            "tsConfig": "libs/state/tsconfig.spec.json",
+            "setupFile": "libs/state/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "firebase": {
+      "root": "libs/firebase",
+      "sourceRoot": "libs/firebase/src",
+      "projectType": "library",
+      "prefix": "ft",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/firebase/tsconfig.lib.json",
+            "project": "libs/firebase/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/firebase/tsconfig.lib.json",
+              "libs/firebase/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/firebase/jest.config.js",
+            "tsConfig": "libs/firebase/tsconfig.spec.json",
+            "setupFile": "libs/firebase/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    },
     "playground": {
       "root": "apps/playground/",
       "sourceRoot": "apps/playground/src",
@@ -229,33 +310,6 @@
             "jestConfig": "apps/playground/jest.config.js",
             "tsConfig": "apps/playground/tsconfig.spec.json",
             "setupFile": "apps/playground/src/test-setup.ts"
-          }
-        }
-      }
-    },
-    "playground-e2e": {
-      "root": "apps/playground-e2e",
-      "projectType": "application",
-      "prefix": "",
-      "architect": {
-        "e2e": {
-          "builder": "@nrwl/builders:cypress",
-          "options": {
-            "cypressConfig": "apps/playground-e2e/cypress.json",
-            "tsConfig": "apps/playground-e2e/tsconfig.e2e.json",
-            "devServerTarget": "playground:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "playground:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "apps/playground-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -374,85 +428,96 @@
         }
       }
     },
-    "state": {
-      "root": "libs/state",
-      "sourceRoot": "libs/state/src",
-      "projectType": "library",
-      "prefix": "ft",
+    "todo": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/todo",
+      "sourceRoot": "apps/todo/src",
+      "prefix": "reative",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "tsConfig": "libs/state/tsconfig.lib.json",
-            "project": "libs/state/ng-package.json"
+            "outputPath": "dist/apps/todo",
+            "index": "apps/todo/src/index.html",
+            "main": "apps/todo/src/main.ts",
+            "polyfills": "apps/todo/src/polyfills.ts",
+            "tsConfig": "apps/todo/tsconfig.app.json",
+            "aot": true,
+            "assets": ["apps/todo/src/favicon.ico", "apps/todo/src/assets"],
+            "styles": ["apps/todo/src/styles.scss"],
+            "scripts": []
           },
           "configurations": {
-            "production": {}
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/todo/src/environments/environment.ts",
+                  "with": "apps/todo/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "todo:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "todo:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "todo:build"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/state/tsconfig.lib.json",
-              "libs/state/tsconfig.spec.json"
+              "apps/todo/tsconfig.app.json",
+              "apps/todo/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "!apps/todo/**"]
           }
         },
         "test": {
-          "builder": "@nrwl/builders:jest",
+          "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/state/jest.config.js",
-            "tsConfig": "libs/state/tsconfig.spec.json",
-            "setupFile": "libs/state/src/test-setup.ts"
+            "jestConfig": "apps/todo/jest.config.js",
+            "tsConfig": "apps/todo/tsconfig.spec.json",
+            "setupFile": "apps/todo/src/test-setup.ts"
           }
-        }
-      },
-      "schematics": {
-        "@nrwl/schematics:component": {
-          "styleext": "scss"
-        }
-      }
-    },
-    "firebase": {
-      "root": "libs/firebase",
-      "sourceRoot": "libs/firebase/src",
-      "projectType": "library",
-      "prefix": "ft",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "libs/firebase/tsconfig.lib.json",
-            "project": "libs/firebase/ng-package.json"
-          },
-          "configurations": {
-            "production": {}
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/firebase/tsconfig.lib.json",
-              "libs/firebase/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/builders:jest",
-          "options": {
-            "jestConfig": "libs/firebase/jest.config.js",
-            "tsConfig": "libs/firebase/tsconfig.spec.json",
-            "setupFile": "libs/firebase/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/schematics:component": {
-          "styleext": "scss"
         }
       }
     }
@@ -476,6 +541,13 @@
     },
     "@ionic/angular-toolkit:page": {
       "styleext": "scss"
+    },
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "none"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
     }
   },
   "defaultProject": "firetask"
