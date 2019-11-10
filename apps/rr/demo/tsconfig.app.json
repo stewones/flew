@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "../../../dist/out-tsc/apps/rr/demo",
-    "types": ["node"]
-  },
-  "exclude": ["src/test-setup.ts", "**/*.spec.ts"],
-  "include": ["**/*.ts"]
-}
