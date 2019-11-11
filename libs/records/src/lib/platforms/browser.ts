@@ -1,7 +1,6 @@
 // tslint:disable
 import {
   isEmpty,
-  isEqual,
   merge,
   isFunction,
   isBoolean,
@@ -20,10 +19,8 @@ import {
   shouldTransformResponse
 } from '../utils/response';
 import { Chain } from '../interfaces/chain';
-import * as differential from '../utils/diff';
 import { take } from 'rxjs/operators';
-
-const deepDiff = differential.diff;
+import { diff } from '../utils/diff';
 
 export class PlatformBrowser extends Records {
   /**
@@ -144,7 +141,7 @@ export class PlatformBrowser extends Records {
             response => {
               this.getCurrentState$(key)
                 .pipe(take(1))
-                .subscribe(stateData => {
+                .subscribe((stateData: Response) => {
                   const networkData: Response = cloneDeep(response);
                   if (this.isDifferent(chain, key, stateData, networkData)) {
                     //
@@ -159,6 +156,7 @@ export class PlatformBrowser extends Records {
 
                     this.dispatch(observer, networkData, chain);
                     this.setCache(chain, key, networkData);
+
                     this.log().info()(`${key} dispatch from network$`);
                   }
                   if (!['on'].includes(verb)) {
@@ -281,7 +279,7 @@ export class PlatformBrowser extends Records {
     const diffFn = isCustomDiff
       ? chain.diff
       : (c, n) =>
-          !isEqual(clearNetworkResponse(c), clearNetworkResponse(n)) ||
+          !isEmpty(diff(clearNetworkResponse(c), clearNetworkResponse(n))) ||
           isEmpty(_cache) ||
           isEmpty(_network);
 
@@ -296,7 +294,7 @@ export class PlatformBrowser extends Records {
       if (this.log().enabled())
         console.log(
           `${key} [diff] deep data difference between them`,
-          deepDiff(clearNetworkResponse(_cache), clearNetworkResponse(_network))
+          diff(clearNetworkResponse(_cache), clearNetworkResponse(_network))
         );
     }
 
@@ -327,7 +325,7 @@ export class PlatformBrowser extends Records {
 
     if (!hasStore && !hasStorage) return of();
 
-    const state = hasStore ? Reative.store.get(key) : null;
+    const state: Response = hasStore ? Reative.store.get(key) : null;
 
     return !isEmpty(state)
       ? of(state)
