@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  dbStoreName: 'prod',
+  dbName: 'todo-app'
 };
