@@ -1,4 +1,4 @@
-import { RR_VERSION } from '../../libs/records/src/lib/version';
+import { RR_VERSION } from '../libs/records/src/lib/version';
 import * as fs from 'fs';
 import { LIBS } from './libs';
 import * as shell from 'shelljs';
@@ -10,7 +10,7 @@ export type SemanticTarget = 'major' | 'minor' | 'patch';
 export function bumpRR(target: SemanticTarget = 'patch') {
   newVersion = bumpNumber(RR_VERSION, target);
   fs.writeFile(
-    '../../libs/records/src/lib/version.ts',
+    '../libs/records/src/lib/version.ts',
     `export const RR_VERSION = '${newVersion}';`,
     function(err) {
       if (err) {
@@ -24,14 +24,14 @@ export function bumpRR(target: SemanticTarget = 'patch') {
 
 export function bumpPackages(target: SemanticTarget = 'patch') {
   LIBS.map(libName => {
-    fs.readFile(`../../libs/${libName}/package.json`, 'utf8', function(
+    fs.readFile(`../libs/${libName}/package.json`, 'utf8', function(
       err,
       contents
     ) {
       const pkg = JSON.parse(contents);
       pkg.version = bumpNumber(pkg.version, target);
       fs.writeFile(
-        `../../libs/${libName}/package.json`,
+        `../libs/${libName}/package.json`,
         JSON.stringify(pkg, null, '\t'),
         function(err) {
           if (err) {
@@ -90,7 +90,7 @@ export function bumpNumber(num: string, target: SemanticTarget) {
 export function gitTag() {
   // re-create tag due to standard-version bug
   shell.exec(
-    `cd ../../ && git tag -a v${RR_VERSION} -m "chore(release): ${RR_VERSION}" --force`
+    `cd ../ && git tag -a v${RR_VERSION} -m "chore(release): ${RR_VERSION}" --force`
   );
 }
 
