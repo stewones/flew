@@ -241,7 +241,6 @@ export function setState(
       Reative.storage.set(key, newState);
     } catch (err) {}
   }
-  return Reative.store.set && Reative.store.set(key, newState);
 }
 
 /**
