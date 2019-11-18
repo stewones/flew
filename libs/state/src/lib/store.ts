@@ -236,7 +236,11 @@ export function setState(
 
   //
   // set the new state
-  if (Reative.storage && options.save) Reative.storage.set(key, newState);
+  if (Reative.storage && options.save) {
+    try {
+      Reative.storage.set(key, newState);
+    } catch (err) {}
+  }
   return Reative.store.set && Reative.store.set(key, newState);
 }
 

@@ -1,0 +1,18 @@
+<!-- loading -->
+<!-- <img class="loading" src="/assets/images/loading.svg" [hidden]="!busy" /> -->
+<!-- /loading -->
+<section id="todoapp" [hidden]="busy">
+  <!-- todo header -->
+  <todo-header></todo-header>
+  <!-- /todo header -->
+  <!-- todo content -->
+  <todo-content [(filter)]="filter" [todos]="todos$ | async"></todo-content>
+  <!-- /todo content -->
+  <!-- todo footer -->
+  <todo-footer [(filter)]="filter" [todos]="todos$ | async"></todo-footer>
+  <!-- /todo footer -->
+</section>
+<footer id="info">
+  <p>Press to edit a todo</p>
+  <!-- <p>{{ version }}</p> -->
+</footer>

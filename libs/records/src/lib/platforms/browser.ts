@@ -1,20 +1,26 @@
 // tslint:disable
-import { isEmpty, isEqual, merge, isFunction, isBoolean } from 'lodash';
-import { Observable, from, of, merge as merge$ } from 'rxjs';
-import { map, switchMap, filter, catchError, tap } from 'rxjs/operators';
-import { Options } from '../interfaces/options';
-import { Response } from '../interfaces/response';
-import { Records } from './server';
-import { StorageAdapter } from '../interfaces/storage';
-import { Reative } from '../symbols/reative';
-import { ReativeVerb } from '../interfaces/verb';
+import {
+  isEmpty,
+  merge,
+  isFunction,
+  isBoolean,
+  cloneDeep,
+  isUndefined
+} from "lodash";
+import { Observable, from, of, merge as merge$ } from "rxjs";
+import { Options } from "../interfaces/options";
+import { Response } from "../interfaces/response";
+import { Records } from "./server";
+import { StorageAdapter } from "../interfaces/storage";
+import { Reative } from "../symbols/reative";
+import { ReativeVerb } from "../interfaces/verb";
 import {
   clearNetworkResponse,
   shouldTransformResponse
-} from '../utils/response';
-import { Chain } from '../interfaces/chain';
-import * as differential from '../utils/diff';
-const deepDiff = differential.diff;
+} from "../utils/response";
+import { Chain } from "../interfaces/chain";
+import { take } from "rxjs/operators";
+import { diff } from "../utils/diff";
 
 export class PlatformBrowser extends Records {
   /**
@@ -26,7 +32,6 @@ export class PlatformBrowser extends Records {
 
   constructor(options: Options) {
     super(options);
-
     merge(this, this.clearOptions(options));
   }
 
@@ -38,7 +43,7 @@ export class PlatformBrowser extends Records {
    */
   public clearCache(): void {
     this.init({ driver: this.getDriver() });
-    this.$storage().clear();
+    Reative.storage.clear();
     Reative.store.reset();
   }
 
@@ -54,33 +59,33 @@ export class PlatformBrowser extends Records {
     }
   }
 
-  public get<T>(path: string = ''): Observable<T> {
-    return this.call$('get', path);
+  public get<T>(path: string = ""): Observable<T> {
+    return this.call$("get", path);
   }
 
-  public post<T>(path: string = '', body: any = {}): Observable<T> {
-    return this.call$('post', path, body);
+  public post<T>(path: string = "", body: any = {}): Observable<T> {
+    return this.call$("post", path, body);
   }
 
-  public patch<T>(path: string = '', body: any = {}): Observable<T> {
-    return this.call$('patch', path, body);
+  public patch<T>(path: string = "", body: any = {}): Observable<T> {
+    return this.call$("patch", path, body);
   }
 
   public find<T>(): Observable<T> {
-    return this.call$('find');
+    return this.call$("find");
   }
 
   public findOne<T>(): Observable<T> {
-    return this.call$('findOne');
+    return this.call$("findOne");
   }
 
   public on<T>(): Observable<T> {
-    return this.call$<T>('on');
+    return this.call$<T>("on");
   }
 
   protected call$<T>(
     verb: ReativeVerb,
-    path: string = '',
+    path: string = "",
     payload: any = {}
   ): Observable<T> {
     //
@@ -104,249 +109,167 @@ export class PlatformBrowser extends Records {
     });
 
     //
-    // request
+    // order for response
+    //
+    // 1 - state
+    // 2 - cache
+    // 3 - network
+    //
+    // check for ttl condition, when met it should
+    // only return the response from (state or cache)
+    // rather than request network
+    //
     return new Observable(observer => {
-      this.shouldCallNetwork(chain, key).then(evaluation =>
-        merge$(
-          this.state$(observer, chain, key),
-          this.cache$(observer, chain, key),
-          this.ttl$(evaluation, observer, chain, key),
-          this.network$(evaluation, observer, verb, path, payload, chain, key)
-        ).subscribe()
-      );
+      merge$(
+        this.state$(observer, chain, key).pipe(take(1)),
+        this.cache$(observer, chain, key).pipe(take(1)),
+        this.network$(observer, verb, path, payload, chain, key).pipe(take(1))
+      )
+        .pipe(take(2))
+        .subscribe();
     });
   }
 
-  protected network$<T>(evaluation, observer, verb, path, payload, chain, key) {
-    return of(evaluation).pipe(
-      filter(evaluation => evaluation.now === true),
-      tap(() => this.log().warn()(`${key} [network$] request`)),
-      switchMap(() =>
-        from(this.call<T>(verb, path, payload, chain, key)).pipe(
-          tap(response => this.setCache(verb, chain, key, response, observer)),
-          catchError(err => observer.error(err))
-        )
-      )
-    );
-  }
+  protected network$<T>(observer, verb, path, payload, chain, key) {
+    this.isNetworkAllowed(chain, key).then(allowed => {
+      // console.log(`is network allowed?`, allowed);
+      if (allowed) {
+        this.log().warn()(`${key} network$ request`);
+        from(this.call<T>(verb, path, payload, chain, key))
+          .pipe(take(1))
+          .subscribe(
+            response => {
+              this.getCurrentState$(key)
+                .pipe(take(1))
+                .subscribe((stateData: Response) => {
+                  const networkData: Response = cloneDeep(response);
+                  if (this.isDifferent(chain, key, stateData, networkData)) {
+                    //
+                    // cache strategy
+                    let ttl = chain.ttl || 0;
 
-  protected ttl$<T>(evaluation, observer, chain, key) {
-    return of(evaluation).pipe(
-      map(evaluation => {
-        if (!evaluation.now) {
-          if (evaluation.ttl) {
-            this.log().danger()(`${key} [ttl$] response`);
-          }
-          this.dispatch(observer, evaluation.cache, chain);
+                    if (ttl > 0) {
+                      ttl +=
+                        new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
+                      // increase seconds
+                      networkData.ttl = ttl;
+                    }
+
+                    this.dispatch(observer, networkData, chain);
+                    this.setCache(chain, key, networkData);
+
+                    this.log().info()(`${key} dispatch from network$`);
+                  }
+                  if (!["on"].includes(verb)) {
+                    observer.complete();
+                  }
+                });
+            },
+            err => {
+              observer.error(err);
+              if (!["on"].includes(verb)) {
+                observer.complete();
+              }
+            }
+          );
+      } else {
+        this.log().danger()(`${key} network not allowed. ttl condition met.`);
+        if (!["on"].includes(verb)) {
           observer.complete();
         }
-      })
-    );
+      }
+    });
+    return of();
   }
 
   protected cache$<T>(observer, chain, key) {
-    return from(this.shouldReturnCache(chain, key, observer));
+    const useCache: boolean = chain.useCache === false ? false : true;
+    const useState: boolean = chain.useState === false ? false : true;
+    const stateAvailable = Reative.store.enabled;
+    const cacheAvailable = isFunction(Reative.storage.get);
+    const state: Response = this.getCurrentState(key);
+
+    if ((useState && stateAvailable && !isEmpty(state.data)) || !cacheAvailable)
+      return of();
+
+    if (useCache === false) return of();
+
+    return from(
+      Reative.storage
+        .get(key)
+        .then(cache => {
+          //
+          // return cached response immediately to view
+          if (cache && cache.data) {
+            this.dispatch(observer, cache, chain);
+            this.log().info()(`${key} dispatch from cache$`);
+          }
+        })
+        .catch(err => {
+          this.log().warn()(err);
+        })
+    );
   }
 
   protected state$<T>(observer, chain, key) {
-    return from(this.shouldReturnState(chain, key, observer));
+    const useState = chain.useState === false ? false : true;
+    const hasState = Reative.store.enabled;
+
+    if (useState === false || !hasState) return of();
+
+    const state: Response = this.getCurrentState(key);
+
+    //
+    // return cached response immediately to view
+    // console.log(`state`, state);
+    if (state && state.data) {
+      this.dispatch(observer, state, chain);
+      this.log().info()(`${key} dispatch from state$`);
+    }
+    return of();
   }
 
-  protected shouldCallNetwork(
-    chain: Chain,
-    key: string
-  ): Promise<{ now: boolean; cache?: Response; ttl?: boolean }> {
+  protected isNetworkAllowed(chain: Chain, key: string): Promise<boolean> {
     return new Promise(async resolve => {
-      const useCache: boolean = chain.useCache === false ? false : true;
-      const useState: boolean = chain.useState === false ? false : true;
-      const useNetwork: boolean = chain.useNetwork === false ? false : true;
-
       //
       // check for TTL
       // should not call network
       const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-      let state: any = this.$state(key) || { data: {} };
-      if (isEmpty(state.data)) {
-        state = (await this.$storage().get(key)) || { data: {} };
-      }
+      let state: Response = cloneDeep(
+        await this.getCurrentState$(key).toPromise()
+      ) || { data: {} };
+
+      if (!state.ttl) state.ttl = 0;
+      if (!chain.ttl) chain.ttl = 0;
+
       const hasState = state && !isEmpty(state.data) ? true : false;
-      //
-      // avoid the return of any cache (jump to network request at server level)
-      if ((useCache === false || useState === false) && useNetwork !== false)
-        return resolve({
-          now: true
-        });
+      // console.log(key, hasState, seconds, state.ttl, chain.ttl);
 
-      //
-      // stop network request at server level - case 1
-      if ((useCache || useState) && hasState && useNetwork === false) {
-        this.log().info()(`${key} [shouldCallNetwork] stop request`);
-        return resolve({
-          now: false,
-          cache: state
-        });
+      if (hasState && seconds < state.ttl && chain.ttl > 0) {
+        return resolve(false);
       }
 
-      //
-      // stop network request at server level - case 2
-      if (
-        (useCache || useState) &&
-        (hasState && seconds < state.ttl) &&
-        chain.ttl > 0
-      ) {
-        this.log().info()(`${key} [shouldCallNetwork] stop request due to TTL`);
-
-        return resolve({
-          now: false,
-          ttl: true,
-          cache: state
-        });
-      }
-
-      return resolve({
-        now: true
-      });
+      return resolve(true);
     });
   }
 
-  protected async shouldReturnCache(chain: Chain, key: string, observer) {
-    const useCache: boolean = chain.useCache === false ? false : true;
-    const useState: boolean = chain.useState === false ? false : true;
-    const stateAvailable = Reative.store.enabled;
-    const state: Response = this.$state(key);
-
-    if (useState && stateAvailable && !isEmpty(state)) return Promise.resolve();
-
-    this.log().info()(
-      `${key} [shouldReturnCache] useCache? ${useCache ? true : false}`
-    );
-
-    if (useCache === false) return Promise.resolve();
-
-    const cache: Response & { ttl: number } | any = await this.$storage().get(
-      key
-    );
-
-    this.log().info()(
-      `${key} [shouldReturnCache] hasCache? ${!isEmpty(cache) ? true : false}`
-    );
-
-    this.log().info()(
-      `${key} [shouldReturnCache] transformResponse? ${
-        (chain.transformResponse &&
-          typeof chain.transformResponse === 'function') ||
-        chain.transformData
-          ? true
-          : false
-      }`
-    );
-
-    //
-    // return cached response immediately to view
-    if (useCache && !isEmpty(cache)) {
-      this.dispatch(observer, cache, chain);
-    }
-  }
-
-  protected async shouldReturnState(chain: Chain, key: string, observer) {
-    const useState = chain.useState === false ? false : true;
-    const stateAvailable = Reative.store.enabled;
-
-    if (useState === false || !stateAvailable) return Promise.resolve();
-
-    this.log().info()(
-      `${key} [shouldReturnState] useState? ${useState ? true : false}`
-    );
-
-    const state: Response = this.$state(key);
-
-    this.log().info()(
-      `${key} [shouldReturnState] hasState? ${!isEmpty(state) ? true : false}`
-    );
-    this.log().info()(
-      `${key} [shouldReturnState] transformResponse? ${
-        (chain.transformResponse &&
-          typeof chain.transformResponse === 'function') ||
-        chain.transformData
-          ? true
-          : false
-      }`
-    );
-
-    //
-    // return cached response immediately to view
-    if (useState && !isEmpty(state)) {
-      this.dispatch(observer, state, chain);
-    }
-  }
-
   protected async setCache(
-    verb: ReativeVerb,
     chain: Chain,
     key: string,
-    network: Response & { ttl?: number },
-    observer = { next: data => {}, complete: () => {} }
-  ) {
+    network: Response & { ttl?: number }
+  ): Promise<void> {
     const saveNetwork: boolean = chain.saveNetwork === false ? false : true;
-    const useNetwork: boolean = chain.useNetwork === false ? false : true;
-    const useCache: boolean = chain.useCache === false ? false : true;
-
-    //
-    // should return response immediately
-    if (useNetwork === true && useCache === false) {
-      this.log().warn()(`${key} [setCache] response`);
-      this.dispatch(observer, network, chain);
-    }
-
-    let cache: Response & { ttl?: number } = {};
-
+    const hasStorage = Reative.storage && isFunction(Reative.storage.get);
+    if (!saveNetwork || !hasStorage) return Promise.resolve();
     try {
-      cache = await this.$storage().get(key);
-    } catch (err) {}
-
-    //
-    // cache strategy
-    let ttl = chain.ttl || 0;
-    const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-
-    if (ttl > 0) {
-      ttl += seconds;
-      network.ttl = ttl;
-    }
-
-    if (this.isDifferent(chain, key, cache, network)) {
-      this.log().info()(
-        `${key} [setCache] saveNetwork? ${saveNetwork ? true : false}`
-      );
-
-      if (saveNetwork) {
-        this.$storage().set(key, clearNetworkResponse(network));
-        this.log().warn()(`${key} [setCache] cache updated`);
-      }
-
-      //
-      // return network response
-      if (
-        (useNetwork === true && useCache === true) ||
-        (useNetwork === false && useCache === true)
-      ) {
-        this.log().danger()(
-          `${key} [setCache] response [cache might be outdated]`
-        );
-        this.dispatch(observer, network, chain);
-      }
-    } else {
-      //
-      // edge case: update cache because of ttl
-      if (chain.ttl && cache && !cache.ttl) {
-        if (saveNetwork) {
-          this.$storage().set(key, clearNetworkResponse(network));
-          this.log().warn()(`${key} [setCache] cache updated [ttl]`);
-          Reative.store.sync(network);
-        }
+      Reative.storage.set(key, clearNetworkResponse(network));
+      this.log().warn()(`${key} cache updated`);
+    } catch (err) {
+      this.log().danger()(`${key} unable to save cache`);
+      if (this.log().enabled()) {
+        console.log(err);
       }
     }
-    if (!['on'].includes(verb)) return observer.complete();
   }
 
   private isDifferent(chain, key, cache, network) {
@@ -356,7 +279,10 @@ export class PlatformBrowser extends Records {
     const isCustomDiff = isFunction(chain.diff);
     const diffFn = isCustomDiff
       ? chain.diff
-      : (c, n) => !isEqual(clearNetworkResponse(c), clearNetworkResponse(n));
+      : (c, n) =>
+          !isEmpty(diff(clearNetworkResponse(c), clearNetworkResponse(n))) ||
+          isEmpty(_cache) ||
+          isEmpty(_network);
 
     if (isCustomDiff) {
       this.log().danger()(`${key} [diff] applying a custom function`);
@@ -369,26 +295,50 @@ export class PlatformBrowser extends Records {
       if (this.log().enabled())
         console.log(
           `${key} [diff] deep data difference between them`,
-          deepDiff(clearNetworkResponse(_cache), clearNetworkResponse(_network))
+          diff(clearNetworkResponse(_cache), clearNetworkResponse(_network))
         );
     }
 
-    return isCustomDiff
-      ? diffFn(_cache, _network)
-      : diffFn(_cache, _network) || (isEmpty(_cache) || isEmpty(_network));
+    return diffFn(_cache, _network);
   }
 
-  protected dispatch(observer = { next: data => {} }, data, chain) {
+  protected dispatch(
+    observer = { next: data => {} },
+    data: Response,
+    chain: Chain
+  ) {
+    // console.log(`dispatch`, data);
     const transformResponse: any = shouldTransformResponse(chain, data);
     observer.next(transformResponse(data));
-    Reative.store.sync(data);
+    if (chain.useState || isUndefined(chain.useState)) Reative.store.sync(data);
   }
 
-  protected $storage(): any {
-    return Reative.storage;
+  private getCurrentState(key: string): Response {
+    const hasStore = Reative.store && isFunction(Reative.store.get);
+    if (!hasStore) return null;
+    const state = hasStore ? Reative.store.get(key) : null;
+    return state;
   }
 
-  private $state(key: string) {
-    return Reative.store.get ? Reative.store.get(key) : { data: {} };
+  private getCurrentState$(key: string): Observable<Response> {
+    const hasStore = Reative.store && isFunction(Reative.store.get);
+    const hasStorage = Reative.storage && isFunction(Reative.storage.get);
+
+    if (!hasStore && !hasStorage) return of();
+
+    const state: Response = hasStore ? Reative.store.get(key) : null;
+
+    return !isEmpty(state)
+      ? of(state)
+      : hasStorage
+      ? (from(
+          new Promise((resolve, reject) => {
+            Reative.storage
+              .get(key)
+              .then(r => resolve(r as Observable<Response>))
+              .catch(err => reject(err));
+          })
+        ) as Observable<Response>)
+      : of();
   }
 }

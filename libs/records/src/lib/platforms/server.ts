@@ -632,7 +632,7 @@ export class Records implements ReativeApi {
 
   /**
    * @deprecated
-   * RR wont transform cache before saving it anymore
+   * RR no longer transforms cache before saving
    */
   public transformCache<T>(transformFn: (response: Response) => any): Records {
     return this;

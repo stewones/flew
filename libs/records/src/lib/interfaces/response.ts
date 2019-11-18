@@ -6,4 +6,5 @@ export interface Response<T = any> {
   key?: string | boolean; // key used for cache
   collection?: string;
   driver?: ReativeDriverOption;
+  ttl?: number;
 }
