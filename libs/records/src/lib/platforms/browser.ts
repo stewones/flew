@@ -6,21 +6,21 @@ import {
   isBoolean,
   cloneDeep,
   isUndefined
-} from "lodash";
-import { Observable, from, of, merge as merge$ } from "rxjs";
-import { Options } from "../interfaces/options";
-import { Response } from "../interfaces/response";
-import { Records } from "./server";
-import { StorageAdapter } from "../interfaces/storage";
-import { Reative } from "../symbols/reative";
-import { ReativeVerb } from "../interfaces/verb";
+} from 'lodash';
+import { Observable, from, of, merge as merge$ } from 'rxjs';
+import { Options } from '../interfaces/options';
+import { Response } from '../interfaces/response';
+import { Records } from './server';
+import { StorageAdapter } from '../interfaces/storage';
+import { Reative } from '../symbols/reative';
+import { ReativeVerb } from '../interfaces/verb';
 import {
   clearNetworkResponse,
   shouldTransformResponse
-} from "../utils/response";
-import { Chain } from "../interfaces/chain";
-import { take } from "rxjs/operators";
-import { diff } from "../utils/diff";
+} from '../utils/response';
+import { Chain } from '../interfaces/chain';
+import { take } from 'rxjs/operators';
+import { diff } from '../utils/diff';
 
 export class PlatformBrowser extends Records {
   /**
@@ -59,33 +59,33 @@ export class PlatformBrowser extends Records {
     }
   }
 
-  public get<T>(path: string = ""): Observable<T> {
-    return this.call$("get", path);
+  public get<T>(path: string = ''): Observable<T> {
+    return this.call$('get', path);
   }
 
-  public post<T>(path: string = "", body: any = {}): Observable<T> {
-    return this.call$("post", path, body);
+  public post<T>(path: string = '', body: any = {}): Observable<T> {
+    return this.call$('post', path, body);
   }
 
-  public patch<T>(path: string = "", body: any = {}): Observable<T> {
-    return this.call$("patch", path, body);
+  public patch<T>(path: string = '', body: any = {}): Observable<T> {
+    return this.call$('patch', path, body);
   }
 
   public find<T>(): Observable<T> {
-    return this.call$("find");
+    return this.call$('find');
   }
 
   public findOne<T>(): Observable<T> {
-    return this.call$("findOne");
+    return this.call$('findOne');
   }
 
   public on<T>(): Observable<T> {
-    return this.call$<T>("on");
+    return this.call$<T>('on');
   }
 
   protected call$<T>(
     verb: ReativeVerb,
-    path: string = "",
+    path: string = '',
     payload: any = {}
   ): Observable<T> {
     //
@@ -135,46 +135,42 @@ export class PlatformBrowser extends Records {
       // console.log(`is network allowed?`, allowed);
       if (allowed) {
         this.log().warn()(`${key} network$ request`);
-        from(this.call<T>(verb, path, payload, chain, key))
-          .pipe(take(1))
-          .subscribe(
-            response => {
-              this.getCurrentState$(key)
-                .pipe(take(1))
-                .subscribe((stateData: Response) => {
-                  const networkData: Response = cloneDeep(response);
-                  if (this.isDifferent(chain, key, stateData, networkData)) {
-                    //
-                    // cache strategy
-                    let ttl = chain.ttl || 0;
+        from(this.call<T>(verb, path, payload, chain, key)).subscribe(
+          response => {
+            this.getCurrentState$(key).subscribe((stateData: Response) => {
+              const networkData: Response = cloneDeep(response);
+              if (this.isDifferent(chain, key, stateData, networkData)) {
+                //
+                // cache strategy
+                let ttl = chain.ttl || 0;
 
-                    if (ttl > 0) {
-                      ttl +=
-                        new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-                      // increase seconds
-                      networkData.ttl = ttl;
-                    }
+                if (ttl > 0) {
+                  // increase seconds
+                  ttl += new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
+                  networkData.ttl = ttl;
+                }
 
-                    this.dispatch(observer, networkData, chain);
-                    this.setCache(chain, key, networkData);
+                this.dispatch(observer, networkData, chain);
+                this.setCache(chain, key, networkData);
 
-                    this.log().info()(`${key} dispatch from network$`);
-                  }
-                  if (!["on"].includes(verb)) {
-                    observer.complete();
-                  }
-                });
-            },
-            err => {
-              observer.error(err);
-              if (!["on"].includes(verb)) {
+                this.log().info()(`${key} dispatch from network$`);
+              }
+
+              if (!['on'].includes(verb)) {
                 observer.complete();
               }
+            });
+          },
+          err => {
+            observer.error(err);
+            if (!['on'].includes(verb)) {
+              observer.complete();
             }
-          );
+          }
+        );
       } else {
         this.log().danger()(`${key} network not allowed. ttl condition met.`);
-        if (!["on"].includes(verb)) {
+        if (!['on'].includes(verb)) {
           observer.complete();
         }
       }

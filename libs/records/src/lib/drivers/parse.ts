@@ -1,6 +1,5 @@
 import { Observable, PartialObserver } from 'rxjs';
-import { merge, isEmpty, isArray, isObject, isNil, get } from 'lodash';
-import { Connector } from '../interfaces/connector';
+import { merge, isEmpty, isArray, isObject, isNil } from 'lodash';
 import { Options } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
@@ -265,12 +264,15 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // fire in the hole
-      const getData = async () => {
-        const entries: any[] = await this.connector.find();
-
-        const result = [];
-        for (const item of entries) {
-          result.push(item.toJSON());
+      const getData = async (result?) => {
+        if (isEmpty(result)) {
+          result = [];
+          const entries: any[] = await this.connector.find();
+          for (const item of entries) {
+            result.push(item.toJSON());
+          }
+        } else {
+          result = [result];
         }
         //
         // define standard response
@@ -286,22 +288,41 @@ export class ParseDriver implements ReativeDriver {
         } as Response);
       };
 
-      this.connector.subscribe().then(async handler => {
-        observer.next(await getData());
+      // for test
+      // observer.next({
+      //   data: [{ a: 1 }],
+      //   key: key,
+      //   collection: this.collection,
+      //   driver: this._driver,
+      //   response: {}
+      // } as any);
 
+      // observer.next({
+      //   data: [{ a: 2 }],
+      //   key: key,
+      //   collection: this.collection,
+      //   driver: this._driver,
+      //   response: {}
+      // } as any);
+
+      this.connector.subscribe().then(async handler => {
+        observer.next((await getData()) as T);
         handler.on('create', async object => {
           // console.log(`create`, object);
-          observer.next(await getData());
+          // observer.next((await getData(object.toJSON())) as T);
+          observer.next((await getData()) as T);
         });
 
         handler.on('update', async object => {
-          console.log(`update`, object);
-          observer.next(await getData());
+          // console.log(`update`, object);
+          // observer.next((await getData(object.toJSON())) as T);
+          observer.next((await getData()) as T);
         });
 
         handler.on('delete', async object => {
           // console.log(`delete`, object);
-          observer.next(await getData());
+          // observer.next((await getData(object.toJSON())) as T);
+          observer.next((await getData()) as T);
         });
 
         handler.on('close', () => {
