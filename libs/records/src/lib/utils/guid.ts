@@ -4,6 +4,10 @@
  * @export
  * @class Guid
  */
+
+export function guid(size: number) {
+  return Guid.make(size);
+}
 export class Guid {
   /**
    *
