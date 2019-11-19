@@ -37,7 +37,6 @@ export class Records implements ReativeApi {
 
   private chain: Chain = {};
 
-  private _driver_initialized = {};
   private _driver: ReativeDriverOption = RR_DRIVER;
   private _drivers: {
     firestore: ReativeDriver;
@@ -125,11 +124,6 @@ export class Records implements ReativeApi {
     //
     // configure http client
     this.driverHttpReload(options);
-
-    //
-    // set use cache
-    if (!options.chain) options.chain = {};
-    options.chain.useCache = options.useCache === false ? false : true;
 
     //
     // settings initialized once
@@ -333,7 +327,7 @@ export class Records implements ReativeApi {
   }
 
   protected cloneChain(): Chain {
-    return { ...this.chain };
+    return { ...this._initial_options.chain, ...this.chain };
   }
 
   protected call<T>(
@@ -649,7 +643,6 @@ export class Records implements ReativeApi {
 
   public reboot() {
     this._initialized = false;
-    this._driver_initialized = {};
     this.reset();
     this.init({ driver: RR_DRIVER });
   }

@@ -19,9 +19,10 @@ export interface Options {
 
   //
   // browser
-  useCache?: boolean; // whether or not use cache (works only in browser)
-
-  feed?: boolean; // whether should feed store with cached results
+  useCache?: boolean;
+  useState?: boolean;
+  useNetwork?: boolean;
+  saveNetwork?: boolean;
   persistence?: boolean;
 
   //

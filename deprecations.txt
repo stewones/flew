@@ -1,3 +1,7 @@
 1.4.0
 
 - chain .query should be rewrite to fit in .where clausule since .query is now reserved for any kind of query
+
+1.5.0
+
+- browser platform no longer has `clearCache()`. replace by the pure function `resetCache()` from the `@reative/cache` package

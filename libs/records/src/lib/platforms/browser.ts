@@ -32,31 +32,6 @@ export class PlatformBrowser extends Records {
 
   constructor(options: Options) {
     super(options);
-    merge(this, this.clearOptions(options));
-  }
-
-  /**
-   * Clear browser cache
-   * @deprecated
-   * import the pure function `resetCache`
-   * from cache package
-   */
-  public clearCache(): void {
-    this.init({ driver: this.getDriver() });
-    Reative.storage.clear();
-    Reative.store.reset();
-  }
-
-  public feed() {
-    const storage =
-      !isEmpty(Reative.options) && Reative.storage ? Reative.storage : false;
-    if (storage) {
-      storage.forEach((value, key, index) => {
-        if (value.collection === this.collection) {
-          Reative.store.sync(value);
-        }
-      });
-    }
   }
 
   public get<T>(path: string = ''): Observable<T> {
@@ -139,7 +114,11 @@ export class PlatformBrowser extends Records {
           response => {
             this.getCurrentState$(key).subscribe((stateData: Response) => {
               const networkData: Response = cloneDeep(response);
-              if (this.isDifferent(chain, key, stateData, networkData)) {
+
+              if (
+                this.isDifferent(chain, key, stateData, networkData) ||
+                (!chain.useCache && !chain.useState)
+              ) {
                 //
                 // cache strategy
                 let ttl = chain.ttl || 0;
@@ -169,26 +148,25 @@ export class PlatformBrowser extends Records {
           }
         );
       } else {
-        this.log().danger()(`${key} network not allowed. ttl condition met.`);
-        if (!['on'].includes(verb)) {
-          observer.complete();
-        }
+        this.log().danger()(`${key} network not allowed`);
       }
     });
     return of();
   }
 
   protected cache$<T>(observer, chain, key) {
-    const useCache: boolean = chain.useCache === false ? false : true;
-    const useState: boolean = chain.useState === false ? false : true;
+    const useCache: boolean = chain.useCache;
+    const useState: boolean = chain.useState;
     const stateAvailable = Reative.store.enabled;
     const cacheAvailable = isFunction(Reative.storage.get);
     const state: Response = this.getCurrentState(key);
 
-    if ((useState && stateAvailable && !isEmpty(state.data)) || !cacheAvailable)
+    if (
+      (useState && stateAvailable && !isEmpty(state.data)) ||
+      !cacheAvailable ||
+      useCache === false
+    )
       return of();
-
-    if (useCache === false) return of();
 
     return from(
       Reative.storage
@@ -208,7 +186,7 @@ export class PlatformBrowser extends Records {
   }
 
   protected state$<T>(observer, chain, key) {
-    const useState = chain.useState === false ? false : true;
+    const useState = chain.useState;
     const hasState = Reative.store.enabled;
 
     if (useState === false || !hasState) return of();
@@ -227,6 +205,7 @@ export class PlatformBrowser extends Records {
 
   protected isNetworkAllowed(chain: Chain, key: string): Promise<boolean> {
     return new Promise(async resolve => {
+      if (!chain.useNetwork) return resolve(false);
       //
       // check for TTL
       // should not call network
@@ -242,6 +221,7 @@ export class PlatformBrowser extends Records {
       // console.log(key, hasState, seconds, state.ttl, chain.ttl);
 
       if (hasState && seconds < state.ttl && chain.ttl > 0) {
+        this.log().danger()(`${key} ttl condition met`);
         return resolve(false);
       }
 
