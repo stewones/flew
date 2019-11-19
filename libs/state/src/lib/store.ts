@@ -125,6 +125,7 @@ export function getState$<T = any>(
     response
   );
   const state = transform(response);
+
   return state
     ? of(state)
     : (from(

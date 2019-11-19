@@ -286,7 +286,7 @@ export class PlatformBrowser extends Records {
     // console.log(`dispatch`, data);
     const transformResponse: any = shouldTransformResponse(chain, data);
     observer.next(transformResponse(data));
-    if (chain.useState || isUndefined(chain.useState)) Reative.store.sync(data);
+    if (chain.saveNetwork) Reative.store.sync(data);
   }
 
   private getCurrentState(key: string): Response {
