@@ -23,7 +23,7 @@ export class ParseSetup {
     Parse.masterKey = options.masterKey;
 
     Reative.parse = {
-      model: collection,
+      model: model,
       query: query
     };
   }
@@ -48,7 +48,7 @@ export class ParseModule {
   constructor(private parse: ParseSetup) {}
 }
 
-export function collection(name: string) {
+export function model(name: string) {
   const Entity = Parse.Object.extend(name);
   return new Entity();
 }

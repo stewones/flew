@@ -337,74 +337,92 @@ export class ParseDriver implements ReativeDriver {
     });
   }
 
-  // public set(
-  //   id: string,
-  //   data: any,
-  //   shouldMerge: boolean = true
-  // ): Observable<any> {
-  //   return new Observable(observer => {
-  //     //
-  //     // run exceptions
-  //     this.exceptions();
+  public set(
+    id: string,
+    data: any
+    // shouldMerge: boolean = true
+  ): Observable<any> {
+    return new Observable(observer => {
+      const newData = { ...data };
+      newData.id = id;
 
-  //     //
-  //     // define connector
-  //     const firestore: any = this.connector.collection(this.collection);
-  //     //
-  //     // define return
-  //     const response = r => {
-  //       observer.next(data);
-  //       observer.complete();
-  //     };
-  //     const error = err => {
-  //       observer.error(err);
-  //       observer.complete();
-  //     };
-  //     //
-  //     // call firestore
-  //     firestore
-  //       .doc(id)
-  //       .set(data, { merge: shouldMerge })
-  //       .then(response)
-  //       .catch(error);
-  //   });
-  // }
+      //
+      // auto update timestamp
+      if (this.timestamp) newData.created_at = new Date().toISOString();
 
-  // public update(id: string, data: any): Observable<any> {
-  //   return new Observable(observer => {
-  //     //
-  //     // run exceptions
-  //     this.exceptions();
+      //
+      // run exceptions
+      this.exceptions();
 
-  //     //
-  //     // clone state
-  //     const newData = { ...data };
+      //
+      // define connector
+      this.connector = Reative.parse.model(this.collection);
 
-  //     //
-  //     // define connector
-  //     const firestore: any = this.connector.collection(this.collection);
+      //
+      // define return
+      const response = r => {
+        observer.next(r);
+        observer.complete();
+      };
 
-  //     //
-  //     // auto update timestamp
-  //     if (this.timestamp) newData.updated_at = new Date().toISOString();
+      const error = err => {
+        observer.error(err);
+        observer.complete();
+      };
+      console.log(newData);
+      //
+      // call firestore
+      this.connector
+        .save(newData)
+        .then(response)
+        .catch(error);
+    });
+  }
 
-  //     //
-  //     // define return
-  //     const response = r => {
-  //       observer.next(newData);
-  //       observer.complete();
-  //     };
-  //     const error = err => {
-  //       observer.error(err);
-  //       observer.complete();
-  //     };
-  //     //
-  //     // call firestore
-  //     firestore
-  //       .doc(id)
-  //       .update(newData)
-  //       .then(response)
-  //       .catch(error);
-  //   });
-  // }
+  public update(id: string, data: any): Observable<any> {
+    return new Observable(observer => {
+      //
+      // run exceptions
+      this.exceptions();
+
+      //
+      // define connector
+      const query = Reative.parse.query(this.collection);
+
+      //
+      // clone state
+      const newData = { ...data };
+
+      //
+      // auto update timestamp
+      if (this.timestamp) newData.updated_at = new Date().toISOString();
+
+      //
+      // define return
+      const response = r => {
+        observer.next(newData);
+        observer.complete();
+      };
+      const error = err => {
+        observer.error(err);
+        observer.complete();
+      };
+      //
+      //
+      query
+        .equalTo('id', id)
+        .find()
+        .then((r: any[] = []) => {
+          if (r.length) {
+            for (let k in data) {
+              r[0].set(k, data[k]);
+            }
+            r[0]
+              .save()
+              .then(response)
+              .catch(error);
+          }
+        });
+    });
+  }
 }
