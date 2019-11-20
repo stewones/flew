@@ -10,19 +10,25 @@ import { Chain } from '../interfaces/chain';
 import { Reative } from '../symbols/reative';
 import { subscribe } from '../utils/events';
 import { isFunction } from 'util';
+import { SetOptions } from '../interfaces/api';
 
 export class ParseDriver implements ReativeDriver {
   _driver: ReativeDriverOption = 'parse';
   collection: string;
   timestamp = true;
+  timestampCreated: string;
+  timestampUpdated: string;
   connector: any;
   logger: Logger;
   chain: Chain;
-  skipActions = ['aggregate'];
-  // persistence: boolean;
+  skipOnQuery = ['aggregate'];
 
   constructor(options: Options) {
     merge(this, options);
+
+    this.timestamp = Reative.options.timestamp;
+    this.timestampCreated = Reative.options.timestampCreated;
+    this.timestampUpdated = Reative.options.timestampUpdated;
 
     this.chain = this.chain ? this.chain : {};
   }
@@ -127,7 +133,8 @@ export class ParseDriver implements ReativeDriver {
 
   public find<T>(chain: Chain, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
-      const verb = chain.query['aggregate'] ? 'aggregate' : 'find';
+      const verb =
+        chain.query && chain.query['aggregate'] ? 'aggregate' : 'find';
 
       //
       // run exceptions
@@ -140,7 +147,7 @@ export class ParseDriver implements ReativeDriver {
       //
       // set arbitrary query
       for (const k in chain.query) {
-        if (!this.skipActions.includes(k)) {
+        if (!this.skipOnQuery.includes(k)) {
           const value = chain.query[k];
           if (isFunction(value)) {
             this.connector[k](...value());
@@ -161,6 +168,12 @@ export class ParseDriver implements ReativeDriver {
       //
       // set limit
       if (chain.size) this.limit(chain.size);
+
+      //
+      // set include (pointers, relation, etc)
+      if (chain.fields) {
+        this.connector.include(chain.fields);
+      }
 
       //
       // network handle
@@ -337,18 +350,15 @@ export class ParseDriver implements ReativeDriver {
     });
   }
 
-  public set(
-    id: string,
-    data: any
-    // shouldMerge: boolean = true
-  ): Observable<any> {
+  public set(id: string, data: any, options?: SetOptions): Observable<any> {
     return new Observable(observer => {
       const newData = { ...data };
-      newData.id = id;
 
+      newData[Reative.options.identifier] = id;
       //
       // auto update timestamp
-      if (this.timestamp) newData.created_at = new Date().toISOString();
+      if (this.timestamp)
+        newData[this.timestampCreated] = new Date().toISOString();
 
       //
       // run exceptions
@@ -356,7 +366,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // define connector
-      this.connector = Reative.parse.model(this.collection);
+      const model = Reative.parse.model(this.collection);
 
       //
       // define return
@@ -369,10 +379,10 @@ export class ParseDriver implements ReativeDriver {
         observer.error(err);
         observer.complete();
       };
-      console.log(newData);
+
       //
-      // call firestore
-      this.connector
+      //
+      model
         .save(newData)
         .then(response)
         .catch(error);
@@ -395,7 +405,8 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // auto update timestamp
-      if (this.timestamp) newData.updated_at = new Date().toISOString();
+      if (this.timestamp)
+        newData[this.timestampUpdated] = new Date().toISOString();
 
       //
       // define return
@@ -410,7 +421,7 @@ export class ParseDriver implements ReativeDriver {
       //
       //
       query
-        .equalTo('id', id)
+        .equalTo(Reative.options.identifier, id)
         .find()
         .then((r: any[] = []) => {
           if (r.length) {

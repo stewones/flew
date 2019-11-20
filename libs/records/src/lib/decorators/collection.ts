@@ -28,7 +28,7 @@ export function Collection(options: Options) {
  * @param {Options} options
  * @returns
  */
-export function collection(name: string, options: Options) {
+export function collection(name: string, options: Options = {}) {
   options.name = name;
   const params = init(options);
   return isServer() ? new PlatformServer(params) : new PlatformBrowser(params);

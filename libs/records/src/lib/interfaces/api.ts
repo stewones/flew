@@ -6,6 +6,10 @@ import { Records } from '../platforms/server';
 import { Log } from './log';
 import { Options } from './options';
 
+export interface SetOptions {
+  merge?: boolean;
+}
+
 /**
  * Public RR Api
  */
@@ -52,7 +56,7 @@ export interface ReativeApi {
   // fire verbs
   find();
   findOne();
-  set(id: string, data: any, merge?: boolean);
+  set(id: string, data: any, options?: SetOptions);
   update(id: string, data: any);
   on();
 
@@ -62,6 +66,10 @@ export interface ReativeApi {
   post(path: string, body: any);
   patch(path: string, body: any);
   delete(path: string, body?: any);
+
+  //
+  // parse
+  include(fields: string[]): Records;
 
   //
   // experimental

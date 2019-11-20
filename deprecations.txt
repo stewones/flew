@@ -5,3 +5,11 @@
 1.5.0
 
 - browser platform no longer has `clearCache()`. replace by the pure function `resetCache()` from the `@reative/cache` package
+- `.set()` now receive an object as third param 
+    ```js
+    // before
+    .set(id, data, true)
+
+    // after
+    .set(id, data, { merge: true })
+    ```

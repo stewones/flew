@@ -9,6 +9,7 @@ import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
 import { clearNetworkResponse } from '../utils/response';
 import { Chain } from '../interfaces/chain';
 import { Reative } from '../symbols/reative';
+import { SetOptions } from '../interfaces/api';
 
 export class FirestoreDriver implements ReativeDriver {
   _driver: ReativeDriverOption = 'firestore';
@@ -64,7 +65,9 @@ export class FirestoreDriver implements ReativeDriver {
       query.operator
     ) {
       this.log().success()(
-        `firestore where object -> ${query.field} ${query.operator} ${query.value}`
+        `firestore where object -> ${query.field} ${query.operator} ${
+          query.value
+        }`
       );
       if (!query.value)
         throw new Error(`value can't be null for firestore where`);
@@ -249,7 +252,7 @@ export class FirestoreDriver implements ReativeDriver {
   public set(
     id: string,
     data: any,
-    shouldMerge: boolean = true
+    options: SetOptions = { merge: true }
   ): Observable<any> {
     return new Observable(observer => {
       //
@@ -273,7 +276,7 @@ export class FirestoreDriver implements ReativeDriver {
       // call firestore
       firestore
         .doc(id)
-        .set(data, { merge: shouldMerge })
+        .set(data, { merge: options.merge })
         .then(response)
         .catch(error);
     });

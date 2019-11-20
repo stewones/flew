@@ -21,6 +21,6 @@ export interface Chain {
   doc?: string | number; // firestore `on`
   at?: string | number; // firestore
   after?: string | number; // firestore
-
+  fields?: string[];
   diff?: (fn: (cache: any, network: any) => boolean) => any; // customize rr response behavior
 }

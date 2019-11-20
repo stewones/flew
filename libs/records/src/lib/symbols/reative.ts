@@ -2,6 +2,12 @@ import { Options } from '../interfaces/options';
 import { Observable, of, Subject } from 'rxjs';
 import { StorageAdapter } from '../interfaces/storage';
 import { Connector } from '../interfaces/connector';
+import {
+  RR_DRIVER,
+  RR_IDENTIFIER,
+  RR_TIMESTAMP_CREATED,
+  RR_TIMESTAMP_UPDATED
+} from '../global';
 
 interface ReativeProtocol {
   options: Options;
@@ -23,7 +29,11 @@ interface ReativeProtocol {
 export const Reative: ReativeProtocol = {
   ready$: new Subject(), // experimental
   options: {
-    driver: 'firestore'
+    driver: RR_DRIVER,
+    identifier: RR_IDENTIFIER,
+    timestamp: true,
+    timestampCreated: RR_TIMESTAMP_CREATED,
+    timestampUpdated: RR_TIMESTAMP_UPDATED
   },
   connector: {} as Connector,
   store: {

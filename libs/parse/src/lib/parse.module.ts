@@ -56,3 +56,7 @@ export function model(name: string) {
 export function query(name: string) {
   return new Parse.Query(name);
 }
+
+export function pointer(name: string, id: string) {
+  return new Parse.Object(name).set('id', id);
+}

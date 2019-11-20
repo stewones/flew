@@ -12,7 +12,7 @@ import {
 import { Observable, Subject } from 'rxjs';
 import { Response } from '../interfaces/response';
 import { Options } from '../interfaces/options';
-import { ReativeApi } from '../interfaces/api';
+import { ReativeApi, SetOptions } from '../interfaces/api';
 import { ReativeVerb } from '../interfaces/verb';
 import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
 import { StorageAdapter } from '../interfaces/storage';
@@ -24,7 +24,7 @@ import { FirebaseDriver } from '../drivers/firebase';
 import { ParseDriver } from '../drivers/parse';
 import { HttpDriver } from '../drivers/http';
 import { RR_VERSION } from '../version';
-import { RR_DRIVER } from '../driver';
+import { RR_DRIVER } from '../global';
 import { SHA256 } from '../utils/sha';
 import { Chain } from '../interfaces/chain';
 export class Records implements ReativeApi {
@@ -51,7 +51,6 @@ export class Records implements ReativeApi {
   };
 
   public $log: Subject<Log> = new Subject();
-
   protected logger: Logger; // instance
 
   //
@@ -280,15 +279,11 @@ export class Records implements ReativeApi {
     return this.call<T>('findOne');
   }
 
-  public set(
-    id: string,
-    data: any,
-    shouldMerge: boolean = true
-  ): Observable<any> {
+  public set(id: string, data: any, options?: SetOptions): Observable<any> {
     return this.call('set', null, {
       id: id,
       data: data,
-      shouldMerge: shouldMerge
+      options: options
     });
   }
 
@@ -378,7 +373,7 @@ export class Records implements ReativeApi {
       case 'update':
         arg1 = payload.id;
         arg2 = payload.data;
-        arg3 = payload.shouldMerge;
+        arg3 = payload.options;
         break;
       case 'on':
         arg1 = chain;
@@ -556,6 +551,11 @@ export class Records implements ReativeApi {
 
   public raw(active: boolean): Records {
     this.chain.transformData = !active;
+    return this;
+  }
+
+  public include(fields: string[]): Records {
+    this.chain.fields = fields;
     return this;
   }
 
