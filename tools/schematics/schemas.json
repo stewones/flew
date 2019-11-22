@@ -19,6 +19,12 @@
       "factory": "./collection",
       "description": "Create a Reative service collection",
       "schema": "./collection/schema.json"
+    },
+    "page": {
+      "aliases": ["pg"],
+      "factory": "./page",
+      "description": "Create a Reative page",
+      "schema": "./page/schema.json"
     }
   }
 }
