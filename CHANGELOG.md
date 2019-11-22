@@ -2,6 +2,51 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.3](https://github.com/stewwan/reative/compare/v1.1.0...v1.4.3) (2019-11-22)
+
+
+### Bug Fixes
+
+* **browser:** check for cache service availability ([25b7155](https://github.com/stewwan/reative/commit/25b7155))
+* upgrade firebase and remove ionic from cache module ([62edbf6](https://github.com/stewwan/reative/commit/62edbf6))
+* **browser:** catch setState exceptions ([c240fab](https://github.com/stewwan/reative/commit/c240fab))
+* **browser:** check for state existence ([7ae88e1](https://github.com/stewwan/reative/commit/7ae88e1))
+* **browser:** dispatch ([3665b6e](https://github.com/stewwan/reative/commit/3665b6e))
+* **browser:** improve cache/state logic ([c30e6c0](https://github.com/stewwan/reative/commit/c30e6c0))
+* **browser:** inscrease reliability of observables ([f8ddb2b](https://github.com/stewwan/reative/commit/f8ddb2b))
+* **browser:** make better use of memory and logs ([7f9608e](https://github.com/stewwan/reative/commit/7f9608e))
+* **browser:** memory leaks ([76cb540](https://github.com/stewwan/reative/commit/76cb540))
+* **browser:** replace `super` calls with `this` ([92d469a](https://github.com/stewwan/reative/commit/92d469a))
+* **browser:** state sync should listen for saveNetwork attribute ([7806a96](https://github.com/stewwan/reative/commit/7806a96))
+* **parse:** make `on` verb work with newer browser strategy ([874d987](https://github.com/stewwan/reative/commit/874d987))
+* **rr:** add response type ([1a24d3b](https://github.com/stewwan/reative/commit/1a24d3b))
+* **rr:** store and browser support for ttl ([77ecf43](https://github.com/stewwan/reative/commit/77ecf43))
+* **schematics:** export page schema ([59a477a](https://github.com/stewwan/reative/commit/59a477a))
+* **schematics:** remove unnecessary suffix `-page` from component folder ([0b4130b](https://github.com/stewwan/reative/commit/0b4130b))
+* **state:** feedState with key should use the get method rather loop ([16becd2](https://github.com/stewwan/reative/commit/16becd2))
+* **store:**  value is not iterable ([3835ebc](https://github.com/stewwan/reative/commit/3835ebc))
+* **store:** cant import storage from here ([51c18bf](https://github.com/stewwan/reative/commit/51c18bf))
+* **store:** need to return the state from store lol ([d451cbf](https://github.com/stewwan/reative/commit/d451cbf))
+* **store:** setState was saving cache twice ([3726f2f](https://github.com/stewwan/reative/commit/3726f2f))
+* when observable should be completed for ttl and redundance of diff fn ([25af5dd](https://github.com/stewwan/reative/commit/25af5dd))
+
+
+### Features
+
+* **firestore:** add `at` and `after` to api ([00b1723](https://github.com/stewwan/reative/commit/00b1723))
+* **parse:** add aggregations ([cde7928](https://github.com/stewwan/reative/commit/cde7928))
+* **parse:** add support for `.set` and `.update` ([a4e34bc](https://github.com/stewwan/reative/commit/a4e34bc))
+* **rr:** add pub/sub api ([2716b9b](https://github.com/stewwan/reative/commit/2716b9b))
+* **rr:** export diff function ([d520fa2](https://github.com/stewwan/reative/commit/d520fa2))
+* **schematics:** add page ([92234a9](https://github.com/stewwan/reative/commit/92234a9))
+* **state:** make feedState also accept a key ([246e5fb](https://github.com/stewwan/reative/commit/246e5fb))
+* **state:** make getState also return from cache if needed ([1009945](https://github.com/stewwan/reative/commit/1009945))
+* add pointer for parse, make .set and .update api stable and improve global options ([f56ae7a](https://github.com/stewwan/reative/commit/f56ae7a))
+* **store:** add mutable option to getState ([3cfed3b](https://github.com/stewwan/reative/commit/3cfed3b))
+* **wip:** add parse driver ([b672cde](https://github.com/stewwan/reative/commit/b672cde))
+
+
+
 ### [1.4.2](https://github.com/stewwan/reative/compare/v1.1.0...v1.4.2) (2019-11-22)
 
 ### Bug Fixes
