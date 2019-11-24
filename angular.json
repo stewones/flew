@@ -612,33 +612,6 @@
           }
         }
       }
-    },
-    "rr-parse-e2e": {
-      "root": "apps/rr/parse-e2e",
-      "sourceRoot": "apps/rr/parse-e2e/src",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "apps/rr/parse-e2e/cypress.json",
-            "tsConfig": "apps/rr/parse-e2e/tsconfig.e2e.json",
-            "devServerTarget": "rr-parse:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "rr-parse:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["apps/rr/parse-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/rr/parse-e2e/**"]
-          }
-        }
-      }
     }
   },
   "cli": {
