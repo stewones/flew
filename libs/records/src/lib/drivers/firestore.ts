@@ -250,11 +250,13 @@ export class FirestoreDriver implements ReativeDriver {
   }
 
   public set(
-    id: string,
+    chain: Chain,
     data: any,
     options: SetOptions = { merge: true }
   ): Observable<any> {
     return new Observable(observer => {
+      const id = chain.doc;
+      console.log(chain, options);
       //
       // run exceptions
       this.exceptions();
@@ -282,8 +284,9 @@ export class FirestoreDriver implements ReativeDriver {
     });
   }
 
-  public update(id: string, data: any): Observable<any> {
+  public update(chain: Chain, data: any): Observable<any> {
     return new Observable(observer => {
+      const id = chain.doc;
       //
       // run exceptions
       this.exceptions();

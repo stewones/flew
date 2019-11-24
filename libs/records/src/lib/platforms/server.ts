@@ -279,17 +279,15 @@ export class Records implements ReativeApi {
     return this.call<T>('findOne');
   }
 
-  public set(id: string, data: any, options?: SetOptions): Observable<any> {
+  public set(data: any, options?: SetOptions): Observable<any> {
     return this.call('set', null, {
-      id: id,
       data: data,
       options: options
     });
   }
 
-  public update(id: string, data: any): Observable<any> {
+  public update(data: any): Observable<any> {
     return this.call('update', null, {
-      id: id,
       data: data
     });
   }
@@ -371,7 +369,7 @@ export class Records implements ReativeApi {
         break;
       case 'set':
       case 'update':
-        arg1 = payload.id;
+        arg1 = chain;
         arg2 = payload.data;
         arg3 = payload.options;
         break;

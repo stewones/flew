@@ -56,8 +56,8 @@ export interface ReativeApi {
   // fire verbs
   find();
   findOne();
-  set(id: string, data: any, options?: SetOptions);
-  update(id: string, data: any);
+  set(data: any, options?: SetOptions);
+  update(data: any);
   on();
 
   //

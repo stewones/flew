@@ -5,11 +5,30 @@
 1.5.0
 
 - browser platform no longer has `clearCache()`. replace by the pure function `resetCache()` from the `@reative/cache` package
-- `.set()` now receive an object as third param 
+- `.update()` no longer receives an id as first param. use the chain method `.doc` instead 
+    ```js
+    // before
+    .update(id, data)
+
+    // after
+    .doc(id)
+    .update(data)
+    ```
+- `.set()` no longer receives an id as first param. use the chain method `.doc` instead 
+    ```js
+    // before
+    .set(id, data)
+
+    // after
+    .doc(id)
+    .set(data)
+    ```
+- `.set()` now receives an object as second param rather than a boolean 
     ```js
     // before
     .set(id, data, true)
 
     // after
-    .set(id, data, { merge: true })
+    .doc(id)
+    .set(data, { merge: true })
     ```

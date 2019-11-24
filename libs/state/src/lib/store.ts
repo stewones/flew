@@ -119,12 +119,14 @@ export function getState$<T = any>(
   key: string,
   options: GetStateOptions = { raw: false }
 ): Observable<T> {
-  const response = Reative.store.get && Reative.store.get(key);
-  const transform: any = shouldTransformResponse(
+  const responseFromState = Reative.store.get && Reative.store.get(key);
+  const transformFromState: any = shouldTransformResponse(
     { transformData: !options.raw },
-    response
+    responseFromState
   );
-  const state = transform(response);
+  const state = responseFromState
+    ? transformFromState(responseFromState)
+    : null;
 
   return state
     ? of(state)
@@ -132,7 +134,13 @@ export function getState$<T = any>(
         new Promise((resolve, reject) => {
           Reative.storage
             .get(key)
-            .then(r => resolve(transform(r) as T))
+            .then(responseFromCache => {
+              const transformFromCache: any = shouldTransformResponse(
+                { transformData: !options.raw },
+                responseFromCache
+              );
+              resolve(transformFromCache(responseFromCache) as T);
+            })
             .catch(err => reject(err));
         })
       ) as Observable<T>);

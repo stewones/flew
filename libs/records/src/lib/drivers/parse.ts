@@ -11,6 +11,7 @@ import { Reative } from '../symbols/reative';
 import { subscribe } from '../utils/events';
 import { isFunction } from 'util';
 import { SetOptions } from '../interfaces/api';
+import { guid } from '../utils/guid';
 
 export class ParseDriver implements ReativeDriver {
   _driver: ReativeDriverOption = 'parse';
@@ -350,11 +351,14 @@ export class ParseDriver implements ReativeDriver {
     });
   }
 
-  public set(id: string, data: any, options?: SetOptions): Observable<any> {
+  public set(chain: Chain, data: any, options?: SetOptions): Observable<any> {
     return new Observable(observer => {
+      const id = chain.doc;
       const newData = { ...data };
 
-      newData[Reative.options.identifier] = id;
+      if (id) newData[Reative.options.identifier] = id;
+      else newData[Reative.options.identifier] = guid(3);
+
       //
       // auto update timestamp
       if (this.timestamp)
@@ -389,7 +393,7 @@ export class ParseDriver implements ReativeDriver {
     });
   }
 
-  public update(id: string, data: any): Observable<any> {
+  public update(chain: Chain, data: any): Observable<any> {
     return new Observable(observer => {
       //
       // run exceptions
@@ -421,7 +425,7 @@ export class ParseDriver implements ReativeDriver {
       //
       //
       query
-        .equalTo(Reative.options.identifier, id)
+        .equalTo(Reative.options.identifier, chain.doc)
         .find()
         .then((r: any[] = []) => {
           if (r.length) {

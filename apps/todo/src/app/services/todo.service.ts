@@ -39,7 +39,7 @@ export class TodoService {
 
   save(todo: Todo) {
     if (!todo || !todo.id) throw 'todo object required';
-    return this.$collection.update(todo.id, todo);
+    return this.$collection.doc(todo.id).update(todo);
   }
 
   create(text: string): Observable<Todo> {
@@ -51,7 +51,8 @@ export class TodoService {
       text: text
     };
     this.$collection
-      .set(todo.id, todo)
+      .doc(todo.id)
+      .set(todo)
       .toPromise()
       .catch(err => console.log(err));
     return of(todo);

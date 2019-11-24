@@ -35,6 +35,8 @@ export class Guid {
       ? Guid.s4()
       : size === 2
       ? Guid.s4() + Guid.s4()
+      : size === 3
+      ? Guid.s4() + Guid.s4() + Guid.s4()
       : Guid.s4() +
         Guid.s4() +
         '-' +

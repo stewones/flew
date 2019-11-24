@@ -4,7 +4,7 @@ export const RR_DRIVER = 'firestore';
 // note that if you want to reach higher compatibility
 // among the drivers, it should not collide with existing names
 // like: id, _id or objectId
-export const RR_IDENTIFIER = 'rr_id';
+export const RR_IDENTIFIER = 'doc_id';
 
 //
 // timestamp
