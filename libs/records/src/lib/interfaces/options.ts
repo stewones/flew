@@ -4,7 +4,7 @@ import { Chain } from './chain';
 export interface Options {
   name?: string; // collection name. eg: 'todos'
   collection?: string; // eg: same as name
-  identifier?: string; // default to _id_
+  identifier?: string; // default to doc_id
 
   baseURL?: string; // eg: http://35.102.182.155:9200
   endpoint?: string; // eg: /api

@@ -42,7 +42,7 @@ export const defaultStateOptions: SetStateOptions = {
   merge: true,
   save: true,
   path: 'data',
-  identifier: 'id'
+  identifier: Reative.options.identifier
 };
 
 @Store<StateModel>({
@@ -149,9 +149,9 @@ export function getState$<T = any>(
 export function setState(
   key: string,
   value: any,
-  options_: SetStateOptions = { merge: true, save: true }
+  options: SetStateOptions = {}
 ) {
-  const options = { ...defaultStateOptions, ...options_ };
+  options = { ...defaultStateOptions, ...options };
   const currentState: any = cloneDeep(getState(key, { raw: true })) || {};
   const isElastic = get(currentState, 'data.hits.hits');
   let newState = options.merge
@@ -164,7 +164,7 @@ export function setState(
   if (isElastic) {
     if (options.merge && isObject(value)) {
       const currentStateSource = currentState.data.hits.hits.find(
-        h => h._source.id === value.id
+        h => h._source.id === value[options.identifier]
       );
 
       let newStateHitsHits = [];
@@ -215,10 +215,9 @@ export function setState(
         );
         let newStateData = [];
         if (!isEmpty(newStateHasItem)) {
-          currentStatePath[currentStatePath.indexOf(newStateHasItem)] = {
-            ...newStateHasItem,
-            ...value
-          };
+          currentStatePath[
+            currentStatePath.indexOf(newStateHasItem)
+          ] = Object.assign({}, newStateHasItem, value);
           newStateData = [...currentStatePath];
         } else {
           newStateData = [...currentStatePath, ...[value]];
