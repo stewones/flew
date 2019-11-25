@@ -24,10 +24,12 @@ interface ReativeProtocol {
   ready$: Subject<void>;
   events?: { [key: string]: Subject<any> };
   parse?: any;
+  initialized: { [key: string]: boolean };
 }
 
 export const Reative: ReativeProtocol = {
   ready$: new Subject(), // experimental
+  initialized: {},
   options: {
     driver: RR_DRIVER,
     identifier: RR_IDENTIFIER,
