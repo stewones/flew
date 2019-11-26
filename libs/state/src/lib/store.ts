@@ -6,7 +6,8 @@ import {
   cloneDeep,
   set,
   isArray,
-  isEmpty
+  isEmpty,
+  isEqual
 } from 'lodash';
 import { Reative, Response, shouldTransformResponse } from '@reative/records';
 import { Observable, from, of } from 'rxjs';
@@ -242,14 +243,21 @@ export function setState(
     }
   }
 
+  const stateBefore = getState(key, { raw: true }) || {};
+
+  if (isEqual(stateBefore, newState)) return;
+
   //
-  // set the new state
+  // set cache
   if (Reative.storage && options.save) {
     try {
       Reative.storage.set(key, newState);
     } catch (err) {}
   }
-  return Reative.store.set && Reative.store.set(key, newState);
+
+  //
+  // set state
+  Reative.store.set(key, newState);
 }
 
 /**
