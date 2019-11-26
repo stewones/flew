@@ -1,12 +1,12 @@
 {
-  "name": "@reative/angular",
-  "version": "1.4.3",
-  "peerDependencies": {
-    "@angular/common": "^8.2.0",
-    "@angular/core": "^8.2.0",
-    "@reative/records": "^1.5.0"
-  },
-  "dependencies": {
-    "@reative/records": "^1.5.0"
-  }
+	"name": "@reative/angular",
+	"version": "1.5.0",
+	"peerDependencies": {
+		"@angular/common": "^8.2.0",
+		"@angular/core": "^8.2.0",
+		"@reative/records": "^1.5.0"
+	},
+	"dependencies": {
+		"@reative/records": "^1.5.0"
+	}
 }
