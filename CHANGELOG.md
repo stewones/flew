@@ -20,6 +20,36 @@ collection('Cat', {
   .subscribe(r => console.log(`a random kitty`, r));
 ```
 
+- shipped full support for parse
+
+```ts
+import { collection, pointer } from '@reative/records';
+
+//
+// get user
+const user = await collection('_User')
+  .driver('parse')
+  .find()
+  .toPromise();
+
+//
+// create a task with a relation
+await collection('Task')
+  .driver('parse')
+  .set({
+    name: 'Hello World from Parse',
+    owner: pointer('_User', user.objectId)
+  })
+  .toPromise();
+
+//
+// get tasks
+collection('Task')
+  .driver('parse')
+  .find()
+  .subscribe(tasks => console.log(tasks));
+```
+
 ## Deprecations
 
 - platforms no longer have `clearCache()`. replace by the pure function `resetCache()` from the `@reative/cache` package
