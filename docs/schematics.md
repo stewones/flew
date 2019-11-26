@@ -70,8 +70,7 @@ $ ng g @reative/schematics:container users
 
 Command will create a folder called **users-container** containing this files
 
-{% code-tabs %}
-{% code-tabs-item title="users-container.component.ts" %}
+{% code title="users-container.component.ts" %}
 ```typescript
 import {
   Component,
@@ -102,11 +101,9 @@ export class UsersContainerComponent implements OnInit {
 }
 
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="users-container.module.ts" %}
+{% code title="users-container.module.ts" %}
 ```typescript
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -119,8 +116,7 @@ import { UsersContainerComponent } from './users-container.component';
 })
 export class UsersContainerModule { }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 
 
@@ -134,8 +130,7 @@ $ ng g @reative/schematics:component users
 
 Command will create a folder called **users** containing this files
 
-{% code-tabs %}
-{% code-tabs-item title="users.component.ts" %}
+{% code title="users.component.ts" %}
 ```typescript
 
 import {
@@ -162,11 +157,9 @@ export class UsersComponent implements OnInit {
 }
 
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="users.module.ts" %}
+{% code title="users.module.ts" %}
 ```typescript
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -179,8 +172,7 @@ import { UsersComponent } from './users.component';
 })
 export class UsersModule { }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 
 
@@ -188,8 +180,7 @@ export class UsersModule { }
 
 If you want to avoid typing **@reative/schematics** every time you go to create a new piece, you can just set our schematics as a default collection for cli. You will still be able to use the angular ones. 
 
-{% code-tabs %}
-{% code-tabs-item title="angular.json" %}
+{% code title="angular.json" %}
 ```javascript
 {
     //...
@@ -199,6 +190,5 @@ If you want to avoid typing **@reative/schematics** every time you go to create 
     //...
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

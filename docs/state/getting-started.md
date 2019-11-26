@@ -20,8 +20,7 @@ $ npm i -P @ngxs/store && npm i -P lodash
 
 #### Load Module
 
-{% code-tabs %}
-{% code-tabs-item title="app.module.ts" %}
+{% code title="app.module.ts" %}
 ```typescript
 import { NgxsModule } from '@ngxs/store';
 import { State, StateModule } from '@reative/state';
@@ -42,8 +41,7 @@ import { environment } from '../environments/environment';
 })
 export class AppModule {}
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 #### Freeze Data
 
