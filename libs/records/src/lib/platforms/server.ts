@@ -228,7 +228,7 @@ export class Records implements ReativeApi {
       ...body,
       ...{ path: path },
       ...{ driver: this.options.driver },
-      ...omit(chain, ['ttl', 'key', 'transform'])
+      ...omit(chain, ['ttl', 'key', 'transformResponse', 'diff'])
     });
     const key = `${this.options.collection || 'rr'}:/${this.options.endpoint ||
       ''}${path || ''}/${SHA256(payload)}`;
