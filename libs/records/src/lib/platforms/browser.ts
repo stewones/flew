@@ -211,6 +211,13 @@ export class PlatformBrowser extends Records {
     const saveNetwork: boolean = chain.saveNetwork === false ? false : true;
     const hasStorage = Reative.storage && isFunction(Reative.storage.get);
     if (!saveNetwork || !hasStorage) return Promise.resolve();
+
+    const state: Response = (await this.getCurrentState$(key).toPromise()) || {
+      data: {}
+    };
+
+    if (isEmpty(network) && isEmpty(state.data)) return Promise.resolve();
+
     try {
       Reative.storage.set(key, clearNetworkResponse(network));
       this.log().warn()(`${key} cache updated`);
