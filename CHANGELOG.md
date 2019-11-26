@@ -23,13 +23,14 @@ collection('Cat', {
 - shipped full support for parse
 
 ```ts
-import { collection, pointer } from '@reative/records';
+import { collection } from '@reative/records';
+import { pointer } from '@reative/parse';
 
 //
 // get user
 const user = await collection('_User')
   .driver('parse')
-  .find()
+  .findOne()
   .toPromise();
 
 //
