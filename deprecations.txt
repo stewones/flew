@@ -4,7 +4,9 @@
 
 1.5.0
 
-- browser platform no longer has `clearCache()`. replace by the pure function `resetCache()` from the `@reative/cache` package
+- platforms no longer have `clearCache()`. replace by the pure function `resetCache()` from the `@reative/cache` package
+- platforms no longer have `firestore()` and `firebase()`. import them directly from the `@reative/firebase` package
+- `useLog` has been removed, use the `silent` option instead
 - `.update()` no longer receives an id as first param. use the chain method `.doc` instead 
     ```js
     // before

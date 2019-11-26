@@ -1,4 +1,4 @@
-import { Reative, Options } from '@reative/records';
+import { Reative, ReativeOptions } from '@reative/records';
 
 import {
   NgModule,
@@ -16,7 +16,7 @@ export class ReativeAngularSetup {
 }
 @NgModule()
 export class RecordsModule {
-  public static forRoot(options: Options = {}): ModuleWithProviders {
+  public static forRoot(options: ReativeOptions = {}): ModuleWithProviders {
     return {
       ngModule: RecordsModule,
       providers: [

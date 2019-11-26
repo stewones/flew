@@ -5,9 +5,7 @@ import { Log, LogParams } from '../interfaces/log';
 import { isServer } from './platform';
 
 export class Logger {
-  private useLog: boolean;
-  private useLogTrace: boolean;
-
+  private silent: boolean;
   private subject: Subject<Log> = new Subject();
 
   constructor(params: LogParams) {
@@ -18,63 +16,39 @@ export class Logger {
    * Getter/setter to set active state
    */
   public enabled(active?: boolean): boolean | void {
-    return active || active === false ? (this.useLog = active) : this.useLog;
-  }
-
-  /**
-   * Getter/setter to set trace state
-   */
-  public traced(active?: boolean): boolean | void {
-    return active || active === false
-      ? (this.useLogTrace = active)
-      : this.useLogTrace;
+    return active || active === false ? (this.silent = true) : this.silent;
   }
 
   public success(force?) {
     if (force) return (msg: string) => this.log(msg, this.style('green'));
-    return this.useLogTrace
-      ? this.useLog === false
-        ? msg => {}
-        : msg => this.trace(msg, 'success')
-      : (msg: string) => this.add(msg, 'green');
+    return (msg: string) => this.add(msg, 'green');
   }
 
   public info(force?) {
     if (force) return (msg: string) => this.log(msg, this.style('deepskyblue'));
-    return this.useLogTrace
-      ? this.useLog === false
-        ? msg => {}
-        : msg => this.trace(msg, 'info')
-      : (msg: string) => this.add(msg, 'deepskyblue');
+    return (msg: string) => this.add(msg, 'deepskyblue');
   }
 
   public danger(force?) {
     if (force) return (msg: string) => this.log(msg, this.style('red'));
-    return this.useLogTrace
-      ? this.useLog === false
-        ? msg => {}
-        : msg => this.trace(msg, 'danger')
-      : (msg: string) => this.add(msg, 'red');
+    return (msg: string) => this.add(msg, 'red');
   }
 
   public warn(force?) {
     if (force) return (msg: string) => this.log(msg, this.style('yellow'));
-    return this.useLogTrace
-      ? this.useLog === false
-        ? msg => {}
-        : msg => this.trace(msg, 'warn')
-      : (msg: string) => this.add(msg, 'yellow');
+    return (msg: string) => this.add(msg, 'yellow');
   }
 
   private add(msg: string, bg: string = 'green') {
     const style = this.style(bg);
 
     const log =
-      this.useLogTrace === true
-        ? msg
-        : ` <span style="${style}">${msg}</span> `;
+      // this.useLogTrace === true
+      //   ? msg :
 
-    if (this.useLog === true) {
+      ` <span style="${style}">${msg}</span> `;
+
+    if (!this.silent) {
       if (isServer()) return console.log(msg);
       this.log(msg, style);
       this.subject.next(<Log>{
@@ -84,13 +58,13 @@ export class Logger {
     }
   }
 
-  private trace(msg, type) {
-    if (isServer()) return console.log(msg);
-    console.groupCollapsed(`${type} | ${msg}`);
-    /* tslint:disable */
-    console.trace(msg);
-    console.groupEnd();
-  }
+  // private trace(msg, type) {
+  //   if (isServer()) return console.log(msg);
+  //   console.groupCollapsed(`${type} | ${msg}`);
+  //   /* tslint:disable */
+  //   console.trace(msg);
+  //   console.groupEnd();
+  // }
 
   private log(msg, style) {
     if (isServer()) return console.log(msg);

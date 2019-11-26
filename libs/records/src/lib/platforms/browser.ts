@@ -1,17 +1,9 @@
 // tslint:disable
-import {
-  isEmpty,
-  merge,
-  isFunction,
-  isBoolean,
-  cloneDeep,
-  isUndefined
-} from 'lodash';
-import { Observable, from, of, merge as merge$ } from 'rxjs';
-import { Options } from '../interfaces/options';
+import { isEmpty, isFunction, isBoolean, cloneDeep } from 'lodash';
+import { Observable, from, of, merge } from 'rxjs';
+import { ReativeOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { Records } from './server';
-import { StorageAdapter } from '../interfaces/storage';
 import { Reative } from '../symbols/reative';
 import { ReativeVerb } from '../interfaces/verb';
 import {
@@ -23,14 +15,7 @@ import { take } from 'rxjs/operators';
 import { diff } from '../utils/diff';
 
 export class PlatformBrowser extends Records {
-  /**
-   * Storage Adapter
-   * see ionic storage for reference
-   * https://github.com/ionic-team/ionic-storage/blob/master/src/storage.ts
-   */
-  protected _storage: StorageAdapter;
-
-  constructor(options: Options) {
+  constructor(options: ReativeOptions) {
     super(options);
   }
 
@@ -66,22 +51,11 @@ export class PlatformBrowser extends Records {
     //
     // get attributes
     const key = this.createKey(verb, path, payload);
-    const chain = this.cloneChain();
-    const driver = this.getDriver();
+    const chain = { ...this.chain };
 
     //
-    // set default attr
+    // set default attr @todo move this elsewhere
     if (!isBoolean(chain.transformData)) chain.transformData = true;
-
-    //
-    // reset chain for subsequent calls
-    this.reset();
-
-    //
-    // re-init so we can have access to stuff like `storage`
-    this.init({
-      driver: driver
-    });
 
     //
     // order for response
@@ -95,10 +69,10 @@ export class PlatformBrowser extends Records {
     // rather than request network
     //
     return new Observable(observer => {
-      merge$(
-        this.state$(observer, chain, key).pipe(take(1)),
-        this.cache$(observer, chain, key).pipe(take(1)),
-        this.network$(observer, verb, path, payload, chain, key).pipe(take(1))
+      merge(
+        this.state$(observer, chain, key),
+        this.cache$(observer, chain, key),
+        this.network$(observer, verb, path, payload, chain, key)
       )
         .pipe(take(2))
         .subscribe();
@@ -109,7 +83,7 @@ export class PlatformBrowser extends Records {
     this.isNetworkAllowed(chain, key).then(allowed => {
       // console.log(`is network allowed?`, allowed);
       if (allowed) {
-        this.log().warn()(`${key} network$ request`);
+        this.log().warn()(`${key} network request`);
         from(this.call<T>(verb, path, payload, chain, key)).subscribe(
           response => {
             this.getCurrentState$(key).subscribe((stateData: Response) => {
@@ -132,7 +106,7 @@ export class PlatformBrowser extends Records {
                 this.dispatch(observer, networkData, chain);
                 this.setCache(chain, key, networkData);
 
-                this.log().info()(`${key} dispatch from network$`);
+                this.log().info()(`${key} dispatch from network`);
               }
 
               if (!['on'].includes(verb)) {
@@ -176,7 +150,7 @@ export class PlatformBrowser extends Records {
           // return cached response immediately to view
           if (cache && cache.data) {
             this.dispatch(observer, cache, chain);
-            this.log().info()(`${key} dispatch from cache$`);
+            this.log().info()(`${key} dispatch from cache`);
           }
         })
         .catch(err => {
@@ -198,7 +172,7 @@ export class PlatformBrowser extends Records {
     // console.log(`state`, state);
     if (state && state.data) {
       this.dispatch(observer, state, chain);
-      this.log().info()(`${key} dispatch from state$`);
+      this.log().info()(`${key} dispatch from state`);
     }
     return of();
   }

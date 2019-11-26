@@ -1,7 +1,7 @@
 import { Observable, PartialObserver } from 'rxjs';
-import { merge, isEmpty, isArray, isObject, get } from 'lodash';
-import { Connector } from '../interfaces/connector';
-import { Options } from '../interfaces/options';
+import { isEmpty, isArray, isObject, get } from 'lodash';
+import { ConnectorFirebase } from '../interfaces/connector';
+import { ReativeOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
 import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
@@ -11,19 +11,19 @@ import { Chain } from '../interfaces/chain';
 import { Reative } from '../symbols/reative';
 
 export class FirebaseDriver implements ReativeDriver {
-  _driver: ReativeDriverOption = 'firebase';
-  connector: any;
-  collection: string;
+  driverName: ReativeDriverOption = 'firebase';
+  driverOptions: ReativeOptions;
+  connector: ConnectorFirebase;
   logger: Logger;
 
-  constructor(options: Options) {
-    merge(this, options);
-    const connector: Connector = Reative.connector || ({} as Connector);
-    this.connector = connector.firebase;
+  constructor(options: ReativeOptions) {
+    this.driverOptions = options;
+    this.logger = options.logger;
   }
 
   private exceptions() {
-    if (!this.collection) throw new Error('missing collection');
+    this.connector = Reative.connector.firestore;
+    if (!this.driverOptions.collection) throw new Error('missing collection');
     if (isEmpty(this.connector))
       throw new Error(
         `missing database instance. did you add import 'firebase/database'; to your environment file?`
@@ -42,7 +42,7 @@ export class FirebaseDriver implements ReativeDriver {
 
       //
       // define adapter
-      const path = `${this.collection}/${chain.ref || ''}`;
+      const path = `${this.driverOptions.collection}/${chain.ref || ''}`;
 
       let firebase: any = this.connector.database().ref(path);
 
@@ -60,7 +60,9 @@ export class FirebaseDriver implements ReativeDriver {
         firebase = firebase.orderByChild(chain.where[0].field);
         firebase = firebase.equalTo(chain.where[0].value);
         this.log().success()(
-          `firebase where -> ${chain.where[0].field} ${chain.where[0].operator} ${chain.where[0].value}`
+          `firebase where -> ${chain.where[0].field} ${
+            chain.where[0].operator
+          } ${chain.where[0].value}`
         );
       }
 
@@ -82,8 +84,8 @@ export class FirebaseDriver implements ReativeDriver {
           const response: Response = clearNetworkResponse({
             data: data,
             key: key,
-            collection: this.collection,
-            driver: this._driver,
+            collection: this.driverOptions.collection,
+            driver: this.driverName,
             response: {}
           });
 
@@ -109,8 +111,8 @@ export class FirebaseDriver implements ReativeDriver {
         const response: Response = {
           data: data,
           key: r.key,
-          collection: this.collection,
-          driver: this._driver,
+          collection: this.driverOptions.collection,
+          driver: this.driverName,
           response: r.response
         };
         return response as T;
@@ -126,7 +128,7 @@ export class FirebaseDriver implements ReativeDriver {
 
       //
       // define adapter
-      const path = `${this.collection}/${chain.ref || ''}`;
+      const path = `${this.driverOptions.collection}/${chain.ref || ''}`;
       const firebase: any = this.connector.database().ref(path);
 
       //
@@ -153,8 +155,8 @@ export class FirebaseDriver implements ReativeDriver {
           const response: Response = clearNetworkResponse({
             data: snapshot.val(),
             key: key,
-            collection: this.collection,
-            driver: this._driver,
+            collection: this.driverOptions.collection,
+            driver: this.driverName,
             response: {
               empty: !snapshot.exists(),
               size: snapshot.numChildren()

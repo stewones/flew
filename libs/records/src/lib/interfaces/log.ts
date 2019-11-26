@@ -6,7 +6,6 @@ export interface Log {
 }
 
 export interface LogParams {
-  useLog: boolean;
-  useLogTrace: boolean;
+  silent: boolean;
   subject: Subject<Log>;
 }

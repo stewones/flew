@@ -1,6 +1,6 @@
 import { Observable, PartialObserver } from 'rxjs';
-import { merge, isEmpty, isArray, isObject, isNil } from 'lodash';
-import { Options } from '../interfaces/options';
+import { isEmpty, isArray, isObject, isNil } from 'lodash';
+import { ReativeOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
 import { Logger } from '../utils/logger';
@@ -12,26 +12,18 @@ import { subscribe } from '../utils/events';
 import { isFunction } from 'util';
 import { SetOptions } from '../interfaces/api';
 import { guid } from '../utils/guid';
+import { ConnectorParse } from '../interfaces/connector';
 
 export class ParseDriver implements ReativeDriver {
-  _driver: ReativeDriverOption = 'parse';
-  collection: string;
-  timestamp = true;
-  timestampCreated: string;
-  timestampUpdated: string;
-  connector: any;
+  driverName: ReativeDriverOption = 'parse';
+  driverOptions: ReativeOptions;
+  connector: ConnectorParse;
   logger: Logger;
-  chain: Chain;
   skipOnQuery = ['aggregate'];
 
-  constructor(options: Options) {
-    merge(this, options);
-
-    this.timestamp = Reative.options.timestamp;
-    this.timestampCreated = Reative.options.timestampCreated;
-    this.timestampUpdated = Reative.options.timestampUpdated;
-
-    this.chain = this.chain ? this.chain : {};
+  constructor(options: ReativeOptions) {
+    this.driverOptions = options;
+    this.logger = options.logger;
   }
 
   public log() {
@@ -39,7 +31,8 @@ export class ParseDriver implements ReativeDriver {
   }
 
   private exceptions() {
-    if (!this.collection) throw new Error('missing collection name');
+    if (!this.driverOptions.collection)
+      throw new Error('missing collection name');
   }
 
   protected where(query: any) {
@@ -143,7 +136,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // define adapter
-      this.connector = Reative.parse.query(this.collection);
+      this.connector = Reative.parse.query(this.driverOptions.collection);
 
       //
       // set arbitrary query
@@ -188,8 +181,8 @@ export class ParseDriver implements ReativeDriver {
         const response: Response = clearNetworkResponse({
           data: result,
           key: key,
-          collection: this.collection,
-          driver: this._driver,
+          collection: this.driverOptions.collection,
+          driver: this.driverName,
           response: {
             empty: !result.length,
             size: result.length
@@ -233,8 +226,8 @@ export class ParseDriver implements ReativeDriver {
         const response: Response = <Response>{
           data: r.data && r.data.length ? r.data[0] : {},
           key: r.key,
-          collection: this.collection,
-          driver: this._driver,
+          collection: this.driverOptions.collection,
+          driver: this.driverName,
           response: r.response
         };
 
@@ -251,7 +244,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // define adapter
-      this.connector = Reative.parse.query(this.collection);
+      this.connector = Reative.parse.query(this.driverOptions.collection);
 
       //
       // set arbitrary query
@@ -293,8 +286,8 @@ export class ParseDriver implements ReativeDriver {
         return clearNetworkResponse({
           data: result,
           key: key,
-          collection: this.collection,
-          driver: this._driver,
+          collection: this.driverOptions.collection,
+          driver: this.driverName,
           response: {
             empty: !result.length,
             size: result.length
@@ -307,7 +300,7 @@ export class ParseDriver implements ReativeDriver {
       //   data: [{ a: 1 }],
       //   key: key,
       //   collection: this.collection,
-      //   driver: this._driver,
+      //   driver: this.driverName,
       //   response: {}
       // } as any);
 
@@ -315,7 +308,7 @@ export class ParseDriver implements ReativeDriver {
       //   data: [{ a: 2 }],
       //   key: key,
       //   collection: this.collection,
-      //   driver: this._driver,
+      //   driver: this.driverName,
       //   response: {}
       // } as any);
 
@@ -361,8 +354,8 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // auto update timestamp
-      if (this.timestamp)
-        newData[this.timestampCreated] = new Date().toISOString();
+      if (this.driverOptions.timestamp)
+        newData[this.driverOptions.timestampCreated] = new Date().toISOString();
 
       //
       // run exceptions
@@ -370,7 +363,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // define connector
-      const model = Reative.parse.model(this.collection);
+      const model = Reative.parse.model(this.driverOptions.collection);
 
       //
       // define return
@@ -401,7 +394,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // define connector
-      const query = Reative.parse.query(this.collection);
+      const query = Reative.parse.query(this.driverOptions.collection);
 
       //
       // clone state
@@ -409,8 +402,8 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // auto update timestamp
-      if (this.timestamp)
-        newData[this.timestampUpdated] = new Date().toISOString();
+      if (this.driverOptions.timestamp)
+        newData[this.driverOptions.timestampUpdated] = new Date().toISOString();
 
       //
       // define return

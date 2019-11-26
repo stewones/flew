@@ -37,9 +37,16 @@ export * from './lib/utils/events';
 export { ReativeApi } from './lib/interfaces/api';
 export { ReativeDriver } from './lib/interfaces/driver';
 export { Response } from './lib/interfaces/response';
-export { Options } from './lib/interfaces/options';
+export { ReativeOptions, Options } from './lib/interfaces/options';
 export { Chain } from './lib/interfaces/chain';
-export { Connector } from './lib/interfaces/connector';
+export {
+  Connector,
+  Connectors,
+  ConnectorHttp,
+  ConnectorFirebase,
+  ConnectorFirestore,
+  ConnectorParse
+} from './lib/interfaces/connector';
 export { StorageAdapter } from './lib/interfaces/storage';
 export { Log, LogParams } from './lib/interfaces/log';
 export { ReativeVerb } from './lib/interfaces/verb';

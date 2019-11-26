@@ -1,4 +1,4 @@
-import { Options } from '../interfaces/options';
+import { ReativeOptions } from '../interfaces/options';
 import { Observable, of, Subject } from 'rxjs';
 import { StorageAdapter } from '../interfaces/storage';
 import { Connector } from '../interfaces/connector';
@@ -10,7 +10,7 @@ import {
 } from '../global';
 
 interface ReativeProtocol {
-  options: Options;
+  options: ReativeOptions;
   connector: Connector;
   store?: {
     enabled: boolean;
@@ -21,21 +21,22 @@ interface ReativeProtocol {
     select: <T>(key: string, raw?: boolean) => Observable<T>;
   };
   storage?: StorageAdapter;
-  ready$: Subject<void>;
   events?: { [key: string]: Subject<any> };
-  parse?: any;
-  initialized: { [key: string]: boolean };
+  parse?: any; // some parse utilities
 }
 
 export const Reative: ReativeProtocol = {
-  ready$: new Subject(), // experimental
-  initialized: {},
   options: {
     driver: RR_DRIVER,
     identifier: RR_IDENTIFIER,
     timestamp: true,
     timestampCreated: RR_TIMESTAMP_CREATED,
-    timestampUpdated: RR_TIMESTAMP_UPDATED
+    timestampUpdated: RR_TIMESTAMP_UPDATED,
+    httpConfig: {
+      timeout: 60 * 1000,
+      baseURL: '',
+      headers: {}
+    }
   },
   connector: {} as Connector,
   store: {

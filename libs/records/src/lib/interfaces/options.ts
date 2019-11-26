@@ -1,13 +1,15 @@
 import { ReativeDriverOption } from './driver';
-import { Chain } from './chain';
+import { AxiosRequestConfig } from 'axios';
+import { Logger } from '../utils/logger';
 
-export interface Options {
+export interface ReativeOptions {
   name?: string; // collection name. eg: 'todos'
   collection?: string; // eg: same as name
   identifier?: string; // default to doc_id
 
   baseURL?: string; // eg: http://35.102.182.155:9200
   endpoint?: string; // eg: /api
+  httpConfig?: AxiosRequestConfig;
 
   driver?: ReativeDriverOption;
   timestamp?: boolean; // whether or not to add created/updated automatically
@@ -15,8 +17,7 @@ export interface Options {
   timestampUpdated?: string; // field name
 
   silent?: boolean; // controls whether or not show internal logs
-  useLog?: boolean; // @deprecated use `silent` instead
-  useLogTrace?: boolean; // @experimental `silent` must be off
+  logger?: Logger;
 
   //
   // browser
@@ -25,8 +26,10 @@ export interface Options {
   useNetwork?: boolean;
   saveNetwork?: boolean;
   persistence?: boolean;
-
-  //
-  // for internal initializations
-  chain?: Chain;
 }
+
+/**
+ * @deprecated
+ * use ReativeOptions instead
+ */
+export interface Options extends ReativeOptions {}

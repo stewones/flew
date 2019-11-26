@@ -1,7 +1,7 @@
-import { Options } from '../interfaces/options';
-import { isEmpty, isBoolean } from 'lodash';
+import { ReativeOptions } from '../interfaces/options';
+import { isBoolean } from 'lodash';
 import { isServer } from '../utils/platform';
-import { PlatformServer } from '../platforms/server';
+import { PlatformServer, Records } from '../platforms/server';
 import { PlatformBrowser } from '../platforms/browser';
 
 /**
@@ -11,7 +11,7 @@ import { PlatformBrowser } from '../platforms/browser';
  * @param {Options} options
  * @returns
  */
-export function Collection(options: Options) {
+export function Collection(options: ReativeOptions) {
   const params = init(options);
   return function(constructor: Function) {
     constructor.prototype.$collection = isServer()
@@ -28,7 +28,10 @@ export function Collection(options: Options) {
  * @param {Options} options
  * @returns
  */
-export function collection(name: string, options: Options = {}) {
+export function collection(
+  name: string,
+  options: ReativeOptions = {}
+): Records {
   options.name = name;
   const params = init(options);
   return isServer() ? new PlatformServer(params) : new PlatformBrowser(params);
@@ -40,7 +43,7 @@ export function collection(name: string, options: Options = {}) {
  * @param {Options} options
  * @returns {Options}
  */
-function init(options: Options): Options {
+function init(options: ReativeOptions): ReativeOptions {
   const useCache = isServer()
     ? false
     : isBoolean(options.useCache)
@@ -66,18 +69,11 @@ function init(options: Options): Options {
     : true;
 
   if (options.name) options.collection = options.name;
-  if (!options.chain) options.chain = {};
 
-  options.chain.useCache = useCache;
-  options.chain.useState = useState;
-  options.chain.useNetwork = useNetwork;
-  options.chain.saveNetwork = saveNetwork;
-
-  // to avoid conflicts with public api
-  delete options.useCache;
-  delete options.useState;
-  delete options.useNetwork;
-  delete options.saveNetwork;
+  options.useNetwork = useNetwork;
+  options.saveNetwork = saveNetwork;
+  options.useCache = useCache;
+  options.useState = useState;
 
   return options;
 }

@@ -4,7 +4,7 @@ import { AxiosRequestConfig } from 'axios';
 import { Response } from './response';
 import { Records } from '../platforms/server';
 import { Log } from './log';
-import { Options } from './options';
+import { ReativeOptions } from './options';
 
 export interface SetOptions {
   merge?: boolean;
@@ -14,9 +14,10 @@ export interface SetOptions {
  * Public RR Api
  */
 export interface ReativeApi {
-  //
-  // chained options
-  driver(name?: string): Records; // firebase / firestore / http
+  options: ReativeOptions;
+  reset(): Records; // reset chain and options
+
+  driver(name: string): Records; // firebase / firestore / http
   network(active: boolean): Records; // response using network call
   save(active: boolean): Records; // save response to cache
   ttl(value: number): Records; // set a max time before next network call
@@ -44,13 +45,7 @@ export interface ReativeApi {
   // utils
   $log: Subject<Log>;
   http(transformFn: (config: AxiosRequestConfig) => void): Records;
-  feed(): void; // add response from cache to store
-  init(runtime?: Options): void; // init rr manually
-
-  clearCache(): void; // @todo deprecate and create an exported function from cache package
-  firebase(): any; // firebase instance @todo deprecate and create an exported function from firebase package
-  firestore(): any; // firebase instance @todo deprecate and create an exported function from firebase package
-  storage(): any; // storage instance @todo deprecate and create an exported function from cache package
+  init(runtime?: ReativeOptions): void; // init rr manually
 
   //
   // fire verbs
@@ -70,20 +65,4 @@ export interface ReativeApi {
   //
   // parse
   include(fields: string[]): Records;
-
-  //
-  // experimental
-  reboot(): void; // reload rr initialization
-  reset(): Records;
-  model(): any; // parse object
-
-  //
-  // Legacy @deprecated
-  data(transform: boolean): Records;
-  useCache(active: boolean): Records;
-  useNetwork(active: boolean): Records;
-  saveNetwork(active: boolean): Records;
-  transformNetwork(transformFn: (response: Response) => any): Records;
-  transformCache(transformFn: (response: Response) => any): Records;
-  transformResponse(transformFn: (response: Response) => any): Records;
 }

@@ -1,21 +1,12 @@
 // tslint:disable
 import { AxiosRequestConfig } from 'axios';
-import {
-  merge,
-  isEmpty,
-  isArray,
-  isBoolean,
-  isString,
-  startCase,
-  omit
-} from 'lodash';
+import { isEmpty, isArray, isString, startCase, omit, cloneDeep } from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { Response } from '../interfaces/response';
-import { Options } from '../interfaces/options';
+import { ReativeOptions } from '../interfaces/options';
 import { ReativeApi, SetOptions } from '../interfaces/api';
 import { ReativeVerb } from '../interfaces/verb';
 import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
-import { StorageAdapter } from '../interfaces/storage';
 import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
 import { Reative } from '../symbols/reative';
@@ -24,21 +15,19 @@ import { FirebaseDriver } from '../drivers/firebase';
 import { ParseDriver } from '../drivers/parse';
 import { HttpDriver } from '../drivers/http';
 import { RR_VERSION } from '../version';
-import { RR_DRIVER } from '../global';
+
 import { SHA256 } from '../utils/sha';
 import { Chain } from '../interfaces/chain';
 export class Records implements ReativeApi {
-  protected collection: string;
-  protected endpoint: string;
-  protected _storage: StorageAdapter;
+  chain: Chain = {};
+  options: ReativeOptions;
+  optionsDefault: ReativeOptions;
 
-  private httpConfig: AxiosRequestConfig = {};
   private beforeHttp = (config: AxiosRequestConfig) => {};
 
-  private chain: Chain = {};
-
-  private _driver: ReativeDriverOption = RR_DRIVER;
-  private _drivers: {
+  //
+  // available drivers currently
+  private drivers: {
     firestore: ReativeDriver;
     firebase: ReativeDriver;
     http: ReativeDriver;
@@ -50,13 +39,8 @@ export class Records implements ReativeApi {
     parse: {} as ReativeDriver
   };
 
-  public $log: Subject<Log> = new Subject();
-  protected logger: Logger; // instance
-
-  //
-  // runtime setup
-  private _initial_options: Options = {};
-  private _initialized: boolean;
+  public $log: Subject<Log> = new Subject(); // so external tools can listen for logs
+  protected logger: Logger; // log instance
 
   //
   // verbs
@@ -107,156 +91,97 @@ export class Records implements ReativeApi {
     }
   };
 
-  constructor(options: Options) {
-    this._initial_options = { ...options };
+  protected _initialized: boolean;
+
+  constructor(options: ReativeOptions) {
+    this.init(options);
   }
 
-  public init(runtime: Options = {}) {
+  public init(runtime: ReativeOptions = {}) {
     //
-    // settings that needs runtime evaluation
-    const options: Options & any = { ...this.cloneOptions(), ...runtime };
-
-    if (!this.httpConfig.timeout) this.httpConfig.timeout = 60 * 1000;
-    if (!this.httpConfig.baseURL) this.httpConfig.baseURL = options.baseURL;
-    if (!this.httpConfig.headers) this.httpConfig.headers = {};
-
-    //
-    // configure http client
-    this.driverHttpReload(options);
+    // settings which requires runtime evaluation
+    const options: ReativeOptions = {
+      ...Reative.options,
+      ...runtime
+    };
 
     //
-    // settings initialized once
-    if (this._initialized) return;
+    // http defaults
+    if (!options.httpConfig.timeout) options.httpConfig.timeout = 60 * 1000;
+    if (!options.httpConfig.baseURL)
+      options.httpConfig.baseURL = options.baseURL;
+    if (!options.httpConfig.headers) options.httpConfig.headers = {};
 
     //
-    // configure logger
-    if (!isBoolean(options.useLog)) options.useLog = true;
-    if (!isBoolean(options.useLogTrace)) options.useLogTrace = false;
-    if (!isBoolean(options.silent)) options.useLog = true;
+    // configure http client (needs to be done on every request)
+    // this.httpDriverRefresh(initializedOptions);
 
-    if (options.silent === true) {
-      options.useLog = false;
-      options.useLogTrace = false;
-    }
-
+    //
+    // init logger
     this.logger = new Logger({
       subject: this.$log,
-      useLog: options.useLog,
-      useLogTrace: options.useLogTrace
+      silent: options.silent
     });
 
     //
-    // set default drivers
-    this.driverInit(options);
+    // set drivers
+    this.initDrivers(options);
 
     //
-    // apply class options
-    merge(this, this.clearOptions(options));
+    // log
+    const name = options.collection || options.endpoint;
+
+    this.log().success()(
+      `Reative ${RR_VERSION} Initiated Collection for ${startCase(name)}`
+    );
+
+    //
+    // initialize
+    this.options = cloneDeep(options);
+    this.optionsDefault = cloneDeep(options);
+    this.initChain();
 
     //
     // mark as initialized
     this._initialized = true;
-
-    Reative.ready$.next();
-    Reative.ready$.complete();
-
-    const name = this.collection || this.endpoint;
-
-    this.log().success()(
-      `Collection ${startCase(name)} initiated @ RR ${RR_VERSION}`
-    );
   }
 
-  protected clearOptions(options) {
-    const newOptions = { ...options };
-    delete newOptions.useCache;
-    delete newOptions.useLog;
-    delete newOptions.useLogTrace;
-    delete newOptions.driver;
-    return newOptions;
-  }
-
-  /**
-   * @deprecated
-   * import the pure function `firebase`
-   * from firebase package
-   */
-  public firebase() {
-    return Reative.connector.firebase;
-  }
-
-  /**
-   * @deprecated
-   * import the pure function `firestore`
-   * from firebase package
-   */
-  public firestore() {
-    return Reative.connector.firestore;
-  }
-
-  /**
-   * Clear browser cache
-   * @deprecated
-   * import the pure function `resetCache`
-   * from cache package
-   */
-  public clearCache(): void {}
-
-  /**
-   * Feed store with cached responses
-   */
-  public feed(): void {}
-
-  protected log(): Logger {
-    return this.logger;
-  }
-
-  protected getDriver(): ReativeDriverOption {
-    return this._driver;
-  }
-
-  private _reset(): void {
-    // this.driver(RR_DRIVER);
-    this.chain = {};
-  }
-
-  private cloneOptions() {
-    const consumer: Options = this._initial_options;
-    const general: Options = Reative.options;
-    return { ...general, ...consumer };
-  }
-
-  private driverInit(options: Options) {
-    if (!options.chain) options.chain = {};
-    this._driver = this._initial_options.driver || options.driver || RR_DRIVER;
-    this._drivers = {
+  private initDrivers(options: ReativeOptions) {
+    this.drivers = {
       firestore: new FirestoreDriver({
-        ...{ logger: this.logger },
-        ...options
+        ...options,
+        ...{ logger: this.logger }
       }),
       firebase: new FirebaseDriver({
-        ...{ logger: this.logger },
-        ...options
+        ...options,
+        ...{ logger: this.logger }
       }),
       http: new HttpDriver({
-        ...{ logger: this.logger },
         ...options,
-        ...{ httpConfig: this.httpConfig }
+        ...{ logger: this.logger }
       }),
       parse: new ParseDriver({
-        ...{ logger: this.logger },
         ...options,
-        ...{ httpConfig: this.httpConfig }
+        ...{ logger: this.logger }
       })
     };
   }
 
-  private driverHttpReload(options: Options) {
-    this.beforeHttp(this.httpConfig);
-    this._drivers.http = new HttpDriver({
-      ...{ logger: this.logger },
+  private initChain() {
+    this.chain = {
+      useCache: this.optionsDefault.useCache,
+      useState: this.optionsDefault.useState,
+      useNetwork: this.optionsDefault.useNetwork,
+      saveNetwork: this.optionsDefault.saveNetwork
+    };
+  }
+
+  private httpDriverRefresh() {
+    const options = { ...this.options };
+    this.beforeHttp(options.httpConfig);
+    this.drivers.http = new HttpDriver({
       ...options,
-      ...{ httpConfig: this.httpConfig }
+      ...{ logger: this.logger }
     });
   }
 
@@ -279,14 +204,14 @@ export class Records implements ReativeApi {
     return this.call<T>('findOne');
   }
 
-  public set(data: any, options?: SetOptions): Observable<any> {
+  public set<T>(data: any, options?: SetOptions): Observable<T> {
     return this.call('set', null, {
       data: data,
       options: options
     });
   }
 
-  public update(data: any): Observable<any> {
+  public update<T>(data: any): Observable<T> {
     return this.call('update', null, {
       data: data
     });
@@ -297,41 +222,32 @@ export class Records implements ReativeApi {
   }
 
   protected createKey(verb, path, body): string {
-    const chain = this.cloneChain();
+    const chain = { ...this.chain };
     const payload = JSON.stringify({
       ...verb,
       ...body,
       ...{ path: path },
-      ...{ driver: this._driver },
-      ...omit(chain, [
-        'ttl',
-        'key',
-        'useCache',
-        'useNetwork',
-        'transform',
-        'transformCache',
-        'transformResponse',
-        'transformNetwork'
-      ])
+      ...{ driver: this.options.driver },
+      ...omit(chain, ['ttl', 'key', 'transform'])
     });
-    const key = `${this.collection || 'rr'}:/${this.endpoint || ''}${path ||
-      ''}/${SHA256(payload)}`;
+    const key = `${this.options.collection || 'rr'}:/${this.options.endpoint ||
+      ''}${path || ''}/${SHA256(payload)}`;
     return chain.key || key.split('///').join('//');
-  }
-
-  protected cloneChain(): Chain {
-    return { ...this._initial_options.chain, ...this.chain };
   }
 
   protected call<T>(
     method: ReativeVerb,
     path: string = '',
     payload: any = {},
-    chain = this.cloneChain(),
+    chain = { ...this.chain },
     key: string = ''
   ): Observable<T> {
+    //
+    // configure http client
+    this.httpDriverRefresh();
+
     let _verb = method;
-    let _driver = this.getDriver();
+    let _driver = this.options.driver;
     let arg1, arg2, arg3;
 
     //
@@ -348,16 +264,12 @@ export class Records implements ReativeApi {
     this.getVerbOrException(_driver, _verb);
 
     //
-    // init rr
-    this.init({ driver: _driver });
-
-    //
     // define an unique key
     key = key ? key : this.createKey(_verb, path, payload);
 
     //
     // reset the chain
-    this._reset();
+    this.reset();
 
     //
     // define arguments
@@ -385,7 +297,7 @@ export class Records implements ReativeApi {
 
     //
     // execute request
-    return this._drivers[_driver][_verb]<T>(arg1, arg2, arg3);
+    return this.drivers[_driver][_verb]<T>(arg1, arg2, arg3);
   }
 
   public get<T>(path: string = ''): Observable<T> {
@@ -404,15 +316,9 @@ export class Records implements ReativeApi {
     return this.call<T>('delete', path, body);
   }
 
-  /**
-   * Getter / Setter for the current driver
-   */
-  public driver(name?: ReativeDriverOption): Records {
-    if (name) {
-      this._driver = name;
-      return this;
-    }
-    return this.getDriver() as any;
+  public driver(name: ReativeDriverOption): Records {
+    this.options.driver = name;
+    return this;
   }
 
   public http(fn: (config: AxiosRequestConfig) => void): Records {
@@ -557,92 +463,11 @@ export class Records implements ReativeApi {
     return this;
   }
 
-  /**
-   * @deprecated
-   * use just `save` instead
-   */
-  public saveNetwork(active: boolean): Records {
-    this.save(active);
-    return this;
-  }
-
-  /**
-   * @deprecated use just `transform` instead
-   */
-  public transformResponse<T>(
-    transformFn: (response: Response) => any
-  ): Records {
-    this.transform(transformFn);
-    return this;
-  }
-
-  /**
-   * @deprecated
-   * use `cache` instead
-   */
-  public useCache(active: boolean): Records {
-    this.cache(active);
-    return this;
-  }
-
-  /**
-   * @deprecated use just `transform` instead
-   */
-  public transformNetwork<T>(
-    transformFn: (response: Response) => any
-  ): Records {
-    this.transform(transformFn);
-    return this;
-  }
-
-  /**
-   * @deprecated
-   * use just `network` instead
-   */
-  public useNetwork(active: boolean): Records {
-    this.network(active);
-    return this;
-  }
-
-  /**
-   * @deprecated
-   * import the function `storage`
-   * from @reative/cache
-   */
-  public storage(): StorageAdapter {
-    return Reative.storage || ({} as StorageAdapter);
-  }
-
-  /**
-   * @deprecated now rr should return data formatted properly by default
-   * if you're looking for disable this behavior, just add `.raw(true)` in your chaining
-   */
-  public data(transform: boolean): Records {
-    this.chain.transformData = transform;
-    return this;
-  }
-
-  /**
-   * @deprecated
-   * RR no longer transforms cache before saving
-   */
-  public transformCache<T>(transformFn: (response: Response) => any): Records {
-    return this;
-  }
-
-  /**
-   * experimental
-   */
-
   public reset(): Records {
-    this._reset();
-    return this;
-  }
+    this.options = cloneDeep(this.optionsDefault);
+    this.initChain();
 
-  public reboot() {
-    this._initialized = false;
-    this.reset();
-    this.init({ driver: RR_DRIVER });
+    return this;
   }
 
   public diff(fn): Records {
@@ -650,8 +475,8 @@ export class Records implements ReativeApi {
     return this;
   }
 
-  public model(): any {
-    return Reative.parse.model(this.collection);
+  protected log(): Logger {
+    return this.logger;
   }
 }
 

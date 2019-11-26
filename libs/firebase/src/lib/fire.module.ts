@@ -5,8 +5,7 @@ import * as Firebase from 'firebase/app';
 import {
   Reative,
   FirebaseConnector,
-  FirestoreConnector,
-  Connector
+  FirestoreConnector
 } from '@reative/records';
 
 import {
@@ -15,6 +14,7 @@ import {
   Injectable,
   Inject
 } from '@angular/core';
+import { cloneDeep } from 'lodash';
 
 export interface ReativeFirebaseOptions {
   config: any;
@@ -24,10 +24,10 @@ export interface ReativeFirebaseOptions {
 @Injectable()
 export class ReativeFirebaseSetup {
   constructor(@Inject('ReativeFirebaseOptions') public options) {
-    Reative.connector = {
-      firebase: new FirebaseConnector(Firebase, options.config),
-      firestore: new FirestoreConnector(Firebase, options.config)
-    } as Connector;
+    const connector = cloneDeep(Reative.connector);
+    connector.firebase = new FirebaseConnector(Firebase, options.config);
+    connector.firestore = new FirestoreConnector(Firebase, options.config);
+    Reative.connector = connector;
   }
 }
 

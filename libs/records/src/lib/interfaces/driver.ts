@@ -1,15 +1,15 @@
-import { Connector } from './connector';
 import { Logger } from '../utils/logger';
+import { ReativeOptions } from './options';
+import { Connectors } from './connector';
 
 export type ReativeDriverOption = 'http' | 'firebase' | 'firestore' | 'parse';
 
 //
 // @experimental
 export interface ReativeDriver {
-  _driver: ReativeDriverOption; // driver name used locally
-  connector: Connector;
-  collection: string;
-  timestamp?: boolean; // whether should auto add `updated_at`
+  driverName: ReativeDriverOption; // driver name used locally
+  driverOptions: ReativeOptions;
+  connector: Connectors;
   logger: Logger;
   log(): Logger;
 }
