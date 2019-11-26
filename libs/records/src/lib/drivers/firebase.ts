@@ -22,7 +22,7 @@ export class FirebaseDriver implements ReativeDriver {
   }
 
   private exceptions() {
-    this.connector = Reative.connector.firestore;
+    this.connector = Reative.connector.firebase;
     if (!this.driverOptions.collection) throw new Error('missing collection');
     if (isEmpty(this.connector))
       throw new Error(
