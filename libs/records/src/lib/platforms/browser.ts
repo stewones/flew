@@ -58,6 +58,10 @@ export class PlatformBrowser extends Records {
     if (!isBoolean(chain.transformData)) chain.transformData = true;
 
     //
+    // reset to not mess the chain of subsequent calls
+    this.reset();
+
+    //
     // order for response
     //
     // 1 - state
