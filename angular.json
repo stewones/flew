@@ -208,6 +208,47 @@
         }
       }
     },
+    "parse": {
+      "root": "libs/parse",
+      "sourceRoot": "libs/parse/src",
+      "projectType": "library",
+      "prefix": "ft",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/parse/tsconfig.lib.json",
+            "project": "libs/parse/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/parse/tsconfig.lib.json",
+              "libs/parse/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/builders:jest",
+          "options": {
+            "jestConfig": "libs/parse/jest.config.js",
+            "tsConfig": "libs/parse/tsconfig.spec.json",
+            "setupFile": "libs/parse/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    },
     "playground": {
       "root": "apps/playground/",
       "sourceRoot": "apps/playground/src",
@@ -521,7 +562,7 @@
         }
       }
     },
-    "rr-parse": {
+    "parse-demo": {
       "projectType": "application",
       "schematics": {},
       "root": "apps/rr/parse",

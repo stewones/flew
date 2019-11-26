@@ -4,5 +4,6 @@ export const LIBS = [
   'cache',
   'state',
   'records',
-  'schematics'
+  'schematics',
+  'parse'
 ];
