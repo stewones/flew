@@ -27,6 +27,7 @@ interface ReativeProtocol {
 
 export const Reative: ReativeProtocol = {
   options: {
+    silent: true,
     driver: RR_DRIVER,
     identifier: RR_IDENTIFIER,
     timestamp: true,
