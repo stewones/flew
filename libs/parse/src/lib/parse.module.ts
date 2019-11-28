@@ -58,5 +58,10 @@ export function query(name: string) {
 }
 
 export function pointer(name: string, id: string) {
-  return new Parse.Object(name).set('id', id);
+  const mapping = {
+    User: '_User',
+    Role: '_Role',
+    Session: '_Session'
+  };
+  return new Parse.Object(mapping[name] ? mapping[name] : name).set('id', id);
 }
