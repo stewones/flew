@@ -1,18 +1,18 @@
+import { isArray, isEmpty, isNil, isObject } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
-import { isEmpty, isArray, isObject, isNil } from 'lodash';
-import { ReativeOptions } from '../interfaces/options';
-import { Response } from '../interfaces/response';
 import { map } from 'rxjs/operators';
-import { Logger } from '../utils/logger';
-import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
-import { clearNetworkResponse } from '../utils/response';
-import { Chain } from '../interfaces/chain';
-import { Reative } from '../symbols/reative';
-import { subscribe } from '../utils/events';
 import { isFunction } from 'util';
 import { SetOptions } from '../interfaces/api';
-import { guid } from '../utils/guid';
+import { ChainOptions } from '../interfaces/chain';
 import { ConnectorParse } from '../interfaces/connector';
+import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
+import { ReativeOptions } from '../interfaces/options';
+import { Response } from '../interfaces/response';
+import { Reative } from '../symbols/reative';
+import { subscribe } from '../utils/events';
+import { guid } from '../utils/guid';
+import { Logger } from '../utils/logger';
+import { clearNetworkResponse } from '../utils/response';
 
 export class ParseDriver implements ReativeDriver {
   driverName: ReativeDriverOption = 'parse';
@@ -125,7 +125,7 @@ export class ParseDriver implements ReativeDriver {
     this.connector.limit(limit);
   }
 
-  public find<T>(chain: Chain, key: string): Observable<T> {
+  public find<T>(chain: ChainOptions, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
       const verb =
         chain.query && chain.query['aggregate'] ? 'aggregate' : 'find';
@@ -220,7 +220,7 @@ export class ParseDriver implements ReativeDriver {
     });
   }
 
-  public findOne<T>(chain: Chain, key: string): Observable<T> {
+  public findOne<T>(chain: ChainOptions, key: string): Observable<T> {
     return this.find<T>(chain, key).pipe(
       map((r: Response) => {
         const response: Response = <Response>{
@@ -236,7 +236,7 @@ export class ParseDriver implements ReativeDriver {
     );
   }
 
-  public on<T>(chain: Chain, key: string): Observable<T> {
+  public on<T>(chain: ChainOptions, key: string): Observable<T> {
     return new Observable(observer => {
       //
       // run exceptions
@@ -344,7 +344,11 @@ export class ParseDriver implements ReativeDriver {
     });
   }
 
-  public set(chain: Chain, data: any, options?: SetOptions): Observable<any> {
+  public set(
+    chain: ChainOptions,
+    data: any,
+    options?: SetOptions
+  ): Observable<any> {
     return new Observable(observer => {
       const id = chain.doc;
       const newData = { ...data };
@@ -386,7 +390,7 @@ export class ParseDriver implements ReativeDriver {
     });
   }
 
-  public update(chain: Chain, data: any): Observable<any> {
+  public update(chain: ChainOptions, data: any): Observable<any> {
     return new Observable(observer => {
       //
       // run exceptions

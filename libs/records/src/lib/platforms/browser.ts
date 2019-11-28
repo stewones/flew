@@ -1,18 +1,18 @@
 // tslint:disable
-import { isEmpty, isFunction, isBoolean, cloneDeep } from 'lodash';
-import { Observable, from, of, merge } from 'rxjs';
+import { cloneDeep, isBoolean, isEmpty, isFunction } from 'lodash';
+import { from, merge, Observable, of } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { ChainOptions } from '../interfaces/chain';
 import { ReativeOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
-import { Records } from './server';
-import { Reative } from '../symbols/reative';
 import { ReativeVerb } from '../interfaces/verb';
+import { Reative } from '../symbols/reative';
+import { diff } from '../utils/diff';
 import {
   clearNetworkResponse,
   shouldTransformResponse
 } from '../utils/response';
-import { Chain } from '../interfaces/chain';
-import { take } from 'rxjs/operators';
-import { diff } from '../utils/diff';
+import { Records } from './server';
 
 export class PlatformBrowser extends Records {
   constructor(options: ReativeOptions) {
@@ -181,7 +181,10 @@ export class PlatformBrowser extends Records {
     return of();
   }
 
-  protected isNetworkAllowed(chain: Chain, key: string): Promise<boolean> {
+  protected isNetworkAllowed(
+    chain: ChainOptions,
+    key: string
+  ): Promise<boolean> {
     return new Promise(async resolve => {
       if (!chain.useNetwork) return resolve(false);
       //
@@ -208,7 +211,7 @@ export class PlatformBrowser extends Records {
   }
 
   protected async setCache(
-    chain: Chain,
+    chain: ChainOptions,
     key: string,
     network: Response & { ttl?: number }
   ): Promise<void> {
@@ -266,7 +269,7 @@ export class PlatformBrowser extends Records {
   protected dispatch(
     observer = { next: data => {} },
     data: Response,
-    chain: Chain
+    chain: ChainOptions
   ) {
     // console.log(`dispatch`, data);
     const transformResponse: any = shouldTransformResponse(chain, data);

@@ -1,5 +1,5 @@
 import { omit, get, isFunction } from 'lodash';
-import { Chain } from '../interfaces/chain';
+import { ChainOptions } from '../interfaces/chain';
 import { Response } from '../interfaces/response';
 
 export function clearNetworkResponse(data) {
@@ -13,7 +13,10 @@ export function clearNetworkResponse(data) {
   ]);
 }
 
-export function shouldTransformResponse(chain: Chain, response: Response) {
+export function shouldTransformResponse(
+  chain: ChainOptions,
+  response: Response
+) {
   const customTransform = isFunction(chain.transformResponse);
   let transformResponse: any = customTransform
     ? chain.transformResponse

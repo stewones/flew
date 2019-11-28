@@ -1,32 +1,38 @@
 // tslint:disable
 import { AxiosRequestConfig } from 'axios';
-import { isEmpty, isArray, isString, startCase, omit, cloneDeep } from 'lodash';
+import { cloneDeep, isArray, isEmpty, isString, omit, startCase } from 'lodash';
 import { Observable, Subject } from 'rxjs';
-import { Response } from '../interfaces/response';
-import { ReativeOptions } from '../interfaces/options';
-import { ReativeApi, SetOptions } from '../interfaces/api';
-import { ReativeVerb } from '../interfaces/verb';
-import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
-import { Log } from '../interfaces/log';
-import { Logger } from '../utils/logger';
-import { Reative } from '../symbols/reative';
-import { FirestoreDriver } from '../drivers/firestore';
 import { FirebaseDriver } from '../drivers/firebase';
-import { ParseDriver } from '../drivers/parse';
+import { FirestoreDriver } from '../drivers/firestore';
 import { HttpDriver } from '../drivers/http';
+import { ParseDriver } from '../drivers/parse';
+import { ReativeApi, SetOptions } from '../interfaces/api';
+import { ChainOptions } from '../interfaces/chain';
+import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
+import { Log } from '../interfaces/log';
+import { ReativeOptions } from '../interfaces/options';
+import { Response } from '../interfaces/response';
+import { ReativeVerb } from '../interfaces/verb';
+import { Reative } from '../symbols/reative';
+import { Logger } from '../utils/logger';
+import { SHA256 } from '../utils/sha';
 import { RR_VERSION } from '../version';
 
-import { SHA256 } from '../utils/sha';
-import { Chain } from '../interfaces/chain';
+type ReativeDriverVerbTree = {
+  [key in ReativeDriverOption]: { [key in ReativeVerb]: string | boolean | any }
+};
 export class Records implements ReativeApi {
-  chain: Chain = {};
+  chain: ChainOptions = {};
   options: ReativeOptions;
-  optionsDefault: ReativeOptions;
 
-  private beforeHttp = (config: AxiosRequestConfig) => {};
+  // log instance
+  protected logger: Logger;
+
+  // so external tools can listen for logs
+  public $log: Subject<Log> = new Subject();
 
   //
-  // available drivers currently
+  // available drivers
   private drivers: {
     firestore: ReativeDriver;
     firebase: ReativeDriver;
@@ -39,12 +45,9 @@ export class Records implements ReativeApi {
     parse: {} as ReativeDriver
   };
 
-  public $log: Subject<Log> = new Subject(); // so external tools can listen for logs
-  protected logger: Logger; // log instance
-
   //
-  // verbs
-  private verbs = {
+  // verbs tree
+  private verbs: ReativeDriverVerbTree = {
     firestore: {
       find: true,
       findOne: true,
@@ -91,6 +94,12 @@ export class Records implements ReativeApi {
     }
   };
 
+  //
+  // hook to configure http calls
+  private httpBefore = (config: AxiosRequestConfig) => {};
+
+  //
+  // marks a collection as initialized
   protected _initialized: boolean;
 
   constructor(options: ReativeOptions) {
@@ -106,15 +115,11 @@ export class Records implements ReativeApi {
     };
 
     //
-    // http defaults
+    // enforce http defaults
     if (!options.httpConfig.timeout) options.httpConfig.timeout = 60 * 1000;
     if (!options.httpConfig.baseURL)
       options.httpConfig.baseURL = options.baseURL;
     if (!options.httpConfig.headers) options.httpConfig.headers = {};
-
-    //
-    // configure http client (needs to be done on every request)
-    // this.httpDriverRefresh(initializedOptions);
 
     //
     // init logger
@@ -130,7 +135,6 @@ export class Records implements ReativeApi {
     //
     // log
     const name = options.collection || options.endpoint;
-
     this.log().success()(
       `Reative ${RR_VERSION} Initiated Collection for ${startCase(name)}`
     );
@@ -138,8 +142,7 @@ export class Records implements ReativeApi {
     //
     // initialize
     this.options = cloneDeep(options);
-    this.optionsDefault = cloneDeep(options);
-    this.initChain();
+    this.reset();
 
     //
     // mark as initialized
@@ -167,25 +170,19 @@ export class Records implements ReativeApi {
     };
   }
 
-  private initChain() {
-    this.chain = {
-      useCache: this.optionsDefault.useCache,
-      useState: this.optionsDefault.useState,
-      useNetwork: this.optionsDefault.useNetwork,
-      saveNetwork: this.optionsDefault.saveNetwork
-    };
-  }
-
-  private httpDriverRefresh() {
+  private httpRefresh() {
     const options = { ...this.options };
-    this.beforeHttp(options.httpConfig);
+    this.httpBefore(options.httpConfig);
     this.drivers.http = new HttpDriver({
       ...options,
       ...{ logger: this.logger }
     });
   }
 
-  private getVerbOrException(_driver: string, _verb: string): ReativeVerb {
+  private getVerbOrException(
+    _driver: ReativeDriverOption,
+    _verb: ReativeVerb
+  ): ReativeVerb {
     const msg = `[${_verb}] method unavailable for driver [${_driver}]`;
     try {
       const verb = this.verbs[_driver][_verb];
@@ -223,14 +220,15 @@ export class Records implements ReativeApi {
 
   protected createKey(verb, path, body): string {
     const chain = { ...this.chain };
+    const options = { ...this.options };
     const payload = JSON.stringify({
       ...verb,
       ...body,
       ...{ path: path },
-      ...{ driver: this.options.driver },
+      ...{ driver: chain.driver },
       ...omit(chain, ['ttl', 'key', 'transformResponse', 'diff'])
     });
-    const key = `${this.options.collection || 'rr'}:/${this.options.endpoint ||
+    const key = `${options.collection || 'rr'}:/${options.endpoint ||
       ''}${path || ''}/${SHA256(payload)}`;
     return chain.key || key.split('///').join('//');
   }
@@ -239,15 +237,17 @@ export class Records implements ReativeApi {
     method: ReativeVerb,
     path: string = '',
     payload: any = {},
-    chain = { ...this.chain },
+    chain: ChainOptions = { ...this.chain },
     key: string = ''
   ): Observable<T> {
+    // console.log(method, path, payload, chain, key);
+
     //
     // configure http client
-    this.httpDriverRefresh();
+    this.httpRefresh();
 
     let _verb = method;
-    let _driver = this.options.driver;
+    let _driver = chain.driver;
     let arg1, arg2, arg3;
 
     //
@@ -317,12 +317,12 @@ export class Records implements ReativeApi {
   }
 
   public driver(name: ReativeDriverOption): Records {
-    this.options.driver = name;
+    this.chain.driver = name;
     return this;
   }
 
   public http(fn: (config: AxiosRequestConfig) => void): Records {
-    this.beforeHttp = fn;
+    this.httpBefore = fn;
     return this;
   }
 
@@ -464,8 +464,13 @@ export class Records implements ReativeApi {
   }
 
   public reset(): Records {
-    this.options = cloneDeep(this.optionsDefault);
-    this.initChain();
+    this.chain = {
+      driver: this.options.driver,
+      useCache: this.options.useCache,
+      useState: this.options.useState,
+      useNetwork: this.options.useNetwork,
+      saveNetwork: this.options.saveNetwork
+    };
 
     return this;
   }

@@ -1,14 +1,14 @@
+import { get, isArray, isEmpty, isObject } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
-import { isEmpty, isArray, isObject, get } from 'lodash';
+import { map } from 'rxjs/operators';
+import { ChainOptions } from '../interfaces/chain';
 import { ConnectorFirebase } from '../interfaces/connector';
+import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 import { ReativeOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
-import { map } from 'rxjs/operators';
-import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
-import { clearNetworkResponse } from '../utils/response';
-import { Logger } from '../utils/logger';
-import { Chain } from '../interfaces/chain';
 import { Reative } from '../symbols/reative';
+import { Logger } from '../utils/logger';
+import { clearNetworkResponse } from '../utils/response';
 
 export class FirebaseDriver implements ReativeDriver {
   driverName: ReativeDriverOption = 'firebase';
@@ -34,7 +34,7 @@ export class FirebaseDriver implements ReativeDriver {
     return this.logger;
   }
 
-  public find<T>(chain: Chain, key: string): Observable<T> {
+  public find<T>(chain: ChainOptions, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<any>) => {
       //
       // run exceptions
@@ -104,7 +104,7 @@ export class FirebaseDriver implements ReativeDriver {
     });
   }
 
-  public findOne<T>(chain: Chain, key: string): Observable<T> {
+  public findOne<T>(chain: ChainOptions, key: string): Observable<T> {
     return this.find<T>(chain, key).pipe(
       map((r: Response) => {
         const data = get(r, 'data[0]');
@@ -120,7 +120,7 @@ export class FirebaseDriver implements ReativeDriver {
     );
   }
 
-  public on<T>(chain: Chain, key: string): Observable<T> {
+  public on<T>(chain: ChainOptions, key: string): Observable<T> {
     return new Observable(observer => {
       //
       // run exceptions

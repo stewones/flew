@@ -38,7 +38,7 @@ export { ReativeApi } from './lib/interfaces/api';
 export { ReativeDriver } from './lib/interfaces/driver';
 export { Response } from './lib/interfaces/response';
 export { ReativeOptions, Options } from './lib/interfaces/options';
-export { Chain } from './lib/interfaces/chain';
+export { ChainOptions } from './lib/interfaces/chain';
 export {
   Connector,
   Connectors,

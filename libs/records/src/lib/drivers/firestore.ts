@@ -1,15 +1,15 @@
+import { isArray, isEmpty, isNil, isObject } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
-import { isEmpty, isArray, isObject, isNil } from 'lodash';
+import { map } from 'rxjs/operators';
+import { SetOptions } from '../interfaces/api';
+import { ChainOptions } from '../interfaces/chain';
 import { ConnectorFirestore } from '../interfaces/connector';
+import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 import { ReativeOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
-import { map } from 'rxjs/operators';
-import { Logger } from '../utils/logger';
-import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
-import { clearNetworkResponse } from '../utils/response';
-import { Chain } from '../interfaces/chain';
 import { Reative } from '../symbols/reative';
-import { SetOptions } from '../interfaces/api';
+import { Logger } from '../utils/logger';
+import { clearNetworkResponse } from '../utils/response';
 
 export class FirestoreDriver implements ReativeDriver {
   driverName: ReativeDriverOption = 'firestore';
@@ -93,7 +93,7 @@ export class FirestoreDriver implements ReativeDriver {
     return firestore.limit(limit);
   }
 
-  public find<T>(chain: Chain, key: string): Observable<T> {
+  public find<T>(chain: ChainOptions, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
       //
       // run exceptions
@@ -167,7 +167,7 @@ export class FirestoreDriver implements ReativeDriver {
     });
   }
 
-  public findOne<T>(chain: Chain, key: string): Observable<T> {
+  public findOne<T>(chain: ChainOptions, key: string): Observable<T> {
     return this.find<T>(chain, key).pipe(
       map((r: Response) => {
         const response: Response = <Response>{
@@ -183,7 +183,7 @@ export class FirestoreDriver implements ReativeDriver {
     );
   }
 
-  public on<T>(chain: Chain, key: string): Observable<T> {
+  public on<T>(chain: ChainOptions, key: string): Observable<T> {
     return new Observable(observer => {
       //
       // run exceptions
@@ -251,7 +251,7 @@ export class FirestoreDriver implements ReativeDriver {
   }
 
   public set(
-    chain: Chain,
+    chain: ChainOptions,
     data: any,
     options: SetOptions = { merge: true }
   ): Observable<any> {
@@ -286,7 +286,7 @@ export class FirestoreDriver implements ReativeDriver {
     });
   }
 
-  public update(chain: Chain, data: any): Observable<any> {
+  public update(chain: ChainOptions, data: any): Observable<any> {
     return new Observable(observer => {
       const id = chain.doc;
       //
