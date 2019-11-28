@@ -1,7 +1,3 @@
-# Changelog
-
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
-
 ## [1.6.0](https://github.com/stewwan/reative/compare/v1.5.0...v1.6.0) (2019-11-28)
 
 
