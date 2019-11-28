@@ -2,8 +2,7 @@
 
 By default _RR_ will automatically take care of this. But if you find yourself in a situation where you need, you can manually sync some response into _RR_ internal store.
 
-{% code-tabs %}
-{% code-tabs-item title="sync-state.ts" %}
+{% code title="sync-state.ts" %}
 ```typescript
 import { syncState } from '@reative/state';
 import { Response } from '@reative/records';
@@ -16,8 +15,7 @@ const result:Response = {
 }
 syncState(result);
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 
 

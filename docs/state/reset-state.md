@@ -4,8 +4,7 @@ By default _RR_ will automatically take care of this. But there's some edge case
 
 For that you can just
 
-{% code-tabs %}
-{% code-tabs-item title="reset-state.ts" %}
+{% code title="reset-state.ts" %}
 ```typescript
 import { resetState } from '@reative/state';
 
@@ -13,6 +12,5 @@ import { resetState } from '@reative/state';
 
 resetState();
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
