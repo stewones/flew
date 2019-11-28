@@ -45,6 +45,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "conventional-changelog-cli": "^2.0.21"
+    "conventional-changelog-cli": "^2.0.28"
   }
 }
