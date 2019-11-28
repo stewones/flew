@@ -97,8 +97,6 @@ export function gitTag() {
 export function bump(target: SemanticTarget = 'patch') {
   bumpRR(target);
   bumpPackages(target);
-  // bumpPackage(target);
-  gitTag();
 }
 
 //

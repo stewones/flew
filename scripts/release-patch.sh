@@ -14,7 +14,8 @@
 
 # -- BUMP -- ##
 npm run bump:patch
-npm run changelog:patch
+npm run version:patch
+npm run changelog
 # -- /BUMP -- ##
 
 # -- BUILD -- ##
@@ -31,5 +32,6 @@ npm run git:tag
 npm run deploy:git
 npm run deploy:npm
 # npm run deploy:ci
+
 npm run tada
 git push origin --tags
