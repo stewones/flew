@@ -174,7 +174,9 @@ export class ParseDriver implements ReativeDriver {
       const success = async (data: any[]) => {
         const result = [];
         for (const item of data) {
-          result.push(isFunction(item.toJSON) ? item.toJSON() : item);
+          const entry = isFunction(item.toJSON) ? item.toJSON() : item;
+          entry.id = entry.objectId;
+          result.push(entry);
         }
         //
         // define standard response
@@ -276,7 +278,9 @@ export class ParseDriver implements ReativeDriver {
           result = [];
           const entries: any[] = await this.connector.find();
           for (const item of entries) {
-            result.push(item.toJSON());
+            const entry = isFunction(item.toJSON) ? item.toJSON() : item;
+            entry.id = entry.objectId;
+            result.push(entry);
           }
         } else {
           result = [result];
