@@ -1,6 +1,6 @@
 // tslint:disable
 import { AxiosRequestConfig } from 'axios';
-import { cloneDeep, isArray, isEmpty, isString, omit, startCase } from 'lodash';
+import { isArray, isEmpty, isString, omit, startCase } from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { FirebaseDriver } from '../drivers/firebase';
 import { FirestoreDriver } from '../drivers/firestore';
@@ -98,10 +98,6 @@ export class Records implements ReativeApi {
   // hook to configure http calls
   private httpBefore = (config: AxiosRequestConfig) => {};
 
-  //
-  // marks a collection as initialized
-  protected _initialized: boolean;
-
   constructor(options: ReativeOptions) {
     this.init(options);
   }
@@ -109,17 +105,7 @@ export class Records implements ReativeApi {
   public init(runtime: ReativeOptions = {}) {
     //
     // settings which requires runtime evaluation
-    const options: ReativeOptions = {
-      ...Reative.options,
-      ...runtime
-    };
-
-    //
-    // enforce http defaults
-    if (!options.httpConfig.timeout) options.httpConfig.timeout = 60 * 1000;
-    if (!options.httpConfig.baseURL)
-      options.httpConfig.baseURL = options.baseURL;
-    if (!options.httpConfig.headers) options.httpConfig.headers = {};
+    const options: ReativeOptions = { ...Reative.options, ...runtime };
 
     //
     // init logger
@@ -141,42 +127,37 @@ export class Records implements ReativeApi {
 
     //
     // initialize
-    this.options = cloneDeep(options);
+    this.options = options;
     this.reset();
-
-    //
-    // mark as initialized
-    this._initialized = true;
   }
 
   private initDrivers(options: ReativeOptions) {
+    options.logger = this.logger;
     this.drivers = {
-      firestore: new FirestoreDriver({
-        ...options,
-        ...{ logger: this.logger }
-      }),
-      firebase: new FirebaseDriver({
-        ...options,
-        ...{ logger: this.logger }
-      }),
-      http: new HttpDriver({
-        ...options,
-        ...{ logger: this.logger }
-      }),
-      parse: new ParseDriver({
-        ...options,
-        ...{ logger: this.logger }
-      })
+      firestore: new FirestoreDriver(options),
+      firebase: new FirebaseDriver(options),
+      http: new HttpDriver(options),
+      parse: new ParseDriver(options)
     };
   }
 
-  private httpRefresh() {
-    const options = { ...this.options };
+  private optionsRefresh() {
+    //
+    // evaluate runtime options
+    const options: ReativeOptions = { ...Reative.options, ...this.options };
+
+    //
+    // enforce http defaults
+    if (!options.httpConfig.timeout) options.httpConfig.timeout = 60 * 1000;
+    if (!options.httpConfig.baseURL)
+      options.httpConfig.baseURL = options.baseURL;
+    if (!options.httpConfig.headers) options.httpConfig.headers = {};
+
+    //
+    // run http hook and reconfigure
     this.httpBefore(options.httpConfig);
-    this.drivers.http = new HttpDriver({
-      ...options,
-      ...{ logger: this.logger }
-    });
+    this.drivers.http.configure(options);
+    this.options = options;
   }
 
   private getVerbOrException(
@@ -240,11 +221,11 @@ export class Records implements ReativeApi {
     chain: ChainOptions = { ...this.chain },
     key: string = ''
   ): Observable<T> {
-    // console.log(method, path, payload, chain, key);
-
     //
-    // configure http client
-    this.httpRefresh();
+    // reconfigure http client
+    // to get access on stuff
+    // defined after initialization
+    this.optionsRefresh();
 
     let _verb = method;
     let _driver = chain.driver;
@@ -326,41 +307,26 @@ export class Records implements ReativeApi {
     return this;
   }
 
-  /**
-   * Set whether to use network for first requests
-   */
   public network(active: boolean): Records {
     this.chain.useNetwork = active;
     return this;
   }
 
-  /**
-   * Set whether to cache network responses
-   */
   public save(active: boolean): Records {
     this.chain.saveNetwork = active;
     return this;
   }
 
-  /**
-   * Set a transform fn for the responses
-   */
   public transform<T>(transformFn: (response: Response) => any): Records {
     this.chain.transformResponse = transformFn;
     return this;
   }
 
-  /**
-   * Set cache time to live
-   */
   public ttl(value: number): Records {
     this.chain.ttl = value;
     return this;
   }
 
-  /**
-   * Set whether to use cache for first requests
-   */
   public cache(active: boolean): Records {
     this.chain.useCache = active;
     return this;
@@ -371,25 +337,16 @@ export class Records implements ReativeApi {
     return this;
   }
 
-  /**
-   * Set cache key
-   */
   public key(name: string): Records {
     this.chain.key = name;
     return this;
   }
 
-  /**
-   * Set request query
-   */
   public query(by: { [key: string]: {} } | { [key: string]: {} }[]): Records {
     this.chain.query = by;
     return this;
   }
 
-  /**
-   * Set request where
-   */
   public where(field: string, operator: string, value: any): Records {
     if (!isArray(this.chain.where)) {
       this.chain.where = [];
@@ -402,9 +359,6 @@ export class Records implements ReativeApi {
     return this;
   }
 
-  /**
-   * Set request sort
-   */
   public sort(by: { [key: string]: string }): Records {
     if (isEmpty(this.chain.sort)) {
       this.chain.sort = {};
@@ -416,33 +370,21 @@ export class Records implements ReativeApi {
     return this;
   }
 
-  /**
-   * Set request size
-   */
   public size(value: number): Records {
     this.chain.size = value;
     return this;
   }
 
-  /**
-   * Set request startAt
-   */
   public at(value): Records {
     this.chain.at = value;
     return this;
   }
 
-  /**
-   * Set request startAfter
-   */
   public after(value): Records {
     this.chain.after = value;
     return this;
   }
 
-  /**
-   * Set reference (for firebase)
-   */
   public ref(path: string): Records {
     this.chain.ref = path;
     return this;

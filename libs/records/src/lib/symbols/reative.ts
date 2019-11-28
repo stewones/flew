@@ -1,13 +1,13 @@
-import { ReativeOptions } from '../interfaces/options';
 import { Observable, of, Subject } from 'rxjs';
-import { StorageAdapter } from '../interfaces/storage';
-import { Connector } from '../interfaces/connector';
 import {
   RR_DRIVER,
   RR_IDENTIFIER,
   RR_TIMESTAMP_CREATED,
   RR_TIMESTAMP_UPDATED
 } from '../global';
+import { Connector } from '../interfaces/connector';
+import { ReativeOptions } from '../interfaces/options';
+import { StorageAdapter } from '../interfaces/storage';
 
 interface ReativeProtocol {
   options: ReativeOptions;
@@ -22,7 +22,7 @@ interface ReativeProtocol {
   };
   storage?: StorageAdapter;
   events?: { [key: string]: Subject<any> };
-  parse?: any; // some parse utilities
+  parse?: any;
 }
 
 export const Reative: ReativeProtocol = {

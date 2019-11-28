@@ -1,13 +1,13 @@
 import axios, { AxiosResponse } from 'axios';
-import { Observable, PartialObserver, from } from 'rxjs';
-import { get, isEmpty, isObject } from 'lodash';
+import { get, isObject } from 'lodash';
+import { from, Observable, PartialObserver } from 'rxjs';
 import { ConnectorHttp } from '../interfaces/connector';
+import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 import { ReativeOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
-import { Logger } from '../utils/logger';
-import { ReativeDriverOption, ReativeDriver } from '../interfaces/driver';
-import { clearNetworkResponse } from '../utils/response';
 import { Reative } from '../symbols/reative';
+import { Logger } from '../utils/logger';
+import { clearNetworkResponse } from '../utils/response';
 
 export class HttpDriver implements ReativeDriver {
   driverName: ReativeDriverOption = 'http';
@@ -16,14 +16,15 @@ export class HttpDriver implements ReativeDriver {
   logger: Logger;
 
   constructor(options: ReativeOptions) {
-    this.driverOptions = options;
     this.connector = Reative.connector.http;
+    this.configure(options);
+  }
 
-    if (isEmpty(this.connector)) {
-      //
-      // configure http client
-      this.connector = axios.create(options.httpConfig);
-    }
+  public configure(options: ReativeOptions) {
+    //
+    // configure http client
+    this.driverOptions = options;
+    this.connector = axios.create(options.httpConfig);
   }
 
   public log() {
@@ -36,18 +37,19 @@ export class HttpDriver implements ReativeDriver {
     key: string,
     body?: any
   ): Observable<T> {
+    const baseURL =
+      this.driverOptions.baseURL || this.driverOptions.httpConfig.baseURL;
+    const endpoint = this.driverOptions.endpoint;
+    const collectionName = this.driverOptions.collection;
+
     //
     // call exceptions
-    if (!this.driverOptions.baseURL)
-      throw new Error(`baseURL needed for [${method}]`);
-    if (!this.driverOptions.endpoint)
-      throw new Error(`endpoint required for [${method}]`);
+    if (!baseURL) throw new Error(`baseURL needed for [${method}]`);
+    if (!endpoint) throw new Error(`endpoint required for [${method}]`);
 
     //
     // set path to be requestes
-    const baseURL =
-      this.driverOptions.httpConfig.baseURL || this.driverOptions.baseURL;
-    const requestPath = `${baseURL}${this.driverOptions.endpoint}${path}`;
+    const requestPath = `${baseURL}${endpoint}${path}`;
 
     return new Observable((observer: PartialObserver<T>) => {
       //
@@ -58,7 +60,7 @@ export class HttpDriver implements ReativeDriver {
           data: r.data ? r.data : r,
           response: isObject(r) ? r : {},
           key: key,
-          collection: this.driverOptions.collection || '',
+          collection: collectionName || '',
           driver: this.driverName
         });
 

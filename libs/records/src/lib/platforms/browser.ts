@@ -68,9 +68,9 @@ export class PlatformBrowser extends Records {
     // 2 - cache
     // 3 - network
     //
-    // check for ttl condition, when met it should
+    // check for ttl condition when met it should
     // only return the response from (state or cache)
-    // rather than request network
+    // and avoid a network request
     //
     return new Observable(observer => {
       merge(
@@ -85,7 +85,6 @@ export class PlatformBrowser extends Records {
 
   protected network$<T>(observer, verb, path, payload, chain, key) {
     this.isNetworkAllowed(chain, key).then(allowed => {
-      // console.log(`is network allowed?`, allowed);
       if (allowed) {
         this.log().warn()(`${key} network request`);
         from(this.call<T>(verb, path, payload, chain, key)).subscribe(

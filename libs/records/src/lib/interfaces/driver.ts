@@ -12,4 +12,5 @@ export interface ReativeDriver {
   connector: Connectors;
   logger: Logger;
   log(): Logger;
+  configure?(options: ReativeOptions): void;
 }
