@@ -46,7 +46,9 @@ export class ParseDriver implements ReativeDriver {
 
       this.setWhere(q);
       this.log().success()(
-        `parse where -> ${q.field} ${q.operator} ${q.value}`
+        `parse where -> ${q.field} ${q.operator} ${
+          q.value && q.value.id ? q.value.id : q.value
+        }`
       );
     });
   }
@@ -192,10 +194,11 @@ export class ParseDriver implements ReativeDriver {
       };
 
       const error = err => {
-        try {
-          observer.error(err);
-          observer.complete();
-        } catch (err) {}
+        // this breaks offline requests
+        // try {
+        //   observer.error(err);
+        //   observer.complete();
+        // } catch (err) {}
       };
 
       switch (verb) {
