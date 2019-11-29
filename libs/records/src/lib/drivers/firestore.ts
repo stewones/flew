@@ -46,30 +46,15 @@ export class FirestoreDriver implements ReativeDriver {
     if (isEmpty(this.connector)) throw new Error('missing firestore connector');
   }
 
-  protected where(query: any, firestore: any) {
-    if (isArray(query)) {
-      query.map(q => {
-        if (isNil(q.value))
-          throw Error(`value can't be null for firestore where`);
-        firestore = firestore.where(q.field, q.operator, q.value);
-        this.log().success()(
-          `firestore where array -> ${q.field} ${q.operator} ${q.value}`
-        );
-      });
-    } else if (
-      <any>typeof query === 'object' &&
-      query.field &&
-      query.operator
-    ) {
+  protected where(query: any[] = [], firestore: any) {
+    query.map(q => {
+      if (isNil(q.value))
+        throw Error(`value can't be null for firestore where`);
+      firestore = firestore.where(q.field, q.operator, q.value);
       this.log().success()(
-        `firestore where object -> ${query.field} ${query.operator} ${
-          query.value
-        }`
+        `firestore where array -> ${q.field} ${q.operator} ${q.value}`
       );
-      if (!query.value)
-        throw new Error(`value can't be null for firestore where`);
-      firestore = firestore.where(query.field, query.operator, query.value);
-    }
+    });
     return firestore;
   }
 

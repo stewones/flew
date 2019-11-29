@@ -87,7 +87,7 @@ export class Records implements ReativeApi {
       on: true,
       get: 'parse.find',
       post: 'parse.find',
-      update: 'parse.set',
+      update: 'parse.update',
       patch: 'parse.set',
       delete: false,
       set: true

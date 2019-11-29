@@ -4,9 +4,9 @@
 	"peerDependencies": {
 		"@angular/common": "^8.2.0",
 		"@angular/core": "^8.2.0",
-		"@reative/records": "^1.5.0"
+		"@reative/records": "^1.6.0"
 	},
 	"dependencies": {
-		"@reative/records": "^1.5.0"
+		"@reative/records": "^1.6.0"
 	}
 }

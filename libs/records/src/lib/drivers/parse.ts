@@ -35,27 +35,20 @@ export class ParseDriver implements ReativeDriver {
       throw new Error('missing collection name');
   }
 
-  protected where(query: any) {
-    if (isArray(query)) {
-      query.map(q => {
-        if (isNil(q.value)) throw Error(`value can't be null for parse where`);
-        this.setWhere(q);
-        this.log().success()(
-          `parse where array -> ${q.field} ${q.operator} ${q.value}`
-        );
-      });
-    } else if (
-      <any>typeof query === 'object' &&
-      query.field &&
-      query.operator
-    ) {
-      if (isNil(query.value))
-        throw new Error(`value can't be null for parse where`);
-      this.setWhere(query);
+  protected where(query: any[] = []) {
+    const mapping = {
+      id: 'objectId'
+    };
+    query.map(q => {
+      if (isNil(q.value)) throw Error(`value can't be null for parse where`);
+
+      if (mapping[q.field]) q.field = mapping[q.field];
+
+      this.setWhere(q);
       this.log().success()(
-        `parse where object -> ${query.field} ${query.operator} ${query.value}`
+        `parse where -> ${q.field} ${q.operator} ${q.value}`
       );
-    }
+    });
   }
 
   protected setWhere(q: any) {
@@ -136,7 +129,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // define adapter
-      this.connector = Reative.parse.query(this.driverOptions.collection);
+      this.connector = new Reative.Parse.Query(this.driverOptions.collection);
 
       //
       // set arbitrary query
@@ -175,6 +168,7 @@ export class ParseDriver implements ReativeDriver {
         const result = [];
         for (const item of data) {
           const entry = isFunction(item.toJSON) ? item.toJSON() : item;
+          // const entry =item;
           entry.id = entry.objectId;
           result.push(entry);
         }
@@ -246,7 +240,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // define adapter
-      this.connector = Reative.parse.query(this.driverOptions.collection);
+      this.connector = new Reative.Parse.Query(this.driverOptions.collection);
 
       //
       // set arbitrary query
@@ -371,7 +365,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // define connector
-      const model = Reative.parse.model(this.driverOptions.collection);
+      const model = new Reative.Parse.Object(this.driverOptions.collection);
 
       //
       // define return
@@ -401,10 +395,6 @@ export class ParseDriver implements ReativeDriver {
       this.exceptions();
 
       //
-      // define connector
-      const query = Reative.parse.query(this.driverOptions.collection);
-
-      //
       // clone state
       const newData = { ...data };
 
@@ -423,10 +413,16 @@ export class ParseDriver implements ReativeDriver {
         observer.error(err);
         observer.complete();
       };
+
       //
-      //
-      query
-        .equalTo(Reative.options.identifier, chain.doc)
+      // persist on cloud
+      var id1 = new Reative.Parse.Query(this.driverOptions.collection);
+      id1.equalTo('objectId', chain.doc);
+
+      var id2 = new Reative.Parse.Query(this.driverOptions.collection);
+      id2.equalTo('doc_id', chain.doc);
+
+      Reative.Parse.Query.or(id1, id2)
         .find()
         .then((r: any[] = []) => {
           if (r.length) {

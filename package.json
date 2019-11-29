@@ -141,7 +141,7 @@
     "omit-deep": "0.3.0",
     "paginate-array": "2.1.0",
     "papaparse": "4.6.2",
-    "parse": "^2.8.0",
+    "parse": "^2.9.1",
     "pdfkit": "0.8.3",
     "primeng": "6.1.0",
     "prismjs": "^1.17.1",

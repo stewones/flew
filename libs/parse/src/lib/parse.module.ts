@@ -21,11 +21,7 @@ export class ParseSetup {
     Parse.initialize(options.appID);
     Parse.serverURL = options.serverURL;
     Parse.masterKey = options.masterKey;
-
-    Reative.parse = {
-      model: model,
-      query: query
-    };
+    Reative.Parse = Parse;
   }
 }
 
@@ -64,4 +60,8 @@ export function pointer(name: string, id: string) {
     Session: '_Session'
   };
   return new Parse.Object(mapping[name] ? mapping[name] : name).set('id', id);
+}
+
+export function object(collection: string, attr = {}, options = {}) {
+  return new Reative.Parse.Object(collection, attr, options);
 }
