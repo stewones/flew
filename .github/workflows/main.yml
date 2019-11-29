@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 12.8
       - name: Deps Install
-        run: npm install
+        run: npm install -f
       - name: Records Lint
         run: ng lint records
       - name: Records Build
