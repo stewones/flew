@@ -27,6 +27,7 @@ export interface SetStateOptions {
 export interface GetStateOptions {
   raw?: boolean;
   mutable?: boolean;
+  feed?: boolean;
 }
 
 export class StateSync {
@@ -118,7 +119,7 @@ export function getState<T = any>(
 
 export function getState$<T = any>(
   key: string,
-  options: GetStateOptions = { raw: false }
+  options: GetStateOptions = { raw: false, feed: true }
 ): Observable<T> {
   const responseFromState = Reative.store.get && Reative.store.get(key);
   const transformFromState: any = shouldTransformResponse(
@@ -140,11 +141,20 @@ export function getState$<T = any>(
                 { transformData: !options.raw },
                 responseFromCache
               );
-              resolve(transformFromCache(responseFromCache) as T);
+              const response = transformFromCache(responseFromCache) as T;
+              if (responseFromCache && options.feed) addState(key, response);
+              resolve(response);
             })
             .catch(err => reject(err));
         })
       ) as Observable<T>);
+}
+
+export function addState(key: string, value: any) {
+  const currentState = getState(key);
+  if (!isEqual(currentState, value)) {
+    setState(key, { data: value }, { merge: false });
+  }
 }
 
 export function setState(

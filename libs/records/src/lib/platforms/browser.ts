@@ -1,5 +1,5 @@
 // tslint:disable
-import { cloneDeep, isBoolean, isEmpty, isFunction } from 'lodash';
+import { cloneDeep, isBoolean, isEmpty, isFunction, isEqual } from 'lodash';
 import { from, merge, Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ChainOptions } from '../interfaces/chain';
@@ -270,10 +270,15 @@ export class PlatformBrowser extends Records {
     data: Response,
     chain: ChainOptions
   ) {
-    // console.log(`dispatch`, data);
     const transformResponse: any = shouldTransformResponse(chain, data);
     observer.next(transformResponse(data));
-    if (chain.saveNetwork) Reative.store.sync(data);
+
+    if (chain.saveNetwork) {
+      const currentState = Reative.store.getState(data.key, { raw: true });
+      if (!isEqual(currentState, data)) {
+        Reative.store.sync(data);
+      }
+    }
   }
 
   private getCurrentState(key: string): Response {

@@ -12,14 +12,7 @@ import { StorageAdapter } from '../interfaces/storage';
 interface ReativeProtocol {
   options: ReativeOptions;
   connector: Connector;
-  store?: {
-    enabled: boolean;
-    sync: (val: any) => void;
-    reset: () => void;
-    get: <T>(key: string) => T;
-    set: (key: string, val: any) => void;
-    select: <T>(key: string, raw?: boolean) => Observable<T>;
-  };
+  store?: any;
   storage?: StorageAdapter;
   events?: { [key: string]: Subject<any> };
   Parse?: any; // parse instance
@@ -40,14 +33,7 @@ export const Reative: ReativeProtocol = {
     }
   },
   connector: {} as Connector,
-  store: {
-    enabled: false,
-    sync: (val: any) => {},
-    reset: () => {},
-    get: <T>(key: string) => ({} as T),
-    set: (key: string, val: any) => {},
-    select: <T>(key: string, raw?: boolean) => of({} as T)
-  },
+  store: {},
   storage: {
     get: key => {},
     set: (key, val) => {},
