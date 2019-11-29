@@ -10,6 +10,7 @@ jobs:
     # Machine environment:
     # https://help.github.com/en/articles/software-in-virtual-environments-for-github-actions#ubuntu-1804-lts
     # We specify the Node.js version manually below, and use versioned Chrome from Puppeteer.
+
     runs-on: ubuntu-18.04
 
     steps:
@@ -18,13 +19,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.8
-      - name: Install dependencies
+      - name: Deps Install
         run: npm install
-      - name: Lint
-        run: npm run lint
-      - name: Build
-        run: npm run build -- --prod
-      - name: Test
-        run: npm test -- --configuration=ci
-      - name: E2E
-        run: npm run e2e -- --configuration=ci
+      - name: Records Lint
+        run: ng lint records
+      - name: Records Build
+        run: ng build records --prod
+      - name: Records Test
+        run: ng test records --configuration=ci

@@ -35,6 +35,13 @@
             "jestConfig": "libs/records/jest.config.js",
             "tsConfig": "libs/records/tsconfig.spec.json",
             "setupFile": "libs/records/src/test-setup.ts"
+          },
+          "configurations": {
+            "ci": {
+              "watch": false,
+              "progress": false,
+              "browsers": "ChromeHeadlessCI"
+            }
           }
         }
       },
