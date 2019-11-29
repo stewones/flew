@@ -6,6 +6,7 @@
  */
 
 export function guid(size: number) {
+  // tslint:disable-next-line: no-use-before-declare
   return Guid.make(size);
 }
 export class Guid {

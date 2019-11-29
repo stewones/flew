@@ -32,4 +32,5 @@ export interface ReativeOptions {
  * @deprecated
  * use ReativeOptions instead
  */
+// tslint:disable-next-line: no-empty-interface
 export interface Options extends ReativeOptions {}

@@ -11,9 +11,9 @@ export type Connectors =
   | ConnectorFirebase
   | ConnectorParse;
 
-export type Connector = {
+export interface Connector {
   http?: ConnectorHttp;
   firestore?: ConnectorFirestore;
   firebase?: ConnectorFirebase;
   parse?: ConnectorParse;
-};
+}

@@ -1,6 +1,6 @@
 import { transform, isEqual, isObject } from 'lodash';
 
-export function diff(object, base) {
+export function diff(object_, base_) {
   function changes(object, base) {
     return transform(object, function(result, value, key) {
       if (!isEqual(value, base[key])) {
@@ -11,5 +11,5 @@ export function diff(object, base) {
       }
     });
   }
-  return changes(object, base);
+  return changes(object_, base_);
 }

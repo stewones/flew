@@ -20,22 +20,24 @@
     "state": {
       "tags": []
     },
-    "rr-demo": {
-      "tags": []
-    },
-    "rr-demo-e2e": {
-      "tags": []
-    },
+
     "playground": {
       "tags": []
     },
-    "playground-e2e": {
-      "tags": []
-    },
+
     "firebase": {
       "tags": []
     },
     "todo": {
+      "tags": []
+    },
+    "cache": {
+      "tags": []
+    },
+    "parse": {
+      "tags": []
+    },
+    "parse-demo": {
       "tags": []
     }
   }

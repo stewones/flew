@@ -138,6 +138,7 @@ export class ParseDriver implements ReativeDriver {
       for (const k in chain.query) {
         if (!this.skipOnQuery.includes(k)) {
           const value = chain.query[k];
+          // tslint:disable-next-line: deprecation
           if (isFunction(value)) {
             this.connector[k](...value());
           } else {
@@ -169,6 +170,7 @@ export class ParseDriver implements ReativeDriver {
       const success = async (data: any[]) => {
         const result = [];
         for (const item of data) {
+          // tslint:disable-next-line: deprecation
           const entry = isFunction(item.toJSON) ? item.toJSON() : item;
           // const entry =item;
           entry.id = entry.objectId;
@@ -249,6 +251,7 @@ export class ParseDriver implements ReativeDriver {
       // set arbitrary query
       for (const k in chain.query) {
         const value = chain.query[k];
+        // tslint:disable-next-line: deprecation
         if (isFunction(value)) {
           this.connector[k](...value());
         } else {
@@ -275,6 +278,7 @@ export class ParseDriver implements ReativeDriver {
           result = [];
           const entries: any[] = await this.connector.find();
           for (const item of entries) {
+            // tslint:disable-next-line: deprecation
             const entry = isFunction(item.toJSON) ? item.toJSON() : item;
             entry.id = entry.objectId;
             result.push(entry);
@@ -419,17 +423,17 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // persist on cloud
-      var id1 = new Reative.Parse.Query(this.driverOptions.collection);
+      const id1 = new Reative.Parse.Query(this.driverOptions.collection);
       id1.equalTo('objectId', chain.doc);
 
-      var id2 = new Reative.Parse.Query(this.driverOptions.collection);
+      const id2 = new Reative.Parse.Query(this.driverOptions.collection);
       id2.equalTo(this.driverOptions.identifier, chain.doc);
 
       Reative.Parse.Query.or(id1, id2)
         .find()
         .then((r: any[] = []) => {
           if (r.length) {
-            for (let k in data) {
+            for (const k in data) {
               r[0].set(k, data[k]);
             }
             r[0]
