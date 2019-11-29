@@ -351,8 +351,8 @@ export class ParseDriver implements ReativeDriver {
       const id = chain.doc;
       const newData = { ...data };
 
-      if (id) newData[Reative.options.identifier] = id;
-      else newData[Reative.options.identifier] = guid(3);
+      if (id) newData[this.driverOptions.identifier] = id;
+      else newData[this.driverOptions.identifier] = guid(3);
 
       //
       // auto update timestamp
@@ -420,7 +420,7 @@ export class ParseDriver implements ReativeDriver {
       id1.equalTo('objectId', chain.doc);
 
       var id2 = new Reative.Parse.Query(this.driverOptions.collection);
-      id2.equalTo('doc_id', chain.doc);
+      id2.equalTo(this.driverOptions.identifier, chain.doc);
 
       Reative.Parse.Query.or(id1, id2)
         .find()
