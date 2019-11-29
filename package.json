@@ -133,6 +133,7 @@
     "moment-range": "4.0.1",
     "moment-timezone": "0.5.23",
     "ng-gallery": "1.0.1",
+    "ng-zorro-antd": "^8.5.2",
     "ng2-currency-mask": "5.3.1",
     "ngx-daterangepicker-material": "2.0.2",
     "ngx-icon-picker": "0.0.8",
