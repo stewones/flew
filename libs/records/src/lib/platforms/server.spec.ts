@@ -1,10 +1,7 @@
-import { Records } from './server';
-import { FirestoreStub, FirebaseStub } from '../drivers/stub';
-import { ReativeDriverOption } from '../interfaces/driver';
-import { Logger } from '../utils/logger';
-import { Subject, Observable } from 'rxjs';
+import { FirebaseStub, FirestoreStub } from '../drivers/stub';
 import { ReativeVerb } from '../interfaces/verb';
-import { RR_DRIVER } from '../driver';
+import { Reative } from '../symbols/reative';
+import { Records } from './server';
 
 class RecordsMock extends Records {
   constructor(options) {
@@ -19,14 +16,10 @@ class RecordsMock extends Records {
     method: ReativeVerb,
     path: string = '',
     payload: any = {},
-    chain = this.cloneChain(),
+    chain = { ...this.chain },
     key: string = ''
   ) {
     return super.call(method, path, payload, chain, key);
-  }
-
-  public cloneChain() {
-    return super.cloneChain();
   }
 }
 
@@ -47,34 +40,35 @@ describe('Records', () => {
       }
     });
 
+    Reative.connector = {
+      firestore: firestoreStub,
+      firebase: FirebaseStub({}).firebase
+    };
+
     lib = new Records({
-      useLog: false,
+      silent: false,
       baseURL: baseURL,
-      collection: collection,
-      connector: {
-        firestore: firestoreStub,
-        firebase: FirebaseStub({}).firebase
-      }
+      collection: collection
     });
   });
 
   it('should be created using minimal setup', () => {
-    lib = new Records({ useLog: false });
+    lib = new Records({ silent: false });
     expect(lib).toBeTruthy();
   });
 
   it('should initialise with cache disabled', () => {
-    lib = new Records({ useLog: false, useCache: false });
+    lib = new Records({ silent: false, useCache: false });
     expect(lib).toBeTruthy();
     //
     // and/or
-    lib.init({ chain: { useCache: false } });
+    lib.init();
     expect(lib).toBeTruthy();
   });
 
   // it('should initialise with logs disabled', () => {
-  //   lib = new Records({ useLog: false });
-  //   lib.init({ useLog: false, useLogTrace: false });
+  //   lib = new Records({ silent: false });
+  //   lib.init({ silent: false, silentTrace: false });
   //   expect(lib).toBeTruthy();
   // });
 
@@ -123,7 +117,7 @@ describe('Records', () => {
 
   // it('should return `firebase` connector instance', () => {
   //   lib = new Records({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     collection: collection,
   //     connector: {
@@ -136,7 +130,7 @@ describe('Records', () => {
 
   // it('should return `firestore` connector instance', () => {
   //   lib = new Records({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     collection: collection,
   //     connector: {
@@ -149,7 +143,7 @@ describe('Records', () => {
 
   // it('should return `storage` adapter', () => {
   //   lib = new Records({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     collection: collection
   //   });
@@ -159,7 +153,7 @@ describe('Records', () => {
 
   // it('should clear cache', () => {
   //   lib = new Records({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     collection: collection
   //   });
@@ -173,7 +167,7 @@ describe('Records', () => {
 
   // it('should feed collections', () => {
   //   lib = new Records({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     collection: collection
   //   });
@@ -187,7 +181,7 @@ describe('Records', () => {
 
   // it('should not reinitialise drivers', () => {
   //   const lib_ = new Records({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     collection: collection,
   //     connector: {
@@ -207,7 +201,7 @@ describe('Records', () => {
 
   // it('should initialise with `firestore` as a default driver', () => {
   //   const lib_ = new Records({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     collection: collection,
   //     connector: {
@@ -222,7 +216,7 @@ describe('Records', () => {
 
   // it('should fail when verbs and drivers does not match', () => {
   //   const lib_ = new Records({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     collection: collection,
   //     connector: {
@@ -243,18 +237,18 @@ describe('Records', () => {
   //   lib.init({
   //     logger: new Logger({
   //       subject: new Subject(),
-  //       useLog: false,
-  //       useLogTrace: false
+  //       silent: false,
+  //       silentTrace: false
   //     })
   //   } as any);
 
-  //   expect(lib.useLog(false)).toBeInstanceOf(Records);
-  //   expect(lib.useLogTrace(true)).toBeInstanceOf(Records);
+  //   expect(lib.silent(false)).toBeInstanceOf(Records);
+  //   expect(lib.silentTrace(true)).toBeInstanceOf(Records);
   // });
 
   // it('should create unique keys', () => {
   //   let lib_ = new RecordsMock({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     collection: collection,
   //     endpoint: '/',
@@ -276,7 +270,7 @@ describe('Records', () => {
   //   );
 
   //   lib_ = new RecordsMock({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     endpoint: '/',
   //     // collection: collection, // with no collection
@@ -297,7 +291,7 @@ describe('Records', () => {
 
   // it('should implement [get] verb', () => {
   //   let lib_ = new RecordsMock({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     endpoint: '/',
   //     collection: collection,
@@ -325,7 +319,7 @@ describe('Records', () => {
 
   // it('should implement [post] verb', () => {
   //   let lib_ = new RecordsMock({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     endpoint: '/',
   //     collection: collection,
@@ -354,7 +348,7 @@ describe('Records', () => {
 
   // it('should implement [patch] verb', () => {
   //   let lib_ = new RecordsMock({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     endpoint: '/',
   //     collection: collection,
@@ -383,7 +377,7 @@ describe('Records', () => {
 
   // it('should implement [delete] verb', () => {
   //   let lib_ = new RecordsMock({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     endpoint: '/',
   //     collection: collection,
@@ -457,7 +451,7 @@ describe('Records', () => {
   //   expect(lib.where('uid', '==', 'a1b2c3')).toBeInstanceOf(Records);
 
   //   const lib_ = new RecordsMock({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     collection: collection,
   //     connector: {
@@ -545,7 +539,7 @@ describe('Records', () => {
 
   // it('should call network with a customized key', () => {
   //   let lib_ = new RecordsMock({
-  //     useLog: false,
+  //     silent: false,
   //     baseURL: baseURL,
   //     endpoint: '/',
   //     collection: collection,

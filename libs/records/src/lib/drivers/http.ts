@@ -38,7 +38,8 @@ export class HttpDriver implements ReativeDriver {
     body?: any
   ): Observable<T> {
     const baseURL =
-      this.driverOptions.baseURL || this.driverOptions.httpConfig.baseURL;
+      this.driverOptions.baseURL ||
+      get(this.driverOptions, 'httpConfig.baseURL');
     const endpoint = this.driverOptions.endpoint;
     const collectionName = this.driverOptions.collection;
 

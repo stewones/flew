@@ -42,8 +42,8 @@ export class FirestoreDriver implements ReativeDriver {
 
   private exceptions() {
     this.connector = Reative.connector.firestore;
-    if (!this.driverOptions.collection) throw new Error('missing collection');
     if (isEmpty(this.connector)) throw new Error('missing firestore connector');
+    if (!this.driverOptions.collection) throw new Error('missing collection');
   }
 
   protected where(query: any[] = [], firestore: any) {

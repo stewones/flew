@@ -1,12 +1,12 @@
 import { FirebaseDriver } from './firebase';
 import { Logger } from '../utils/logger';
-import { Subject, Observable, of, throwError } from 'rxjs';
+import { Subject, of, throwError } from 'rxjs';
+import { Reative } from '../symbols/reative';
 
 class FirebaseDriverMock extends FirebaseDriver {
   logger = new Logger({
     subject: new Subject(),
-    useLog: false,
-    useLogTrace: false
+    silent: true
   });
 
   constructor(options) {
@@ -78,11 +78,11 @@ describe('FirebaseDriver', () => {
   const collection = 'foo-collection';
 
   beforeEach(() => {
+    Reative.connector = {
+      firebase: firebaseStub
+    };
     driver = new FirebaseDriverMock({
-      collection: collection,
-      connector: {
-        firebase: firebaseStub
-      }
+      collection: collection
     });
   });
 
@@ -109,44 +109,66 @@ describe('FirebaseDriver', () => {
     driver.on({ transformResponse: r => r.data }, 'some-key');
     driver.on({ transformResponse: r => r.data }, 'some-key');
     driver.on({ transformResponse: r => r.data }, 'some-key');
-
     expect(spy).toHaveBeenCalledTimes(3);
   });
 
-  it('should fail on missing `collection` for [find] method', () => {
+  it('should fail on missing `collection` for [find] method', async () => {
+    let thrownError;
+    Reative.connector = {
+      firebase: firebaseStub
+    };
+
     driver = new FirebaseDriver({
-      driver: 'firebase',
-      connector: {
-        firebase: firebaseStub
-      }
+      driver: 'firebase'
     });
 
-    return expect(driver.find({}, 'my-key').toPromise()).rejects.toThrowError(
-      'missing collection'
+    try {
+      await driver.find({}, 'my-key').toPromise();
+    } catch (err) {
+      thrownError = err;
+    }
+
+    return expect(thrownError).toEqual(new Error('missing collection'));
+  });
+
+  it('should fail on missing `database` for [find] method', async () => {
+    let thrownError;
+    Reative.connector = {};
+    driver = new FirebaseDriver({
+      driver: 'firebase',
+      collection: 'users'
+    });
+    try {
+      await driver.find({}, 'my-key').toPromise();
+    } catch (err) {
+      thrownError = err;
+    }
+    return expect(thrownError).toEqual(
+      new Error(
+        `missing database instance. did you add import 'firebase/database'; to your environment file?`
+      )
     );
   });
 
-  it('should fail on missing `database` for [find] method', () => {
+  it('should fail on missing `connector` for [find] method', async () => {
+    Reative.connector = {};
+
+    let thrownError;
     driver = new FirebaseDriver({
       driver: 'firebase',
-      collection: 'users',
-      connector: {}
+      collection: 'users'
     });
 
-    return expect(driver.find({}, 'my-key').toPromise()).rejects.toThrowError(
-      `missing database instance. did you add import 'firebase/database'; to your environment file?`
-    );
-  });
+    try {
+      await driver.find({}, 'my-key').toPromise();
+    } catch (error) {
+      thrownError = error;
+    }
 
-  it('should fail on missing `connector` for [find] method', () => {
-    driver = new FirebaseDriver({
-      driver: 'firebase',
-      collection: 'users',
-      connector: {}
-    });
-
-    return expect(driver.find({}, 'my-key').toPromise()).rejects.toThrowError(
-      `missing database instance. did you add import 'firebase/database'; to your environment file?`
+    expect(thrownError).toEqual(
+      new Error(
+        `missing database instance. did you add import 'firebase/database'; to your environment file?`
+      )
     );
   });
 
