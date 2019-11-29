@@ -1,6 +1,6 @@
 {
 	"name": "@reative/firebase",
-	"version": "1.6.0",
+	"version": "1.6.1",
 	"peerDependencies": {
 		"@angular/common": "^8.2.0",
 		"@angular/core": "^8.2.0",

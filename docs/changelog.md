@@ -1,3 +1,12 @@
+## [1.6.1](https://github.com/stewwan/reative/compare/v1.6.0...v1.6.1) (2019-11-29)
+
+
+### Bug Fixes
+
+* **parse:** update verb ([6ff166a](https://github.com/stewwan/reative/commit/6ff166a1a036e3c1c1e0e5e87374be071e069429))
+
+
+
 ## [1.6.0](https://github.com/stewwan/reative/compare/v1.5.0...v1.6.0) (2019-11-28)
 
 
