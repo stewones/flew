@@ -1,4 +1,4 @@
-import { isArray, isEmpty, isNil, isObject } from 'lodash';
+import { isArray, isEmpty, isNil, isObject, get } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { isFunction } from 'util';
@@ -176,6 +176,25 @@ export class ParseDriver implements ReativeDriver {
           entry.id = entry.objectId;
           result.push(entry);
         }
+
+        //
+        // populade `id` on included fields @todo need more work
+        // if (chain.fields && chain.fields.length) {
+        //   result.map(entry => {
+        //     chain.fields.map(field => {
+        //       const whatever: any = get(entry, field);
+        //       if (isArray(whatever)) {
+        //         whatever.map(it => {
+        //           it.id = it.objectId;
+        //         });
+        //       }
+        //       if (isObject(whatever)) {
+        //         whatever.id = whatever.objectId;
+        //       }
+        //     });
+        //   });
+        // }
+
         //
         // define standard response
         const response: Response = clearNetworkResponse({

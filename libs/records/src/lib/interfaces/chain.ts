@@ -26,6 +26,6 @@ export interface ChainOptions {
   doc?: string | number; // firestore `on`
   at?: string | number; // firestore
   after?: string | number; // firestore
-  fields?: string[];
+  fields?: string[]; // used for the include api from parse
   diff?: (fn: (cache: any, network: any) => boolean) => any; // customize rr response behavior
 }

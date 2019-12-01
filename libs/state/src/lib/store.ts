@@ -160,7 +160,7 @@ export function addState(key: string, value: any) {
 export function setState(
   key: string,
   value: any,
-  options: SetStateOptions = {}
+  options: SetStateOptions = { identifier: Reative.options.identifier }
 ) {
   options = { ...defaultStateOptions, ...options };
   const currentState: any = cloneDeep(getState(key, { raw: true })) || {};
@@ -275,15 +275,16 @@ export function setState(
  */
 export async function feedState(key?: string) {
   const hasStorage = isFunction(Reative.storage.forEach);
+
   if (hasStorage) {
     if (key) {
       const cache = await Reative.storage.get(key);
       if (!isEmpty(cache)) Reative.store.sync(cache);
       return cache;
     } else {
-      return Reative.storage.forEach((value, k, index) =>
-        Reative.store.sync(value)
-      );
+      return Reative.storage.forEach((value, k, index) => {
+        Reative.store.sync(value);
+      });
     }
   }
   throw new Error(`Can't locate storage instance`);

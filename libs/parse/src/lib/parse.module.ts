@@ -65,3 +65,7 @@ export function pointer(name: string, id: string) {
 export function object(collection: string, attr = {}, options = {}) {
   return new Reative.Parse.Object(collection, attr, options);
 }
+
+export function parse() {
+  return Reative.Parse;
+}
