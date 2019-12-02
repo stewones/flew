@@ -7,7 +7,7 @@ import { FirestoreDriver } from '../drivers/firestore';
 import { HttpDriver } from '../drivers/http';
 import { ParseDriver } from '../drivers/parse';
 import { ReativeApi, SetOptions } from '../interfaces/api';
-import { ChainOptions } from '../interfaces/chain';
+import { ReativeChainPayload, ReativeChain } from '../interfaces/chain';
 import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 import { Log } from '../interfaces/log';
 import { ReativeOptions } from '../interfaces/options';
@@ -17,12 +17,18 @@ import { Reative } from '../symbols/reative';
 import { Logger } from '../utils/logger';
 import { SHA256 } from '../utils/sha';
 import { RR_VERSION } from '../version';
+import { isServer } from '../utils/platform';
 
 type ReativeDriverVerbTree = {
   [key in ReativeDriverOption]: { [key in ReativeVerb]: string | boolean | any }
 };
+
+type ReativeDriverChainTree = {
+  [key in ReativeDriverOption]: { [key in ReativeChain]: string | boolean }
+};
+
 export class Records implements ReativeApi {
-  chain: ChainOptions = {};
+  chain: ReativeChainPayload = {};
   options: ReativeOptions;
 
   // log instance
@@ -33,7 +39,7 @@ export class Records implements ReativeApi {
 
   //
   // available drivers
-  private drivers: {
+  protected drivers: {
     firestore: ReativeDriver;
     firebase: ReativeDriver;
     http: ReativeDriver;
@@ -47,7 +53,7 @@ export class Records implements ReativeApi {
 
   //
   // verbs tree
-  private verbs: ReativeDriverVerbTree = {
+  protected verbs: ReativeDriverVerbTree = {
     firestore: {
       find: true,
       findOne: true,
@@ -95,6 +101,98 @@ export class Records implements ReativeApi {
   };
 
   //
+  // chaining tree
+  protected chaining: ReativeDriverChainTree = {
+    firestore: {
+      driver: true,
+      network: true,
+      key: true,
+      query: false,
+      where: true,
+      sort: true,
+      size: true,
+      at: true,
+      after: true,
+      ref: false,
+      raw: true,
+      transform: true,
+      diff: true,
+      http: false,
+      include: false,
+      doc: true,
+      save: 'browser',
+      ttl: 'browser',
+      state: 'browser',
+      cache: 'browser'
+    },
+    firebase: {
+      driver: true,
+      network: true,
+      key: true,
+      query: false,
+      where: true,
+      sort: false,
+      size: false,
+      at: false,
+      after: false,
+      ref: true,
+      raw: true,
+      transform: true,
+      diff: true,
+      http: false,
+      include: false,
+      doc: false,
+      save: 'browser',
+      ttl: 'browser',
+      state: 'browser',
+      cache: 'browser'
+    },
+    http: {
+      driver: true,
+      network: true,
+      key: true,
+      query: false,
+      where: false,
+      sort: false,
+      size: false,
+      at: false,
+      after: false,
+      ref: false,
+      raw: true,
+      transform: true,
+      diff: true,
+      http: true,
+      include: false,
+      doc: false,
+      save: 'browser',
+      ttl: 'browser',
+      state: 'browser',
+      cache: 'browser'
+    },
+    parse: {
+      driver: true,
+      network: true,
+      key: true,
+      query: true,
+      where: true,
+      sort: true,
+      size: true,
+      at: false,
+      after: false,
+      ref: false,
+      raw: true,
+      transform: true,
+      diff: true,
+      http: false,
+      include: true,
+      doc: true,
+      save: 'browser',
+      ttl: 'browser',
+      state: 'browser',
+      cache: 'browser'
+    }
+  };
+
   // hook to configure http calls
   private httpBefore = (config: AxiosRequestConfig) => {};
 
@@ -160,7 +258,18 @@ export class Records implements ReativeApi {
     this.options = options;
   }
 
-  private getVerbOrException(
+  public reset(): Records {
+    this.chain = {
+      driver: this.options.driver,
+      useCache: this.options.useCache,
+      useState: this.options.useState,
+      useNetwork: this.options.useNetwork,
+      saveNetwork: this.options.saveNetwork
+    };
+    return this;
+  }
+
+  private checkVerbAvailability(
     _driver: ReativeDriverOption,
     _verb: ReativeVerb
   ): ReativeVerb {
@@ -174,29 +283,20 @@ export class Records implements ReativeApi {
     }
   }
 
-  public find<T>(): Observable<T> {
-    return this.call<T>('find');
+  private checkChainAvailability(
+    _driver: ReativeDriverOption,
+    _method: ReativeChain
+  ): void {
+    const msg = `[${_method}] chaining method unavailable for driver [${_driver}]`;
+
+    const exists = this.chaining[_driver][_method];
+    if (exists === false || (exists === 'browser' && isServer())) {
+      return this.log().warn()(msg);
+    }
   }
 
-  public findOne<T>(): Observable<T> {
-    return this.call<T>('findOne');
-  }
-
-  public set<T>(data: any, options?: SetOptions): Observable<T> {
-    return this.call('set', null, {
-      data: data,
-      options: options
-    });
-  }
-
-  public update<T>(data: any): Observable<T> {
-    return this.call('update', null, {
-      data: data
-    });
-  }
-
-  public on<T>(): Observable<T> {
-    return this.call<T>('on');
+  protected log(): Logger {
+    return this.logger;
   }
 
   protected createKey(verb, path, body): string {
@@ -218,7 +318,7 @@ export class Records implements ReativeApi {
     method: ReativeVerb,
     path: string = '',
     payload: any = {},
-    chain: ChainOptions = { ...this.chain },
+    chain: ReativeChainPayload = { ...this.chain },
     key: string = ''
   ): Observable<T> {
     //
@@ -233,16 +333,14 @@ export class Records implements ReativeApi {
 
     //
     // get verb
-    const verb = this.getVerbOrException(_driver, _verb);
+    const verb = this.checkVerbAvailability(_driver, _verb);
 
+    //
+    // map to the correct option
     if (isString(verb)) {
       _driver = verb.split('.')[0] as ReativeDriverOption;
       _verb = verb.split('.')[1] as ReativeVerb;
     }
-
-    //
-    // run exception for new variables
-    this.getVerbOrException(_driver, _verb);
 
     //
     // define an unique key
@@ -281,6 +379,11 @@ export class Records implements ReativeApi {
     return this.drivers[_driver][_verb]<T>(arg1, arg2, arg3);
   }
 
+  /**
+   *
+   * Verb methods
+   *
+   */
   public get<T>(path: string = ''): Observable<T> {
     return this.call<T>('get', path);
   }
@@ -297,53 +400,93 @@ export class Records implements ReativeApi {
     return this.call<T>('delete', path, body);
   }
 
+  public find<T>(): Observable<T> {
+    return this.call<T>('find');
+  }
+
+  public findOne<T>(): Observable<T> {
+    return this.call<T>('findOne');
+  }
+
+  public set<T>(data: any, options?: SetOptions): Observable<T> {
+    return this.call('set', null, {
+      data: data,
+      options: options
+    });
+  }
+
+  public update<T>(data: any): Observable<T> {
+    return this.call('update', null, {
+      data: data
+    });
+  }
+
+  public on<T>(): Observable<T> {
+    return this.call<T>('on');
+  }
+
+  /**
+   *
+   * Chaining methods
+   *
+   */
   public driver(name: ReativeDriverOption): Records {
     this.chain.driver = name;
+    this.checkChainAvailability(this.chain.driver, 'driver');
     return this;
   }
 
   public http(fn: (config: AxiosRequestConfig) => void): Records {
     this.httpBefore = fn;
+    this.checkChainAvailability(this.chain.driver, 'http');
     return this;
   }
 
   public network(active: boolean): Records {
     this.chain.useNetwork = active;
+    this.checkChainAvailability(this.chain.driver, 'network');
     return this;
   }
 
   public save(active: boolean): Records {
     this.chain.saveNetwork = active;
+    this.checkChainAvailability(this.chain.driver, 'save');
     return this;
   }
 
   public transform<T>(transformFn: (response: Response) => any): Records {
     this.chain.transformResponse = transformFn;
+    this.checkChainAvailability(this.chain.driver, 'transform');
     return this;
   }
 
   public ttl(value: number): Records {
     this.chain.ttl = value;
+    this.checkChainAvailability(this.chain.driver, 'ttl');
     return this;
   }
 
   public cache(active: boolean): Records {
     this.chain.useCache = active;
+    this.checkChainAvailability(this.chain.driver, 'cache');
     return this;
   }
 
   public state(active: boolean): Records {
     this.chain.useState = active;
+    this.checkChainAvailability(this.chain.driver, 'state');
     return this;
   }
 
   public key(name: string): Records {
     this.chain.key = name;
+    this.checkChainAvailability(this.chain.driver, 'key');
     return this;
   }
 
   public query(by: { [key: string]: {} } | { [key: string]: {} }[]): Records {
     this.chain.query = by;
+    this.checkChainAvailability(this.chain.driver, 'query');
     return this;
   }
 
@@ -356,6 +499,7 @@ export class Records implements ReativeApi {
       operator: operator,
       value: value
     });
+    this.checkChainAvailability(this.chain.driver, 'where');
     return this;
   }
 
@@ -367,63 +511,56 @@ export class Records implements ReativeApi {
     for (const k in by) {
       this.chain.sort[k] = by[k];
     }
+    this.checkChainAvailability(this.chain.driver, 'sort');
     return this;
   }
 
   public size(value: number): Records {
     this.chain.size = value;
+    this.checkChainAvailability(this.chain.driver, 'size');
     return this;
   }
 
   public at(value): Records {
     this.chain.at = value;
+    this.checkChainAvailability(this.chain.driver, 'at');
     return this;
   }
 
   public after(value): Records {
     this.chain.after = value;
+    this.checkChainAvailability(this.chain.driver, 'after');
     return this;
   }
 
   public ref(path: string): Records {
     this.chain.ref = path;
+    this.checkChainAvailability(this.chain.driver, 'ref');
     return this;
   }
 
-  public doc(value: string | number): Records {
+  public doc(value: any): Records {
     this.chain.doc = value;
+    this.checkChainAvailability(this.chain.driver, 'network');
     return this;
   }
 
   public raw(active: boolean): Records {
     this.chain.transformData = !active;
+    this.checkChainAvailability(this.chain.driver, 'raw');
     return this;
   }
 
   public include(fields: string[]): Records {
     this.chain.fields = fields;
-    return this;
-  }
-
-  public reset(): Records {
-    this.chain = {
-      driver: this.options.driver,
-      useCache: this.options.useCache,
-      useState: this.options.useState,
-      useNetwork: this.options.useNetwork,
-      saveNetwork: this.options.saveNetwork
-    };
-
+    this.checkChainAvailability(this.chain.driver, 'include');
     return this;
   }
 
   public diff(fn): Records {
     this.chain.diff = fn;
+    this.checkChainAvailability(this.chain.driver, 'diff');
     return this;
-  }
-
-  protected log(): Logger {
-    return this.logger;
   }
 }
 

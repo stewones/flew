@@ -5,7 +5,7 @@ import { Subject, PartialObserver } from 'rxjs';
 import { Logger } from '../utils/logger';
 import { Response } from '../interfaces/response';
 import { ReativeVerb } from '../interfaces/verb';
-import { ChainOptions, Reative } from '../..';
+import { ReativeChainPayload, Reative } from '../..';
 
 class PlatformBrowserMock extends PlatformBrowser {
   _storage: StorageAdapter;
@@ -14,12 +14,12 @@ class PlatformBrowserMock extends PlatformBrowser {
     super(options);
   }
 
-  public isNetworkAllowed(chain: ChainOptions = {}, key: string) {
+  public isNetworkAllowed(chain: ReativeChainPayload = {}, key: string) {
     return super.isNetworkAllowed(chain, key);
   }
 
   public setCache(
-    chain: ChainOptions,
+    chain: ReativeChainPayload,
     key: string,
     network: Response & { ttl?: number }
   ) {

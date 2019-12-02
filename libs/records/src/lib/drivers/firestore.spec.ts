@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { ChainOptions } from '../interfaces/chain';
+import { ReativeChainPayload } from '../interfaces/chain';
 import { Records } from '../platforms/server';
 import { Reative } from '../symbols/reative';
 import { Logger } from '../utils/logger';
@@ -33,7 +33,7 @@ class FirestoreDriverMock extends FirestoreDriver {
     return super.limit(limit, firestore);
   }
 
-  public on(chain: ChainOptions = {}, key: string = ''): any {
+  public on(chain: ReativeChainPayload = {}, key: string = ''): any {
     return super.on(chain, key);
   }
 }

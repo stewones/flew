@@ -1,7 +1,7 @@
 import { get, isArray, isEmpty, isObject } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ChainOptions } from '../interfaces/chain';
+import { ReativeChainPayload } from '../interfaces/chain';
 import { ConnectorFirebase } from '../interfaces/connector';
 import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 import { ReativeOptions } from '../interfaces/options';
@@ -34,7 +34,7 @@ export class FirebaseDriver implements ReativeDriver {
     return this.logger;
   }
 
-  public find<T>(chain: ChainOptions, key: string): Observable<T> {
+  public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<any>) => {
       //
       // run exceptions
@@ -104,7 +104,7 @@ export class FirebaseDriver implements ReativeDriver {
     });
   }
 
-  public findOne<T>(chain: ChainOptions, key: string): Observable<T> {
+  public findOne<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return this.find<T>(chain, key).pipe(
       map((r: Response) => {
         const data = get(r, 'data[0]');
@@ -120,7 +120,7 @@ export class FirebaseDriver implements ReativeDriver {
     );
   }
 
-  public on<T>(chain: ChainOptions, key: string): Observable<T> {
+  public on<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable(observer => {
       //
       // run exceptions

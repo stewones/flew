@@ -2,7 +2,7 @@ import { isArray, isEmpty, isNil, isObject } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SetOptions } from '../interfaces/api';
-import { ChainOptions } from '../interfaces/chain';
+import { ReativeChainPayload } from '../interfaces/chain';
 import { ConnectorFirestore } from '../interfaces/connector';
 import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 import { ReativeOptions } from '../interfaces/options';
@@ -78,7 +78,7 @@ export class FirestoreDriver implements ReativeDriver {
     return firestore.limit(limit);
   }
 
-  public find<T>(chain: ChainOptions, key: string): Observable<T> {
+  public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
       //
       // run exceptions
@@ -152,7 +152,7 @@ export class FirestoreDriver implements ReativeDriver {
     });
   }
 
-  public findOne<T>(chain: ChainOptions, key: string): Observable<T> {
+  public findOne<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return this.find<T>(chain, key).pipe(
       map((r: Response) => {
         const response: Response = <Response>{
@@ -168,7 +168,7 @@ export class FirestoreDriver implements ReativeDriver {
     );
   }
 
-  public on<T>(chain: ChainOptions, key: string): Observable<T> {
+  public on<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable(observer => {
       //
       // run exceptions
@@ -236,7 +236,7 @@ export class FirestoreDriver implements ReativeDriver {
   }
 
   public set(
-    chain: ChainOptions,
+    chain: ReativeChainPayload,
     data: any,
     options: SetOptions = { merge: true }
   ): Observable<any> {
@@ -271,7 +271,7 @@ export class FirestoreDriver implements ReativeDriver {
     });
   }
 
-  public update(chain: ChainOptions, data: any): Observable<any> {
+  public update(chain: ReativeChainPayload, data: any): Observable<any> {
     return new Observable(observer => {
       const id = chain.doc;
       //

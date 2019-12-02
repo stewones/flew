@@ -27,10 +27,3 @@ export interface ReativeOptions {
   saveNetwork?: boolean;
   persistence?: boolean;
 }
-
-/**
- * @deprecated
- * use ReativeOptions instead
- */
-// tslint:disable-next-line: no-empty-interface
-export interface Options extends ReativeOptions {}

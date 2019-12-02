@@ -3,7 +3,7 @@ import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { isFunction } from 'util';
 import { SetOptions } from '../interfaces/api';
-import { ChainOptions } from '../interfaces/chain';
+import { ReativeChainPayload } from '../interfaces/chain';
 import { ConnectorParse } from '../interfaces/connector';
 import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 import { ReativeOptions } from '../interfaces/options';
@@ -120,7 +120,7 @@ export class ParseDriver implements ReativeDriver {
     this.connector.limit(limit);
   }
 
-  public find<T>(chain: ChainOptions, key: string): Observable<T> {
+  public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
       const verb =
         chain.query && chain.query['aggregate'] ? 'aggregate' : 'find';
@@ -240,7 +240,7 @@ export class ParseDriver implements ReativeDriver {
     });
   }
 
-  public findOne<T>(chain: ChainOptions, key: string): Observable<T> {
+  public findOne<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return this.find<T>(chain, key).pipe(
       map((r: Response) => {
         const response: Response = <Response>{
@@ -256,7 +256,7 @@ export class ParseDriver implements ReativeDriver {
     );
   }
 
-  public on<T>(chain: ChainOptions, key: string): Observable<T> {
+  public on<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable(observer => {
       //
       // run exceptions
@@ -369,7 +369,7 @@ export class ParseDriver implements ReativeDriver {
   }
 
   public set(
-    chain: ChainOptions,
+    chain: ReativeChainPayload,
     data: any,
     options?: SetOptions
   ): Observable<any> {
@@ -414,7 +414,7 @@ export class ParseDriver implements ReativeDriver {
     });
   }
 
-  public update(chain: ChainOptions, data: any): Observable<any> {
+  public update(chain: ReativeChainPayload, data: any): Observable<any> {
     return new Observable(observer => {
       //
       // run exceptions

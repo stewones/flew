@@ -15,7 +15,7 @@ export interface SetOptions {
  */
 export interface ReativeApi {
   options: ReativeOptions;
-  reset(): Records; // reset chain and options
+  reset(): Records; // reset chaining payload
 
   driver(name: string): Records; // firebase / firestore / http
   network(active: boolean): Records; // response using network call
@@ -65,4 +65,6 @@ export interface ReativeApi {
   //
   // parse
   include(fields: string[]): Records;
+
+  doc(value: any): Records;
 }

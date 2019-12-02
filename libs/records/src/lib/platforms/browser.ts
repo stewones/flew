@@ -2,7 +2,7 @@
 import { cloneDeep, isBoolean, isEmpty, isFunction, isEqual } from 'lodash';
 import { from, merge, Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { ChainOptions } from '../interfaces/chain';
+import { ReativeChainPayload } from '../interfaces/chain';
 import { ReativeOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
 import { ReativeVerb } from '../interfaces/verb';
@@ -181,7 +181,7 @@ export class PlatformBrowser extends Records {
   }
 
   protected isNetworkAllowed(
-    chain: ChainOptions,
+    chain: ReativeChainPayload,
     key: string
   ): Promise<boolean> {
     return new Promise(async resolve => {
@@ -210,7 +210,7 @@ export class PlatformBrowser extends Records {
   }
 
   protected async setCache(
-    chain: ChainOptions,
+    chain: ReativeChainPayload,
     key: string,
     network: Response & { ttl?: number }
   ): Promise<void> {
@@ -268,7 +268,7 @@ export class PlatformBrowser extends Records {
   protected dispatch(
     observer = { next: data => {} },
     data: Response,
-    chain: ChainOptions
+    chain: ReativeChainPayload
   ) {
     const transformResponse: any = shouldTransformResponse(chain, data);
     observer.next(transformResponse(data));
