@@ -239,7 +239,7 @@ export class Records implements ReativeApi {
     };
   }
 
-  private optionsRefresh() {
+  private refresh() {
     //
     // evaluate runtime options
     const options: ReativeOptions = { ...Reative.options, ...this.options };
@@ -287,11 +287,13 @@ export class Records implements ReativeApi {
     _driver: ReativeDriverOption,
     _method: ReativeChain
   ): void {
-    const msg = `[${_method}] chaining method unavailable for driver [${_driver}]`;
+    const msg = `[${_method}] chaining method unavailable for driver ${_driver} on ${
+      isServer() ? 'server' : 'browser'
+    }`;
 
     const exists = this.chaining[_driver][_method];
     if (exists === false || (exists === 'browser' && isServer())) {
-      return this.log().warn()(msg);
+      return this.log().danger()(msg);
     }
   }
 
@@ -325,7 +327,7 @@ export class Records implements ReativeApi {
     // reconfigure http client
     // to get access on stuff
     // defined after initialization
-    this.optionsRefresh();
+    this.refresh();
 
     let _verb = method;
     let _driver = chain.driver;
