@@ -1,3 +1,20 @@
+# [1.7.0](https://github.com/stewwan/reative/compare/v1.6.0...v1.7.0) (2019-12-02)
+
+
+### Bug Fixes
+
+* **parse:** must use driverOptions.identifier ([5e96a55](https://github.com/stewwan/reative/commit/5e96a55c12be7d099cb36b526c910e2373f76f3a))
+* **parse:** tweak `where` log and remove exception for offline cases ([a088b43](https://github.com/stewwan/reative/commit/a088b435787c07a75ba9f8fe582e200cb52072b7))
+* **parse:** update verb ([6ff166a](https://github.com/stewwan/reative/commit/6ff166a1a036e3c1c1e0e5e87374be071e069429))
+
+
+### Features
+
+* **parse:** export pure function parse() to expose their api ([df8d385](https://github.com/stewwan/reative/commit/df8d3852f61356f61d8f639a6267945eff3f12fc))
+* **state:** implement `addState` to serve as a fast replacement for the use case of `setState` with merge false ([5e460f5](https://github.com/stewwan/reative/commit/5e460f55107232d1044438da24141cc7cd9e6c94))
+
+
+
 ## [1.6.1](https://github.com/stewwan/reative/compare/v1.6.0...v1.6.1) (2019-11-29)
 
 
