@@ -20,7 +20,6 @@
     "state": {
       "tags": []
     },
-
     "playground": {
       "tags": []
     },
@@ -35,9 +34,6 @@
       "tags": []
     },
     "parse": {
-      "tags": []
-    },
-    "parse-demo": {
       "tags": []
     }
   }
