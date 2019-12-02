@@ -1,42 +1,42 @@
 # [1.7.0](https://github.com/stewwan/reative/compare/v1.6.0...v1.7.0) (2019-12-02)
 
+## Warning
+
+To reach higher compatibility among all the drivers you might need to specify the `identifier` field on the module initialisation as its default to `doc_id`
+
+```ts
+RecordsModule.forRoot({
+  identifier: 'id' // <-- add whatever you use as a identifier for a record. note that the name `id` cant be used for the parse driver, so use this option carefully.
+});
+```
 
 ### Bug Fixes
 
-* **parse:** must use driverOptions.identifier ([5e96a55](https://github.com/stewwan/reative/commit/5e96a55c12be7d099cb36b526c910e2373f76f3a))
-* **parse:** tweak `where` log and remove exception for offline cases ([a088b43](https://github.com/stewwan/reative/commit/a088b435787c07a75ba9f8fe582e200cb52072b7))
-* **parse:** update verb ([6ff166a](https://github.com/stewwan/reative/commit/6ff166a1a036e3c1c1e0e5e87374be071e069429))
-
+- **parse:** must use driverOptions.identifier ([5e96a55](https://github.com/stewwan/reative/commit/5e96a55c12be7d099cb36b526c910e2373f76f3a))
+- **parse:** tweak `where` log and remove exception for offline cases ([a088b43](https://github.com/stewwan/reative/commit/a088b435787c07a75ba9f8fe582e200cb52072b7))
 
 ### Features
 
-* **parse:** export pure function parse() to expose their api ([df8d385](https://github.com/stewwan/reative/commit/df8d3852f61356f61d8f639a6267945eff3f12fc))
-* **state:** implement `addState` to serve as a fast replacement for the use case of `setState` with merge false ([5e460f5](https://github.com/stewwan/reative/commit/5e460f55107232d1044438da24141cc7cd9e6c94))
-
-
+- **parse:** export pure function parse() to expose their api ([df8d385](https://github.com/stewwan/reative/commit/df8d3852f61356f61d8f639a6267945eff3f12fc))
+- **state:** implement `addState` to serve as a fast replacement for the use case of `setState` with merge false ([5e460f5](https://github.com/stewwan/reative/commit/5e460f55107232d1044438da24141cc7cd9e6c94))
 
 ## [1.6.1](https://github.com/stewwan/reative/compare/v1.6.0...v1.6.1) (2019-11-29)
 
-
 ### Bug Fixes
 
-* **parse:** update verb ([6ff166a](https://github.com/stewwan/reative/commit/6ff166a1a036e3c1c1e0e5e87374be071e069429))
-
-
+- **parse:** update verb ([6ff166a](https://github.com/stewwan/reative/commit/6ff166a1a036e3c1c1e0e5e87374be071e069429))
 
 ## [1.6.0](https://github.com/stewwan/reative/compare/v1.5.0...v1.6.0) (2019-11-28)
 
-
 ### Features
 
-* **parse:** expose objectId as id in parse results ([e8eb410](https://github.com/stewwan/reative/commit/e8eb410d3641e7ee26c23711131e8c634de65e66))
-* **pointer:** add a mapping for the class name ([2f575cc](https://github.com/stewwan/reative/commit/2f575cc13ec3ff45046a754229389f0feac13f83))
-
+- **parse:** expose objectId as id in parse results ([e8eb410](https://github.com/stewwan/reative/commit/e8eb410d3641e7ee26c23711131e8c634de65e66))
+- **pointer:** add a mapping for the class name ([2f575cc](https://github.com/stewwan/reative/commit/2f575cc13ec3ff45046a754229389f0feac13f83))
 
 ### Bug Fixes
 
-* driver chaining ([9b489a8](https://github.com/stewwan/reative/commit/9b489a86db0a35f11072dcc35616e763e5ed4e29))
-* **rr:** options needs re-evaluation on each run ([76004e2](https://github.com/stewwan/reative/commit/76004e2be8cb15fc76792154a197ac1dad0f39d1))
+- driver chaining ([9b489a8](https://github.com/stewwan/reative/commit/9b489a86db0a35f11072dcc35616e763e5ed4e29))
+- **rr:** options needs re-evaluation on each run ([76004e2](https://github.com/stewwan/reative/commit/76004e2be8cb15fc76792154a197ac1dad0f39d1))
 
 ### [1.5.2](https://github.com/stewwan/reative/compare/v1.5.1...v1.5.2) (2019-11-26)
 
