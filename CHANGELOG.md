@@ -6,7 +6,11 @@ To reach higher compatibility among all the drivers you might need to specify th
 
 ```ts
 RecordsModule.forRoot({
-  identifier: 'id' // <-- add whatever you use as a identifier for a record. note that the name `id` cant be used for the parse driver, so use this option carefully.
+  // add whatever you use as a identifier for a record.
+  // note that the name `id` cant be used for the parse driver
+  // because it's a reserved keyword
+  // so use this option carefully
+  identifier: 'id'
 });
 ```
 
