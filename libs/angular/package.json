@@ -1,30 +1,30 @@
 {
-  "name": "@reative/angular",
-  "version": "1.6.1",
-  "peerDependencies": {
-    "@angular/common": "^8.2.0",
-    "@angular/core": "^8.2.0",
-    "@ngxs/store": "^3.4.3",
-    "@ionic/storage": "^2.2.0",
-    "parse": "^2.9.1",
-    "firebase": "6.3.3",
-    "@reative/core": "^2.0.0",
-    "@reative/state": "^2.0.0",
-    "@reative/firebase": "^2.0.0",
-    "@reative/parse": "^2.0.0",
-    "@reative/cache": "^2.0.0"
-  },
-  "dependencies": {
-    "@angular/common": "^8.2.0",
-    "@angular/core": "^8.2.0",
-    "@ngxs/store": "^3.4.3",
-    "@ionic/storage": "^2.2.0",
-    "parse": "^2.9.1",
-    "firebase": "6.3.3",
-    "@reative/core": "^2.0.0",
-    "@reative/state": "^2.0.0",
-    "@reative/firebase": "^2.0.0",
-    "@reative/parse": "^2.0.0",
-    "@reative/cache": "^2.0.0"
-  }
+	"name": "@reative/angular",
+	"version": "2.0.0",
+	"peerDependencies": {
+		"@angular/common": "^8.2.0",
+		"@angular/core": "^8.2.0",
+		"@ngxs/store": "^3.4.3",
+		"@ionic/storage": "^2.2.0",
+		"parse": "^2.9.1",
+		"firebase": "6.3.3",
+		"@reative/core": "^2.0.0",
+		"@reative/state": "^2.0.0",
+		"@reative/firebase": "^2.0.0",
+		"@reative/parse": "^2.0.0",
+		"@reative/cache": "^2.0.0"
+	},
+	"dependencies": {
+		"@angular/common": "^8.2.0",
+		"@angular/core": "^8.2.0",
+		"@ngxs/store": "^3.4.3",
+		"@ionic/storage": "^2.2.0",
+		"parse": "^2.9.1",
+		"firebase": "6.3.3",
+		"@reative/core": "^2.0.0",
+		"@reative/state": "^2.0.0",
+		"@reative/firebase": "^2.0.0",
+		"@reative/parse": "^2.0.0",
+		"@reative/cache": "^2.0.0"
+	}
 }

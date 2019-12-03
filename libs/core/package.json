@@ -1,26 +1,26 @@
 {
-  "name": "@reative/core",
-  "version": "1.6.2",
-  "homepage": "https://github.com/stewwan/core#readme",
-  "license": "MIT",
-  "author": {
-    "name": "Reative Team",
-    "email": "support@reative.dev",
-    "url": "https://reative.dev"
-  },
-  "bugs": {
-    "url": "https://github.com/stewwan/core/issues",
-    "email": "support@reative.dev"
-  },
-  "dependencies": {
-    "axios": "^0.18.0",
-    "rxjs": "^6.5.3",
-    "lodash": "^4.17.15"
-  },
-  "peerDependencies": {
-    "axios": "^0.18.0",
-    "lodash": "^4.17.11",
-    "rxjs": "^6.5.2"
-  },
-  "description": "It has never been easier to build high-quality apps using web technology"
+	"name": "@reative/core",
+	"version": "2.0.0",
+	"homepage": "https://github.com/stewwan/core#readme",
+	"license": "MIT",
+	"author": {
+		"name": "Reative Team",
+		"email": "support@reative.dev",
+		"url": "https://reative.dev"
+	},
+	"bugs": {
+		"url": "https://github.com/stewwan/core/issues",
+		"email": "support@reative.dev"
+	},
+	"dependencies": {
+		"axios": "^0.18.0",
+		"rxjs": "^6.5.3",
+		"lodash": "^4.17.15"
+	},
+	"peerDependencies": {
+		"axios": "^0.18.0",
+		"lodash": "^4.17.11",
+		"rxjs": "^6.5.2"
+	},
+	"description": "It has never been easier to build high-quality apps using web technology"
 }
