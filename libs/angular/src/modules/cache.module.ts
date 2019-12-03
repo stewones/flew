@@ -12,10 +12,10 @@ import {
 @Injectable()
 export class CacheSetup {
   constructor(@Inject('CacheOptions') public options) {
-    Reative.storage.enabled = true;
     Reative.storage = new Storage(
       storageConfig(options.dbName, options.dbStore)
-    ) as any;
+    );
+    Reative.storage.enabled = true;
   }
 }
 
