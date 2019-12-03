@@ -25,7 +25,6 @@ export * from './lib/decorators/collection';
 
 //
 // utils
-export * from './lib/utils/version';
 export * from './lib/utils/response';
 export * from './lib/utils/guid';
 export * from './lib/utils/platform';
