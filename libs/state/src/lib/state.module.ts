@@ -1,4 +1,4 @@
-import { Reative } from '@reative/records';
+import { Reative } from '@reative/core';
 import { NgModule, ModuleWithProviders, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import {

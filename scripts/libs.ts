@@ -3,7 +3,7 @@ export const LIBS = [
   'firebase',
   'cache',
   'state',
-  'records',
+  'core',
   'schematics',
   'parse'
 ];

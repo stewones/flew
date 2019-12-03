@@ -8,7 +8,7 @@
     "nx.json": "*"
   },
   "projects": {
-    "records": {
+    "core": {
       "tags": []
     },
     "firetask": {

@@ -1,4 +1,4 @@
-import { RR_VERSION } from '../libs/records/src/lib/version';
+import { RR_VERSION } from '../libs/core/src/lib/version';
 import * as fs from 'fs';
 import { LIBS } from './libs';
 import * as shell from 'shelljs';
@@ -10,7 +10,7 @@ export type SemanticTarget = 'major' | 'minor' | 'patch';
 export function bumpRR(target: SemanticTarget = 'patch') {
   newVersion = bumpNumber(RR_VERSION, target);
   fs.writeFile(
-    '../libs/records/src/lib/version.ts',
+    '../libs/core/src/lib/version.ts',
     `export const RR_VERSION = '${newVersion}';`,
     function(err) {
       if (err) {

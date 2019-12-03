@@ -45,7 +45,7 @@
 - shipped a pure function `collection` to serve as a spare replacement option for the `@Collection` decorator. Easier for server side usage.
 
 ```ts
-import { collection } from '@reative/records';
+import { collection } from '@reative/core';
 
 collection('Cat', {
   baseURL: 'https://api.thecatapi.com',
@@ -58,7 +58,7 @@ collection('Cat', {
 - shipped full support for parse
 
 ```ts
-import { collection } from '@reative/records';
+import { collection } from '@reative/core';
 import { pointer } from '@reative/parse';
 
 //
@@ -496,7 +496,7 @@ collection('Task')
 
 ### Features
 
-- **state:** rework of how records are being persisted on state. now it should assume a top level object on state, rather than live in a single array index. ([6c3719b](https://github.com/stewwan/reative/commit/6c3719b))
+- **state:** rework of how core are being persisted on state. now it should assume a top level object on state, rather than live in a single array index. ([6c3719b](https://github.com/stewwan/reative/commit/6c3719b))
 
 ### [1.0.11](https://github.com/stewwan/reative/compare/v1.0.10...v1.0.11) (2019-08-01)
 
@@ -580,7 +580,7 @@ collection('Task')
 - Make sure all reative packages are in version `^1.0.1`
 - Replace `.useLog` to `.silent`
 - Replace `@reative/ionic` to `@reative/cache`
-- Replace `reactive-record` to `records`
+- Replace `reactive-record` to `core`
 - Replace `ReactiveRecord` to `Records`
 - Replace `ReactiveModule` to `RecordsModule`
 - Replace `ReactiveIonicModule` to `CacheModule`
@@ -651,7 +651,7 @@ this.storage = storage();
 ### Bug Fixes
 
 - **rr:** diff function ([5617f62](https://github.com/stewwan/reative/commit/5617f62))
-- **state:** store was duplicating records ([3249049](https://github.com/stewwan/reative/commit/3249049))
+- **state:** store was duplicating core ([3249049](https://github.com/stewwan/reative/commit/3249049))
 - **store:** again, make data param default to true for key method ([19ca350](https://github.com/stewwan/reative/commit/19ca350))
 - closes [#14](https://github.com/stewwan/reative/issues/14) ([9a200fa](https://github.com/stewwan/reative/commit/9a200fa))
 
@@ -666,7 +666,7 @@ this.storage = storage();
 
 ### Bug Fixes
 
-- **state:** store was duplicating records ([3249049](https://github.com/stewwan/reative/commit/3249049))
+- **state:** store was duplicating core ([3249049](https://github.com/stewwan/reative/commit/3249049))
 
 ### [0.2.11](https://github.com/stewwan/reative/compare/v0.2.10...v0.2.11) (2019-07-15)
 

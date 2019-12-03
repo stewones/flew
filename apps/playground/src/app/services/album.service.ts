@@ -4,7 +4,7 @@ import {
   Records,
   Response,
   Log
-} from '@reative/records';
+} from '@reative/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { AddLog } from '../+state/log/log.actions';

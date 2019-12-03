@@ -3,6 +3,6 @@
 	"version": "1.5.1",
 	"peerDependencies": {
 		"parse": "^2.9.1",
-		"@reative/records": "^1.6.0"
+		"@reative/core": "^1.6.0"
 	}
 }

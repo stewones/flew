@@ -22,8 +22,8 @@ jobs:
       - name: Deps Install
         run: npm install -f
       - name: Records Lint
-        run: ./node_modules/.bin/ng lint records
+        run: ./node_modules/.bin/ng lint core
       - name: Records Build
-        run: ./node_modules/.bin/ng build records --prod
+        run: ./node_modules/.bin/ng build core --prod
       - name: Records Test
-        run: ./node_modules/.bin/ng test records --configuration=ci
+        run: ./node_modules/.bin/ng test core --configuration=ci

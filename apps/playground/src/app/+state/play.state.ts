@@ -2,7 +2,7 @@ import { State, Selector, Action, StateContext } from '@ngxs/store';
 import { PlayCollection } from '../interfaces/collection.interface';
 import { PlayMethod } from '../interfaces/method.interface';
 import { PlayResponse, PlayPlatform } from '../interfaces/play.interface';
-import { Log } from '@reative/records';
+import { Log } from '@reative/core';
 import { PlayCollections } from '../constants/collection';
 import { PlayMethods } from '../constants/method';
 import {

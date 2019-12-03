@@ -1,4 +1,4 @@
-import { Reative, StorageAdapter } from '@reative/records';
+import { Reative, StorageAdapter } from '@reative/core';
 
 /**
  * A simple helper for getting the ionic storage config

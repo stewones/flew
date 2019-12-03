@@ -1,7 +1,7 @@
 {
-	"name": "@reative/records",
+	"name": "@reative/core",
 	"version": "1.6.1",
-	"homepage": "https://github.com/stewwan/records#readme",
+	"homepage": "https://github.com/stewwan/core#readme",
 	"license": "MIT",
 	"author": {
 		"name": "Reative Team",
@@ -9,7 +9,7 @@
 		"url": "https://reative.dev"
 	},
 	"bugs": {
-		"url": "https://github.com/stewwan/records/issues",
+		"url": "https://github.com/stewwan/core/issues",
 		"email": "support@reative.dev"
 	},
 	"peerDependencies": {

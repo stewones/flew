@@ -4,10 +4,10 @@
 	"peerDependencies": {
 		"@angular/common": "^8.2.0",
 		"@angular/core": "^8.2.0",
-		"@reative/records": "^1.6.0",
+		"@reative/core": "^1.6.0",
 		"firebase": "6.3.3"
 	},
 	"dependencies": {
-		"@reative/records": "^1.6.0"
+		"@reative/core": "^1.6.0"
 	}
 }

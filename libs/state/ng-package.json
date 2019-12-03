@@ -6,7 +6,7 @@
     "umdModuleIds": {
       "lodash": "_",
       "@ngxs/store": "@ngxs/store",
-      "@reative/records": "@reative/records"
+      "@reative/core": "@reative/core"
     }
   }
 }

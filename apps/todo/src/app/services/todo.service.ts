@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Collection, Records, Guid } from '@reative/records';
+import { Collection, Records, Guid } from '@reative/core';
 import { Observable, of } from 'rxjs';
 import { firestore } from '@reative/firebase';
 import { getState } from '@reative/state';

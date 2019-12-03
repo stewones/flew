@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { PlayCache } from '../../interfaces/play.interface';
 import { AppService } from '../../services/app.service';
-import { Reative } from '@reative/records';
+import { Reative } from '@reative/core';
 
 declare var window;
 

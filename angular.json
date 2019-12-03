@@ -3,17 +3,17 @@
   "version": 1,
   "newProjectRoot": "",
   "projects": {
-    "records": {
-      "root": "libs/records",
-      "sourceRoot": "libs/records/src",
+    "core": {
+      "root": "libs/core",
+      "sourceRoot": "libs/core/src",
       "projectType": "library",
       "prefix": "rr",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "libs/records/tsconfig.lib.json",
-            "project": "libs/records/ng-package.json"
+            "tsConfig": "libs/core/tsconfig.lib.json",
+            "project": "libs/core/ng-package.json"
           },
           "configurations": {
             "production": {}
@@ -23,8 +23,8 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/records/tsconfig.lib.json",
-              "libs/records/tsconfig.spec.json"
+              "libs/core/tsconfig.lib.json",
+              "libs/core/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
@@ -32,9 +32,9 @@
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/records/jest.config.js",
-            "tsConfig": "libs/records/tsconfig.spec.json",
-            "setupFile": "libs/records/src/test-setup.ts"
+            "jestConfig": "libs/core/jest.config.js",
+            "tsConfig": "libs/core/tsconfig.spec.json",
+            "setupFile": "libs/core/src/test-setup.ts"
           },
           "configurations": {
             "ci": {

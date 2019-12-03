@@ -9,7 +9,7 @@ import {
   isEmpty,
   isEqual
 } from 'lodash';
-import { Reative, Response, shouldTransformResponse } from '@reative/records';
+import { Reative, Response, shouldTransformResponse } from '@reative/core';
 import { Observable, from, of } from 'rxjs';
 import { STATE_GLOBAL_NAMESPACE } from './config';
 

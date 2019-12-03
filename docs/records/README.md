@@ -6,5 +6,5 @@ The lib is available on both client/server side. However in browser it has a lot
 
 Last but not least, this package is intended to be totally _framework agnostic_, meaning you should be able to use it outside Angular with your preferred framework.
 
-The other packages are all Angular related, though you can easily write your own adapters implementing the [Reative Protocol](https://github.com/stewwan/reative/blob/master/libs/records/src/lib/symbols/reative.ts#L6).
+The other packages are all Angular related, though you can easily write your own adapters implementing the [Reative Protocol](https://github.com/stewwan/reative/blob/master/libs/core/src/lib/symbols/reative.ts#L6).
 

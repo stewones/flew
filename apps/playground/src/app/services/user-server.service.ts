@@ -3,7 +3,7 @@ import {
   Collection,
   Records,
   Response
-} from '@reative/records';
+} from '@reative/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 // import { AxiosRequestConfig } from 'axios';

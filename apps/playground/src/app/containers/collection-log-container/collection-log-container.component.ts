@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Log } from '@reative/records';
+import { Log } from '@reative/core';
 import { Select } from '@ngxs/store';
 import { PlayState } from '../../+state/play.state';
 

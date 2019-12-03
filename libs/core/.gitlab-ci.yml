@@ -6,7 +6,7 @@ unit-test:
     - npm install -f
 
   script:
-    - ./node_modules/.bin/ng test records
+    - ./node_modules/.bin/ng test core
 cache:
   paths:
     - node_modules/

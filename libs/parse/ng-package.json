@@ -4,7 +4,7 @@
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
-      "@reative/records": "@reative/records",
+      "@reative/core": "@reative/core",
       "parse": "parse"
     }
   }

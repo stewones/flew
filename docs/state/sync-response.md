@@ -5,7 +5,7 @@ By default _RR_ will automatically take care of this. But if you find yourself i
 {% code title="sync-state.ts" %}
 ```typescript
 import { syncState } from '@reative/state';
-import { Response } from '@reative/records';
+import { Response } from '@reative/core';
 
 // ...
 const result:Response = {

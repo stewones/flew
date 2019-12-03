@@ -1,4 +1,4 @@
-import { Reative } from '@reative/records';
+import { Reative } from '@reative/core';
 import { storageConfig } from './utils';
 
 import {

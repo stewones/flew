@@ -19,7 +19,7 @@
       "@reative/cache": ["libs/cache/src/index.ts"],
       "@reative/angular": ["libs/angular/src/index.ts"],
       "@reative/state": ["libs/state/src/index.ts"],
-      "@reative/records": ["libs/records/src/index.ts"],
+      "@reative/core": ["libs/core/src/index.ts"],
       "@reative/firebase": ["libs/firebase/src/index.ts"],
       "@reative/parse": ["libs/parse/src/index.ts"]
     },

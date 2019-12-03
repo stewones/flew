@@ -26,7 +26,7 @@ Command will produce something like this
 
 ```typescript
 import { Injectable } from '@angular/core';
-import { Collection, Records } from '@reative/records';
+import { Collection, Records } from '@reative/core';
 import { Observable } from 'rxjs';
 
 export interface User {

@@ -26,7 +26,7 @@ import { AlbumService } from '../../services/album.service';
 import { CommentService } from '../../services/comment.service';
 import { PhotoService } from '../../services/photo.service';
 import { TodoService } from '../../services/todo.service';
-import { Reative } from '@reative/records';
+import { Reative } from '@reative/core';
 
 @Component({
   selector: 'play-verb-chooser-container',

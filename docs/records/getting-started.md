@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-$ npm install --save @reative/records
+$ npm install --save @reative/core
 ```
 
 {% hint style="info" %}

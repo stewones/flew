@@ -6,7 +6,7 @@ import {
   Reative,
   FirebaseConnector,
   FirestoreConnector
-} from '@reative/records';
+} from '@reative/core';
 
 import {
   NgModule,

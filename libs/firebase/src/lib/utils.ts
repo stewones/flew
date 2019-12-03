@@ -1,4 +1,4 @@
-import { Reative } from '@reative/records';
+import { Reative } from '@reative/core';
 
 export function firebase() {
   return Reative.connector.firebase;

@@ -1,4 +1,4 @@
-import { Log } from '@reative/records';
+import { Log } from '@reative/core';
 
 export class AddLog {
   public static readonly type = '[Log] Add log';

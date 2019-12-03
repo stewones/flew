@@ -1,4 +1,4 @@
-import { Reative, ReativeOptions } from '@reative/records';
+import { Reative, ReativeOptions } from '@reative/core';
 
 import {
   NgModule,
