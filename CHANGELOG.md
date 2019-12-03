@@ -1,3 +1,12 @@
+## [2.0.1](https://github.com/stewwan/reative/compare/v2.0.0...v2.0.1) (2019-12-03)
+
+
+### Bug Fixes
+
+* stuff to make it work in vue ([6a4992c](https://github.com/stewwan/reative/commit/6a4992cd85d8c7c500d2cada49d69fb23e198a1b))
+
+
+
 # [2.0.0](https://github.com/stewwan/reative/compare/v1.7.0...v2.0.0) (2019-12-03)
 
 ## Feature Highlight
