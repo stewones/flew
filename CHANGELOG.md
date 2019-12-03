@@ -1,21 +1,26 @@
-# [2.0.0](https://github.com/stewwan/reative/compare/v1.6.0...v2.0.0) (2019-12-03)
+# [2.0.0](https://github.com/stewwan/reative/compare/v1.7.0...v2.0.0) (2019-12-03)
 
+## Feature Highlight
 
-### Bug Fixes
+Organizing packages so we can ship features for another frameworks in the near future.
 
-* **parse:** must use driverOptions.identifier ([5e96a55](https://github.com/stewwan/reative/commit/5e96a55c12be7d099cb36b526c910e2373f76f3a))
-* **parse:** tweak `where` log and remove exception for offline cases ([a088b43](https://github.com/stewwan/reative/commit/a088b435787c07a75ba9f8fe582e200cb52072b7))
-* **parse:** update verb ([6ff166a](https://github.com/stewwan/reative/commit/6ff166a1a036e3c1c1e0e5e87374be071e069429))
+## Deprecations
 
+- now every angular module should be imported from `@reative/angular`
+- replace `State` by `ReativeState` from `@reative/state`
+- now these needs to be imported by client app when needed (recommended to add in client's app.module)
 
-### Features
+  ```
+  import 'firebase/firestore';
+  import 'firebase/database';
+  import 'firebase/auth';
+  ```
 
-* **parse:** export pure function parse() to expose their api ([df8d385](https://github.com/stewwan/reative/commit/df8d3852f61356f61d8f639a6267945eff3f12fc))
-* **state:** implement `addState` to serve as a fast replacement for the use case of `setState` with merge false ([5e460f5](https://github.com/stewwan/reative/commit/5e460f55107232d1044438da24141cc7cd9e6c94))
+- npm uninstall --save @reative/records
+- npm install --save @reative/core
+- rename `@reative/records` to `@reative/core`
 
-
-
-# [1.7.0](https://github.com/stewwan/reative/compare/v1.6.0...v1.7.0) (2019-12-02)
+# [1.7.0](https://github.com/stewwan/reative/compare/v1.6.1...v1.7.0) (2019-12-02)
 
 ## Warning
 
