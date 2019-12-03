@@ -6,30 +6,32 @@ Organizing packages so we can ship features for another frameworks in the near f
 
 ## Deprecations
 
+- replace `State` by `ReativeState`
 - now every angular module should be imported from `@reative/angular`
-  ```ts
-    import {
-      RecordsModule,
-      StateModule,
-      ParseModule,
-      FirebaseModule,
-      CacheModule,
-      ReativeState
-    } from '@reative/angular';
 
+  ```ts
+  import {
+    RecordsModule,
+    StateModule,
+    ParseModule,
+    FirebaseModule,
+    CacheModule,
+    ReativeState
+  } from '@reative/angular';
   ```
-- replace `State` by `ReativeState` from `@reative/state`
+
 - now these needs to be imported by client app when needed (recommended to add in client's app.module)
 
   ```ts
-    import 'firebase/firestore';
-    import 'firebase/database';
-    import 'firebase/auth';
+  import 'firebase/firestore';
+  import 'firebase/database';
+  import 'firebase/auth';
   ```
 
-- npm uninstall --save @reative/records
-- npm install --save @reative/core
-- rename `@reative/records` to `@reative/core`
+- records package is dead
+  - npm uninstall --save @reative/records
+  - npm install --save @reative/core
+  - rename `@reative/records` to `@reative/core`
 
 # [1.7.0](https://github.com/stewwan/reative/compare/v1.6.1...v1.7.0) (2019-12-02)
 
