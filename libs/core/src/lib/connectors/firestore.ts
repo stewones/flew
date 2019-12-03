@@ -1,5 +1,6 @@
 export class FirestoreConnector {
   constructor(firebase, config) {
+    let firestore;
     const settings = {
       /* your settings...  timestampsInSnapshots: true */
     };
@@ -10,13 +11,14 @@ export class FirestoreConnector {
         console.error('Firebase initialization error', err.stack);
     }
     if (!firebase.apps.length) {
-      const firestore = firebase.default.firestore();
+      firestore = firebase.default.firestore();
       firestore.settings(settings);
-      return firestore;
     } else {
-      const firestore = firebase.apps[0].firebase_.firestore();
-      firestore.settings(settings);
-      return firestore;
+      try {
+        firestore = firebase.apps[0].firebase_.firestore();
+        firestore.settings(settings);
+      } catch (err) {}
     }
+    return firestore;
   }
 }
