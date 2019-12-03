@@ -32,15 +32,17 @@ Organizing packages so we can ship features for another frameworks in the near f
 - now these needs to be imported by client app when needed (recommended to add in client's app.module)
 
   ```ts
+  import 'firebase/storage';
   import 'firebase/firestore';
   import 'firebase/database';
   import 'firebase/auth';
+  import 'firebase/app';
   ```
 
 - records package is dead
   - npm uninstall --save @reative/records
   - npm install --save @reative/core
-  - rename `@reative/records` to `@reative/core`
+  - replace every `@reative/records` to `@reative/core`
 
 # [1.7.0](https://github.com/stewwan/reative/compare/v1.6.1...v1.7.0) (2019-12-02)
 
