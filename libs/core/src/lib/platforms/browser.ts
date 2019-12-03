@@ -89,33 +89,35 @@ export class PlatformBrowser extends Records {
         this.log().warn()(`${key} network request`);
         from(this.call<T>(verb, path, payload, chain, key)).subscribe(
           response => {
-            this.getCurrentState$(key).subscribe((stateData: Response) => {
-              const networkData: Response = cloneDeep(response);
+            this.getCurrentState$(key, response).subscribe(
+              (stateData: Response) => {
+                const networkData: Response = cloneDeep(response);
+                if (
+                  this.isDifferent(chain, key, stateData, networkData) ||
+                  (!chain.useCache && !chain.useState) ||
+                  !Reative.storage.enabled
+                ) {
+                  //
+                  // cache strategy
+                  let ttl = chain.ttl || 0;
 
-              if (
-                this.isDifferent(chain, key, stateData, networkData) ||
-                (!chain.useCache && !chain.useState)
-              ) {
-                //
-                // cache strategy
-                let ttl = chain.ttl || 0;
+                  if (ttl > 0) {
+                    // increase seconds
+                    ttl += new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
+                    networkData.ttl = ttl;
+                  }
 
-                if (ttl > 0) {
-                  // increase seconds
-                  ttl += new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
-                  networkData.ttl = ttl;
+                  this.dispatch(observer, networkData, chain);
+                  this.setCache(chain, key, networkData);
+
+                  this.log().info()(`${key} dispatch from network`);
                 }
 
-                this.dispatch(observer, networkData, chain);
-                this.setCache(chain, key, networkData);
-
-                this.log().info()(`${key} dispatch from network`);
+                if (!['on'].includes(verb)) {
+                  observer.complete();
+                }
               }
-
-              if (!['on'].includes(verb)) {
-                observer.complete();
-              }
-            });
+            );
           },
           err => {
             observer.error(err);
@@ -135,7 +137,7 @@ export class PlatformBrowser extends Records {
     const useCache: boolean = chain.useCache;
     const useState: boolean = chain.useState;
     const stateAvailable = Reative.store.enabled;
-    const cacheAvailable = isFunction(Reative.storage.get);
+    const cacheAvailable = Reative.storage.enabled;
     const state: Response = this.getCurrentState(key);
 
     if (
@@ -215,7 +217,7 @@ export class PlatformBrowser extends Records {
     network: Response & { ttl?: number }
   ): Promise<void> {
     const saveNetwork: boolean = chain.saveNetwork === false ? false : true;
-    const hasStorage = Reative.storage && isFunction(Reative.storage.get);
+    const hasStorage = Reative.storage.enabled;
     if (!saveNetwork || !hasStorage) return Promise.resolve();
 
     const state: Response = (await this.getCurrentState$(key).toPromise()) || {
@@ -282,17 +284,17 @@ export class PlatformBrowser extends Records {
   }
 
   private getCurrentState(key: string): Response {
-    const hasStore = Reative.store && isFunction(Reative.store.get);
+    const hasStore = Reative.store.enabled;
     if (!hasStore) return null;
     const state = hasStore ? Reative.store.get(key) : null;
     return state;
   }
 
-  private getCurrentState$(key: string): Observable<Response> {
-    const hasStore = Reative.store && isFunction(Reative.store.get);
-    const hasStorage = Reative.storage && isFunction(Reative.storage.get);
+  private getCurrentState$(key: string, response = null): Observable<Response> {
+    const hasStore = Reative.store.enabled;
+    const hasStorage = Reative.storage.enabled;
 
-    if (!hasStore && !hasStorage) return of();
+    if (!hasStore && !hasStorage) return of(response);
 
     const state: Response = hasStore ? Reative.store.get(key) : null;
 

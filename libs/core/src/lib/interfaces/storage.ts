@@ -4,6 +4,7 @@
  * either the package `ionic-storage`(https://github.com/ionic-team/ionic-storage)
  */
 export interface StorageAdapter<T = any> {
+  enabled: boolean;
   /**
    * Get the value associated with the given key.
    * @param key the key to identify this value

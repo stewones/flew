@@ -33,11 +33,17 @@ export const Reative: ReativeProtocol = {
     }
   },
   connector: {} as Connector,
-  store: {},
+  store: {
+    enabled: false,
+    getState: () => {},
+    sync: () => {},
+    getState$: of()
+  },
   storage: {
-    get: key => {},
-    set: (key, val) => {},
-    clear: () => {}
+    enabled: false,
+    get: key => Promise.resolve(),
+    set: (key, val) => Promise.resolve(),
+    clear: () => Promise.resolve()
   } as StorageAdapter,
   events: {},
   Parse: {}
