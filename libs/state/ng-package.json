@@ -5,8 +5,9 @@
     "entryFile": "src/index.ts",
     "umdModuleIds": {
       "lodash": "_",
-      "@ngxs/store": "@ngxs/store",
+      "rxjs": "rxjs",
       "@reative/core": "@reative/core"
     }
-  }
+  },
+  "whitelistedNonPeerDependencies": ["@reative/core", "rxjs", "lodash"]
 }

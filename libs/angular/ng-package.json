@@ -1,12 +1,37 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/libs/angular",
-  "whitelistedNonPeerDependencies": ["@reative/core"],
+  "whitelistedNonPeerDependencies": [
+    "@reative/core",
+    "@reative/state",
+    "@reative/firebase",
+    "@reative/parse",
+    "@reative/cache",
+    "lodash",
+    "@angular/common",
+    "@angular/core",
+    "@ngxs/store",
+    "@ionic/storage",
+    "parse",
+    "firebase",
+    "firebase/app"
+  ],
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
       "lodash": "_",
-      "@reative/core": "@reative/core"
+      "@reative/core": "@reative/core",
+      "@reative/state": "@reative/state",
+      "@reative/firebase": "@reative/firebase",
+      "@reative/parse": "@reative/parse",
+      "@reative/cache": "@reative/cache",
+      "@angular/common": "@angular/common",
+      "@angular/core": "@angular/core",
+      "@ngxs/store": "@ngxs/store",
+      "@ionic/storage": "@ionic/storage",
+      "parse": "parse",
+      "firebase": "firebase",
+      "firebase/app": "firebase/app"
     }
   }
 }

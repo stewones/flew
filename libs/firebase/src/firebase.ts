@@ -7,3 +7,8 @@ export function firebase() {
 export function firestore() {
   return Reative.connector.firestore;
 }
+
+export interface ReativeFirebaseOptions {
+  config: any;
+  persistence: boolean;
+}

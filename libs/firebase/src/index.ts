@@ -1,2 +1,1 @@
-export * from './lib/fire.module';
-export * from './lib/utils';
+export * from './firebase';

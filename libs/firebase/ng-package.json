@@ -1,11 +1,10 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/libs/firebase",
-  "whitelistedNonPeerDependencies": ["@reative/core"],
+  "whitelistedNonPeerDependencies": ["@angular/core"],
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
-      "firebase/app": "firebase/app",
       "@reative/core": "@reative/core"
     }
   }

@@ -6,6 +6,7 @@ import {
   Injectable,
   Inject
 } from '@angular/core';
+
 @Injectable()
 export class ReativeAngularSetup {
   constructor(@Inject('ReativeAngularOptions') public options) {

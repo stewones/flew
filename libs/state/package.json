@@ -1,10 +1,14 @@
 {
-	"name": "@reative/state",
-	"version": "1.6.1",
-	"peerDependencies": {
-		"@angular/common": "^8.2.0",
-		"@angular/core": "^8.2.0",
-		"@ngxs/store": "^3.4.3",
-		"@reative/core": "^1.6.0"
-	}
+  "name": "@reative/state",
+  "version": "1.6.1",
+  "dependencies": {
+    "@reative/core": "^1.6.1",
+    "rxjs": "^6.5.3",
+    "lodash": "^4.17.15"
+  },
+  "peerDependencies": {
+    "@reative/core": "^1.6.1",
+    "rxjs": "^6.5.3",
+    "lodash": "^4.17.15"
+  }
 }

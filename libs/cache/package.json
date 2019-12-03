@@ -1,10 +1,10 @@
 {
-	"name": "@reative/cache",
-	"version": "1.6.1",
-	"peerDependencies": {
-		"@angular/common": "^8.2.0",
-		"@angular/core": "^8.2.0",
-		"@ionic/storage": "^2.2.0",
-		"@reative/core": "^1.6.0"
-	}
+  "name": "@reative/cache",
+  "version": "1.6.1",
+  "peerDependencies": {
+    "@reative/core": "^1.6.0"
+  },
+  "dependencies": {
+    "@reative/core": "^1.6.0"
+  }
 }

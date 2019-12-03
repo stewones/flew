@@ -1,36 +1,10 @@
-1.4.0
+# 2.0
 
-- chain .query should be rewrite to fit in .where clausule since .query is now reserved for any kind of query
-
-1.5.0
-
-- platforms no longer have `clearCache()`. replace by the pure function `resetCache()` from the `@reative/cache` package
-- platforms no longer have `firestore()` and `firebase()`. import them directly from the `@reative/firebase` package
-- `useLog` has been removed, use the `silent` option instead
-- `.update()` no longer receives an id as first param. use the chain method `.doc` instead 
-    ```js
-    // before
-    .update(id, data)
-
-    // after
-    .doc(id)
-    .update(data)
-    ```
-- `.set()` no longer receives an id as first param. use the chain method `.doc` instead 
-    ```js
-    // before
-    .set(id, data)
-
-    // after
-    .doc(id)
-    .set(data)
-    ```
-- `.set()` now receives an object as second param rather than a boolean 
-    ```js
-    // before
-    .set(id, data, true)
-
-    // after
-    .doc(id)
-    .set(data, { merge: true })
-    ```
+- now every angular module should be imported from @reative/angular
+- replace `State` by `ReativeState` from @reative/state
+- now these needs to be imported by client app when needed
+```
+import 'firebase/firestore';
+import 'firebase/database';
+import 'firebase/auth';
+```

@@ -1,12 +1,6 @@
-import 'firebase/firestore';
-import 'firebase/database';
-import 'firebase/auth';
 import * as Firebase from 'firebase/app';
-import {
-  Reative,
-  FirebaseConnector,
-  FirestoreConnector
-} from '@reative/core';
+import { Reative, FirebaseConnector, FirestoreConnector } from '@reative/core';
+import { ReativeFirebaseOptions } from '@reative/firebase';
 
 import {
   NgModule,
@@ -15,11 +9,6 @@ import {
   Inject
 } from '@angular/core';
 import { cloneDeep } from 'lodash';
-
-export interface ReativeFirebaseOptions {
-  config: any;
-  persistence: boolean;
-}
 
 @Injectable()
 export class ReativeFirebaseSetup {

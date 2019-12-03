@@ -1,1 +1,1 @@
-export * from './lib/parse.module';
+export * from './parse';

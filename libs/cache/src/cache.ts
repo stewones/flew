@@ -1,8 +1,10 @@
 import { Reative, StorageAdapter } from '@reative/core';
 
-/**
- * A simple helper for getting the ionic storage config
- */
+export interface CacheOptions {
+  dbName: string;
+  dbStore: string;
+}
+
 export function storageConfig(
   db = 'app:db',
   store = 'app:store',

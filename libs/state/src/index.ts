@@ -1,2 +1,1 @@
-export * from './lib/state.module';
-export * from './lib/store';
+export * from './state';

@@ -1,4 +1,3 @@
-import { State as Store, Action, StateContext } from '@ngxs/store';
 import {
   get,
   isFunction,
@@ -11,11 +10,8 @@ import {
 } from 'lodash';
 import { Reative, Response, shouldTransformResponse } from '@reative/core';
 import { Observable, from, of } from 'rxjs';
-import { STATE_GLOBAL_NAMESPACE } from './config';
 
-export interface StateModel {
-  [key: string]: Response;
-}
+export const STATE_GLOBAL_NAMESPACE = `Records`;
 
 export interface SetStateOptions {
   merge?: boolean;
@@ -23,7 +19,6 @@ export interface SetStateOptions {
   path?: string;
   identifier?: string;
 }
-
 export interface GetStateOptions {
   raw?: boolean;
   mutable?: boolean;
@@ -40,41 +35,16 @@ export class StateReset {
   constructor() {}
 }
 
+export interface StateModel {
+  [key: string]: Response;
+}
+
 export const defaultStateOptions: SetStateOptions = {
   merge: true,
   save: true,
   path: 'data',
   identifier: Reative.options.identifier
 };
-
-@Store<StateModel>({
-  name: STATE_GLOBAL_NAMESPACE,
-  defaults: {}
-})
-export class State {
-  @Action(StateSync) syncResponse(
-    context: StateContext<StateModel>,
-    action: StateSync
-  ) {
-    const key: string = get(action, 'payload.key');
-    if (!key) return;
-    const state = context.getState();
-    const newState: any = {
-      ...state,
-      ...{
-        [key]: action.payload
-      }
-    };
-
-    context.setState(newState);
-  }
-
-  @Action(StateReset) resetResponse(context: StateContext<StateModel>) {
-    context.setState({});
-  }
-
-  constructor() {}
-}
 
 export function key(name: string, raw = false) {
   return (state: any) => {
@@ -104,10 +74,10 @@ export function syncState(data: Response) {
 }
 
 export function getState<T = any>(
-  key: string,
+  stateKey: string,
   options: GetStateOptions = { raw: false, mutable: false }
 ): T {
-  const response = Reative.store.get && Reative.store.get(key);
+  const response = Reative.store.get && Reative.store.get(stateKey);
   const transform: any = shouldTransformResponse(
     { transformData: !options.raw },
     response
@@ -118,10 +88,10 @@ export function getState<T = any>(
 }
 
 export function getState$<T = any>(
-  key: string,
+  stateKey: string,
   options: GetStateOptions = { raw: false, feed: true }
 ): Observable<T> {
-  const responseFromState = Reative.store.get && Reative.store.get(key);
+  const responseFromState = Reative.store.get && Reative.store.get(stateKey);
   const transformFromState: any = shouldTransformResponse(
     { transformData: !options.raw },
     responseFromState
@@ -135,14 +105,15 @@ export function getState$<T = any>(
     : (from(
         new Promise((resolve, reject) => {
           Reative.storage
-            .get(key)
+            .get(stateKey)
             .then(responseFromCache => {
               const transformFromCache: any = shouldTransformResponse(
                 { transformData: !options.raw },
                 responseFromCache
               );
               const response = transformFromCache(responseFromCache) as T;
-              if (responseFromCache && options.feed) addState(key, response);
+              if (responseFromCache && options.feed)
+                addState(stateKey, response);
               resolve(response);
             })
             .catch(err => reject(err));
@@ -150,24 +121,24 @@ export function getState$<T = any>(
       ) as Observable<T>);
 }
 
-export function addState(key: string, value: any) {
-  const currentState = getState(key);
+export function addState(stateKey: string, value: any) {
+  const currentState = getState(stateKey);
   if (!isEqual(currentState, value)) {
-    setState(key, { data: value }, { merge: false });
+    setState(stateKey, { data: value }, { merge: false });
   }
 }
 
 export function setState(
-  key: string,
+  stateKey: string,
   value: any,
   options: SetStateOptions = { identifier: Reative.options.identifier }
 ) {
   options = { ...defaultStateOptions, ...options };
-  const currentState: any = cloneDeep(getState(key, { raw: true })) || {};
+  const currentState: any = cloneDeep(getState(stateKey, { raw: true })) || {};
   const isElastic = get(currentState, 'data.hits.hits');
   let newState = options.merge
-    ? { ...currentState, data: value, key: key }
-    : { ...value, key: key };
+    ? { ...currentState, data: value, key: stateKey }
+    : { ...value, key: stateKey };
 
   //
   // elastic case
@@ -221,7 +192,7 @@ export function setState(
       if (currentStatePathIsEmpty) currentStatePath = [];
 
       if (isObject(value) && isArray(currentStatePath)) {
-        let newStateHasItem = currentStatePath.find(
+        const newStateHasItem = currentStatePath.find(
           item => item[options.identifier] === value[options.identifier]
         );
         let newStateData = [];
@@ -253,7 +224,7 @@ export function setState(
     }
   }
 
-  const stateBefore = getState(key, { raw: true }) || {};
+  const stateBefore = getState(stateKey, { raw: true }) || {};
 
   if (isEqual(stateBefore, newState)) return;
 
@@ -261,24 +232,21 @@ export function setState(
   // set cache
   if (Reative.storage && options.save) {
     try {
-      Reative.storage.set(key, newState);
+      Reative.storage.set(stateKey, newState);
     } catch (err) {}
   }
 
   //
   // set state
-  Reative.store.set(key, newState);
+  Reative.store.set(stateKey, newState);
 }
 
-/**
- * method to load state from cache into store
- */
-export async function feedState(key?: string) {
+export async function feedState(stateKey?: string) {
   const hasStorage = isFunction(Reative.storage.forEach);
 
   if (hasStorage) {
     if (key) {
-      const cache = await Reative.storage.get(key);
+      const cache = await Reative.storage.get(stateKey);
       if (!isEmpty(cache)) Reative.store.sync(cache);
       return cache;
     } else {

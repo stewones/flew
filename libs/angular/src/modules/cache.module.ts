@@ -1,5 +1,6 @@
 import { Reative } from '@reative/core';
-import { storageConfig } from './utils';
+import { storageConfig, CacheOptions } from '@reative/cache';
+import { Storage } from '@ionic/storage';
 
 import {
   NgModule,
@@ -7,13 +8,6 @@ import {
   Injectable,
   Inject
 } from '@angular/core';
-
-import { Storage } from '@ionic/storage';
-
-export interface CacheOptions {
-  dbName: string;
-  dbStore: string;
-}
 
 @Injectable()
 export class CacheSetup {
