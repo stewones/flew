@@ -225,14 +225,20 @@ export class ParseDriver implements ReativeDriver {
       switch (verb) {
         case 'aggregate':
           this.connector
-            .aggregate(chain.query['aggregate'])
+            .aggregate(chain.query['aggregate'], {
+              useMasterKey: chain.useMasterKey,
+              useSessionToken: chain.useSessionToken
+            })
             .then(success)
             .catch(error);
           break;
 
         default:
           this.connector
-            .find()
+            .find({
+              useMasterKey: chain.useMasterKey,
+              useSessionToken: chain.useSessionToken
+            })
             .then(success)
             .catch(error);
           break;

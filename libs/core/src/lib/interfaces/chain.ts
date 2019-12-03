@@ -20,7 +20,9 @@ export type ReativeChain =
   | 'diff'
   | 'http'
   | 'include'
-  | 'doc';
+  | 'doc'
+  | 'token'
+  | 'master';
 
 export interface ReativeChainPayloadWhere {
   field: string;
@@ -37,6 +39,8 @@ export interface ReativeChainPayload {
   useCache?: boolean; //  use cache for first response
   useNetwork?: boolean; // use network for first response
   saveNetwork?: boolean; // save network response
+  useMasterKey?: boolean; // from parse
+  useSessionToken?: string; // from parse
 
   transformResponse?: (data: any) => any; // transform function for network data response
   transformData?: boolean; // shortcut for transform(r=>r.data)

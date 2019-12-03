@@ -120,6 +120,8 @@ export class Records implements ReativeApi {
       http: false,
       include: false,
       doc: true,
+      master: false,
+      token: false,
       save: 'browser',
       ttl: 'browser',
       state: 'browser',
@@ -142,6 +144,8 @@ export class Records implements ReativeApi {
       http: false,
       include: false,
       doc: false,
+      master: false,
+      token: false,
       save: 'browser',
       ttl: 'browser',
       state: 'browser',
@@ -164,6 +168,8 @@ export class Records implements ReativeApi {
       http: true,
       include: false,
       doc: false,
+      master: false,
+      token: false,
       save: 'browser',
       ttl: 'browser',
       state: 'browser',
@@ -186,6 +192,8 @@ export class Records implements ReativeApi {
       http: false,
       include: true,
       doc: true,
+      master: true,
+      token: true,
       save: 'browser',
       ttl: 'browser',
       state: 'browser',
@@ -562,6 +570,18 @@ export class Records implements ReativeApi {
   public diff(fn): Records {
     this.chain.diff = fn;
     this.checkChainAvailability(this.chain.driver, 'diff');
+    return this;
+  }
+
+  public master(active): Records {
+    this.chain.useMasterKey = active;
+    this.checkChainAvailability(this.chain.driver, 'master');
+    return this;
+  }
+
+  public token(session): Records {
+    this.chain.useSessionToken = session;
+    this.checkChainAvailability(this.chain.driver, 'token');
     return this;
   }
 }
