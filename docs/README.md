@@ -1,4 +1,4 @@
-# Reative
+# Reative [![CI](https://github.com/stewwan/reative/workflows/CI/badge.svg)](https://github.com/stewwan/reative/actions)
 
 Reative is a set of open-source tools which makes it easy to build high-quality apps using just web technologies.
 
