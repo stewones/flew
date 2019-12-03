@@ -8,11 +8,11 @@
     "@ionic/storage": "^2.2.0",
     "parse": "^2.9.1",
     "firebase": "6.3.3",
-    "@reative/core": "^1.6.2",
-    "@reative/state": "^1.7.0",
-    "@reative/firebase": "^1.7.0",
-    "@reative/parse": "^1.6.0",
-    "@reative/cache": "^1.7.0"
+    "@reative/core": "^2.0.0",
+    "@reative/state": "^2.0.0",
+    "@reative/firebase": "^2.0.0",
+    "@reative/parse": "^2.0.0",
+    "@reative/cache": "^2.0.0"
   },
   "dependencies": {
     "@angular/common": "^8.2.0",
@@ -21,10 +21,10 @@
     "@ionic/storage": "^2.2.0",
     "parse": "^2.9.1",
     "firebase": "6.3.3",
-    "@reative/core": "^1.6.2",
-    "@reative/state": "^1.7.0",
-    "@reative/firebase": "^1.7.0",
-    "@reative/parse": "^1.6.0",
-    "@reative/cache": "^1.7.0"
+    "@reative/core": "^2.0.0",
+    "@reative/state": "^2.0.0",
+    "@reative/firebase": "^2.0.0",
+    "@reative/parse": "^2.0.0",
+    "@reative/cache": "^2.0.0"
   }
 }
