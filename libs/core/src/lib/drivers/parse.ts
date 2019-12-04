@@ -31,8 +31,7 @@ export class ParseDriver implements ReativeDriver {
   }
 
   private exceptions() {
-    if (!this.driverOptions.collection)
-      throw new Error('missing collection name');
+    if (!this.getCollectionName()) throw new Error('missing collection name');
   }
 
   protected where(query: any[] = []) {
@@ -131,7 +130,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // define adapter
-      this.connector = new Reative.Parse.Query(this.driverOptions.collection);
+      this.connector = new Reative.Parse.Query(this.getCollectionName());
 
       //
       // set arbitrary query
@@ -200,7 +199,7 @@ export class ParseDriver implements ReativeDriver {
         const response: Response = clearNetworkResponse({
           data: result,
           key: key,
-          collection: this.driverOptions.collection,
+          collection: this.getCollectionName(),
           driver: this.driverName,
           response: {
             empty: !result.length,
@@ -252,7 +251,7 @@ export class ParseDriver implements ReativeDriver {
         const response: Response = <Response>{
           data: r.data && r.data.length ? r.data[0] : {},
           key: r.key,
-          collection: this.driverOptions.collection,
+          collection: this.getCollectionName(),
           driver: this.driverName,
           response: r.response
         };
@@ -270,7 +269,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // define adapter
-      this.connector = new Reative.Parse.Query(this.driverOptions.collection);
+      this.connector = new Reative.Parse.Query(this.getCollectionName());
 
       //
       // set arbitrary query
@@ -316,7 +315,7 @@ export class ParseDriver implements ReativeDriver {
         return clearNetworkResponse({
           data: result,
           key: key,
-          collection: this.driverOptions.collection,
+          collection: this.getCollectionName(),
           driver: this.driverName,
           response: {
             empty: !result.length,
@@ -397,7 +396,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // define connector
-      const model = new Reative.Parse.Object(this.driverOptions.collection);
+      const model = new Reative.Parse.Object(this.getCollectionName());
 
       //
       // define return
@@ -448,10 +447,10 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // persist on cloud
-      const id1 = new Reative.Parse.Query(this.driverOptions.collection);
+      const id1 = new Reative.Parse.Query(this.getCollectionName());
       id1.equalTo('objectId', chain.doc);
 
-      const id2 = new Reative.Parse.Query(this.driverOptions.collection);
+      const id2 = new Reative.Parse.Query(this.getCollectionName());
       id2.equalTo(this.driverOptions.identifier, chain.doc);
 
       Reative.Parse.Query.or(id1, id2)
@@ -468,5 +467,15 @@ export class ParseDriver implements ReativeDriver {
           }
         });
     });
+  }
+
+  getCollectionName() {
+    const mapping = {
+      User: '_User',
+      Role: '_Role',
+      Session: '_Session'
+    };
+    const name = this.driverOptions.collection;
+    return mapping[name] ? mapping[name] : name;
   }
 }
