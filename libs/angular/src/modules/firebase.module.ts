@@ -1,6 +1,5 @@
 import * as Firebase from 'firebase/app';
-import { Reative, FirebaseConnector, FirestoreConnector } from '@reative/core';
-import { ReativeFirebaseOptions } from '@reative/firebase';
+import { install, ReativeFirebaseOptions } from '@reative/firebase';
 
 import {
   NgModule,
@@ -8,15 +7,11 @@ import {
   Injectable,
   Inject
 } from '@angular/core';
-import { cloneDeep } from 'lodash';
 
 @Injectable()
 export class ReativeFirebaseSetup {
   constructor(@Inject('ReativeFirebaseOptions') public options) {
-    const connector = cloneDeep(Reative.connector);
-    connector.firebase = new FirebaseConnector(Firebase, options.config);
-    connector.firestore = new FirestoreConnector(Firebase, options.config);
-    Reative.connector = connector;
+    install(Firebase, options.config);
   }
 }
 

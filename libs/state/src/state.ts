@@ -1,15 +1,15 @@
+import { Reative, Response, shouldTransformResponse } from '@reative/core';
 import {
-  get,
-  isFunction,
-  isObject,
   cloneDeep,
-  set,
+  get,
   isArray,
   isEmpty,
-  isEqual
+  isEqual,
+  isFunction,
+  isObject,
+  set
 } from 'lodash';
-import { Reative, Response, shouldTransformResponse } from '@reative/core';
-import { Observable, from, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 
 export const STATE_GLOBAL_NAMESPACE = `Records`;
 
@@ -69,6 +69,10 @@ export function resetState() {
   return Reative.store.reset();
 }
 
+export function resetStateResponse(context) {
+  context.setState({});
+}
+
 export function syncState(data: Response) {
   return Reative.store.sync(data);
 }
@@ -126,6 +130,20 @@ export function addState(stateKey: string, value: any) {
   if (!isEqual(currentState, value)) {
     setState(stateKey, { data: value }, { merge: false });
   }
+}
+
+export function addStateResponse(context, action) {
+  const stateKey: string = get(action, 'payload.key');
+  if (!stateKey) return;
+  const state = context.getState();
+  const newState: any = {
+    ...state,
+    ...{
+      [stateKey]: action.payload
+    }
+  };
+
+  context.setState(newState);
 }
 
 export function setState(
@@ -256,4 +274,31 @@ export async function feedState(stateKey?: string) {
     }
   }
   throw new Error(`Can't locate storage instance`);
+}
+
+export function install(instance) {
+  Reative.store.enabled = true;
+  Reative.store.reset = () => instance.dispatch(new StateReset());
+  Reative.store.sync = r => {
+    instance.dispatch(new StateSync(r));
+  };
+
+  Reative.store.get = stateKey => {
+    const snapshot = instance.snapshot();
+    const state = get(snapshot, `${STATE_GLOBAL_NAMESPACE}.${stateKey}`) || {};
+    return state;
+  };
+
+  Reative.store.set = (stateKey, val) => {
+    const newState = { ...val, key: stateKey };
+    instance.dispatch(new StateSync(newState));
+  };
+
+  Reative.store.select = (stateKey, raw?) => {
+    return instance.select(key(stateKey, raw));
+  };
+
+  Reative.store.addState = addState;
+  Reative.store.getState = getState;
+  Reative.store.setState = setState;
 }

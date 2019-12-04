@@ -1,5 +1,4 @@
-import { Reative } from '@reative/core';
-import { storageConfig, CacheOptions } from '@reative/cache';
+import { install, storageConfig, CacheOptions } from '@reative/cache';
 import { Storage } from '@ionic/storage';
 
 import {
@@ -12,10 +11,7 @@ import {
 @Injectable()
 export class CacheSetup {
   constructor(@Inject('CacheOptions') public options) {
-    Reative.storage = new Storage(
-      storageConfig(options.dbName, options.dbStore)
-    );
-    Reative.storage.enabled = true;
+    install(new Storage(storageConfig(options.dbName, options.dbStore)));
   }
 }
 

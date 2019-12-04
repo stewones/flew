@@ -25,3 +25,8 @@ export function storage(): StorageAdapter {
 export function resetCache() {
   Reative.storage.clear();
 }
+
+export function install(instance) {
+  Reative.storage = instance;
+  Reative.storage.enabled = true;
+}

@@ -34,3 +34,10 @@ export function object(collection: string, attr = {}, options = {}) {
 export function parse() {
   return Reative.Parse;
 }
+
+export function install(instance, options) {
+  instance.initialize(options.appID);
+  instance.serverURL = options.serverURL;
+  instance.masterKey = options.masterKey;
+  Reative.Parse = instance;
+}

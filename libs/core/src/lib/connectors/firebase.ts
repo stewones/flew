@@ -1,3 +1,7 @@
+/**
+ * @deprecated
+ * moved to firebase package
+ */
 export class FirebaseConnector {
   constructor(firebase, config) {
     try {
