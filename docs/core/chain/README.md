@@ -26,4 +26,4 @@
 | [cache](https://docs.reative.dev/core/chain/cache)         | ⚙         | ⚙        | ⚙    | ⚙     |
 
 
-> ✅ available ⛔️ unavailable ⚙ only in browser
+✅ available ⛔️ unavailable ⚙ only in browser

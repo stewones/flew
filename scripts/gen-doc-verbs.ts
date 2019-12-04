@@ -50,7 +50,7 @@ for (const driver in service.verbs) {
 
 markdown += table(matrix);
 markdown += `\n\n\n`;
-markdown += `> ✅ available ⛔️ unavailable ⚙ routed`;
+markdown += `✅ available ⛔️ unavailable ⚙ routed`;
 
 console.log(markdown);
 

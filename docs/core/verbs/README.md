@@ -1,4 +1,4 @@
-# Verbs 
+# Verbs API
 
 |                                                        | firestore               | firebase                | http                   | parse                    |
 | ------------------------------------------------------ | ----------------------- | ----------------------- | ---------------------- | ------------------------ |
@@ -13,4 +13,4 @@
 | [set](https://docs.reative.dev/core/verbs/set)         | ✅                       | ⚙<sub>http.post</sub>   | ⚙<sub>http.post</sub>  | ✅                        |
 
 
-> ✅ available ⛔️ unavailable ⚙ routed
+✅ available ⛔️ unavailable ⚙ routed

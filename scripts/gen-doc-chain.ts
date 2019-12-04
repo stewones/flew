@@ -48,7 +48,7 @@ for (const driver in service.chaining) {
 
 markdown += table(matrix);
 markdown += `\n\n\n`;
-markdown += `> ✅ available ⛔️ unavailable ⚙ only in browser`;
+markdown += `✅ available ⛔️ unavailable ⚙ only in browser`;
 
 console.log(markdown);
 
