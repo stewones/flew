@@ -1,3 +1,19 @@
+## [2.0.3](https://github.com/stewwan/reative/compare/v2.0.0...v2.0.3) (2019-12-04)
+
+
+### Bug Fixes
+
+* bump firebase ([6e69904](https://github.com/stewwan/reative/commit/6e699040c7a12b5aa3a8dbb859f0a1dd22f4652e))
+* stuff to make it work in vue ([6a4992c](https://github.com/stewwan/reative/commit/6a4992cd85d8c7c500d2cada49d69fb23e198a1b))
+* **browser:** cache diff ([dae93de](https://github.com/stewwan/reative/commit/dae93de2ad4b4b7a018922dadd3b9a1f6910d9fa))
+
+
+### Features
+
+* **parse:** add useMasterKey and sessionToken options to the chaining ([29ed50c](https://github.com/stewwan/reative/commit/29ed50ce84dfe1d4e3ebbf89ac12336743f5c778))
+
+
+
 ## [2.0.2](https://github.com/stewwan/reative/compare/v2.0.0...v2.0.2) (2019-12-03)
 
 
