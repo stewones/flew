@@ -1,10 +1,10 @@
 {
-	"name": "@reative/cache",
-	"version": "2.0.2",
-	"peerDependencies": {
-		"@reative/core": "^2.0.1"
-	},
-	"dependencies": {
-		"@reative/core": "^2.0.1"
-	}
+  "name": "@reative/cache",
+  "version": "2.0.2",
+  "peerDependencies": {
+    "@reative/core": "^2.0.3"
+  },
+  "dependencies": {
+    "@reative/core": "^2.0.3"
+  }
 }
