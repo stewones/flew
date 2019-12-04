@@ -1,2 +1,0 @@
-# Faster Loads
-

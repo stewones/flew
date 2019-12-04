@@ -1,2 +1,0 @@
-# HTTP Custom Connector
-

@@ -26,6 +26,28 @@ collection('kitty', {
   .subscribe(kitty => console.log(kitty), err => console.log(err));
 ```
 
+### The same call but as a promise
+
+```js
+import { collection, Response } from '@reative/core';
+
+// Get a random kitty
+
+collection('kitty', {
+  silent: false,
+  driver: 'http',
+  baseURL: 'https://api.thecatapi.com',
+  endpoint: '/v1'
+})
+  .transform((data: Response) => data.data[0])
+  .get('/images/search?size=small&mime_types=gif')
+  .toPromise()
+  .then(kitty => console.log(kitty))
+  .catch(err => console.log(err));
+```
+
+> use promises carefully, especially if you're expecting results from cache.
+
 ### Configuring options only once
 
 ```js
@@ -57,7 +79,7 @@ Reative.options = {
 };
 
 // Get a kitty from http and firestore
-// using the same api
+// both using the same api
 
 ['firestore', 'http'].map(driver =>
   collection('kitty')
@@ -72,4 +94,28 @@ Reative.options = {
 );
 ```
 
-> For `firebase` and `firestore` drivers, reative api follows pretty much the same as is in the oficial google's sdk
+> Reative api for `firebase` and `firestore` drivers follows pretty much the same as is in the oficial google's sdk
+
+### Using the class decorator @Collection
+
+```js
+import { Collection, Response, Records } from '@reative/core';
+
+@Collection({
+  name: 'kitty',
+  driver: 'http',
+  baseURL: 'https://api.thecatapi.com',
+  endpoint: '/v1'
+})
+class KittyService {
+  $collection: Records;
+}
+
+const kittyService = new KittyService();
+
+// Get a random kitty
+kittyService.$collection
+  .transform((data: Response) => data.data[0])
+  .get('/images/search?size=small&mime_types=gif')
+  .subscribe(kitty => console.log(kitty), err => console.log(err));
+```

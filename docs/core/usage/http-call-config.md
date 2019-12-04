@@ -1,2 +1,0 @@
-# HTTP Call Config
-
