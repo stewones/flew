@@ -8,6 +8,8 @@
     "bump:major": "tsc && node ./.compiled/scripts/bump-major.js",
     "bump:minor": "tsc && node ./.compiled/scripts/bump-minor.js",
     "bump:patch": "tsc && node ./.compiled/scripts/bump-patch.js",
+    "gen:doc:verbs": "tsc && node ./.compiled/scripts/gen-doc-verbs.js",
+    "gen:doc:chain": "tsc && node ./.compiled/scripts/gen-doc-chain.js",
     "git:tag": "tsc && node ./.compiled/scripts/git-tag.js",
     "lint:angular": "cd ../ && ./node_modules/.bin/ng lint angular",
     "lint:ionic": "cd ../ && ./node_modules/.bin/ng lint ionic",
