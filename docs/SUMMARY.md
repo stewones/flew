@@ -1,6 +1,6 @@
 # Table of contents
 
-- [Reative](README.md)
+- [Platform](README.md)
 - [Getting Started](getting-started.md)
 - [Core](core/README.md)
   - [Options](core/options.md)

@@ -1,6 +1,6 @@
 # Getting Started
 
-There's a bunch of reative packages which each one is responsible for a special feature. Easy as cake this is a good start point.
+There's a bunch of reative packages which each one is responsible for a special feature. Easy as cake this is the quickest start point.
 
 ## Installation
 
