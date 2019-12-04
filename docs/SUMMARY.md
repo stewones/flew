@@ -26,7 +26,7 @@
     - [HTTP](core/drivers/http.md)
   - [Verbs API](core/verbs/README.md)
     - [Find](core/verbs/find.md)
-    - [Find One](core/verbs/find-one.md)
+    - [FindOne](core/verbs/findOne.md)
     - [On](core/verbs/on.md)
     - [Get](core/verbs/get.md)
     - [Post](core/verbs/post.md)
