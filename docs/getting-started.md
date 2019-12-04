@@ -46,7 +46,7 @@ collection('kitty', {
   .catch(err => console.log(err));
 ```
 
-> use promises carefully, especially if you're expecting results from cache.
+> use promises carefully, especially if you're expecting results from cache or state.
 
 ### Configuring options only once
 
@@ -94,7 +94,7 @@ Reative.options = {
 );
 ```
 
-> Reative api for `firebase` and `firestore` drivers follows pretty much the same as is in the oficial google's sdk
+> Reative api for `firebase` and `firestore` drivers follows pretty much the same as is in the oficial Google's SDK
 
 ### Using the class decorator @Collection
 
