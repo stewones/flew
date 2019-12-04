@@ -245,7 +245,7 @@ export class PlatformBrowser extends Records {
     const diffFn = isCustomDiff
       ? chain.diff
       : (c, n) =>
-          !isEmpty(diff(clearNetworkResponse(c), clearNetworkResponse(n))) ||
+          !isEqual(clearNetworkResponse(c), clearNetworkResponse(n)) ||
           isEmpty(_cache) ||
           isEmpty(_network);
 
@@ -297,7 +297,6 @@ export class PlatformBrowser extends Records {
     if (!hasStore && !hasStorage) return of(response);
 
     const state: Response = hasStore ? Reative.store.get(key) : null;
-
     return !isEmpty(state)
       ? of(state)
       : hasStorage
