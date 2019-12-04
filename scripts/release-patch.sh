@@ -16,6 +16,8 @@
 npm run bump:patch
 npm run version:patch
 npm run changelog
+npm run git:tag
+
 # -- /BUMP -- ##
 
 # -- BUILD -- ##
@@ -28,8 +30,7 @@ npm run build:schematics
 npm run build:parse
 # -- /BUILD -- ##
 
-npm run git:tag
-npm run deploy:git
+
 npm run deploy:npm
 # npm run deploy:ci
 
