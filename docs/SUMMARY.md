@@ -34,6 +34,7 @@
     - [Set](core/verbs/set.md)
 - [Cache](cache/README.md)
 - [State](state/README.md)
+
   - [Getting Started](state/getting-started.md)
   - [Select Data](state/select-data.md)
   - [Select Dynamically](state/select-dynamically.md)
@@ -42,7 +43,9 @@
   - [Reset State](state/reset-state.md)
   - [Feed State](state/feed-state.md)
   - [Sync Response](state/sync-response.md)
+
 - [Angular](angular.md)
+- [Parse](parse/README.md)
 - [Vue](vue.md)
 - [Schematics](schematics.md)
 - [Changelog](changelog.md)
