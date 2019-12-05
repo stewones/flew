@@ -1,11 +1,4 @@
 import { Reative } from '@reative/core';
-
-/**
- * Parse Options
- *
- * @export
- * @interface ParseOptions
- */
 export interface ParseOptions {
   serverURL: string;
   appID: string;
@@ -13,7 +6,9 @@ export interface ParseOptions {
 }
 
 /**
- * Extend Parse Object
+ * Model
+ *
+ * Extends Parse Object
  *
  * @export
  * @param {string} name
@@ -25,7 +20,9 @@ export function model(name: string) {
 }
 
 /**
- * Create Parse Query
+ * Query
+ *
+ * Creates a Parse Query
  *
  * @export
  * @param {string} name
@@ -36,7 +33,9 @@ export function query(name: string) {
 }
 
 /**
- * Create a Parse Pointer
+ * Pointer
+ *
+ * Creates a Parse Pointer
  *
  * @export
  * @param {string} name
@@ -56,7 +55,9 @@ export function pointer(name: string, id: string) {
 }
 
 /**
- * Create a Parse Object
+ * Object
+ *
+ * Creates a Parse Object
  *
  * @export
  * @param {string} collection
@@ -69,7 +70,9 @@ export function object(collection: string, attr = {}, options = {}) {
 }
 
 /**
- * Get Parse Instance
+ * Parse
+ *
+ * Get the Parse instance
  *
  * @export
  * @returns Parse
@@ -79,7 +82,9 @@ export function parse() {
 }
 
 /**
- * Bootstrap Parse on Reative Platform
+ * Install
+ *
+ * Bootstraps Parse on Reative Platform
  *
  * @export
  * @param {*} instance
