@@ -44,7 +44,8 @@
   - [Feed State](state/feed-state.md)
   - [Sync Response](state/sync-response.md)
 
-- [Angular](angular.md)
+- [Angular](angular/README.md)
+  - [API](angular/api.md)
 - [Parse](parse/README.md)
   - [API](parse/api.md)
 - [Vue](vue.md)

@@ -12,12 +12,29 @@ import {
 } from '@reative/state';
 
 @Injectable()
-export class ReativeStateSetup {
+class ReativeStateSetup {
   constructor(public store: Store) {
     install(store);
   }
 }
 
+/**
+  Reative State
+  @example
+  ```js
+  import { ReativeState } from '@reative/angular';
+  import { NgxsModule } from '@ngxs/store';
+  import { environment } from '../environments/environment';
+
+  //... 
+    NgxsModule.forRoot([ReativeState], {
+        developmentMode: !environment.production
+    }),
+  //...
+  ```
+  @export
+  @class ReativeState
+*/
 @State<StateModel>({
   name: STATE_GLOBAL_NAMESPACE,
   defaults: {}
@@ -37,6 +54,18 @@ export class ReativeState {
   constructor() {}
 }
 
+/**
+  State Module 
+  @example
+  ```js
+  import { StateModule } from '@reative/angular';
+  //... 
+  StateModule.forRoot()
+  //...
+  ```
+  @export
+  @class StateModule
+*/
 @NgModule()
 export class StateModule {
   public static forRoot(): ModuleWithProviders {

@@ -9,12 +9,27 @@ import {
 } from '@angular/core';
 
 @Injectable()
-export class CacheSetup {
+class CacheSetup {
   constructor(@Inject('CacheOptions') public options) {
     install(new Storage(storageConfig(options.dbName, options.dbStore)));
   }
 }
 
+/**
+  Cache Module 
+  @example
+  ```js
+  import { CacheModule } from '@reative/angular';
+  //... 
+  CacheModule.forRoot({
+    dbName: 'kitty',
+    dbStore: 'app'
+  })
+  //...
+  ```
+  @export
+  @class CacheModule
+*/
 @NgModule()
 export class CacheModule {
   public static forRoot(

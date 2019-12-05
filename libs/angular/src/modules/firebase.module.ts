@@ -9,12 +9,27 @@ import {
 } from '@angular/core';
 
 @Injectable()
-export class ReativeFirebaseSetup {
+class ReativeFirebaseSetup {
   constructor(@Inject('ReativeFirebaseOptions') public options) {
     install(Firebase, options.config);
   }
 }
 
+/**
+  Firebase Module 
+  @example
+  ```js
+  import { FirebaseModule } from '@reative/angular';
+  //... 
+  FirebaseModule.forRoot({
+    config: FIREBASE_CONFIG, // from firebase console
+    persistence: true // firestore setting
+  })
+  //...
+  ```
+  @export
+  @class FirebaseModule
+*/
 @NgModule()
 export class FirebaseModule {
   public static forRoot(

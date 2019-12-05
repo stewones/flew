@@ -1,12 +1,3 @@
-## Functions
-
-<dl>
-<dt><a href="#storageConfig">storageConfig([db], [store], [driver])</a></dt>
-<dd><p>Configure storage</p></dd>
-<dt><a href="#install">install(instance)</a></dt>
-<dd><p>Initialize stuff for a given storage instance</p></dd>
-</dl>
-
 <a name="storageConfig"></a>
 
 ## storageConfig([db], [store], [driver])
