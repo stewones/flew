@@ -1,20 +1,3 @@
-## Functions
-
-<dl>
-<dt><a href="#model">model(name)</a> ⇒</dt>
-<dd><p>Extends Parse Object</p></dd>
-<dt><a href="#query">query(name)</a> ⇒</dt>
-<dd><p>Creates a Parse Query</p></dd>
-<dt><a href="#pointer">pointer(name, id)</a> ⇒</dt>
-<dd><p>Creates a Parse Pointer</p></dd>
-<dt><a href="#object">object(collection, [attr], [options])</a> ⇒</dt>
-<dd><p>Creates a Parse Object</p></dd>
-<dt><a href="#parse">parse()</a> ⇒</dt>
-<dd><p>Get the Parse instance</p></dd>
-<dt><a href="#install">install(instance, options)</a></dt>
-<dd><p>Bootstraps Parse on Reative Platform</p></dd>
-</dl>
-
 <a name="model"></a>
 
 ## model(name) ⇒
