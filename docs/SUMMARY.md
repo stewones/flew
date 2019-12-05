@@ -46,6 +46,7 @@
 
 - [Angular](angular.md)
 - [Parse](parse/README.md)
+  - [API](parse/api.md)
 - [Vue](vue.md)
 - [Schematics](schematics.md)
 - [Changelog](changelog.md)
