@@ -8,7 +8,7 @@
     "doc:cache": "./node_modules/.bin/jsdoc2md --files ../libs/cache/src/**/*.ts --configure ./setup.json > ../docs/cache/api.md",
     "doc:core": "./node_modules/.bin/jsdoc2md --files ../libs/core/src/**/*.ts --configure ./setup.json > ../docs/core/api.md",
     "doc:firebase": "./node_modules/.bin/jsdoc2md --files ../libs/firebase/src/**/*.ts --configure ./setup.json > ../docs/firebase/api.md",
-    "doc:parse": "./node_modules/.bin/jsdoc2md --files ../libs/parse/src/**/*.ts --configure ./setup.json > ../docs/parse/api.md",
+    "doc:parse": "./node_modules/.bin/jsdoc2md --files ../libs/parse/src/**/*.ts --configure ./setup.json --template template.hbs > ../docs/parse/api.md",
     "doc:state": "./node_modules/.bin/jsdoc2md --files ../libs/state/src/**/*.ts --configure ./setup.json > ../docs/state/api.md"
   },
   "private": true,

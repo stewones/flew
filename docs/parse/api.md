@@ -2,29 +2,22 @@
 
 <dl>
 <dt><a href="#model">model(name)</a> ⇒</dt>
-<dd><p>Model</p>
-<p>Extends Parse Object</p></dd>
+<dd><p>Extends Parse Object</p></dd>
 <dt><a href="#query">query(name)</a> ⇒</dt>
-<dd><p>Query</p>
-<p>Creates a Parse Query</p></dd>
+<dd><p>Creates a Parse Query</p></dd>
 <dt><a href="#pointer">pointer(name, id)</a> ⇒</dt>
-<dd><p>Pointer</p>
-<p>Creates a Parse Pointer</p></dd>
+<dd><p>Creates a Parse Pointer</p></dd>
 <dt><a href="#object">object(collection, [attr], [options])</a> ⇒</dt>
-<dd><p>Object</p>
-<p>Creates a Parse Object</p></dd>
+<dd><p>Creates a Parse Object</p></dd>
 <dt><a href="#parse">parse()</a> ⇒</dt>
-<dd><p>Parse</p>
-<p>Get the Parse instance</p></dd>
+<dd><p>Get the Parse instance</p></dd>
 <dt><a href="#install">install(instance, options)</a></dt>
-<dd><p>Install</p>
-<p>Bootstraps Parse on Reative Platform</p></dd>
+<dd><p>Bootstraps Parse on Reative Platform</p></dd>
 </dl>
 
 <a name="model"></a>
 
 ## model(name) ⇒
-<p>Model</p>
 <p>Extends Parse Object</p>
 
 **Kind**: global function  
@@ -37,7 +30,6 @@
 <a name="query"></a>
 
 ## query(name) ⇒
-<p>Query</p>
 <p>Creates a Parse Query</p>
 
 **Kind**: global function  
@@ -50,7 +42,6 @@
 <a name="pointer"></a>
 
 ## pointer(name, id) ⇒
-<p>Pointer</p>
 <p>Creates a Parse Pointer</p>
 
 **Kind**: global function  
@@ -64,7 +55,6 @@
 <a name="object"></a>
 
 ## object(collection, [attr], [options]) ⇒
-<p>Object</p>
 <p>Creates a Parse Object</p>
 
 **Kind**: global function  
@@ -79,7 +69,6 @@
 <a name="parse"></a>
 
 ## parse() ⇒
-<p>Parse</p>
 <p>Get the Parse instance</p>
 
 **Kind**: global function  
@@ -87,7 +76,6 @@
 <a name="install"></a>
 
 ## install(instance, options)
-<p>Install</p>
 <p>Bootstraps Parse on Reative Platform</p>
 
 **Kind**: global function  
