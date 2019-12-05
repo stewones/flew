@@ -5,6 +5,14 @@ export interface CacheOptions {
   dbStore: string;
 }
 
+/**
+ * Configure storage
+ *
+ * @export
+ * @param {string} [db='app:db']
+ * @param {string} [store='app:store']
+ * @param {string} [driver=['sqlite', 'indexeddb', 'localstorage']]
+ */
 export function storageConfig(
   db = 'app:db',
   store = 'app:store',
@@ -26,6 +34,12 @@ export function resetCache() {
   Reative.storage.clear();
 }
 
+/**
+ * Initialize stuff for a given storage instance
+ *
+ * @export
+ * @param {*} instance
+ */
 export function install(instance) {
   Reative.storage = instance;
   Reative.storage.enabled = true;

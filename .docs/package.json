@@ -1,0 +1,28 @@
+{
+  "name": "reative-docs",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "doc:gen": "npm run doc:angular && npm run doc:cache && npm run doc:core && npm run doc:firebase && npm run doc:parse && npm run doc:state",
+    "doc:angular": "./node_modules/.bin/jsdoc2md --files ../libs/angular/src/**/*.ts --configure ./setup.json > ../docs/angular/api.md",
+    "doc:cache": "./node_modules/.bin/jsdoc2md --files ../libs/cache/src/**/*.ts --configure ./setup.json > ../docs/cache/api.md",
+    "doc:core": "./node_modules/.bin/jsdoc2md --files ../libs/core/src/**/*.ts --configure ./setup.json > ../docs/core/api.md",
+    "doc:firebase": "./node_modules/.bin/jsdoc2md --files ../libs/firebase/src/**/*.ts --configure ./setup.json > ../docs/firebase/api.md",
+    "doc:parse": "./node_modules/.bin/jsdoc2md --files ../libs/parse/src/**/*.ts --configure ./setup.json > ../docs/parse/api.md",
+    "doc:state": "./node_modules/.bin/jsdoc2md --files ../libs/state/src/**/*.ts --configure ./setup.json > ../docs/state/api.md"
+  },
+  "private": true,
+  "dependencies": {
+    "jsdoc-babel": "^0.5.0",
+    "jsdoc-to-markdown": "^5.0.3",
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-typescript": "^7.7.4"
+  },
+  "devDependencies": {}
+}

@@ -9,7 +9,6 @@ import { PlatformBrowser } from '../platforms/browser';
  *
  * @export
  * @param {Options} options
- * @returns
  */
 export function Collection(options: ReativeOptions) {
   const params = init(options);
@@ -26,7 +25,7 @@ export function Collection(options: ReativeOptions) {
  * @export
  * @param {string} name
  * @param {Options} options
- * @returns
+ * @returns Records
  */
 export function collection(
   name: string,
