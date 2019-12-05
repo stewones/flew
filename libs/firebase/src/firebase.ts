@@ -14,7 +14,18 @@ export function firestore() {
   return Reative.connector.firestore;
 }
 
-export function install(Firebase, config) {
-  Reative.connector.firebase = new FirebaseConnector(Firebase, config);
-  Reative.connector.firestore = new FirestoreConnector(Firebase, config);
+export function install(Firebase, config, ReativePlatform?) {
+  if (ReativePlatform) {
+    ReativePlatform.connector.firebase = new FirebaseConnector(
+      Firebase,
+      config
+    );
+    ReativePlatform.connector.firestore = new FirestoreConnector(
+      Firebase,
+      config
+    );
+  } else {
+    Reative.connector.firebase = new FirebaseConnector(Firebase, config);
+    Reative.connector.firestore = new FirestoreConnector(Firebase, config);
+  }
 }

@@ -170,9 +170,13 @@ export class ParseDriver implements ReativeDriver {
         const result = [];
         for (const item of data) {
           // tslint:disable-next-line: deprecation
-          const entry = isFunction(item.toJSON) ? item.toJSON() : item;
-          // const entry =item;
-          entry.id = entry.objectId;
+          const entry =
+            isFunction(item.toJSON) && !chain.useObject ? item.toJSON() : item;
+
+          if (!chain.useObject) {
+            // @todo add id for nested results
+            entry.id = entry.objectId;
+          }
           result.push(entry);
         }
 
@@ -413,7 +417,10 @@ export class ParseDriver implements ReativeDriver {
       //
       //
       model
-        .save(newData)
+        .save(newData, {
+          useMasterKey: chain.useMasterKey,
+          sessionToken: chain.useSessionToken
+        })
         .then(response)
         .catch(error);
     });

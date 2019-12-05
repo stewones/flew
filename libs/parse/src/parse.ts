@@ -1,5 +1,11 @@
 import { Reative } from '@reative/core';
 
+const mapping = {
+  User: '_User',
+  Role: '_Role',
+  Session: '_Session'
+};
+
 export interface ParseOptions {
   serverURL: string;
   appID: string;
@@ -14,7 +20,9 @@ export interface ParseOptions {
  * @returns Parse.Object
  */
 export function model(name: string) {
-  const Entity = Reative.Parse.Object.extend(name);
+  const Entity = Reative.Parse.Object.extend(
+    mapping[name] ? mapping[name] : name
+  );
   return new Entity();
 }
 
@@ -26,7 +34,7 @@ export function model(name: string) {
  * @returns Parse.Query
  */
 export function query(name: string) {
-  return new Reative.Parse.Query(name);
+  return new Reative.Parse.Query(mapping[name] ? mapping[name] : name);
 }
 
 /**
@@ -38,11 +46,6 @@ export function query(name: string) {
  * @returns Parse.Object
  */
 export function pointer(name: string, id: string) {
-  const mapping = {
-    User: '_User',
-    Role: '_Role',
-    Session: '_Session'
-  };
   return new Reative.Parse.Object(mapping[name] ? mapping[name] : name).set(
     'id',
     id
@@ -59,7 +62,11 @@ export function pointer(name: string, id: string) {
  * @returns Parse.Object
  */
 export function object(collection: string, attr = {}, options = {}) {
-  return new Reative.Parse.Object(collection, attr, options);
+  return new Reative.Parse.Object(
+    mapping[collection] ? mapping[collection] : collection,
+    attr,
+    options
+  );
 }
 
 /**
@@ -79,9 +86,13 @@ export function parse() {
  * @param {*} instance
  * @param {*} options
  */
-export function install(instance, options) {
+export function install(instance, options, ReativePlatform?) {
   instance.initialize(options.appID);
   instance.serverURL = options.serverURL;
   instance.masterKey = options.masterKey;
-  Reative.Parse = instance;
+  if (ReativePlatform) {
+    ReativePlatform.Parse = instance;
+  } else {
+    Reative.Parse = instance;
+  }
 }

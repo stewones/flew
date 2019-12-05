@@ -22,7 +22,8 @@ export type ReativeChain =
   | 'include'
   | 'doc'
   | 'token'
-  | 'master';
+  | 'master'
+  | 'object';
 
 export interface ReativeChainPayloadWhere {
   field: string;
@@ -41,6 +42,7 @@ export interface ReativeChainPayload {
   saveNetwork?: boolean; // save network response
   useMasterKey?: boolean; // from parse
   useSessionToken?: string; // from parse
+  useObject?: boolean; // for parse
 
   transformResponse?: (data: any) => any; // transform function for network data response
   transformData?: boolean; // shortcut for transform(r=>r.data)
