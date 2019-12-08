@@ -28,7 +28,7 @@ for (const driver in service.chaining) {
 
 const actions = service.chaining.http;
 for (const action in actions) {
-  matrix.push([`[${action}](https://docs.reative.dev/core/platform)`]);
+  matrix.push([`[${action}](https://docs.reative.dev/core/api)`]);
 }
 
 let row = 1;

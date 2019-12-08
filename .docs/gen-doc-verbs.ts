@@ -28,7 +28,7 @@ for (const driver in service.verbs) {
 
 const verbs = service.verbs.http;
 for (const verb in verbs) {
-  matrix.push([`[${verb}](https://docs.reative.dev/core/platform)`]);
+  matrix.push([`[${verb}](https://docs.reative.dev/core/api)`]);
 }
 
 let row = 1;
