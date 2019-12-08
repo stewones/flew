@@ -6,7 +6,7 @@ import { FirebaseDriver } from '../drivers/firebase';
 import { FirestoreDriver } from '../drivers/firestore';
 import { HttpDriver } from '../drivers/http';
 import { ParseDriver } from '../drivers/parse';
-import { ReativeApi, SetOptions } from '../interfaces/api';
+import { ReativeAPI, SetOptions } from '../interfaces/api';
 import { ReativeChainPayload, ReativeChain } from '../interfaces/chain';
 import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 import { Log } from '../interfaces/log';
@@ -32,9 +32,9 @@ type ReativeDriverChainTree = {
  *
  * @export
  * @class Records
- * @implements {ReativeApi}
+ * @implements {ReativeAPI}
  */
-export class Records implements ReativeApi {
+export class Records implements ReativeAPI {
   chain: ReativeChainPayload = {};
   options: ReativeOptions;
 
@@ -219,7 +219,7 @@ export class Records implements ReativeApi {
     this.init(options);
   }
 
-  private init(runtime: ReativeOptions = {}) {
+  public init(runtime: ReativeOptions = {}) {
     //
     // settings which requires runtime evaluation
     const options: ReativeOptions = { ...Reative.options, ...runtime };

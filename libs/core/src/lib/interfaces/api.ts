@@ -13,7 +13,7 @@ export interface SetOptions {
 /**
  * Public RR Api
  */
-export interface ReativeApi {
+export interface ReativeAPI {
   options: ReativeOptions;
   reset(): Records; // reset chaining payload
 

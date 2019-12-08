@@ -2,7 +2,7 @@
 
 ## Records
 **Kind**: global class  
-**Implements**: <code>ReativeApi</code>  
+**Implements**: <code>ReativeAPI</code>  
 
 * [Records](#Records)
     * [new Records()](#new_Records_new)
