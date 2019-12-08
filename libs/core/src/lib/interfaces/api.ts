@@ -45,7 +45,6 @@ export interface ReativeApi {
   // utils
   $log: Subject<Log>;
   http(transformFn: (config: AxiosRequestConfig) => void): Records;
-  init(runtime?: ReativeOptions): void; // init rr manually
 
   //
   // fire verbs

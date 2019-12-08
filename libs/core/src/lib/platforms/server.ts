@@ -27,6 +27,13 @@ type ReativeDriverChainTree = {
   [key in ReativeDriverOption]: { [key in ReativeChain]: string | boolean }
 };
 
+/**
+ * Reative Records
+ *
+ * @export
+ * @class Records
+ * @implements {ReativeApi}
+ */
 export class Records implements ReativeApi {
   chain: ReativeChainPayload = {};
   options: ReativeOptions;
@@ -212,7 +219,7 @@ export class Records implements ReativeApi {
     this.init(options);
   }
 
-  public init(runtime: ReativeOptions = {}) {
+  private init(runtime: ReativeOptions = {}) {
     //
     // settings which requires runtime evaluation
     const options: ReativeOptions = { ...Reative.options, ...runtime };
@@ -268,17 +275,6 @@ export class Records implements ReativeApi {
     this.httpBefore(options.httpConfig);
     this.drivers.http.configure(options);
     this.options = options;
-  }
-
-  public reset(): Records {
-    this.chain = {
-      driver: this.options.driver,
-      useCache: this.options.useCache,
-      useState: this.options.useState,
-      useNetwork: this.options.useNetwork,
-      saveNetwork: this.options.saveNetwork
-    };
-    return this;
   }
 
   private checkVerbAvailability(
@@ -394,34 +390,104 @@ export class Records implements ReativeApi {
   }
 
   /**
+   * Reset the chaining configuration on the fly
    *
-   * Verb methods
+   * @returns {Records}
+   * @memberof Records
+   */
+  public reset(): Records {
+    this.chain = {
+      driver: this.options.driver,
+      useCache: this.options.useCache,
+      useState: this.options.useState,
+      useNetwork: this.options.useNetwork,
+      saveNetwork: this.options.saveNetwork
+    };
+    return this;
+  }
+
+  /**
+   * Get a document
    *
+   * @template T
+   * @param {string} [path='']
+   * @returns {Observable<T>}
+   * @memberof Records
    */
   public get<T>(path: string = ''): Observable<T> {
     return this.call<T>('get', path);
   }
 
+  /**
+   * Post document
+   *
+   * @template T
+   * @param {string} [path='']
+   * @param {*} [body={}]
+   * @returns {Observable<T>}
+   * @memberof Records
+   */
   public post<T>(path: string = '', body: any = {}): Observable<T> {
     return this.call<T>('post', path, body);
   }
 
+  /**
+   * Patch a document
+   *
+   * @template T
+   * @param {string} [path='']
+   * @param {*} [body={}]
+   * @returns {Observable<T>}
+   * @memberof Records
+   */
   public patch<T>(path: string = '', body: any = {}): Observable<T> {
     return this.call<T>('patch', path, body);
   }
 
+  /**
+   * Delete a document
+   *
+   * @template T
+   * @param {string} [path='']
+   * @param {*} [body]
+   * @returns {Observable<T>}
+   * @memberof Records
+   */
   public delete<T>(path: string = '', body?: any): Observable<T> {
     return this.call<T>('delete', path, body);
   }
 
+  /**
+   * Find documents
+   *
+   * @template T
+   * @returns {Observable<T>}
+   * @memberof Records
+   */
   public find<T>(): Observable<T> {
     return this.call<T>('find');
   }
 
+  /**
+   * Same as find but only one result is returned
+   *
+   * @template T
+   * @returns {Observable<T>}
+   * @memberof Records
+   */
   public findOne<T>(): Observable<T> {
     return this.call<T>('findOne');
   }
 
+  /**
+   * Create a document
+   *
+   * @template T
+   * @param {*} data
+   * @param {SetOptions} [options]
+   * @returns {Observable<T>}
+   * @memberof Records
+   */
   public set<T>(data: any, options?: SetOptions): Observable<T> {
     return this.call('set', null, {
       data: data,
@@ -429,20 +495,37 @@ export class Records implements ReativeApi {
     });
   }
 
+  /**
+   * Update document
+   *
+   * @template T
+   * @param {*} data
+   * @returns {Observable<T>}
+   * @memberof Records
+   */
   public update<T>(data: any): Observable<T> {
     return this.call('update', null, {
       data: data
     });
   }
 
+  /**
+   * Get documents in realtime
+   *
+   * @template T
+   * @returns {Observable<T>}
+   * @memberof Records
+   */
   public on<T>(): Observable<T> {
     return this.call<T>('on');
   }
 
   /**
+   * Modify the driver to be used on the fly
    *
-   * Chaining methods
-   *
+   * @param {ReativeDriverOption} name
+   * @returns {Records}
+   * @memberof Records
    */
   public driver(name: ReativeDriverOption): Records {
     this.chain.driver = name;
@@ -450,60 +533,133 @@ export class Records implements ReativeApi {
     return this;
   }
 
+  /**
+   * Modify http request config on the fly
+   *
+   * @param {Function} fn
+   * @returns {Records}
+   * @memberof Records
+   */
   public http(fn: (config: AxiosRequestConfig) => void): Records {
     this.httpBefore = fn;
     this.checkChainAvailability(this.chain.driver, 'http');
     return this;
   }
 
+  /**
+   * Choose whether or not to make a network request
+   *
+   * @param {boolean} active
+   * @returns {Records}
+   * @memberof Records
+   */
   public network(active: boolean): Records {
     this.chain.useNetwork = active;
     this.checkChainAvailability(this.chain.driver, 'network');
     return this;
   }
 
+  /**
+   * Choose whether or not to save returned data in cache
+   *
+   * @param {boolean} active
+   * @returns {Records}
+   * @memberof Records
+   */
   public save(active: boolean): Records {
     this.chain.saveNetwork = active;
     this.checkChainAvailability(this.chain.driver, 'save');
     return this;
   }
 
+  /**
+   * Shortcut to modify returned results without a pipe
+   *
+   * @template T
+   * @param {Function} transformFn
+   * @returns {Records}
+   * @memberof Records
+   */
   public transform<T>(transformFn: (response: Response) => any): Records {
     this.chain.transformResponse = transformFn;
     this.checkChainAvailability(this.chain.driver, 'transform');
     return this;
   }
 
+  /**
+   * Define a time to live for cache
+   *
+   * @param {number} value
+   * @returns {Records}
+   * @memberof Records
+   */
   public ttl(value: number): Records {
     this.chain.ttl = value;
     this.checkChainAvailability(this.chain.driver, 'ttl');
     return this;
   }
 
+  /**
+   * Choose whether to use cached results
+   *
+   * @param {boolean} active
+   * @returns {Records}
+   * @memberof Records
+   */
   public cache(active: boolean): Records {
     this.chain.useCache = active;
     this.checkChainAvailability(this.chain.driver, 'cache');
     return this;
   }
 
+  /**
+   * Choose whether to use state results
+   *
+   * @param {boolean} active
+   * @returns {Records}
+   * @memberof Records
+   */
   public state(active: boolean): Records {
     this.chain.useState = active;
     this.checkChainAvailability(this.chain.driver, 'state');
     return this;
   }
 
+  /**
+   * Define a custom key to be used as a identifier for the result set
+   *
+   * @param {string} name
+   * @returns {Records}
+   * @memberof Records
+   */
   public key(name: string): Records {
     this.chain.key = name;
     this.checkChainAvailability(this.chain.driver, 'key');
     return this;
   }
 
+  /**
+   * Define a custom query
+   *
+   * @param {object} by
+   * @returns {Records}
+   * @memberof Records
+   */
   public query(by: { [key: string]: {} } | { [key: string]: {} }[]): Records {
     this.chain.query = by;
     this.checkChainAvailability(this.chain.driver, 'query');
     return this;
   }
 
+  /**
+   * Constraint results
+   *
+   * @param {string} field
+   * @param {string} operator
+   * @param {*} value
+   * @returns {Records}
+   * @memberof Records
+   */
   public where(field: string, operator: string, value: any): Records {
     if (!isArray(this.chain.where)) {
       this.chain.where = [];
@@ -517,6 +673,13 @@ export class Records implements ReativeApi {
     return this;
   }
 
+  /**
+   * Sort data
+   *
+   * @param {object} by
+   * @returns {Records}
+   * @memberof Records
+   */
   public sort(by: { [key: string]: string }): Records {
     if (isEmpty(this.chain.sort)) {
       this.chain.sort = {};
@@ -529,67 +692,144 @@ export class Records implements ReativeApi {
     return this;
   }
 
+  /**
+   * Define the size of results
+   *
+   * @param {number} value
+   * @returns {Records}
+   * @memberof Records
+   */
   public size(value: number): Records {
     this.chain.size = value;
     this.checkChainAvailability(this.chain.driver, 'size');
     return this;
   }
 
+  /**
+   * Set an at pointer for the request
+   *
+   * @param {*} value
+   * @returns {Records}
+   * @memberof Records
+   */
   public at(value): Records {
     this.chain.at = value;
     this.checkChainAvailability(this.chain.driver, 'at');
     return this;
   }
 
+  /**
+   * Set an after pointer for the request
+   *
+   * @param {*} value
+   * @returns {Records}
+   * @memberof Records
+   */
   public after(value): Records {
     this.chain.after = value;
     this.checkChainAvailability(this.chain.driver, 'after');
     return this;
   }
 
+  /**
+   * Define a document path for a request
+   *
+   * @param {string} path
+   * @returns {Records}
+   * @memberof Records
+   */
   public ref(path: string): Records {
     this.chain.ref = path;
     this.checkChainAvailability(this.chain.driver, 'ref');
     return this;
   }
 
+  /**
+   * Define a document id for the request
+   *
+   * @param {*} value
+   * @returns {Records}
+   * @memberof Records
+   */
   public doc(value: any): Records {
     this.chain.doc = value;
     this.checkChainAvailability(this.chain.driver, 'network');
     return this;
   }
 
+  /**
+   * Use pure results without any internal transformation
+   *
+   * @param {boolean} active
+   * @returns {Records}
+   * @memberof Records
+   */
   public raw(active: boolean): Records {
     this.chain.transformData = !active;
     this.checkChainAvailability(this.chain.driver, 'raw');
     return this;
   }
 
+  /**
+   * Populate query fields
+   *
+   * @param {string[]} fields
+   * @returns {Records}
+   * @memberof Records
+   */
   public include(fields: string[]): Records {
     this.chain.fields = fields;
     this.checkChainAvailability(this.chain.driver, 'include');
     return this;
   }
 
-  public diff(fn): Records {
+  /**
+   * Modify internal diff function
+   *
+   * @param {*} fn
+   * @returns {Records}
+   * @memberof Records
+   */
+  public diff(fn: any): Records {
     this.chain.diff = fn;
     this.checkChainAvailability(this.chain.driver, 'diff');
     return this;
   }
 
-  public master(active): Records {
+  /**
+   * Set useMasterKey on the request
+   *
+   * @param {boolean} active
+   * @returns {Records}
+   * @memberof Records
+   */
+  public master(active: boolean): Records {
     this.chain.useMasterKey = active;
     this.checkChainAvailability(this.chain.driver, 'master');
     return this;
   }
 
-  public token(session): Records {
+  /**
+   * Set a session token for the request
+   *
+   * @param {string} session
+   * @returns {Records}
+   * @memberof Records
+   */
+  public token(session: string): Records {
     this.chain.useSessionToken = session;
     this.checkChainAvailability(this.chain.driver, 'token');
     return this;
   }
 
-  public object(active): Records {
+  /**
+   * Result as real objects
+   *
+   * @param {boolean} active
+   * @returns {Records}
+   * @memberof Records
+   */
+  public object(active: boolean): Records {
     this.chain.useObject = active;
     this.checkChainAvailability(this.chain.driver, 'object');
     return this;
