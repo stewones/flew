@@ -1,6 +1,8 @@
 import { Records } from '@reative/core';
 import * as fs from 'fs';
 import * as Table from 'markdown-table';
+import { DOCS_QUERY_PARAM as query } from './links';
+
 const table = Table.default;
 
 const specMap = {
@@ -28,7 +30,9 @@ for (const driver in service.verbs) {
 
 const verbs = service.verbs.http;
 for (const verb in verbs) {
-  matrix.push([`[${verb}](https://docs.reative.dev/core/api)`]);
+  matrix.push([
+    `<a href="https://docs.reative.dev/core/api/#${query[verb]}">${verb}</a>`
+  ]);
 }
 
 let row = 1;
