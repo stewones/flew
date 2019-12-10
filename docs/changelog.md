@@ -1,3 +1,36 @@
+# [2.1.0](https://github.com/stewwan/reative/compare/v2.0.3...v2.1.0) (2019-12-10)
+
+
+### Bug Fixes
+
+* **angular:** need to export init classes for modules ([34e70d2](https://github.com/stewwan/reative/commit/34e70d2190d8a5ef91a13e955f10174c70069d04))
+* **parse:** timestamp and identifier usage ([c6c7b94](https://github.com/stewwan/reative/commit/c6c7b94767150b05a97881f4228922cf781617fe))
+* **parse:** user collection must be mapped ([18d7b93](https://github.com/stewwan/reative/commit/18d7b93f60e549d4f859d551d92ae12fe6adeada))
+
+
+### Features
+
+* **parse:** add `object` method to chaining api ([db7b32f](https://github.com/stewwan/reative/commit/db7b32f5b6fc83c9b0465f85e111fb8585ad6799))
+* **parse:** add removeState(key) ([c8a582d](https://github.com/stewwan/reative/commit/c8a582d8177febeb9614bca7ea984c6001ed4755))
+
+
+
+## [2.0.3](https://github.com/stewwan/reative/compare/v2.0.0...v2.0.3) (2019-12-04)
+
+
+### Bug Fixes
+
+* bump firebase ([6e69904](https://github.com/stewwan/reative/commit/6e699040c7a12b5aa3a8dbb859f0a1dd22f4652e))
+* stuff to make it work in vue ([6a4992c](https://github.com/stewwan/reative/commit/6a4992cd85d8c7c500d2cada49d69fb23e198a1b))
+* **browser:** cache diff ([dae93de](https://github.com/stewwan/reative/commit/dae93de2ad4b4b7a018922dadd3b9a1f6910d9fa))
+
+
+### Features
+
+* **parse:** add useMasterKey and sessionToken options to the chaining ([29ed50c](https://github.com/stewwan/reative/commit/29ed50ce84dfe1d4e3ebbf89ac12336743f5c778))
+
+
+
 ## [2.0.2](https://github.com/stewwan/reative/compare/v2.0.0...v2.0.2) (2019-12-03)
 
 
