@@ -386,13 +386,22 @@ export class ParseDriver implements ReativeDriver {
       const id = chain.doc;
       const newData = { ...data };
 
-      if (id) newData[this.driverOptions.identifier] = id;
-      else newData[this.driverOptions.identifier] = guid(3);
+      if (id) {
+        newData[this.driverOptions.identifier] = id;
+      } else {
+        if (!data[this.driverOptions.identifier])
+          newData[this.driverOptions.identifier] = guid(3);
+      }
 
       //
       // auto update timestamp
-      if (this.driverOptions.timestamp)
-        newData[this.driverOptions.timestampCreated] = new Date().toISOString();
+      if (this.driverOptions.timestamp) {
+        if (!data[this.driverOptions.timestampCreated]) {
+          newData[
+            this.driverOptions.timestampCreated
+          ] = new Date().toISOString();
+        }
+      }
 
       //
       // run exceptions
@@ -438,8 +447,13 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // auto update timestamp
-      if (this.driverOptions.timestamp)
-        newData[this.driverOptions.timestampUpdated] = new Date().toISOString();
+      if (this.driverOptions.timestamp) {
+        if (!data[this.driverOptions.timestampUpdated]) {
+          newData[
+            this.driverOptions.timestampUpdated
+          ] = new Date().toISOString();
+        }
+      }
 
       //
       // define return

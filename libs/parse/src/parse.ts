@@ -1,4 +1,5 @@
 import { Reative } from '@reative/core';
+import { merge } from 'lodash';
 
 const mapping = {
   User: '_User',
@@ -83,16 +84,14 @@ export function parse() {
  * Bootstraps Parse on Reative Platform
  *
  * @export
- * @param {*} instance
- * @param {*} options
+ * @param {*} sdk
+ * @param {*} config
+ * @param {*} [instance=Reative.Parse]
+ * @returns ReativeParse
  */
-export function install(instance, options, ReativePlatform?) {
-  instance.initialize(options.appID);
-  instance.serverURL = options.serverURL;
-  instance.masterKey = options.masterKey;
-  if (ReativePlatform) {
-    ReativePlatform.Parse = instance;
-  } else {
-    Reative.Parse = instance;
-  }
+export function install(sdk, config, instance = Reative.Parse) {
+  sdk.initialize(config.appID);
+  sdk.serverURL = config.serverURL;
+  sdk.masterKey = config.masterKey;
+  return (Reative.Parse = merge(instance, sdk.Parse));
 }

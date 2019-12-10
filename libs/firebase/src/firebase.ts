@@ -1,5 +1,6 @@
 import { Reative } from '@reative/core';
 import { FirebaseConnector, FirestoreConnector } from './connectors';
+import { merge } from 'lodash';
 
 export interface ReativeFirebaseOptions {
   config: any;
@@ -14,18 +15,8 @@ export function firestore() {
   return Reative.connector.firestore;
 }
 
-export function install(Firebase, config, ReativePlatform?) {
-  if (ReativePlatform) {
-    ReativePlatform.connector.firebase = new FirebaseConnector(
-      Firebase,
-      config
-    );
-    ReativePlatform.connector.firestore = new FirestoreConnector(
-      Firebase,
-      config
-    );
-  } else {
-    Reative.connector.firebase = new FirebaseConnector(Firebase, config);
-    Reative.connector.firestore = new FirestoreConnector(Firebase, config);
-  }
+export function install(sdk, config, connector = Reative.connector) {
+  merge(connector, { firebase: new FirebaseConnector(sdk, config) });
+  merge(connector, { firestore: new FirestoreConnector(sdk, config) });
+  Reative.connector = connector;
 }
