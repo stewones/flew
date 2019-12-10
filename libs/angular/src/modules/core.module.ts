@@ -7,7 +7,7 @@ import {
 import { Reative, ReativeOptions } from '@reative/core';
 
 @Injectable()
-class ReativeAngularSetup {
+export class ReativeAngularSetup {
   constructor(@Inject('ReativeAngularOptions') public options) {
     for (const k in options) {
       Reative.options[k] = options[k];

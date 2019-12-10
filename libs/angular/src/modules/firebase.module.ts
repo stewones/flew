@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 
 @Injectable()
-class ReativeFirebaseSetup {
+export class ReativeFirebaseSetup {
   constructor(@Inject('ReativeFirebaseOptions') public options) {
     install(Firebase, options.config);
   }

@@ -14,7 +14,7 @@ import {
 } from '@reative/state';
 
 @Injectable()
-class ReativeStateSetup {
+export class ReativeStateSetup {
   constructor(public store: Store) {
     install(store);
   }

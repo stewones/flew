@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 
 @Injectable()
-class CacheSetup {
+export class CacheSetup {
   constructor(@Inject('CacheOptions') public options) {
     install(new Storage(storageConfig(options.dbName, options.dbStore)));
   }

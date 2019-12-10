@@ -10,7 +10,7 @@ import { install, ParseOptions } from '@reative/parse';
 import Parse from 'parse';
 
 @Injectable()
-class ParseSetup {
+export class ParseSetup {
   constructor(@Inject('ParseOptions') public options) {
     install(Parse, options);
   }
