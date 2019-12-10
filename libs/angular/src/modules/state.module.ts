@@ -5,8 +5,10 @@ import {
   install,
   addStateResponse,
   resetStateResponse,
+  removeStateResponse,
   StateModel,
   StateReset,
+  StateRemove,
   StateSync,
   STATE_GLOBAL_NAMESPACE
 } from '@reative/state';
@@ -49,6 +51,13 @@ export class ReativeState {
 
   @Action(StateReset) resetResponse(context: StateContext<StateModel>) {
     resetStateResponse(context);
+  }
+
+  @Action(StateRemove) removeResponse(
+    context: StateContext<StateModel>,
+    action: StateSync
+  ) {
+    removeStateResponse(context, action);
   }
 
   constructor() {}

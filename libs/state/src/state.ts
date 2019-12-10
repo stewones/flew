@@ -35,6 +35,11 @@ export class StateReset {
   constructor() {}
 }
 
+export class StateRemove {
+  public static readonly type = `[${STATE_GLOBAL_NAMESPACE}] Remove State`;
+  constructor(public payload: string) {}
+}
+
 export interface StateModel {
   [key: string]: Response;
 }
@@ -69,8 +74,21 @@ export function resetState() {
   return Reative.store.reset();
 }
 
+export function removeState(key: string) {
+  return Reative.store.remove(key);
+}
+
 export function resetStateResponse(context) {
   context.setState({});
+}
+
+export function removeStateResponse(context, action) {
+  const state = cloneDeep(context.getState());
+  delete state[action.payload];
+  const newState: any = {
+    ...state
+  };
+  context.setState(newState);
 }
 
 export function syncState(data: Response) {
@@ -292,6 +310,10 @@ export function install(instance) {
   Reative.store.set = (stateKey, val) => {
     const newState = { ...val, key: stateKey };
     instance.dispatch(new StateSync(newState));
+  };
+
+  Reative.store.remove = stateKey => {
+    instance.dispatch(new StateRemove(stateKey));
   };
 
   Reative.store.select = (stateKey, raw?) => {
