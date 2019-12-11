@@ -4,4 +4,4 @@ The **Reative Platform** is a set of tools which allows you communicate external
 
 Its concept is fully based on _Reactive_ _Programming_ meaning you're going to fully work using [Observables](https://rxjs-dev.firebaseapp.com/operator-decision-tree).
 
-Our goal is to write once and deploy everywhere whether using TypeScript, Vanilla.js or Node.js. However in the browser it has a lot of cool features such as cache and state management. So that's a big win.
+Our goal is to write once and deploy anywhere whether using TypeScript, Vanilla.js or Node.js. However in the browser it has a lot of cool features such as cache and state management. So that's a big win.
