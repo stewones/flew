@@ -157,6 +157,11 @@
     "zone.js": "^0.10.2"
   },
   "devDependencies": {
+    "@reative/core": "^2.0.3",
+    "@reative/state": "^2.0.3",
+    "@reative/firebase": "^2.0.3",
+    "@reative/parse": "^2.0.3",
+    "@reative/cache": "^2.0.3",
     "@angular-builders/jest": "^8.2.0",
     "@angular-devkit/architect": "^0.803.3",
     "@angular-devkit/build-angular": "^0.803.3",
