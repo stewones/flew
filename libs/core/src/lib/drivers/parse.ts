@@ -490,6 +490,71 @@ export class ParseDriver implements ReativeDriver {
     });
   }
 
+  public count<T>(chain: ReativeChainPayload, key: string): Observable<T> {
+    return new Observable((observer: PartialObserver<T>) => {
+      //
+      // run exceptions
+      this.exceptions();
+
+      //
+      // define adapter
+      this.connector = new Reative.Parse.Query(this.getCollectionName());
+
+      //
+      // set arbitrary query
+      for (const k in chain.query) {
+        if (!this.skipOnQuery.includes(k)) {
+          const value = chain.query[k];
+          // tslint:disable-next-line: deprecation
+          if (isFunction(value)) {
+            this.connector[k](...value());
+          } else {
+            this.connector[k](value);
+          }
+        }
+      }
+
+      //
+      // set where
+      this.where(chain.where);
+
+      //
+      // network handle
+      const success = async (data: any[]) => {
+        //
+        // define standard response
+        const response: Response = clearNetworkResponse({
+          data: data,
+          key: key,
+          collection: this.getCollectionName(),
+          driver: this.driverName,
+          response: {}
+        });
+
+        //
+        // success callback
+        observer.next(response as T);
+        observer.complete();
+      };
+
+      const error = err => {
+        // this breaks offline requests
+        // try {
+        //   observer.error(err);
+        //   observer.complete();
+        // } catch (err) {}
+      };
+
+      this.connector
+        .count({
+          useMasterKey: chain.useMasterKey,
+          sessionToken: chain.useSessionToken
+        })
+        .then(success)
+        .catch(error);
+    });
+  }
+
   getCollectionName() {
     const mapping = {
       User: '_User',

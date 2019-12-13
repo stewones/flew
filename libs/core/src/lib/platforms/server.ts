@@ -70,7 +70,8 @@ export class Records implements ReativeAPI {
       update: true,
       patch: 'http.patch',
       delete: 'http.delete',
-      set: true
+      set: true,
+      count: false
     },
     firebase: {
       find: true,
@@ -81,7 +82,8 @@ export class Records implements ReativeAPI {
       update: 'http.patch',
       patch: 'http.patch',
       delete: 'http.delete',
-      set: 'http.post'
+      set: 'http.post',
+      count: false
     },
     http: {
       find: 'http.get',
@@ -92,7 +94,8 @@ export class Records implements ReativeAPI {
       update: 'http.patch',
       patch: true,
       delete: true,
-      set: 'http.post'
+      set: 'http.post',
+      count: false
     },
     parse: {
       find: true,
@@ -103,7 +106,8 @@ export class Records implements ReativeAPI {
       update: 'parse.update',
       patch: 'parse.set',
       delete: false,
-      set: true
+      set: true,
+      count: true
     }
   };
 
@@ -365,6 +369,7 @@ export class Records implements ReativeAPI {
     switch (_verb) {
       case 'find':
       case 'findOne':
+      case 'count':
         arg1 = chain;
         arg2 = key;
         break;
@@ -518,6 +523,16 @@ export class Records implements ReativeAPI {
    */
   public on<T>(): Observable<T> {
     return this.call<T>('on');
+  }
+
+  /**
+   *  Count documents
+   *
+   * @returns {Observable<number>}
+   * @memberof Records
+   */
+  public count(): Observable<number> {
+    return this.call<number>('count');
   }
 
   /**

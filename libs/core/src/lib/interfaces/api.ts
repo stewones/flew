@@ -53,6 +53,7 @@ export interface ReativeAPI {
   set(data: any, options?: SetOptions);
   update(data: any);
   on();
+  count();
 
   //
   // http verbs

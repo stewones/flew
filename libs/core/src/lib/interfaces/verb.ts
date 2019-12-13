@@ -7,4 +7,5 @@ export type ReativeVerb =
   | 'findOne'
   | 'set'
   | 'update'
-  | 'on';
+  | 'on'
+  | 'count';
