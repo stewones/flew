@@ -10,6 +10,7 @@
   - [API](core/api.md)
 
 - [Cache](cache/README.md)
+  - [API](cache/api.md)
 - [State](state/README.md)
 
   - [Getting Started](state/getting-started.md)
