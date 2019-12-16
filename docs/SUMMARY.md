@@ -4,10 +4,10 @@
 - [Getting Started](getting-started.md)
 - [Core](core/README.md)
 
-  - [API](core/api.md)
   - [Options](core/options.md)
   - [Chain](core/chain.md)
   - [Verbs](core/verbs.md)
+  - [API](core/api.md)
 
 - [Cache](cache/README.md)
 - [State](state/README.md)
