@@ -17,7 +17,7 @@
 
 ## Applying Globally
 
-Make sure to execute this only once. For angular users we have the `RecordsModule`(https://docs.reative.dev/angular/api#new-recordsmodule)
+Make sure to execute this only once. For angular users we have the [`RecordsModule`](https://docs.reative.dev/angular/api#new-recordsmodule)
 
 ```js
 import { Reative } from '@reative/core';
