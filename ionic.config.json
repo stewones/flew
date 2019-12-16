@@ -1,8 +1,0 @@
-{
-  "name": "Reative App",
-  "integrations": {
-    "capacitor": true
-  },
-  "type": "angular",
-  "id": "810f0acf"
-}

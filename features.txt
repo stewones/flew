@@ -1,4 +1,0 @@
-## 1.5.0
-
-- rewrite of platform server
-- shipped a pure function `collection` to serve as a replacement for the `@Collection` decorator 

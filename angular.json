@@ -362,120 +362,6 @@
         }
       }
     },
-    "firetask": {
-      "root": "apps/firetask",
-      "sourceRoot": "apps/firetask/src",
-      "projectType": "application",
-      "prefix": "ft",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/apps/firetask",
-            "index": "apps/firetask/src/index.html",
-            "main": "apps/firetask/src/main.ts",
-            "polyfills": "apps/firetask/src/polyfills.ts",
-            "tsConfig": "apps/firetask/tsconfig.app.json",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "apps/firetask/src/assets",
-                "output": "assets"
-              },
-              {
-                "glob": "**/*.svg",
-                "input": "node_modules/ionicons/dist/ionicons/svg",
-                "output": "./svg"
-              },
-              "apps/firetask/src/manifest.json"
-            ],
-            "styles": [
-              {
-                "input": "apps/firetask/src/theme/variables.scss"
-              },
-              {
-                "input": "apps/firetask/src/global.scss"
-              },
-              {
-                "input": "node_modules/@ctrl/ngx-emoji-mart/picker.css"
-              }
-            ],
-            "scripts": [],
-            "es5BrowserSupport": true
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/firetask/src/environments/environment.ts",
-                  "with": "apps/firetask/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ],
-              "serviceWorker": true,
-              "ngswConfigPath": "apps/firetask/ngsw-config.json"
-            },
-            "ci": {
-              "progress": false
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "firetask:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "firetask:build:production"
-            },
-            "ci": {
-              "progress": false
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "app:build"
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/firetask/jest.config.js",
-            "tsConfig": "apps/firetask/tsconfig.spec.json",
-            "setupFile": "apps/firetask/src/test-setup.ts"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "apps/firetask/tsconfig.app.json",
-              "apps/firetask/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
-        }
-      }
-    },
     "todo": {
       "projectType": "application",
       "schematics": {
@@ -599,5 +485,5 @@
       "unitTestRunner": "jest"
     }
   },
-  "defaultProject": "firetask"
+  "defaultProject": "todo"
 }
