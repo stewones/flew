@@ -29,17 +29,14 @@ export class StateSync {
   public static readonly type = `[${STATE_GLOBAL_NAMESPACE}] Sync State`;
   constructor(public payload: Response) {}
 }
-
 export class StateReset {
   public static readonly type = `[${STATE_GLOBAL_NAMESPACE}] Reset State`;
   constructor() {}
 }
-
 export class StateRemove {
   public static readonly type = `[${STATE_GLOBAL_NAMESPACE}] Remove State`;
   constructor(public payload: string) {}
 }
-
 export interface StateModel {
   [key: string]: Response;
 }
@@ -62,20 +59,36 @@ export function key(name: string, raw = false) {
   };
 }
 
-export function select<T>(key: string, raw?: boolean) {
-  return Reative.store.select(key, raw) as Observable<T>;
+/**
+ * Select data from Reative State
+ *
+ * @export
+ * @template T
+ * @param {string} key
+ * @param {boolean} [raw]
+ * @returns {Observable<T>}
+ */
+export function select<T>(key: string, raw?: boolean): Observable<T> {
+  return Reative.store.select(key, raw);
 }
 
-export function enabledState() {
-  return Reative.store.enabled;
-}
-
+/**
+ * Fully reset current state
+ *
+ * @export
+ */
 export function resetState() {
-  return Reative.store.reset();
+  Reative.store.reset();
 }
 
+/**
+ * Reset a specific state based on key
+ *
+ * @export
+ * @param {string} key
+ */
 export function removeState(key: string) {
-  return Reative.store.remove(key);
+  Reative.store.remove(key);
 }
 
 export function resetStateResponse(context) {
@@ -95,6 +108,15 @@ export function syncState(data: Response) {
   return Reative.store.sync(data);
 }
 
+/**
+ * Get state synchronously
+ *
+ * @export
+ * @template T
+ * @param {string} stateKey
+ * @param {GetStateOptions} [options={ raw: false, mutable: false }]
+ * @returns {T}
+ */
 export function getState<T = any>(
   stateKey: string,
   options: GetStateOptions = { raw: false, mutable: false }
@@ -109,6 +131,15 @@ export function getState<T = any>(
     : (transform(response) as T);
 }
 
+/**
+ * Get state asynchronously
+ *
+ * @export
+ * @template T
+ * @param {string} stateKey
+ * @param {GetStateOptions} [options={ raw: false, feed: true }]
+ * @returns {Observable<T>}
+ */
 export function getState$<T = any>(
   stateKey: string,
   options: GetStateOptions = { raw: false, feed: true }
@@ -143,6 +174,13 @@ export function getState$<T = any>(
       ) as Observable<T>);
 }
 
+/**
+ * Add a new state imperatively
+ *
+ * @export
+ * @param {string} stateKey
+ * @param {*} value
+ */
 export function addState(stateKey: string, value: any) {
   const currentState = getState(stateKey);
   if (!isEqual(currentState, value)) {
@@ -164,6 +202,14 @@ export function addStateResponse(context, action) {
   context.setState(newState);
 }
 
+/**
+ * Add a new state dynamically
+ *
+ * @export
+ * @param {string} stateKey
+ * @param {*} value
+ * @param {SetStateOptions} [options={ identifier: Reative.options.identifier }]
+ */
 export function setState(
   stateKey: string,
   value: any,
@@ -277,6 +323,12 @@ export function setState(
   Reative.store.set(stateKey, newState);
 }
 
+/**
+ * Transfer state from cache to memory
+ *
+ * @export
+ * @param {string} [stateKey]
+ */
 export async function feedState(stateKey?: string) {
   const hasStorage = isFunction(Reative.storage.forEach);
 
@@ -294,6 +346,12 @@ export async function feedState(stateKey?: string) {
   throw new Error(`Can't locate storage instance`);
 }
 
+/**
+ * Initiate state stuff on Reative Platform
+ *
+ * @export
+ * @param {*} instance
+ */
 export function install(instance) {
   Reative.store.enabled = true;
   Reative.store.reset = () => instance.dispatch(new StateReset());

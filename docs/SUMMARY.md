@@ -21,6 +21,7 @@
   - [Reset State](state/reset-state.md)
   - [Feed State](state/feed-state.md)
   - [Sync Response](state/sync-response.md)
+  - [API](state/api.md)
 
 - [Angular](angular/README.md)
   - [API](angular/api.md)

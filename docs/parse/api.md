@@ -58,13 +58,15 @@
 **Returns**: <p>Parse</p>  
 <a name="install"></a>
 
-## install(instance, options)
+## install(sdk, config, [instance]) ⇒
 <p>Bootstraps Parse on Reative Platform</p>
 
 **Kind**: global function  
+**Returns**: <p>ReativeParse</p>  
 
-| Param | Type |
-| --- | --- |
-| instance | <code>\*</code> | 
-| options | <code>\*</code> | 
+| Param | Type | Default |
+| --- | --- | --- |
+| sdk | <code>\*</code> |  | 
+| config | <code>\*</code> |  | 
+| [instance] | <code>\*</code> | <code>Reative.Parse</code> | 
 

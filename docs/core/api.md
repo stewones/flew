@@ -16,6 +16,7 @@
     * [.set(data, [options])](#Records+set) ⇒ <code>Observable.&lt;T&gt;</code>
     * [.update(data)](#Records+update) ⇒ <code>Observable.&lt;T&gt;</code>
     * [.on()](#Records+on) ⇒ <code>Observable.&lt;T&gt;</code>
+    * [.count()](#Records+count) ⇒ <code>Observable.&lt;number&gt;</code>
     * [.driver(name)](#Records+driver) ⇒ [<code>Records</code>](#Records)
     * [.http(fn)](#Records+http) ⇒ [<code>Records</code>](#Records)
     * [.network(active)](#Records+network) ⇒ [<code>Records</code>](#Records)
@@ -137,6 +138,12 @@
 
 ### records.on() ⇒ <code>Observable.&lt;T&gt;</code>
 <p>Get documents in realtime</p>
+
+**Kind**: instance method of [<code>Records</code>](#Records)  
+<a name="Records+count"></a>
+
+### records.count() ⇒ <code>Observable.&lt;number&gt;</code>
+<p>Count documents</p>
 
 **Kind**: instance method of [<code>Records</code>](#Records)  
 <a name="Records+driver"></a>

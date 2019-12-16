@@ -32,7 +32,7 @@
     "release:minor": "cd ./scripts && npm run release:minor",
     "release:patch": "cd ./scripts && npm run release:patch",
     "build:schematics": "tsc -p tools/tsconfig.tools.json && ./tools/copy.sh",
-    "build:doc": "jsdoc2md --files ./libs/**/*.ts --configure ./jsdoc2md.json > ./docs/file.md"
+    "build:doc": "cd .docs && npm run doc:gen"
   },
   "private": true,
   "dependencies": {
