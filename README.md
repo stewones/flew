@@ -1,6 +1,6 @@
 # Reative [![CI](https://github.com/stewwan/reative/workflows/CI/badge.svg)](https://github.com/stewwan/reative/actions)
 
-The **Reative Platform** is a set of tools which allows you communicate externally using a single, chainable and well designed API so you can build your apps really fast with a lot of fun.
+The **Reative Platform** is a set of tools which allows you communicate externally using a single, chainable and well designed API letting you build your apps really fast with a lot of fun.
 
 Its concept is fully based on _Reactive_ _Programming_ meaning you're going to fully work using [Observables](https://rxjs-dev.firebaseapp.com/operator-decision-tree).
 
