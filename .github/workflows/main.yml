@@ -5,6 +5,12 @@ name: CI
 
 on: [push]
 
+#
+# on:
+#   push:
+#     paths:
+#       - 'libs/core/*'
+
 jobs:
   build:
     # Machine environment:

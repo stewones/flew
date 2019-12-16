@@ -1,4 +1,4 @@
-# Reative Parse
+# Reative Parse [![CI](https://github.com/stewwan/reative/workflows/CI/badge.svg)](https://github.com/stewwan/reative/actions)
 
 ## Docs
 

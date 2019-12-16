@@ -1,4 +1,4 @@
-# Reative State [![pipeline status](https://gitlab.com/reative-team/test-state/badges/master/pipeline.svg)](https://gitlab.com/reative-team/test-state/commits/master) [![coverage report](https://gitlab.com/reative-team/test-state/badges/master/coverage.svg)](https://gitlab.com/reative-team/test-state/commits/master) [![Conventional Commits](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://conventionalcommits.org)
+# Reative State [![CI](https://github.com/stewwan/reative/workflows/CI/badge.svg)](https://github.com/stewwan/reative/actions)
 
 ## Docs
 
