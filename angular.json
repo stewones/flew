@@ -461,7 +461,7 @@
       "typescriptMismatch": false,
       "versionMismatch": false
     },
-    "defaultCollection": "@nrwl/angular"
+    "defaultCollection": "@reative/schematics"
   },
   "schematics": {
     "@nrwl/schematics:application": {
