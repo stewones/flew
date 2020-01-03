@@ -1,3 +1,12 @@
+## [2.3.2](https://github.com/stewwan/reative/compare/v2.3.1...v2.3.2) (2020-01-03)
+
+
+### Bug Fixes
+
+* **parse:** needs to skip on default query for the `or` clausule ([6cb4f1f](https://github.com/stewwan/reative/commit/6cb4f1f3dc7d2d00e63a163c8722ebdff94d9ec1))
+
+
+
 ## [2.3.1](https://github.com/stewwan/reative/compare/v2.3.0...v2.3.1) (2020-01-03)
 
 
