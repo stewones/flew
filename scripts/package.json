@@ -26,7 +26,7 @@
     "build:core": "cd ../ && ./node_modules/.bin/ng build core --prod",
     "build:state": "cd ../ && ./node_modules/.bin/ng build state --prod",
     "build:firebase": "cd ../ && ./node_modules/.bin/ng build firebase --prod",
-    "build:schematics": "cd ../ && npm run schematics:build",
+    "build:schematics": "cd ../ && npm run build:schematics",
     "build:parse": "cd ../ && ./node_modules/.bin/ng build parse --prod",
     "deploy:git": "./deploy-git.sh",
     "deploy:npm": "tsc && node ./.compiled/scripts/deploy-npm.js",
