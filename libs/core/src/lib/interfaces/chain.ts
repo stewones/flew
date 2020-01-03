@@ -51,9 +51,9 @@ export interface ReativeChainPayload {
   where?: ReativeChainPayloadWhere[];
   size?: number; // elastic/firestore
   sort?: any | any[]; // elastic/firestore
-  doc?: string | number; // firestore `on`
-  at?: string | number; // firestore
-  after?: string | number; // firestore
+  doc?: any; // firestore `on`
+  at?: any; // firestore
+  after?: any; // firestore
   fields?: string[]; // used for the include api from parse
   diff?: (fn: (cache: any, network: any) => boolean) => any; // customize rr response behavior
 }

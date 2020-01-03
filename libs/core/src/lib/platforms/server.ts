@@ -198,7 +198,7 @@ export class Records implements ReativeAPI {
       sort: true,
       size: true,
       at: false,
-      after: false,
+      after: true,
       ref: false,
       raw: true,
       transform: true,

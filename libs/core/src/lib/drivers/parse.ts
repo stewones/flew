@@ -125,6 +125,11 @@ export class ParseDriver implements ReativeDriver {
     this.connector.limit(limit);
   }
 
+  protected skip(value: number) {
+    this.log().success()(`parse after -> ${value}`);
+    this.connector.skip(value);
+  }
+
   public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
       const verb =
@@ -182,6 +187,10 @@ export class ParseDriver implements ReativeDriver {
       if (chain.fields) {
         this.connector.include(chain.fields);
       }
+
+      //
+      // set skip
+      if (chain.after) this.skip(chain.after);
 
       //
       // network handle
@@ -287,6 +296,7 @@ export class ParseDriver implements ReativeDriver {
           });
 
           Reative.Parse.Query.or(...execute)
+            .skip(chain.after > 0 ? chain.after : 0)
             .find({
               useMasterKey: chain.useMasterKey,
               sessionToken: chain.useSessionToken
@@ -369,6 +379,10 @@ export class ParseDriver implements ReativeDriver {
       //
       // set limit
       if (chain.size) this.limit(chain.size);
+
+      //
+      // set skip
+      if (chain.after) this.skip(chain.after);
 
       //
       // fire in the hole
@@ -597,6 +611,10 @@ export class ParseDriver implements ReativeDriver {
       //
       // set where
       this.where(chain.where);
+
+      //
+      // set skip
+      if (chain.after) this.skip(chain.after);
 
       //
       // network handle
