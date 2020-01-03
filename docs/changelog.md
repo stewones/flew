@@ -1,3 +1,13 @@
+# [2.2.0](https://github.com/stewwan/reative/compare/v2.1.0...v2.2.0) (2020-01-03)
+
+
+### Features
+
+* **parse:** add `count()` verb ([7b818a6](https://github.com/stewwan/reative/commit/7b818a66a03af6d2400088e3a8134099b9e2c1a1))
+* **parse:** make .query work with arrays ([61f3d80](https://github.com/stewwan/reative/commit/61f3d80160284088e0323be7c93f801eb0e69ef5))
+
+
+
 # [2.1.0](https://github.com/stewwan/reative/compare/v2.0.3...v2.1.0) (2019-12-10)
 
 
