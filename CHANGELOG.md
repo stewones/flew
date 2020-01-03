@@ -1,3 +1,12 @@
+# [2.3.0](https://github.com/stewwan/reative/compare/v2.2.0...v2.3.0) (2020-01-03)
+
+
+### Features
+
+* **parse:** add `or` clausule ([baa4a6f](https://github.com/stewwan/reative/commit/baa4a6fc66a5a25b97433006f1694766f8c1d65b))
+
+
+
 # [2.2.0](https://github.com/stewwan/reative/compare/v2.1.0...v2.2.0) (2020-01-03)
 
 
