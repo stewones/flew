@@ -1,7 +1,6 @@
-import { isArray, isEmpty, isNil, isObject, get } from 'lodash';
+import { isArray, isEmpty, isNil, isObject, isFunction } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { isFunction } from 'util';
 import { SetOptions } from '../interfaces/api';
 import { ReativeChainPayload } from '../interfaces/chain';
 import { ConnectorParse } from '../interfaces/connector';
@@ -140,6 +139,14 @@ export class ParseDriver implements ReativeDriver {
           // tslint:disable-next-line: deprecation
           if (isFunction(value)) {
             this.connector[k](...value());
+          } else if (isArray(value)) {
+            value.map(it => {
+              if (isFunction(it)) {
+                this.connector[k](...it());
+              } else {
+                this.connector[k](it);
+              }
+            });
           } else {
             this.connector[k](value);
           }
