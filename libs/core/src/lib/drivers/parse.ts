@@ -1,4 +1,11 @@
-import { isArray, isEmpty, isNil, isObject, isFunction } from 'lodash';
+import {
+  isArray,
+  isEmpty,
+  isNil,
+  isObject,
+  isFunction,
+  isString
+} from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SetOptions } from '../interfaces/api';
@@ -18,7 +25,7 @@ export class ParseDriver implements ReativeDriver {
   driverOptions: ReativeOptions;
   connector: ConnectorParse;
   logger: Logger;
-  skipOnQuery = ['aggregate'];
+  skipOnQuery = ['aggregate', 'or'];
 
   constructor(options: ReativeOptions) {
     this.driverOptions = options;
@@ -121,7 +128,11 @@ export class ParseDriver implements ReativeDriver {
   public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
       const verb =
-        chain.query && chain.query['aggregate'] ? 'aggregate' : 'find';
+        chain.query && chain.query['aggregate']
+          ? 'aggregate'
+          : chain.query && chain.query['or']
+          ? 'or'
+          : 'find';
 
       //
       // run exceptions
@@ -136,10 +147,7 @@ export class ParseDriver implements ReativeDriver {
       for (const k in chain.query) {
         if (!this.skipOnQuery.includes(k)) {
           const value = chain.query[k];
-          // tslint:disable-next-line: deprecation
-          if (isFunction(value)) {
-            this.connector[k](...value());
-          } else if (isArray(value)) {
+          if (isArray(value) && !isString(value[0])) {
             value.map(it => {
               if (isFunction(it)) {
                 this.connector[k](...it());
@@ -148,7 +156,11 @@ export class ParseDriver implements ReativeDriver {
               }
             });
           } else {
-            this.connector[k](value);
+            if (isFunction(value)) {
+              this.connector[k](...value());
+            } else {
+              this.connector[k](value);
+            }
           }
         }
       }
@@ -242,6 +254,47 @@ export class ParseDriver implements ReativeDriver {
             .then(success)
             .catch(error);
           break;
+        case 'or':
+          const execute = [];
+
+          chain.query.or.map(item => {
+            for (const k in item) {
+              const value = item[k];
+              if (isArray(value)) {
+                value.map(it => {
+                  if (isFunction(it)) {
+                    const q = new Reative.Parse.Query(this.getCollectionName());
+                    q[k](...it());
+                    execute.push(q);
+                  } else {
+                    const q = new Reative.Parse.Query(this.getCollectionName());
+                    q[k](it);
+                    execute.push(q);
+                  }
+                });
+              } else {
+                if (isFunction(value)) {
+                  const q = new Reative.Parse.Query(this.getCollectionName());
+                  q[k](...value());
+                  execute.push(q);
+                } else {
+                  const q = new Reative.Parse.Query(this.getCollectionName());
+                  q[k](value);
+                  execute.push(q);
+                }
+              }
+            }
+          });
+
+          Reative.Parse.Query.or(...execute)
+            .find({
+              useMasterKey: chain.useMasterKey,
+              sessionToken: chain.useSessionToken
+            })
+            .then(success)
+            .catch(error);
+
+          break;
 
         default:
           this.connector
@@ -285,12 +338,23 @@ export class ParseDriver implements ReativeDriver {
       //
       // set arbitrary query
       for (const k in chain.query) {
-        const value = chain.query[k];
-        // tslint:disable-next-line: deprecation
-        if (isFunction(value)) {
-          this.connector[k](...value());
-        } else {
-          this.connector[k](value);
+        if (!this.skipOnQuery.includes(k)) {
+          const value = chain.query[k];
+          if (isArray(value) && !isString(value[0])) {
+            value.map(it => {
+              if (isFunction(it)) {
+                this.connector[k](...it());
+              } else {
+                this.connector[k](it);
+              }
+            });
+          } else {
+            if (isFunction(value)) {
+              this.connector[k](...value());
+            } else {
+              this.connector[k](value);
+            }
+          }
         }
       }
 
