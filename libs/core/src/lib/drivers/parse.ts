@@ -25,7 +25,7 @@ export class ParseDriver implements ReativeDriver {
   driverOptions: ReativeOptions;
   connector: ConnectorParse;
   logger: Logger;
-  skipOnQuery = ['aggregate'];
+  skipOnQuery = ['aggregate', 'or'];
 
   constructor(options: ReativeOptions) {
     this.driverOptions = options;
