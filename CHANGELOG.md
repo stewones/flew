@@ -1,3 +1,12 @@
+## [2.3.1](https://github.com/stewwan/reative/compare/v2.3.0...v2.3.1) (2020-01-03)
+
+
+### Bug Fixes
+
+* **parse:** or clausule ([c2607d1](https://github.com/stewwan/reative/commit/c2607d1dbe7ab6aec949bfbc15c3089cac5e8937))
+
+
+
 # [2.3.0](https://github.com/stewwan/reative/compare/v2.2.0...v2.3.0) (2020-01-03)
 
 
