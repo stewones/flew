@@ -25,7 +25,7 @@ export class ParseDriver implements ReativeDriver {
   driverOptions: ReativeOptions;
   connector: ConnectorParse;
   logger: Logger;
-  skipOnQuery = ['aggregate', 'or'];
+  skipOnQuery = ['aggregate'];
 
   constructor(options: ReativeOptions) {
     this.driverOptions = options;
@@ -576,11 +576,20 @@ export class ParseDriver implements ReativeDriver {
       for (const k in chain.query) {
         if (!this.skipOnQuery.includes(k)) {
           const value = chain.query[k];
-          // tslint:disable-next-line: deprecation
-          if (isFunction(value)) {
-            this.connector[k](...value());
+          if (isArray(value) && !isString(value[0])) {
+            value.map(it => {
+              if (isFunction(it)) {
+                this.connector[k](...it());
+              } else {
+                this.connector[k](it);
+              }
+            });
           } else {
-            this.connector[k](value);
+            if (isFunction(value)) {
+              this.connector[k](...value());
+            } else {
+              this.connector[k](value);
+            }
           }
         }
       }
