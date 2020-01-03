@@ -1,3 +1,12 @@
+# [2.4.0](https://github.com/stewwan/reative/compare/v2.3.2...v2.4.0) (2020-01-03)
+
+
+### Features
+
+* **parse:** implement `after` ([1366ac6](https://github.com/stewwan/reative/commit/1366ac6c9e94cf38230770fa185aaa124755d177))
+
+
+
 ## [2.3.2](https://github.com/stewwan/reative/compare/v2.3.1...v2.3.2) (2020-01-03)
 
 

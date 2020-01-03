@@ -1,3 +1,30 @@
+# [2.4.0](https://github.com/stewwan/reative/compare/v2.3.2...v2.4.0) (2020-01-03)
+
+
+### Features
+
+* **parse:** implement `after` ([1366ac6](https://github.com/stewwan/reative/commit/1366ac6c9e94cf38230770fa185aaa124755d177))
+
+
+
+## [2.3.2](https://github.com/stewwan/reative/compare/v2.3.1...v2.3.2) (2020-01-03)
+
+
+### Bug Fixes
+
+* **parse:** needs to skip on default query for the `or` clausule ([6cb4f1f](https://github.com/stewwan/reative/commit/6cb4f1f3dc7d2d00e63a163c8722ebdff94d9ec1))
+
+
+
+## [2.3.1](https://github.com/stewwan/reative/compare/v2.3.0...v2.3.1) (2020-01-03)
+
+
+### Bug Fixes
+
+* **parse:** or clausule ([c2607d1](https://github.com/stewwan/reative/commit/c2607d1dbe7ab6aec949bfbc15c3089cac5e8937))
+
+
+
 # [2.3.0](https://github.com/stewwan/reative/compare/v2.2.0...v2.3.0) (2020-01-03)
 
 
