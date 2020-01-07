@@ -381,6 +381,12 @@ export class ParseDriver implements ReativeDriver {
       if (chain.size) this.limit(chain.size);
 
       //
+      // set include (pointers, relation, etc)
+      if (chain.fields) {
+        this.connector.include(chain.fields);
+      }
+
+      //
       // set skip
       if (chain.after) this.skip(chain.after);
 
