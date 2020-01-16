@@ -1,3 +1,12 @@
+## [2.5.2](https://github.com/stewwan/reative/compare/v2.5.1...v2.5.2) (2020-01-16)
+
+
+### Bug Fixes
+
+* **parse:** needs to check for query existence ([d40cf33](https://github.com/stewwan/reative/commit/d40cf330fcd5d41e14751368aefd0ceb79f6c25b))
+
+
+
 ## [2.5.1](https://github.com/stewwan/reative/compare/v2.5.0...v2.5.1) (2020-01-16)
 
 
