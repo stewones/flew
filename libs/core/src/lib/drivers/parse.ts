@@ -26,6 +26,7 @@ export class ParseDriver implements ReativeDriver {
   connector: ConnectorParse;
   logger: Logger;
   skipOnQuery = ['aggregate'];
+  skipOnOperator = ['include', 'exclude'];
   specialOperators = ['or', 'and'];
 
   constructor(options: ReativeOptions) {
@@ -220,6 +221,7 @@ export class ParseDriver implements ReativeDriver {
       //
       // Validate skip on query operators
       if (this.skipOnQuery.includes(k)) return;
+      if (this.skipOnOperator.includes(k)) continue;
 
       //
       // Tranpile query
@@ -242,11 +244,7 @@ export class ParseDriver implements ReativeDriver {
     // Create from a function
     if (isFunction(value)) {
       query[operator](...value());
-    }
-
-    //
-    // Not a function
-    else {
+    } else {
       query[operator](value);
     }
 
@@ -275,6 +273,22 @@ export class ParseDriver implements ReativeDriver {
       const query: any = this.transpileChainQuery(chain.query);
 
       //
+      // Join query with connector
+      if (!isEmpty(query)) {
+        this.connector = Reative.Parse.Query.and(this.connector, ...query);
+      }
+
+      //
+      // set include (pointers, relation, etc)
+      if (chain.fields) {
+        this.connector.include(chain.fields);
+      }
+
+      if (chain.query.include) {
+        this.connector.include(chain.query.include);
+      }
+
+      //
       // set where
       this.where(chain.where);
 
@@ -287,19 +301,8 @@ export class ParseDriver implements ReativeDriver {
       if (chain.size) this.limit(chain.size);
 
       //
-      // set include (pointers, relation, etc)
-      if (chain.fields) {
-        this.connector.include(chain.fields);
-      }
-
-      //
       // set skip
       if (chain.after) this.skip(chain.after);
-
-      //
-      // Join query with connector
-      if (!isEmpty(query))
-        this.connector = Reative.Parse.Query.and(this.connector, ...query);
 
       //
       // network handle
@@ -318,7 +321,7 @@ export class ParseDriver implements ReativeDriver {
         }
 
         //
-        // populade `id` on included fields @todo need more work
+        // @todo auto populate `id` on included fields - need more work
         // if (chain.fields && chain.fields.length) {
         //   result.map(entry => {
         //     chain.fields.map(field => {
@@ -437,6 +440,10 @@ export class ParseDriver implements ReativeDriver {
       // set include (pointers, relation, etc)
       if (chain.fields) {
         this.connector.include(chain.fields);
+      }
+
+      if (chain.query.include) {
+        this.connector.include(chain.query.include);
       }
 
       //
