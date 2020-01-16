@@ -1,3 +1,12 @@
+## [2.5.1](https://github.com/stewwan/reative/compare/v2.5.0...v2.5.1) (2020-01-16)
+
+
+### Bug Fixes
+
+* **parse:** include/exclude operators for .query ([84108dd](https://github.com/stewwan/reative/commit/84108ddb53d8268da272c2d335ea8a5f5a8ba47b))
+
+
+
 # [2.5.0](https://github.com/stewwan/reative/compare/v2.4.0...v2.5.0) (2020-01-16)
 
 
