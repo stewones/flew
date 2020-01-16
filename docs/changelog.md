@@ -1,3 +1,17 @@
+# [2.5.0](https://github.com/stewwan/reative/compare/v2.4.0...v2.5.0) (2020-01-16)
+
+
+### Bug Fixes
+
+* **parse:** .on also must include fields ([f5b4957](https://github.com/stewwan/reative/commit/f5b4957114f83f5c0e9fa63d6acc5f249540c394))
+
+
+### Features
+
+* **parse/query:** handle complex and multi level queries ([1932d72](https://github.com/stewwan/reative/commit/1932d72d8757c312edabb6625b93ef6b98ebd892))
+
+
+
 # [2.4.0](https://github.com/stewwan/reative/compare/v2.3.2...v2.4.0) (2020-01-03)
 
 
