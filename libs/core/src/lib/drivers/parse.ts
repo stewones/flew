@@ -25,7 +25,8 @@ export class ParseDriver implements ReativeDriver {
   driverOptions: ReativeOptions;
   connector: ConnectorParse;
   logger: Logger;
-  skipOnQuery = ['aggregate', 'or'];
+  skipOnQuery = ['aggregate'];
+  specialOperators = ['or', 'and'];
 
   constructor(options: ReativeOptions) {
     this.driverOptions = options;
@@ -130,6 +131,128 @@ export class ParseDriver implements ReativeDriver {
     this.connector.skip(value);
   }
 
+  protected transpileQuery(operator, chainQuery) {
+    //
+    // Hold queries
+    let queries = [];
+
+    //
+    // Transpile special operators
+    if (this.specialOperators.includes(operator)) {
+      //
+      // Fix chainQuery, must be an array
+      // @todo: improve this so we don't need this workaround
+      // on the first level chainQuery is an array here, but from the second forward is an object
+      chainQuery = isArray(chainQuery) ? chainQuery : [chainQuery];
+
+      //
+      // Transpile in the query router
+      const routedQuery: any = this.transpileQueryRouter(operator, chainQuery);
+      queries = [...queries, ...routedQuery];
+    }
+
+    //
+    // Transpile common operators
+    else {
+      //
+      // Get operator value
+      const value = chainQuery[operator] ? chainQuery[operator] : chainQuery;
+
+      //
+      // Treatment for arrays
+      if (isArray(value) && !isString(value[0])) {
+        value.map(it => {
+          queries.push(this.createQueryByOperator(it, operator));
+        });
+      }
+
+      //
+      // Treatment when not array
+      else {
+        queries.push(this.createQueryByOperator(value, operator));
+      }
+    }
+
+    return queries;
+  }
+
+  protected transpileQueryRouter(specialOperator, chainQuery) {
+    //
+    // Hold queries
+    let queries = [];
+
+    //
+    // Transpile queries
+    chainQuery.map(operators => {
+      for (const operator in operators) {
+        //
+        // Set next new chain query
+        // If our operator if a special operator this is after first level and we must send the special operator query value
+        const nextChainQuery = this.specialOperators.includes(operator)
+          ? operators[operator]
+          : operators;
+
+        //
+        // Tranpile query
+        const transpiledQueries = this.transpileQuery(operator, nextChainQuery);
+
+        //
+        // Push to queries
+        queries = [...queries, ...transpiledQueries];
+      }
+    });
+
+    //
+    // Validate
+    if (isEmpty(queries)) return queries;
+
+    return Reative.Parse.Query[specialOperator](...queries);
+  }
+
+  protected transpileChainQuery(query) {
+    //
+    // Hold queries
+    let queries = [];
+
+    //
+    // Set plain queries
+    for (const k in query) {
+      //
+      // Validate skip on query operators
+      if (this.skipOnQuery.includes(k)) return;
+
+      //
+      // Tranpile query
+      const transpiledQuery = this.transpileQuery(k, query[k]);
+
+      //
+      // Push to queries
+      queries = [...queries, ...transpiledQuery];
+    }
+
+    return queries;
+  }
+
+  protected createQueryByOperator(value, operator) {
+    //
+    // Start query
+    const query = new Reative.Parse.Query(this.getCollectionName());
+
+    //
+    // Create from a function
+    if (isFunction(value)) {
+      query[operator](...value());
+    }
+
+    //
+    // Not a function
+    else {
+      query[operator](value);
+    }
+
+    return query;
+  }
+
   public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
       const verb =
@@ -148,27 +271,8 @@ export class ParseDriver implements ReativeDriver {
       this.connector = new Reative.Parse.Query(this.getCollectionName());
 
       //
-      // set arbitrary query
-      for (const k in chain.query) {
-        if (!this.skipOnQuery.includes(k)) {
-          const value = chain.query[k];
-          if (isArray(value) && !isString(value[0])) {
-            value.map(it => {
-              if (isFunction(it)) {
-                this.connector[k](...it());
-              } else {
-                this.connector[k](it);
-              }
-            });
-          } else {
-            if (isFunction(value)) {
-              this.connector[k](...value());
-            } else {
-              this.connector[k](value);
-            }
-          }
-        }
-      }
+      // Transpile chain query
+      const query: any = this.transpileChainQuery(chain.query);
 
       //
       // set where
@@ -191,6 +295,11 @@ export class ParseDriver implements ReativeDriver {
       //
       // set skip
       if (chain.after) this.skip(chain.after);
+
+      //
+      // Join query with connector
+      if (!isEmpty(query))
+        this.connector = Reative.Parse.Query.and(this.connector, ...query);
 
       //
       // network handle
@@ -263,48 +372,6 @@ export class ParseDriver implements ReativeDriver {
             .then(success)
             .catch(error);
           break;
-        case 'or':
-          const execute = [];
-
-          chain.query.or.map(item => {
-            for (const k in item) {
-              const value = item[k];
-              if (isArray(value)) {
-                value.map(it => {
-                  if (isFunction(it)) {
-                    const q = new Reative.Parse.Query(this.getCollectionName());
-                    q[k](...it());
-                    execute.push(q);
-                  } else {
-                    const q = new Reative.Parse.Query(this.getCollectionName());
-                    q[k](it);
-                    execute.push(q);
-                  }
-                });
-              } else {
-                if (isFunction(value)) {
-                  const q = new Reative.Parse.Query(this.getCollectionName());
-                  q[k](...value());
-                  execute.push(q);
-                } else {
-                  const q = new Reative.Parse.Query(this.getCollectionName());
-                  q[k](value);
-                  execute.push(q);
-                }
-              }
-            }
-          });
-
-          Reative.Parse.Query.or(...execute)
-            .skip(chain.after > 0 ? chain.after : 0)
-            .find({
-              useMasterKey: chain.useMasterKey,
-              sessionToken: chain.useSessionToken
-            })
-            .then(success)
-            .catch(error);
-
-          break;
 
         default:
           this.connector
@@ -346,27 +413,13 @@ export class ParseDriver implements ReativeDriver {
       this.connector = new Reative.Parse.Query(this.getCollectionName());
 
       //
-      // set arbitrary query
-      for (const k in chain.query) {
-        if (!this.skipOnQuery.includes(k)) {
-          const value = chain.query[k];
-          if (isArray(value) && !isString(value[0])) {
-            value.map(it => {
-              if (isFunction(it)) {
-                this.connector[k](...it());
-              } else {
-                this.connector[k](it);
-              }
-            });
-          } else {
-            if (isFunction(value)) {
-              this.connector[k](...value());
-            } else {
-              this.connector[k](value);
-            }
-          }
-        }
-      }
+      // Transpile chain query
+      const query: any = this.transpileChainQuery(chain.query);
+
+      //
+      // Join query with connector
+      if (!isEmpty(query))
+        this.connector = Reative.Parse.Query.and(this.connector, ...query);
 
       //
       // set where
@@ -592,27 +645,13 @@ export class ParseDriver implements ReativeDriver {
       this.connector = new Reative.Parse.Query(this.getCollectionName());
 
       //
-      // set arbitrary query
-      for (const k in chain.query) {
-        if (!this.skipOnQuery.includes(k)) {
-          const value = chain.query[k];
-          if (isArray(value) && !isString(value[0])) {
-            value.map(it => {
-              if (isFunction(it)) {
-                this.connector[k](...it());
-              } else {
-                this.connector[k](it);
-              }
-            });
-          } else {
-            if (isFunction(value)) {
-              this.connector[k](...value());
-            } else {
-              this.connector[k](value);
-            }
-          }
-        }
-      }
+      // Transpile chain query
+      const query: any = this.transpileChainQuery(chain.query);
+
+      //
+      // Join query with connector
+      if (!isEmpty(query))
+        this.connector = Reative.Parse.Query.and(this.connector, ...query);
 
       //
       // set where
