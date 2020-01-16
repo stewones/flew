@@ -284,7 +284,7 @@ export class ParseDriver implements ReativeDriver {
         this.connector.include(chain.fields);
       }
 
-      if (chain.query.include) {
+      if (chain.query && chain.query.include) {
         this.connector.include(chain.query.include);
       }
 
@@ -442,7 +442,7 @@ export class ParseDriver implements ReativeDriver {
         this.connector.include(chain.fields);
       }
 
-      if (chain.query.include) {
+      if (chain.query && chain.query.include) {
         this.connector.include(chain.query.include);
       }
 
