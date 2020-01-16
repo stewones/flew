@@ -20,7 +20,6 @@
     "playground": {
       "tags": []
     },
-
     "firebase": {
       "tags": []
     },
@@ -31,6 +30,9 @@
       "tags": []
     },
     "parse": {
+      "tags": []
+    },
+    "parse-demo": {
       "tags": []
     }
   }
