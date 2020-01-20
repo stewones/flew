@@ -1,3 +1,12 @@
+# [2.6.0](https://github.com/stewwan/reative/compare/v2.5.2...v2.6.0) (2020-01-20)
+
+
+### Features
+
+* **parse:** implement .delete verb closes [#21](https://github.com/stewwan/reative/issues/21) ([a57887f](https://github.com/stewwan/reative/commit/a57887f4401bc94499f25ee6502180eef7bd76e2))
+
+
+
 ## [2.5.2](https://github.com/stewwan/reative/compare/v2.5.1...v2.5.2) (2020-01-16)
 
 

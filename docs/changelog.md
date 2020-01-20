@@ -1,3 +1,30 @@
+# [2.6.0](https://github.com/stewwan/reative/compare/v2.5.2...v2.6.0) (2020-01-20)
+
+
+### Features
+
+* **parse:** implement .delete verb closes [#21](https://github.com/stewwan/reative/issues/21) ([a57887f](https://github.com/stewwan/reative/commit/a57887f4401bc94499f25ee6502180eef7bd76e2))
+
+
+
+## [2.5.2](https://github.com/stewwan/reative/compare/v2.5.1...v2.5.2) (2020-01-16)
+
+
+### Bug Fixes
+
+* **parse:** needs to check for query existence ([d40cf33](https://github.com/stewwan/reative/commit/d40cf330fcd5d41e14751368aefd0ceb79f6c25b))
+
+
+
+## [2.5.1](https://github.com/stewwan/reative/compare/v2.5.0...v2.5.1) (2020-01-16)
+
+
+### Bug Fixes
+
+* **parse:** include/exclude operators for .query ([84108dd](https://github.com/stewwan/reative/commit/84108ddb53d8268da272c2d335ea8a5f5a8ba47b))
+
+
+
 # [2.5.0](https://github.com/stewwan/reative/compare/v2.4.0...v2.5.0) (2020-01-16)
 
 
