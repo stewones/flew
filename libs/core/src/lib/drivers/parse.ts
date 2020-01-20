@@ -4,7 +4,8 @@ import {
   isNil,
   isObject,
   isFunction,
-  isString
+  isString,
+  trim
 } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -19,6 +20,7 @@ import { subscribe } from '../utils/events';
 import { guid } from '../utils/guid';
 import { Logger } from '../utils/logger';
 import { clearNetworkResponse } from '../utils/response';
+import { RR_IDENTIFIER } from '../global';
 
 export class ParseDriver implements ReativeDriver {
   driverName: ReativeDriverOption = 'parse';
@@ -697,6 +699,123 @@ export class ParseDriver implements ReativeDriver {
 
       this.connector
         .count({
+          useMasterKey: chain.useMasterKey,
+          sessionToken: chain.useSessionToken
+        })
+        .then(success)
+        .catch(error);
+    });
+  }
+
+  public delete<T>(
+    path: string,
+    key: string,
+    payload: any,
+    chain: ReativeChainPayload
+  ): Observable<T> {
+    return new Observable((observer: PartialObserver<T>) => {
+      //
+      // run exceptions
+      this.exceptions();
+
+      //
+      // define adapter
+      this.connector = new Reative.Parse.Query(this.getCollectionName());
+
+      //
+      // add or condition when doc is set
+      if (chain.doc) {
+        let orQueryExtended = {
+          or: [
+            {
+              equalTo: () => [
+                this.driverOptions.identifier || RR_IDENTIFIER,
+                trim(chain.doc)
+              ]
+            },
+            {
+              equalTo: () => ['objectId', trim(chain.doc)]
+            }
+          ]
+        };
+        if (chain.query && chain.query.or) {
+          orQueryExtended = {
+            or: [...chain.query.or, ...orQueryExtended.or]
+          };
+        }
+        chain.query = {
+          ...chain.query,
+          ...orQueryExtended
+        };
+      }
+
+      //
+      // Transpile chain query
+      const query: any = this.transpileChainQuery(chain.query);
+
+      //
+      // Join query with connector
+      if (!isEmpty(query))
+        this.connector = Reative.Parse.Query.and(this.connector, ...query);
+
+      //
+      // set where
+      this.where(chain.where);
+
+      //
+      // set skip
+      if (chain.after) this.skip(chain.after);
+
+      //
+      // network handle
+      const success = async (data: any[]) => {
+        const list = await Reative.Parse.Object.destroyAll(data).catch(
+          error => {
+            // An error occurred while deleting one or more of the objects.
+            // If this is an aggregate error, then we can inspect each error
+            // object individually to determine the reason why a particular
+            // object was not deleted.
+            if (error.code === Reative.Parse.Error.AGGREGATE_ERROR) {
+              for (let i = 0; i < error.errors.length; i++) {
+                console.log(
+                  "Couldn't delete " +
+                    error.errors[i].object.id +
+                    'due to ' +
+                    error.errors[i].message
+                );
+              }
+            } else {
+              console.log('Delete aborted because of ' + error.message);
+            }
+          }
+        );
+
+        //
+        // define standard response
+        const response: Response = {
+          data: list,
+          key: key,
+          collection: this.getCollectionName(),
+          driver: this.driverName,
+          response: {}
+        };
+
+        //
+        // success callback
+        observer.next(response as T);
+        observer.complete();
+      };
+
+      const error = err => {
+        // this breaks offline requests
+        // try {
+        //   observer.error(err);
+        //   observer.complete();
+        // } catch (err) {}
+      };
+
+      this.connector
+        .find({
           useMasterKey: chain.useMasterKey,
           sessionToken: chain.useSessionToken
         })

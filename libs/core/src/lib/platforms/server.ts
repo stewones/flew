@@ -105,7 +105,7 @@ export class Records implements ReativeAPI {
       post: 'parse.find',
       update: 'parse.update',
       patch: 'parse.set',
-      delete: false,
+      delete: true, // can use doc_id or objectId
       set: true,
       count: true
     }
@@ -343,7 +343,7 @@ export class Records implements ReativeAPI {
 
     let _verb = method;
     let _driver = chain.driver;
-    let arg1, arg2, arg3;
+    let arg1, arg2, arg3, arg4;
 
     //
     // get verb
@@ -379,6 +379,12 @@ export class Records implements ReativeAPI {
         arg2 = payload.data;
         arg3 = payload.options;
         break;
+      case 'delete':
+        arg1 = path;
+        arg2 = key;
+        arg3 = payload;
+        arg4 = chain;
+        break;
       case 'on':
         arg1 = chain;
         arg2 = key;
@@ -391,7 +397,7 @@ export class Records implements ReativeAPI {
 
     //
     // execute request
-    return this.drivers[_driver][_verb]<T>(arg1, arg2, arg3);
+    return this.drivers[_driver][_verb]<T>(arg1, arg2, arg3, arg4);
   }
 
   /**
