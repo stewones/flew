@@ -1,3 +1,12 @@
+## [2.6.1](https://github.com/stewwan/reative/compare/v2.6.0...v2.6.1) (2020-01-21)
+
+
+### Bug Fixes
+
+* **parse:** .on needs to check for special queries ([751d8a1](https://github.com/stewwan/reative/commit/751d8a1913db9e10ec3c4533088a181b21a7f8f8))
+
+
+
 # [2.6.0](https://github.com/stewwan/reative/compare/v2.5.2...v2.6.0) (2020-01-20)
 
 
