@@ -277,7 +277,7 @@ export class ParseDriver implements ReativeDriver {
       //
       // Join query with connector
       if (!isEmpty(query)) {
-        this.connector = Reative.Parse.Query.and(this.connector, ...query);
+        this.connector = Reative.Parse.Query.and(...query);
       }
 
       //
@@ -412,19 +412,25 @@ export class ParseDriver implements ReativeDriver {
       //
       // run exceptions
       this.exceptions();
-
-      //
-      // define adapter
       this.connector = new Reative.Parse.Query(this.getCollectionName());
 
       //
       // Transpile chain query
-      const query: any = this.transpileChainQuery(chain.query);
+      const specialQueries: any = this.transpileChainQuery(chain.query);
 
       //
       // Join query with connector
-      if (!isEmpty(query))
-        this.connector = Reative.Parse.Query.and(this.connector, ...query);
+      if (!isEmpty(specialQueries) && this.isSpecialQuery(chain)) {
+        this.connector = Reative.Parse.Query.and(...specialQueries);
+      } else {
+        for (const q in chain.query) {
+          if (isFunction(chain.query[q])) {
+            this.connector[q](...chain.query[q]());
+          } else {
+            this.connector[q](...chain.query[q]);
+          }
+        }
+      }
 
       //
       // set where
@@ -659,8 +665,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // Join query with connector
-      if (!isEmpty(query))
-        this.connector = Reative.Parse.Query.and(this.connector, ...query);
+      if (!isEmpty(query)) this.connector = Reative.Parse.Query.and(...query);
 
       //
       // set where
@@ -755,8 +760,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // Join query with connector
-      if (!isEmpty(query))
-        this.connector = Reative.Parse.Query.and(this.connector, ...query);
+      if (!isEmpty(query)) this.connector = Reative.Parse.Query.and(...query);
 
       //
       // set where
@@ -832,5 +836,16 @@ export class ParseDriver implements ReativeDriver {
     };
     const name = this.driverOptions.collection;
     return mapping[name] ? mapping[name] : name;
+  }
+
+  isSpecialQuery(chain: ReativeChainPayload): boolean {
+    const query = { ...chain.query };
+    let isSpecial = false;
+    for (const item in query) {
+      if (this.specialOperators.includes(item)) {
+        isSpecial = true;
+      }
+    }
+    return isSpecial;
   }
 }

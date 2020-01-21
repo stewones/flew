@@ -13,6 +13,7 @@ export class AppComponent implements OnInit {
     // this.exerciseTest()
     // this.includeTest();
     // this.deleteObjects();
+    this.onQuery();
   }
 
   exerciseTest() {
@@ -50,7 +51,7 @@ export class AppComponent implements OnInit {
       // .include([`parts`, `requester`, `reviewer`])
       .query({
         include: [`parts`, `parts.vendor`, `requester`, `reviewer`],
-        matches: () => [`code`, `O-410`]
+        equalTo: () => [`code`, `E-100`]
       })
 
       .findOne()
@@ -82,6 +83,46 @@ export class AppComponent implements OnInit {
       .delete()
       .subscribe(result => {
         console.log(`result`, result);
+      });
+  }
+
+  onQuery() {
+    collection(`Part`)
+      .driver('parse')
+      .key(`realtime-parts`)
+      //
+      // doesnt work with livequery
+      // .query({
+      //   or: [
+      //     {
+      //       equalTo: () => [`doc_id`, `e9f9cacd-4241-943a-74ef-05a1a7bbffd9`]
+      //     }
+      //   ]
+      // })
+
+      .query({
+        //
+        // works with livequery
+        containedIn: () => [
+          `doc_id`,
+          [`e9f9cacd-4241-943a-74ef-05a1a7bbffd9`, `asdf`]
+        ]
+      })
+      .on()
+      .subscribe(parts => {
+        console.log(`realtime parts`, parts);
+      });
+
+    collection(`Order`)
+      .driver('parse')
+      .key(`realtime-orders`)
+      .query({
+        include: [`parts`, `parts.vendor`, `requester`, `reviewer`],
+        equalTo: () => [`code`, `E-100`]
+      })
+      .on()
+      .subscribe(orders => {
+        console.log(`realtime order`, orders);
       });
   }
 }
