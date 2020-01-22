@@ -1,3 +1,12 @@
+## [2.6.2](https://github.com/stewwan/reative/compare/v2.6.1...v2.6.2) (2020-01-22)
+
+
+### Bug Fixes
+
+* **parse:** .set should populate updated_at closes [#18](https://github.com/stewwan/reative/issues/18) ([503f3dd](https://github.com/stewwan/reative/commit/503f3dd30849a929cd1d6a1d610c0d6e1af78b4d))
+
+
+
 ## [2.6.1](https://github.com/stewwan/reative/compare/v2.6.0...v2.6.1) (2020-01-21)
 
 
