@@ -560,6 +560,11 @@ export class ParseDriver implements ReativeDriver {
             this.driverOptions.timestampCreated
           ] = new Date().toISOString();
         }
+        if (!data[this.driverOptions.timestampUpdated]) {
+          newData[
+            this.driverOptions.timestampUpdated
+          ] = new Date().toISOString();
+        }
       }
 
       //

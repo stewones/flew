@@ -13,7 +13,8 @@ export class AppComponent implements OnInit {
     // this.exerciseTest()
     // this.includeTest();
     // this.deleteObjects();
-    this.onQuery();
+    // this.onQuery();
+    this.setQuery();
   }
 
   exerciseTest() {
@@ -124,5 +125,14 @@ export class AppComponent implements OnInit {
       .subscribe(orders => {
         console.log(`realtime order`, orders);
       });
+  }
+
+  setQuery() {
+    collection(`Someone`)
+      .driver('parse')
+      .set({
+        some: 'value'
+      })
+      .toPromise();
   }
 }
