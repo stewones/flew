@@ -246,6 +246,8 @@ export class ParseDriver implements ReativeDriver {
     // Create from a function
     if (isFunction(value)) {
       query[operator](...value());
+    } else if (isArray(value)) {
+      value.map(it => this.createQueryByOperator(it, operator));
     } else {
       query[operator](value);
     }
