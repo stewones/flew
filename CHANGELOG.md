@@ -1,3 +1,13 @@
+# [2.7.0](https://github.com/stewwan/reative/compare/v2.6.2...v2.7.0) (2020-01-23)
+
+
+### Features
+
+* **parse:** add array support for queries ([1e77bc1](https://github.com/stewwan/reative/commit/1e77bc1818d4ca52feab1a1f853d6b7a00fbc77a))
+* **parse:** add array support for queries ([f5745ed](https://github.com/stewwan/reative/commit/f5745ed5a280692b3a798227ba690ce7505bb705))
+
+
+
 ## [2.6.2](https://github.com/stewwan/reative/compare/v2.6.1...v2.6.2) (2020-01-22)
 
 

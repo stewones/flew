@@ -1,3 +1,31 @@
+# [2.7.0](https://github.com/stewwan/reative/compare/v2.6.2...v2.7.0) (2020-01-23)
+
+
+### Features
+
+* **parse:** add array support for queries ([1e77bc1](https://github.com/stewwan/reative/commit/1e77bc1818d4ca52feab1a1f853d6b7a00fbc77a))
+* **parse:** add array support for queries ([f5745ed](https://github.com/stewwan/reative/commit/f5745ed5a280692b3a798227ba690ce7505bb705))
+
+
+
+## [2.6.2](https://github.com/stewwan/reative/compare/v2.6.1...v2.6.2) (2020-01-22)
+
+
+### Bug Fixes
+
+* **parse:** .set should populate updated_at closes [#18](https://github.com/stewwan/reative/issues/18) ([503f3dd](https://github.com/stewwan/reative/commit/503f3dd30849a929cd1d6a1d610c0d6e1af78b4d))
+
+
+
+## [2.6.1](https://github.com/stewwan/reative/compare/v2.6.0...v2.6.1) (2020-01-21)
+
+
+### Bug Fixes
+
+* **parse:** .on needs to check for special queries ([751d8a1](https://github.com/stewwan/reative/commit/751d8a1913db9e10ec3c4533088a181b21a7f8f8))
+
+
+
 # [2.6.0](https://github.com/stewwan/reative/compare/v2.5.2...v2.6.0) (2020-01-20)
 
 
