@@ -14,7 +14,8 @@ export class AppComponent implements OnInit {
     // this.includeTest();
     // this.deleteObjects();
     // this.onQuery();
-    this.setQuery();
+    // this.setQuery();
+    this.orQueryArraySupport();
   }
 
   exerciseTest() {
@@ -134,5 +135,27 @@ export class AppComponent implements OnInit {
         some: 'value'
       })
       .toPromise();
+  }
+
+  orQueryArraySupport() {
+    const keyword = `asdf`;
+
+    collection(`Someone`)
+      .driver(`parse`)
+      .query({
+        or: [
+          {
+            equalTo: [() => ['email', keyword], () => ['phone', keyword]]
+          },
+          {
+            matches: [
+              () => ['email', keyword, 'i'],
+              () => ['phone', keyword, 'i']
+            ]
+          }
+        ]
+      })
+      .find()
+      .subscribe(console.log);
   }
 }
