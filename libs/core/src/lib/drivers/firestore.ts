@@ -103,6 +103,11 @@ export class FirestoreDriver implements ReativeDriver {
       if (chain.size) firestore = this.limit(chain.size, firestore);
 
       //
+      // apply cursor
+      if (chain.at) firestore = firestore.startAt(chain.at);
+      if (chain.after) firestore = firestore.startAfter(chain.after);
+
+      //
       // network handle
       firestore
         .get()

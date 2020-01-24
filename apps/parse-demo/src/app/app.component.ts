@@ -15,7 +15,8 @@ export class AppComponent implements OnInit {
     // this.deleteObjects();
     // this.onQuery();
     // this.setQuery();
-    this.orQueryArraySupport();
+    // this.orQueryArraySupport();
+    this.atAfterFirestoreSupport();
   }
 
   exerciseTest() {
@@ -157,5 +158,28 @@ export class AppComponent implements OnInit {
       })
       .find()
       .subscribe(console.log);
+  }
+
+  async atAfterFirestoreSupport() {
+    const limit = 10;
+
+    const firestoreEntries = await collection(`debrief`)
+      .driver(`firestore`)
+      .sort({ created_at: 'desc' })
+      .size(limit)
+      .find()
+      .toPromise()
+      .catch(console.log);
+
+    const firestoreEntries2 = await collection(`debrief`)
+      .driver(`firestore`)
+      .sort({ created_at: 'asc' })
+      .after('2020-01-20')
+      .size(limit)
+      .find()
+      .toPromise()
+      .catch(console.log);
+
+    console.log(firestoreEntries[0], firestoreEntries2[0]);
   }
 }
