@@ -1,3 +1,17 @@
+# [2.8.0](https://github.com/stewwan/reative/compare/v2.7.0...v2.8.0) (2020-01-29)
+
+
+### Bug Fixes
+
+* **firestore:** add missing cursor ([4253f80](https://github.com/stewwan/reative/commit/4253f80186bd6f212d14f79f55653daa799c270a))
+
+
+### Features
+
+* **parse:** add `run` verb to make it possible execute cloud functions through reative ([cf574d3](https://github.com/stewwan/reative/commit/cf574d33747762f79f7f07c7d551f89a7a894a7b))
+
+
+
 # [2.7.0](https://github.com/stewwan/reative/compare/v2.6.2...v2.7.0) (2020-01-23)
 
 
