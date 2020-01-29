@@ -601,6 +601,40 @@ export class ParseDriver implements ReativeDriver {
     });
   }
 
+  public run(name: string, payload: any, key: string): Observable<any> {
+    return new Observable(observer => {
+      //
+      // define connector
+      const cloud = Reative.Parse.Cloud;
+
+      //
+      // define return
+      const response = r => {
+        const result: Response = clearNetworkResponse({
+          data: r,
+          key: key,
+          collection: this.getCollectionName(),
+          driver: this.driverName,
+          response: {
+            empty: isEmpty(r)
+          }
+        });
+        observer.next(result);
+        observer.complete();
+      };
+
+      const error = err => {
+        observer.error(err);
+        observer.complete();
+      };
+
+      cloud
+        .run(name, payload)
+        .then(response)
+        .catch(error);
+    });
+  }
+
   public update(chain: ReativeChainPayload, data: any): Observable<any> {
     return new Observable(observer => {
       //

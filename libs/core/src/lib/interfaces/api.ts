@@ -54,6 +54,7 @@ export interface ReativeAPI {
   update(data: any);
   on();
   count();
+  run(name: string, payload: any);
 
   //
   // http verbs

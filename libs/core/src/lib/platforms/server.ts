@@ -71,7 +71,8 @@ export class Records implements ReativeAPI {
       patch: 'http.patch',
       delete: 'http.delete',
       set: true,
-      count: false
+      count: false,
+      run: false
     },
     firebase: {
       find: true,
@@ -83,7 +84,8 @@ export class Records implements ReativeAPI {
       patch: 'http.patch',
       delete: 'http.delete',
       set: 'http.post',
-      count: false
+      count: false,
+      run: false
     },
     http: {
       find: 'http.get',
@@ -95,7 +97,8 @@ export class Records implements ReativeAPI {
       patch: true,
       delete: true,
       set: 'http.post',
-      count: false
+      count: false,
+      run: false
     },
     parse: {
       find: true,
@@ -107,7 +110,8 @@ export class Records implements ReativeAPI {
       patch: 'parse.set',
       delete: true, // can use doc_id or objectId
       set: true,
-      count: true
+      count: true,
+      run: true
     }
   };
 
@@ -389,6 +393,11 @@ export class Records implements ReativeAPI {
         arg1 = chain;
         arg2 = key;
         break;
+      case 'run':
+        arg1 = path;
+        arg2 = payload;
+        arg3 = key;
+        break;
       default:
         arg1 = path;
         arg2 = key;
@@ -539,6 +548,16 @@ export class Records implements ReativeAPI {
    */
   public count(): Observable<number> {
     return this.call<number>('count');
+  }
+
+  /**
+   *  Run cloud functions
+   *
+   * @returns {Observable<number>}
+   * @memberof Records
+   */
+  public run<T>(name: string, payload: any): Observable<T> {
+    return this.call<T>('run', name, payload);
   }
 
   /**

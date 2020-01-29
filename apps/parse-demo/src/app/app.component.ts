@@ -16,7 +16,8 @@ export class AppComponent implements OnInit {
     // this.onQuery();
     // this.setQuery();
     // this.orQueryArraySupport();
-    this.atAfterFirestoreSupport();
+    // this.atAfterFirestoreSupport();
+    this.reativeRun();
   }
 
   exerciseTest() {
@@ -181,5 +182,20 @@ export class AppComponent implements OnInit {
       .catch(console.log);
 
     console.log(firestoreEntries[0], firestoreEntries2[0]);
+  }
+
+  async reativeRun() {
+    collection(`Debrief`)
+      .driver(`parse`)
+      .key(`debrief-report`)
+      .run(`debriefReport`, {
+        company: '2BrFT6OrBm',
+        picker: {
+          startDate: '2019-01-01',
+          endDate: '2019-12-31'
+        }
+      })
+      .toPromise()
+      .then(console.log);
   }
 }

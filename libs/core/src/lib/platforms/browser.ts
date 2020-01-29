@@ -47,6 +47,10 @@ export class PlatformBrowser extends Records {
     return this.call$<number>('count');
   }
 
+  public run<T>(name: string, payload: any): Observable<T> {
+    return this.call$<T>('run', name, payload);
+  }
+
   protected call$<T>(
     verb: ReativeVerb,
     path: string = '',

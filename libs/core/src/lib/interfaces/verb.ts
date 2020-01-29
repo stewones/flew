@@ -8,4 +8,5 @@ export type ReativeVerb =
   | 'set'
   | 'update'
   | 'on'
-  | 'count';
+  | 'count'
+  | 'run';
