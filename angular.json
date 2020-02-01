@@ -7,7 +7,7 @@
       "root": "libs/core",
       "sourceRoot": "libs/core/src",
       "projectType": "library",
-      "prefix": "rr",
+      "prefix": "core",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -26,9 +26,7 @@
               "libs/core/tsconfig.lib.json",
               "libs/core/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -76,9 +74,7 @@
               "libs/cache/tsconfig.lib.json",
               "libs/cache/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -119,9 +115,7 @@
               "libs/angular/tsconfig.lib.json",
               "libs/angular/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -162,9 +156,7 @@
               "libs/state/tsconfig.lib.json",
               "libs/state/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -205,9 +197,7 @@
               "libs/firebase/tsconfig.lib.json",
               "libs/firebase/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -248,9 +238,7 @@
               "libs/parse/tsconfig.lib.json",
               "libs/parse/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -361,9 +349,7 @@
               "apps/playground/tsconfig.app.json",
               "apps/playground/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -396,13 +382,8 @@
             "polyfills": "apps/todo/src/polyfills.ts",
             "tsConfig": "apps/todo/tsconfig.app.json",
             "aot": true,
-            "assets": [
-              "apps/todo/src/favicon.ico",
-              "apps/todo/src/assets"
-            ],
-            "styles": [
-              "apps/todo/src/styles.scss"
-            ],
+            "assets": ["apps/todo/src/favicon.ico", "apps/todo/src/assets"],
+            "styles": ["apps/todo/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -461,10 +442,7 @@
               "apps/todo/tsconfig.app.json",
               "apps/todo/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/todo/**"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/todo/**"]
           }
         },
         "test": {
@@ -499,11 +477,14 @@
             "aot": false,
             "assets": [
               "apps/parse-demo/src/favicon.ico",
-              "apps/parse-demo/src/assets"
+              "apps/parse-demo/src/assets",
+              {
+                "glob": "http.js",
+                "input": "libs/core/worker",
+                "output": "worker"
+              }
             ],
-            "styles": [
-              "apps/parse-demo/src/styles.scss"
-            ],
+            "styles": ["apps/parse-demo/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -562,10 +543,7 @@
               "apps/parse-demo/tsconfig.app.json",
               "apps/parse-demo/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/parse-demo/**"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/parse-demo/**"]
           }
         },
         "test": {

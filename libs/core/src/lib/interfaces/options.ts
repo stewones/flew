@@ -24,6 +24,7 @@ export interface ReativeOptions {
   useCache?: boolean;
   useState?: boolean;
   useNetwork?: boolean;
+  useWorker?: boolean; // global config to always use worker
   saveNetwork?: boolean;
   persistence?: boolean;
 }

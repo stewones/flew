@@ -45,6 +45,7 @@ export interface ReativeAPI {
   // utils
   $log: Subject<Log>;
   http(transformFn: (config: AxiosRequestConfig) => void): Records;
+  worker(active: boolean): Records;
 
   //
   // fire verbs

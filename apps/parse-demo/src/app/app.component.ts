@@ -17,7 +17,8 @@ export class AppComponent implements OnInit {
     // this.setQuery();
     // this.orQueryArraySupport();
     // this.atAfterFirestoreSupport();
-    this.reativeRun();
+    // this.reativeRun();
+    this.webWorker();
   }
 
   exerciseTest() {
@@ -197,5 +198,37 @@ export class AppComponent implements OnInit {
       })
       .toPromise()
       .then(console.log);
+  }
+
+  webWorker() {
+    //
+    // worker call
+    collection(`Test`, {
+      baseURL: 'https://api.thecatapi.com',
+      endpoint: '/v1',
+      useWorker: true // GLOBAL WORKER
+    })
+      .driver(`http`)
+      .state(false)
+      .cache(false)
+      .save(false)
+      .worker(true) // CHAINABLE WORKER
+      .token(`some-header-token`)
+      .get(`/images/search`)
+      .subscribe(console.log);
+
+    //
+    // no worker call
+    collection(`Test`, {
+      baseURL: 'https://api.thecatapi.com',
+      endpoint: '/v1'
+    })
+      .driver(`http`)
+      .state(false)
+      .cache(false)
+      .save(false)
+      .token(`some-header-token`)
+      .get(`/images/search`)
+      .subscribe(console.log);
   }
 }

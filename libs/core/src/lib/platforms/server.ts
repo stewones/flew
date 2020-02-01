@@ -141,7 +141,8 @@ export class Records implements ReativeAPI {
       save: 'browser',
       ttl: 'browser',
       state: 'browser',
-      cache: 'browser'
+      cache: 'browser',
+      worker: false
     },
     firebase: {
       driver: true,
@@ -166,7 +167,8 @@ export class Records implements ReativeAPI {
       save: 'browser',
       ttl: 'browser',
       state: 'browser',
-      cache: 'browser'
+      cache: 'browser',
+      worker: false
     },
     http: {
       driver: true,
@@ -191,7 +193,8 @@ export class Records implements ReativeAPI {
       save: 'browser',
       ttl: 'browser',
       state: 'browser',
-      cache: 'browser'
+      cache: 'browser',
+      worker: true
     },
     parse: {
       driver: true,
@@ -216,7 +219,8 @@ export class Records implements ReativeAPI {
       save: 'browser',
       ttl: 'browser',
       state: 'browser',
-      cache: 'browser'
+      cache: 'browser',
+      worker: false
     }
   };
 
@@ -266,6 +270,8 @@ export class Records implements ReativeAPI {
     };
   }
 
+  //
+  // @deprecated
   private refresh() {
     //
     // evaluate runtime options
@@ -340,10 +346,11 @@ export class Records implements ReativeAPI {
     key: string = ''
   ): Observable<T> {
     //
+    // @deprecated
     // reconfigure http client
     // to get access on stuff
     // defined after initialization
-    this.refresh();
+    // this.refresh();
 
     let _verb = method;
     let _driver = chain.driver;
@@ -402,6 +409,7 @@ export class Records implements ReativeAPI {
         arg1 = path;
         arg2 = key;
         arg3 = payload;
+        arg4 = chain;
     }
 
     //
@@ -872,6 +880,19 @@ export class Records implements ReativeAPI {
   public object(active: boolean): Records {
     this.chain.useObject = active;
     this.checkChainAvailability(this.chain.driver, 'object');
+    return this;
+  }
+
+  /**
+   * Activate worker
+   *
+   * @param {boolean} active
+   * @returns {Records}
+   * @memberof Records
+   */
+  public worker(active: boolean): Records {
+    this.chain.useWorker = active;
+    this.checkChainAvailability(this.chain.driver, 'worker');
     return this;
   }
 }
