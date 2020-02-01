@@ -20,9 +20,8 @@ export class HttpDriver implements ReativeDriver {
 
   constructor(options: ReativeOptions) {
     this.driverOptions = options;
-    this.connector = Reative.connector.http || axios.create(options.httpConfig);
 
-    if (window.Worker && this.driverOptions.useWorker === true) {
+    if (window.Worker && options.useWorker === true) {
       try {
         this.worker = new Worker('/worker/http.js');
       } catch (err) {}
@@ -46,11 +45,23 @@ export class HttpDriver implements ReativeDriver {
     body: any = {},
     chain: ReativeChainPayload
   ): Observable<T> {
-    const baseURL =
-      this.driverOptions.baseURL ||
-      get(this.driverOptions, 'httpConfig.baseURL');
-    const endpoint = this.driverOptions.endpoint;
-    const collectionName = this.driverOptions.collection;
+    const options: ReativeOptions = {
+      ...Reative.options,
+      ...this.driverOptions,
+      ...chain
+    };
+
+    if (chain.useSessionToken) {
+      options.httpConfig.headers[`Authorization`] = `Bearer ${
+        chain.useSessionToken
+      }`;
+    }
+
+    this.connector = Reative.connector.http || axios.create(options.httpConfig);
+
+    const baseURL = options.baseURL || get(options, 'httpConfig.baseURL');
+    const endpoint = options.endpoint;
+    const collectionName = options.collection;
 
     //
     // call exceptions
@@ -94,11 +105,7 @@ export class HttpDriver implements ReativeDriver {
       //
       // network handle
 
-      if (
-        this.worker &&
-        this.driverOptions.useWorker &&
-        chain.useWorker !== false
-      ) {
+      if (this.worker && options.useWorker && chain.useWorker !== false) {
         this.worker.postMessage({
           url: url,
           token: chain.useSessionToken

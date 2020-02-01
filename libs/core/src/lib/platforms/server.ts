@@ -234,7 +234,14 @@ export class Records implements ReativeAPI {
   public init(runtime: ReativeOptions = {}) {
     //
     // settings which requires runtime evaluation
-    const options: ReativeOptions = { ...Reative.options, ...runtime };
+    const options: ReativeOptions = {
+      ...Reative.options,
+      ...runtime,
+      httpConfig: {
+        ...Reative.options.httpConfig,
+        ...runtime.httpConfig
+      }
+    };
 
     //
     // init logger

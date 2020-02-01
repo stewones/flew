@@ -213,7 +213,7 @@ export class AppComponent implements OnInit {
       .cache(false)
       .save(false)
       .worker(true) // CHAINABLE WORKER
-      .token(`some-header-token`)
+      .token(`some-Bearer-token`)
       .get(`/images/search`)
       .subscribe(console.log);
 
@@ -221,13 +221,18 @@ export class AppComponent implements OnInit {
     // no worker call
     collection(`Test`, {
       baseURL: 'https://api.thecatapi.com',
-      endpoint: '/v1'
+      endpoint: '/v1',
+      httpConfig: {
+        headers: {
+          someHeader: `XYZ`
+        }
+      }
     })
       .driver(`http`)
       .state(false)
       .cache(false)
       .save(false)
-      .token(`some-header-token`)
+      .token(`some-Bearer-token`)
       .get(`/images/search`)
       .subscribe(console.log);
   }
