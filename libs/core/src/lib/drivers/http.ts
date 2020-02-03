@@ -87,7 +87,7 @@ export class HttpDriver implements ReativeDriver {
         //
         // success callback
         observer.next(response as T);
-        if (isServer()) observer.complete();
+        if (!this.driverOptions.useWorker) observer.complete();
       };
 
       //
