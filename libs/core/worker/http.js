@@ -2,21 +2,23 @@ onmessage = payload => {
   const data = payload.data || {};
   const url = data.url;
   const method = data.method || 'get';
-  const token = data.token;
-  const headers = {};
-
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
-
-  // console.log(`message from worker`, payload.data);
-
+  const body = data.body;
+  const headers = {
+    ...data.headers,
+    Accept: 'application/json, text/plain',
+    'Content-Type': 'application/json;charset=UTF-8'
+  };
   fetch(url, {
     method: method,
-    headers: headers
-  })
-    .then(response => {
+    headers: headers,
+    body: JSON.stringify(body)
+  }).then(response => {
+    if (response.status >= 200 && response.status < 300) {
       response.json().then(it => postMessage(it));
-    })
-    .catch(err => console.log(err));
+    } else {
+      response.json().then(err => {
+        postMessage({ error: err });
+      });
+    }
+  });
 };

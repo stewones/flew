@@ -4,7 +4,7 @@ import { from, Observable, PartialObserver } from 'rxjs';
 import { ConnectorHttp } from '../interfaces/connector';
 import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 import { ReativeOptions } from '../interfaces/options';
-import { Response } from '../interfaces/response';
+import { Response, ResponseSource } from '../interfaces/response';
 import { Reative } from '../symbols/reative';
 import { Logger } from '../utils/logger';
 import { clearNetworkResponse } from '../utils/response';
@@ -73,8 +73,22 @@ export class HttpDriver implements ReativeDriver {
     const url = `${baseURL}${endpoint}${path}`;
     return new Observable((observer: PartialObserver<T>) => {
       //
+      // error callback
+      const error = (err, source: ResponseSource = 'http') => {
+        const errData = get(err, 'response.data');
+        try {
+          observer.error(errData ? errData : err);
+          if (source !== 'worker') observer.complete();
+        } catch (err) {}
+      };
+
+      //
       // success callback
-      const success = (r, source = 'http') => {
+      const success = (r, source: ResponseSource = 'http') => {
+        // double check for worker errors
+        if (source === 'worker' && r.data.error) {
+          return error(r.data.error, source);
+        }
         // build standard response
         const response: Response = clearNetworkResponse({
           data: r && r.data,
@@ -90,17 +104,6 @@ export class HttpDriver implements ReativeDriver {
         observer.next(response as T);
         if (response.source !== 'worker') observer.complete();
       };
-
-      //
-      // error callback
-      const error = err => {
-        const errData = get(err, 'response.data');
-        try {
-          observer.error(errData ? errData : err);
-          observer.complete();
-        } catch (err) {}
-      };
-
       //
       // network handle
       if (
@@ -109,9 +112,10 @@ export class HttpDriver implements ReativeDriver {
         chain.useWorker !== false
       ) {
         Reative.worker.http.postMessage({
+          method: method,
           url: url,
-          token:
-            chain.useSessionToken || options.httpConfig.headers[`Authorization`]
+          body: body,
+          headers: options.httpConfig.headers
         });
         Reative.worker.http.onmessage = r => success(r, 'worker');
         Reative.worker.http.onerror = r => error(r);

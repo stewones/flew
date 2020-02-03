@@ -20,9 +20,10 @@ export class AppComponent implements OnInit {
     // this.orQueryArraySupport();
     // this.atAfterFirestoreSupport();
     // this.reativeRun();
-    this.webWorker();
+    // this.webWorker();
     // this.configureHttp();
     // this.httpCalls();
+    this.webWorkerPost();
   }
 
   exerciseTest() {
@@ -255,6 +256,33 @@ export class AppComponent implements OnInit {
           console.log
           //   () => console.log(`completed`)
         );
+
+    collection(`Test`, {
+      baseURL: 'https://api.thecatapi.com',
+      endpoint: '/v1',
+      httpConfig: {
+        headers: {
+          someHeader: `XYZ`
+        }
+      }
+    })
+      .driver(`http`)
+      .state(false)
+      .cache(false)
+      .save(false)
+      .raw(true)
+      .token(`some-Bearer-token`)
+      .http((config: AxiosRequestConfig) => {
+        config.headers.xyz = 123;
+        // console.log(111, config.headers);
+      })
+      .get(`/images/search`)
+      .pipe(take(1))
+      .subscribe(
+        r => console.log(`non-worker response`, r),
+        console.log
+        //   () => console.log(`completed`)
+      );
   }
 
   configureHttp() {
@@ -304,5 +332,25 @@ export class AppComponent implements OnInit {
       .save(false)
       .get(`/user/profile`)
       .subscribe(console.log);
+  }
+
+  webWorkerPost() {
+    const coll = collection(`Test`, {
+      baseURL: 'https://dev.inf.com',
+      endpoint: '/api',
+      useWorker: true
+    });
+
+    coll
+      .state(false)
+      .cache(false)
+      .save(false)
+      .post(`/login`, {
+        client_id: 1,
+        client_secret: '8SGp6dUo5cKtOP8uueKKgKvKSBZ96Uuq54O7V4kj',
+        email: 'asdf@asdf.com',
+        password: '132134'
+      })
+      .subscribe(it => console.log(`it`, it), err => console.log(`err`, err));
   }
 }
