@@ -1,3 +1,12 @@
+## [2.9.5](https://github.com/stewwan/reative/compare/v2.9.4...v2.9.5) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** needs to complete observable ([a89b1a1](https://github.com/stewwan/reative/commit/a89b1a17ade1337b1e3b53a781554c57a82de79d))
+
+
+
 ## [2.9.4](https://github.com/stewwan/reative/compare/v2.9.3...v2.9.4) (2020-02-03)
 
 
