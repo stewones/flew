@@ -1,3 +1,12 @@
+## [2.9.2](https://github.com/stewwan/reative/compare/v2.9.1...v2.9.2) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** success handler for web worker ([ae7dfd7](https://github.com/stewwan/reative/commit/ae7dfd7c6b0bf614a7b8b1e6f931c6a7c41ac786))
+
+
+
 ## [2.9.1](https://github.com/stewwan/reative/compare/v2.9.0...v2.9.1) (2020-02-03)
 
 
