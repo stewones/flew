@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
     // this.reativeRun();
     this.webWorker();
     // this.configureHttp();
+    // this.httpCalls();
   }
 
   exerciseTest() {
@@ -215,6 +216,7 @@ export class AppComponent implements OnInit {
         .state(false)
         .cache(false)
         .save(false)
+        .raw(true)
         //.worker(true) // CHAINABLE WORKER
         .token(`some-Bearer-token`)
         .get(`/images/search`)
@@ -236,6 +238,7 @@ export class AppComponent implements OnInit {
         .state(false)
         .cache(false)
         .save(false)
+        .raw(true)
         .token(`some-Bearer-token`)
         .http((config: AxiosRequestConfig) => {
           config.headers.xyz = 123;
@@ -269,6 +272,28 @@ export class AppComponent implements OnInit {
       .save(false)
       .token(`some-Bearer-token`)
       .get(`/images/search`)
+      .subscribe(console.log);
+  }
+
+  httpCalls() {
+    //
+    // no worker call
+    const coll = collection(`Test`, {
+      baseURL: 'https://dev.inf.com',
+      endpoint: '/api',
+      useWorker: true,
+      httpConfig: {
+        headers: {
+          Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZTkzMzViMDg2NWE5ZTNmNWVhOGRkYzk1NzY5MWFmYjY2NGZkNTI3YzgzNDlkM2UzNTEzZWZmYmZhNzhlOTliYzA1NTViMzc3NmI1ZWFhNjciLCJpYXQiOjE1ODA3NTE0OTUsIm5iZiI6MTU4MDc1MTQ5NSwiZXhwIjoxNjEyMzczODk0LCJzdWIiOiI0NDE1Iiwic2NvcGVzIjpbIioiXX0.FF78hzNFUDGAPxxVxJlw_xtcXY3lGMloOkzIohShzaz1KtPJE0jY7uusxDo5rRWwpe0IyAQdclDVScNcf8D7Ks_D_16WvwsQFDh7c3IGybEW2zUgb6gA-A8gbqcN_BNG-2xGB_d3R3KsyhJwBjXcQG_W9FY1T5fCMNd3pUD5bda5AxyhkOdzLR6plWKQ3bBPKAQZX9R8xqXp0UU9DQzizBS5_8IrqfvrGc_rK5d4fT_yN-F8Lg4-zRej2rjo9g99qxMyAgSkMZzUkRUptOEYNbPqq4vFxU-HSFAziL1DQwgnE0qxuc8kbdlIqkA6RBJZ-KTTITdbnwa-CkC9Wo76zdWvpDH9DJXoOLC8tV-dbWOpNd31skF2AcueAwEeSJ4PRS6IzODuwV3VLStfnIxpfohDU1IN2vPh-XVFMtnjlcdaXBk0otEYqWuw1ieN--TGRubHVqdrdGmUfwPaiDdv7R3dRbIfNgT7WyXDsLZ3DSXntmaC_g1enWu1EIL4B2kGUv7kV9iRomhLtdxNoln-_k_cBLWsgv_AGmPp9l0T96fZtX7QYpk_6yIQPEX6M0-uKv5UP-r3dV5hqc8PvhAOSae4_IAtNzlB8rePgQQbYPHYpo1DYwR8Q69_6uB1ZOCKyxmdyAowSRmpexBujA9MfMPE6C7dLLl4Ac75gXkoG8g`
+        }
+      }
+    });
+
+    coll
+      .state(false)
+      .cache(false)
+      .save(false)
+      .get(`/user/profile`)
       .subscribe(console.log);
   }
 }

@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { get, isObject } from 'lodash';
+import { get, omit, cloneDeep } from 'lodash';
 import { from, Observable, PartialObserver } from 'rxjs';
 import { ConnectorHttp } from '../interfaces/connector';
 import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
@@ -71,20 +71,18 @@ export class HttpDriver implements ReativeDriver {
     //
     // set path to be requestes
     const url = `${baseURL}${endpoint}${path}`;
-
     return new Observable((observer: PartialObserver<T>) => {
       //
       // success callback
       const success = async r => {
         // build standard response
         const response: Response = clearNetworkResponse({
-          data: r,
-          response: isObject(r) ? r : {},
+          data: r && r.data,
+          response: omit(cloneDeep(r), [`data`]),
           key: key,
           collection: collectionName || '',
           driver: this.driverName
         });
-
         //
         //
         // success callback
@@ -111,37 +109,38 @@ export class HttpDriver implements ReativeDriver {
       ) {
         Reative.worker.http.postMessage({
           url: url,
-          token: chain.useSessionToken
+          token:
+            chain.useSessionToken || options.httpConfig.headers[`Authorization`]
         });
-        Reative.worker.http.onmessage = r => success(r.data);
+        Reative.worker.http.onmessage = r => success(r);
         Reative.worker.http.onerror = r => error(r);
       } else {
         switch (method) {
           case 'post':
             from(this.connector.post(url, body))
               .toPromise()
-              .then((r: AxiosResponse) => success(r.data))
+              .then((r: AxiosResponse) => success(r))
               .catch(error);
             break;
 
           case 'patch':
             from(this.connector.patch(url, body))
               .toPromise()
-              .then((r: AxiosResponse) => success(r.data))
+              .then((r: AxiosResponse) => success(r))
               .catch(error);
             break;
 
           case 'delete':
             from(this.connector.delete(url, body))
               .toPromise()
-              .then((r: AxiosResponse) => success(r.data))
+              .then((r: AxiosResponse) => success(r))
               .catch(error);
             break;
 
           default:
             from(this.connector.get(url))
               .toPromise()
-              .then((r: AxiosResponse) => success(r.data))
+              .then((r: AxiosResponse) => success(r))
               .catch(error);
         }
       }
