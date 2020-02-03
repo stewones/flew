@@ -120,10 +120,6 @@ export class PlatformBrowser extends Records {
 
                   this.log().info()(`${key} dispatch from network`);
                 }
-
-                if (!['on'].includes(verb)) {
-                  observer.complete();
-                }
               }
             );
           },

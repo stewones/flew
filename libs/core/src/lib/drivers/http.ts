@@ -9,6 +9,7 @@ import { Reative } from '../symbols/reative';
 import { Logger } from '../utils/logger';
 import { clearNetworkResponse } from '../utils/response';
 import { ReativeChainPayload } from '../interfaces/chain';
+import { isServer } from '../utils/platform';
 
 declare var window;
 export class HttpDriver implements ReativeDriver {
@@ -16,19 +17,18 @@ export class HttpDriver implements ReativeDriver {
   driverOptions: ReativeOptions;
   connector: ConnectorHttp;
   logger: Logger;
-  worker;
 
   constructor(options: ReativeOptions) {
     this.driverOptions = options;
 
-    if (window.Worker && options.useWorker === true) {
+    if (window.Worker && options.useWorker === true && !Reative.worker.http) {
       try {
-        this.worker = new Worker('/worker/http.js');
+        Reative.worker.http = new Worker('/worker/http.js');
       } catch (err) {}
     }
 
     // if (typeof Worker !== 'undefined') {
-    //   this.worker = new Worker('../platforms/browser.worker', {
+    //   Reative.worker.http = new Worker('../platforms/browser.worker', {
     //     type: 'module'
     //   });
     // }
@@ -75,10 +75,10 @@ export class HttpDriver implements ReativeDriver {
     return new Observable((observer: PartialObserver<T>) => {
       //
       // success callback
-      const success = async (r: AxiosResponse) => {
+      const success = async r => {
         // build standard response
         const response: Response = clearNetworkResponse({
-          data: r.data ? r.data : r,
+          data: r,
           response: isObject(r) ? r : {},
           key: key,
           collection: collectionName || '',
@@ -89,7 +89,7 @@ export class HttpDriver implements ReativeDriver {
         //
         // success callback
         observer.next(response as T);
-        observer.complete();
+        if (isServer()) observer.complete();
       };
 
       //
@@ -98,51 +98,50 @@ export class HttpDriver implements ReativeDriver {
         const errData = get(err, 'response.data');
         try {
           observer.error(errData ? errData : err);
-          observer.complete();
+          if (isServer()) observer.complete();
         } catch (err) {}
       };
 
       //
       // network handle
-
-      if (this.worker && options.useWorker && chain.useWorker !== false) {
-        this.worker.postMessage({
+      if (
+        Reative.worker.http &&
+        options.useWorker &&
+        chain.useWorker !== false
+      ) {
+        Reative.worker.http.postMessage({
           url: url,
           token: chain.useSessionToken
         });
-        this.worker.onmessage = r => {
-          success(r);
-        };
-        this.worker.onerror = r => {
-          error(r);
-        };
+        Reative.worker.http.onmessage = r => success(r.data);
+        Reative.worker.http.onerror = r => error(r);
       } else {
         switch (method) {
           case 'post':
             from(this.connector.post(url, body))
               .toPromise()
-              .then(success)
+              .then((r: AxiosResponse) => success(r.data))
               .catch(error);
             break;
 
           case 'patch':
             from(this.connector.patch(url, body))
               .toPromise()
-              .then(success)
+              .then((r: AxiosResponse) => success(r.data))
               .catch(error);
             break;
 
           case 'delete':
             from(this.connector.delete(url, body))
               .toPromise()
-              .then(success)
+              .then((r: AxiosResponse) => success(r.data))
               .catch(error);
             break;
 
           default:
             from(this.connector.get(url))
               .toPromise()
-              .then(success)
+              .then((r: AxiosResponse) => success(r.data))
               .catch(error);
         }
       }

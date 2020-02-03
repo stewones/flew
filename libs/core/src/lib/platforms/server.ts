@@ -412,6 +412,7 @@ export class Records implements ReativeAPI {
       useCache: this.options.useCache,
       useState: this.options.useState,
       useNetwork: this.options.useNetwork,
+      useWorker: this.options.useWorker,
       saveNetwork: this.options.saveNetwork
     };
     return this;

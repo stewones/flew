@@ -205,42 +205,44 @@ export class AppComponent implements OnInit {
   webWorker() {
     //
     // worker call
-    collection(`Test`, {
-      baseURL: 'https://api.thecatapi.com',
-      endpoint: '/v1',
-      useWorker: true // GLOBAL WORKER
-    })
-      .driver(`http`)
-      .state(false)
-      .cache(false)
-      .save(false)
-      //.worker(true) // CHAINABLE WORKER
-      .token(`some-Bearer-token`)
-      .get(`/images/search`)
-      .subscribe(r => console.log(`worker response`, r));
+    for (let i = 0; i < 3; i++)
+      collection(`Worker`, {
+        baseURL: 'https://api.thecatapi.com',
+        endpoint: '/v1',
+        useWorker: true // GLOBAL WORKER
+      })
+        .driver(`http`)
+        .state(false)
+        .cache(false)
+        .save(false)
+        //.worker(true) // CHAINABLE WORKER
+        .token(`some-Bearer-token`)
+        .get(`/images/search`)
+        .subscribe(r => console.log(`worker response`, r));
 
     //
-    // no worker call
-    collection(`Test`, {
-      baseURL: 'https://api.thecatapi.com',
-      endpoint: '/v1',
-      httpConfig: {
-        headers: {
-          someHeader: `XYZ`
+    // non-worker call
+    for (let i = 0; i < 3; i++)
+      collection(`Test`, {
+        baseURL: 'https://api.thecatapi.com',
+        endpoint: '/v1',
+        httpConfig: {
+          headers: {
+            someHeader: `XYZ`
+          }
         }
-      }
-    })
-      .driver(`http`)
-      .state(false)
-      .cache(false)
-      .save(false)
-      .token(`some-Bearer-token`)
-      .http((config: AxiosRequestConfig) => {
-        config.headers.xyz = 123;
-        console.log(111, config.headers);
       })
-      .get(`/images/search`)
-      .subscribe(r => console.log(`non-worker response`, r));
+        .driver(`http`)
+        .state(false)
+        .cache(false)
+        .save(false)
+        .token(`some-Bearer-token`)
+        .http((config: AxiosRequestConfig) => {
+          config.headers.xyz = 123;
+          // console.log(111, config.headers);
+        })
+        .get(`/images/search`)
+        .subscribe(r => console.log(`non-worker response`, r));
   }
 
   configureHttp() {

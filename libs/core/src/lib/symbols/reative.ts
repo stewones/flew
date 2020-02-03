@@ -16,6 +16,7 @@ interface ReativeProtocol {
   storage?: StorageAdapter;
   events?: { [key: string]: Subject<any> };
   Parse?: any; // parse instance
+  worker?: { http: any };
 }
 
 export const Reative: ReativeProtocol = {
@@ -46,5 +47,8 @@ export const Reative: ReativeProtocol = {
     clear: () => Promise.resolve()
   } as StorageAdapter,
   events: {},
-  Parse: {}
+  Parse: {},
+  worker: {
+    http: false
+  }
 };
