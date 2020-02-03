@@ -224,9 +224,6 @@ export class Records implements ReativeAPI {
     }
   };
 
-  // hook to configure http calls
-  private httpBefore = (config: AxiosRequestConfig) => {};
-
   constructor(options: ReativeOptions) {
     this.init(options);
   }
@@ -275,27 +272,6 @@ export class Records implements ReativeAPI {
       http: new HttpDriver(options),
       parse: new ParseDriver(options)
     };
-  }
-
-  //
-  // @deprecated
-  private refresh() {
-    //
-    // evaluate runtime options
-    const options: ReativeOptions = { ...Reative.options, ...this.options };
-
-    //
-    // enforce http defaults
-    if (!options.httpConfig.timeout) options.httpConfig.timeout = 60 * 1000;
-    if (!options.httpConfig.baseURL)
-      options.httpConfig.baseURL = options.baseURL;
-    if (!options.httpConfig.headers) options.httpConfig.headers = {};
-
-    //
-    // run http hook and reconfigure
-    this.httpBefore(options.httpConfig);
-    this.drivers.http.configure(options);
-    this.options = options;
   }
 
   private checkVerbAvailability(
@@ -596,8 +572,8 @@ export class Records implements ReativeAPI {
    * @memberof Records
    */
   public http(fn: (config: AxiosRequestConfig) => void): Records {
-    this.httpBefore = fn;
     this.checkChainAvailability(this.chain.driver, 'http');
+    fn(this.options.httpConfig);
     return this;
   }
 

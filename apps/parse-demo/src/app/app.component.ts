@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { collection } from '@reative/core';
+import { AxiosRequestConfig } from 'axios';
 
 @Component({
   selector: 'reative-root',
@@ -18,7 +19,8 @@ export class AppComponent implements OnInit {
     // this.orQueryArraySupport();
     // this.atAfterFirestoreSupport();
     // this.reativeRun();
-    this.webWorker();
+    // this.webWorker();
+    this.configureHttp();
   }
 
   exerciseTest() {
@@ -228,6 +230,37 @@ export class AppComponent implements OnInit {
         }
       }
     })
+      .driver(`http`)
+      .state(false)
+      .cache(false)
+      .save(false)
+      .token(`some-Bearer-token`)
+      .http((config: AxiosRequestConfig) => {
+        config.headers.xyz = 123;
+        console.log(111, config.headers);
+      })
+      .get(`/images/search`)
+      .subscribe(console.log);
+  }
+
+  configureHttp() {
+    //
+    // no worker call
+    const coll = collection(`Test`, {
+      baseURL: 'https://api.thecatapi.com',
+      endpoint: '/v1',
+      httpConfig: {
+        headers: {
+          someHeader: `XYZ`
+        }
+      }
+    });
+
+    coll.http((config: AxiosRequestConfig) => {
+      config.headers.xyz = new Date().toISOString();
+    });
+
+    coll
       .driver(`http`)
       .state(false)
       .cache(false)

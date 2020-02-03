@@ -50,6 +50,7 @@ export class HttpDriver implements ReativeDriver {
       ...this.driverOptions,
       ...chain
     };
+    console.log(222, options.httpConfig.headers);
 
     if (chain.useSessionToken) {
       options.httpConfig.headers[`Authorization`] = `Bearer ${
