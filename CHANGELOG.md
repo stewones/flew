@@ -1,3 +1,12 @@
+## [2.9.3](https://github.com/stewwan/reative/compare/v2.9.2...v2.9.3) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** worker calls must work from loops and we dont need to construct the worker for every call ([974fa06](https://github.com/stewwan/reative/commit/974fa064224c7d1d8e2ad2d8e99fbb7fe351482e))
+
+
+
 ## [2.9.2](https://github.com/stewwan/reative/compare/v2.9.1...v2.9.2) (2020-02-03)
 
 
