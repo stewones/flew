@@ -3,11 +3,18 @@ onmessage = payload => {
   const url = data.url;
   const method = data.method || 'get';
   const body = data.body;
-  const headers = {
-    ...data.headers,
-    Accept: 'application/json, text/plain',
-    'Content-Type': 'application/json;charset=UTF-8'
+  let headers = {
+    ...data.headers
   };
+
+  if (method !== 'get') {
+    headers = {
+      ...headers,
+      Accept: 'application/json, text/plain',
+      'Content-Type': 'application/json;charset=UTF-8'
+    };
+  }
+
   fetch(url, {
     method: method,
     headers: headers,

@@ -336,7 +336,7 @@ export class AppComponent implements OnInit {
 
   webWorkerPost() {
     const coll = collection(`Test`, {
-      baseURL: 'https://dev.inf.com',
+      baseURL: 'https://dev.com',
       endpoint: '/api',
       useWorker: true
     });
@@ -348,8 +348,8 @@ export class AppComponent implements OnInit {
       .post(`/login`, {
         client_id: 1,
         client_secret: '8SGp6dUo5cKtOP8uueKKgKvKSBZ96Uuq54O7V4kj',
-        email: 'asdf@asdf.com',
-        password: '132134'
+        email: '',
+        password: ''
       })
       .subscribe(it => console.log(`it`, it), err => console.log(`err`, err));
   }
