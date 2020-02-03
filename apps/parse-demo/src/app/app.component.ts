@@ -19,8 +19,8 @@ export class AppComponent implements OnInit {
     // this.orQueryArraySupport();
     // this.atAfterFirestoreSupport();
     // this.reativeRun();
-    // this.webWorker();
-    this.configureHttp();
+    this.webWorker();
+    // this.configureHttp();
   }
 
   exerciseTest() {
@@ -214,10 +214,10 @@ export class AppComponent implements OnInit {
       .state(false)
       .cache(false)
       .save(false)
-      .worker(true) // CHAINABLE WORKER
+      //.worker(true) // CHAINABLE WORKER
       .token(`some-Bearer-token`)
       .get(`/images/search`)
-      .subscribe(console.log);
+      .subscribe(r => console.log(`worker response`, r));
 
     //
     // no worker call
@@ -240,7 +240,7 @@ export class AppComponent implements OnInit {
         console.log(111, config.headers);
       })
       .get(`/images/search`)
-      .subscribe(console.log);
+      .subscribe(r => console.log(`non-worker response`, r));
   }
 
   configureHttp() {

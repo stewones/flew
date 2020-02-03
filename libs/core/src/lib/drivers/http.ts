@@ -50,7 +50,6 @@ export class HttpDriver implements ReativeDriver {
       ...this.driverOptions,
       ...chain
     };
-    console.log(222, options.httpConfig.headers);
 
     if (chain.useSessionToken) {
       options.httpConfig.headers[`Authorization`] = `Bearer ${
@@ -112,7 +111,7 @@ export class HttpDriver implements ReativeDriver {
           token: chain.useSessionToken
         });
         this.worker.onmessage = r => {
-          success(r.data);
+          success(r);
         };
         this.worker.onerror = r => {
           error(r);
