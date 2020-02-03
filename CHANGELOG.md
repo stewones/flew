@@ -1,3 +1,12 @@
+## [2.9.6](https://github.com/stewwan/reative/compare/v2.9.5...v2.9.6) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** worker implementation. we cant use toPromise() and worker for now ([5ebfc5d](https://github.com/stewwan/reative/commit/5ebfc5de73da64a5eadb2fb82dc083aa032cbe2a))
+
+
+
 ## [2.9.5](https://github.com/stewwan/reative/compare/v2.9.4...v2.9.5) (2020-02-03)
 
 
