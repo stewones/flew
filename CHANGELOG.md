@@ -1,3 +1,12 @@
+## [2.9.8](https://github.com/stewwan/reative/compare/v2.9.7...v2.9.8) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** worker headers ([d5c46d8](https://github.com/stewwan/reative/commit/d5c46d8509f79f77638a13de0e754fa76f08e445))
+
+
+
 ## [2.9.7](https://github.com/stewwan/reative/compare/v2.9.6...v2.9.7) (2020-02-03)
 
 
