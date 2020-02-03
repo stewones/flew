@@ -1,3 +1,17 @@
+# [2.9.0](https://github.com/stewwan/reative/compare/v2.8.0...v2.9.0) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** merge options correctly ([357be36](https://github.com/stewwan/reative/commit/357be3626dff8f9e9be370405391c7db5fefc1d5))
+
+
+### Features
+
+* **http:** add web worker ([35e30e2](https://github.com/stewwan/reative/commit/35e30e229c10ca23bef7ce67a0d9ed294d0aa28b))
+
+
+
 # [2.8.0](https://github.com/stewwan/reative/compare/v2.7.0...v2.8.0) (2020-01-29)
 
 
