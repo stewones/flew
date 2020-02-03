@@ -1,3 +1,12 @@
+## [2.9.7](https://github.com/stewwan/reative/compare/v2.9.6...v2.9.7) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** improve worker ([b3761c0](https://github.com/stewwan/reative/commit/b3761c0e1190404a7ed19497bb2da4670c93d648))
+
+
+
 ## [2.9.6](https://github.com/stewwan/reative/compare/v2.9.5...v2.9.6) (2020-02-03)
 
 
