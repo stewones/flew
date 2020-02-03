@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { collection } from '@reative/core';
 import { AxiosRequestConfig } from 'axios';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'reative-root',
@@ -218,9 +219,12 @@ export class AppComponent implements OnInit {
         .save(false)
         .raw(true)
         //.worker(true) // CHAINABLE WORKER
-        .token(`some-Bearer-token`)
-        .get(`/images/search`)
+        .token(`some-Bearer-token-${i}`)
+        .get(`/images/search?asdf=${i}`)
         .subscribe(r => console.log(`worker response`, r));
+    // @todo worker and toPromise dont work good
+    // .toPromise()
+    // .then(r => console.log(`worker response`, r));
 
     //
     // non-worker call
@@ -245,7 +249,12 @@ export class AppComponent implements OnInit {
           // console.log(111, config.headers);
         })
         .get(`/images/search`)
-        .subscribe(r => console.log(`non-worker response`, r));
+        .pipe(take(1))
+        .subscribe(
+          r => console.log(`non-worker response`, r),
+          console.log
+          //   () => console.log(`completed`)
+        );
   }
 
   configureHttp() {

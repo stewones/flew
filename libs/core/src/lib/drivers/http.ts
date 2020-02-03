@@ -74,20 +74,21 @@ export class HttpDriver implements ReativeDriver {
     return new Observable((observer: PartialObserver<T>) => {
       //
       // success callback
-      const success = async r => {
+      const success = (r, source = 'http') => {
         // build standard response
         const response: Response = clearNetworkResponse({
           data: r && r.data,
           response: omit(cloneDeep(r), [`data`]),
           key: key,
           collection: collectionName || '',
-          driver: this.driverName
+          driver: this.driverName,
+          source: source
         });
         //
         //
         // success callback
         observer.next(response as T);
-        if (!this.driverOptions.useWorker) observer.complete();
+        if (response.source !== 'worker') observer.complete();
       };
 
       //
@@ -96,7 +97,7 @@ export class HttpDriver implements ReativeDriver {
         const errData = get(err, 'response.data');
         try {
           observer.error(errData ? errData : err);
-          if (isServer()) observer.complete();
+          observer.complete();
         } catch (err) {}
       };
 
@@ -112,7 +113,7 @@ export class HttpDriver implements ReativeDriver {
           token:
             chain.useSessionToken || options.httpConfig.headers[`Authorization`]
         });
-        Reative.worker.http.onmessage = r => success(r);
+        Reative.worker.http.onmessage = r => success(r, 'worker');
         Reative.worker.http.onerror = r => error(r);
       } else {
         switch (method) {

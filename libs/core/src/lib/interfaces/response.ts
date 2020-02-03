@@ -1,5 +1,6 @@
 import { ReativeDriverOption } from './driver';
 
+export type ResponseSource = 'worker' | 'http' | 'state' | 'cache' | 'network';
 export interface Response<T = any> {
   data?: T; // formatted data response
   response?: any; // generic response from driver
@@ -7,4 +8,5 @@ export interface Response<T = any> {
   collection?: string;
   driver?: ReativeDriverOption;
   ttl?: number;
+  source?: ResponseSource;
 }

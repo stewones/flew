@@ -117,7 +117,12 @@ export class PlatformBrowser extends Records {
 
                   this.dispatch(observer, networkData, chain);
                   this.setCache(chain, key, networkData);
-
+                  if (
+                    !['on'].includes(verb) &&
+                    networkData.source !== 'worker'
+                  ) {
+                    observer.complete();
+                  }
                   this.log().info()(`${key} dispatch from network`);
                 }
               }
