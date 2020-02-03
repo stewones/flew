@@ -1,6 +1,6 @@
 {
 	"name": "@reative/angular",
-	"version": "2.9.3",
+	"version": "2.9.4",
 	"peerDependencies": {
 		"@angular/common": "^8.2.0",
 		"@angular/core": "^8.2.0",

@@ -1,3 +1,12 @@
+## [2.9.4](https://github.com/stewwan/reative/compare/v2.9.3...v2.9.4) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** response ([3f6a148](https://github.com/stewwan/reative/commit/3f6a14810c8a677015feb955f5c074b396656f40))
+
+
+
 ## [2.9.3](https://github.com/stewwan/reative/compare/v2.9.2...v2.9.3) (2020-02-03)
 
 
