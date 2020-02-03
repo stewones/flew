@@ -1,3 +1,12 @@
+## [2.9.1](https://github.com/stewwan/reative/compare/v2.9.0...v2.9.1) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** must be able to reconfigure http on the fly ([ffd47f8](https://github.com/stewwan/reative/commit/ffd47f8080102b0e955e47ad97423c8d6c8994d8))
+
+
+
 # [2.9.0](https://github.com/stewwan/reative/compare/v2.8.0...v2.9.0) (2020-02-03)
 
 
