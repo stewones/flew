@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { collection } from '@reative/core';
+import { collection, Reative } from '@reative/core';
 import { AxiosRequestConfig } from 'axios';
-import { take } from 'rxjs/operators';
+import { take, map } from 'rxjs/operators';
 
 @Component({
   selector: 'reative-root',
@@ -20,10 +20,10 @@ export class AppComponent implements OnInit {
     // this.orQueryArraySupport();
     // this.atAfterFirestoreSupport();
     // this.reativeRun();
-    // this.webWorker();
     // this.configureHttp();
     // this.httpCalls();
-    this.webWorkerPost();
+    // this.webWorkerPost();
+    this.webWorker();
   }
 
   exerciseTest() {
@@ -222,7 +222,8 @@ export class AppComponent implements OnInit {
         //.worker(true) // CHAINABLE WORKER
         .token(`some-Bearer-token-${i}`)
         .get(`/images/search?asdf=${i}`)
-        .subscribe(r => console.log(`worker response`, r));
+        .pipe(map((it: any) => it.data[0]))
+        .subscribe(r => console.log(`worker response`, Reative.responses, r));
     // @todo worker and toPromise dont work good
     // .toPromise()
     // .then(r => console.log(`worker response`, r));
@@ -250,39 +251,12 @@ export class AppComponent implements OnInit {
           // console.log(111, config.headers);
         })
         .get(`/images/search`)
-        .pipe(take(1))
+        .pipe(map((it: any) => it.data[0]))
         .subscribe(
           r => console.log(`non-worker response`, r),
           console.log
           //   () => console.log(`completed`)
         );
-
-    collection(`Test`, {
-      baseURL: 'https://api.thecatapi.com',
-      endpoint: '/v1',
-      httpConfig: {
-        headers: {
-          someHeader: `XYZ`
-        }
-      }
-    })
-      .driver(`http`)
-      .state(false)
-      .cache(false)
-      .save(false)
-      .raw(true)
-      .token(`some-Bearer-token`)
-      .http((config: AxiosRequestConfig) => {
-        config.headers.xyz = 123;
-        // console.log(111, config.headers);
-      })
-      .get(`/images/search`)
-      .pipe(take(1))
-      .subscribe(
-        r => console.log(`non-worker response`, r),
-        console.log
-        //   () => console.log(`completed`)
-      );
   }
 
   configureHttp() {

@@ -3,6 +3,7 @@ onmessage = req => {
   const url = data.url;
   const method = data.method || 'get';
   const body = data.body;
+  const key = data.key;
 
   let headers = {
     ...data.headers
@@ -28,10 +29,10 @@ onmessage = req => {
 
   fetch(url, payload).then(response => {
     if (response.status >= 200 && response.status < 300) {
-      response.json().then(it => postMessage(it));
+      response.json().then(it => postMessage({ key: key, data: it }));
     } else {
       response.json().then(err => {
-        postMessage({ error: err });
+        postMessage({ key: key, error: err });
       });
     }
   });

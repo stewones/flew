@@ -9,7 +9,6 @@ import { Reative } from '../symbols/reative';
 import { Logger } from '../utils/logger';
 import { clearNetworkResponse } from '../utils/response';
 import { ReativeChainPayload } from '../interfaces/chain';
-import { isServer } from '../utils/platform';
 
 declare var window;
 export class HttpDriver implements ReativeDriver {
@@ -89,11 +88,18 @@ export class HttpDriver implements ReativeDriver {
         if (source === 'worker' && r.data.error) {
           return error(r.data.error, source);
         }
+
+        const data = source === 'worker' ? r.data.data : r.data;
+        const dataResponse =
+          source === 'worker'
+            ? omit(cloneDeep(r.data), [`data`])
+            : omit(cloneDeep(r), [`data`]);
+
         // build standard response
         const response: Response = clearNetworkResponse({
-          data: r && r.data,
-          response: omit(cloneDeep(r), [`data`]),
-          key: key,
+          data: data,
+          response: dataResponse,
+          key: source === 'worker' ? r.data.key : key,
           collection: collectionName || '',
           driver: this.driverName,
           source: source
@@ -101,8 +107,12 @@ export class HttpDriver implements ReativeDriver {
         //
         //
         // success callback
-        observer.next(response as T);
-        if (response.source !== 'worker') observer.complete();
+        if (source === 'worker') {
+          Reative.responses[r.data.key].observer.next(response as T);
+        } else {
+          observer.next(response as T);
+          observer.complete();
+        }
       };
       //
       // network handle
@@ -111,7 +121,12 @@ export class HttpDriver implements ReativeDriver {
         options.useWorker &&
         chain.useWorker !== false
       ) {
+        Reative.responses[key] = {
+          key: key,
+          observer: observer
+        };
         Reative.worker.http.postMessage({
+          key: key,
           method: method,
           url: url,
           body: body,

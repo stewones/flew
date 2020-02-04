@@ -1,4 +1,4 @@
-import { Observable, of, Subject } from 'rxjs';
+import { of, Subject, PartialObserver } from 'rxjs';
 import {
   RR_DRIVER,
   RR_IDENTIFIER,
@@ -17,6 +17,7 @@ interface ReativeProtocol {
   events?: { [key: string]: Subject<any> };
   Parse?: any; // parse instance
   worker?: { http: any };
+  responses?: { key: string; observer: PartialObserver<any> };
 }
 
 export const Reative: ReativeProtocol = {
@@ -50,5 +51,6 @@ export const Reative: ReativeProtocol = {
   Parse: {},
   worker: {
     http: false
-  }
+  },
+  responses: {} as any
 };
