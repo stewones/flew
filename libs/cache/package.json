@@ -1,6 +1,6 @@
 {
 	"name": "@reative/cache",
-	"version": "2.9.10",
+	"version": "2.9.11",
 	"peerDependencies": {
 		"@reative/core": "^2.0.3"
 	},

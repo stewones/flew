@@ -1,3 +1,17 @@
+## [2.9.11](https://github.com/stewwan/reative/compare/v2.9.10...v2.9.11) (2020-02-04)
+
+
+### Bug Fixes
+
+* worker import from server env ([6aa219b](https://github.com/stewwan/reative/commit/6aa219b9fa0b9489ddfb50376d9755ff2601b66b))
+
+
+### Features
+
+* **parse:** implement web worker for parse ([19b44c3](https://github.com/stewwan/reative/commit/19b44c3d31d89211bd7154fa6209c052f90b1b46))
+
+
+
 ## [2.9.10](https://github.com/stewwan/reative/compare/v2.9.9...v2.9.10) (2020-02-04)
 
 
