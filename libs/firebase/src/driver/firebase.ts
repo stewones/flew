@@ -1,22 +1,72 @@
 import { get, isArray, isEmpty, isObject } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ReativeChainPayload } from '../interfaces/chain';
-import { ConnectorFirebase } from '../interfaces/connector';
-import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
-import { ReativeOptions } from '../interfaces/options';
-import { Response } from '../interfaces/response';
-import { Reative } from '../symbols/reative';
-import { Logger } from '../utils/logger';
-import { clearNetworkResponse } from '../utils/response';
+
+import {
+  ReativeChainPayload,
+  Reative,
+  ReativeDriver,
+  ReativeDriverOption,
+  ReativeOptions,
+  Response,
+  Logger,
+  clearNetworkResponse
+} from '@reative/core';
 
 export class FirebaseDriver implements ReativeDriver {
   driverName: ReativeDriverOption = 'firebase';
   driverOptions: ReativeOptions;
-  connector: ConnectorFirebase;
+  connector: any;
   logger: Logger;
 
-  constructor(options: ReativeOptions) {
+  //
+  // verbs tree
+  public verbs: { [key in ReativeVerb]: string | boolean } = {
+    find: 'http.get',
+    findOne: 'http.get',
+    on: false,
+    get: true,
+    post: true,
+    update: 'http.patch',
+    patch: true,
+    delete: true,
+    set: 'http.post',
+    count: false,
+    run: false
+  };
+
+  //
+  // chaining tree
+  public chaining: { [key in ReativeChain]: string | boolean } = {
+    driver: true,
+    network: true,
+    key: true,
+    query: false,
+    where: false,
+    sort: false,
+    size: false,
+    at: false,
+    after: false,
+    ref: false,
+    raw: true,
+    transform: true,
+    diff: true,
+    http: true,
+    include: false,
+    doc: false,
+    master: false,
+    token: false,
+    object: false,
+    save: 'browser',
+    ttl: 'browser',
+    state: 'browser',
+    cache: 'browser',
+    worker: true
+  };
+
+  constructor() {}
+
+  configure(options: ReativeOptions) {
     this.driverOptions = options;
     this.logger = options.logger;
   }

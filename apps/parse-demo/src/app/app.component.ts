@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
     // this.webWorkerPost();
     // this.webWorkerHttp();
     // this.webWorkerParse();
+    this.firebaseTest();
   }
 
   exerciseTest() {
@@ -392,5 +393,12 @@ export class AppComponent implements OnInit {
         .raw(true)
         .findOne()
         .subscribe(r => console.log(`non-worker response`, r));
+  }
+
+  firebaseTest() {
+    collection(`todos`)
+      .driver(`firebase`)
+      .find()
+      .subscribe(console.log, console.log);
   }
 }
