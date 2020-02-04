@@ -534,7 +534,7 @@ describe('Records', () => {
   // it('should implement [reboot] chaining', () => {
   //   lib.init({ driver: 'firebase' });
   //   lib.reboot();
-  //   expect(lib.driver()).toEqual(RR_DRIVER);
+  //   expect(lib.driver()).toEqual(R_DRIVER);
   // });
 
   // it('should call network with a customized key', () => {

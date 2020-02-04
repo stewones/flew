@@ -1,5 +1,5 @@
 import { Reative } from '@reative/core';
-import { merge } from 'lodash';
+import { ParseDriver } from '../driver/parse';
 
 const mapping = {
   User: '_User',
@@ -21,9 +21,8 @@ export interface ParseOptions {
  * @returns Parse.Object
  */
 export function model(name: string) {
-  const Entity = Reative.Parse.Object.extend(
-    mapping[name] ? mapping[name] : name
-  );
+  const Parse = parse();
+  const Entity = Parse.Object.extend(mapping[name] ? mapping[name] : name);
   return new Entity();
 }
 
@@ -35,7 +34,8 @@ export function model(name: string) {
  * @returns Parse.Query
  */
 export function query(name: string) {
-  return new Reative.Parse.Query(mapping[name] ? mapping[name] : name);
+  const Parse = parse();
+  return new Parse.Query(mapping[name] ? mapping[name] : name);
 }
 
 /**
@@ -47,10 +47,8 @@ export function query(name: string) {
  * @returns Parse.Object
  */
 export function pointer(name: string, id: string) {
-  return new Reative.Parse.Object(mapping[name] ? mapping[name] : name).set(
-    'id',
-    id
-  );
+  const Parse = parse();
+  return new Parse.Object(mapping[name] ? mapping[name] : name).set('id', id);
 }
 
 /**
@@ -63,7 +61,8 @@ export function pointer(name: string, id: string) {
  * @returns Parse.Object
  */
 export function object(collection: string, attr = {}, options = {}) {
-  return new Reative.Parse.Object(
+  const Parse = parse();
+  return new Parse.Object(
     mapping[collection] ? mapping[collection] : collection,
     attr,
     options
@@ -77,7 +76,7 @@ export function object(collection: string, attr = {}, options = {}) {
  * @returns Parse
  */
 export function parse() {
-  return Reative.Parse;
+  return Reative.driver.parse.getInstance();
 }
 
 /**
@@ -86,16 +85,17 @@ export function parse() {
  * @export
  * @param {*} sdk
  * @param {*} config
- * @param {*} [instance=Reative.Parse]
  * @returns ReativeParse
  */
-export function install(sdk, config, instance = Reative.Parse) {
+export function install(sdk, config) {
   sdk.initialize(config.appID);
   sdk.serverURL = config.serverURL;
   sdk.masterKey = config.masterKey;
-  Reative.parse = {
+  Reative.drivers = [...Reative.drivers, 'parse'];
+  Reative.driver.parse = new ParseDriver({
     serverURL: sdk.serverURL,
-    appID: config.appID
-  };
-  return (Reative.Parse = merge(instance, sdk.Parse));
+    appID: config.appID,
+    instance: sdk.Parse
+  });
+  return parse();
 }

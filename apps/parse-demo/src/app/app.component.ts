@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
     // this.httpCalls();
     // this.webWorkerPost();
     // this.webWorkerHttp();
-    this.webWorkerParse();
+    // this.webWorkerParse();
   }
 
   exerciseTest() {
@@ -293,10 +293,23 @@ export class AppComponent implements OnInit {
         .token(`some-Bearer-token-${i}`)
         .get(`/images/search?asdf=${i}`)
         .pipe(map((it: any) => it.data[0]))
-        .subscribe(r => console.log(`worker response`, Reative.responses, r));
-    // @todo worker and toPromise dont work good
-    // .toPromise()
-    // .then(r => console.log(`worker response`, r));
+        .subscribe(r => console.log(`worker response`, r), console.log);
+
+    //
+    // worker failed call
+    collection(`Worker`, {
+      baseURL: 'https://api.thecatapi.com',
+      endpoint: '/v1',
+      useWorker: true // GLOBAL WORKER
+    })
+      .driver(`http`)
+      .state(false)
+      .cache(false)
+      .save(false)
+      .get(`/images/asdf`)
+      .pipe(map((it: any) => it.data[0]))
+      .toPromise()
+      .catch(err => console.log(`failed call + toPromise`, err));
 
     //
     // non-worker call
@@ -344,10 +357,28 @@ export class AppComponent implements OnInit {
         .size(1)
         //.worker(true) // CHAINABLE WORKER
         .findOne()
-        .subscribe(r => console.log(`worker response`, Reative.responses, r));
-    // @todo worker and toPromise dont work good
-    // .toPromise()
-    // .then(r => console.log(`worker response`, r));
+        //        .subscribe(r => console.log(`worker response`, Reative.responses, r));
+        .toPromise()
+        .then(r => console.log(`worker response`, r));
+
+    //
+    // failed call
+    collection(`User`, {
+      useWorker: true // GLOBAL WORKER
+    })
+      .key(`order-worker-fail`)
+      .driver(`parse`)
+      .query({
+        equalTo: { a: '123' }
+      })
+      .state(false)
+      .cache(false)
+      .save(false)
+      .size(1)
+      .findOne()
+      .toPromise()
+      .then(r => console.log(r))
+      .catch(err => console.log(`failed call + toPromise()`, err));
 
     //
     // non-worker call
@@ -360,8 +391,6 @@ export class AppComponent implements OnInit {
         .save(false)
         .raw(true)
         .findOne()
-        .subscribe(r =>
-          console.log(`non-worker response`, Reative.responses, r)
-        );
+        .subscribe(r => console.log(`non-worker response`, r));
   }
 }

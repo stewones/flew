@@ -8,7 +8,8 @@ import { Response, ResponseSource } from '../interfaces/response';
 import { Reative } from '../symbols/reative';
 import { Logger } from '../utils/logger';
 import { clearNetworkResponse } from '../utils/response';
-import { ReativeChainPayload } from '../interfaces/chain';
+import { ReativeChainPayload, ReativeChain } from '../interfaces/chain';
+import { ReativeVerb } from '../interfaces/verb';
 
 declare var window;
 export class HttpDriver implements ReativeDriver {
@@ -17,14 +18,65 @@ export class HttpDriver implements ReativeDriver {
   connector: ConnectorHttp;
   logger: Logger;
 
-  constructor(options: ReativeOptions) {
-    this.driverOptions = options;
+  //
+  // verbs tree
+  public verbs: { [key in ReativeVerb]: string | boolean } = {
+    find: 'http.get',
+    findOne: 'http.get',
+    on: false,
+    get: true,
+    post: true,
+    update: 'http.patch',
+    patch: true,
+    delete: true,
+    set: 'http.post',
+    count: false,
+    run: false
+  };
 
-    if (window.Worker && options.useWorker === true && !Reative.worker.http) {
-      try {
+  //
+  // chaining tree
+  public chaining: { [key in ReativeChain]: string | boolean } = {
+    driver: true,
+    network: true,
+    key: true,
+    query: false,
+    where: false,
+    sort: false,
+    size: false,
+    at: false,
+    after: false,
+    ref: false,
+    raw: true,
+    transform: true,
+    diff: true,
+    http: true,
+    include: false,
+    doc: false,
+    master: false,
+    token: false,
+    object: false,
+    save: 'browser',
+    ttl: 'browser',
+    state: 'browser',
+    cache: 'browser',
+    worker: true
+  };
+
+  constructor() {}
+
+  configure(options: ReativeOptions) {
+    this.driverOptions = options;
+    try {
+      if (
+        window &&
+        window.Worker &&
+        options.useWorker === true &&
+        !Reative.worker.http
+      ) {
         Reative.worker.http = new Worker('/worker/http.js');
-      } catch (err) {}
-    }
+      }
+    } catch (err) {}
 
     // if (typeof Worker !== 'undefined') {
     //   Reative.worker.http = new Worker('../platforms/browser.worker', {
@@ -73,11 +125,18 @@ export class HttpDriver implements ReativeDriver {
     return new Observable((observer: PartialObserver<T>) => {
       //
       // error callback
-      const error = (err, source: ResponseSource = 'http') => {
-        const errData = get(err, 'response.data');
+      const error = (r, source: ResponseSource = 'http') => {
+        const data =
+          source === 'worker' ? get(r, 'error') || r : get(r, 'response.data');
+
         try {
-          observer.error(errData ? errData : err);
-          if (source !== 'worker') observer.complete();
+          if (source === 'worker') {
+            Reative.responses[r.key].observer.error(data);
+            Reative.responses[r.key].observer.complete();
+          } else {
+            observer.error(data);
+            observer.complete();
+          }
         } catch (err) {}
       };
 
@@ -86,7 +145,7 @@ export class HttpDriver implements ReativeDriver {
       const success = (r, source: ResponseSource = 'http') => {
         // double check for worker errors
         if (source === 'worker' && r.data.error) {
-          return error(r.data.error, source);
+          return error(r.data, source);
         }
 
         const data = source === 'worker' ? r.data.data : r.data;
@@ -109,11 +168,13 @@ export class HttpDriver implements ReativeDriver {
         // success callback
         if (source === 'worker') {
           Reative.responses[r.data.key].observer.next(response as T);
+          Reative.responses[r.data.key].observer.complete();
         } else {
           observer.next(response as T);
           observer.complete();
         }
       };
+
       //
       // network handle
       if (

@@ -4,6 +4,7 @@ onmessage = req => {
   const method = data.method || 'get';
   const body = data.body;
   const key = data.key;
+  const collection = data.collection;
 
   let headers = {
     ...data.headers
@@ -29,10 +30,14 @@ onmessage = req => {
 
   fetch(url, payload).then(response => {
     if (response.status >= 200 && response.status < 300) {
-      response.json().then(it => postMessage({ key: key, data: it }));
+      response
+        .json()
+        .then(it =>
+          postMessage({ key: key, collection: collection, data: it })
+        );
     } else {
       response.json().then(err => {
-        postMessage({ key: key, error: err });
+        postMessage({ key: key, collection: collection, error: err });
       });
     }
   });

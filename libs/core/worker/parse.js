@@ -18,6 +18,7 @@ onmessage = req => {
   const collection = data.collection;
   const skipOnOperator = data.skipOnOperator;
   const skipOnQuery = data.skipOnQuery;
+  const specialOperators = data.specialOperators;
 
   Parse.initialize(appID);
   Parse.serverURL = serverURL;
@@ -37,7 +38,9 @@ onmessage = req => {
   // Transpile chain query
   const query = transpileChainQuery(chain.query, {
     skipOnQuery: skipOnQuery,
-    skipOnOperator: skipOnOperator
+    skipOnOperator: skipOnOperator,
+    specialOperators: specialOperators,
+    collection: collection
   });
 
   //
@@ -79,7 +82,9 @@ onmessage = req => {
     for (const item of data) {
       // tslint:disable-next-line: deprecation
       const entry =
-        isFunction(item.toJSON) && !chain.useObject ? item.toJSON() : item;
+        item && isFunction(item.toJSON) && !chain.useObject
+          ? item.toJSON()
+          : item;
 
       if (!chain.useObject) {
         // @todo add id for nested results
@@ -108,11 +113,11 @@ onmessage = req => {
 
     //
     // success callback
-    postMessage({ key: key, data: result });
+    postMessage({ key: key, collection: collection, data: result });
   };
 
   const error = err => {
-    postMessage({ key: key, error: err });
+    postMessage({ key: key, collection: collection, error: err });
   };
 
   switch (verb) {
@@ -194,14 +199,14 @@ function transpileQuery(operator, chainQuery, extra) {
     // Treatment for arrays
     if (isArray(value) && isString(value[0])) {
       value.map(it => {
-        queries.push(createQueryByOperator(it, operator));
+        queries.push(createQueryByOperator(it, operator, extra));
       });
     }
 
     //
     // Treatment when not array
     else {
-      queries.push(createQueryByOperator(value, operator));
+      queries.push(createQueryByOperator(value, operator, extra));
     }
   }
 
@@ -326,4 +331,22 @@ function limit(limit, connector) {
 function skip(value, connector) {
   // this.log().success()(`parse after -> ${value}`);
   connector.skip(value);
+}
+
+function createQueryByOperator(value, operator, extra) {
+  //
+  // Start query
+  const query = new Parse.Query(extra.collection);
+
+  //
+  // Create from a function
+  if (isFunction(value)) {
+    query[operator](...value());
+  } else if (isArray(value)) {
+    value.map(it => createQueryByOperator(it, operator, extra.collection));
+  } else {
+    query[operator](value);
+  }
+
+  return query;
 }

@@ -53,6 +53,7 @@
     "@ngxs/logger-plugin": "^3.4.3",
     "@ngxs/store": "^3.4.3",
     "@reative/core": "file:dist/libs/core",
+    "@reative/parse": "file:dist/libs/parse",
     "animate.css": "^3.7.2",
     "axios": "^0.19.2",
     "core-js": "^2.5.4",
