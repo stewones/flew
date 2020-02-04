@@ -1,3 +1,12 @@
+## [2.9.10](https://github.com/stewwan/reative/compare/v2.9.9...v2.9.10) (2020-02-04)
+
+
+### Bug Fixes
+
+* **http:** memoize observables for worker ([d827f0d](https://github.com/stewwan/reative/commit/d827f0d0d147f45f821ab2398a0d6d32f256b5b4))
+
+
+
 ## [2.9.9](https://github.com/stewwan/reative/compare/v2.9.8...v2.9.9) (2020-02-04)
 
 
