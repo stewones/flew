@@ -479,8 +479,18 @@
               "apps/parse-demo/src/favicon.ico",
               "apps/parse-demo/src/assets",
               {
-                "glob": "http.js",
+                "glob": "*.js",
                 "input": "libs/core/worker",
+                "output": "worker"
+              },
+              {
+                "glob": "parse.min.js",
+                "input": "node_modules/parse/dist",
+                "output": "worker"
+              },
+              {
+                "glob": "lodash.min.js",
+                "input": "node_modules/lodash",
                 "output": "worker"
               }
             ],

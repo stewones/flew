@@ -93,5 +93,9 @@ export function install(sdk, config, instance = Reative.Parse) {
   sdk.initialize(config.appID);
   sdk.serverURL = config.serverURL;
   sdk.masterKey = config.masterKey;
+  Reative.parse = {
+    serverURL: sdk.serverURL,
+    appID: config.appID
+  };
   return (Reative.Parse = merge(instance, sdk.Parse));
 }

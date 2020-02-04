@@ -104,7 +104,7 @@ export class HttpDriver implements ReativeDriver {
           driver: this.driverName,
           source: source
         });
-        //
+
         //
         // success callback
         if (source === 'worker') {
@@ -133,7 +133,7 @@ export class HttpDriver implements ReativeDriver {
           headers: options.httpConfig.headers
         });
         Reative.worker.http.onmessage = r => success(r, 'worker');
-        Reative.worker.http.onerror = r => error(r);
+        Reative.worker.http.onerror = r => error(r, 'worker');
       } else {
         switch (method) {
           case 'post':

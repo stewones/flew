@@ -220,7 +220,7 @@ export class Records implements ReativeAPI {
       ttl: 'browser',
       state: 'browser',
       cache: 'browser',
-      worker: false
+      worker: true
     }
   };
 

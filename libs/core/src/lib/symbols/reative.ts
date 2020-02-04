@@ -9,14 +9,19 @@ import { Connector } from '../interfaces/connector';
 import { ReativeOptions } from '../interfaces/options';
 import { StorageAdapter } from '../interfaces/storage';
 
-interface ReativeProtocol {
+export interface ReativeParseOptions {
+  serverURL: string;
+  appID: string;
+}
+export interface ReativeProtocol {
   options: ReativeOptions;
   connector: Connector;
   store?: any;
   storage?: StorageAdapter;
   events?: { [key: string]: Subject<any> };
   Parse?: any; // parse instance
-  worker?: { http: any };
+  parse: ReativeParseOptions;
+  worker?: { http: any; parse: any };
   responses?: { key: string; observer: PartialObserver<any> };
 }
 
@@ -49,8 +54,13 @@ export const Reative: ReativeProtocol = {
   } as StorageAdapter,
   events: {},
   Parse: {},
+  parse: {
+    serverURL: '',
+    appID: ''
+  },
   worker: {
-    http: false
+    http: false,
+    parse: false
   },
   responses: {} as any
 };

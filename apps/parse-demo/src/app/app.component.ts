@@ -23,7 +23,8 @@ export class AppComponent implements OnInit {
     // this.configureHttp();
     // this.httpCalls();
     // this.webWorkerPost();
-    this.webWorker();
+    // this.webWorkerHttp();
+    this.webWorkerParse();
   }
 
   exerciseTest() {
@@ -205,60 +206,6 @@ export class AppComponent implements OnInit {
       .then(console.log);
   }
 
-  webWorker() {
-    //
-    // worker call
-    for (let i = 0; i < 3; i++)
-      collection(`Worker`, {
-        baseURL: 'https://api.thecatapi.com',
-        endpoint: '/v1',
-        useWorker: true // GLOBAL WORKER
-      })
-        .driver(`http`)
-        .state(false)
-        .cache(false)
-        .save(false)
-        .raw(true)
-        //.worker(true) // CHAINABLE WORKER
-        .token(`some-Bearer-token-${i}`)
-        .get(`/images/search?asdf=${i}`)
-        .pipe(map((it: any) => it.data[0]))
-        .subscribe(r => console.log(`worker response`, Reative.responses, r));
-    // @todo worker and toPromise dont work good
-    // .toPromise()
-    // .then(r => console.log(`worker response`, r));
-
-    //
-    // non-worker call
-    for (let i = 0; i < 3; i++)
-      collection(`Test`, {
-        baseURL: 'https://api.thecatapi.com',
-        endpoint: '/v1',
-        httpConfig: {
-          headers: {
-            someHeader: `XYZ`
-          }
-        }
-      })
-        .driver(`http`)
-        .state(false)
-        .cache(false)
-        .save(false)
-        .raw(true)
-        .token(`some-Bearer-token`)
-        .http((config: AxiosRequestConfig) => {
-          config.headers.xyz = 123;
-          // console.log(111, config.headers);
-        })
-        .get(`/images/search`)
-        .pipe(map((it: any) => it.data[0]))
-        .subscribe(
-          r => console.log(`non-worker response`, r),
-          console.log
-          //   () => console.log(`completed`)
-        );
-  }
-
   configureHttp() {
     //
     // no worker call
@@ -326,5 +273,95 @@ export class AppComponent implements OnInit {
         password: ''
       })
       .subscribe(it => console.log(`it`, it), err => console.log(`err`, err));
+  }
+
+  webWorkerHttp() {
+    //
+    // worker call
+    for (let i = 0; i < 3; i++)
+      collection(`Worker`, {
+        baseURL: 'https://api.thecatapi.com',
+        endpoint: '/v1',
+        useWorker: true // GLOBAL WORKER
+      })
+        .driver(`http`)
+        .state(false)
+        .cache(false)
+        .save(false)
+        .raw(true)
+        //.worker(true) // CHAINABLE WORKER
+        .token(`some-Bearer-token-${i}`)
+        .get(`/images/search?asdf=${i}`)
+        .pipe(map((it: any) => it.data[0]))
+        .subscribe(r => console.log(`worker response`, Reative.responses, r));
+    // @todo worker and toPromise dont work good
+    // .toPromise()
+    // .then(r => console.log(`worker response`, r));
+
+    //
+    // non-worker call
+    for (let i = 0; i < 3; i++)
+      collection(`Test`, {
+        baseURL: 'https://api.thecatapi.com',
+        endpoint: '/v1',
+        httpConfig: {
+          headers: {
+            someHeader: `XYZ`
+          }
+        }
+      })
+        .driver(`http`)
+        .state(false)
+        .cache(false)
+        .save(false)
+        .raw(true)
+        .token(`some-Bearer-token`)
+        .http((config: AxiosRequestConfig) => {
+          config.headers.xyz = 123;
+          // console.log(111, config.headers);
+        })
+        .get(`/images/search`)
+        .pipe(map((it: any) => it.data[0]))
+        .subscribe(
+          r => console.log(`non-worker response`, r),
+          console.log
+          //   () => console.log(`completed`)
+        );
+  }
+
+  webWorkerParse() {
+    //
+    // worker call
+    for (let i = 0; i < 3; i++)
+      collection(`Order`, {
+        useWorker: true // GLOBAL WORKER
+      })
+        .key(`order-worker-${i}`)
+        .driver(`parse`)
+        .state(false)
+        .cache(false)
+        .save(false)
+        .size(1)
+        //.worker(true) // CHAINABLE WORKER
+        .findOne()
+        .subscribe(r => console.log(`worker response`, Reative.responses, r));
+    // @todo worker and toPromise dont work good
+    // .toPromise()
+    // .then(r => console.log(`worker response`, r));
+
+    //
+    // non-worker call
+    for (let i = 0; i < 3; i++)
+      collection(`Order`)
+        .key(`order-non-worker-${i}`)
+        .driver(`parse`)
+        .state(false)
+        .cache(false)
+        .save(false)
+        .raw(true)
+        .findOne()
+        .subscribe(r =>
+          console.log(`non-worker response`, Reative.responses, r)
+        );
   }
 }
