@@ -1,6 +1,6 @@
 {
 	"name": "@reative/firebase",
-	"version": "2.9.8",
+	"version": "2.9.9",
 	"peerDependencies": {
 		"@reative/core": "^2.0.3"
 	},

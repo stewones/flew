@@ -1,3 +1,12 @@
+## [2.9.9](https://github.com/stewwan/reative/compare/v2.9.8...v2.9.9) (2020-02-04)
+
+
+### Bug Fixes
+
+* **http:** worker body ([5a00bdc](https://github.com/stewwan/reative/commit/5a00bdcfd290f4c1c80a56255462f8deae2e0a0e))
+
+
+
 ## [2.9.8](https://github.com/stewwan/reative/compare/v2.9.7...v2.9.8) (2020-02-03)
 
 
