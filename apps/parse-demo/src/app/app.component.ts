@@ -396,9 +396,30 @@ export class AppComponent implements OnInit {
   }
 
   firebaseTest() {
-    collection(`todos`)
-      .driver(`firebase`)
-      .find()
-      .subscribe(console.log, console.log);
+    for (let i = 0; i < 3; i++)
+      collection(`cats`)
+        .driver(`firebase`)
+        .state(false)
+        .cache(false)
+        .save(false)
+        .raw(true)
+        .find()
+        .subscribe(
+          r => console.log(`success firebase`, r),
+          err => console.log(`err firebase`, err)
+        );
+
+    for (let i = 0; i < 3; i++)
+      collection(`cats`)
+        .driver(`firestore`)
+        .state(false)
+        .cache(false)
+        .save(false)
+        .raw(true)
+        .find()
+        .subscribe(
+          r => console.log(`success firestore`, r),
+          err => console.log(`err firestore`, err)
+        );
   }
 }

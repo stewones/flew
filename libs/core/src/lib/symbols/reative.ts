@@ -5,28 +5,16 @@ import {
   R_TIMESTAMP_CREATED,
   R_TIMESTAMP_UPDATED
 } from '../global';
-import { Connector } from '../interfaces/connector';
 import { ReativeOptions } from '../interfaces/options';
 import { StorageAdapter } from '../interfaces/storage';
 import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 
 export interface ReativeProtocol {
   options: ReativeOptions;
-  connector: Connector;
   store?: any;
   storage?: StorageAdapter;
   events?: { [key: string]: Subject<any> };
   worker?: { http: any; parse: any };
-  // responses?: {
-  //   // collection
-  //   [key: string]: {
-  //     // reative key
-  //     [key: string]: {
-  //       key: string;
-  //       observer: PartialObserver<any>;
-  //     };
-  //   };
-  // };
   responses?: {
     // reative key
     [key: string]: {
@@ -53,7 +41,6 @@ export const Reative: ReativeProtocol = {
       headers: {}
     }
   },
-  connector: {} as Connector,
   store: {
     enabled: false,
     getState: () => {},

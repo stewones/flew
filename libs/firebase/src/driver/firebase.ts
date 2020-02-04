@@ -4,54 +4,52 @@ import { map } from 'rxjs/operators';
 
 import {
   ReativeChainPayload,
-  Reative,
   ReativeDriver,
   ReativeDriverOption,
   ReativeOptions,
   Response,
   Logger,
-  clearNetworkResponse
+  clearNetworkResponse,
+  ReativeVerb,
+  ReativeChain
 } from '@reative/core';
 
 export class FirebaseDriver implements ReativeDriver {
   driverName: ReativeDriverOption = 'firebase';
   driverOptions: ReativeOptions;
-  connector: any;
-  logger: Logger;
 
-  //
-  // verbs tree
+  logger: Logger;
+  instance: any;
+
   public verbs: { [key in ReativeVerb]: string | boolean } = {
-    find: 'http.get',
-    findOne: 'http.get',
-    on: false,
-    get: true,
-    post: true,
+    find: true,
+    findOne: true,
+    on: true,
+    get: 'http.get',
+    post: 'http.post',
     update: 'http.patch',
-    patch: true,
-    delete: true,
+    patch: 'http.patch',
+    delete: 'http.delete',
     set: 'http.post',
     count: false,
     run: false
   };
 
-  //
-  // chaining tree
   public chaining: { [key in ReativeChain]: string | boolean } = {
     driver: true,
     network: true,
     key: true,
     query: false,
-    where: false,
+    where: true,
     sort: false,
     size: false,
     at: false,
     after: false,
-    ref: false,
+    ref: true,
     raw: true,
     transform: true,
     diff: true,
-    http: true,
+    http: false,
     include: false,
     doc: false,
     master: false,
@@ -61,20 +59,27 @@ export class FirebaseDriver implements ReativeDriver {
     ttl: 'browser',
     state: 'browser',
     cache: 'browser',
-    worker: true
+    worker: false
   };
 
-  constructor() {}
+  constructor(options: any) {
+    this.instance = options.instance;
+  }
 
   configure(options: ReativeOptions) {
     this.driverOptions = options;
     this.logger = options.logger;
   }
 
+  getInstance() {
+    return this.instance;
+  }
+
   private exceptions() {
-    this.connector = Reative.connector.firebase;
-    if (!this.driverOptions.collection) throw new Error('missing collection');
-    if (isEmpty(this.connector))
+    const connector = this.getInstance();
+    if (!this.driverOptions.collection)
+      throw new Error('missing collection for firebase');
+    if (isEmpty(connector))
       throw new Error(
         `missing database instance. did you add import 'firebase/database'; to your environment file?`
       );
@@ -86,6 +91,7 @@ export class FirebaseDriver implements ReativeDriver {
 
   public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<any>) => {
+      const connector = this.getInstance();
       //
       // run exceptions
       this.exceptions();
@@ -94,7 +100,7 @@ export class FirebaseDriver implements ReativeDriver {
       // define adapter
       const path = `${this.driverOptions.collection}/${chain.ref || ''}`;
 
-      let firebase: any = this.connector.database().ref(path);
+      let firebase: any = connector.database().ref(path);
 
       //
       // @todo add complete api
@@ -172,6 +178,7 @@ export class FirebaseDriver implements ReativeDriver {
 
   public on<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable(observer => {
+      const connector = this.getInstance();
       //
       // run exceptions
       this.exceptions();
@@ -179,7 +186,7 @@ export class FirebaseDriver implements ReativeDriver {
       //
       // define adapter
       const path = `${this.driverOptions.collection}/${chain.ref || ''}`;
-      const firebase: any = this.connector.database().ref(path);
+      const firebase: any = connector.database().ref(path);
 
       //
       // @todo add complete api

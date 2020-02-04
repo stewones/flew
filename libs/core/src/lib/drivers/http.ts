@@ -1,7 +1,6 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosInstance } from 'axios';
 import { get, omit, cloneDeep } from 'lodash';
 import { from, Observable, PartialObserver } from 'rxjs';
-import { ConnectorHttp } from '../interfaces/connector';
 import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 import { ReativeOptions } from '../interfaces/options';
 import { Response, ResponseSource } from '../interfaces/response';
@@ -15,11 +14,9 @@ declare var window;
 export class HttpDriver implements ReativeDriver {
   driverName: ReativeDriverOption = 'http';
   driverOptions: ReativeOptions;
-  connector: ConnectorHttp;
+  instance: AxiosInstance;
   logger: Logger;
 
-  //
-  // verbs tree
   public verbs: { [key in ReativeVerb]: string | boolean } = {
     find: 'http.get',
     findOne: 'http.get',
@@ -34,8 +31,6 @@ export class HttpDriver implements ReativeDriver {
     run: false
   };
 
-  //
-  // chaining tree
   public chaining: { [key in ReativeChain]: string | boolean } = {
     driver: true,
     network: true,
@@ -65,6 +60,10 @@ export class HttpDriver implements ReativeDriver {
 
   constructor() {}
 
+  getInstance() {
+    return this.instance;
+  }
+
   configure(options: ReativeOptions) {
     this.driverOptions = options;
     try {
@@ -77,12 +76,6 @@ export class HttpDriver implements ReativeDriver {
         Reative.worker.http = new Worker('/worker/http.js');
       }
     } catch (err) {}
-
-    // if (typeof Worker !== 'undefined') {
-    //   Reative.worker.http = new Worker('../platforms/browser.worker', {
-    //     type: 'module'
-    //   });
-    // }
   }
 
   public log() {
@@ -108,7 +101,7 @@ export class HttpDriver implements ReativeDriver {
       }`;
     }
 
-    this.connector = Reative.connector.http || axios.create(options.httpConfig);
+    this.instance = axios.create(options.httpConfig);
 
     const baseURL = options.baseURL || get(options, 'httpConfig.baseURL');
     const endpoint = options.endpoint;
@@ -198,28 +191,28 @@ export class HttpDriver implements ReativeDriver {
       } else {
         switch (method) {
           case 'post':
-            from(this.connector.post(url, body))
+            from(this.instance.post(url, body))
               .toPromise()
               .then((r: AxiosResponse) => success(r))
               .catch(error);
             break;
 
           case 'patch':
-            from(this.connector.patch(url, body))
+            from(this.instance.patch(url, body))
               .toPromise()
               .then((r: AxiosResponse) => success(r))
               .catch(error);
             break;
 
           case 'delete':
-            from(this.connector.delete(url, body))
+            from(this.instance.delete(url, body))
               .toPromise()
               .then((r: AxiosResponse) => success(r))
               .catch(error);
             break;
 
           default:
-            from(this.connector.get(url))
+            from(this.instance.get(url))
               .toPromise()
               .then((r: AxiosResponse) => success(r))
               .catch(error);

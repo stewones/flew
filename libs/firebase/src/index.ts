@@ -1,2 +1,2 @@
-export * from './firebase';
-export * from './connectors';
+export * from './platform/firebase';
+export * from './platform/connectors';

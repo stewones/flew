@@ -2,35 +2,19 @@
 import { AxiosRequestConfig } from 'axios';
 import { isArray, isEmpty, isString, omit, startCase } from 'lodash';
 import { Observable, Subject } from 'rxjs';
-import { ReativeAPI, SetOptions } from '../interfaces/api';
+import { Response } from '../interfaces/response';
+import { Reative } from '../symbols/reative';
+import { ReativeAPI } from '../interfaces/api';
 import { ReativeChainPayload, ReativeChain } from '../interfaces/chain';
 import { ReativeDriverOption } from '../interfaces/driver';
-import { Log } from '../interfaces/log';
 import { ReativeOptions } from '../interfaces/options';
-import { Response } from '../interfaces/response';
 import { ReativeVerb } from '../interfaces/verb';
-import { Reative } from '../symbols/reative';
+import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
-import { SHA256 } from '../utils/sha';
-import { R_VERSION } from '../version';
 import { isServer } from '../utils/platform';
 import { HttpDriver } from '../drivers/http';
-
-type ReativeDriverVerbTree = {
-  [key in ReativeDriverOption]: { [key in ReativeVerb]: string | boolean | any }
-};
-
-type ReativeDriverChainTree = {
-  [key in ReativeDriverOption]: { [key in ReativeChain]: string | boolean }
-};
-
-/**
- * Reative Records
- *
- * @export
- * @class Records
- * @implements {ReativeAPI}
- */
+import { SHA256 } from '../utils/sha';
+import { R_VERSION } from '../version';
 export class Records implements ReativeAPI {
   chain: ReativeChainPayload = {};
   options: ReativeOptions;
@@ -41,178 +25,11 @@ export class Records implements ReativeAPI {
   // so external tools can listen for logs
   public $log: Subject<Log> = new Subject();
 
-  //
-  // verbs tree
-  protected verbs: ReativeDriverVerbTree = {
-    firestore: {
-      find: true,
-      findOne: true,
-      on: true,
-      get: 'http.get',
-      post: 'http.post',
-      update: true,
-      patch: 'http.patch',
-      delete: 'http.delete',
-      set: true,
-      count: false,
-      run: false
-    },
-    firebase: {
-      find: true,
-      findOne: true,
-      on: true,
-      get: 'http.get',
-      post: 'http.post',
-      update: 'http.patch',
-      patch: 'http.patch',
-      delete: 'http.delete',
-      set: 'http.post',
-      count: false,
-      run: false
-    },
-    http: {
-      find: 'http.get',
-      findOne: 'http.get',
-      on: false,
-      get: true,
-      post: true,
-      update: 'http.patch',
-      patch: true,
-      delete: true,
-      set: 'http.post',
-      count: false,
-      run: false
-    },
-    parse: {
-      find: true,
-      findOne: true,
-      on: true,
-      get: 'parse.find',
-      post: 'parse.find',
-      update: 'parse.update',
-      patch: 'parse.set',
-      delete: true, // can use doc_id or objectId
-      set: true,
-      count: true,
-      run: true
-    }
-  };
-
-  //
-  // chaining tree
-  protected chaining: ReativeDriverChainTree = {
-    firestore: {
-      driver: true,
-      network: true,
-      key: true,
-      query: false,
-      where: true,
-      sort: true,
-      size: true,
-      at: true,
-      after: true,
-      ref: false,
-      raw: true,
-      transform: true,
-      diff: true,
-      http: false,
-      include: false,
-      doc: true,
-      master: false,
-      token: false,
-      object: false,
-      save: 'browser',
-      ttl: 'browser',
-      state: 'browser',
-      cache: 'browser',
-      worker: false
-    },
-    firebase: {
-      driver: true,
-      network: true,
-      key: true,
-      query: false,
-      where: true,
-      sort: false,
-      size: false,
-      at: false,
-      after: false,
-      ref: true,
-      raw: true,
-      transform: true,
-      diff: true,
-      http: false,
-      include: false,
-      doc: false,
-      master: false,
-      token: false,
-      object: false,
-      save: 'browser',
-      ttl: 'browser',
-      state: 'browser',
-      cache: 'browser',
-      worker: false
-    },
-    http: {
-      driver: true,
-      network: true,
-      key: true,
-      query: false,
-      where: false,
-      sort: false,
-      size: false,
-      at: false,
-      after: false,
-      ref: false,
-      raw: true,
-      transform: true,
-      diff: true,
-      http: true,
-      include: false,
-      doc: false,
-      master: false,
-      token: false,
-      object: false,
-      save: 'browser',
-      ttl: 'browser',
-      state: 'browser',
-      cache: 'browser',
-      worker: true
-    },
-    parse: {
-      driver: true,
-      network: true,
-      key: true,
-      query: true,
-      where: true,
-      sort: true,
-      size: true,
-      at: false,
-      after: true,
-      ref: false,
-      raw: true,
-      transform: true,
-      diff: true,
-      http: false,
-      include: true,
-      doc: true,
-      master: true,
-      token: true,
-      object: true,
-      save: 'browser',
-      ttl: 'browser',
-      state: 'browser',
-      cache: 'browser',
-      worker: true
-    }
-  };
-
   constructor(options: ReativeOptions) {
     this.init(options);
   }
 
   public init(runtime: ReativeOptions = {}) {
-    //
     // settings which requires runtime evaluation
     const options: ReativeOptions = {
       ...Reative.options,
@@ -223,25 +40,21 @@ export class Records implements ReativeAPI {
       }
     };
 
-    //
     // init logger
     this.logger = new Logger({
       subject: this.$log,
       silent: options.silent
     });
 
-    //
     // set drivers
     this.initDrivers(options);
 
-    //
     // log
     const name = options.collection || options.endpoint;
     this.log().success()(
       `Reative ${R_VERSION} Initiated Collection for ${startCase(name)}`
     );
 
-    //
     // initialize
     this.options = options;
     this.reset();
@@ -482,7 +295,7 @@ export class Records implements ReativeAPI {
    * @returns {Observable<T>}
    * @memberof Records
    */
-  public set<T>(data: any, options?: SetOptions): Observable<T> {
+  public set<T>(data: any, options?: any): Observable<T> {
     return this.call('set', null, {
       data: data,
       options: options

@@ -21,13 +21,13 @@ import {
 } from '@reative/angular';
 import { environment } from '../environments/environment';
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyBCXnFNk0PL7xiPYpm8r88dfNUpy5QHGKE',
-  authDomain: 'ontime-manager.firebaseapp.com',
-  databaseURL: 'https://ontime-manager.firebaseio.com',
-  projectId: 'ontime-manager',
-  storageBucket: 'ontime-manager.appspot.com',
-  messagingSenderId: '290172576309'
+export const FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyDd0NPKiqB06EkCxRRai6rHphUVgkU38jA',
+  authDomain: 'reactive-record-demo.firebaseapp.com',
+  databaseURL: 'https://reactive-record-demo.firebaseio.com',
+  projectId: 'reactive-record-demo',
+  storageBucket: 'reactive-record-demo.appspot.com',
+  messagingSenderId: '244444899524'
 };
 
 @NgModule({
@@ -71,7 +71,7 @@ const firebaseConfig = {
     //
     // use rr for firebase
     FirebaseModule.forRoot({
-      config: firebaseConfig,
+      config: FIREBASE_CONFIG,
       persistence: true
     })
   ],

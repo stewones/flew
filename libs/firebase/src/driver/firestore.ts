@@ -1,23 +1,77 @@
 import { isArray, isEmpty, isNil, isObject } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SetOptions } from '../interfaces/api';
-import { ReativeChainPayload } from '../interfaces/chain';
-import { ConnectorFirestore } from '../interfaces/connector';
-import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
-import { ReativeOptions } from '../interfaces/options';
-import { Response } from '../interfaces/response';
-import { Reative } from '../symbols/reative';
-import { Logger } from '../utils/logger';
-import { clearNetworkResponse } from '../utils/response';
+import { SetOptions } from '../interfaces/setOptions';
+
+import {
+  Logger,
+  Response,
+  ReativeVerb,
+  ReativeChain,
+  ReativeDriver,
+  ReativeOptions,
+  ReativeDriverOption,
+  ReativeChainPayload,
+  clearNetworkResponse
+} from '@reative/core';
 
 export class FirestoreDriver implements ReativeDriver {
   driverName: ReativeDriverOption = 'firestore';
   driverOptions: ReativeOptions;
   logger: Logger;
-  connector: ConnectorFirestore;
+  instance: any;
 
-  constructor(options: ReativeOptions) {
+  public verbs: { [key in ReativeVerb]: string | boolean } = {
+    find: true,
+    findOne: true,
+    on: true,
+    get: 'http.get',
+    post: 'http.post',
+    update: true,
+    patch: 'http.patch',
+    delete: 'http.delete',
+    set: true,
+    count: false,
+    run: false
+  };
+
+  public chaining: { [key in ReativeChain]: string | boolean } = {
+    driver: true,
+    network: true,
+    key: true,
+    query: false,
+    where: true,
+    sort: true,
+    size: true,
+    at: true,
+    after: true,
+    ref: false,
+    raw: true,
+    transform: true,
+    diff: true,
+    http: false,
+    include: false,
+    doc: true,
+    master: false,
+    token: false,
+    object: false,
+    save: 'browser',
+    ttl: 'browser',
+    state: 'browser',
+    cache: 'browser',
+    worker: false
+  };
+
+  constructor(options: any) {
+    this.instance = options.instance;
+  }
+
+  getInstance() {
+    return this.instance;
+  }
+
+  configure(options: ReativeOptions) {
+    const connector = this.getInstance();
     this.driverOptions = options;
     this.logger = options.logger;
 
@@ -29,7 +83,7 @@ export class FirestoreDriver implements ReativeDriver {
           `[persistence + tabs] using experimental features from firestore`
         );
       try {
-        this.connector.enablePersistence({
+        connector.enablePersistence({
           experimentalTabSynchronization: true
         });
       } catch (err) {}
@@ -41,8 +95,8 @@ export class FirestoreDriver implements ReativeDriver {
   }
 
   private exceptions() {
-    this.connector = Reative.connector.firestore;
-    if (isEmpty(this.connector)) throw new Error('missing firestore connector');
+    const connector = this.getInstance();
+    if (isEmpty(connector)) throw new Error('missing firestore connector');
     if (!this.driverOptions.collection) throw new Error('missing collection');
   }
 
@@ -80,15 +134,14 @@ export class FirestoreDriver implements ReativeDriver {
 
   public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
+      const connector = this.getInstance();
       //
       // run exceptions
       this.exceptions();
 
       //
       // define adapter
-      let firestore: any = this.connector.collection(
-        this.driverOptions.collection
-      );
+      let firestore: any = connector.collection(this.driverOptions.collection);
 
       //
       // set query
@@ -175,15 +228,14 @@ export class FirestoreDriver implements ReativeDriver {
 
   public on<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable(observer => {
+      const connector = this.getInstance();
       //
       // run exceptions
       this.exceptions();
 
       //
       // define adapter
-      let firestore: any = this.connector.collection(
-        this.driverOptions.collection
-      );
+      let firestore: any = connector.collection(this.driverOptions.collection);
 
       //
       // set doc
@@ -246,6 +298,7 @@ export class FirestoreDriver implements ReativeDriver {
     options: SetOptions = { merge: true }
   ): Observable<any> {
     return new Observable(observer => {
+      const connector = this.getInstance();
       const id = chain.doc;
       //
       // run exceptions
@@ -253,7 +306,7 @@ export class FirestoreDriver implements ReativeDriver {
 
       //
       // define connector
-      const firestore: any = this.connector.collection(
+      const firestore: any = connector.collection(
         this.driverOptions.collection
       );
       //
@@ -278,6 +331,7 @@ export class FirestoreDriver implements ReativeDriver {
 
   public update(chain: ReativeChainPayload, data: any): Observable<any> {
     return new Observable(observer => {
+      const connector = this.getInstance();
       const id = chain.doc;
       //
       // run exceptions
@@ -289,7 +343,7 @@ export class FirestoreDriver implements ReativeDriver {
 
       //
       // define connector
-      const firestore: any = this.connector.collection(
+      const firestore: any = connector.collection(
         this.driverOptions.collection
       );
 
