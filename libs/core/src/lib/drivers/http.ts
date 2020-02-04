@@ -19,13 +19,16 @@ export class HttpDriver implements ReativeDriver {
 
   constructor(options: ReativeOptions) {
     this.driverOptions = options;
-
-    if (window.Worker && options.useWorker === true && !Reative.worker.http) {
-      try {
+    try {
+      if (
+        window &&
+        window.Worker &&
+        options.useWorker === true &&
+        !Reative.worker.http
+      ) {
         Reative.worker.http = new Worker('/worker/http.js');
-      } catch (err) {}
-    }
-
+      }
+    } catch (err) {}
     // if (typeof Worker !== 'undefined') {
     //   Reative.worker.http = new Worker('../platforms/browser.worker', {
     //     type: 'module'

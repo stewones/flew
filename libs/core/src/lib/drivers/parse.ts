@@ -37,12 +37,16 @@ export class ParseDriver implements ReativeDriver {
   constructor(options: ReativeOptions) {
     this.driverOptions = options;
     this.logger = options.logger;
-
-    if (window.Worker && options.useWorker === true && !Reative.worker.parse) {
-      try {
+    try {
+      if (
+        window &&
+        window.Worker &&
+        options.useWorker === true &&
+        !Reative.worker.parse
+      ) {
         Reative.worker.parse = new Worker('/worker/parse.js');
-      } catch (err) {}
-    }
+      }
+    } catch (err) {}
   }
 
   public log() {
