@@ -1,10 +1,10 @@
 {
-  "name": "@reative/firebase",
-  "version": "3.0.0",
-  "peerDependencies": {
-    "@reative/core": "^3.0.0"
-  },
-  "dependencies": {
-    "@reative/core": "^3.0.0"
-  }
+	"name": "@reative/firebase",
+	"version": "3.0.1",
+	"peerDependencies": {
+		"@reative/core": "^3.0.0"
+	},
+	"dependencies": {
+		"@reative/core": "^3.0.0"
+	}
 }

@@ -1,3 +1,7 @@
+## [3.0.1](https://github.com/stewwan/reative/compare/v3.0.0...v3.0.1) (2020-02-05)
+
+
+
 # [3.0.0](https://github.com/stewwan/reative/compare/v2.9.11...v3.0.0) (2020-02-05)
 
 
