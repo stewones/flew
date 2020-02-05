@@ -1,13 +1,13 @@
 {
-	"name": "@reative/parse",
-	"version": "3.0.0",
-	"peerDependencies": {
-		"@reative/core": "^2.9.11"
-	},
-	"dependencies": {
-		"@reative/core": "^2.9.11"
-	},
-	"devDependencies": {
-		"tsify": "^4.0.1"
-	}
+  "name": "@reative/parse",
+  "version": "3.0.0",
+  "peerDependencies": {
+    "@reative/core": "^3.0.0"
+  },
+  "dependencies": {
+    "@reative/core": "^3.0.0"
+  },
+  "devDependencies": {
+    "tsify": "^4.0.1"
+  }
 }
