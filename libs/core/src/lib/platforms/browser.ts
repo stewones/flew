@@ -118,11 +118,11 @@ export class PlatformBrowser extends Records {
                   this.dispatch(observer, networkData, chain);
                   this.setCache(chain, key, networkData);
 
-                  if (!['on'].includes(verb)) {
-                    observer.complete();
-                  }
-
                   this.log().info()(`${key} dispatch from network`);
+                }
+
+                if (!['on'].includes(verb)) {
+                  observer.complete();
                 }
               }
             );
@@ -138,6 +138,7 @@ export class PlatformBrowser extends Records {
         this.log().danger()(`${key} network not allowed`);
       }
     });
+
     return of();
   }
 
@@ -196,6 +197,7 @@ export class PlatformBrowser extends Records {
   ): Promise<boolean> {
     return new Promise(async resolve => {
       if (!chain.useNetwork) return resolve(false);
+
       //
       // check for TTL
       // should not call network

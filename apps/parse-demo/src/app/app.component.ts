@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { collection, Reative } from '@reative/core';
 import { AxiosRequestConfig } from 'axios';
 import { take, map } from 'rxjs/operators';
+import { resetState } from '@reative/state';
+import { resetCache } from '@reative/cache';
 
 @Component({
   selector: 'reative-root',
@@ -26,6 +28,8 @@ export class AppComponent implements OnInit {
     // this.webWorkerHttp();
     // this.webWorkerParse();
     // this.firebaseTest();
+
+    this.parseToPromise();
   }
 
   exerciseTest() {
@@ -422,5 +426,33 @@ export class AppComponent implements OnInit {
           r => console.log(`success firestore`, r),
           err => console.log(`err firestore`, err)
         );
+  }
+
+  async parseToPromise() {
+    const fn = function(name = 'Birmingham') {
+      return (
+        collection(`Company`)
+          .driver(`parse`)
+          // .state(false)
+          // .cache(false)
+          // .save(false)
+          .raw(true)
+          .where(`name`, `==`, name)
+          .findOne()
+      );
+    };
+    console.log(`trying`);
+    await fn()
+      .toPromise()
+      .then(console.log);
+    console.log(`parseToPromise done`);
+  }
+
+  clearState() {
+    resetState();
+  }
+
+  clearCache() {
+    resetCache();
   }
 }
