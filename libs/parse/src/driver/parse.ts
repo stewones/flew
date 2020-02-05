@@ -31,6 +31,11 @@ import {
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ReativeParseOptions } from '../interfaces/options';
+import { transpileChainQuery } from '../worker/transpile';
+import { where } from '../worker/where';
+import { order } from '../worker/order';
+import { limit } from '../worker/limit';
+import { skip } from '../worker/skip';
 import { find } from '../worker/find';
 
 declare var window;
@@ -119,219 +124,6 @@ export class ParseDriver implements ReativeDriver {
 
   public log() {
     return this.logger;
-  }
-
-  protected where(query: any[] = []) {
-    const mapping = {
-      id: 'objectId'
-    };
-    query.map(q => {
-      if (isNil(q.value)) throw Error(`value can't be null for parse where`);
-
-      if (mapping[q.field]) q.field = mapping[q.field];
-
-      this.setWhere(q);
-      this.log().success()(
-        `parse where -> ${q.field} ${q.operator} ${
-          q.value && q.value.id ? q.value.id : q.value
-        }`
-      );
-    });
-  }
-
-  protected setWhere(q: any) {
-    switch (q.operator) {
-      case '==':
-        this.connector.equalTo(q.field, q.value);
-        break;
-
-      case '>=':
-        this.connector.greaterThanOrEqualTo(q.field, q.value);
-        break;
-
-      case '<=':
-        this.connector.lessThanOrEqualTo(q.field, q.value);
-        break;
-
-      case '>':
-        this.connector.greaterThan(q.field, q.value);
-        break;
-
-      case '<':
-        this.connector.lessThan(q.field, q.value);
-        break;
-
-      case 'array-contains':
-        this.connector.containedIn(
-          q.field,
-          isArray(q.value) ? q.value : [q.value]
-        );
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  protected order(sort: any) {
-    if (isArray(sort)) {
-      this.log().success()(`parse sort array -> ${sort}`);
-      sort.map(s => {
-        if (isEmpty(s)) throw new Error(`sort object in array can't be null`);
-        for (const k in s) {
-          if (s[k] === 'asc') {
-            this.connector.ascending(k);
-          }
-          if (s[k] === 'desc') {
-            this.connector.descending(k);
-          }
-        }
-      });
-    } else if (isObject(sort)) {
-      this.log().success()(`parse sort object -> ${JSON.stringify(sort)}`);
-      if (isEmpty(sort)) throw new Error(`sort object can't be null`);
-      for (const k in sort) {
-        if (sort[k] === 'asc') {
-          this.connector.ascending(k);
-        }
-        if (sort[k] === 'desc') {
-          this.connector.descending(k);
-        }
-      }
-    }
-  }
-
-  protected limit(limit: number) {
-    this.log().success()(`parse limit -> ${limit}`);
-    this.connector.limit(limit);
-  }
-
-  protected skip(value: number) {
-    this.log().success()(`parse after -> ${value}`);
-    this.connector.skip(value);
-  }
-
-  protected transpileQuery(operator, chainQuery) {
-    //
-    // Hold queries
-    let queries = [];
-
-    //
-    // Transpile special operators
-    if (this.specialOperators.includes(operator)) {
-      //
-      // Fix chainQuery, must be an array
-      // @todo: improve this so we don't need this workaround
-      // on the first level chainQuery is an array here, but from the second forward is an object
-      chainQuery = isArray(chainQuery) ? chainQuery : [chainQuery];
-
-      //
-      // Transpile in the query router
-      const routedQuery: any = this.transpileQueryRouter(operator, chainQuery);
-      queries = [...queries, ...routedQuery];
-    }
-
-    //
-    // Transpile common operators
-    else {
-      //
-      // Get operator value
-      const value = chainQuery[operator] ? chainQuery[operator] : chainQuery;
-
-      //
-      // Treatment for arrays
-      if (isArray(value) && !isString(value[0])) {
-        value.map(it => {
-          queries.push(this.createQueryByOperator(it, operator));
-        });
-      }
-
-      //
-      // Treatment when not array
-      else {
-        queries.push(this.createQueryByOperator(value, operator));
-      }
-    }
-
-    return queries;
-  }
-
-  protected transpileQueryRouter(specialOperator, chainQuery) {
-    const Parse = this.getInstance();
-    //
-    // Hold queries
-    let queries = [];
-
-    //
-    // Transpile queries
-    chainQuery.map(operators => {
-      for (const operator in operators) {
-        //
-        // Set next new chain query
-        // If our operator if a special operator this is after first level and we must send the special operator query value
-        const nextChainQuery = this.specialOperators.includes(operator)
-          ? operators[operator]
-          : operators;
-
-        //
-        // Tranpile query
-        const transpiledQueries = this.transpileQuery(operator, nextChainQuery);
-
-        //
-        // Push to queries
-        queries = [...queries, ...transpiledQueries];
-      }
-    });
-
-    //
-    // Validate
-    if (isEmpty(queries)) return queries;
-
-    return Parse.Query[specialOperator](...queries);
-  }
-
-  protected transpileChainQuery(query) {
-    //
-    // Hold queries
-    let queries = [];
-
-    //
-    // Set plain queries
-    for (const k in query) {
-      //
-      // Validate skip on query operators
-      if (this.skipOnQuery.includes(k)) return;
-      if (this.skipOnOperator.includes(k)) continue;
-
-      //
-      // Tranpile query
-      const transpiledQuery = this.transpileQuery(k, query[k]);
-
-      //
-      // Push to queries
-      queries = [...queries, ...transpiledQuery];
-    }
-
-    return queries;
-  }
-
-  protected createQueryByOperator(value, operator) {
-    const Parse = this.getInstance();
-    //
-    // Start query
-    const query = new Parse.Query(this.getCollectionName());
-
-    //
-    // Create from a function
-    if (isFunction(value)) {
-      query[operator](...value());
-    } else if (isArray(value)) {
-      value.map(it => this.createQueryByOperator(it, operator));
-    } else {
-      query[operator](value);
-    }
-
-    return query;
   }
 
   public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
@@ -494,7 +286,14 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // Transpile chain query
-      const specialQueries: any = this.transpileChainQuery(chain.query);
+      const specialQueries: any = transpileChainQuery(chain.query, {
+        Parse: this.connector,
+        chain: chain,
+        collection: this.getCollectionName(),
+        skipOnQuery: this.skipOnQuery,
+        skipOnOperator: this.skipOnOperator,
+        specialOperators: this.specialOperators
+      });
 
       //
       // Join query with connector
@@ -512,15 +311,15 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // set where
-      this.where(chain.where);
+      where(chain.where, this.connector);
 
       //
       // set order
-      this.order(chain.sort);
+      order(chain.sort, this.connector);
 
       //
       // set limit
-      if (chain.size) this.limit(chain.size);
+      if (chain.size) limit(chain.size, this.connector);
 
       //
       // set include (pointers, relation, etc)
@@ -534,7 +333,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // set skip
-      if (chain.after) this.skip(chain.after);
+      if (chain.after) skip(chain.after, this.connector);
 
       //
       // fire in the hole
@@ -564,23 +363,6 @@ export class ParseDriver implements ReativeDriver {
           }
         } as Response);
       };
-
-      // for test
-      // observer.next({
-      //   data: [{ a: 1 }],
-      //   key: key,
-      //   collection: this.collection,
-      //   driver: this.driverName,
-      //   response: {}
-      // } as any);
-
-      // observer.next({
-      //   data: [{ a: 2 }],
-      //   key: key,
-      //   collection: this.collection,
-      //   driver: this.driverName,
-      //   response: {}
-      // } as any);
 
       this.connector.subscribe().then(async handler => {
         observer.next((await getData()) as T);
@@ -768,7 +550,14 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // Transpile chain query
-      const query: any = this.transpileChainQuery(chain.query);
+      const query: any = transpileChainQuery(chain.query, {
+        Parse: this.connector,
+        chain: chain,
+        collection: this.getCollectionName(),
+        skipOnQuery: this.skipOnQuery,
+        skipOnOperator: this.skipOnOperator,
+        specialOperators: this.specialOperators
+      });
 
       //
       // Join query with connector
@@ -776,11 +565,11 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // set where
-      this.where(chain.where);
+      where(chain.where, this.connector);
 
       //
       // set skip
-      if (chain.after) this.skip(chain.after);
+      if (chain.after) skip(chain.after, this.connector);
 
       //
       // network handle
@@ -861,7 +650,14 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // Transpile chain query
-      const query: any = this.transpileChainQuery(chain.query);
+      const query: any = transpileChainQuery(chain.query, {
+        Parse: this.connector,
+        chain: chain,
+        collection: this.getCollectionName(),
+        skipOnQuery: this.skipOnQuery,
+        skipOnOperator: this.skipOnOperator,
+        specialOperators: this.specialOperators
+      });
 
       //
       // Join query with connector
@@ -869,11 +665,11 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // set where
-      this.where(chain.where);
+      where(chain.where, this.connector);
 
       //
       // set skip
-      if (chain.after) this.skip(chain.after);
+      if (chain.after) skip(chain.after, this.connector);
 
       //
       // network handle
