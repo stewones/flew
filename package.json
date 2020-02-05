@@ -32,7 +32,8 @@
     "release:minor": "cd ./scripts && npm run release:minor",
     "release:patch": "cd ./scripts && npm run release:patch",
     "build:schematics": "tsc -p tools/tsconfig.tools.json && ./tools/copy.sh",
-    "build:doc": "cd .docs && npm run doc:gen"
+    "build:doc": "cd .docs && npm run doc:gen",
+    "build:worker": "browserify find.ts --standalone reative -p [ tsify ] > reative.js"
   },
   "private": true,
   "dependencies": {

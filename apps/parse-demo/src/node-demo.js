@@ -2,6 +2,9 @@ const Core = require('@reative/core');
 const ReativeParse = require('@reative/parse');
 const Parse = require('parse/node');
 
+const { yay } = require('./node-demo-lib');
+yay();
+
 ReativeParse.install(Parse, {
   appID: 'OnTimeServer',
   serverURL: 'http://localhost:1337/api',

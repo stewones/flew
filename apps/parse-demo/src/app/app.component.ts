@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
     // this.webWorkerPost();
     // this.webWorkerHttp();
     // this.webWorkerParse();
-    this.firebaseTest();
+    // this.firebaseTest();
   }
 
   exerciseTest() {
@@ -356,6 +356,7 @@ export class AppComponent implements OnInit {
         .cache(false)
         .save(false)
         .size(1)
+        .raw(true)
         //.worker(true) // CHAINABLE WORKER
         .findOne()
         //        .subscribe(r => console.log(`worker response`, Reative.responses, r));

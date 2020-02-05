@@ -31,6 +31,7 @@ import {
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ReativeParseOptions } from '../interfaces/options';
+import { find } from '../worker/find';
 
 declare var window;
 
@@ -369,17 +370,24 @@ export class ParseDriver implements ReativeDriver {
             ? omit(cloneDeep(r.data), [`data`])
             : omit(cloneDeep(r), [`data`]);
 
-        const result = [];
-        for (const item of data) {
-          // tslint:disable-next-line: deprecation
-          const entry =
-            isFunction(item.toJSON) && !chain.useObject ? item.toJSON() : item;
+        let result = [];
 
-          if (!chain.useObject) {
-            // @todo add id for nested results
-            entry.id = entry.objectId;
+        if (source === 'http') {
+          for (const item of data) {
+            // tslint:disable-next-line: deprecation
+            const entry =
+              isFunction(item.toJSON) && !chain.useObject
+                ? item.toJSON()
+                : item;
+
+            if (!chain.useObject) {
+              // @todo add id for nested results
+              entry.id = entry.objectId;
+            }
+            result.push(entry);
           }
-          result.push(entry);
+        } else {
+          result = data;
         }
 
         //
@@ -434,6 +442,7 @@ export class ParseDriver implements ReativeDriver {
           key: key,
           observer: observer
         };
+
         Reative.worker.parse.postMessage({
           key: key,
           serverURL: this.options.serverURL,
@@ -447,76 +456,16 @@ export class ParseDriver implements ReativeDriver {
         Reative.worker.parse.onmessage = r => success(r, 'worker');
         Reative.worker.parse.onerror = r => error(r, 'worker');
       } else {
-        //
-        // @todo abstract common functions to remove this whole part
-        const verb =
-          chain.query && chain.query['aggregate']
-            ? 'aggregate'
-            : chain.query && chain.query['or']
-            ? 'or'
-            : 'find';
-
-        //
-        // define adapter
-        this.connector = new Parse.Query(this.getCollectionName());
-
-        //
-        // Transpile chain query
-        const query: any = this.transpileChainQuery(chain.query);
-
-        //
-        // Join query with connector
-        if (!isEmpty(query)) {
-          this.connector = Parse.Query.and(...query);
-        }
-
-        //
-        // set include (pointers, relation, etc)
-        if (chain.fields) {
-          this.connector.include(chain.fields);
-        }
-
-        if (chain.query && chain.query.include) {
-          this.connector.include(chain.query.include);
-        }
-
-        //
-        // set where
-        this.where(chain.where);
-
-        //
-        // set order
-        this.order(chain.sort);
-
-        //
-        // set limit
-        if (chain.size) this.limit(chain.size);
-
-        //
-        // set skip
-        if (chain.after) this.skip(chain.after);
-
-        switch (verb) {
-          case 'aggregate':
-            this.connector
-              .aggregate(chain.query['aggregate'], {
-                useMasterKey: chain.useMasterKey,
-                sessionToken: chain.useSessionToken
-              })
-              .then(r => success({ data: r }))
-              .catch(error);
-            break;
-
-          default:
-            this.connector
-              .find({
-                useMasterKey: chain.useMasterKey,
-                sessionToken: chain.useSessionToken
-              })
-              .then(r => success({ data: r }))
-              .catch(error);
-            break;
-        }
+        find({
+          Parse: this.getInstance(),
+          chain: chain,
+          collection: this.getCollectionName(),
+          skipOnQuery: this.skipOnQuery,
+          skipOnOperator: this.skipOnOperator,
+          specialOperators: this.specialOperators,
+          success: r => success(r),
+          error: err => error(err)
+        });
       }
     });
   }

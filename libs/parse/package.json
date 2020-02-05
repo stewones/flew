@@ -6,5 +6,8 @@
 	},
 	"dependencies": {
 		"@reative/core": "^2.0.3"
+	},
+	"devDependencies": {
+		"tsify": "^4.0.1"
 	}
 }
