@@ -1,3 +1,12 @@
+## [3.0.2](https://github.com/stewwan/reative/compare/v3.0.1...v3.0.2) (2020-02-05)
+
+
+### Bug Fixes
+
+* **browser:** should complete observable even if result wasnt ship through network ([9c21fdd](https://github.com/stewwan/reative/commit/9c21fddda68e08e136658c314361c2c940ebd8bf))
+
+
+
 ## [3.0.1](https://github.com/stewwan/reative/compare/v3.0.0...v3.0.1) (2020-02-05)
 
 
