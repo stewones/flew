@@ -1,30 +1,85 @@
 import { get, isArray, isEmpty, isObject } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ReativeChainPayload } from '../interfaces/chain';
-import { ConnectorFirebase } from '../interfaces/connector';
-import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
-import { ReativeOptions } from '../interfaces/options';
-import { Response } from '../interfaces/response';
-import { Reative } from '../symbols/reative';
-import { Logger } from '../utils/logger';
-import { clearNetworkResponse } from '../utils/response';
+
+import {
+  ReativeChainPayload,
+  ReativeDriver,
+  ReativeDriverOption,
+  ReativeOptions,
+  Response,
+  Logger,
+  clearNetworkResponse,
+  ReativeVerb,
+  ReativeChain
+} from '@reative/core';
 
 export class FirebaseDriver implements ReativeDriver {
   driverName: ReativeDriverOption = 'firebase';
   driverOptions: ReativeOptions;
-  connector: ConnectorFirebase;
-  logger: Logger;
 
-  constructor(options: ReativeOptions) {
+  logger: Logger;
+  instance: any;
+
+  public verbs: { [key in ReativeVerb]: string | boolean } = {
+    find: true,
+    findOne: true,
+    on: true,
+    get: 'http.get',
+    post: 'http.post',
+    update: 'http.patch',
+    patch: 'http.patch',
+    delete: 'http.delete',
+    set: 'http.post',
+    count: false,
+    run: false
+  };
+
+  public chaining: { [key in ReativeChain]: string | boolean } = {
+    driver: true,
+    network: true,
+    key: true,
+    query: false,
+    where: true,
+    sort: false,
+    size: false,
+    at: false,
+    after: false,
+    ref: true,
+    raw: true,
+    transform: true,
+    diff: true,
+    http: false,
+    include: false,
+    doc: false,
+    master: false,
+    token: false,
+    object: false,
+    save: 'browser',
+    ttl: 'browser',
+    state: 'browser',
+    cache: 'browser',
+    worker: false
+  };
+
+  constructor(options: any) {
+    this.instance = options.instance;
+  }
+
+  configure(options: ReativeOptions) {
     this.driverOptions = options;
     this.logger = options.logger;
   }
 
+  getInstance() {
+    return this.instance;
+  }
+
   private exceptions() {
-    this.connector = Reative.connector.firebase;
-    if (!this.driverOptions.collection) throw new Error('missing collection');
-    if (isEmpty(this.connector))
+    const connector = this.getInstance();
+    if (!this.driverOptions.collection)
+      throw new Error('missing collection for firebase');
+    if (isEmpty(connector))
       throw new Error(
         `missing database instance. did you add import 'firebase/database'; to your environment file?`
       );
@@ -36,6 +91,7 @@ export class FirebaseDriver implements ReativeDriver {
 
   public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<any>) => {
+      const connector = this.getInstance();
       //
       // run exceptions
       this.exceptions();
@@ -44,7 +100,7 @@ export class FirebaseDriver implements ReativeDriver {
       // define adapter
       const path = `${this.driverOptions.collection}/${chain.ref || ''}`;
 
-      let firebase: any = this.connector.database().ref(path);
+      let firebase: any = connector.database().ref(path);
 
       //
       // @todo add complete api
@@ -122,6 +178,7 @@ export class FirebaseDriver implements ReativeDriver {
 
   public on<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable(observer => {
+      const connector = this.getInstance();
       //
       // run exceptions
       this.exceptions();
@@ -129,7 +186,7 @@ export class FirebaseDriver implements ReativeDriver {
       //
       // define adapter
       const path = `${this.driverOptions.collection}/${chain.ref || ''}`;
-      const firebase: any = this.connector.database().ref(path);
+      const firebase: any = connector.database().ref(path);
 
       //
       // @todo add complete api

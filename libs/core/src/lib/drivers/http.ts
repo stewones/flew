@@ -1,23 +1,70 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosInstance } from 'axios';
 import { get, omit, cloneDeep } from 'lodash';
 import { from, Observable, PartialObserver } from 'rxjs';
-import { ConnectorHttp } from '../interfaces/connector';
 import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 import { ReativeOptions } from '../interfaces/options';
 import { Response, ResponseSource } from '../interfaces/response';
 import { Reative } from '../symbols/reative';
 import { Logger } from '../utils/logger';
 import { clearNetworkResponse } from '../utils/response';
-import { ReativeChainPayload } from '../interfaces/chain';
+import { ReativeChainPayload, ReativeChain } from '../interfaces/chain';
+import { ReativeVerb } from '../interfaces/verb';
 
 declare var window;
 export class HttpDriver implements ReativeDriver {
   driverName: ReativeDriverOption = 'http';
   driverOptions: ReativeOptions;
-  connector: ConnectorHttp;
+  instance: AxiosInstance;
   logger: Logger;
 
-  constructor(options: ReativeOptions) {
+  public verbs: { [key in ReativeVerb]: string | boolean } = {
+    find: 'http.get',
+    findOne: 'http.get',
+    on: false,
+    get: true,
+    post: true,
+    update: 'http.patch',
+    patch: true,
+    delete: true,
+    set: 'http.post',
+    count: false,
+    run: false
+  };
+
+  public chaining: { [key in ReativeChain]: string | boolean } = {
+    driver: true,
+    network: true,
+    key: true,
+    query: false,
+    where: false,
+    sort: false,
+    size: false,
+    at: false,
+    after: false,
+    ref: false,
+    raw: true,
+    transform: true,
+    diff: true,
+    http: true,
+    include: false,
+    doc: false,
+    master: false,
+    token: false,
+    object: false,
+    save: 'browser',
+    ttl: 'browser',
+    state: 'browser',
+    cache: 'browser',
+    worker: true
+  };
+
+  constructor() {}
+
+  getInstance() {
+    return this.instance;
+  }
+
+  configure(options: ReativeOptions) {
     this.driverOptions = options;
     try {
       if (
@@ -29,11 +76,6 @@ export class HttpDriver implements ReativeDriver {
         Reative.worker.http = new Worker('/worker/http.js');
       }
     } catch (err) {}
-    // if (typeof Worker !== 'undefined') {
-    //   Reative.worker.http = new Worker('../platforms/browser.worker', {
-    //     type: 'module'
-    //   });
-    // }
   }
 
   public log() {
@@ -59,7 +101,7 @@ export class HttpDriver implements ReativeDriver {
       }`;
     }
 
-    this.connector = Reative.connector.http || axios.create(options.httpConfig);
+    this.instance = axios.create(options.httpConfig);
 
     const baseURL = options.baseURL || get(options, 'httpConfig.baseURL');
     const endpoint = options.endpoint;
@@ -76,11 +118,18 @@ export class HttpDriver implements ReativeDriver {
     return new Observable((observer: PartialObserver<T>) => {
       //
       // error callback
-      const error = (err, source: ResponseSource = 'http') => {
-        const errData = get(err, 'response.data');
+      const error = (r, source: ResponseSource = 'http') => {
+        const data =
+          source === 'worker' ? get(r, 'error') || r : get(r, 'response.data');
+
         try {
-          observer.error(errData ? errData : err);
-          if (source !== 'worker') observer.complete();
+          if (source === 'worker') {
+            Reative.responses[r.key].observer.error(data);
+            Reative.responses[r.key].observer.complete();
+          } else {
+            observer.error(data);
+            observer.complete();
+          }
         } catch (err) {}
       };
 
@@ -89,7 +138,7 @@ export class HttpDriver implements ReativeDriver {
       const success = (r, source: ResponseSource = 'http') => {
         // double check for worker errors
         if (source === 'worker' && r.data.error) {
-          return error(r.data.error, source);
+          return error(r.data, source);
         }
 
         const data = source === 'worker' ? r.data.data : r.data;
@@ -112,11 +161,13 @@ export class HttpDriver implements ReativeDriver {
         // success callback
         if (source === 'worker') {
           Reative.responses[r.data.key].observer.next(response as T);
+          Reative.responses[r.data.key].observer.complete();
         } else {
           observer.next(response as T);
           observer.complete();
         }
       };
+
       //
       // network handle
       if (
@@ -140,28 +191,28 @@ export class HttpDriver implements ReativeDriver {
       } else {
         switch (method) {
           case 'post':
-            from(this.connector.post(url, body))
+            from(this.instance.post(url, body))
               .toPromise()
               .then((r: AxiosResponse) => success(r))
               .catch(error);
             break;
 
           case 'patch':
-            from(this.connector.patch(url, body))
+            from(this.instance.patch(url, body))
               .toPromise()
               .then((r: AxiosResponse) => success(r))
               .catch(error);
             break;
 
           case 'delete':
-            from(this.connector.delete(url, body))
+            from(this.instance.delete(url, body))
               .toPromise()
               .then((r: AxiosResponse) => success(r))
               .catch(error);
             break;
 
           default:
-            from(this.connector.get(url))
+            from(this.instance.get(url))
               .toPromise()
               .then((r: AxiosResponse) => success(r))
               .catch(error);

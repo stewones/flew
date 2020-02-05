@@ -32,7 +32,8 @@
     "release:minor": "cd ./scripts && npm run release:minor",
     "release:patch": "cd ./scripts && npm run release:patch",
     "build:schematics": "tsc -p tools/tsconfig.tools.json && ./tools/copy.sh",
-    "build:doc": "cd .docs && npm run doc:gen"
+    "build:doc": "cd .docs && npm run doc:gen",
+    "build:worker": "browserify find.ts --standalone reative -p [ tsify ] > reative.js"
   },
   "private": true,
   "dependencies": {
@@ -53,6 +54,7 @@
     "@ngxs/logger-plugin": "^3.4.3",
     "@ngxs/store": "^3.4.3",
     "@reative/core": "file:dist/libs/core",
+    "@reative/parse": "file:dist/libs/parse",
     "animate.css": "^3.7.2",
     "axios": "^0.19.2",
     "core-js": "^2.5.4",
@@ -90,7 +92,6 @@
     "@nrwl/node": "^8.5.0",
     "@nrwl/workspace": "8.5.0",
     "@reative/cache": "^2.0.3",
-    "@reative/firebase": "^2.0.3",
     "@reative/schematics": "^1.3.2",
     "@reative/state": "^2.0.3",
     "@types/jasmine": "^3.3.9",

@@ -1,4 +1,4 @@
-import { RR_VERSION } from '../libs/core/src/lib/version';
+import { R_VERSION } from '../libs/core/src/lib/version';
 import * as fs from 'fs';
 import { LIBS } from './libs';
 import * as shell from 'shelljs';
@@ -8,10 +8,10 @@ let newVersion = '';
 export type SemanticTarget = 'major' | 'minor' | 'patch';
 
 export function bumpRR(target: SemanticTarget = 'patch') {
-  newVersion = bumpNumber(RR_VERSION, target);
+  newVersion = bumpNumber(R_VERSION, target);
   fs.writeFile(
     '../libs/core/src/lib/version.ts',
-    `export const RR_VERSION = '${newVersion}';`,
+    `export const R_VERSION = '${newVersion}';`,
     function(err) {
       if (err) {
         console.log(err);
@@ -90,10 +90,10 @@ export function bumpNumber(num: string, target: SemanticTarget) {
 export function gitTag() {
   // re-create tag due to standard-version bug
   shell.exec(
-    // `cd ../ && git tag -a -f v${RR_VERSION} -m "chore(release): ${RR_VERSION}"`
-    `cd ../ && git tag -a v${RR_VERSION} -m "chore(release): ${RR_VERSION}"`
+    // `cd ../ && git tag -a -f v${R_VERSION} -m "chore(release): ${R_VERSION}"`
+    `cd ../ && git tag -a v${R_VERSION} -m "chore(release): ${R_VERSION}"`
   );
-  shell.exec(`git commit -am "chore(release): ${RR_VERSION}"`);
+  shell.exec(`git commit -am "chore(release): ${R_VERSION}"`);
 }
 
 export function bump(target: SemanticTarget = 'patch') {

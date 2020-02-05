@@ -2,38 +2,19 @@
 import { AxiosRequestConfig } from 'axios';
 import { isArray, isEmpty, isString, omit, startCase } from 'lodash';
 import { Observable, Subject } from 'rxjs';
-import { FirebaseDriver } from '../drivers/firebase';
-import { FirestoreDriver } from '../drivers/firestore';
-import { HttpDriver } from '../drivers/http';
-import { ParseDriver } from '../drivers/parse';
-import { ReativeAPI, SetOptions } from '../interfaces/api';
-import { ReativeChainPayload, ReativeChain } from '../interfaces/chain';
-import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
-import { Log } from '../interfaces/log';
-import { ReativeOptions } from '../interfaces/options';
 import { Response } from '../interfaces/response';
-import { ReativeVerb } from '../interfaces/verb';
 import { Reative } from '../symbols/reative';
+import { ReativeAPI } from '../interfaces/api';
+import { ReativeChainPayload, ReativeChain } from '../interfaces/chain';
+import { ReativeDriverOption } from '../interfaces/driver';
+import { ReativeOptions } from '../interfaces/options';
+import { ReativeVerb } from '../interfaces/verb';
+import { Log } from '../interfaces/log';
 import { Logger } from '../utils/logger';
-import { SHA256 } from '../utils/sha';
-import { RR_VERSION } from '../version';
 import { isServer } from '../utils/platform';
-
-type ReativeDriverVerbTree = {
-  [key in ReativeDriverOption]: { [key in ReativeVerb]: string | boolean | any }
-};
-
-type ReativeDriverChainTree = {
-  [key in ReativeDriverOption]: { [key in ReativeChain]: string | boolean }
-};
-
-/**
- * Reative Records
- *
- * @export
- * @class Records
- * @implements {ReativeAPI}
- */
+import { HttpDriver } from '../drivers/http';
+import { SHA256 } from '../utils/sha';
+import { R_VERSION } from '../version';
 export class Records implements ReativeAPI {
   chain: ReativeChainPayload = {};
   options: ReativeOptions;
@@ -44,192 +25,11 @@ export class Records implements ReativeAPI {
   // so external tools can listen for logs
   public $log: Subject<Log> = new Subject();
 
-  //
-  // available drivers
-  protected drivers: {
-    firestore: ReativeDriver;
-    firebase: ReativeDriver;
-    http: ReativeDriver;
-    parse: ReativeDriver;
-  } = {
-    firestore: {} as ReativeDriver,
-    firebase: {} as ReativeDriver,
-    http: {} as ReativeDriver,
-    parse: {} as ReativeDriver
-  };
-
-  //
-  // verbs tree
-  protected verbs: ReativeDriverVerbTree = {
-    firestore: {
-      find: true,
-      findOne: true,
-      on: true,
-      get: 'http.get',
-      post: 'http.post',
-      update: true,
-      patch: 'http.patch',
-      delete: 'http.delete',
-      set: true,
-      count: false,
-      run: false
-    },
-    firebase: {
-      find: true,
-      findOne: true,
-      on: true,
-      get: 'http.get',
-      post: 'http.post',
-      update: 'http.patch',
-      patch: 'http.patch',
-      delete: 'http.delete',
-      set: 'http.post',
-      count: false,
-      run: false
-    },
-    http: {
-      find: 'http.get',
-      findOne: 'http.get',
-      on: false,
-      get: true,
-      post: true,
-      update: 'http.patch',
-      patch: true,
-      delete: true,
-      set: 'http.post',
-      count: false,
-      run: false
-    },
-    parse: {
-      find: true,
-      findOne: true,
-      on: true,
-      get: 'parse.find',
-      post: 'parse.find',
-      update: 'parse.update',
-      patch: 'parse.set',
-      delete: true, // can use doc_id or objectId
-      set: true,
-      count: true,
-      run: true
-    }
-  };
-
-  //
-  // chaining tree
-  protected chaining: ReativeDriverChainTree = {
-    firestore: {
-      driver: true,
-      network: true,
-      key: true,
-      query: false,
-      where: true,
-      sort: true,
-      size: true,
-      at: true,
-      after: true,
-      ref: false,
-      raw: true,
-      transform: true,
-      diff: true,
-      http: false,
-      include: false,
-      doc: true,
-      master: false,
-      token: false,
-      object: false,
-      save: 'browser',
-      ttl: 'browser',
-      state: 'browser',
-      cache: 'browser',
-      worker: false
-    },
-    firebase: {
-      driver: true,
-      network: true,
-      key: true,
-      query: false,
-      where: true,
-      sort: false,
-      size: false,
-      at: false,
-      after: false,
-      ref: true,
-      raw: true,
-      transform: true,
-      diff: true,
-      http: false,
-      include: false,
-      doc: false,
-      master: false,
-      token: false,
-      object: false,
-      save: 'browser',
-      ttl: 'browser',
-      state: 'browser',
-      cache: 'browser',
-      worker: false
-    },
-    http: {
-      driver: true,
-      network: true,
-      key: true,
-      query: false,
-      where: false,
-      sort: false,
-      size: false,
-      at: false,
-      after: false,
-      ref: false,
-      raw: true,
-      transform: true,
-      diff: true,
-      http: true,
-      include: false,
-      doc: false,
-      master: false,
-      token: false,
-      object: false,
-      save: 'browser',
-      ttl: 'browser',
-      state: 'browser',
-      cache: 'browser',
-      worker: true
-    },
-    parse: {
-      driver: true,
-      network: true,
-      key: true,
-      query: true,
-      where: true,
-      sort: true,
-      size: true,
-      at: false,
-      after: true,
-      ref: false,
-      raw: true,
-      transform: true,
-      diff: true,
-      http: false,
-      include: true,
-      doc: true,
-      master: true,
-      token: true,
-      object: true,
-      save: 'browser',
-      ttl: 'browser',
-      state: 'browser',
-      cache: 'browser',
-      worker: true
-    }
-  };
-
   constructor(options: ReativeOptions) {
     this.init(options);
   }
 
   public init(runtime: ReativeOptions = {}) {
-    //
     // settings which requires runtime evaluation
     const options: ReativeOptions = {
       ...Reative.options,
@@ -240,25 +40,21 @@ export class Records implements ReativeAPI {
       }
     };
 
-    //
     // init logger
     this.logger = new Logger({
       subject: this.$log,
       silent: options.silent
     });
 
-    //
     // set drivers
     this.initDrivers(options);
 
-    //
     // log
     const name = options.collection || options.endpoint;
     this.log().success()(
-      `Reative ${RR_VERSION} Initiated Collection for ${startCase(name)}`
+      `Reative ${R_VERSION} Initiated Collection for ${startCase(name)}`
     );
 
-    //
     // initialize
     this.options = options;
     this.reset();
@@ -266,21 +62,23 @@ export class Records implements ReativeAPI {
 
   private initDrivers(options: ReativeOptions) {
     options.logger = this.logger;
-    this.drivers = {
-      firestore: new FirestoreDriver(options),
-      firebase: new FirebaseDriver(options),
-      http: new HttpDriver(options),
-      parse: new ParseDriver(options)
-    };
+
+    // install default driver
+    Reative.driver.http = new HttpDriver();
+
+    // instantiate everyone
+    for (const driver of Reative.drivers) {
+      Reative.driver[driver].configure(options);
+    }
   }
 
   private checkVerbAvailability(
     _driver: ReativeDriverOption,
     _verb: ReativeVerb
-  ): ReativeVerb {
+  ): any {
     const msg = `[${_verb}] method unavailable for driver [${_driver}]`;
     try {
-      const verb = this.verbs[_driver][_verb];
+      const verb = Reative.driver[_driver].verbs[_verb];
       if (verb === false) throw new Error(msg);
       return verb;
     } catch (err) {
@@ -290,13 +88,12 @@ export class Records implements ReativeAPI {
 
   private checkChainAvailability(
     _driver: ReativeDriverOption,
-    _method: ReativeChain
+    _chain: ReativeChain
   ): void {
-    const msg = `[${_method}] chaining method unavailable for driver ${_driver} on ${
+    const msg = `[${_chain}] chaining method unavailable for driver ${_driver} on ${
       isServer() ? 'server' : 'browser'
     }`;
-
-    const exists = this.chaining[_driver][_method];
+    const exists = Reative.driver[_driver].chaining[_chain];
     if (exists === false || (exists === 'browser' && isServer())) {
       return this.log().danger()(msg);
     }
@@ -328,12 +125,7 @@ export class Records implements ReativeAPI {
     chain: ReativeChainPayload = { ...this.chain },
     key: string = ''
   ): Observable<T> {
-    //
-    // @deprecated
-    // reconfigure http client
-    // to get access on stuff
-    // defined after initialization
-    // this.refresh();
+    this.initDrivers(this.options);
 
     let _verb = method;
     let _driver = chain.driver;
@@ -349,6 +141,9 @@ export class Records implements ReativeAPI {
       _driver = verb.split('.')[0] as ReativeDriverOption;
       _verb = verb.split('.')[1] as ReativeVerb;
     }
+
+    if (!Reative.driver[_driver])
+      throw new Error(`Whoops! Reative didn't find ${_driver} driver`);
 
     //
     // define an unique key
@@ -396,8 +191,8 @@ export class Records implements ReativeAPI {
     }
 
     //
-    // execute request
-    return this.drivers[_driver][_verb]<T>(arg1, arg2, arg3, arg4);
+    // execute the request
+    return Reative.driver[_driver][_verb]<T>(arg1, arg2, arg3, arg4);
   }
 
   /**
@@ -500,7 +295,7 @@ export class Records implements ReativeAPI {
    * @returns {Observable<T>}
    * @memberof Records
    */
-  public set<T>(data: any, options?: SetOptions): Observable<T> {
+  public set<T>(data: any, options?: any): Observable<T> {
     return this.call('set', null, {
       data: data,
       options: options

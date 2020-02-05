@@ -6,10 +6,6 @@ import { Records } from '../platforms/server';
 import { Log } from './log';
 import { ReativeOptions } from './options';
 
-export interface SetOptions {
-  merge?: boolean;
-}
-
 /**
  * Public RR Api
  */
@@ -51,7 +47,7 @@ export interface ReativeAPI {
   // fire verbs
   find();
   findOne();
-  set(data: any, options?: SetOptions);
+  set(data: any, options?: any);
   update(data: any);
   on();
   count();

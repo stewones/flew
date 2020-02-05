@@ -1,45 +1,46 @@
 import { of, Subject, PartialObserver } from 'rxjs';
 import {
-  RR_DRIVER,
-  RR_IDENTIFIER,
-  RR_TIMESTAMP_CREATED,
-  RR_TIMESTAMP_UPDATED
+  R_DRIVER,
+  R_IDENTIFIER,
+  R_TIMESTAMP_CREATED,
+  R_TIMESTAMP_UPDATED
 } from '../global';
-import { Connector } from '../interfaces/connector';
 import { ReativeOptions } from '../interfaces/options';
 import { StorageAdapter } from '../interfaces/storage';
+import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 
-export interface ReativeParseOptions {
-  serverURL: string;
-  appID: string;
-}
 export interface ReativeProtocol {
   options: ReativeOptions;
-  connector: Connector;
   store?: any;
   storage?: StorageAdapter;
   events?: { [key: string]: Subject<any> };
-  Parse?: any; // parse instance
-  parse: ReativeParseOptions;
   worker?: { http: any; parse: any };
-  responses?: { key: string; observer: PartialObserver<any> };
+  responses?: {
+    // reative key
+    [key: string]: {
+      key: string;
+      observer: PartialObserver<any>;
+    };
+  };
+
+  driver?: { [key: string]: ReativeDriver };
+  drivers?: ReativeDriverOption[];
 }
 
 export const Reative: ReativeProtocol = {
   options: {
     silent: true,
-    driver: RR_DRIVER,
-    identifier: RR_IDENTIFIER,
+    driver: R_DRIVER,
+    identifier: R_IDENTIFIER,
     timestamp: true,
-    timestampCreated: RR_TIMESTAMP_CREATED,
-    timestampUpdated: RR_TIMESTAMP_UPDATED,
+    timestampCreated: R_TIMESTAMP_CREATED,
+    timestampUpdated: R_TIMESTAMP_UPDATED,
     httpConfig: {
       timeout: 60 * 1000,
       baseURL: '',
       headers: {}
     }
   },
-  connector: {} as Connector,
   store: {
     enabled: false,
     getState: () => {},
@@ -53,11 +54,10 @@ export const Reative: ReativeProtocol = {
     clear: () => Promise.resolve()
   } as StorageAdapter,
   events: {},
-  Parse: {},
-  parse: {
-    serverURL: '',
-    appID: ''
+  driver: {
+    http: {} as any
   },
+  drivers: ['http'],
   worker: {
     http: false,
     parse: false

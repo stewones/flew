@@ -7,54 +7,118 @@ import {
   isString,
   trim,
   omit,
-  cloneDeep
+  cloneDeep,
+  get
 } from 'lodash';
+
+import {
+  Reative,
+  ReativeDriver,
+  ReativeChainPayload,
+  ReativeDriverOption,
+  ReativeOptions,
+  ReativeVerb,
+  ReativeChain,
+  Response,
+  ResponseSource,
+  subscribe,
+  guid,
+  Logger,
+  clearNetworkResponse,
+  R_IDENTIFIER
+} from '@reative/core';
+
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SetOptions } from '../interfaces/api';
-import { ReativeChainPayload } from '../interfaces/chain';
-import { ConnectorParse } from '../interfaces/connector';
-import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
-import { ReativeOptions } from '../interfaces/options';
-import { Response, ResponseSource } from '../interfaces/response';
-import { Reative } from '../symbols/reative';
-import { subscribe } from '../utils/events';
-import { guid } from '../utils/guid';
-import { Logger } from '../utils/logger';
-import { clearNetworkResponse } from '../utils/response';
-import { RR_IDENTIFIER } from '../global';
+import { ReativeParseOptions } from '../interfaces/options';
+import { find } from '../worker/find';
 
 declare var window;
+
 export class ParseDriver implements ReativeDriver {
+  options: Partial<ReativeParseOptions>;
+  instance: any; // parse instance
   driverName: ReativeDriverOption = 'parse';
-  driverOptions: ReativeOptions;
-  connector: ConnectorParse;
+  driverOptions: ReativeOptions = {};
+  connector: any;
   logger: Logger;
   skipOnQuery = ['aggregate'];
   skipOnOperator = ['include', 'exclude'];
   specialOperators = ['or', 'and'];
 
-  constructor(options: ReativeOptions) {
-    this.driverOptions = options;
-    this.logger = options.logger;
+  //
+  // verbs tree
+  public verbs: { [key in ReativeVerb]: string | boolean } = {
+    find: true,
+    findOne: true,
+    on: true,
+    get: 'parse.find',
+    post: 'parse.find',
+    update: 'parse.update',
+    patch: 'parse.set',
+    delete: true, // can use both doc_id or objectId
+    set: true,
+    count: true,
+    run: true
+  };
+
+  //
+  // chaining tree
+  public chaining: { [key in ReativeChain]: string | boolean } = {
+    driver: true,
+    network: true,
+    key: true,
+    query: true,
+    where: true,
+    sort: true,
+    size: true,
+    at: false,
+    after: true,
+    ref: false,
+    raw: true,
+    transform: true,
+    diff: true,
+    http: false,
+    include: true,
+    doc: true,
+    master: true,
+    token: true,
+    object: true,
+    save: 'browser',
+    ttl: 'browser',
+    state: 'browser',
+    cache: 'browser',
+    worker: true
+  };
+
+  constructor(options: ReativeParseOptions) {
+    this.options = omit(options, ['instance']);
+    this.instance = options.instance;
+  }
+
+  configure(driverOptions: ReativeOptions) {
+    this.driverOptions = driverOptions;
+    this.logger = driverOptions.logger;
+
     try {
       if (
         window &&
         window.Worker &&
-        options.useWorker === true &&
+        driverOptions.useWorker === true &&
         !Reative.worker.parse
       ) {
         Reative.worker.parse = new Worker('/worker/parse.js');
       }
     } catch (err) {}
+    return this.getInstance();
+  }
+
+  public getInstance() {
+    return this.instance;
   }
 
   public log() {
     return this.logger;
-  }
-
-  private exceptions() {
-    if (!this.getCollectionName()) throw new Error('missing collection name');
   }
 
   protected where(query: any[] = []) {
@@ -193,6 +257,7 @@ export class ParseDriver implements ReativeDriver {
   }
 
   protected transpileQueryRouter(specialOperator, chainQuery) {
+    const Parse = this.getInstance();
     //
     // Hold queries
     let queries = [];
@@ -222,7 +287,7 @@ export class ParseDriver implements ReativeDriver {
     // Validate
     if (isEmpty(queries)) return queries;
 
-    return Reative.Parse.Query[specialOperator](...queries);
+    return Parse.Query[specialOperator](...queries);
   }
 
   protected transpileChainQuery(query) {
@@ -251,9 +316,10 @@ export class ParseDriver implements ReativeDriver {
   }
 
   protected createQueryByOperator(value, operator) {
+    const Parse = this.getInstance();
     //
     // Start query
-    const query = new Reative.Parse.Query(this.getCollectionName());
+    const query = new Parse.Query(this.getCollectionName());
 
     //
     // Create from a function
@@ -270,24 +336,32 @@ export class ParseDriver implements ReativeDriver {
 
   public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
+      const Parse = this.getInstance();
       const options: ReativeOptions = {
         ...Reative.options,
         ...this.driverOptions,
         ...chain
       };
+
       //
       // network handle
-      const error = (err, source: ResponseSource = 'http') => {
+      const error = (r, source: ResponseSource = 'http') => {
+        const data = source === 'worker' ? get(r, `data.error`) || r : r;
         try {
-          observer.error(err);
-          if (source !== 'worker') observer.complete();
+          if (source === 'worker') {
+            Reative.responses[r.key].observer.error(data);
+            Reative.responses[r.key].observer.complete();
+          } else {
+            observer.error(data);
+            observer.complete();
+          }
         } catch (err) {}
       };
 
       const success = (r: any, source: ResponseSource = 'http') => {
         // double check for worker errors
         if (source === 'worker' && r.data.error) {
-          return error(r.data.error, source);
+          return error(r.data, source);
         }
 
         const data = source === 'worker' ? r.data.data : r.data;
@@ -296,17 +370,24 @@ export class ParseDriver implements ReativeDriver {
             ? omit(cloneDeep(r.data), [`data`])
             : omit(cloneDeep(r), [`data`]);
 
-        const result = [];
-        for (const item of data) {
-          // tslint:disable-next-line: deprecation
-          const entry =
-            isFunction(item.toJSON) && !chain.useObject ? item.toJSON() : item;
+        let result = [];
 
-          if (!chain.useObject) {
-            // @todo add id for nested results
-            entry.id = entry.objectId;
+        if (source === 'http') {
+          for (const item of data) {
+            // tslint:disable-next-line: deprecation
+            const entry =
+              isFunction(item.toJSON) && !chain.useObject
+                ? item.toJSON()
+                : item;
+
+            if (!chain.useObject) {
+              // @todo add id for nested results
+              entry.id = entry.objectId;
+            }
+            result.push(entry);
           }
-          result.push(entry);
+        } else {
+          result = data;
         }
 
         //
@@ -345,6 +426,7 @@ export class ParseDriver implements ReativeDriver {
         // success callback
         if (source === 'worker') {
           Reative.responses[r.data.key].observer.next(response as T);
+          Reative.responses[r.data.key].observer.complete();
         } else {
           observer.next(response as T);
           observer.complete();
@@ -360,93 +442,30 @@ export class ParseDriver implements ReativeDriver {
           key: key,
           observer: observer
         };
+
         Reative.worker.parse.postMessage({
           key: key,
-          serverURL: Reative.parse.serverURL,
-          appID: Reative.parse.appID,
+          serverURL: this.options.serverURL,
+          appID: this.options.appID,
           chain: chain,
           collection: this.getCollectionName(),
           skipOnOperator: this.skipOnOperator,
-          skipOnQuery: this.skipOnQuery
+          skipOnQuery: this.skipOnQuery,
+          specialOperators: this.specialOperators
         });
         Reative.worker.parse.onmessage = r => success(r, 'worker');
         Reative.worker.parse.onerror = r => error(r, 'worker');
       } else {
-        //
-        // @todo abstract common functions to remove this whole part
-
-        const verb =
-          chain.query && chain.query['aggregate']
-            ? 'aggregate'
-            : chain.query && chain.query['or']
-            ? 'or'
-            : 'find';
-
-        //
-        // run exceptions
-        this.exceptions();
-
-        //
-        // define adapter
-        this.connector = new Reative.Parse.Query(this.getCollectionName());
-
-        //
-        // Transpile chain query
-        const query: any = this.transpileChainQuery(chain.query);
-
-        //
-        // Join query with connector
-        if (!isEmpty(query)) {
-          this.connector = Reative.Parse.Query.and(...query);
-        }
-
-        //
-        // set include (pointers, relation, etc)
-        if (chain.fields) {
-          this.connector.include(chain.fields);
-        }
-
-        if (chain.query && chain.query.include) {
-          this.connector.include(chain.query.include);
-        }
-
-        //
-        // set where
-        this.where(chain.where);
-
-        //
-        // set order
-        this.order(chain.sort);
-
-        //
-        // set limit
-        if (chain.size) this.limit(chain.size);
-
-        //
-        // set skip
-        if (chain.after) this.skip(chain.after);
-
-        switch (verb) {
-          case 'aggregate':
-            this.connector
-              .aggregate(chain.query['aggregate'], {
-                useMasterKey: chain.useMasterKey,
-                sessionToken: chain.useSessionToken
-              })
-              .then(r => success({ data: r }))
-              .catch(error);
-            break;
-
-          default:
-            this.connector
-              .find({
-                useMasterKey: chain.useMasterKey,
-                sessionToken: chain.useSessionToken
-              })
-              .then(r => success({ data: r }))
-              .catch(error);
-            break;
-        }
+        find({
+          Parse: this.getInstance(),
+          chain: chain,
+          collection: this.getCollectionName(),
+          skipOnQuery: this.skipOnQuery,
+          skipOnOperator: this.skipOnOperator,
+          specialOperators: this.specialOperators,
+          success: r => success(r),
+          error: err => error(err)
+        });
       }
     });
   }
@@ -469,10 +488,9 @@ export class ParseDriver implements ReativeDriver {
 
   public on<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable(observer => {
-      //
-      // run exceptions
-      this.exceptions();
-      this.connector = new Reative.Parse.Query(this.getCollectionName());
+      const Parse = this.getInstance();
+
+      this.connector = new Parse.Query(this.getCollectionName());
 
       //
       // Transpile chain query
@@ -481,7 +499,7 @@ export class ParseDriver implements ReativeDriver {
       //
       // Join query with connector
       if (!isEmpty(specialQueries) && this.isSpecialQuery(chain)) {
-        this.connector = Reative.Parse.Query.and(...specialQueries);
+        this.connector = Parse.Query.and(...specialQueries);
       } else {
         for (const q in chain.query) {
           if (isFunction(chain.query[q])) {
@@ -596,12 +614,9 @@ export class ParseDriver implements ReativeDriver {
     });
   }
 
-  public set(
-    chain: ReativeChainPayload,
-    data: any,
-    options?: SetOptions
-  ): Observable<any> {
+  public set(chain: ReativeChainPayload, data: any): Observable<any> {
     return new Observable(observer => {
+      const Parse = this.getInstance();
       const id = chain.doc;
       const newData = { ...data };
 
@@ -628,12 +643,8 @@ export class ParseDriver implements ReativeDriver {
       }
 
       //
-      // run exceptions
-      this.exceptions();
-
-      //
       // define connector
-      const model = new Reative.Parse.Object(this.getCollectionName());
+      const model = new Parse.Object(this.getCollectionName());
 
       //
       // define return
@@ -661,9 +672,10 @@ export class ParseDriver implements ReativeDriver {
 
   public run(name: string, payload: any, key: string): Observable<any> {
     return new Observable(observer => {
+      const Parse = this.getInstance();
       //
       // define connector
-      const cloud = Reative.Parse.Cloud;
+      const cloud = Parse.Cloud;
 
       //
       // define return
@@ -695,9 +707,7 @@ export class ParseDriver implements ReativeDriver {
 
   public update(chain: ReativeChainPayload, data: any): Observable<any> {
     return new Observable(observer => {
-      //
-      // run exceptions
-      this.exceptions();
+      const Parse = this.getInstance();
 
       //
       // clone state
@@ -726,13 +736,13 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // persist on cloud
-      const id1 = new Reative.Parse.Query(this.getCollectionName());
+      const id1 = new Parse.Query(this.getCollectionName());
       id1.equalTo('objectId', chain.doc);
 
-      const id2 = new Reative.Parse.Query(this.getCollectionName());
+      const id2 = new Parse.Query(this.getCollectionName());
       id2.equalTo(this.driverOptions.identifier, chain.doc);
 
-      Reative.Parse.Query.or(id1, id2)
+      Parse.Query.or(id1, id2)
         .find()
         .then((r: any[] = []) => {
           if (r.length) {
@@ -750,13 +760,11 @@ export class ParseDriver implements ReativeDriver {
 
   public count<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
-      //
-      // run exceptions
-      this.exceptions();
+      const Parse = this.getInstance();
 
       //
       // define adapter
-      this.connector = new Reative.Parse.Query(this.getCollectionName());
+      this.connector = new Parse.Query(this.getCollectionName());
 
       //
       // Transpile chain query
@@ -764,7 +772,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // Join query with connector
-      if (!isEmpty(query)) this.connector = Reative.Parse.Query.and(...query);
+      if (!isEmpty(query)) this.connector = Parse.Query.and(...query);
 
       //
       // set where
@@ -818,13 +826,11 @@ export class ParseDriver implements ReativeDriver {
     chain: ReativeChainPayload
   ): Observable<T> {
     return new Observable((observer: PartialObserver<T>) => {
-      //
-      // run exceptions
-      this.exceptions();
+      const Parse = this.getInstance();
 
       //
       // define adapter
-      this.connector = new Reative.Parse.Query(this.getCollectionName());
+      this.connector = new Parse.Query(this.getCollectionName());
 
       //
       // add or condition when doc is set
@@ -833,7 +839,7 @@ export class ParseDriver implements ReativeDriver {
           or: [
             {
               equalTo: () => [
-                this.driverOptions.identifier || RR_IDENTIFIER,
+                this.driverOptions.identifier || R_IDENTIFIER,
                 trim(chain.doc)
               ]
             },
@@ -859,7 +865,7 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // Join query with connector
-      if (!isEmpty(query)) this.connector = Reative.Parse.Query.and(...query);
+      if (!isEmpty(query)) this.connector = Parse.Query.and(...query);
 
       //
       // set where
@@ -872,26 +878,24 @@ export class ParseDriver implements ReativeDriver {
       //
       // network handle
       const success = async (data: any[]) => {
-        const list = await Reative.Parse.Object.destroyAll(data).catch(
-          error => {
-            // An error occurred while deleting one or more of the objects.
-            // If this is an aggregate error, then we can inspect each error
-            // object individually to determine the reason why a particular
-            // object was not deleted.
-            if (error.code === Reative.Parse.Error.AGGREGATE_ERROR) {
-              for (let i = 0; i < error.errors.length; i++) {
-                console.log(
-                  "Couldn't delete " +
-                    error.errors[i].object.id +
-                    'due to ' +
-                    error.errors[i].message
-                );
-              }
-            } else {
-              console.log('Delete aborted because of ' + error.message);
+        const list = await Parse.Object.destroyAll(data).catch(error => {
+          // An error occurred while deleting one or more of the objects.
+          // If this is an aggregate error, then we can inspect each error
+          // object individually to determine the reason why a particular
+          // object was not deleted.
+          if (error.code === Parse.Error.AGGREGATE_ERROR) {
+            for (let i = 0; i < error.errors.length; i++) {
+              console.log(
+                "Couldn't delete " +
+                  error.errors[i].object.id +
+                  'due to ' +
+                  error.errors[i].message
+              );
             }
+          } else {
+            console.log('Delete aborted because of ' + error.message);
           }
-        );
+        });
 
         //
         // define standard response
