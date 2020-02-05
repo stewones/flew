@@ -1,3 +1,12 @@
+# [3.0.0](https://github.com/stewwan/reative/compare/v2.9.11...v3.0.0) (2020-02-05)
+
+
+### Features
+
+* abstract parse .find and share with worker ([24adc07](https://github.com/stewwan/reative/commit/24adc070c6d105078bce5a896fc54c5575208e40))
+
+
+
 ## [2.9.11](https://github.com/stewwan/reative/compare/v2.9.10...v2.9.11) (2020-02-04)
 
 

@@ -1,3 +1,116 @@
+# [3.0.0](https://github.com/stewwan/reative/compare/v2.9.11...v3.0.0) (2020-02-05)
+
+
+### Features
+
+* abstract parse .find and share with worker ([24adc07](https://github.com/stewwan/reative/commit/24adc070c6d105078bce5a896fc54c5575208e40))
+
+
+
+## [2.9.11](https://github.com/stewwan/reative/compare/v2.9.10...v2.9.11) (2020-02-04)
+
+
+### Bug Fixes
+
+* worker import from server env ([6aa219b](https://github.com/stewwan/reative/commit/6aa219b9fa0b9489ddfb50376d9755ff2601b66b))
+
+
+### Features
+
+* **parse:** implement web worker for parse ([19b44c3](https://github.com/stewwan/reative/commit/19b44c3d31d89211bd7154fa6209c052f90b1b46))
+
+
+
+## [2.9.10](https://github.com/stewwan/reative/compare/v2.9.9...v2.9.10) (2020-02-04)
+
+
+### Bug Fixes
+
+* **http:** memoize observables for worker ([d827f0d](https://github.com/stewwan/reative/commit/d827f0d0d147f45f821ab2398a0d6d32f256b5b4))
+
+
+
+## [2.9.9](https://github.com/stewwan/reative/compare/v2.9.8...v2.9.9) (2020-02-04)
+
+
+### Bug Fixes
+
+* **http:** worker body ([5a00bdc](https://github.com/stewwan/reative/commit/5a00bdcfd290f4c1c80a56255462f8deae2e0a0e))
+
+
+
+## [2.9.8](https://github.com/stewwan/reative/compare/v2.9.7...v2.9.8) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** worker headers ([d5c46d8](https://github.com/stewwan/reative/commit/d5c46d8509f79f77638a13de0e754fa76f08e445))
+
+
+
+## [2.9.7](https://github.com/stewwan/reative/compare/v2.9.6...v2.9.7) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** improve worker ([b3761c0](https://github.com/stewwan/reative/commit/b3761c0e1190404a7ed19497bb2da4670c93d648))
+
+
+
+## [2.9.6](https://github.com/stewwan/reative/compare/v2.9.5...v2.9.6) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** worker implementation. we cant use toPromise() and worker for now ([5ebfc5d](https://github.com/stewwan/reative/commit/5ebfc5de73da64a5eadb2fb82dc083aa032cbe2a))
+
+
+
+## [2.9.5](https://github.com/stewwan/reative/compare/v2.9.4...v2.9.5) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** needs to complete observable ([a89b1a1](https://github.com/stewwan/reative/commit/a89b1a17ade1337b1e3b53a781554c57a82de79d))
+
+
+
+## [2.9.4](https://github.com/stewwan/reative/compare/v2.9.3...v2.9.4) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** response ([3f6a148](https://github.com/stewwan/reative/commit/3f6a14810c8a677015feb955f5c074b396656f40))
+
+
+
+## [2.9.3](https://github.com/stewwan/reative/compare/v2.9.2...v2.9.3) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** worker calls must work from loops and we dont need to construct the worker for every call ([974fa06](https://github.com/stewwan/reative/commit/974fa064224c7d1d8e2ad2d8e99fbb7fe351482e))
+
+
+
+## [2.9.2](https://github.com/stewwan/reative/compare/v2.9.1...v2.9.2) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** success handler for web worker ([ae7dfd7](https://github.com/stewwan/reative/commit/ae7dfd7c6b0bf614a7b8b1e6f931c6a7c41ac786))
+
+
+
+## [2.9.1](https://github.com/stewwan/reative/compare/v2.9.0...v2.9.1) (2020-02-03)
+
+
+### Bug Fixes
+
+* **http:** must be able to reconfigure http on the fly ([ffd47f8](https://github.com/stewwan/reative/commit/ffd47f8080102b0e955e47ad97423c8d6c8994d8))
+
+
+
 # [2.9.0](https://github.com/stewwan/reative/compare/v2.8.0...v2.9.0) (2020-02-03)
 
 
