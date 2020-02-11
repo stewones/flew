@@ -41,6 +41,7 @@ export class ReativeStateSetup {
   name: STATE_GLOBAL_NAMESPACE,
   defaults: {}
 })
+@Injectable()
 export class ReativeState {
   @Action(StateSync) addResponse(
     context: StateContext<StateModel>,
