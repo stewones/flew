@@ -277,7 +277,10 @@ export class AppComponent implements OnInit {
         email: '',
         password: ''
       })
-      .subscribe(it => console.log(`it`, it), err => console.log(`err`, err));
+      .subscribe(
+        it => console.log(`it`, it),
+        err => console.log(`err`, err)
+      );
   }
 
   webWorkerHttp() {
@@ -436,8 +439,8 @@ export class AppComponent implements OnInit {
           // .state(false)
           // .cache(false)
           // .save(false)
-          .raw(true)
-          .where(`name`, `==`, name)
+          .raw(false)
+          // .where(`name`, `==`, name)
           .findOne()
       );
     };
