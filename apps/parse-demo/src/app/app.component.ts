@@ -4,6 +4,7 @@ import { AxiosRequestConfig } from 'axios';
 import { take, map } from 'rxjs/operators';
 import { resetState } from '@reative/state';
 import { resetCache } from '@reative/cache';
+import { object } from '@reative/parse';
 
 @Component({
   selector: 'reative-root',
@@ -28,8 +29,8 @@ export class AppComponent implements OnInit {
     // this.webWorkerHttp();
     // this.webWorkerParse();
     // this.firebaseTest();
-
-    this.parseToPromise();
+    // this.parseToPromise();
+    this.parseSaveAll();
   }
 
   exerciseTest() {
@@ -449,6 +450,23 @@ export class AppComponent implements OnInit {
       .toPromise()
       .then(console.log);
     console.log(`parseToPromise done`);
+  }
+
+  parseSaveAll() {
+    collection(`Activity`)
+      .driver(`parse`)
+      .master(true) // this is just for test. we dont use master key on client side
+      .set(
+        [
+          object(`Activity`, { message: 'oi 1' }),
+          object(`Activity`, { message: 'oi 2' })
+        ],
+        { all: true }
+      )
+      .subscribe(
+        r => console.log(`success`, r),
+        err => console.log(`err`, err)
+      );
   }
 
   clearState() {

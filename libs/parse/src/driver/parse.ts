@@ -396,40 +396,14 @@ export class ParseDriver implements ReativeDriver {
     });
   }
 
-  public set(chain: ReativeChainPayload, data: any): Observable<any> {
+  public set(
+    chain: ReativeChainPayload,
+    data: any,
+    options = { all: false }
+  ): Observable<any> {
     return new Observable(observer => {
       const Parse = this.getInstance();
-      const id = chain.doc;
-      const newData = { ...data };
 
-      if (id) {
-        newData[this.driverOptions.identifier] = id;
-      } else {
-        if (!data[this.driverOptions.identifier])
-          newData[this.driverOptions.identifier] = guid(3);
-      }
-
-      //
-      // auto update timestamp
-      if (this.driverOptions.timestamp) {
-        if (!data[this.driverOptions.timestampCreated]) {
-          newData[
-            this.driverOptions.timestampCreated
-          ] = new Date().toISOString();
-        }
-        if (!data[this.driverOptions.timestampUpdated]) {
-          newData[
-            this.driverOptions.timestampUpdated
-          ] = new Date().toISOString();
-        }
-      }
-
-      //
-      // define connector
-      const model = new Parse.Object(this.getCollectionName());
-
-      //
-      // define return
       const response = r => {
         observer.next(r);
         observer.complete();
@@ -440,15 +414,50 @@ export class ParseDriver implements ReativeDriver {
         observer.complete();
       };
 
-      //
-      //
-      model
-        .save(newData, {
-          useMasterKey: chain.useMasterKey,
-          sessionToken: chain.useSessionToken
-        })
-        .then(response)
-        .catch(error);
+      if (!options.all) {
+        const connector = new Parse.Object(this.getCollectionName());
+        const id = chain.doc;
+        const newData = { ...data };
+
+        if (id) {
+          newData[this.driverOptions.identifier] = id;
+        } else {
+          if (!data[this.driverOptions.identifier])
+            newData[this.driverOptions.identifier] = guid(3);
+        }
+
+        //
+        // auto update timestamp
+        if (this.driverOptions.timestamp) {
+          if (!data[this.driverOptions.timestampCreated]) {
+            newData[
+              this.driverOptions.timestampCreated
+            ] = new Date().toISOString();
+          }
+          if (!data[this.driverOptions.timestampUpdated]) {
+            newData[
+              this.driverOptions.timestampUpdated
+            ] = new Date().toISOString();
+          }
+        }
+
+        connector
+          .save(newData, {
+            useMasterKey: chain.useMasterKey,
+            sessionToken: chain.useSessionToken
+          })
+          .then(response)
+          .catch(error);
+      } else {
+        const connector = Parse.Object;
+        connector
+          .saveAll(data, {
+            useMasterKey: chain.useMasterKey,
+            sessionToken: chain.useSessionToken
+          })
+          .then(response)
+          .catch(error);
+      }
     });
   }
 

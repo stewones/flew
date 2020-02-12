@@ -17,7 +17,7 @@ import { SHA256 } from '../utils/sha';
 import { R_VERSION } from '../version';
 import { map } from 'rxjs/operators';
 import { shouldTransformResponse } from '../utils/response';
-
+import { SetOptions } from '../interfaces/set';
 /**
  * @export
  * @class ReativeCore
@@ -312,7 +312,7 @@ export class ReativeCore implements ReativeAPI {
    * @returns {Observable<T>}
    * @memberof ReativeCore
    */
-  public set<T>(data: any, options?: any): Observable<T> {
+  public set<T>(data: any, options?: SetOptions): Observable<T> {
     return this.call('set', null, {
       data: data,
       options: options

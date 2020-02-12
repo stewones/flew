@@ -3,10 +3,7 @@ export const environment = {
   dbStoreName: 'parse-demo',
   dbName: 'prod',
   parse: {
-    appID: 'OnTimeServer',
-    name: 'name',
-    displayName: 'displaName',
-    store: 'app',
+    appID: 'BackrServer',
     serverURL: 'http://localhost:1337/api'
   }
 };

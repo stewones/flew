@@ -1,7 +1,7 @@
 import { isArray, isEmpty, isNil, isObject } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SetOptions } from '../interfaces/setOptions';
+import { SetOptions } from '@reative/core';
 
 import {
   Logger,

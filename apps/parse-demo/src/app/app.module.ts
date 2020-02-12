@@ -65,7 +65,8 @@ export const FIREBASE_CONFIG = {
     // use parse
     ParseModule.forRoot({
       serverURL: environment.parse.serverURL,
-      appID: environment.parse.appID
+      appID: environment.parse.appID,
+      masterKey: 'BackrParse'
     }),
 
     //
