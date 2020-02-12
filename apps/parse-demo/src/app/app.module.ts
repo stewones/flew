@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import {
-  RecordsModule,
+  ReativeModule,
   ParseModule,
   StateModule,
   CacheModule,
@@ -50,7 +50,7 @@ export const FIREBASE_CONFIG = {
 
     //
     // init rr for angular
-    RecordsModule.forRoot({
+    ReativeModule.forRoot({
       silent: true
     }),
 

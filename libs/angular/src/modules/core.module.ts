@@ -16,12 +16,12 @@ export class ReativeAngularSetup {
 }
 
 /**
-  Records Module 
+  Reative Module 
   @example
   ```js
-  import { RecordsModule } from '@reative/angular';
+  import { ReativeModule } from '@reative/angular';
   //... 
-  RecordsModule.forRoot({
+  ReativeModule.forRoot({
     driver: 'parse', // define default data driver
     silent: false, // whether show logs
     timestamp: false // auto save timestamp
@@ -31,13 +31,13 @@ export class ReativeAngularSetup {
   //...
   ```
   @export
-  @class RecordsModule
+  @class ReativeModule
 */
 @NgModule()
-export class RecordsModule {
+export class ReativeModule {
   public static forRoot(options: ReativeOptions = {}): ModuleWithProviders {
     return {
-      ngModule: RecordsModule,
+      ngModule: ReativeModule,
       providers: [
         ReativeAngularSetup,
         {
