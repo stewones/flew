@@ -30,7 +30,8 @@ export class AppComponent implements OnInit {
     // this.webWorkerParse();
     // this.firebaseTest();
     // this.parseToPromise();
-    this.parseSaveAll();
+    // this.parseSaveAll();
+    this.disableAutoIdentifier();
   }
 
   exerciseTest() {
@@ -463,6 +464,20 @@ export class AppComponent implements OnInit {
         ],
         { all: true }
       )
+      .subscribe(
+        r => console.log(`success`, r),
+        err => console.log(`err`, err)
+      );
+  }
+
+  disableAutoIdentifier() {
+    collection(`Activity`, {
+      disableTimestamp: true,
+      // timestampObject: true,
+      disableAutoID: true
+    })
+      .driver(`parse`)
+      .set({ message: 'oi 3' })
       .subscribe(
         r => console.log(`success`, r),
         err => console.log(`err`, err)

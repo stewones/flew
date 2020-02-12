@@ -1,15 +1,4 @@
-import {
-  isArray,
-  isEmpty,
-  isNil,
-  isObject,
-  isFunction,
-  isString,
-  trim,
-  omit,
-  cloneDeep,
-  get
-} from 'lodash';
+import { isEmpty, isFunction, trim, omit, cloneDeep, get } from 'lodash';
 
 import {
   Reative,
@@ -419,25 +408,28 @@ export class ParseDriver implements ReativeDriver {
         const id = chain.doc;
         const newData = { ...data };
 
-        if (id) {
-          newData[this.driverOptions.identifier] = id;
-        } else {
-          if (!data[this.driverOptions.identifier])
-            newData[this.driverOptions.identifier] = guid(3);
+        //
+        // auto id generation
+        if (!this.driverOptions.disableAutoID) {
+          if (id) {
+            newData[this.driverOptions.identifier] = id;
+          } else {
+            if (!newData[this.driverOptions.identifier])
+              newData[this.driverOptions.identifier] = guid(3);
+          }
         }
 
         //
         // auto update timestamp
-        if (this.driverOptions.timestamp) {
-          if (!data[this.driverOptions.timestampCreated]) {
-            newData[
-              this.driverOptions.timestampCreated
-            ] = new Date().toISOString();
+        if (!this.driverOptions.disableTimestamp) {
+          const timestamp = this.driverOptions.timestampObject
+            ? new Date()
+            : new Date().toISOString();
+          if (!newData[this.driverOptions.timestampCreated]) {
+            newData[this.driverOptions.timestampCreated] = timestamp;
           }
-          if (!data[this.driverOptions.timestampUpdated]) {
-            newData[
-              this.driverOptions.timestampUpdated
-            ] = new Date().toISOString();
+          if (!newData[this.driverOptions.timestampUpdated]) {
+            newData[this.driverOptions.timestampUpdated] = timestamp;
           }
         }
 
@@ -506,11 +498,12 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // auto update timestamp
-      if (this.driverOptions.timestamp) {
-        if (!data[this.driverOptions.timestampUpdated]) {
-          newData[
-            this.driverOptions.timestampUpdated
-          ] = new Date().toISOString();
+      if (!this.driverOptions.disableTimestamp) {
+        if (!newData[this.driverOptions.timestampUpdated]) {
+          newData[this.driverOptions.timestampUpdated] = this.driverOptions
+            .timestampObject
+            ? new Date()
+            : new Date().toISOString();
         }
       }
 
