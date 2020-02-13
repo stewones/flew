@@ -276,7 +276,7 @@ export class ParseDriver implements ReativeDriver {
       //
       // Transpile chain query
       const specialQueries: any = transpileChainQuery(chain.query, {
-        Parse: this.connector,
+        Parse: this.getInstance(),
         chain: chain,
         collection: this.getCollectionName(),
         skipOnQuery: this.skipOnQuery,
@@ -553,7 +553,7 @@ export class ParseDriver implements ReativeDriver {
       //
       // Transpile chain query
       const query: any = transpileChainQuery(chain.query, {
-        Parse: this.connector,
+        Parse: this.getInstance(),
         chain: chain,
         collection: this.getCollectionName(),
         skipOnQuery: this.skipOnQuery,
@@ -653,7 +653,7 @@ export class ParseDriver implements ReativeDriver {
       //
       // Transpile chain query
       const query: any = transpileChainQuery(chain.query, {
-        Parse: this.connector,
+        Parse: this.getInstance(),
         chain: chain,
         collection: this.getCollectionName(),
         skipOnQuery: this.skipOnQuery,
