@@ -5,7 +5,7 @@ import { take, map } from 'rxjs/operators';
 import { resetState } from '@reative/state';
 import { resetCache } from '@reative/cache';
 import { object } from '@reative/parse';
-
+import moment from 'moment';
 @Component({
   selector: 'reative-root',
   templateUrl: './app.component.html',
@@ -31,7 +31,8 @@ export class AppComponent implements OnInit {
     // this.firebaseTest();
     // this.parseToPromise();
     // this.parseSaveAll();
-    this.disableAutoIdentifier();
+    // this.disableAutoIdentifier();
+    this.parseQuery();
   }
 
   exerciseTest() {
@@ -482,6 +483,22 @@ export class AppComponent implements OnInit {
         r => console.log(`success`, r),
         err => console.log(`err`, err)
       );
+  }
+
+  parseQuery() {
+    collection(`User`)
+      .driver(`parse`)
+      .query({
+        greaterThanOrEqualTo: () => [
+          'online_at',
+          moment()
+            .subtract(1, 'hour')
+            .toISOString()
+        ],
+        lessThan: () => ['online_at', moment().toISOString()]
+      })
+      .find()
+      .subscribe(console.log);
   }
 
   clearState() {
