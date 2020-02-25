@@ -46,7 +46,9 @@ export function transpileQuery(operator, chainQuery, handler) {
       chainQuery,
       handler
     );
-    queries = [...queries, ...routedQuery];
+
+    const routedQueries = isArray(routedQuery) ? routedQuery : [routedQuery];
+    queries = [...queries, ...routedQueries];
   }
 
   //
