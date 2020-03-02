@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { collection, Reative } from '@reative/core';
+import { collection, Reative, unsubscribe } from '@reative/core';
 import { AxiosRequestConfig } from 'axios';
 import { take, map } from 'rxjs/operators';
 import { resetState } from '@reative/state';
@@ -486,19 +486,40 @@ export class AppComponent implements OnInit {
   }
 
   parseQuery() {
-    collection(`User`)
+    // collection(`User`)
+    //   .driver(`parse`)
+    //   .query({
+    //     greaterThanOrEqualTo: () => [
+    //       'online_at',
+    //       moment()
+    //         .subtract(1, 'hour')
+    //         .toISOString()
+    //     ],
+    //     lessThan: () => ['online_at', moment().toISOString()]
+    //   })
+    //   .find()
+    //   .subscribe(console.log);
+
+    collection(`Debrief`)
       .driver(`parse`)
+      .sort({ job_number: 'desc', created_at: 'desc' })
       .query({
-        greaterThanOrEqualTo: () => [
-          'online_at',
-          moment()
-            .subtract(1, 'hour')
-            .toISOString()
-        ],
-        lessThan: () => ['online_at', moment().toISOString()]
+        or: [
+          {
+            equalTo: () => [`customer_name`, `apple`]
+          },
+          {
+            matches: () => [`customer_name`, `apple`, `i`]
+          }
+        ]
       })
-      .find()
-      .subscribe(console.log);
+
+      .size(100)
+      .find<any[]>()
+      //    .pipe(take(1))
+      .subscribe(entries => {
+        console.log(entries);
+      });
   }
 
   clearState() {
@@ -507,5 +528,21 @@ export class AppComponent implements OnInit {
 
   clearCache() {
     resetCache();
+  }
+
+  realtimeUnsubscribe() {
+    unsubscribe(`realtime-orders`);
+
+    collection(`Order`)
+      .driver('parse')
+      .key(`realtime-orders`)
+      .query({
+        include: [`parts`, `parts.vendor`, `requester`, `reviewer`],
+        equalTo: () => [`code`, `E-100`]
+      })
+      .on()
+      .subscribe(orders => {
+        console.log(`realtime order`, orders);
+      });
   }
 }
