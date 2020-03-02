@@ -378,8 +378,9 @@ export class ParseDriver implements ReativeDriver {
           observer.complete();
         });
 
-        subscribe(`unsubscribe-${key}`, () => {
+        const internalHandler = subscribe(`unsubscribe-${key}`, () => {
           handler.unsubscribe();
+          internalHandler.unsubscribe();
         });
       });
     });
