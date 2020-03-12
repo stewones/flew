@@ -16,12 +16,16 @@ export function firestore() {
   return Reative.driver.firestore.getInstance();
 }
 
-export function install(sdk, config) {
-  Reative.drivers = [...Reative.drivers, 'firebase', 'firestore'];
+export function install(sdk, config, namespace = '', settings = {}) {
+  const isDriverAvailable = Reative.drivers.find(it => it === 'firebase');
+  if (!isDriverAvailable) {
+    Reative.drivers = [...Reative.drivers, 'firebase', 'firestore'];
+  }
+
   Reative.driver.firebase = new FirebaseDriver({
     instance: new FirebaseConnector(sdk, config)
   });
   Reative.driver.firestore = new FirestoreDriver({
-    instance: new FirestoreConnector(sdk, config)
+    instance: new FirestoreConnector(sdk, config, namespace, settings)
   });
 }
