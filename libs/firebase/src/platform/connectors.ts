@@ -19,13 +19,24 @@ export class FirestoreConnector {
     let firestore;
 
     try {
-      firebase.initializeApp(config, namespace);
+      if (namespace) {
+        firebase.initializeApp(config, namespace);
+      } else {
+        firebase.initializeApp(config);
+      }
     } catch (err) {
       if (!/already exists/.test(err.message))
         console.error('Firebase initialization error', err.stack);
     }
 
-    const app = firebase.app(namespace);
+    let app;
+
+    if (namespace) {
+      app = firebase.app(namespace);
+    } else {
+      app = firebase.app();
+    }
+
     firestore = app.firestore();
     firestore.settings(settings);
 
