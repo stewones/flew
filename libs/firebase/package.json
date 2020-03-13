@@ -1,10 +1,10 @@
 {
   "name": "@reative/firebase",
-  "version": "4.0.1-beta",
+  "version": "4.0.3-beta.0",
   "peerDependencies": {
-    "@reative/core": "^4.0.0-alpha.0"
+    "@reative/core": "^4.0.0-beta.0"
   },
   "dependencies": {
-    "@reative/core": "^4.0.0-alpha.0"
+    "@reative/core": "^4.0.0-beta.0"
   }
 }
