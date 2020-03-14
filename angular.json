@@ -371,7 +371,7 @@
       },
       "root": "apps/todo",
       "sourceRoot": "apps/todo/src",
-      "prefix": "reative",
+      "prefix": "todo",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
