@@ -20,13 +20,13 @@ import {
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ReativeParseOptions } from '../interfaces/options';
-import { transpileChainQuery } from '../worker/transpile';
-import { where } from '../worker/where';
-import { order } from '../worker/order';
-import { limit } from '../worker/limit';
-import { skip } from '../worker/skip';
-import { find } from '../worker/find';
-import { select } from '../worker/select';
+import { transpileChainQuery } from '../api/transpile';
+import { where } from '../api/where';
+import { order } from '../api/order';
+import { limit } from '../api/limit';
+import { skip } from '../api/skip';
+import { find } from '../api/find';
+import { select } from '../api/select';
 
 declare var window;
 
