@@ -6,6 +6,7 @@ var lodash_1 = require("lodash");
 var where_1 = require("./where");
 var order_1 = require("./order");
 var limit_1 = require("./limit");
+var select_1 = require("./select");
 var skip_1 = require("./skip");
 function find(handler) {
     var _a;
@@ -50,6 +51,10 @@ function find(handler) {
     // set skip
     if (chain.after)
         skip_1.skip(chain.after, connector);
+    //
+    // set select
+    if (chain.select)
+        select_1.select(chain.select, connector);
     switch (verb) {
         case 'aggregate':
             connector

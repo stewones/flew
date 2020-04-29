@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash';
 import { where } from './where';
 import { order } from './order';
 import { limit } from './limit';
+import { select } from './select';
 import { skip } from './skip';
 import { QueryHandler } from '../interfaces/query';
 
@@ -57,6 +58,10 @@ export function find(handler: QueryHandler) {
   //
   // set skip
   if (chain.after) skip(chain.after, connector);
+
+  //
+  // set select
+  if (chain.select) select(chain.select, connector);
 
   switch (verb) {
     case 'aggregate':

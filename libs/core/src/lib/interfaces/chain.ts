@@ -24,7 +24,8 @@ export type ReativeChain =
   | 'token'
   | 'master'
   | 'object'
-  | 'worker';
+  | 'worker'
+  | 'select';
 
 export interface ReativeChainPayloadWhere {
   field: string;
@@ -58,4 +59,5 @@ export interface ReativeChainPayload {
   after?: any; // firestore
   fields?: string[]; // used for the include api from parse
   diff?: (fn: (cache: any, network: any) => boolean) => any; // customize rr response behavior
+  select?: string[]; // parse - select specific fields only
 }

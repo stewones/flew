@@ -26,6 +26,7 @@ import { order } from '../worker/order';
 import { limit } from '../worker/limit';
 import { skip } from '../worker/skip';
 import { find } from '../worker/find';
+import { select } from '../worker/select';
 
 declare var window;
 
@@ -82,7 +83,8 @@ export class ParseDriver implements ReativeDriver {
     ttl: 'browser',
     state: 'browser',
     cache: 'browser',
-    worker: true
+    worker: true,
+    select: true
   };
 
   constructor(options: ReativeParseOptions) {
@@ -323,6 +325,10 @@ export class ParseDriver implements ReativeDriver {
       //
       // set skip
       if (chain.after) skip(chain.after, this.connector);
+
+      //
+      // set select
+      if (chain.select) select(chain.select, this.connector);
 
       //
       // fire in the hole
