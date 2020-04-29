@@ -1,13 +1,13 @@
 {
   "name": "@reative/state",
-  "version": "4.0.0-beta.0",
+  "version": "4.0.0",
   "dependencies": {
-    "@reative/core": "^4.0.0-beta.0",
+    "@reative/core": "^4.0.0",
     "rxjs": "^6.5.4",
     "lodash": "^4.17.15"
   },
   "peerDependencies": {
-    "@reative/core": "^4.0.0-beta.0",
+    "@reative/core": "^4.0.0",
     "rxjs": "^6.5.4",
     "lodash": "^4.17.15"
   }
