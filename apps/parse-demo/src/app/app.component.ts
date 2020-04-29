@@ -32,7 +32,8 @@ export class AppComponent implements OnInit {
     // this.parseToPromise();
     // this.parseSaveAll();
     // this.disableAutoIdentifier();
-    this.parseQuery();
+    // this.parseQuery();
+    this.parseSet();
   }
 
   exerciseTest() {
@@ -544,5 +545,16 @@ export class AppComponent implements OnInit {
       .subscribe(orders => {
         console.log(`realtime order`, orders);
       });
+  }
+
+  parseSet() {
+    collection(`Customer`)
+      .driver('parse')
+      .set({
+        name: 'asffa'
+      })
+      .toPromise()
+      .catch(console.log)
+      .then(console.log);
   }
 }
