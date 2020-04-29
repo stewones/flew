@@ -557,4 +557,14 @@ export class AppComponent implements OnInit {
       .catch(console.log)
       .then(console.log);
   }
+
+  parseSelect() {
+    collection(`Customer`)
+      .driver('parse')
+      .select(['name'])
+      .find()
+      .toPromise()
+      .catch(console.log)
+      .then(console.log);
+  }
 }
