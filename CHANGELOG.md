@@ -1,3 +1,12 @@
+## [4.0.2](https://github.com/stewwan/reative/compare/v4.0.1...v4.0.2) (2020-04-29)
+
+
+### Bug Fixes
+
+* **firebase:** catch firestore connector error ([a44bd71](https://github.com/stewwan/reative/commit/a44bd717d74f0c8da0c733ef246056dbadb86d06))
+
+
+
 ## [3.0.2](https://github.com/stewwan/reative/compare/v3.0.1...v3.0.2) (2020-02-05)
 
 
