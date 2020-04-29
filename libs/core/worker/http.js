@@ -12,7 +12,8 @@ onmessage = req => {
 
   let payload = {
     method: method,
-    headers: headers
+    headers: headers,
+    cache: 'no-cache'
   };
 
   if (method !== 'get') {
@@ -24,17 +25,19 @@ onmessage = req => {
     payload = {
       method: method,
       headers: headers,
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
+      cache: 'no-cache'
     };
   }
 
-  fetch(url, payload).then(response => {
+  fetch(url, payload).then(async response => {
     if (response.status >= 200 && response.status < 300) {
-      response
-        .json()
-        .then(it =>
-          postMessage({ key: key, collection: collection, data: it })
-        );
+      try {
+        const it = await response.json();
+        postMessage({ key: key, collection: collection, data: it });
+      } catch (err) {
+        postMessage({ key: key, collection: collection, data: [] });
+      }
     } else {
       response.json().then(err => {
         postMessage({ key: key, collection: collection, error: err });
