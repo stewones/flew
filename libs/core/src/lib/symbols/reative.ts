@@ -32,9 +32,11 @@ export const Reative: ReativeProtocol = {
     silent: true,
     driver: R_DRIVER,
     identifier: R_IDENTIFIER,
-    timestamp: true,
+    disableTimestamp: false,
+    disableAutoID: false,
     timestampCreated: R_TIMESTAMP_CREATED,
     timestampUpdated: R_TIMESTAMP_UPDATED,
+    timestampObject: false,
     httpConfig: {
       timeout: 60 * 1000,
       baseURL: '',

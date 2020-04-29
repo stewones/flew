@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 import { select } from '@reative/state';
 
 @Component({
-  selector: '<% if(selector) { %><%= selector %>-<% } %><%= dasherize(name) %>-page',
+  selector: '<%= selector %>-page',
   templateUrl: './<%= dasherize(name) %>-page.component.html',
   styleUrls: ['./<%= dasherize(name) %>-page.component.<%= style %>'],
   changeDetection: ChangeDetectionStrategy.OnPush

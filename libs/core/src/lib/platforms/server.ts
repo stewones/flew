@@ -1,6 +1,6 @@
 // tslint:disable
 import { AxiosRequestConfig } from 'axios';
-import { isArray, isEmpty, isString, omit, startCase } from 'lodash';
+import { isArray, isEmpty, isBoolean, isString, omit, startCase } from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { Response } from '../interfaces/response';
 import { Reative } from '../symbols/reative';
@@ -15,7 +15,15 @@ import { isServer } from '../utils/platform';
 import { HttpDriver } from '../drivers/http';
 import { SHA256 } from '../utils/sha';
 import { R_VERSION } from '../version';
-export class Records implements ReativeAPI {
+import { map } from 'rxjs/operators';
+import { shouldTransformResponse } from '../utils/response';
+import { SetOptions } from '../interfaces/set';
+/**
+ * @export
+ * @class ReativeCore
+ * @implements {ReativeAPI}
+ */
+export class ReativeCore implements ReativeAPI {
   chain: ReativeChainPayload = {};
   options: ReativeOptions;
 
@@ -192,16 +200,25 @@ export class Records implements ReativeAPI {
 
     //
     // execute the request
-    return Reative.driver[_driver][_verb]<T>(arg1, arg2, arg3, arg4);
+    return Reative.driver[_driver][_verb]<T>(arg1, arg2, arg3, arg4).pipe(
+      map((data: Response) => {
+        if (isServer()) {
+          if (!isBoolean(chain.transformData)) chain.transformData = true;
+          const transformResponse: any = shouldTransformResponse(chain, data);
+          return transformResponse(data);
+        }
+        return data;
+      })
+    );
   }
 
   /**
    * Reset the chaining configuration on the fly
    *
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public reset(): Records {
+  public reset(): ReativeCore {
     this.chain = {
       driver: this.options.driver,
       useCache: this.options.useCache,
@@ -219,7 +236,7 @@ export class Records implements ReativeAPI {
    * @template T
    * @param {string} [path='']
    * @returns {Observable<T>}
-   * @memberof Records
+   * @memberof ReativeCore
    */
   public get<T>(path: string = ''): Observable<T> {
     return this.call<T>('get', path);
@@ -232,7 +249,7 @@ export class Records implements ReativeAPI {
    * @param {string} [path='']
    * @param {*} [body={}]
    * @returns {Observable<T>}
-   * @memberof Records
+   * @memberof ReativeCore
    */
   public post<T>(path: string = '', body: any = {}): Observable<T> {
     return this.call<T>('post', path, body);
@@ -245,7 +262,7 @@ export class Records implements ReativeAPI {
    * @param {string} [path='']
    * @param {*} [body={}]
    * @returns {Observable<T>}
-   * @memberof Records
+   * @memberof ReativeCore
    */
   public patch<T>(path: string = '', body: any = {}): Observable<T> {
     return this.call<T>('patch', path, body);
@@ -258,7 +275,7 @@ export class Records implements ReativeAPI {
    * @param {string} [path='']
    * @param {*} [body]
    * @returns {Observable<T>}
-   * @memberof Records
+   * @memberof ReativeCore
    */
   public delete<T>(path: string = '', body?: any): Observable<T> {
     return this.call<T>('delete', path, body);
@@ -269,7 +286,7 @@ export class Records implements ReativeAPI {
    *
    * @template T
    * @returns {Observable<T>}
-   * @memberof Records
+   * @memberof ReativeCore
    */
   public find<T>(): Observable<T> {
     return this.call<T>('find');
@@ -280,7 +297,7 @@ export class Records implements ReativeAPI {
    *
    * @template T
    * @returns {Observable<T>}
-   * @memberof Records
+   * @memberof ReativeCore
    */
   public findOne<T>(): Observable<T> {
     return this.call<T>('findOne');
@@ -293,9 +310,9 @@ export class Records implements ReativeAPI {
    * @param {*} data
    * @param {SetOptions} [options]
    * @returns {Observable<T>}
-   * @memberof Records
+   * @memberof ReativeCore
    */
-  public set<T>(data: any, options?: any): Observable<T> {
+  public set<T>(data: any, options?: SetOptions): Observable<T> {
     return this.call('set', null, {
       data: data,
       options: options
@@ -308,7 +325,7 @@ export class Records implements ReativeAPI {
    * @template T
    * @param {*} data
    * @returns {Observable<T>}
-   * @memberof Records
+   * @memberof ReativeCore
    */
   public update<T>(data: any): Observable<T> {
     return this.call('update', null, {
@@ -321,7 +338,7 @@ export class Records implements ReativeAPI {
    *
    * @template T
    * @returns {Observable<T>}
-   * @memberof Records
+   * @memberof ReativeCore
    */
   public on<T>(): Observable<T> {
     return this.call<T>('on');
@@ -331,7 +348,7 @@ export class Records implements ReativeAPI {
    *  Count documents
    *
    * @returns {Observable<number>}
-   * @memberof Records
+   * @memberof ReativeCore
    */
   public count(): Observable<number> {
     return this.call<number>('count');
@@ -341,7 +358,7 @@ export class Records implements ReativeAPI {
    *  Run cloud functions
    *
    * @returns {Observable<number>}
-   * @memberof Records
+   * @memberof ReativeCore
    */
   public run<T>(name: string, payload: any): Observable<T> {
     return this.call<T>('run', name, payload);
@@ -351,10 +368,10 @@ export class Records implements ReativeAPI {
    * Modify the driver to be used on the fly
    *
    * @param {ReativeDriverOption} name
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public driver(name: ReativeDriverOption): Records {
+  public driver(name: ReativeDriverOption): ReativeCore {
     this.chain.driver = name;
     this.checkChainAvailability(this.chain.driver, 'driver');
     return this;
@@ -364,10 +381,10 @@ export class Records implements ReativeAPI {
    * Modify http request config on the fly
    *
    * @param {Function} fn
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public http(fn: (config: AxiosRequestConfig) => void): Records {
+  public http(fn: (config: AxiosRequestConfig) => void): ReativeCore {
     this.checkChainAvailability(this.chain.driver, 'http');
     fn(this.options.httpConfig);
     return this;
@@ -377,10 +394,10 @@ export class Records implements ReativeAPI {
    * Choose whether or not to make a network request
    *
    * @param {boolean} active
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public network(active: boolean): Records {
+  public network(active: boolean): ReativeCore {
     this.chain.useNetwork = active;
     this.checkChainAvailability(this.chain.driver, 'network');
     return this;
@@ -390,10 +407,10 @@ export class Records implements ReativeAPI {
    * Choose whether or not to save returned data in cache
    *
    * @param {boolean} active
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public save(active: boolean): Records {
+  public save(active: boolean): ReativeCore {
     this.chain.saveNetwork = active;
     this.checkChainAvailability(this.chain.driver, 'save');
     return this;
@@ -404,10 +421,10 @@ export class Records implements ReativeAPI {
    *
    * @template T
    * @param {Function} transformFn
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public transform<T>(transformFn: (response: Response) => any): Records {
+  public transform<T>(transformFn: (response: Response) => any): ReativeCore {
     this.chain.transformResponse = transformFn;
     this.checkChainAvailability(this.chain.driver, 'transform');
     return this;
@@ -417,10 +434,10 @@ export class Records implements ReativeAPI {
    * Define a time to live for cache
    *
    * @param {number} value
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public ttl(value: number): Records {
+  public ttl(value: number): ReativeCore {
     this.chain.ttl = value;
     this.checkChainAvailability(this.chain.driver, 'ttl');
     return this;
@@ -430,10 +447,10 @@ export class Records implements ReativeAPI {
    * Choose whether to use cached results
    *
    * @param {boolean} active
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public cache(active: boolean): Records {
+  public cache(active: boolean): ReativeCore {
     this.chain.useCache = active;
     this.checkChainAvailability(this.chain.driver, 'cache');
     return this;
@@ -443,10 +460,10 @@ export class Records implements ReativeAPI {
    * Choose whether to use state results
    *
    * @param {boolean} active
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public state(active: boolean): Records {
+  public state(active: boolean): ReativeCore {
     this.chain.useState = active;
     this.checkChainAvailability(this.chain.driver, 'state');
     return this;
@@ -456,10 +473,10 @@ export class Records implements ReativeAPI {
    * Define a custom key to be used as a identifier for the result set
    *
    * @param {string} name
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public key(name: string): Records {
+  public key(name: string): ReativeCore {
     this.chain.key = name;
     this.checkChainAvailability(this.chain.driver, 'key');
     return this;
@@ -469,10 +486,12 @@ export class Records implements ReativeAPI {
    * Define a custom query
    *
    * @param {object} by
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public query(by: { [key: string]: {} } | { [key: string]: {} }[]): Records {
+  public query(
+    by: { [key: string]: {} } | { [key: string]: {} }[]
+  ): ReativeCore {
     this.chain.query = by;
     this.checkChainAvailability(this.chain.driver, 'query');
     return this;
@@ -484,10 +503,10 @@ export class Records implements ReativeAPI {
    * @param {string} field
    * @param {string} operator
    * @param {*} value
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public where(field: string, operator: string, value: any): Records {
+  public where(field: string, operator: string, value: any): ReativeCore {
     if (!isArray(this.chain.where)) {
       this.chain.where = [];
     }
@@ -504,10 +523,10 @@ export class Records implements ReativeAPI {
    * Sort data
    *
    * @param {object} by
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public sort(by: { [key: string]: string }): Records {
+  public sort(by: { [key: string]: string }): ReativeCore {
     if (isEmpty(this.chain.sort)) {
       this.chain.sort = {};
     }
@@ -523,10 +542,10 @@ export class Records implements ReativeAPI {
    * Define the size of results
    *
    * @param {number} value
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public size(value: number): Records {
+  public size(value: number): ReativeCore {
     this.chain.size = value;
     this.checkChainAvailability(this.chain.driver, 'size');
     return this;
@@ -536,10 +555,10 @@ export class Records implements ReativeAPI {
    * Set an at pointer for the request
    *
    * @param {*} value
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public at(value): Records {
+  public at(value): ReativeCore {
     this.chain.at = value;
     this.checkChainAvailability(this.chain.driver, 'at');
     return this;
@@ -549,10 +568,10 @@ export class Records implements ReativeAPI {
    * Set an after pointer for the request
    *
    * @param {*} value
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public after(value): Records {
+  public after(value): ReativeCore {
     this.chain.after = value;
     this.checkChainAvailability(this.chain.driver, 'after');
     return this;
@@ -562,10 +581,10 @@ export class Records implements ReativeAPI {
    * Define a document path for a request
    *
    * @param {string} path
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public ref(path: string): Records {
+  public ref(path: string): ReativeCore {
     this.chain.ref = path;
     this.checkChainAvailability(this.chain.driver, 'ref');
     return this;
@@ -575,10 +594,10 @@ export class Records implements ReativeAPI {
    * Define a document id for the request
    *
    * @param {*} value
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public doc(value: any): Records {
+  public doc(value: any): ReativeCore {
     this.chain.doc = value;
     this.checkChainAvailability(this.chain.driver, 'network');
     return this;
@@ -588,10 +607,10 @@ export class Records implements ReativeAPI {
    * Use pure results without any internal transformation
    *
    * @param {boolean} active
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public raw(active: boolean): Records {
+  public raw(active: boolean): ReativeCore {
     this.chain.transformData = !active;
     this.checkChainAvailability(this.chain.driver, 'raw');
     return this;
@@ -601,10 +620,10 @@ export class Records implements ReativeAPI {
    * Populate query fields
    *
    * @param {string[]} fields
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public include(fields: string[]): Records {
+  public include(fields: string[]): ReativeCore {
     this.chain.fields = fields;
     this.checkChainAvailability(this.chain.driver, 'include');
     return this;
@@ -614,10 +633,10 @@ export class Records implements ReativeAPI {
    * Modify internal diff function
    *
    * @param {*} fn
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public diff(fn: any): Records {
+  public diff(fn: any): ReativeCore {
     this.chain.diff = fn;
     this.checkChainAvailability(this.chain.driver, 'diff');
     return this;
@@ -627,10 +646,10 @@ export class Records implements ReativeAPI {
    * Set useMasterKey on the request
    *
    * @param {boolean} active
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public master(active: boolean): Records {
+  public master(active: boolean): ReativeCore {
     this.chain.useMasterKey = active;
     this.checkChainAvailability(this.chain.driver, 'master');
     return this;
@@ -640,10 +659,10 @@ export class Records implements ReativeAPI {
    * Set a session token for the request
    *
    * @param {string} session
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public token(session: string): Records {
+  public token(session: string): ReativeCore {
     this.chain.useSessionToken = session;
     this.checkChainAvailability(this.chain.driver, 'token');
     return this;
@@ -653,10 +672,10 @@ export class Records implements ReativeAPI {
    * Result as real objects
    *
    * @param {boolean} active
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public object(active: boolean): Records {
+  public object(active: boolean): ReativeCore {
     this.chain.useObject = active;
     this.checkChainAvailability(this.chain.driver, 'object');
     return this;
@@ -666,14 +685,28 @@ export class Records implements ReativeAPI {
    * Activate worker
    *
    * @param {boolean} active
-   * @returns {Records}
-   * @memberof Records
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
    */
-  public worker(active: boolean): Records {
+  public worker(active: boolean): ReativeCore {
     this.chain.useWorker = active;
     this.checkChainAvailability(this.chain.driver, 'worker');
     return this;
   }
+
+  /**
+   * Select custom fields
+   *
+   * @param {boolean} active
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
+   */
+  public select(value: string[]): ReativeCore {
+    this.chain.select = value;
+    this.checkChainAvailability(this.chain.driver, 'select');
+    return this;
+  }
 }
 
-export class PlatformServer extends Records {}
+export class Records extends ReativeCore {}
+export class PlatformServer extends ReativeCore {}

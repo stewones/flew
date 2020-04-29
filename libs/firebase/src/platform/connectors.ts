@@ -15,26 +15,31 @@ export class FirebaseConnector {
 }
 
 export class FirestoreConnector {
-  constructor(firebase, config) {
+  constructor(firebase, config, namespace = '', settings = {}) {
     let firestore;
-    const settings = {
-      /* your settings...  timestampsInSnapshots: true */
-    };
+
     try {
-      firebase.initializeApp(config);
+      if (namespace) {
+        firebase.initializeApp(config, namespace);
+      } else {
+        firebase.initializeApp(config);
+      }
     } catch (err) {
       if (!/already exists/.test(err.message))
         console.error('Firebase initialization error', err.stack);
     }
-    if (!firebase.apps.length) {
-      firestore = firebase.default.firestore();
-      firestore.settings(settings);
+
+    let app;
+
+    if (namespace) {
+      app = firebase.app(namespace);
     } else {
-      try {
-        firestore = firebase.apps[0].firebase_.firestore();
-        firestore.settings(settings);
-      } catch (err) {}
+      app = firebase.app();
     }
+
+    firestore = app.firestore();
+    firestore.settings(settings);
+
     return firestore;
   }
 }

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { collection, Reative } from '@reative/core';
+import { collection, Reative, unsubscribe } from '@reative/core';
 import { AxiosRequestConfig } from 'axios';
 import { take, map } from 'rxjs/operators';
 import { resetState } from '@reative/state';
 import { resetCache } from '@reative/cache';
-
+import { object } from '@reative/parse';
+import moment from 'moment';
 @Component({
   selector: 'reative-root',
   templateUrl: './app.component.html',
@@ -28,8 +29,11 @@ export class AppComponent implements OnInit {
     // this.webWorkerHttp();
     // this.webWorkerParse();
     // this.firebaseTest();
-
-    this.parseToPromise();
+    // this.parseToPromise();
+    // this.parseSaveAll();
+    // this.disableAutoIdentifier();
+    // this.parseQuery();
+    this.parseSet();
   }
 
   exerciseTest() {
@@ -277,7 +281,10 @@ export class AppComponent implements OnInit {
         email: '',
         password: ''
       })
-      .subscribe(it => console.log(`it`, it), err => console.log(`err`, err));
+      .subscribe(
+        it => console.log(`it`, it),
+        err => console.log(`err`, err)
+      );
   }
 
   webWorkerHttp() {
@@ -436,8 +443,8 @@ export class AppComponent implements OnInit {
           // .state(false)
           // .cache(false)
           // .save(false)
-          .raw(true)
-          .where(`name`, `==`, name)
+          .raw(false)
+          // .where(`name`, `==`, name)
           .findOne()
       );
     };
@@ -448,11 +455,116 @@ export class AppComponent implements OnInit {
     console.log(`parseToPromise done`);
   }
 
+  parseSaveAll() {
+    collection(`Activity`)
+      .driver(`parse`)
+      .master(true) // this is just for test. we dont use master key on client side
+      .set(
+        [
+          object(`Activity`, { message: 'oi 1' }),
+          object(`Activity`, { message: 'oi 2' })
+        ],
+        { all: true }
+      )
+      .subscribe(
+        r => console.log(`success`, r),
+        err => console.log(`err`, err)
+      );
+  }
+
+  disableAutoIdentifier() {
+    collection(`Activity`, {
+      disableTimestamp: true,
+      // timestampObject: true,
+      disableAutoID: true
+    })
+      .driver(`parse`)
+      .set({ message: 'oi 3' })
+      .subscribe(
+        r => console.log(`success`, r),
+        err => console.log(`err`, err)
+      );
+  }
+
+  parseQuery() {
+    // collection(`User`)
+    //   .driver(`parse`)
+    //   .query({
+    //     greaterThanOrEqualTo: () => [
+    //       'online_at',
+    //       moment()
+    //         .subtract(1, 'hour')
+    //         .toISOString()
+    //     ],
+    //     lessThan: () => ['online_at', moment().toISOString()]
+    //   })
+    //   .find()
+    //   .subscribe(console.log);
+
+    collection(`Debrief`)
+      .driver(`parse`)
+      .sort({ job_number: 'desc', created_at: 'desc' })
+      .query({
+        or: [
+          {
+            equalTo: () => [`customer_name`, `apple`]
+          },
+          {
+            matches: () => [`customer_name`, `apple`, `i`]
+          }
+        ]
+      })
+
+      .size(100)
+      .find<any[]>()
+      //    .pipe(take(1))
+      .subscribe(entries => {
+        console.log(entries);
+      });
+  }
+
   clearState() {
     resetState();
   }
 
   clearCache() {
     resetCache();
+  }
+
+  realtimeUnsubscribe() {
+    unsubscribe(`realtime-orders`);
+
+    collection(`Order`)
+      .driver('parse')
+      .key(`realtime-orders`)
+      .query({
+        include: [`parts`, `parts.vendor`, `requester`, `reviewer`],
+        equalTo: () => [`code`, `E-100`]
+      })
+      .on()
+      .subscribe(orders => {
+        console.log(`realtime order`, orders);
+      });
+  }
+
+  parseSet() {
+    collection(`Customer`)
+      .driver('parse')
+      .set({
+        name: 'asffa'
+      })
+      .toPromise()
+      .catch(console.log)
+      .then(console.log);
+  }
+
+  parseSelect() {
+    collection(`Customer`)
+      .driver('parse')
+      .select(['name'])
+      .find()
+      .toPromise()
+      .catch(console.log)
+      .then(console.log);
   }
 }

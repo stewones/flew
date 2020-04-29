@@ -1,3 +1,0 @@
-# 2.1
-
-- FirebaseConnector and FirestoreConnector have been moved to `@reative/firebase` package

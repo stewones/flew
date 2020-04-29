@@ -12,7 +12,7 @@ import { PlayState } from './+state/play.state';
 import { HttpClientModule } from '@angular/common/http';
 import { FIREBASE_CONFIG } from '../environments/firebase.config';
 
-import { RecordsModule } from '@reative/angular';
+import { ReativeModule } from '@reative/angular';
 import { FirebaseModule } from '@reative/firebase';
 import { CacheModule } from '@reative/cache';
 import { State, StateModule } from '@reative/state';
@@ -32,7 +32,7 @@ import { State, StateModule } from '@reative/state';
     StateModule.forRoot(),
     //
     // init rr
-    RecordsModule.forRoot({
+    ReativeModule.forRoot({
       silent: !isDev(),
       baseURL: 'https://jsonplaceholder.typicode.com'
     }),

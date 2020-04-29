@@ -1,15 +1,4 @@
-import {
-  isArray,
-  isEmpty,
-  isNil,
-  isObject,
-  isFunction,
-  isString,
-  trim,
-  omit,
-  cloneDeep,
-  get
-} from 'lodash';
+import { isEmpty, isFunction, trim, omit, cloneDeep, get } from 'lodash';
 
 import {
   Reative,
@@ -31,12 +20,13 @@ import {
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ReativeParseOptions } from '../interfaces/options';
-import { transpileChainQuery } from '../worker/transpile';
-import { where } from '../worker/where';
-import { order } from '../worker/order';
-import { limit } from '../worker/limit';
-import { skip } from '../worker/skip';
-import { find } from '../worker/find';
+import { transpileChainQuery } from '../api/transpile';
+import { where } from '../api/where';
+import { order } from '../api/order';
+import { limit } from '../api/limit';
+import { skip } from '../api/skip';
+import { find } from '../api/find';
+import { select } from '../api/select';
 
 declare var window;
 
@@ -93,7 +83,8 @@ export class ParseDriver implements ReativeDriver {
     ttl: 'browser',
     state: 'browser',
     cache: 'browser',
-    worker: true
+    worker: true,
+    select: true
   };
 
   constructor(options: ReativeParseOptions) {
@@ -287,7 +278,7 @@ export class ParseDriver implements ReativeDriver {
       //
       // Transpile chain query
       const specialQueries: any = transpileChainQuery(chain.query, {
-        Parse: this.connector,
+        Parse: this.getInstance(),
         chain: chain,
         collection: this.getCollectionName(),
         skipOnQuery: this.skipOnQuery,
@@ -334,6 +325,10 @@ export class ParseDriver implements ReativeDriver {
       //
       // set skip
       if (chain.after) skip(chain.after, this.connector);
+
+      //
+      // set select
+      if (chain.select) select(chain.select, this.connector);
 
       //
       // fire in the hole
@@ -389,47 +384,22 @@ export class ParseDriver implements ReativeDriver {
           observer.complete();
         });
 
-        subscribe(`unsubscribe-${key}`, () => {
+        const internalHandler = subscribe(`unsubscribe-${key}`, () => {
           handler.unsubscribe();
+          internalHandler.unsubscribe();
         });
       });
     });
   }
 
-  public set(chain: ReativeChainPayload, data: any): Observable<any> {
+  public set(
+    chain: ReativeChainPayload,
+    data: any,
+    options = { all: false }
+  ): Observable<any> {
     return new Observable(observer => {
       const Parse = this.getInstance();
-      const id = chain.doc;
-      const newData = { ...data };
 
-      if (id) {
-        newData[this.driverOptions.identifier] = id;
-      } else {
-        if (!data[this.driverOptions.identifier])
-          newData[this.driverOptions.identifier] = guid(3);
-      }
-
-      //
-      // auto update timestamp
-      if (this.driverOptions.timestamp) {
-        if (!data[this.driverOptions.timestampCreated]) {
-          newData[
-            this.driverOptions.timestampCreated
-          ] = new Date().toISOString();
-        }
-        if (!data[this.driverOptions.timestampUpdated]) {
-          newData[
-            this.driverOptions.timestampUpdated
-          ] = new Date().toISOString();
-        }
-      }
-
-      //
-      // define connector
-      const model = new Parse.Object(this.getCollectionName());
-
-      //
-      // define return
       const response = r => {
         observer.next(r);
         observer.complete();
@@ -440,15 +410,53 @@ export class ParseDriver implements ReativeDriver {
         observer.complete();
       };
 
-      //
-      //
-      model
-        .save(newData, {
-          useMasterKey: chain.useMasterKey,
-          sessionToken: chain.useSessionToken
-        })
-        .then(response)
-        .catch(error);
+      if (!options.all) {
+        const connector = new Parse.Object(this.getCollectionName());
+        const id = chain.doc;
+        const newData = { ...data };
+
+        //
+        // auto id generation
+        if (!this.driverOptions.disableAutoID) {
+          if (id) {
+            newData[this.driverOptions.identifier] = id;
+          } else {
+            if (!newData[this.driverOptions.identifier])
+              newData[this.driverOptions.identifier] = guid(3);
+          }
+        }
+
+        //
+        // auto update timestamp
+        if (!this.driverOptions.disableTimestamp) {
+          const timestamp = this.driverOptions.timestampObject
+            ? new Date()
+            : new Date().toISOString();
+          if (!newData[this.driverOptions.timestampCreated]) {
+            newData[this.driverOptions.timestampCreated] = timestamp;
+          }
+          if (!newData[this.driverOptions.timestampUpdated]) {
+            newData[this.driverOptions.timestampUpdated] = timestamp;
+          }
+        }
+
+        connector
+          .save(newData, {
+            useMasterKey: chain.useMasterKey,
+            sessionToken: chain.useSessionToken
+          })
+          .then(response)
+          .catch(error);
+      } else {
+        const connector = Parse.Object;
+        connector
+          .saveAll(data, {
+            useMasterKey: chain.useMasterKey,
+            sessionToken: chain.useSessionToken
+          })
+          .then(response)
+          .catch(error);
+      }
     });
   }
 
@@ -497,11 +505,12 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // auto update timestamp
-      if (this.driverOptions.timestamp) {
-        if (!data[this.driverOptions.timestampUpdated]) {
-          newData[
-            this.driverOptions.timestampUpdated
-          ] = new Date().toISOString();
+      if (!this.driverOptions.disableTimestamp) {
+        if (!newData[this.driverOptions.timestampUpdated]) {
+          newData[this.driverOptions.timestampUpdated] = this.driverOptions
+            .timestampObject
+            ? new Date()
+            : new Date().toISOString();
         }
       }
 
@@ -551,7 +560,7 @@ export class ParseDriver implements ReativeDriver {
       //
       // Transpile chain query
       const query: any = transpileChainQuery(chain.query, {
-        Parse: this.connector,
+        Parse: this.getInstance(),
         chain: chain,
         collection: this.getCollectionName(),
         skipOnQuery: this.skipOnQuery,
@@ -651,7 +660,7 @@ export class ParseDriver implements ReativeDriver {
       //
       // Transpile chain query
       const query: any = transpileChainQuery(chain.query, {
-        Parse: this.connector,
+        Parse: this.getInstance(),
         chain: chain,
         collection: this.getCollectionName(),
         skipOnQuery: this.skipOnQuery,

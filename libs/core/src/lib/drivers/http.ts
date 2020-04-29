@@ -55,7 +55,8 @@ export class HttpDriver implements ReativeDriver {
     ttl: 'browser',
     state: 'browser',
     cache: 'browser',
-    worker: true
+    worker: true,
+    select: false
   };
 
   constructor() {}
@@ -96,9 +97,9 @@ export class HttpDriver implements ReativeDriver {
     };
 
     if (chain.useSessionToken) {
-      options.httpConfig.headers[`Authorization`] = `Bearer ${
-        chain.useSessionToken
-      }`;
+      options.httpConfig.headers[
+        `Authorization`
+      ] = `Bearer ${chain.useSessionToken}`;
     }
 
     this.instance = axios.create(options.httpConfig);

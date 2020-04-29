@@ -88,14 +88,20 @@ export function parse() {
  * @returns ReativeParse
  */
 export function install(sdk, config) {
+  const isDriverAvailable = Reative.drivers.find(it => it === 'parse');
+  if (!isDriverAvailable) {
+    Reative.drivers = [...Reative.drivers, 'parse'];
+  }
+
   sdk.initialize(config.appID);
   sdk.serverURL = config.serverURL;
   sdk.masterKey = config.masterKey;
-  Reative.drivers = [...Reative.drivers, 'parse'];
+
   Reative.driver.parse = new ParseDriver({
     serverURL: sdk.serverURL,
     appID: config.appID,
     instance: sdk.Parse
   });
+
   return parse();
 }

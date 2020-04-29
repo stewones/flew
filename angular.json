@@ -371,7 +371,7 @@
       },
       "root": "apps/todo",
       "sourceRoot": "apps/todo/src",
-      "prefix": "reative",
+      "prefix": "todo",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -464,7 +464,7 @@
       },
       "root": "apps/parse-demo",
       "sourceRoot": "apps/parse-demo/src",
-      "prefix": "reative",
+      "prefix": "pd",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",

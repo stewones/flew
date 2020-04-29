@@ -1,7 +1,7 @@
 import { isArray, isEmpty, isNil, isObject } from 'lodash';
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SetOptions } from '../interfaces/setOptions';
+import { SetOptions } from '@reative/core';
 
 import {
   Logger,
@@ -59,7 +59,8 @@ export class FirestoreDriver implements ReativeDriver {
     ttl: 'browser',
     state: 'browser',
     cache: 'browser',
-    worker: false
+    worker: false,
+    select: false
   };
 
   constructor(options: any) {
@@ -300,6 +301,7 @@ export class FirestoreDriver implements ReativeDriver {
     return new Observable(observer => {
       const connector = this.getInstance();
       const id = chain.doc;
+      const newData = { ...data };
       //
       // run exceptions
       this.exceptions();
@@ -309,6 +311,21 @@ export class FirestoreDriver implements ReativeDriver {
       const firestore: any = connector.collection(
         this.driverOptions.collection
       );
+
+      //
+      // auto update timestamp
+      if (!this.driverOptions.disableTimestamp) {
+        const timestamp = this.driverOptions.timestampObject
+          ? new Date()
+          : new Date().toISOString();
+        if (!newData[this.driverOptions.timestampCreated]) {
+          newData[this.driverOptions.timestampCreated] = timestamp;
+        }
+        if (!newData[this.driverOptions.timestampUpdated]) {
+          newData[this.driverOptions.timestampUpdated] = timestamp;
+        }
+      }
+
       //
       // define return
       const response = r => {
@@ -323,7 +340,7 @@ export class FirestoreDriver implements ReativeDriver {
       // call firestore
       firestore
         .doc(id)
-        .set(data, { merge: options.merge })
+        .set(newData, { merge: options.merge })
         .then(response)
         .catch(error);
     });
@@ -349,8 +366,17 @@ export class FirestoreDriver implements ReativeDriver {
 
       //
       // auto update timestamp
-      if (this.driverOptions.timestamp)
-        newData.updated_at = new Date().toISOString();
+      if (!this.driverOptions.disableTimestamp) {
+        const timestamp = this.driverOptions.timestampObject
+          ? new Date()
+          : new Date().toISOString();
+        if (!newData[this.driverOptions.timestampCreated]) {
+          newData[this.driverOptions.timestampCreated] = timestamp;
+        }
+        if (!newData[this.driverOptions.timestampUpdated]) {
+          newData[this.driverOptions.timestampUpdated] = timestamp;
+        }
+      }
 
       //
       // define return

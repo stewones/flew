@@ -37,6 +37,7 @@ export {
   ReativeChainPayloadWhere
 } from './lib/interfaces/chain';
 export { Response, ResponseSource } from './lib/interfaces/response';
+export { SetOptions } from './lib/interfaces/set';
 
 export { StorageAdapter } from './lib/interfaces/storage';
 export { Log, LogParams } from './lib/interfaces/log';
