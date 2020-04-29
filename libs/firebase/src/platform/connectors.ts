@@ -37,9 +37,10 @@ export class FirestoreConnector {
       app = firebase.app();
     }
 
-    firestore = app.firestore();
-    firestore.settings(settings);
-
-    return firestore;
+    try {
+      firestore = app.firestore();
+      firestore.settings(settings);
+      return firestore;
+    } catch (err) {}
   }
 }
