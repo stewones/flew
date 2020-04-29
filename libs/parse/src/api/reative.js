@@ -6,6 +6,7 @@ var lodash_1 = require("lodash");
 var where_1 = require("./where");
 var order_1 = require("./order");
 var limit_1 = require("./limit");
+var select_1 = require("./select");
 var skip_1 = require("./skip");
 function find(handler) {
     var _a;
@@ -50,6 +51,10 @@ function find(handler) {
     // set skip
     if (chain.after)
         skip_1.skip(chain.after, connector);
+    //
+    // set select
+    if (chain.select)
+        select_1.select(chain.select, connector);
     switch (verb) {
         case 'aggregate':
             connector
@@ -71,7 +76,7 @@ function find(handler) {
 }
 exports.find = find;
 
-},{"./limit":2,"./order":3,"./skip":5,"./transpile":6,"./where":7,"lodash":8}],2:[function(require,module,exports){
+},{"./limit":2,"./order":3,"./select":4,"./skip":6,"./transpile":7,"./where":8,"lodash":9}],2:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 function limit(it, connector) {
@@ -116,7 +121,18 @@ function order(sort, connector) {
 }
 exports.order = order;
 
-},{"lodash":8}],4:[function(require,module,exports){
+},{"lodash":9}],4:[function(require,module,exports){
+"use strict";
+exports.__esModule = true;
+var lodash_1 = require("lodash");
+function select(it, connector) {
+    if (lodash_1.isEmpty(it))
+        return;
+    connector.select.apply(connector, it);
+}
+exports.select = select;
+
+},{"lodash":9}],5:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 var lodash_1 = require("lodash");
@@ -146,7 +162,7 @@ function setWhere(q, connector) {
 }
 exports.setWhere = setWhere;
 
-},{"lodash":8}],5:[function(require,module,exports){
+},{"lodash":9}],6:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 function skip(value, connector) {
@@ -155,8 +171,15 @@ function skip(value, connector) {
 }
 exports.skip = skip;
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 exports.__esModule = true;
 var lodash_1 = require("lodash");
 function transpileChainQuery(query, handler) {
@@ -177,7 +200,7 @@ function transpileChainQuery(query, handler) {
         var transpiledQuery = transpileQuery(k, query[k], handler);
         //
         // Push to queries
-        queries = queries.concat(transpiledQuery);
+        queries = __spreadArrays(queries, transpiledQuery);
     }
     return queries;
 }
@@ -197,7 +220,8 @@ function transpileQuery(operator, chainQuery, handler) {
         //
         // Transpile in the query router
         var routedQuery = transpileQueryRouter(operator, chainQuery, handler);
-        queries = queries.concat(routedQuery);
+        var routedQueries = lodash_1.isArray(routedQuery) ? routedQuery : [routedQuery];
+        queries = __spreadArrays(queries, routedQueries);
     }
     //
     // Transpile common operators
@@ -241,7 +265,7 @@ function transpileQueryRouter(specialOperator, chainQuery, handler) {
             var transpiledQueries = transpileQuery(operator, nextChainQuery, handler);
             //
             // Push to queries
-            queries = queries.concat(transpiledQueries);
+            queries = __spreadArrays(queries, transpiledQueries);
         }
     });
     //
@@ -270,10 +294,9 @@ function createQueryByOperator(value, operator, handler) {
 }
 exports.createQueryByOperator = createQueryByOperator;
 
-},{"lodash":8}],7:[function(require,module,exports){
+},{"lodash":9}],8:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
-var lodash_1 = require("lodash");
 var setWhere_1 = require("./setWhere");
 function where(query, connector) {
     if (query === void 0) { query = []; }
@@ -281,8 +304,6 @@ function where(query, connector) {
         id: 'objectId'
     };
     query.map(function (q) {
-        if (lodash_1.isNil(q.value))
-            throw Error("value can't be null for parse where");
         if (mapping[q.field])
             q.field = mapping[q.field];
         setWhere_1.setWhere(q, connector);
@@ -296,7 +317,7 @@ function where(query, connector) {
 }
 exports.where = where;
 
-},{"./setWhere":4,"lodash":8}],8:[function(require,module,exports){
+},{"./setWhere":5}],9:[function(require,module,exports){
 (function (global){
 /**
  * @license

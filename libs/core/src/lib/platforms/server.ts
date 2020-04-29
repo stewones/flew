@@ -693,6 +693,19 @@ export class ReativeCore implements ReativeAPI {
     this.checkChainAvailability(this.chain.driver, 'worker');
     return this;
   }
+
+  /**
+   * Select custom fields
+   *
+   * @param {boolean} active
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
+   */
+  public select(value: string[]): ReativeCore {
+    this.chain.select = value;
+    this.checkChainAvailability(this.chain.driver, 'select');
+    return this;
+  }
 }
 
 export class Records extends ReativeCore {}

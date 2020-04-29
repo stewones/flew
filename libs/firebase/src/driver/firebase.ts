@@ -59,7 +59,8 @@ export class FirebaseDriver implements ReativeDriver {
     ttl: 'browser',
     state: 'browser',
     cache: 'browser',
-    worker: false
+    worker: false,
+    select: false
   };
 
   constructor(options: any) {
@@ -116,9 +117,7 @@ export class FirebaseDriver implements ReativeDriver {
         firebase = firebase.orderByChild(chain.where[0].field);
         firebase = firebase.equalTo(chain.where[0].value);
         this.log().success()(
-          `firebase where -> ${chain.where[0].field} ${
-            chain.where[0].operator
-          } ${chain.where[0].value}`
+          `firebase where -> ${chain.where[0].field} ${chain.where[0].operator} ${chain.where[0].value}`
         );
       }
 

@@ -65,4 +65,6 @@ export interface ReativeAPI {
   include(fields: string[]): Records;
 
   doc(value: any): Records;
+
+  select(value: string[]): Records;
 }

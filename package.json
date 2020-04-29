@@ -33,7 +33,7 @@
     "release:patch": "cd ./scripts && npm run release:patch",
     "build:schematics": "tsc -p tools/tsconfig.tools.json && ./tools/copy.sh",
     "build:doc": "cd .docs && npm run doc:gen",
-    "build:worker": "browserify find.ts --standalone reative -p [ tsify ] > reative.js"
+    "build:worker": "cd ./libs/parse/src/api && browserify find.ts --standalone reative -p [ tsify ] > reative.js"
   },
   "private": true,
   "dependencies": {
@@ -133,6 +133,7 @@
     "ts-jest": "25.2.0",
     "ts-node": "~8.6.2",
     "tsickle": "0.38.0",
+    "tsify": "^4.0.1",
     "tslib": "^1.9.0",
     "tslint": "~6.0.0",
     "tslint-ionic-rules": "*",
