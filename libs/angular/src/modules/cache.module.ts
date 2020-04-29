@@ -34,7 +34,7 @@ export class CacheSetup {
 export class CacheModule {
   public static forRoot(
     options: CacheOptions = {} as CacheOptions
-  ): ModuleWithProviders {
+  ): ModuleWithProviders<CacheModule> {
     return {
       ngModule: CacheModule,
       providers: [

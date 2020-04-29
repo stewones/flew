@@ -4,5 +4,8 @@
     "types": ["node", "jest"]
   },
   "include": ["**/*.ts"],
-  "exclude": ["./src/test-setup.ts", "./**/stub.ts", "./**/*.spec.ts"]
+  "exclude": ["./src/test-setup.ts", "./**/stub.ts", "./**/*.spec.ts"],
+  "angularCompilerOptions": {
+    "enableIvy": false
+  }
 }

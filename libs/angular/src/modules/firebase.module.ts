@@ -34,7 +34,7 @@ export class ReativeFirebaseSetup {
 export class FirebaseModule {
   public static forRoot(
     options: ReativeFirebaseOptions = {} as ReativeFirebaseOptions
-  ): ModuleWithProviders {
+  ): ModuleWithProviders<FirebaseModule> {
     return {
       ngModule: FirebaseModule,
       providers: [

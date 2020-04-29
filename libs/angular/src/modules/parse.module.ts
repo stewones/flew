@@ -36,7 +36,7 @@ export class ParseSetup {
 export class ParseModule {
   public static forRoot(
     options: ParseOptions = {} as ParseOptions
-  ): ModuleWithProviders {
+  ): ModuleWithProviders<ParseModule> {
     return {
       ngModule: ParseModule,
       providers: [

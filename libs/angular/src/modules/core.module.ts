@@ -35,7 +35,9 @@ export class ReativeAngularSetup {
 */
 @NgModule()
 export class ReativeModule {
-  public static forRoot(options: ReativeOptions = {}): ModuleWithProviders {
+  public static forRoot(
+    options: ReativeOptions = {}
+  ): ModuleWithProviders<ReativeModule> {
     return {
       ngModule: ReativeModule,
       providers: [
