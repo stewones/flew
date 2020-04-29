@@ -1,8 +1,5 @@
 {
   "extends": "../../tsconfig.json",
-  "angularCompilerOptions": {
-    "enableIvy": false
-  },
   "compilerOptions": {
     "types": ["node", "jest"],
     "baseUrl": "./"
