@@ -59,7 +59,8 @@ export class FirestoreDriver implements ReativeDriver {
     ttl: 'browser',
     state: 'browser',
     cache: 'browser',
-    worker: false
+    worker: false,
+    select: false
   };
 
   constructor(options: any) {

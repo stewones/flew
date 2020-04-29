@@ -1,4 +1,3 @@
-import { ReativeChainPayload } from '@reative/core';
 import { transpileChainQuery } from './transpile';
 import { isEmpty } from 'lodash';
 import { where } from './where';
