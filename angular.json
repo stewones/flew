@@ -362,99 +362,6 @@
         }
       }
     },
-    "todo": {
-      "projectType": "application",
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      },
-      "root": "apps/todo",
-      "sourceRoot": "apps/todo/src",
-      "prefix": "",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/apps/todo",
-            "index": "apps/todo/src/index.html",
-            "main": "apps/todo/src/main.ts",
-            "polyfills": "apps/todo/src/polyfills.ts",
-            "tsConfig": "apps/todo/tsconfig.app.json",
-            "aot": true,
-            "assets": ["apps/todo/src/favicon.ico", "apps/todo/src/assets"],
-            "styles": ["apps/todo/src/styles.scss"],
-            "scripts": []
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/todo/src/environments/environment.ts",
-                  "with": "apps/todo/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "todo:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "todo:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "todo:build"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "apps/todo/tsconfig.app.json",
-              "apps/todo/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!apps/todo/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/todo/jest.config.js",
-            "tsConfig": "apps/todo/tsconfig.spec.json",
-            "setupFile": "apps/todo/src/test-setup.ts"
-          }
-        }
-      }
-    },
     "parse-demo": {
       "projectType": "application",
       "schematics": {
@@ -661,6 +568,98 @@
           }
         }
       }
+    },
+    "todo": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/todo",
+      "sourceRoot": "apps/todo/src",
+      "prefix": "",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/todo",
+            "index": "apps/todo/src/index.html",
+            "main": "apps/todo/src/main.ts",
+            "polyfills": "apps/todo/src/polyfills.ts",
+            "tsConfig": "apps/todo/tsconfig.app.json",
+            "aot": true,
+            "assets": ["apps/todo/src/favicon.ico", "apps/todo/src/assets"],
+            "styles": ["apps/todo/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/todo/src/environments/environment.ts",
+                  "with": "apps/todo/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "todo:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "todo:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "todo:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/todo/tsconfig.app.json",
+              "apps/todo/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/todo/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/todo/jest.config.js",
+            "tsConfig": "apps/todo/tsconfig.spec.json",
+            "setupFile": "apps/todo/src/test-setup.ts"
+          }
+        }
+      }
     }
   },
   "cli": {
@@ -693,5 +692,5 @@
       "unitTestRunner": "jest"
     }
   },
-  "defaultProject": "todo"
+  "defaultProject": "todo-redux"
 }
