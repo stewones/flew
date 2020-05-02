@@ -7,7 +7,7 @@
       "root": "libs/core",
       "sourceRoot": "libs/core/src",
       "projectType": "library",
-      "prefix": "core",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -55,7 +55,7 @@
       "root": "libs/cache",
       "sourceRoot": "libs/cache/src",
       "projectType": "library",
-      "prefix": "firebasetask",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -96,7 +96,7 @@
       "root": "libs/angular",
       "sourceRoot": "libs/angular/src",
       "projectType": "library",
-      "prefix": "ft",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -137,7 +137,7 @@
       "root": "libs/state",
       "sourceRoot": "libs/state/src",
       "projectType": "library",
-      "prefix": "ft",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -178,7 +178,7 @@
       "root": "libs/firebase",
       "sourceRoot": "libs/firebase/src",
       "projectType": "library",
-      "prefix": "ft",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -219,7 +219,7 @@
       "root": "libs/parse",
       "sourceRoot": "libs/parse/src",
       "projectType": "library",
-      "prefix": "ft",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -371,7 +371,7 @@
       },
       "root": "apps/todo",
       "sourceRoot": "apps/todo/src",
-      "prefix": "todo",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -464,7 +464,7 @@
       },
       "root": "apps/parse-demo",
       "sourceRoot": "apps/parse-demo/src",
-      "prefix": "pd",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -562,6 +562,102 @@
             "jestConfig": "apps/parse-demo/jest.config.js",
             "tsConfig": "apps/parse-demo/tsconfig.spec.json",
             "setupFile": "apps/parse-demo/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "todo-redux": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "inlineTemplate": true,
+          "style": "scss"
+        }
+      },
+      "root": "apps/todo-redux",
+      "sourceRoot": "apps/todo-redux/src",
+      "prefix": "",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/todo-redux",
+            "index": "apps/todo-redux/src/index.html",
+            "main": "apps/todo-redux/src/main.ts",
+            "polyfills": "apps/todo-redux/src/polyfills.ts",
+            "tsConfig": "apps/todo-redux/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/todo-redux/src/favicon.ico",
+              "apps/todo-redux/src/assets"
+            ],
+            "styles": ["apps/todo-redux/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/todo-redux/src/environments/environment.ts",
+                  "with": "apps/todo-redux/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "todo-redux:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "todo-redux:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "todo-redux:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/todo-redux/tsconfig.app.json",
+              "apps/todo-redux/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/todo-redux/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/todo-redux/jest.config.js",
+            "tsConfig": "apps/todo-redux/tsconfig.spec.json",
+            "setupFile": "apps/todo-redux/src/test-setup.ts"
           }
         }
       }
