@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-
-import { createStore } from 'redux';
+import { createStore, store, dispatch, connect } from '@reative/state';
 
 function counter(state = 0, action) {
   switch (action.type) {
@@ -13,8 +12,6 @@ function counter(state = 0, action) {
   }
 }
 
-const store = createStore(counter);
-
 @Component({
   selector: 'counter-container',
   templateUrl: './counter-container.component.html',
@@ -22,17 +19,21 @@ const store = createStore(counter);
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CounterContainerComponent implements OnInit {
+  display$ = connect<number>('counter', { raw: false }); // default raw is false
+
   constructor() {
-    store.subscribe(() => console.log(store.getState()));
+    createStore({ counter }, { counter: 420 });
+    console.log('initial state', store().getState());
+    // store().subscribe(it => console.log(it, store().getState()));
   }
 
   ngOnInit() {}
 
   increment() {
-    store.dispatch({ type: 'INCREMENT' });
+    dispatch({ type: 'INCREMENT', a: 1, b: 2 });
   }
 
   decrement() {
-    store.dispatch({ type: 'DECREMENT' });
+    dispatch({ type: 'DECREMENT', a: 1, b: 2 });
   }
 }
