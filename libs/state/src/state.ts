@@ -69,7 +69,7 @@ export function key(name: string, raw = false) {
  * @returns {Observable<T>}
  */
 export function select<T>(key: string, raw?: boolean): Observable<T> {
-  return Reative.store.select(key, raw);
+  return Reative.state.select(key, raw);
 }
 
 /**
@@ -78,7 +78,7 @@ export function select<T>(key: string, raw?: boolean): Observable<T> {
  * @export
  */
 export function resetState() {
-  Reative.store.reset();
+  Reative.state.reset();
 }
 
 /**
@@ -88,7 +88,7 @@ export function resetState() {
  * @param {string} key
  */
 export function removeState(key: string) {
-  Reative.store.remove(key);
+  Reative.state.remove(key);
 }
 
 export function resetStateResponse(context) {
@@ -105,7 +105,7 @@ export function removeStateResponse(context, action) {
 }
 
 export function syncState(data: Response) {
-  return Reative.store.sync(data);
+  return Reative.state.sync(data);
 }
 
 /**
@@ -121,7 +121,7 @@ export function getState<T = any>(
   stateKey: string,
   options: GetStateOptions = { raw: false, mutable: false }
 ): T {
-  const response = Reative.store.get && Reative.store.get(stateKey);
+  const response = Reative.state.get && Reative.state.get(stateKey);
   const transform: any = shouldTransformResponse(
     { transformData: !options.raw },
     response
@@ -144,7 +144,7 @@ export function getState$<T = any>(
   stateKey: string,
   options: GetStateOptions = { raw: false, feed: true }
 ): Observable<T> {
-  const responseFromState = Reative.store.get && Reative.store.get(stateKey);
+  const responseFromState = Reative.state.get && Reative.state.get(stateKey);
   const transformFromState: any = shouldTransformResponse(
     { transformData: !options.raw },
     responseFromState
@@ -320,7 +320,7 @@ export function setState(
 
   //
   // set state
-  Reative.store.set(stateKey, newState);
+  Reative.state.set(stateKey, newState);
 }
 
 /**
@@ -335,11 +335,11 @@ export async function feedState(stateKey?: string) {
   if (hasStorage) {
     if (key) {
       const cache = await Reative.storage.get(stateKey);
-      if (!isEmpty(cache)) Reative.store.sync(cache);
+      if (!isEmpty(cache)) Reative.state.sync(cache);
       return cache;
     } else {
       return Reative.storage.forEach((value, k, index) => {
-        Reative.store.sync(value);
+        Reative.state.sync(value);
       });
     }
   }
@@ -353,32 +353,32 @@ export async function feedState(stateKey?: string) {
  * @param {*} instance
  */
 export function install(instance) {
-  Reative.store.enabled = true;
-  Reative.store.reset = () => instance.dispatch(new StateReset());
-  Reative.store.sync = r => {
+  Reative.state.enabled = true;
+  Reative.state.reset = () => instance.dispatch(new StateReset());
+  Reative.state.sync = r => {
     instance.dispatch(new StateSync(r));
   };
 
-  Reative.store.get = stateKey => {
+  Reative.state.get = stateKey => {
     const snapshot = instance.snapshot();
     const state = get(snapshot, `${STATE_GLOBAL_NAMESPACE}.${stateKey}`) || {};
     return state;
   };
 
-  Reative.store.set = (stateKey, val) => {
+  Reative.state.set = (stateKey, val) => {
     const newState = { ...val, key: stateKey };
     instance.dispatch(new StateSync(newState));
   };
 
-  Reative.store.remove = stateKey => {
+  Reative.state.remove = stateKey => {
     instance.dispatch(new StateRemove(stateKey));
   };
 
-  Reative.store.select = (stateKey, raw?) => {
+  Reative.state.select = (stateKey, raw?) => {
     return instance.select(key(stateKey, raw));
   };
 
-  Reative.store.addState = addState;
-  Reative.store.getState = getState;
-  Reative.store.setState = setState;
+  Reative.state.addState = addState;
+  Reative.state.getState = getState;
+  Reative.state.setState = setState;
 }

@@ -2,8 +2,8 @@ import { Reative } from './reative';
 
 describe('RRSymbol', () => {
   // it('should dispatch payloads to store', () => {
-  //   const spy = jest.spyOn(Reative.store.sync, 'next');
-  //   Reative.store.sync.next(`rr rulez!`);
+  //   const spy = jest.spyOn(Reative.state.sync, 'next');
+  //   Reative.state.sync.next(`rr rulez!`);
   //   expect(spy).toBeCalledWith(`rr rulez!`);
   // });
   // it('should get options', () => {
@@ -19,7 +19,7 @@ describe('RRSymbol', () => {
   // it('should set store', () => {
   //   const store = { _: 'ngxs' };
   //   storeSet(store);
-  //   expect(Reative.store).toBe(store);
+  //   expect(Reative.state).toBe(store);
   // });
   // @todo move to rr state
   // it('should return a state response from a key', () => {

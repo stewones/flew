@@ -145,7 +145,7 @@ export class PlatformBrowser extends Records {
   protected cache$<T>(observer, chain, key) {
     const useCache: boolean = chain.useCache;
     const useState: boolean = chain.useState;
-    const stateAvailable = Reative.store.enabled;
+    const stateAvailable = Reative.state.enabled;
     const cacheAvailable = Reative.storage.enabled;
     const state: Response = this.getCurrentState(key);
 
@@ -175,7 +175,7 @@ export class PlatformBrowser extends Records {
 
   protected state$<T>(observer, chain, key) {
     const useState = chain.useState;
-    const hasState = Reative.store.enabled;
+    const hasState = Reative.state.enabled;
 
     if (useState === false || !hasState) return of();
 
@@ -286,27 +286,27 @@ export class PlatformBrowser extends Records {
     observer.next(transformResponse(data));
 
     if (chain.saveNetwork) {
-      const currentState = Reative.store.getState(data.key, { raw: true });
+      const currentState = Reative.state.getState(data.key, { raw: true });
       if (!isEqual(currentState, data)) {
-        Reative.store.sync(data);
+        Reative.state.sync(data);
       }
     }
   }
 
   private getCurrentState(key: string): Response {
-    const hasStore = Reative.store.enabled;
+    const hasStore = Reative.state.enabled;
     if (!hasStore) return null;
-    const state = hasStore ? Reative.store.get(key) : null;
+    const state = hasStore ? Reative.state.get(key) : null;
     return state;
   }
 
   private getCurrentState$(key: string, response = null): Observable<Response> {
-    const hasStore = Reative.store.enabled;
+    const hasStore = Reative.state.enabled;
     const hasStorage = Reative.storage.enabled;
 
     if (!hasStore && !hasStorage) return of(response);
 
-    const state: Response = hasStore ? Reative.store.get(key) : null;
+    const state: Response = hasStore ? Reative.state.get(key) : null;
     return !isEmpty(state)
       ? of(state)
       : hasStorage
