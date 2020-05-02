@@ -2,6 +2,10 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'reative-todo-redux-app',
-  template: ``
+  template: `
+    <counter-container></counter-container>
+  `
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor() {}
+}
