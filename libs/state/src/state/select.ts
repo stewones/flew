@@ -2,9 +2,8 @@ import { Observable } from 'rxjs';
 import { connect } from '../store/connect';
 
 /**
- * Select data from Reative State
- * @deprecated replace with the connect(path) function
+ * Select data from the memoized state
  */
-export function select<T>(key: string, raw?: boolean): Observable<T> {
-  return connect(`memo.${key}`);
+export function select<T>(key: string, raw: boolean): Observable<T> {
+  return connect(`memo.${key}`, { raw });
 }
