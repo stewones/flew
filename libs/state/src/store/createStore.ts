@@ -3,7 +3,7 @@ import { combineReducers, createStore as createReduxStore } from 'redux';
 import { pickBy, isEmpty } from 'lodash';
 
 // rr reducer
-function _cache_(state = {}, action) {
+function memo(state = {}, action) {
   switch (action.type) {
     case 'ADD':
       return { ...state, ...action.payload };
@@ -24,7 +24,7 @@ export function createStore(reducers, initialState?, enhancers?) {
   }
 
   return (Reative.store = createReduxStore(
-    combineReducers({ _cache_, ...reducers }),
+    combineReducers({ memo, ...reducers }),
     initialState,
     enhancers
   ));

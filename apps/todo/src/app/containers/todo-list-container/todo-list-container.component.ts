@@ -39,9 +39,9 @@ export class TodoListContainerComponent implements OnInit {
     //   // initial state
     //   { counter: 420 },
     //   // enhancers
-    //   applyDevTools(true)
+    //   applyDevTools()
     //   // composing enhancers
-    //   // compose(applyDevTools(true), applyMiddleware(logger))
+    //   // compose(applyDevTools(), applyMiddleware(logger))
     // );
     // console.log('initial state', store().getState());
     // // store().subscribe(it => console.log(it, store().getState()));
