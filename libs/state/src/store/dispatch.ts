@@ -1,5 +1,5 @@
-import { Reative } from '@reative/core';
+import { store } from './store';
 
 export function dispatch(action: { type: string; [key: string]: any }) {
-  return Reative.store.dispatch(action);
+  store().dispatch(action);
 }

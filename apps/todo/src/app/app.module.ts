@@ -25,7 +25,7 @@ export function someReducer(state = 0, action) {
       silent: false,
       baseURL: 'https://jsonplaceholder.typicode.com'
     }),
-    StateModule.forRoot({ production: false }),
+    StateModule.forRoot({ production: false, trace: true }),
     // StoreModule.forRoot({
     //   production: false,
     //   reducers: { someReducer },

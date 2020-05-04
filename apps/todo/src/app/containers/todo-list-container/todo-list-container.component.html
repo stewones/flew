@@ -1,3 +1,4 @@
 <div class="flex">
-    todo-list works!
+  {{ display$ | async }} <button (click)="increment()">Increment</button>
+  <button (click)="decrement()">Decrement</button>
 </div>

@@ -6,7 +6,14 @@ import {
 } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { select, createStore, applyDevTools, store } from '@reative/state';
+import {
+  select,
+  createStore,
+  applyDevTools,
+  store,
+  setState,
+  getState
+} from '@reative/state';
 
 export interface Todo {
   name: string;
@@ -29,7 +36,7 @@ function counter(state = 0, action) {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TodoListContainerComponent implements OnInit {
-  // entries$ = connect;
+  display$ = select<number>('counter');
 
   constructor(protected detector: ChangeDetectorRef) {
     // creating store locally rather using StoreModule
@@ -47,5 +54,17 @@ export class TodoListContainerComponent implements OnInit {
     // // store().subscribe(it => console.log(it, store().getState()));
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    setState(`counter`, 420);
+  }
+
+  increment() {
+    console.log(getState(`counter`));
+    setState(`counter`, getState(`counter`) + 1);
+  }
+
+  decrement() {
+    console.log(getState(`counter`));
+    setState(`counter`, getState(`counter`) - 1);
+  }
 }

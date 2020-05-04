@@ -288,7 +288,7 @@ export class PlatformBrowser extends Records {
     if (chain.saveNetwork) {
       const currentState = Reative.state.getState(data.key, { raw: true });
       if (!isEqual(currentState, data)) {
-        Reative.state.sync(data);
+        Reative.state.setState(data);
       }
     }
   }
@@ -296,7 +296,7 @@ export class PlatformBrowser extends Records {
   private getCurrentState(key: string): Response {
     const hasStore = Reative.state.enabled;
     if (!hasStore) return null;
-    const state = hasStore ? Reative.state.get(key) : null;
+    const state = hasStore ? Reative.state.getState(key) : null;
     return state;
   }
 
@@ -306,7 +306,7 @@ export class PlatformBrowser extends Records {
 
     if (!hasStore && !hasStorage) return of(response);
 
-    const state: Response = hasStore ? Reative.state.get(key) : null;
+    const state: Response = hasStore ? Reative.state.getState(key) : null;
     return !isEmpty(state)
       ? of(state)
       : hasStorage

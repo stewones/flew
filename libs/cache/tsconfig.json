@@ -2,7 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "types": ["node", "jest"],
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "paths": {
+      "@reative/core": ["../libs/core/src/index.ts"]
+    }
   },
   "include": ["**/*.ts"],
   "exclude": ["./src/test-setup.ts", "./**/stub.ts", "./**/*.spec.ts"],
