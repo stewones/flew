@@ -33,7 +33,8 @@
     "release:patch": "cd ./scripts && npm run release:patch",
     "build:schematics": "tsc -p tools/tsconfig.tools.json && ./tools/copy.sh",
     "build:doc": "cd .docs && npm run doc:gen",
-    "build:worker": "cd ./libs/parse/src/api && browserify find.ts --standalone reative -p [ tsify ] > reative.js && cp reative.js ../../../core/worker/reative.js && rm -rf reative.js"
+    "build:worker": "cd ./libs/parse/src/api && browserify find.ts --standalone reative -p [ tsify ] > reative.js && cp reative.js ../../../core/worker/reative.js && rm -rf reative.js",
+    "build:libs": "./scripts/build-libs.sh"
   },
   "private": true,
   "dependencies": {
