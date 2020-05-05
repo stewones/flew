@@ -1,0 +1,25 @@
+{
+  "name": "@reative/state",
+  "version": "4.0.2",
+  "dependencies": {
+    "@reative/core": "^4.0.0",
+    "rxjs": "^6.5.4",
+    "lodash": "^4.17.15"
+  },
+  "peerDependencies": {
+    "@reative/core": "^4.0.0",
+    "rxjs": "^6.5.4",
+    "lodash": "^4.17.15",
+    "tslib": "^1.10.0"
+  },
+  "main": "bundles/reative-state.umd.js",
+  "module": "fesm5/reative-state.js",
+  "es2015": "fesm2015/reative-state.js",
+  "esm5": "esm5/reative-state.js",
+  "esm2015": "esm2015/reative-state.js",
+  "fesm5": "fesm5/reative-state.js",
+  "fesm2015": "fesm2015/reative-state.js",
+  "typings": "reative-state.d.ts",
+  "metadata": "reative-state.metadata.json",
+  "sideEffects": false
+}

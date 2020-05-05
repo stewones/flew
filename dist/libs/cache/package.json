@@ -1,0 +1,21 @@
+{
+  "name": "@reative/cache",
+  "version": "4.0.2",
+  "peerDependencies": {
+    "@reative/core": "^4.0.0",
+    "tslib": "^1.10.0"
+  },
+  "dependencies": {
+    "@reative/core": "^4.0.0"
+  },
+  "main": "bundles/reative-cache.umd.js",
+  "module": "fesm5/reative-cache.js",
+  "es2015": "fesm2015/reative-cache.js",
+  "esm5": "esm5/reative-cache.js",
+  "esm2015": "esm2015/reative-cache.js",
+  "fesm5": "fesm5/reative-cache.js",
+  "fesm2015": "fesm2015/reative-cache.js",
+  "typings": "reative-cache.d.ts",
+  "metadata": "reative-cache.metadata.json",
+  "sideEffects": false
+}

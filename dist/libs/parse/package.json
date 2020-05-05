@@ -1,0 +1,21 @@
+{
+  "name": "@reative/parse",
+  "version": "4.0.2",
+  "peerDependencies": {
+    "@reative/core": "^4.0.0",
+    "tslib": "^1.10.0"
+  },
+  "dependencies": {
+    "@reative/core": "^4.0.0"
+  },
+  "main": "bundles/reative-parse.umd.js",
+  "module": "fesm5/reative-parse.js",
+  "es2015": "fesm2015/reative-parse.js",
+  "esm5": "esm5/reative-parse.js",
+  "esm2015": "esm2015/reative-parse.js",
+  "fesm5": "fesm5/reative-parse.js",
+  "fesm2015": "fesm2015/reative-parse.js",
+  "typings": "reative-parse.d.ts",
+  "metadata": "reative-parse.metadata.json",
+  "sideEffects": false
+}

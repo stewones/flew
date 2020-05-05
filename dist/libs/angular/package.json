@@ -1,0 +1,41 @@
+{
+  "name": "@reative/angular",
+  "version": "4.0.2",
+  "peerDependencies": {
+    "@angular/common": "^9.0.0",
+    "@angular/core": "^9.0.0",
+    "@ngxs/store": "^3.6.2",
+    "@ionic/storage": "^2.2.0",
+    "parse": "^2.11.0",
+    "firebase": "^7.8.1",
+    "@reative/core": "^4.0.0",
+    "@reative/state": "^4.0.0",
+    "@reative/firebase": "^4.0.0",
+    "@reative/parse": "^4.0.0",
+    "@reative/cache": "^4.0.0",
+    "tslib": "^1.10.0"
+  },
+  "dependencies": {
+    "@angular/common": "^9.0.0",
+    "@angular/core": "^9.0.0",
+    "@ngxs/store": "^3.6.2",
+    "@ionic/storage": "^2.2.0",
+    "parse": "^2.11.0",
+    "firebase": "^7.8.1",
+    "@reative/core": "^4.0.0",
+    "@reative/state": "^4.0.0",
+    "@reative/firebase": "^4.0.0",
+    "@reative/parse": "^4.0.0",
+    "@reative/cache": "^4.0.0"
+  },
+  "main": "bundles/reative-angular.umd.js",
+  "module": "fesm5/reative-angular.js",
+  "es2015": "fesm2015/reative-angular.js",
+  "esm5": "esm5/reative-angular.js",
+  "esm2015": "esm2015/reative-angular.js",
+  "fesm5": "fesm5/reative-angular.js",
+  "fesm2015": "fesm2015/reative-angular.js",
+  "typings": "reative-angular.d.ts",
+  "metadata": "reative-angular.metadata.json",
+  "sideEffects": false
+}
