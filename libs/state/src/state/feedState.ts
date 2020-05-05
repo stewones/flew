@@ -22,9 +22,8 @@ export async function feedState(path?: string) {
           payload: cache
         });
       }
-      return cache;
     } else {
-      return Reative.storage.forEach((value, k, index) => {
+      Reative.storage.forEach((value, k, index) => {
         dispatch({
           type: 'MEMO_UPDATE',
           path: `memo.${k}`,
