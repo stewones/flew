@@ -4,5 +4,14 @@
 <button (click)="decrement()">
   decrement
 </button>
+<hr />
+{{ display$ | async }} {{ displayDetailed$ | async | json }}
+<hr />
 
-{{ display$ | async | json }}
+<button (click)="incrementAsync(5)">
+  increment after 5 seconds
+</button>
+
+<button (click)="decrementAsync(5)">
+  decrement after 5 seconds
+</button>

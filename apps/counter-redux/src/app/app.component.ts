@@ -1,5 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { dispatch, connect, getState } from '@reative/state';
+import { delayedIncrement } from './actions/delayedIncrement';
+import { delayedDecrement } from './actions/delayedDecrement';
 
 @Component({
   selector: 'reative-root',
@@ -8,7 +10,8 @@ import { dispatch, connect, getState } from '@reative/state';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
-  display$ = connect<number>('counter', { detailed: true }); // default for detailed is false
+  display$ = connect<number>('counter');
+  displayDetailed$ = connect<number>('counter', { detailed: true });
 
   constructor() {
     console.log('initial state', getState());
@@ -17,10 +20,18 @@ export class AppComponent implements OnInit {
   ngOnInit() {}
 
   increment() {
-    dispatch({ type: 'INCREMENT' });
+    dispatch({ type: 'INCREMENT', payload: 1 });
   }
 
   decrement() {
-    dispatch({ type: 'DECREMENT' });
+    dispatch({ type: 'DECREMENT', payload: 1 });
+  }
+
+  incrementAsync(seconds) {
+    dispatch(delayedIncrement(seconds));
+  }
+
+  decrementAsync(seconds) {
+    dispatch(delayedDecrement(seconds));
   }
 }

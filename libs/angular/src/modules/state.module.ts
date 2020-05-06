@@ -5,13 +5,14 @@ import {
   ModuleWithProviders
 } from '@angular/core';
 import { createStore, applyDevTools, install } from '@reative/state';
+import { compose, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 
 export interface StoreOptions {
   production?: boolean;
   reducers?: any;
   state?: any; // the initial state
-  trace?: boolean;
-  // see more options at https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
+  trace?: boolean; // see more options at https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
 }
 
 @Injectable()
@@ -21,7 +22,12 @@ export class StateSetup {
     createStore(
       (options && options.reducers) || {},
       (options && options.state) || {},
-      options && options.production === false ? applyDevTools(options) : null
+      compose(
+        // lets us dispatch() functions from async actions
+        applyMiddleware(thunk),
+        // enable chrome devtools
+        options && options.production === false ? applyDevTools(options) : null
+      )
     );
   }
 }

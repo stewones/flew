@@ -7,17 +7,7 @@ import { RouterModule } from '@angular/router';
 import { StateModule } from '@reative/angular';
 import { environment } from '../environments/environment';
 
-// the reducer
-function counter(state = 0, action) {
-  switch (action.type) {
-    case 'INCREMENT':
-      return state + 1;
-    case 'DECREMENT':
-      return state - 1;
-    default:
-      return state;
-  }
-}
+import { counter } from './reducers';
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,12 +22,10 @@ function counter(state = 0, action) {
       trace: true,
       // define an initial state
       state: {
-        // counter: 420
+        // counter: 420 // uncomment this line
       },
-      // pass in the reducers
-      reducers: {
-        counter
-      }
+      // pass in the app reducers
+      reducers: { counter }
     })
   ],
   providers: [],

@@ -43,8 +43,6 @@ function _memo(state = {}, action) {
  *    { counter },
  *    // initial state
  *    { counter: 420 },
- *    // enhancers
- *    applyDevTools()
  *    // composing enhancers
  *    compose(applyDevTools(), applyMiddleware(logger))
  *  );
