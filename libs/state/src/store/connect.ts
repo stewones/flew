@@ -4,19 +4,23 @@ import { get } from 'lodash';
 
 import watch from 'redux-watch';
 
+export interface ConnectOptions {
+  detailed: boolean;
+}
+
 export function connect<T>(
   path: string,
-  options: { raw: boolean } = { raw: false }
+  options: ConnectOptions = { detailed: false }
 ): Observable<T> {
   return new Observable(observer => {
     const storeInstance = store();
     const storeValue = get(storeInstance.getState(), path);
 
     const w = watch(storeInstance.getState, path);
-    if (options.raw) {
+    if (options.detailed) {
       observer.next({
         path,
-        pre: null,
+        prev: storeValue,
         next: storeValue
       } as any);
     } else {
@@ -25,14 +29,14 @@ export function connect<T>(
 
     storeInstance.subscribe(
       w((next, prev, path) => {
-        console.log(
-          '%s changed from %s to %s at %s',
-          path,
-          prev,
-          next,
-          new Date().toLocaleTimeString()
-        );
-        if (options.raw) {
+        // console.log(
+        //   '%s changed from %s to %s at %s',
+        //   path,
+        //   prev,
+        //   next,
+        //   new Date().toLocaleTimeString()
+        // );
+        if (options.detailed) {
           observer.next({
             path,
             prev,
@@ -64,7 +68,7 @@ export type PropertyType<T> = T extends (...args: any[]) => any
 
 export function Connect<T>(
   path: string,
-  options: { raw: boolean } = { raw: false }
+  options: ConnectOptions = { detailed: false }
 ) {
   return function(constructor: Function) {
     constructor.prototype.display$ = connect<T>(path, options);

@@ -10,13 +10,13 @@ import { install } from '../state/install';
  * @param {*} action
  * @returns
  */
-function memo(state = {}, action) {
+function _memo(state = {}, action) {
   switch (action.type) {
     case 'MEMO_UPDATE':
       return { ...state, [action.path]: action.payload };
     case 'MEMO_REMOVE':
       return {
-        memo: pickBy(state, it => it.key !== action.path),
+        _memo: pickBy(state, it => it.key !== action.path),
         ...pickBy(state, it => it.key !== action.path)
       };
     case 'MEMO_RESET':
@@ -28,6 +28,27 @@ function memo(state = {}, action) {
 
 /**
  * Create a reative redux store
+ * @example
+ *  // logger middleware example
+ *   const logger = store => next => action => {
+ *   console.log('dispatching', action);
+ *   const result = next(action);
+ *   console.log('next state', store.getState());
+ *   return result;
+ *  };
+ *
+ *  // create store outside app.module
+ *  createStore(
+ *    // list of reducers
+ *    { counter },
+ *    // initial state
+ *    { counter: 420 },
+ *    // enhancers
+ *    applyDevTools()
+ *    // composing enhancers
+ *    compose(applyDevTools(), applyMiddleware(logger))
+ *  );
+ *  store().subscribe(it => console.log(it, store().getState()));
  *
  * @export
  * @param {*} reducers
@@ -42,7 +63,7 @@ export function createStore(reducers, initialState?, enhancers?) {
   }
   install();
   return (Reative.store = createReduxStore(
-    combineReducers({ memo, ...reducers }),
+    combineReducers({ _memo, ...reducers }),
     initialState,
     enhancers
   ));

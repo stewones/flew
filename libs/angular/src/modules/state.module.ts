@@ -9,7 +9,7 @@ import { createStore, applyDevTools, install } from '@reative/state';
 export interface StoreOptions {
   production?: boolean;
   reducers?: any;
-  initialState?: any;
+  state?: any; // the initial state
   trace?: boolean;
   // see more options at https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
 }
@@ -20,7 +20,7 @@ export class StateSetup {
     install();
     createStore(
       (options && options.reducers) || {},
-      (options && options.initialState) || {},
+      (options && options.state) || {},
       options && options.production === false ? applyDevTools(options) : null
     );
   }
@@ -34,7 +34,7 @@ export class StateSetup {
 @NgModule()
 export class StateModule {
   public static forRoot(
-    options: StoreOptions & any = {} as StoreOptions
+    options: StoreOptions = {} as StoreOptions
   ): ModuleWithProviders<StateModule> {
     return {
       ngModule: StateModule,

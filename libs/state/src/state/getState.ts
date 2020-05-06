@@ -22,7 +22,7 @@ export function getState<T = any>(
   options: GetStateOptions = { raw: false }
 ): T {
   const currentState = store().getState();
-  const data = get(currentState, path) || get(currentState, `memo.${path}`);
+  const data = get(currentState, path) || get(currentState, `_memo.${path}`);
   return path ? (data as T) : currentState;
 }
 

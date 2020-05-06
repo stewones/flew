@@ -660,6 +660,196 @@
           }
         }
       }
+    },
+    "counter-redux": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/counter-redux",
+      "sourceRoot": "apps/counter-redux/src",
+      "prefix": "reative",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/counter-redux",
+            "index": "apps/counter-redux/src/index.html",
+            "main": "apps/counter-redux/src/main.ts",
+            "polyfills": "apps/counter-redux/src/polyfills.ts",
+            "tsConfig": "apps/counter-redux/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/counter-redux/src/favicon.ico",
+              "apps/counter-redux/src/assets"
+            ],
+            "styles": ["apps/counter-redux/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/counter-redux/src/environments/environment.ts",
+                  "with": "apps/counter-redux/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "counter-redux:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "counter-redux:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "counter-redux:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/counter-redux/tsconfig.app.json",
+              "apps/counter-redux/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/counter-redux/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/counter-redux/jest.config.js",
+            "tsConfig": "apps/counter-redux/tsconfig.spec.json",
+            "setupFile": "apps/counter-redux/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "counter": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/counter",
+      "sourceRoot": "apps/counter/src",
+      "prefix": "reative",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/counter",
+            "index": "apps/counter/src/index.html",
+            "main": "apps/counter/src/main.ts",
+            "polyfills": "apps/counter/src/polyfills.ts",
+            "tsConfig": "apps/counter/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/counter/src/favicon.ico",
+              "apps/counter/src/assets"
+            ],
+            "styles": ["apps/counter/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/counter/src/environments/environment.ts",
+                  "with": "apps/counter/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "counter:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "counter:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "counter:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/counter/tsconfig.app.json",
+              "apps/counter/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/counter/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/counter/jest.config.js",
+            "tsConfig": "apps/counter/tsconfig.spec.json",
+            "setupFile": "apps/counter/src/test-setup.ts"
+          }
+        }
+      }
     }
   },
   "cli": {

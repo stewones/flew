@@ -14,7 +14,7 @@ export async function feedState(path?: string) {
 
   if (hasStorage) {
     if (path) {
-      const cache = await Reative.storage.get(`memo.${path}`);
+      const cache = await Reative.storage.get(`_memo.${path}`);
       if (!isEmpty(cache)) {
         dispatch({
           type: 'MEMO_UPDATE',
@@ -26,7 +26,7 @@ export async function feedState(path?: string) {
       Reative.storage.forEach((value, k, index) => {
         dispatch({
           type: 'MEMO_UPDATE',
-          path: `memo.${k}`,
+          path: `_memo.${k}`,
           payload: value
         });
       });

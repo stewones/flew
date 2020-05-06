@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { ReativeModule, StateModule } from '@reative/angular';
-import { TodoListContainerModule } from './containers/todo-list-container/todo-list-container.module';
 import { NgxsModule } from '@ngxs/store';
 import { environment } from '../environments/environment';
 export function someReducer(state = 0, action) {
@@ -25,13 +24,12 @@ export function someReducer(state = 0, action) {
       silent: false,
       baseURL: 'https://jsonplaceholder.typicode.com'
     }),
-    StateModule.forRoot({ production: false, trace: true }),
+    StateModule.forRoot({ production: false, trace: true })
     // StoreModule.forRoot({
     //   production: false,
     //   reducers: { someReducer },
     //   initialState: { someReducer: 32535 }
     // }),
-    TodoListContainerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
