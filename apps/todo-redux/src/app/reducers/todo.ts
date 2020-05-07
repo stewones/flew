@@ -7,7 +7,7 @@ export function todo(
   action: { type: string; payload: any }
 ) {
   switch (action.type) {
-    case 'ADD_TODO_GET':
+    case 'ADD_TODO_LOAD':
       return {
         ...state,
         loading: true
