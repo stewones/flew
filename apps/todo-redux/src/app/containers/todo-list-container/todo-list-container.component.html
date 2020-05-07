@@ -1,5 +1,9 @@
-<ul>
+Loading: {{ loading$ | async }}
+<br />
+<ul [hidden]="loading$ | async">
   <li *ngFor="let todo of todos$ | async">
     {{ todo.text }}
   </li>
 </ul>
+<br />
+<button (click)="reload()">Reload</button>

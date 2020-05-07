@@ -16,11 +16,16 @@ import { getTodos } from '../../actions/getTodos';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TodoListContainerComponent implements OnInit {
+  loading$ = connect<boolean>('todo.loading');
   todos$ = connect<Todo[]>('todo.list');
 
   constructor(protected detector: ChangeDetectorRef) {}
 
   ngOnInit() {
+    dispatch(getTodos());
+  }
+
+  reload() {
     dispatch(getTodos());
   }
 }
