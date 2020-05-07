@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { RouterModule } from '@angular/router';
 
 import { StateModule } from '@reative/angular';
 import { environment } from '../environments/environment';
@@ -13,7 +12,6 @@ import { counter } from './reducers';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    RouterModule.forRoot([], { initialNavigation: 'enabled' }),
     StateModule.forRoot({
       // enable devtools when production is false
       production: environment.production,

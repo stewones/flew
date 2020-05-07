@@ -82,8 +82,8 @@ export class PlatformBrowser extends Records {
     //
     return new Observable(observer => {
       merge(
-        this.state$(observer, chain, key),
-        this.cache$(observer, chain, key),
+        // this.state$(observer, chain, key), // @todo refactor
+        // this.cache$(observer, chain, key), // @todo refactor
         this.network$(observer, verb, path, payload, chain, key)
       )
         .pipe(take(2))
@@ -97,6 +97,9 @@ export class PlatformBrowser extends Records {
         this.log().warn()(`${key} network request`);
         from(this.call<T>(verb, path, payload, chain, key)).subscribe(
           response => {
+            this.dispatch(observer, response, chain);
+
+            // @todo refactor below
             this.getCurrentState$(key, response).subscribe(
               (stateData: Response) => {
                 const networkData: Response = cloneDeep(response);
