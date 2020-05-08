@@ -8,6 +8,7 @@ import {
 import { connect, dispatch } from '@reative/state';
 import { Todo } from '../../interfaces/todo';
 import { getTodos } from '../../actions/getTodos';
+import { navigateTo } from '../../actions/navigateTo';
 
 @Component({
   selector: 'todo-list-container',
@@ -43,5 +44,9 @@ export class TodoListContainerComponent implements OnInit {
         useNetwork: this.useNetwork
       })
     );
+  }
+
+  edit(todoID) {
+    dispatch(navigateTo(`/edit/${todoID}`));
   }
 }

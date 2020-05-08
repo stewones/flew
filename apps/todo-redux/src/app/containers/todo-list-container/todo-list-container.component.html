@@ -1,6 +1,6 @@
 <ul [hidden]="loading$ | async">
   <li *ngFor="let todo of todos$ | async">
-    {{ todo.text }}
+    <a (click)="edit(todo.id)">{{ todo.text }}</a>
   </li>
 </ul>
 <hr />

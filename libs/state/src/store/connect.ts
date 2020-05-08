@@ -8,10 +8,16 @@ export interface ConnectOptions {
   detailed: boolean;
 }
 
+export interface StateMeta<T = any> {
+  path: string;
+  prev: T;
+  next: T;
+}
+
 export function connect<T>(
   path: string,
   options: ConnectOptions = { detailed: false }
-): Observable<T> {
+): Observable<T & StateMeta<T>> {
   return new Observable(observer => {
     const storeInstance = store();
     const storeValue = get(storeInstance.getState(), path);
