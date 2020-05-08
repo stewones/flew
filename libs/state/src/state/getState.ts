@@ -1,6 +1,6 @@
 import { get } from 'lodash';
 import { Observable, of, from } from 'rxjs';
-import { shouldTransformResponse, Reative } from '@reative/core';
+import { Reative } from '@reative/core';
 import { GetStateOptions } from './state';
 import { store } from '../store/store';
 import { dispatch } from '../store/dispatch';
@@ -54,7 +54,7 @@ export function getState$<T = any>(
               if (responseFromCache) {
                 dispatch({
                   type: 'MEMO_UPDATE',
-                  ket: path,
+                  key: path,
                   value: responseFromCache
                 });
               }
