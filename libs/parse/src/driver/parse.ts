@@ -70,21 +70,22 @@ export class ParseDriver implements ReativeDriver {
     at: false,
     after: true,
     ref: false,
-    raw: true,
-    transform: true,
-    diff: true,
     http: false,
     include: true,
     doc: true,
     master: true,
     token: true,
     object: true,
-    save: 'browser',
-    ttl: 'browser',
-    state: 'browser',
     cache: 'browser',
     worker: true,
-    select: true
+    select: true,
+    memo: true,
+    raw: true, // deprecated
+    transform: true, // deprecated
+    diff: true, // deprecated
+    save: 'browser', // deprecated
+    ttl: 'browser', // deprecated
+    state: 'browser' // deprecated
   };
 
   constructor(options: ReativeParseOptions) {

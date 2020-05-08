@@ -13,7 +13,7 @@ import { install } from '../state/install';
 function _memo(state = {}, action) {
   switch (action.type) {
     case 'MEMO_UPDATE':
-      return { ...state, [action.path]: action.payload };
+      return { ...state, [action.key]: action.value };
     case 'MEMO_REMOVE':
       return {
         _memo: pickBy(state, it => it.key !== action.path),

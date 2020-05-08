@@ -9,13 +9,13 @@ export function setState(
   options: SetStateOptions = { save: true }
 ) {
   options = { ...defaultStateOptions, ...options };
-  const currentState = store().getState();
+  const currentState = store().getState()['_memo'];
   const nextState = { ...currentState, [key]: value };
 
   dispatch({
     type: 'MEMO_UPDATE',
-    path: key,
-    payload: value
+    key: key,
+    value: value
   });
 
   if (Reative.storage && options.save) {

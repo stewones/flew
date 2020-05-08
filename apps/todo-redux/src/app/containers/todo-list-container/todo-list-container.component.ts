@@ -19,13 +19,29 @@ export class TodoListContainerComponent implements OnInit {
   loading$ = connect<boolean>('todo.loading');
   todos$ = connect<Todo[]>('todo.list');
 
+  useMemo = true;
+  useCache = true;
+  useNetwork = true;
+
   constructor(protected detector: ChangeDetectorRef) {}
 
   ngOnInit() {
-    dispatch(getTodos());
+    dispatch(
+      getTodos({
+        useMemo: this.useMemo,
+        useCache: this.useCache,
+        useNetwork: this.useNetwork
+      })
+    );
   }
 
   reload() {
-    dispatch(getTodos());
+    dispatch(
+      getTodos({
+        useMemo: this.useMemo,
+        useCache: this.useCache,
+        useNetwork: this.useNetwork
+      })
+    );
   }
 }

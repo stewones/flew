@@ -24,9 +24,10 @@ export interface ReativeOptions {
   //
   // browser
   useCache?: boolean;
-  useState?: boolean;
+  useMemo?: boolean;
   useNetwork?: boolean;
   useWorker?: boolean; // global config to always use worker
-  saveNetwork?: boolean;
   persistence?: boolean;
+  useState?: boolean; // @deprecated
+  saveNetwork?: boolean; // @deprecated
 }

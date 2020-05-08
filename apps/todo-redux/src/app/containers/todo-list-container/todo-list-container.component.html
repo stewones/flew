@@ -1,9 +1,31 @@
-Loading: {{ loading$ | async }}
-<br />
 <ul [hidden]="loading$ | async">
   <li *ngFor="let todo of todos$ | async">
     {{ todo.text }}
   </li>
 </ul>
+<hr />
+Loading: {{ loading$ | async }}
+<br />
+Use Memo?
+<input
+  type="checkbox"
+  [checked]="useMemo"
+  (change)="useMemo = $event.target.checked"
+/>
+<br />
+Use Cache?
+<input
+  type="checkbox"
+  [checked]="useCache"
+  (change)="useCache = $event.target.checked"
+/>
+<br />
+Use Network?
+<input
+  type="checkbox"
+  [checked]="useNetwork"
+  (change)="useNetwork = $event.target.checked"
+/>
+<br />
 <br />
 <button (click)="reload()">Reload</button>

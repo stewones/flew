@@ -11,8 +11,7 @@ import {
   ReativeDriver,
   ReativeOptions,
   ReativeDriverOption,
-  ReativeChainPayload,
-  clearNetworkResponse
+  ReativeChainPayload
 } from '@reative/core';
 
 export class FirestoreDriver implements ReativeDriver {
@@ -46,21 +45,22 @@ export class FirestoreDriver implements ReativeDriver {
     at: true,
     after: true,
     ref: false,
-    raw: true,
-    transform: true,
-    diff: true,
     http: false,
     include: false,
     doc: true,
     master: false,
     token: false,
     object: false,
-    save: 'browser',
-    ttl: 'browser',
-    state: 'browser',
     cache: 'browser',
     worker: false,
-    select: false
+    select: false,
+    memo: true,
+    raw: true, // deprecated
+    transform: true, // deprecated
+    diff: true, // deprecated
+    save: 'browser', // deprecated
+    ttl: 'browser', // deprecated
+    state: 'browser' // deprecated
   };
 
   constructor(options: any) {
@@ -180,26 +180,12 @@ export class FirestoreDriver implements ReativeDriver {
 
           //
           // format data
-          const data: any[] = [];
+          const data = [];
           snapshot.forEach(doc => data.push(doc.data()));
 
           //
-          // define standard response
-          const response: Response = clearNetworkResponse({
-            data: data,
-            key: key,
-            collection: this.driverOptions.collection,
-            driver: this.driverName,
-            response: {
-              empty: snapshot.empty,
-              size: snapshot.size,
-              meta: snapshot.metadata
-            }
-          });
-
-          //
           // success callback
-          observer.next(response as T);
+          observer.next(data as any);
           observer.complete();
         })
         .catch(err => {
@@ -213,17 +199,7 @@ export class FirestoreDriver implements ReativeDriver {
 
   public findOne<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return this.find<T>(chain, key).pipe(
-      map((r: Response) => {
-        const response: Response = <Response>{
-          data: r.data && r.data.length ? r.data[0] : {},
-          key: r.key,
-          collection: this.driverOptions.collection,
-          driver: this.driverName,
-          response: r.response
-        };
-
-        return response as T;
-      })
+      map((r: Response) => (r.data && r.data.length ? r.data[0] : ({} as T)))
     );
   }
 
@@ -271,22 +247,9 @@ export class FirestoreDriver implements ReativeDriver {
             return turnOff();
           }
 
-          const data: any[] = [];
+          const data = [];
           snapshot.forEach(doc => data.push(doc.data()));
-          const response: Response = clearNetworkResponse({
-            data: data,
-            key: key,
-            collection: this.driverOptions.collection,
-            driver: this.driverOptions.driver,
-            response: {
-              empty: snapshot.empty,
-              size: snapshot.size,
-              meta: snapshot.metadata
-            }
-          });
-          //
-          // callback
-          observer.next(response as T);
+          observer.next(data as any);
         },
         err => observer.error(err)
       );

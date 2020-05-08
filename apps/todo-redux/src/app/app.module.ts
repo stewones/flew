@@ -4,7 +4,12 @@ import 'firebase/auth';
 import * as reducers from './reducers';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { StateModule, CacheModule, FirebaseModule } from '@reative/angular';
+import {
+  StateModule,
+  CacheModule,
+  FirebaseModule,
+  ReativeModule
+} from '@reative/angular';
 import { environment } from '../environments/environment';
 import { FIREBASE_CONFIG } from './configs/firebase';
 import { AppComponent } from './app.component';
@@ -15,6 +20,9 @@ import { RoutesModule } from './routes.module';
   imports: [
     BrowserModule,
     RoutesModule,
+    ReativeModule.forRoot({
+      silent: environment.production
+    }),
     StateModule.forRoot({
       // enable devtools when production is false
       production: environment.production,
@@ -30,12 +38,12 @@ import { RoutesModule } from './routes.module';
     FirebaseModule.forRoot({
       config: FIREBASE_CONFIG,
       persistence: false
+    }),
+    // use cache
+    CacheModule.forRoot({
+      dbName: environment.dbName,
+      dbStore: environment.dbStore
     })
-    // use cache @todo
-    // CacheModule.forRoot({
-    //   dbName: environment.dbName,
-    //   dbStore: environment.dbStore
-    // })
   ],
   providers: [],
   bootstrap: [AppComponent]

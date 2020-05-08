@@ -18,16 +18,16 @@ export async function feedState(path?: string) {
       if (!isEmpty(cache)) {
         dispatch({
           type: 'MEMO_UPDATE',
-          path: path,
-          payload: cache
+          key: path,
+          value: cache
         });
       }
     } else {
       Reative.storage.forEach((value, k, index) => {
         dispatch({
           type: 'MEMO_UPDATE',
-          path: `_memo.${k}`,
-          payload: value
+          key: `_memo.${k}`,
+          value: value
         });
       });
     }

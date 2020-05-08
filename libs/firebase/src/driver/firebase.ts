@@ -46,21 +46,22 @@ export class FirebaseDriver implements ReativeDriver {
     at: false,
     after: false,
     ref: true,
-    raw: true,
-    transform: true,
-    diff: true,
     http: false,
     include: false,
     doc: false,
     master: false,
     token: false,
     object: false,
-    save: 'browser',
-    ttl: 'browser',
-    state: 'browser',
     cache: 'browser',
     worker: false,
-    select: false
+    select: false,
+    memo: true,
+    raw: true, // deprecated
+    transform: true, // deprecated
+    diff: true, // deprecated
+    save: 'browser', // deprecated
+    ttl: 'browser', // deprecated
+    state: 'browser' // deprecated
   };
 
   constructor(options: any) {

@@ -54,8 +54,8 @@ export function getState$<T = any>(
               if (responseFromCache) {
                 dispatch({
                   type: 'MEMO_UPDATE',
-                  path: path,
-                  payload: responseFromCache
+                  ket: path,
+                  value: responseFromCache
                 });
               }
               resolve(responseFromCache);

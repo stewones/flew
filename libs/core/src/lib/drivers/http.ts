@@ -42,21 +42,22 @@ export class HttpDriver implements ReativeDriver {
     at: false,
     after: false,
     ref: false,
-    raw: true,
-    transform: true,
-    diff: true,
     http: true,
     include: false,
     doc: false,
     master: false,
     token: false,
     object: false,
-    save: 'browser',
-    ttl: 'browser',
-    state: 'browser',
     cache: 'browser',
     worker: true,
-    select: false
+    select: false,
+    memo: true,
+    save: 'browser', // deprecated
+    ttl: 'browser', // deprecated
+    state: 'browser', // deprecated
+    raw: true, // deprecated
+    transform: true, // deprecated
+    diff: true // deprecated
   };
 
   constructor() {}
