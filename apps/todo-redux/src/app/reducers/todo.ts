@@ -10,13 +10,15 @@ export function todo(
     case 'ADD_TODO_LOAD':
       return {
         ...state,
-        loading: true
+        loading: true,
+        error: null
       };
     case 'ADD_TODO_LIST':
       return {
         ...state,
         list: action.payload,
-        loading: false
+        loading: false,
+        error: null
       };
     case 'ADD_TODO_ERROR':
       return {

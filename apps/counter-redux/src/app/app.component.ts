@@ -11,7 +11,7 @@ import { delayedDecrement } from './actions/delayedDecrement';
 })
 export class AppComponent implements OnInit {
   display$ = connect<number>('counter');
-  displayDetailed$ = connect<number>('counter', { detailed: true });
+  displayDetailed$ = connect<number>('counter', { context: true });
 
   constructor() {
     console.log('initial state', getState());

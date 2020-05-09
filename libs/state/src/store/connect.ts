@@ -5,10 +5,10 @@ import { get } from 'lodash';
 import watch from 'redux-watch';
 
 export interface ConnectOptions {
-  detailed: boolean;
+  context: boolean;
 }
 
-export interface StateMeta<T = any> {
+export interface StateContext<T = any> {
   path: string;
   prev: T;
   next: T;
@@ -16,14 +16,14 @@ export interface StateMeta<T = any> {
 
 export function connect<T>(
   path: string,
-  options: ConnectOptions = { detailed: false }
-): Observable<T & StateMeta<T>> {
+  options: ConnectOptions = { context: false }
+): Observable<T & StateContext<T>> {
   return new Observable(observer => {
     const storeInstance = store();
     const storeValue = get(storeInstance.getState(), path);
 
     const w = watch(storeInstance.getState, path);
-    if (options.detailed) {
+    if (options.context) {
       observer.next({
         path,
         prev: storeValue,
@@ -42,7 +42,7 @@ export function connect<T>(
         //   next,
         //   new Date().toLocaleTimeString()
         // );
-        if (options.detailed) {
+        if (options.context) {
           observer.next({
             path,
             prev,
@@ -74,7 +74,7 @@ export type PropertyType<T> = T extends (...args: any[]) => any
 
 export function Connect<T>(
   path: string,
-  options: ConnectOptions = { detailed: false }
+  options: ConnectOptions = { context: false }
 ) {
   return function(constructor: Function) {
     constructor.prototype.display$ = connect<T>(path, options);

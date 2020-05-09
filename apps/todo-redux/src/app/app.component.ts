@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { connect, dispatch, StateMeta } from '@reative/state';
+import { connect, dispatch } from '@reative/state';
 import { navigateEnd } from './actions/navigateEnd';
 
 @Component({
@@ -11,12 +11,8 @@ import { navigateEnd } from './actions/navigateEnd';
 })
 export class AppComponent {
   constructor(private router: Router) {
-    connect<string>('route.pathname', {
-      detailed: true
-    }).subscribe((it: StateMeta<string>) =>
-      it.next
-        ? this.router.navigate([it.next]).then(() => dispatch(navigateEnd()))
-        : null
+    connect<string>('route.pathname').subscribe(it =>
+      it ? this.router.navigate([it]).then(() => dispatch(navigateEnd())) : null
     );
   }
 }

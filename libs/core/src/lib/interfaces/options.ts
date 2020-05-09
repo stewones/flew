@@ -11,6 +11,7 @@ export interface ReativeOptions {
 
   baseURL?: string; // eg: http://35.102.182.155:9200
   endpoint?: string; // eg: /api
+  pathname?: string; // eg: /some/long/path/to/resource
   httpConfig?: AxiosRequestConfig;
 
   driver?: ReativeDriverOption;

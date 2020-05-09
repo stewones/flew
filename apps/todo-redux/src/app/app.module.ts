@@ -1,4 +1,5 @@
 import 'firebase/firestore';
+import 'firebase/database';
 import 'firebase/auth';
 
 import * as reducers from './reducers';
@@ -8,7 +9,8 @@ import {
   StateModule,
   CacheModule,
   FirebaseModule,
-  ReativeModule
+  ReativeModule,
+  ParseModule
 } from '@reative/angular';
 import { environment } from '../environments/environment';
 import { FIREBASE_CONFIG } from './configs/firebase';
@@ -21,7 +23,9 @@ import { RoutesModule } from './routes.module';
     BrowserModule,
     RoutesModule,
     ReativeModule.forRoot({
-      silent: environment.production
+      silent: environment.production,
+      baseURL: 'https://api.thecatapi.com',
+      endpoint: '/v1'
     }),
     StateModule.forRoot({
       // enable devtools when production is false
@@ -34,15 +38,18 @@ import { RoutesModule } from './routes.module';
       // pass in the app reducers
       reducers: reducers
     }),
-    // use firebase
     FirebaseModule.forRoot({
       config: FIREBASE_CONFIG,
       persistence: false
     }),
-    // use cache
     CacheModule.forRoot({
       dbName: environment.dbName,
       dbStore: environment.dbStore
+    }),
+    ParseModule.forRoot({
+      serverURL: environment.parse.serverURL,
+      appID: environment.parse.appID,
+      masterKey: environment.parse.masterKey
     })
   ],
   providers: [],

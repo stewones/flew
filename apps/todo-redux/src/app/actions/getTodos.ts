@@ -3,7 +3,7 @@ import { addTodoList } from './addTodoList';
 import { addTodoError } from './addTodoError';
 import { TodoFindOptions } from '../interfaces/todoFindOptions';
 
-export function getTodos(options: TodoFindOptions = { useMemo: true }) {
+export function getTodos(options: TodoFindOptions) {
   return function(dispatch) {
     //
     // just a flag to be logged in state

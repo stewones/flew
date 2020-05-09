@@ -1,31 +1,46 @@
 <ul [hidden]="loading$ | async">
   <li *ngFor="let todo of todos$ | async">
-    <a (click)="edit(todo.id)">{{ todo.text }}</a>
+    <a (click)="edit(todo.id)" [innerHTML]="todo.text"></a>
   </li>
 </ul>
+<span [hidden]="(todos$ | async)?.length || (loading$ | async)">
+  no results found for {{ driver }}
+</span>
 <hr />
-Loading: {{ loading$ | async }}
-<br />
-Use Memo?
+Loading: {{ loading$ | async }}<br />
+Error: {{ (error$ | async | json) || 'none' }}<br />
+<hr />
+
+Use Memo
 <input
   type="checkbox"
   [checked]="useMemo"
   (change)="useMemo = $event.target.checked"
 />
 <br />
-Use Cache?
+Use Cache
 <input
   type="checkbox"
   [checked]="useCache"
   (change)="useCache = $event.target.checked"
 />
 <br />
-Use Network?
+Use Network
 <input
   type="checkbox"
   [checked]="useNetwork"
   (change)="useNetwork = $event.target.checked"
-/>
+/><br />
+<br />
+Driver
+<select (change)="driver = $event.target.value">
+  <option *ngFor="let item of drivers" [selected]="item === driver">
+    {{ item }}
+  </option>
+</select>
+<br />
+Simulate HTTP error
+<input type="checkbox" (change)="simulateHttpError($event)" />
 <br />
 <br />
 <button (click)="reload()">Reload</button>

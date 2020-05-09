@@ -7,9 +7,7 @@ import {
   ReativeDriver,
   ReativeDriverOption,
   ReativeOptions,
-  Response,
   Logger,
-  clearNetworkResponse,
   ReativeVerb,
   ReativeChain
 } from '@reative/core';
@@ -91,7 +89,7 @@ export class FirebaseDriver implements ReativeDriver {
     return this.logger;
   }
 
-  public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
+  public find<T>(chain: ReativeChainPayload, key: string): Observable<T[]> {
     return new Observable((observer: PartialObserver<any>) => {
       const connector = this.getInstance();
       //
@@ -129,25 +127,20 @@ export class FirebaseDriver implements ReativeDriver {
         async (snapshot: any) => {
           //
           // format data
-          const data: any[] = [];
+          const data: T[] = [];
           const val: any = snapshot.toJSON();
 
-          if (isObject(val)) for (const k in val) data.push(val[k]);
-          else data.push(val);
-
-          //
-          // define standard response
-          const response: Response = clearNetworkResponse({
-            data: data,
-            key: key,
-            collection: this.driverOptions.collection,
-            driver: this.driverName,
-            response: {}
-          });
+          if (isObject(val)) {
+            for (const k in val) {
+              data.push(val[k]);
+            }
+          } else {
+            data.push(val);
+          }
 
           //
           // success callback
-          observer.next(response as T);
+          observer.next(data);
           observer.complete();
         },
         err => {
@@ -162,16 +155,9 @@ export class FirebaseDriver implements ReativeDriver {
 
   public findOne<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return this.find<T>(chain, key).pipe(
-      map((r: Response) => {
+      map(r => {
         const data = get(r, 'data[0]');
-        const response: Response = {
-          data: data,
-          key: r.key,
-          collection: this.driverOptions.collection,
-          driver: this.driverName,
-          response: r.response
-        };
-        return response as T;
+        return data as T;
       })
     );
   }
@@ -209,19 +195,9 @@ export class FirebaseDriver implements ReativeDriver {
       firebase.on(
         'value',
         (snapshot: any) => {
-          const response: Response = clearNetworkResponse({
-            data: snapshot.val(),
-            key: key,
-            collection: this.driverOptions.collection,
-            driver: this.driverName,
-            response: {
-              empty: !snapshot.exists(),
-              size: snapshot.numChildren()
-            }
-          });
           //
           // callback
-          observer.next(response as T);
+          observer.next(snapshot.val() as T);
         },
         err => observer.error(err)
       );

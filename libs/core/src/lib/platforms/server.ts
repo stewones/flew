@@ -112,6 +112,8 @@ export class ReativeCore implements ReativeAPI {
   }
 
   protected createKey(verb, path, body): string {
+    if (this.chain.key) return this.chain.key;
+
     const chain = { ...this.chain };
     const options = { ...this.options };
     const payload = JSON.stringify({
@@ -130,9 +132,15 @@ export class ReativeCore implements ReativeAPI {
         'diff' // @deprecated
       ])
     });
-    const key = `${options.collection || 'rr'}:/${options.endpoint ||
-      ''}${path || ''}/${SHA256(payload)}`;
-    return chain.key || key.split('///').join('//');
+
+    const keyStart = options.collection || 'reative';
+    const keyEndpoint = chain.driver === 'http' ? options.endpoint : '';
+    const keyPath = chain.driver === 'http' ? path || options.pathname : '';
+    const keyCrypt = SHA256(payload);
+
+    const key = `${keyStart}:/${keyEndpoint}${keyPath}/${keyCrypt}`;
+
+    return key.split('///').join('//');
   }
 
   protected call<T>(
