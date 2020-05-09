@@ -483,7 +483,7 @@
       },
       "root": "apps/todo-redux",
       "sourceRoot": "apps/todo-redux/src",
-      "prefix": "",
+      "prefix": "reative",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -578,7 +578,7 @@
       },
       "root": "apps/todo",
       "sourceRoot": "apps/todo/src",
-      "prefix": "",
+      "prefix": "reative",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",

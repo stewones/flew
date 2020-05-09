@@ -1,19 +1,18 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-  ChangeDetectionStrategy
-} from '@angular/core';
-
-import { connect, dispatch } from '@reative/state';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ReativeDriverOption } from '@reative/core';
+import { connect, dispatch, getState } from '@reative/state';
+import { THE_CAT_API_SEARCH } from '../../configs/cat';
 import { Todo } from '../../interfaces/todo';
 import { getTodos } from '../../actions/getTodos';
 import { navigateTo } from '../../actions/navigateTo';
-import { ReativeDriverOption } from '../../../../../../libs/core/src';
+import { useMemo } from '../../actions/useMemo';
+import { useCache } from '../../actions/useCache';
+import { useNetwork } from '../../actions/useNetwork';
+import { setDriver } from '../../actions/setDriver';
+import { setPathname } from '../../actions/setPathname';
 
-const THE_CAT_API_SEARCH = '/images/search?limit=5';
 @Component({
-  selector: 'todo-list-container',
+  selector: 'reative-todo-list-container',
   templateUrl: './todo-list-container.component.html',
   styleUrls: ['./todo-list-container.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -23,26 +22,24 @@ export class TodoListContainerComponent implements OnInit {
   error$ = connect<boolean>('todo.error');
   todos$ = connect<Todo[]>('todo.list');
 
-  driver: ReativeDriverOption = 'firestore';
+  useMemo$ = connect<boolean>('control.useMemo');
+  useCache$ = connect<boolean>('control.useCache');
+  useNetwork$ = connect<boolean>('control.useNetwork');
+  simulateError$ = connect<boolean>('control.simulateError');
+
+  driver$ = connect<ReativeDriverOption>('control.driver');
   drivers = ['firestore', 'firebase', 'http', 'parse'];
 
-  useMemo = true;
-  useCache = true;
-  useNetwork = true;
-  useError = false;
-
-  pathname = THE_CAT_API_SEARCH; // for http driver
-
-  constructor(protected detector: ChangeDetectorRef) {}
+  constructor() {}
 
   ngOnInit() {
     dispatch(
       getTodos({
-        useMemo: this.useMemo,
-        useCache: this.useCache,
-        useNetwork: this.useNetwork,
-        driver: this.driver,
-        pathname: this.pathname
+        useMemo: getState('control.useMemo'),
+        useCache: getState('control.useCache'),
+        useNetwork: getState('control.useNetwork'),
+        driver: getState('control.driver'),
+        pathname: getState('control.pathname')
       })
     );
   }
@@ -50,11 +47,11 @@ export class TodoListContainerComponent implements OnInit {
   reload() {
     dispatch(
       getTodos({
-        useMemo: this.useMemo,
-        useCache: this.useCache,
-        useNetwork: this.useNetwork,
-        driver: this.driver,
-        pathname: this.pathname
+        useMemo: getState('control.useMemo'),
+        useCache: getState('control.useCache'),
+        useNetwork: getState('control.useNetwork'),
+        driver: getState('control.driver'),
+        pathname: getState('control.pathname')
       })
     );
   }
@@ -63,14 +60,30 @@ export class TodoListContainerComponent implements OnInit {
     dispatch(navigateTo(`/edit/${todoID}`));
   }
 
+  changeDriver($event) {
+    dispatch(setDriver($event.target.value));
+  }
+
+  changeUseMemo($event) {
+    dispatch(useMemo($event.target.checked));
+  }
+
+  changeUseCache($event) {
+    dispatch(useCache($event.target.checked));
+  }
+
+  changeUseNetwork($event) {
+    dispatch(useNetwork($event.target.checked));
+  }
+
   simulateHttpError($event) {
     const isChecked = $event.target.checked;
     if (isChecked) {
-      this.driver = 'http';
-      this.pathname = '/some-weird-path';
+      dispatch(setDriver('http'));
+      dispatch(setPathname('/some-weird-path'));
     } else {
-      this.driver = 'firestore';
-      this.pathname = THE_CAT_API_SEARCH;
+      dispatch(setDriver('firestore'));
+      dispatch(setPathname(THE_CAT_API_SEARCH));
     }
   }
 }

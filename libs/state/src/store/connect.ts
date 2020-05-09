@@ -17,7 +17,7 @@ export interface StateContext<T = any> {
 export function connect<T>(
   path: string,
   options: ConnectOptions = { context: false }
-): Observable<T & StateContext<T>> {
+): Observable<T> {
   return new Observable(observer => {
     const storeInstance = store();
     const storeValue = get(storeInstance.getState(), path);

@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { connect, ConnectOptions, StateContext } from '../store/connect';
+import { connect, ConnectOptions } from '../store/connect';
 
 /**
  * Select data from the memoized state
@@ -7,6 +7,6 @@ import { connect, ConnectOptions, StateContext } from '../store/connect';
 export function select<T>(
   key: string,
   options?: ConnectOptions
-): Observable<T & StateContext<T>> {
+): Observable<T> {
   return connect<T>(`_memo.${key}`, options);
 }

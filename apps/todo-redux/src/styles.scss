@@ -8,3 +8,27 @@ a {
   text-decoration: underline;
   cursor: pointer;
 }
+
+.flex {
+  display: flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.p-2 {
+  padding: 10px;
+}
+
+.pl-2 {
+  padding-left: 10px;
+}
+
+.w-200 {
+  width: 200px;
+}
