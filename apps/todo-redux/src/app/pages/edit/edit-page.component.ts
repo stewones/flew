@@ -1,28 +1,21 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { select, dispatch } from '@reative/state';
 import { navigateTo } from '../../actions/navigateTo';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'edit-page',
+  selector: 'reative-edit-page',
   templateUrl: './edit-page.component.html',
   styleUrls: ['./edit-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditPageComponent implements OnInit {
-  entries$: Observable<any[]>;
+  id: string = this.route.snapshot.params.id;
+  constructor(protected route: ActivatedRoute) {}
 
-  constructor(protected detector: ChangeDetectorRef) {}
-
-  ngOnInit() {
-    this.entries$ = select('entries');
-  }
+  ngOnInit() {}
 
   back() {
     dispatch(navigateTo(`/`));

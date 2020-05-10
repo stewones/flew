@@ -1,5 +1,6 @@
 export function todo(
   state = {
+    view: {},
     list: [],
     loading: false,
     error: null
@@ -7,11 +8,23 @@ export function todo(
   action: { type: string; payload: any }
 ) {
   switch (action.type) {
-    case 'ADD_TODO_LOAD':
+    case 'LOADING_TODO':
       return {
         ...state,
         loading: true,
         error: null
+      };
+    case 'LOADING_TODOS':
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    case 'LOADING_ERROR':
+      return {
+        ...state,
+        error: action.payload,
+        loading: false
       };
     case 'ADD_TODO_LIST':
       return {
@@ -20,12 +33,14 @@ export function todo(
         loading: false,
         error: null
       };
-    case 'ADD_TODO_ERROR':
+    case 'ADD_TODO_VIEW':
       return {
         ...state,
-        error: action.payload,
-        loading: false
+        view: action.payload,
+        loading: false,
+        error: null
       };
+
     default:
       return state;
   }

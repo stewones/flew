@@ -199,7 +199,7 @@ export class FirestoreDriver implements ReativeDriver {
 
   public findOne<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return this.find<T>(chain, key).pipe(
-      map((r: Response) => (r.data && r.data.length ? r.data[0] : ({} as T)))
+      map((r: Response) => (r && r.length ? r[0] : ({} as T)))
     );
   }
 

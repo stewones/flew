@@ -33,18 +33,10 @@ export class TodoListComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    dispatch(
-      getTodos({
-        useMemo: getState('control.useMemo'),
-        useCache: getState('control.useCache'),
-        useNetwork: getState('control.useNetwork'),
-        driver: getState('control.driver'),
-        pathname: getState('control.pathname')
-      })
-    );
+    this.load();
   }
 
-  reload() {
+  load() {
     dispatch(
       getTodos({
         useMemo: getState('control.useMemo'),
