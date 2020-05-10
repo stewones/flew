@@ -12,12 +12,12 @@ import { setDriver } from '../../actions/setDriver';
 import { setPathname } from '../../actions/setPathname';
 
 @Component({
-  selector: 'reative-todo-list-container',
-  templateUrl: './todo-list-container.component.html',
-  styleUrls: ['./todo-list-container.component.scss'],
+  selector: 'reative-todo-list',
+  templateUrl: './todo-list.component.html',
+  styleUrls: ['./todo-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TodoListContainerComponent implements OnInit {
+export class TodoListComponent implements OnInit {
   loading$ = connect<boolean>('todo.loading');
   error$ = connect<boolean>('todo.error');
   todos$ = connect<Todo[]>('todo.list');

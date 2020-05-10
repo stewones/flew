@@ -4,7 +4,7 @@ import { connect, dispatch } from '@reative/state';
 import { navigateEnd } from './actions/navigateEnd';
 
 @Component({
-  selector: 'reative-todo-redux-app',
+  selector: 'reative-todo-redux',
   template: `
     <router-outlet></router-outlet>
   `

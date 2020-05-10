@@ -58,28 +58,27 @@ export function connect<T>(
 
 //
 // @todo @Connect decorator
+// export type ConnectType<T> = <U extends Observable<T>, K extends string>(
+//   target: U,
+//   key: K
+// ) => void;
 
-export type ConnectType<T> = <U extends Observable<T>, K extends string>(
-  target: U,
-  key: K
-) => void;
+// export type ComponentClass<T> = {
+//   [P in keyof T]: T[P];
+// };
 
-export type ComponentClass<T> = {
-  [P in keyof T]: T[P];
-};
+// export type PropertyType<T> = T extends (...args: any[]) => any
+//   ? Observable<ReturnType<T>>
+//   : any;
 
-export type PropertyType<T> = T extends (...args: any[]) => any
-  ? Observable<ReturnType<T>>
-  : any;
-
-export function Connect<T>(
-  path: string,
-  options: ConnectOptions = { context: false }
-) {
-  return function(constructor: Function) {
-    constructor.prototype.display$ = connect<T>(path, options);
-  };
-}
+// export function Connect<T>(
+//   path: string,
+//   options: ConnectOptions = { context: false }
+// ) {
+//   return function(constructor: Function) {
+//     constructor.prototype.display$ = connect<T>(path, options);
+//   };
+// }
 
 // export function Connect<T>(
 //   path: string,
