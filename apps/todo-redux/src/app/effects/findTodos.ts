@@ -3,14 +3,7 @@ import { map } from 'rxjs/operators';
 import { Todo } from '../interfaces/todo';
 import { TodoFindOptions } from '../interfaces/todoFindOptions';
 
-export function findTodos(
-  options: TodoFindOptions = {
-    useMemo: true,
-    useCache: true,
-    useNetwork: true,
-    driver: 'firestore'
-  }
-) {
+export function findTodos(options: TodoFindOptions) {
   return collection(`Todo`, { pathname: options.pathname })
     .driver(options.driver)
     .memo(options.useMemo)
