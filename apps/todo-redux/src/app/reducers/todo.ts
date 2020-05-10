@@ -40,7 +40,18 @@ export function todo(
         loading: false,
         error: null
       };
-
+    case 'SAVING_TODO':
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
+    case 'TODO_SAVED':
+      return {
+        ...state,
+        loading: false,
+        error: null
+      };
     default:
       return state;
   }

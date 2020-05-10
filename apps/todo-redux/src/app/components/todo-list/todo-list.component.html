@@ -32,7 +32,11 @@
     </select>
     <br />
     Simulate HTTP error
-    <input type="checkbox" (change)="simulateHttpError($event)" />
+    <input
+      type="checkbox"
+      [checked]="simulateHttpError$ | async"
+      (change)="simulateHttpError($event)"
+    />
     <br />
     <br />
     <button (click)="load()">Reload</button>
@@ -40,7 +44,7 @@
 
   <div class="w-full pl-2">
     Loading: {{ loading$ | async }}<br />
-    Error: {{ (error$ | async | json) || 'none' }}<br />
+    Error: {{ error$ | async | json }}<br />
     <hr />
     <ul [hidden]="loading$ | async">
       <li *ngFor="let todo of todos$ | async">

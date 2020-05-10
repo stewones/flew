@@ -7,7 +7,7 @@ export function control(
     useMemo: true,
     useCache: true,
     useNetwork: true,
-    simulateError: false
+    simulateHttpError: false
   },
   action: { type: string; payload: any }
 ) {
@@ -27,10 +27,10 @@ export function control(
         ...state,
         useNetwork: action.payload
       };
-    case 'CONTROL_SIMULATE_ERROR':
+    case 'CONTROL_SIMULATE_HTTP_ERROR':
       return {
         ...state,
-        simulateError: action.payload
+        simulateHttpError: action.payload
       };
     case 'CONTROL_DRIVER':
       return {

@@ -7,7 +7,7 @@ import {
 import { dispatch, getState, connect } from '@reative/state';
 import { getTodo } from '../../actions/getTodo';
 import { Todo } from '../../interfaces/todo';
-
+import { saveTodo } from '../../actions/saveTodo';
 @Component({
   selector: 'reative-todo-edit',
   templateUrl: './todo-edit.component.html',
@@ -35,5 +35,9 @@ export class TodoEditComponent implements OnInit {
         pathname: getState('control.pathname')
       })
     );
+  }
+
+  save(todo: Todo) {
+    dispatch(saveTodo(todo));
   }
 }

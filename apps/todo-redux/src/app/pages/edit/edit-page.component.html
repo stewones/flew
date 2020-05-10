@@ -1,5 +1,9 @@
 <div class="">
   <a (click)="back()">go back</a>
+  <br />
+  Loading: {{ loading$ | async }}
+  <br />
+  Error: {{ error$ | async | json }}
   <hr />
   <reative-todo-edit [id]="id"></reative-todo-edit>
 </div>

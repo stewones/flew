@@ -1,9 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-
-import { Observable } from 'rxjs';
-import { select, dispatch } from '@reative/state';
+import { ActivatedRoute } from '@angular/router';
+import { connect, dispatch } from '@reative/state';
 import { navigateTo } from '../../actions/navigateTo';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'reative-edit-page',
@@ -13,6 +11,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class EditPageComponent implements OnInit {
   id: string = this.route.snapshot.params.id;
+
+  loading$ = connect<boolean>('todo.loading');
+  error$ = connect<any>('todo.error');
+
   constructor(protected route: ActivatedRoute) {}
 
   ngOnInit() {}

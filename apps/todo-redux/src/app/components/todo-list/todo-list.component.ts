@@ -10,6 +10,7 @@ import { useCache } from '../../actions/useCache';
 import { useNetwork } from '../../actions/useNetwork';
 import { setDriver } from '../../actions/setDriver';
 import { setPathname } from '../../actions/setPathname';
+import { setSimulateError } from '../../actions/setSimulateError';
 
 @Component({
   selector: 'reative-todo-list',
@@ -25,7 +26,7 @@ export class TodoListComponent implements OnInit {
   useMemo$ = connect<boolean>('control.useMemo');
   useCache$ = connect<boolean>('control.useCache');
   useNetwork$ = connect<boolean>('control.useNetwork');
-  simulateError$ = connect<boolean>('control.simulateError');
+  simulateHttpError$ = connect<boolean>('control.simulateHttpError');
 
   driver$ = connect<ReativeDriverOption>('control.driver');
   drivers = ['firestore', 'firebase', 'http', 'parse'];
@@ -70,6 +71,7 @@ export class TodoListComponent implements OnInit {
 
   simulateHttpError($event) {
     const isChecked = $event.target.checked;
+    dispatch(setSimulateError(isChecked));
     if (isChecked) {
       dispatch(setDriver('http'));
       dispatch(setPathname('/some-weird-path'));
@@ -77,5 +79,6 @@ export class TodoListComponent implements OnInit {
       dispatch(setDriver('firestore'));
       dispatch(setPathname(THE_CAT_API_SEARCH));
     }
+    this.load();
   }
 }

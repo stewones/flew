@@ -1,11 +1,10 @@
 import { isArray, isEmpty, isNil, isObject } from 'lodash';
-import { Observable, PartialObserver } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SetOptions } from '@reative/core';
 
 import {
   Logger,
-  Response,
   ReativeVerb,
   ReativeChain,
   ReativeDriver,
@@ -133,8 +132,8 @@ export class FirestoreDriver implements ReativeDriver {
     return firestore.limit(limit);
   }
 
-  public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
-    return new Observable((observer: PartialObserver<T>) => {
+  public find<T>(chain: ReativeChainPayload, key: string): Observable<T[]> {
+    return new Observable(observer => {
       const connector = this.getInstance();
       //
       // run exceptions
@@ -180,12 +179,12 @@ export class FirestoreDriver implements ReativeDriver {
 
           //
           // format data
-          const data = [];
+          const data: T[] = [];
           snapshot.forEach(doc => data.push(doc.data()));
 
           //
           // success callback
-          observer.next(data as any);
+          observer.next(data);
           observer.complete();
         })
         .catch(err => {
@@ -199,7 +198,7 @@ export class FirestoreDriver implements ReativeDriver {
 
   public findOne<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return this.find<T>(chain, key).pipe(
-      map((r: Response) => (r && r.length ? r[0] : ({} as T)))
+      map(r => (r && r.length ? r[0] : ({} as T)))
     );
   }
 
