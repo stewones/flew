@@ -70,7 +70,7 @@ export function find(handler: QueryHandler) {
           sessionToken: chain.useSessionToken
         })
         .then(r => handler.success(r))
-        .catch(handler.error);
+        .catch(err => handler.error(err));
       break;
 
     default:
@@ -80,7 +80,7 @@ export function find(handler: QueryHandler) {
           sessionToken: chain.useSessionToken
         })
         .then(r => handler.success(r))
-        .catch(handler.error);
+        .catch(err => handler.error(err));
       break;
   }
 }

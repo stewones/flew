@@ -1,6 +1,6 @@
 // tslint:disable
 import { AxiosRequestConfig } from 'axios';
-import { isArray, isEmpty, isBoolean, isString, omit, startCase } from 'lodash';
+import { isArray, isEmpty, isString, omit, startCase } from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { Response } from '../interfaces/response';
 import { Reative } from '../symbols/reative';
@@ -15,8 +15,6 @@ import { isServer } from '../utils/platform';
 import { HttpDriver } from '../drivers/http';
 import { SHA256 } from '../utils/sha';
 import { R_VERSION } from '../version';
-import { map } from 'rxjs/operators';
-import { shouldTransformResponse } from '../utils/response';
 import { SetOptions } from '../interfaces/set';
 /**
  * @export
@@ -217,16 +215,7 @@ export class ReativeCore implements ReativeAPI {
 
     //
     // execute the request
-    return Reative.driver[_driver][_verb]<T>(arg1, arg2, arg3, arg4).pipe(
-      map((data: Response) => {
-        if (isServer()) {
-          if (!isBoolean(chain.transformData)) chain.transformData = true;
-          const transformResponse: any = shouldTransformResponse(chain, data);
-          return transformResponse(data);
-        }
-        return data;
-      })
-    );
+    return Reative.driver[_driver][_verb]<T>(arg1, arg2, arg3, arg4);
   }
 
   /**
@@ -697,7 +686,7 @@ export class ReativeCore implements ReativeAPI {
    */
   public state(active: boolean): ReativeCore {
     this.chain.useMemo = active;
-    this.checkChainAvailability(this.chain.driver, 'state');
+    this.checkChainAvailability(this.chain.driver, 'memo');
     return this;
   }
 

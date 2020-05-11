@@ -1,7 +1,6 @@
 import { isEmpty, isFunction, trim, omit } from 'lodash';
 
 import {
-  Reative,
   ReativeDriver,
   ReativeChainPayload,
   ReativeDriverOption,
@@ -104,17 +103,10 @@ export class ParseDriver implements ReativeDriver {
 
   public find<T>(chain: ReativeChainPayload, key: string): Observable<T[]> {
     return new Observable(observer => {
-      const Parse = this.getInstance();
-      const options: ReativeOptions = {
-        ...Reative.options,
-        ...this.driverOptions,
-        ...chain
-      };
-
       //
       // network handle
-      const error = r => {
-        observer.error(r);
+      const error = err => {
+        observer.error(err);
         observer.complete();
       };
 
@@ -124,14 +116,11 @@ export class ParseDriver implements ReativeDriver {
           // tslint:disable-next-line: deprecation
           const entry =
             isFunction(item.toJSON) && !chain.useObject ? item.toJSON() : item;
-
           if (!chain.useObject) {
-            // @todo add id for nested results
             entry.id = entry.objectId;
           }
           response.push(entry);
         }
-
         observer.next(response);
         observer.complete();
       };

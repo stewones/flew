@@ -97,11 +97,6 @@ export class HttpDriver implements ReativeDriver {
     const endpoint = options.endpoint;
 
     //
-    // call exceptions
-    if (!baseURL) throw new Error(`baseURL needed for [${method}]`);
-    if (!endpoint) throw new Error(`endpoint required for [${method}]`);
-
-    //
     // set path to be requestes
     const url = `${baseURL}${endpoint}${options.pathname}${path}`;
     return new Observable((observer: PartialObserver<T>) => {
