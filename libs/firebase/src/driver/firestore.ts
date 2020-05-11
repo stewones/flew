@@ -27,7 +27,7 @@ export class FirestoreDriver implements ReativeDriver {
     post: 'http.post',
     update: true,
     patch: 'http.patch',
-    delete: 'http.delete',
+    delete: true,
     set: true,
     count: false,
     run: false
@@ -355,6 +355,47 @@ export class FirestoreDriver implements ReativeDriver {
       firestore
         .doc(id)
         .update(newData)
+        .then(response)
+        .catch(error);
+    });
+  }
+
+  public delete<T>(
+    path: string,
+    key: string,
+    payload: any,
+    chain: ReativeChainPayload
+  ): Observable<T> {
+    return new Observable(observer => {
+      const connector = this.getInstance();
+      const id = chain.doc;
+
+      //
+      // run exceptions
+      this.exceptions();
+
+      //
+      // define connector
+      const firestore: any = connector.collection(
+        this.driverOptions.collection
+      );
+
+      //
+      // define return
+      const response = r => {
+        observer.next(r);
+        observer.complete();
+      };
+      const error = err => {
+        observer.error(err);
+        observer.complete();
+      };
+
+      //
+      // call firestore
+      firestore
+        .doc(id)
+        .delete()
         .then(response)
         .catch(error);
     });

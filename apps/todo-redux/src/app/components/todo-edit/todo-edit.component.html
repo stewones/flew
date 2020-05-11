@@ -7,4 +7,5 @@
   ></textarea>
   <br />
   <button (click)="save(todo)">Save</button>
+  <button [hidden]="!id" (click)="delete(todo)">Delete</button>
 </div>

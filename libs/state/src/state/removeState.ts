@@ -1,14 +1,24 @@
+import { Reative } from '@reative/core';
 import { dispatch } from '../store/dispatch';
 
 /**
- * Remove state based on path
+ * Remove memoized/cached state based on key
  *
  * @export
- * @param {string} path
+ * @param {string} key
+ * @param {{ cache: boolean }} [options={ cache: true }]
+ * @returns {Promise<boolean>}
  */
-export function removeState(path: string) {
+export function removeState(
+  key: string,
+  options: { cache: boolean } = { cache: true }
+): Promise<boolean> {
   dispatch({
     type: 'MEMO_REMOVE',
-    path: path
+    key: key
   });
+  if (options.cache) {
+    return Reative.storage.remove(key);
+  }
+  return Promise.resolve(true);
 }

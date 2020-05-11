@@ -16,8 +16,9 @@ function _memo(state = {}, action) {
       return { ...state, [action.key]: action.value };
     case 'MEMO_REMOVE':
       return {
-        _memo: pickBy(state, it => it.key !== action.path),
-        ...pickBy(state, it => it.key !== action.path)
+        ...pickBy(state, (it, key) => {
+          return key !== action.key;
+        })
       };
     case 'MEMO_RESET':
       return {};

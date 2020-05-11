@@ -12,6 +12,7 @@ import { Todo } from '../../interfaces/todo';
 import { saveTodo } from '../../actions/saveTodo';
 import { addTodoView } from '../../actions/addTodoView';
 import { createTodo } from '../../actions/createTodo';
+import { removeTodo } from '../../actions/removeTodo';
 
 @Component({
   selector: 'reative-todo-edit',
@@ -22,7 +23,8 @@ import { createTodo } from '../../actions/createTodo';
 export class TodoEditComponent implements OnInit {
   @Input() id: string;
 
-  view$ = connect<Todo>('todo.view', { mutable: true }); // mutable is meant for not changing redux state while performing form actions (ngModel)
+  // mutable option is meant for not changing redux state. ie: while performing form actions (ngModel)
+  view$ = connect<Todo>('todo.view', { mutable: true });
 
   constructor() {}
 
@@ -58,5 +60,9 @@ export class TodoEditComponent implements OnInit {
     } else {
       dispatch(createTodo(todo));
     }
+  }
+
+  delete(todo: Todo) {
+    dispatch(removeTodo(todo));
   }
 }

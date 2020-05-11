@@ -1,10 +1,11 @@
 import { collection } from '@reative/core';
-import { map } from 'rxjs/operators';
 import { Todo } from '../interfaces/todo';
 import { TodoFindOptions } from '../interfaces/todoFindOptions';
+import { findTodoKey } from './findTodoKey';
 
 export function findTodo(id: string, options: TodoFindOptions) {
   return collection(`Todo`, { pathname: options.pathname })
+    .key(findTodoKey(id))
     .driver(options.driver)
     .memo(options.useMemo)
     .cache(options.useCache)

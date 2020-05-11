@@ -52,6 +52,12 @@ export function todo(
         loading: true,
         error: null
       };
+    case 'DELETING_TODO':
+      return {
+        ...state,
+        loading: true,
+        error: null
+      };
     default:
       return state;
   }

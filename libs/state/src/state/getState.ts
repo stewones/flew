@@ -31,30 +31,30 @@ export function getState<T = any>(
  *
  * @export
  * @template T
- * @param {string} path
+ * @param {string} key
  * @param {GetStateOptions} [options={ raw: false }]
  * @returns {Observable<T>}
  */
 export function getState$<T = any>(
-  path: string,
+  key: string,
   /**
    * @deprecated
    */
   options: GetStateOptions = { raw: false }
 ): Observable<T> {
-  const responseFromState = getState(path) || null;
+  const responseFromState = getState(key) || null;
 
   return responseFromState
     ? of(responseFromState)
     : (from(
         new Promise((resolve, reject) => {
           Reative.storage
-            .get(path)
+            .get(key)
             .then(responseFromCache => {
               if (responseFromCache) {
                 dispatch({
                   type: 'MEMO_UPDATE',
-                  key: path,
+                  key: key,
                   value: responseFromCache
                 });
               }

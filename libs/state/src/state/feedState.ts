@@ -9,16 +9,16 @@ import { dispatch } from '../store/dispatch';
  * @param {string} [path]
  * @returns
  */
-export async function feedState(path?: string) {
+export async function feedState(key?: string) {
   const hasStorage = isFunction(Reative.storage.forEach);
 
   if (hasStorage) {
-    if (path) {
-      const cache = await Reative.storage.get(`_memo.${path}`);
+    if (key) {
+      const cache = await Reative.storage.get(key);
       if (!isEmpty(cache)) {
         dispatch({
           type: 'MEMO_UPDATE',
-          key: path,
+          key: key,
           value: cache
         });
       }
@@ -26,7 +26,7 @@ export async function feedState(path?: string) {
       Reative.storage.forEach((value, k, index) => {
         dispatch({
           type: 'MEMO_UPDATE',
-          key: `_memo.${k}`,
+          key: k,
           value: value
         });
       });
