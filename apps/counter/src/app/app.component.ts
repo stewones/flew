@@ -8,11 +8,13 @@ import { select, setState, getState } from '@reative/state';
 })
 export class AppComponent implements OnInit {
   display$ = select<number>('counter');
+  displayTree$ = select<{ total: number }>('counter-tree');
 
   constructor() {}
 
   ngOnInit() {
     setState(`counter`, 420);
+    setState(`counter-tree`, { total: 210 });
   }
 
   increment() {
@@ -21,5 +23,13 @@ export class AppComponent implements OnInit {
 
   decrement() {
     setState(`counter`, getState(`counter`) - 1);
+  }
+
+  incrementTree() {
+    setState(`counter-tree`, { total: getState(`counter-tree`).total + 1 });
+  }
+
+  decrementTree() {
+    setState(`counter-tree`, { total: getState(`counter-tree`).total - 1 });
   }
 }
