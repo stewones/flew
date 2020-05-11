@@ -22,7 +22,6 @@ import { createTodo } from '../../actions/createTodo';
 export class TodoEditComponent implements OnInit {
   @Input() id: string;
 
-  todo = {} as Todo;
   view$ = connect<Todo>('todo.view', { mutable: true }); // mutable is meant for not changing redux state while performing form actions (ngModel)
 
   constructor() {}
