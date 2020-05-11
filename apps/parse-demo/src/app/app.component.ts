@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
     // this.setQuery();
     // this.orQueryArraySupport();
     // this.atAfterFirestoreSupport();
-    // this.reativeRun();
+    this.reativeRun();
     // this.configureHttp();
     // this.httpCalls();
     // this.webWorkerPost();
@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
     // this.parseSaveAll();
     // this.disableAutoIdentifier();
     // this.parseQuery();
-    this.parseSet();
+    // this.parseSet();
   }
 
   exerciseTest() {
@@ -201,16 +201,16 @@ export class AppComponent implements OnInit {
   }
 
   async reativeRun() {
-    collection(`Debrief`)
+    // collection(`Todo`)
+    //   .driver(`parse`)
+    //   .find()
+    //   .toPromise()
+    //   .then(it => console.log(111, it));
+
+    collection(`Task`)
       .driver(`parse`)
-      .key(`debrief-report`)
-      .run(`debriefReport`, {
-        company: '2BrFT6OrBm',
-        picker: {
-          startDate: '2019-01-01',
-          endDate: '2019-12-31'
-        }
-      })
+      .key(`collection-run`)
+      .run(`collectionRun`, {})
       .toPromise()
       .then(console.log);
   }

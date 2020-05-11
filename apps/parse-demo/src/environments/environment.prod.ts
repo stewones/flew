@@ -3,7 +3,8 @@ export const environment = {
   dbStoreName: 'parse-demo',
   dbName: 'prod',
   parse: {
-    appID: 'BackrServer',
+    appID: 'AppServer',
+    masterKey: 'AppParse', // from client used only for tests
     serverURL: 'http://localhost:1337/api'
   }
 };

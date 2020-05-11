@@ -5,10 +5,10 @@
 export const environment = {
   production: false,
   dbStoreName: 'parse-demo',
-  dbName: 'prod',
+  dbName: 'dev',
   parse: {
-    appID: 'OnTimeServer',
-    masterKey: 'OnTimeParse', // from client used only for tests
+    appID: 'AppServer',
+    masterKey: 'AppParse', // from client used only for tests
     serverURL: 'http://localhost:1337/api'
   }
 };
