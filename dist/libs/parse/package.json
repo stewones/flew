@@ -1,12 +1,13 @@
 {
   "name": "@reative/parse",
-  "version": "4.0.2",
+  "version": "5.0.4-next",
   "peerDependencies": {
-    "@reative/core": "^4.0.0",
+    "@reative/core": "5.0.4-next",
     "tslib": "^1.10.0"
   },
   "dependencies": {
-    "@reative/core": "^4.0.0"
+    "@reative/core": "5.0.4-next",
+    "parse": "^2.11.0"
   },
   "main": "bundles/reative-parse.umd.js",
   "module": "fesm5/reative-parse.js",

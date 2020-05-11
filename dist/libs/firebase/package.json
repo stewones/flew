@@ -1,12 +1,14 @@
 {
   "name": "@reative/firebase",
-  "version": "4.0.2",
+  "version": "5.0.4-next",
   "peerDependencies": {
-    "@reative/core": "^4.0.0",
+    "@reative/core": "5.0.4-next",
+    "firebase": "^7.8.1",
     "tslib": "^1.10.0"
   },
   "dependencies": {
-    "@reative/core": "^4.0.0"
+    "@reative/core": "5.0.4-next",
+    "firebase": "^7.8.1"
   },
   "main": "bundles/reative-firebase.umd.js",
   "module": "fesm5/reative-firebase.js",

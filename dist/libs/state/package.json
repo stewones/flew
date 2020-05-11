@@ -1,15 +1,21 @@
 {
   "name": "@reative/state",
-  "version": "4.0.2",
+  "version": "5.0.4-next",
   "dependencies": {
-    "@reative/core": "^4.0.0",
-    "rxjs": "^6.5.4",
-    "lodash": "^4.17.15"
-  },
-  "peerDependencies": {
-    "@reative/core": "^4.0.0",
+    "@reative/core": "5.0.4-next",
     "rxjs": "^6.5.4",
     "lodash": "^4.17.15",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "redux-watch": "^1.1.1"
+  },
+  "peerDependencies": {
+    "@reative/core": "5.0.4-next",
+    "rxjs": "^6.5.4",
+    "lodash": "^4.17.15",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "redux-watch": "^1.1.1",
     "tslib": "^1.10.0"
   },
   "main": "bundles/reative-state.umd.js",
