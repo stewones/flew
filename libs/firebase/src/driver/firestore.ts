@@ -262,7 +262,7 @@ export class FirestoreDriver implements ReativeDriver {
   ): Observable<any> {
     return new Observable(observer => {
       const connector = this.getInstance();
-      const id = chain.doc;
+      const id = chain.doc || data.doc_id || data.id;
       const newData = { ...data };
       //
       // run exceptions

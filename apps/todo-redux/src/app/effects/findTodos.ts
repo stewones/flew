@@ -15,7 +15,7 @@ export function findTodos(options: TodoFindOptions) {
         if (options.driver === 'http') {
           response = response.map(it => {
             return {
-              id: it.id,
+              doc_id: it.id,
               text: `kitty #${it.id} <img src="${it.url}" height="48" />`
             };
           });

@@ -53,6 +53,10 @@ export class TodoListComponent implements OnInit {
     dispatch(navigateTo(`/edit/${todoID}`));
   }
 
+  create() {
+    dispatch(navigateTo(`/edit`));
+  }
+
   changeDriver($event) {
     dispatch(setDriver($event.target.value));
   }

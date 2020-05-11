@@ -4,10 +4,15 @@ import {
   Input,
   ChangeDetectionStrategy
 } from '@angular/core';
+
+import { guid } from '@reative/core';
 import { dispatch, getState, connect } from '@reative/state';
 import { getTodo } from '../../actions/getTodo';
 import { Todo } from '../../interfaces/todo';
 import { saveTodo } from '../../actions/saveTodo';
+import { addTodoView } from '../../actions/addTodoView';
+import { createTodo } from '../../actions/createTodo';
+
 @Component({
   selector: 'reative-todo-edit',
   templateUrl: './todo-edit.component.html',
@@ -17,7 +22,8 @@ import { saveTodo } from '../../actions/saveTodo';
 export class TodoEditComponent implements OnInit {
   @Input() id: string;
 
-  view$ = connect<Todo>('todo.view');
+  todo = {} as Todo;
+  view$ = connect<Todo>('todo.view', { mutable: true }); // mutable is meant for not changing redux state while performing form actions (ngModel)
 
   constructor() {}
 
@@ -26,6 +32,16 @@ export class TodoEditComponent implements OnInit {
   }
 
   load() {
+    // new todo
+    if (!this.id) {
+      dispatch(
+        addTodoView({
+          doc_id: guid(2)
+        })
+      );
+      return;
+    }
+    // existing todo
     dispatch(
       getTodo(this.id, {
         useMemo: getState('control.useMemo'),
@@ -38,6 +54,10 @@ export class TodoEditComponent implements OnInit {
   }
 
   save(todo: Todo) {
-    dispatch(saveTodo(todo));
+    if (this.id) {
+      dispatch(saveTodo(todo));
+    } else {
+      dispatch(createTodo(todo));
+    }
   }
 }

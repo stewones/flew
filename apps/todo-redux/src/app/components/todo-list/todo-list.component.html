@@ -40,6 +40,7 @@
     <br />
     <br />
     <button (click)="load()">Reload</button>
+    <button (click)="create()">Create</button>
   </div>
 
   <div class="w-full pl-2">
@@ -48,7 +49,7 @@
     <hr />
     <ul [hidden]="loading$ | async">
       <li *ngFor="let todo of todos$ | async">
-        <a (click)="edit(todo.id)" [innerHTML]="todo.text"></a>
+        <a (click)="edit(todo.doc_id)" [innerHTML]="todo.text"></a>
       </li>
     </ul>
     <span [hidden]="(todos$ | async)?.length || (loading$ | async)">

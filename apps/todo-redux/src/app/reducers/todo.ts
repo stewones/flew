@@ -46,10 +46,10 @@ export function todo(
         loading: true,
         error: null
       };
-    case 'TODO_SAVED':
+    case 'CREATING_TODO':
       return {
         ...state,
-        loading: false,
+        loading: true,
         error: null
       };
     default:

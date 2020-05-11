@@ -6,6 +6,10 @@ import { TodoEditModule } from '../../components/todo-edit/todo-edit.module';
 
 const routes: Routes = [
   {
+    path: 'edit',
+    component: EditPageComponent
+  },
+  {
     path: 'edit/:id',
     component: EditPageComponent
   }
