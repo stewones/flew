@@ -3,7 +3,7 @@ export * from './store/createStore';
 export * from './store/dispatch';
 export * from './store/store';
 export * from './store/connect';
-export * from './store/devTools';
+export * from './store/applyDevTools';
 
 // state
 export * from './state/addState';

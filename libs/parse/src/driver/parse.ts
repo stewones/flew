@@ -11,7 +11,6 @@ import {
   subscribe,
   guid,
   Logger,
-  clearNetworkResponse,
   R_IDENTIFIER
 } from '@reative/core';
 
@@ -346,16 +345,7 @@ export class ParseDriver implements ReativeDriver {
       //
       // define return
       const response = r => {
-        const result: Response = clearNetworkResponse({
-          data: r,
-          key: key,
-          collection: this.getCollectionName(),
-          driver: this.driverName,
-          response: {
-            empty: isEmpty(r)
-          }
-        });
-        observer.next(result);
+        observer.next(r);
         observer.complete();
       };
 
