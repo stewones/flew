@@ -29,6 +29,7 @@ import { RoutesModule } from './routes.module';
     }),
     StateModule.forRoot({
       // enable devtools when production is false
+      // https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
       production: environment.production,
       // devtools option. see more at
       // https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
