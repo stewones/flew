@@ -3,9 +3,10 @@ import {
   Component,
   OnInit,
   Input,
-  ChangeDetectorRef,
   ChangeDetectionStrategy
 } from '@angular/core';
+
+import { connect } from '@reative/state';
 
 @Component({
   selector: '<%= selector %>',
@@ -16,11 +17,10 @@ import {
 export class <%= classify(name) %>Component implements OnInit {
 
   @Input() entry: any = {};
+  entry$ = connect<any>('entry');
 
-  constructor(protected detector: ChangeDetectorRef) {}
+  constructor() {}
 
-  ngOnInit() {
-   
-  }
+  ngOnInit() {}
 
 }
