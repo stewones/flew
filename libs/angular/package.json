@@ -1,24 +1,24 @@
 {
   "name": "@reative/angular",
-  "version": "5.0.6-next",
+  "version": "5.0.7-next",
   "peerDependencies": {
     "@angular/common": "^9.0.0",
     "@angular/core": "^9.0.0",
     "@ionic/storage": "^2.2.0",
-    "@reative/core": "5.0.6-next",
-    "@reative/state": "5.0.6-next",
-    "@reative/parse": "5.0.6-next",
-    "@reative/cache": "5.0.6-next",
-    "@reative/firebase": "5.0.6-next"
+    "@reative/core": "5.0.7-next",
+    "@reative/state": "5.0.7-next",
+    "@reative/parse": "5.0.7-next",
+    "@reative/cache": "5.0.7-next",
+    "@reative/firebase": "5.0.7-next"
   },
   "dependencies": {
     "@angular/common": "^9.0.0",
     "@angular/core": "^9.0.0",
     "@ionic/storage": "^2.2.0",
-    "@reative/core": "5.0.6-next",
-    "@reative/state": "5.0.6-next",
-    "@reative/parse": "5.0.6-next",
-    "@reative/cache": "5.0.6-next",
-    "@reative/firebase": "5.0.6-next"
+    "@reative/core": "5.0.7-next",
+    "@reative/state": "5.0.7-next",
+    "@reative/parse": "5.0.7-next",
+    "@reative/cache": "5.0.7-next",
+    "@reative/firebase": "5.0.7-next"
   }
 }

@@ -1,12 +1,12 @@
 {
   "name": "@reative/cache",
-  "version": "5.0.6-next",
+  "version": "5.0.7-next",
   "peerDependencies": {
-    "@reative/core": "5.0.6-next",
+    "@reative/core": "5.0.7-next",
     "tslib": "^1.10.0"
   },
   "dependencies": {
-    "@reative/core": "5.0.6-next"
+    "@reative/core": "5.0.7-next"
   },
   "main": "bundles/reative-cache.umd.js",
   "module": "fesm5/reative-cache.js",
