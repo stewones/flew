@@ -524,38 +524,38 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // network handle
+      const error = err => {
+        observer.error(err);
+        observer.complete();
+      };
+
       const success = async (data: any[]) => {
-        const list = await Parse.Object.destroyAll(data).catch(error => {
+        if (isEmpty(data)) return error({ message: `data wasn't found` });
+
+        const list = await Parse.Object.destroyAll(data).catch(err => {
           // An error occurred while deleting one or more of the objects.
           // If this is an aggregate error, then we can inspect each error
           // object individually to determine the reason why a particular
           // object was not deleted.
-          if (error.code === Parse.Error.AGGREGATE_ERROR) {
-            for (let i = 0; i < error.errors.length; i++) {
-              console.log(
+          if (err.code === Parse.Error.AGGREGATE_ERROR) {
+            for (let i = 0; i < err.errors.length; i++) {
+              const msg =
                 "Couldn't delete " +
-                  error.errors[i].object.id +
-                  'due to ' +
-                  error.errors[i].message
-              );
+                err.errors[i].object.id +
+                'due to ' +
+                err.errors[i].message;
+              console.log(msg);
             }
           } else {
-            console.log('Delete aborted because of ' + error.message);
+            console.log('Delete aborted because of ' + err.message);
           }
+          error(err);
         });
 
         //
         // success callback
         observer.next(list as T);
         observer.complete();
-      };
-
-      const error = err => {
-        // this breaks offline requests
-        // try {
-        //   observer.error(err);
-        //   observer.complete();
-        // } catch (err) {}
       };
 
       this.connector

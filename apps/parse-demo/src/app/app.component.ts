@@ -567,4 +567,21 @@ export class AppComponent implements OnInit {
       .catch(console.log)
       .then(console.log);
   }
+
+  async parseDelete() {
+    const item: any = await collection(`Todo`)
+      .driver('parse')
+      .set({
+        text: 'hey'
+      })
+      .toPromise();
+
+    collection(`Todo`)
+      .driver('parse')
+      .doc(item.id)
+      .delete()
+      .toPromise()
+      .then(() => console.log('success'))
+      .catch(err => console.log(err));
+  }
 }
