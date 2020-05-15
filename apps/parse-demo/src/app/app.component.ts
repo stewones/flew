@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
     // this.setQuery();
     // this.orQueryArraySupport();
     // this.atAfterFirestoreSupport();
-    this.reativeRun();
+    // this.reativeRun();
     // this.configureHttp();
     // this.httpCalls();
     // this.webWorkerPost();
@@ -34,6 +34,7 @@ export class AppComponent implements OnInit {
     // this.disableAutoIdentifier();
     // this.parseQuery();
     // this.parseSet();
+    this.parseFindOne();
   }
 
   exerciseTest() {
@@ -583,5 +584,13 @@ export class AppComponent implements OnInit {
       .toPromise()
       .then(() => console.log('success'))
       .catch(err => console.log(err));
+  }
+
+  async parseFindOne() {
+    collection(`Todo`)
+      .driver('parse')
+      .where(`doc_id`, `==`, `lol`)
+      .findOne()
+      .subscribe(it => console.log(`is empty`, it));
   }
 }

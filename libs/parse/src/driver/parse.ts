@@ -21,7 +21,7 @@ import { where } from '../api/where';
 import { order } from '../api/order';
 import { limit } from '../api/limit';
 import { skip } from '../api/skip';
-import { find } from '../api/find';
+import { find as findParse } from '../api/find';
 import { select } from '../api/select';
 
 export class ParseDriver implements ReativeDriver {
@@ -125,7 +125,7 @@ export class ParseDriver implements ReativeDriver {
         observer.complete();
       };
 
-      find({
+      findParse({
         Parse: this.getInstance(),
         chain: chain,
         collection: this.getCollectionName(),
@@ -139,7 +139,9 @@ export class ParseDriver implements ReativeDriver {
   }
 
   public findOne<T>(chain: ReativeChainPayload, key: string): Observable<T> {
-    return this.find<T>(chain, key).pipe(map(r => r[0] as T));
+    return this.find<T>(chain, key).pipe(
+      map(r => (r && r.length ? r[0] : ({} as T)))
+    );
   }
 
   public on<T>(chain: ReativeChainPayload, key: string): Observable<T> {
