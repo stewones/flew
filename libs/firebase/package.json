@@ -1,12 +1,12 @@
 {
   "name": "@reative/firebase",
-  "version": "5.0.8-next",
+  "version": "5.0.9-next",
   "peerDependencies": {
-    "@reative/core": "5.0.8-next",
+    "@reative/core": "5.0.9-next",
     "firebase": "^7.8.1"
   },
   "dependencies": {
-    "@reative/core": "5.0.8-next",
+    "@reative/core": "5.0.9-next",
     "firebase": "^7.8.1"
   }
 }

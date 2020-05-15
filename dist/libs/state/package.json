@@ -1,8 +1,8 @@
 {
   "name": "@reative/state",
-  "version": "5.0.8-next",
+  "version": "5.0.9-next",
   "dependencies": {
-    "@reative/core": "5.0.8-next",
+    "@reative/core": "5.0.9-next",
     "rxjs": "^6.5.4",
     "lodash": "^4.17.15",
     "redux": "^4.0.5",
@@ -10,7 +10,7 @@
     "redux-watch": "^1.1.1"
   },
   "peerDependencies": {
-    "@reative/core": "5.0.8-next",
+    "@reative/core": "5.0.9-next",
     "rxjs": "^6.5.4",
     "lodash": "^4.17.15",
     "redux": "^4.0.5",
