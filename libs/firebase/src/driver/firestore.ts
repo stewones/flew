@@ -54,6 +54,9 @@ export class FirestoreDriver implements ReativeDriver {
     worker: false,
     select: false,
     memo: true,
+    near: false,
+    withinKilometers: false,
+    withinMiles: false,
     raw: true, // deprecated
     transform: true, // deprecated
     diff: true, // deprecated

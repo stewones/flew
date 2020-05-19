@@ -4,6 +4,8 @@ import { where } from './where';
 import { order } from './order';
 import { limit } from './limit';
 import { select } from './select';
+import { near } from './near';
+import { withinQuery } from './within-query';
 import { skip } from './skip';
 import { QueryHandler } from '../interfaces/query';
 
@@ -61,6 +63,12 @@ export function find(handler: QueryHandler) {
   //
   // set select
   if (chain.select) select(chain.select, connector);
+
+  //
+  // set geo queries
+  if (chain.near) near(chain.near, connector)
+  else if (chain.withinKilometers) withinQuery(chain.withinKilometers, connector)
+  else if (chain.withinMiles) withinQuery(chain.withinMiles, connector)
 
   switch (verb) {
     case 'aggregate':

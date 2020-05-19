@@ -55,6 +55,15 @@ function find(handler) {
     // set select
     if (chain.select)
         select_1.select(chain.select, connector);
+    //
+    // set geo queries
+    if (chain.near)
+        select_1.near(chain.near, connector);
+    else if (chain.withinKilometers)
+        select_1.withinQuery(chain.withinKilometers, connector);
+    else if (chain.withinMiles)
+        select_1.withinQuery(chain.withinMiles, connector);
+
     switch (verb) {
         case 'aggregate':
             connector

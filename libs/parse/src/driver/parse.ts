@@ -73,6 +73,9 @@ export class ParseDriver implements ReativeDriver {
     cache: 'browser',
     select: true,
     memo: true,
+    near: true,
+    withinKilometers: true,
+    withinMiles: true,
     raw: true, // deprecated
     transform: true, // deprecated
     diff: true, // deprecated
