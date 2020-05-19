@@ -66,9 +66,9 @@ export function find(handler: QueryHandler) {
 
   //
   // set geo queries
-  if (chain.near) near(chain.near, this.connector)
-  else if (chain.withinKilometers) withinQuery(chain.withinKilometers, this.connector)
-  else if (chain.withinMiles) withinQuery(chain.withinMiles, this.connector)
+  if (chain.near) near(chain.near, connector)
+  else if (chain.withinKilometers) withinQuery(chain.withinKilometers, connector)
+  else if (chain.withinMiles) withinQuery(chain.withinMiles, connector)
 
   switch (verb) {
     case 'aggregate':
