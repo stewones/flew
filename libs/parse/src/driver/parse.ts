@@ -1,23 +1,19 @@
-import { isEmpty, isFunction, trim, omit, cloneDeep, get } from 'lodash';
+import { isEmpty, isFunction, trim, omit } from 'lodash';
 
 import {
-  Reative,
   ReativeDriver,
   ReativeChainPayload,
   ReativeDriverOption,
   ReativeOptions,
   ReativeVerb,
   ReativeChain,
-  Response,
-  ResponseSource,
   subscribe,
   guid,
   Logger,
-  clearNetworkResponse,
   R_IDENTIFIER
 } from '@reative/core';
 
-import { Observable, PartialObserver } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ReativeParseOptions } from '../interfaces/options';
 import { transpileChainQuery } from '../api/transpile';
@@ -25,10 +21,8 @@ import { where } from '../api/where';
 import { order } from '../api/order';
 import { limit } from '../api/limit';
 import { skip } from '../api/skip';
-import { find } from '../api/find';
+import { find as findParse } from '../api/find';
 import { select } from '../api/select';
-
-declare var window;
 
 export class ParseDriver implements ReativeDriver {
   options: Partial<ReativeParseOptions>;
@@ -70,21 +64,22 @@ export class ParseDriver implements ReativeDriver {
     at: false,
     after: true,
     ref: false,
-    raw: true,
-    transform: true,
-    diff: true,
     http: false,
     include: true,
     doc: true,
     master: true,
     token: true,
     object: true,
-    save: 'browser',
-    ttl: 'browser',
-    state: 'browser',
     cache: 'browser',
-    worker: true,
-    select: true
+    select: true,
+    memo: true,
+    raw: true, // deprecated
+    transform: true, // deprecated
+    diff: true, // deprecated
+    save: 'browser', // deprecated
+    ttl: 'browser', // deprecated
+    state: 'browser', // deprecated
+    worker: false // deprecated
   };
 
   constructor(options: ReativeParseOptions) {
@@ -95,17 +90,6 @@ export class ParseDriver implements ReativeDriver {
   configure(driverOptions: ReativeOptions) {
     this.driverOptions = driverOptions;
     this.logger = driverOptions.logger;
-
-    try {
-      if (
-        window &&
-        window.Worker &&
-        driverOptions.useWorker === true &&
-        !Reative.worker.parse
-      ) {
-        Reative.worker.parse = new Worker('/worker/parse.js');
-      }
-    } catch (err) {}
     return this.getInstance();
   }
 
@@ -117,155 +101,46 @@ export class ParseDriver implements ReativeDriver {
     return this.logger;
   }
 
-  public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
-    return new Observable((observer: PartialObserver<T>) => {
-      const Parse = this.getInstance();
-      const options: ReativeOptions = {
-        ...Reative.options,
-        ...this.driverOptions,
-        ...chain
-      };
-
+  public find<T>(chain: ReativeChainPayload, key: string): Observable<T[]> {
+    return new Observable(observer => {
       //
       // network handle
-      const error = (r, source: ResponseSource = 'http') => {
-        const data = source === 'worker' ? get(r, `data.error`) || r : r;
-        try {
-          if (source === 'worker') {
-            Reative.responses[r.key].observer.error(data);
-            Reative.responses[r.key].observer.complete();
-          } else {
-            observer.error(data);
-            observer.complete();
-          }
-        } catch (err) {}
+      const error = err => {
+        observer.error(err);
+        observer.complete();
       };
 
-      const success = (r: any, source: ResponseSource = 'http') => {
-        // double check for worker errors
-        if (source === 'worker' && r.data.error) {
-          return error(r.data, source);
-        }
-
-        const data = source === 'worker' ? r.data.data : r.data;
-        const dataResponse =
-          source === 'worker'
-            ? omit(cloneDeep(r.data), [`data`])
-            : omit(cloneDeep(r), [`data`]);
-
-        let result = [];
-
-        if (source === 'http') {
-          for (const item of data) {
-            // tslint:disable-next-line: deprecation
-            const entry =
-              isFunction(item.toJSON) && !chain.useObject
-                ? item.toJSON()
-                : item;
-
-            if (!chain.useObject) {
-              // @todo add id for nested results
-              entry.id = entry.objectId;
-            }
-            result.push(entry);
+      const success = (r: any) => {
+        const response: T[] = [];
+        for (const item of r) {
+          // tslint:disable-next-line: deprecation
+          const entry =
+            isFunction(item.toJSON) && !chain.useObject ? item.toJSON() : item;
+          if (!chain.useObject) {
+            entry.id = entry.objectId;
           }
-        } else {
-          result = data;
+          response.push(entry);
         }
-
-        //
-        // @todo auto populate `id` on included fields - need more work
-        // if (chain.fields && chain.fields.length) {
-        //   result.map(entry => {
-        //     chain.fields.map(field => {
-        //       const whatever: any = get(entry, field);
-        //       if (isArray(whatever)) {
-        //         whatever.map(it => {
-        //           it.id = it.objectId;
-        //         });
-        //       }
-        //       if (isObject(whatever)) {
-        //         whatever.id = whatever.objectId;
-        //       }
-        //     });
-        //   });
-        // }
-
-        //
-        // define standard response
-        const response: Response = clearNetworkResponse({
-          data: result,
-          key: source === 'worker' ? r.data.key : key,
-          collection: this.getCollectionName(),
-          driver: this.driverName,
-          response: {
-            ...dataResponse,
-            empty: !result.length,
-            size: result.length
-          }
-        });
-
-        //
-        // success callback
-        if (source === 'worker') {
-          Reative.responses[r.data.key].observer.next(response as T);
-          Reative.responses[r.data.key].observer.complete();
-        } else {
-          observer.next(response as T);
-          observer.complete();
-        }
+        observer.next(response);
+        observer.complete();
       };
 
-      if (
-        Reative.worker.parse &&
-        options.useWorker &&
-        chain.useWorker !== false
-      ) {
-        Reative.responses[key] = {
-          key: key,
-          observer: observer
-        };
-
-        Reative.worker.parse.postMessage({
-          key: key,
-          serverURL: this.options.serverURL,
-          appID: this.options.appID,
-          chain: chain,
-          collection: this.getCollectionName(),
-          skipOnOperator: this.skipOnOperator,
-          skipOnQuery: this.skipOnQuery,
-          specialOperators: this.specialOperators
-        });
-        Reative.worker.parse.onmessage = r => success(r, 'worker');
-        Reative.worker.parse.onerror = r => error(r, 'worker');
-      } else {
-        find({
-          Parse: this.getInstance(),
-          chain: chain,
-          collection: this.getCollectionName(),
-          skipOnQuery: this.skipOnQuery,
-          skipOnOperator: this.skipOnOperator,
-          specialOperators: this.specialOperators,
-          success: r => success(r),
-          error: err => error(err)
-        });
-      }
+      findParse({
+        Parse: this.getInstance(),
+        chain: chain,
+        collection: this.getCollectionName(),
+        skipOnQuery: this.skipOnQuery,
+        skipOnOperator: this.skipOnOperator,
+        specialOperators: this.specialOperators,
+        success: r => success(r),
+        error: err => error(err)
+      });
     });
   }
 
   public findOne<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return this.find<T>(chain, key).pipe(
-      map((r: Response) => {
-        const response: Response = <Response>{
-          data: r.data && r.data.length ? r.data[0] : {},
-          key: r.key,
-          collection: this.getCollectionName(),
-          driver: this.driverName,
-          response: r.response
-        };
-
-        return response as T;
-      })
+      map(r => (r && r.length ? r[0] : ({} as T)))
     );
   }
 
@@ -347,16 +222,7 @@ export class ParseDriver implements ReativeDriver {
         }
         //
         // define standard response
-        return clearNetworkResponse({
-          data: result,
-          key: key,
-          collection: this.getCollectionName(),
-          driver: this.driverName,
-          response: {
-            empty: !result.length,
-            size: result.length
-          }
-        } as Response);
+        return result;
       };
 
       this.connector.subscribe().then(async handler => {
@@ -470,16 +336,7 @@ export class ParseDriver implements ReativeDriver {
       //
       // define return
       const response = r => {
-        const result: Response = clearNetworkResponse({
-          data: r,
-          key: key,
-          collection: this.getCollectionName(),
-          driver: this.driverName,
-          response: {
-            empty: isEmpty(r)
-          }
-        });
-        observer.next(result);
+        observer.next(r);
         observer.complete();
       };
 
@@ -550,7 +407,7 @@ export class ParseDriver implements ReativeDriver {
   }
 
   public count<T>(chain: ReativeChainPayload, key: string): Observable<T> {
-    return new Observable((observer: PartialObserver<T>) => {
+    return new Observable(observer => {
       const Parse = this.getInstance();
 
       //
@@ -582,29 +439,16 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // network handle
-      const success = async (data: any[]) => {
-        //
-        // define standard response
-        const response: Response = clearNetworkResponse({
-          data: data,
-          key: key,
-          collection: this.getCollectionName(),
-          driver: this.driverName,
-          response: {}
-        });
-
+      const success = async data => {
         //
         // success callback
-        observer.next(response as T);
+        observer.next(data);
         observer.complete();
       };
 
       const error = err => {
-        // this breaks offline requests
-        // try {
-        //   observer.error(err);
-        //   observer.complete();
-        // } catch (err) {}
+        observer.error(err);
+        observer.complete();
       };
 
       this.connector
@@ -623,7 +467,7 @@ export class ParseDriver implements ReativeDriver {
     payload: any,
     chain: ReativeChainPayload
   ): Observable<T> {
-    return new Observable((observer: PartialObserver<T>) => {
+    return new Observable(observer => {
       const Parse = this.getInstance();
 
       //
@@ -682,48 +526,38 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // network handle
+      const error = err => {
+        observer.error(err);
+        observer.complete();
+      };
+
       const success = async (data: any[]) => {
-        const list = await Parse.Object.destroyAll(data).catch(error => {
+        if (isEmpty(data)) return error({ message: `data wasn't found` });
+
+        const list = await Parse.Object.destroyAll(data).catch(err => {
           // An error occurred while deleting one or more of the objects.
           // If this is an aggregate error, then we can inspect each error
           // object individually to determine the reason why a particular
           // object was not deleted.
-          if (error.code === Parse.Error.AGGREGATE_ERROR) {
-            for (let i = 0; i < error.errors.length; i++) {
-              console.log(
+          if (err.code === Parse.Error.AGGREGATE_ERROR) {
+            for (let i = 0; i < err.errors.length; i++) {
+              const msg =
                 "Couldn't delete " +
-                  error.errors[i].object.id +
-                  'due to ' +
-                  error.errors[i].message
-              );
+                err.errors[i].object.id +
+                'due to ' +
+                err.errors[i].message;
+              console.log(msg);
             }
           } else {
-            console.log('Delete aborted because of ' + error.message);
+            console.log('Delete aborted because of ' + err.message);
           }
+          error(err);
         });
 
         //
-        // define standard response
-        const response: Response = {
-          data: list,
-          key: key,
-          collection: this.getCollectionName(),
-          driver: this.driverName,
-          response: {}
-        };
-
-        //
         // success callback
-        observer.next(response as T);
+        observer.next(list as T);
         observer.complete();
-      };
-
-      const error = err => {
-        // this breaks offline requests
-        // try {
-        //   observer.error(err);
-        //   observer.complete();
-        // } catch (err) {}
       };
 
       this.connector

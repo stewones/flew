@@ -1,12 +1,10 @@
 import axios, { AxiosResponse, AxiosInstance } from 'axios';
-import { get, omit, cloneDeep } from 'lodash';
+import { get } from 'lodash';
 import { from, Observable, PartialObserver } from 'rxjs';
 import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 import { ReativeOptions } from '../interfaces/options';
-import { Response, ResponseSource } from '../interfaces/response';
 import { Reative } from '../symbols/reative';
 import { Logger } from '../utils/logger';
-import { clearNetworkResponse } from '../utils/response';
 import { ReativeChainPayload, ReativeChain } from '../interfaces/chain';
 import { ReativeVerb } from '../interfaces/verb';
 
@@ -42,21 +40,22 @@ export class HttpDriver implements ReativeDriver {
     at: false,
     after: false,
     ref: false,
-    raw: true,
-    transform: true,
-    diff: true,
     http: true,
     include: false,
     doc: false,
     master: false,
     token: false,
     object: false,
-    save: 'browser',
-    ttl: 'browser',
-    state: 'browser',
     cache: 'browser',
-    worker: true,
-    select: false
+    select: false,
+    memo: true,
+    save: 'browser', // deprecated
+    ttl: 'browser', // deprecated
+    state: 'browser', // deprecated
+    raw: true, // deprecated
+    transform: true, // deprecated
+    diff: true, // deprecated
+    worker: false // deprecated
   };
 
   constructor() {}
@@ -67,16 +66,6 @@ export class HttpDriver implements ReativeDriver {
 
   configure(options: ReativeOptions) {
     this.driverOptions = options;
-    try {
-      if (
-        window &&
-        window.Worker &&
-        options.useWorker === true &&
-        !Reative.worker.http
-      ) {
-        Reative.worker.http = new Worker('/worker/http.js');
-      }
-    } catch (err) {}
   }
 
   public log() {
@@ -106,118 +95,52 @@ export class HttpDriver implements ReativeDriver {
 
     const baseURL = options.baseURL || get(options, 'httpConfig.baseURL');
     const endpoint = options.endpoint;
-    const collectionName = options.collection;
-
-    //
-    // call exceptions
-    if (!baseURL) throw new Error(`baseURL needed for [${method}]`);
-    if (!endpoint) throw new Error(`endpoint required for [${method}]`);
 
     //
     // set path to be requestes
-    const url = `${baseURL}${endpoint}${path}`;
+    const url = `${baseURL}${endpoint}${options.pathname}${path}`;
     return new Observable((observer: PartialObserver<T>) => {
       //
       // error callback
-      const error = (r, source: ResponseSource = 'http') => {
-        const data =
-          source === 'worker' ? get(r, 'error') || r : get(r, 'response.data');
-
-        try {
-          if (source === 'worker') {
-            Reative.responses[r.key].observer.error(data);
-            Reative.responses[r.key].observer.complete();
-          } else {
-            observer.error(data);
-            observer.complete();
-          }
-        } catch (err) {}
+      const error = r => {
+        observer.error(r);
+        observer.complete();
       };
 
       //
       // success callback
-      const success = (r, source: ResponseSource = 'http') => {
-        // double check for worker errors
-        if (source === 'worker' && r.data.error) {
-          return error(r.data, source);
-        }
-
-        const data = source === 'worker' ? r.data.data : r.data;
-        const dataResponse =
-          source === 'worker'
-            ? omit(cloneDeep(r.data), [`data`])
-            : omit(cloneDeep(r), [`data`]);
-
-        // build standard response
-        const response: Response = clearNetworkResponse({
-          data: data,
-          response: dataResponse,
-          key: source === 'worker' ? r.data.key : key,
-          collection: collectionName || '',
-          driver: this.driverName,
-          source: source
-        });
-
-        //
-        // success callback
-        if (source === 'worker') {
-          Reative.responses[r.data.key].observer.next(response as T);
-          Reative.responses[r.data.key].observer.complete();
-        } else {
-          observer.next(response as T);
-          observer.complete();
-        }
+      const success = r => {
+        observer.next(r && (r.data as T));
+        observer.complete();
       };
 
-      //
-      // network handle
-      if (
-        Reative.worker.http &&
-        options.useWorker &&
-        chain.useWorker !== false
-      ) {
-        Reative.responses[key] = {
-          key: key,
-          observer: observer
-        };
-        Reative.worker.http.postMessage({
-          key: key,
-          method: method,
-          url: url,
-          body: body,
-          headers: options.httpConfig.headers
-        });
-        Reative.worker.http.onmessage = r => success(r, 'worker');
-        Reative.worker.http.onerror = r => error(r, 'worker');
-      } else {
-        switch (method) {
-          case 'post':
-            from(this.instance.post(url, body))
-              .toPromise()
-              .then((r: AxiosResponse) => success(r))
-              .catch(error);
-            break;
+      switch (method) {
+        case 'post':
+          from(this.instance.post(url, body))
+            .toPromise()
+            .then((r: AxiosResponse) => success(r))
+            .catch(error);
+          break;
 
-          case 'patch':
-            from(this.instance.patch(url, body))
-              .toPromise()
-              .then((r: AxiosResponse) => success(r))
-              .catch(error);
-            break;
+        case 'patch':
+          from(this.instance.patch(url, body))
+            .toPromise()
+            .then((r: AxiosResponse) => success(r))
+            .catch(error);
+          break;
 
-          case 'delete':
-            from(this.instance.delete(url, body))
-              .toPromise()
-              .then((r: AxiosResponse) => success(r))
-              .catch(error);
-            break;
+        case 'delete':
+          from(this.instance.delete(url, body))
+            .toPromise()
+            .then((r: AxiosResponse) => success(r))
+            .catch(error);
+          break;
 
-          default:
-            from(this.instance.get(url))
-              .toPromise()
-              .then((r: AxiosResponse) => success(r))
-              .catch(error);
-        }
+        default:
+          from(this.instance.get(url))
+            .toPromise()
+            .then((r: AxiosResponse) => success(r))
+            .catch(error);
       }
     });
   }

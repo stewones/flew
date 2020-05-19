@@ -1,0 +1,37 @@
+{
+  "name": "@reative/core",
+  "version": "5.0.9-next",
+  "homepage": "https://github.com/stewwan/core#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Reative Team",
+    "email": "support@reative.dev",
+    "url": "https://reative.dev"
+  },
+  "bugs": {
+    "url": "https://github.com/stewwan/core/issues",
+    "email": "support@reative.dev"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "rxjs": "^6.5.4",
+    "lodash": "^4.17.15"
+  },
+  "peerDependencies": {
+    "axios": "^0.19.2",
+    "lodash": "^4.17.15",
+    "rxjs": "^6.5.4",
+    "tslib": "^1.10.0"
+  },
+  "description": "It has never been easier to build high-quality apps using web technology",
+  "main": "bundles/reative-core.umd.js",
+  "module": "fesm5/reative-core.js",
+  "es2015": "fesm2015/reative-core.js",
+  "esm5": "esm5/reative-core.js",
+  "esm2015": "esm2015/reative-core.js",
+  "fesm5": "fesm5/reative-core.js",
+  "fesm2015": "fesm2015/reative-core.js",
+  "typings": "reative-core.d.ts",
+  "metadata": "reative-core.metadata.json",
+  "sideEffects": false
+}

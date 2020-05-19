@@ -10,11 +10,7 @@
     "lodash",
     "@angular/common",
     "@angular/core",
-    "@ngxs/store",
-    "@ionic/storage",
-    "parse",
-    "firebase",
-    "firebase/app"
+    "@ionic/storage"
   ],
   "lib": {
     "entryFile": "src/index.ts",
@@ -27,11 +23,7 @@
       "@reative/cache": "@reative/cache",
       "@angular/common": "@angular/common",
       "@angular/core": "@angular/core",
-      "@ngxs/store": "@ngxs/store",
-      "@ionic/storage": "@ionic/storage",
-      "parse": "parse",
-      "firebase": "firebase",
-      "firebase/app": "firebase/app"
+      "@ionic/storage": "@ionic/storage"
     }
   }
 }

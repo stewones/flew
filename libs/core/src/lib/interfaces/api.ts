@@ -15,9 +15,7 @@ export interface ReativeAPI {
 
   driver(name: string): Records; // firebase / firestore / http
   network(active: boolean): Records; // response using network call
-  save(active: boolean): Records; // save response to cache
-  ttl(value: number): Records; // set a max time before next network call
-  state(active: boolean): Records; // use first response from state if available
+
   cache(active: boolean): Records; // use first response from cache if available
   key(name: string): Records; // define an unique name for cache/state
   query(by: { [key: string]: {} } | { [key: string]: {} }[]): Records; // firestore only - this is an object literal way for `where`
@@ -30,12 +28,7 @@ export interface ReativeAPI {
   size(value: number): Records; // firestore only
   at(value: string | number);
   after(value: string | number);
-
   ref(path: string): Records; // firebase only
-
-  raw(active: boolean): Records; // return original data with metadata
-  transform(transformFn: (response: Response) => any): Records; // transform network/state/cache responses
-  diff(fn: (cache: any, network: any) => any): Records; // infer into rr response behavior
 
   //
   // utils
@@ -63,8 +56,31 @@ export interface ReativeAPI {
   //
   // parse
   include(fields: string[]): Records;
-
   doc(value: any): Records;
-
   select(value: string[]): Records;
+
+  /**
+   * @deprecated
+   */
+  save(active: boolean): Records; // save response to cache
+  /**
+   * @deprecated
+   */
+  ttl(value: number): Records; // set a max time before next network call
+  /**
+   * @deprecated
+   */
+  state(active: boolean): Records; // use first response from state if available
+  /**
+   * @deprecated
+   */
+  raw(active: boolean): Records; // return original data with metadata
+  /**
+   * @deprecated
+   */
+  transform(transformFn: (response: Response) => any): Records; // transform network/state/cache responses
+  /**
+   * @deprecated
+   */
+  diff(fn: (cache: any, network: any) => any): Records; // infer into rr response behavior
 }

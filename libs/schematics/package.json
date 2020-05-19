@@ -1,26 +1,26 @@
 {
-	"name": "@reative/schematics",
-	"version": "4.0.2",
-	"license": "MIT",
-	"author": {
-		"name": "Reative Team",
-		"email": "support@reative.dev",
-		"url": "https://reative.dev"
-	},
-	"bugs": {
-		"url": "https://github.com/stewwan/reative/issues",
-		"email": "support@reative.dev"
-	},
-	"dependencies": {
-		"@schematics/angular": "^9.0.0",
-		"tslib": "^1.10.0",
-		"typescript": "~3.7.5"
-	},
-	"peerDependencies": {
-		"@angular-devkit/architect": ">=0.900.0",
-		"@angular-devkit/build-angular": ">=0.900.0",
-		"@angular-devkit/core": ">=9.0.0",
-		"@angular-devkit/schematics": ">=9.0.0"
-	},
-	"schematics": "./schemas.json"
+  "name": "@reative/schematics",
+  "version": "5.0.9-next",
+  "license": "MIT",
+  "author": {
+    "name": "Reative Team",
+    "email": "support@reative.dev",
+    "url": "https://reative.dev"
+  },
+  "bugs": {
+    "url": "https://github.com/stewwan/reative/issues",
+    "email": "support@reative.dev"
+  },
+  "dependencies": {
+    "@schematics/angular": "^9.0.0",
+    "tslib": "^1.10.0",
+    "typescript": "~3.7.5"
+  },
+  "peerDependencies": {
+    "@angular-devkit/architect": ">=0.900.0",
+    "@angular-devkit/build-angular": ">=0.900.0",
+    "@angular-devkit/core": ">=9.0.0",
+    "@angular-devkit/schematics": ">=9.0.0"
+  },
+  "schematics": "./schemas.json"
 }

@@ -75,12 +75,6 @@ describe('HttpDriver', () => {
     expect(typeof driver.log).toBeTruthy();
   });
 
-  it('should fail when no baseURL is provided', () => {
-    expect(() => {
-      driver.get().toPromise();
-    }).toThrowError(`baseURL needed for [get]`);
-  });
-
   it('should fail when no endpoint is provided', () => {
     Reative.connector = {};
     driver = new HttpDriver({

@@ -1,88 +1,51 @@
-import { Injectable, ModuleWithProviders, NgModule } from '@angular/core';
-import { Action, State, StateContext, Store } from '@ngxs/store';
-
 import {
-  install,
-  addStateResponse,
-  resetStateResponse,
-  removeStateResponse,
-  StateModel,
-  StateReset,
-  StateRemove,
-  StateSync,
-  STATE_GLOBAL_NAMESPACE
-} from '@reative/state';
+  Injectable,
+  Inject,
+  NgModule,
+  ModuleWithProviders
+} from '@angular/core';
+import { createStore, applyDevTools, install } from '@reative/state';
 
-@Injectable()
-export class ReativeStateSetup {
-  constructor(public store: Store) {
-    install(store);
-  }
+export interface StoreOptions {
+  production?: boolean;
+  reducers?: any;
+  state?: any; // the initial state
+  trace?: boolean; // see more options at https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
 }
 
-/**
-  Reative State
-  @example
-  ```js
-  import { ReativeState } from '@reative/angular';
-  import { NgxsModule } from '@ngxs/store';
-  import { environment } from '../environments/environment';
-
-  //... 
-    NgxsModule.forRoot([ReativeState], {
-        developmentMode: !environment.production
-    }),
-  //...
-  ```
-  @export
-  @class ReativeState
-*/
-@State<StateModel>({
-  name: STATE_GLOBAL_NAMESPACE,
-  defaults: {}
-})
 @Injectable()
-export class ReativeState {
-  @Action(StateSync) addResponse(
-    context: StateContext<StateModel>,
-    action: StateSync
-  ) {
-    addStateResponse(context, action);
-  }
+export class StateSetup {
+  constructor(@Inject('StoreOptions') public options) {
+    install();
 
-  @Action(StateReset) resetResponse(context: StateContext<StateModel>) {
-    resetStateResponse(context);
+    createStore(
+      (options && options.reducers) || {},
+      (options && options.state) || {},
+      applyDevTools(options)
+    );
   }
-
-  @Action(StateRemove) removeResponse(
-    context: StateContext<StateModel>,
-    action: StateSync
-  ) {
-    removeStateResponse(context, action);
-  }
-
-  constructor() {}
 }
 
 /**
   State Module 
-  @example
-  ```js
-  import { StateModule } from '@reative/angular';
-  //... 
-  StateModule.forRoot()
-  //...
-  ```
   @export
   @class StateModule
 */
 @NgModule()
 export class StateModule {
-  public static forRoot(): ModuleWithProviders<StateModule> {
+  public static forRoot(
+    options: StoreOptions = {} as StoreOptions
+  ): ModuleWithProviders<StateModule> {
     return {
       ngModule: StateModule,
-      providers: [ReativeState, ReativeStateSetup]
+      providers: [
+        StateSetup,
+        {
+          provide: 'StoreOptions',
+          useValue: options
+        }
+      ]
     };
   }
-  constructor(private _: ReativeStateSetup) {}
+  constructor(private _: StateSetup) {}
 }

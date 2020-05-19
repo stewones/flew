@@ -69,8 +69,8 @@ export function find(handler: QueryHandler) {
           useMasterKey: chain.useMasterKey,
           sessionToken: chain.useSessionToken
         })
-        .then(r => handler.success({ data: r }))
-        .catch(handler.error);
+        .then(r => handler.success(r))
+        .catch(err => handler.error(err));
       break;
 
     default:
@@ -79,8 +79,8 @@ export function find(handler: QueryHandler) {
           useMasterKey: chain.useMasterKey,
           sessionToken: chain.useSessionToken
         })
-        .then(r => handler.success({ data: r }))
-        .catch(handler.error);
+        .then(r => handler.success(r))
+        .catch(err => handler.error(err));
       break;
   }
 }

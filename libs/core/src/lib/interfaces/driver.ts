@@ -3,12 +3,7 @@ import { ReativeOptions } from './options';
 import { ReativeVerb } from './verb';
 import { ReativeChain } from './chain';
 
-export type ReativeDriverOption =
-  | 'http'
-  | 'firebase'
-  | 'firestore'
-  | 'parse'
-  | string;
+export type ReativeDriverOption = 'http' | 'firebase' | 'firestore' | 'parse';
 
 //
 // @experimental

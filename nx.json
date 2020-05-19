@@ -23,9 +23,6 @@
     "firebase": {
       "tags": []
     },
-    "todo": {
-      "tags": []
-    },
     "cache": {
       "tags": []
     },
@@ -33,6 +30,18 @@
       "tags": []
     },
     "parse-demo": {
+      "tags": []
+    },
+    "todo-redux": {
+      "tags": []
+    },
+    "todo": {
+      "tags": []
+    },
+    "counter-redux": {
+      "tags": []
+    },
+    "counter": {
       "tags": []
     }
   }

@@ -9,14 +9,11 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 
-import { NgxsModule } from '@ngxs/store';
-import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import {
   ReativeModule,
   ParseModule,
   StateModule,
   CacheModule,
-  ReativeState,
   FirebaseModule
 } from '@reative/angular';
 import { environment } from '../environments/environment';
@@ -37,16 +34,10 @@ export const FIREBASE_CONFIG = {
     RouterModule.forRoot([], { initialNavigation: 'enabled' }),
 
     //
-    // ngxs
-    NgxsModule.forRoot([ReativeState], {
-      developmentMode: !environment.production
-    }),
-
-    NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production }),
-
-    //
     // rr state
-    StateModule.forRoot(),
+    StateModule.forRoot({
+      production: environment.production
+    }),
 
     //
     // init rr for angular

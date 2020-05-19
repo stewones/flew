@@ -6,8 +6,18 @@
     "umdModuleIds": {
       "lodash": "_",
       "rxjs": "rxjs",
-      "@reative/core": "@reative/core"
+      "@reative/core": "@reative/core",
+      "redux": "redux",
+      "redux-thunk": "redux-thunk",
+      "redux-watch": "redux-watch"
     }
   },
-  "whitelistedNonPeerDependencies": ["@reative/core", "rxjs", "lodash"]
+  "whitelistedNonPeerDependencies": [
+    "@reative/core",
+    "rxjs",
+    "lodash",
+    "redux",
+    "redux-thunk",
+    "redux-watch"
+  ]
 }

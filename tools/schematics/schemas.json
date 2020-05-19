@@ -2,23 +2,11 @@
   "extends": ["@schematics/angular"],
   "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
   "schematics": {
-    "container": {
-      "aliases": ["con"],
-      "factory": "./container",
-      "description": "Create a Reative container",
-      "schema": "./container/schema.json"
-    },
     "component": {
-      "aliases": ["com"],
+      "aliases": ["co"],
       "factory": "./component",
       "description": "Create a Reative component",
       "schema": "./component/schema.json"
-    },
-    "collection": {
-      "aliases": ["col"],
-      "factory": "./collection",
-      "description": "Create a Reative service collection",
-      "schema": "./collection/schema.json"
     },
     "page": {
       "aliases": ["pg"],

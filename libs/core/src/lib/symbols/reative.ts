@@ -12,6 +12,7 @@ import { ReativeDriver, ReativeDriverOption } from '../interfaces/driver';
 export interface ReativeProtocol {
   options: ReativeOptions;
   store?: any;
+  state?: any;
   storage?: StorageAdapter;
   events?: { [key: string]: Subject<any> };
   worker?: { http: any; parse: any };
@@ -43,12 +44,13 @@ export const Reative: ReativeProtocol = {
       headers: {}
     }
   },
-  store: {
+  state: {
     enabled: false,
     getState: () => {},
     sync: () => {},
     getState$: of()
   },
+  store: {},
   storage: {
     enabled: false,
     get: key => Promise.resolve(),

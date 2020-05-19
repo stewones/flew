@@ -2,9 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "types": ["node", "jest"],
-    "baseUrl": "./"
+    "baseUrl": "."
   },
-  "include": ["**/*.ts"],
+  "include": ["src/**/*.d.ts"],
+  "files": ["src/index.ts"],
   "exclude": ["./src/test-setup.ts", "./**/stub.ts", "./**/*.spec.ts"],
   "angularCompilerOptions": {
     "enableIvy": false

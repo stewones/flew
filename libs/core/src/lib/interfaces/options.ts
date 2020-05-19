@@ -11,6 +11,7 @@ export interface ReativeOptions {
 
   baseURL?: string; // eg: http://35.102.182.155:9200
   endpoint?: string; // eg: /api
+  pathname?: string; // eg: /some/long/path/to/resource
   httpConfig?: AxiosRequestConfig;
 
   driver?: ReativeDriverOption;
@@ -24,9 +25,10 @@ export interface ReativeOptions {
   //
   // browser
   useCache?: boolean;
-  useState?: boolean;
+  useMemo?: boolean;
   useNetwork?: boolean;
   useWorker?: boolean; // global config to always use worker
-  saveNetwork?: boolean;
   persistence?: boolean;
+  useState?: boolean; // @deprecated
+  saveNetwork?: boolean; // @deprecated
 }

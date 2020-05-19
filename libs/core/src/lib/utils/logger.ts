@@ -16,7 +16,7 @@ export class Logger {
    * Getter/setter to set active state
    */
   public enabled(active?: boolean): boolean | void {
-    return active || active === false ? (this.silent = true) : this.silent;
+    return active || active === false ? (this.silent = !active) : !this.silent;
   }
 
   public success(force?) {

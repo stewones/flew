@@ -43,16 +43,16 @@ export function collection(
  * @returns {Options}
  */
 function init(options: ReativeOptions): ReativeOptions {
+  const useMemo = isServer()
+    ? false
+    : isBoolean(options.useMemo)
+    ? options.useMemo
+    : true;
+
   const useCache = isServer()
     ? false
     : isBoolean(options.useCache)
     ? options.useCache
-    : true;
-
-  const useState = isServer()
-    ? false
-    : isBoolean(options.useState)
-    ? options.useState
     : true;
 
   const useNetwork = isServer()
@@ -61,6 +61,18 @@ function init(options: ReativeOptions): ReativeOptions {
     ? options.useNetwork
     : true;
 
+  /**
+   * @deprecated
+   */
+  const useState = isServer()
+    ? false
+    : isBoolean(options.useState)
+    ? options.useState
+    : true;
+
+  /**
+   * @deprecated
+   */
   const saveNetwork = isServer()
     ? false
     : isBoolean(options.saveNetwork)
@@ -70,9 +82,11 @@ function init(options: ReativeOptions): ReativeOptions {
   if (options.name) options.collection = options.name;
 
   options.useNetwork = useNetwork;
-  options.saveNetwork = saveNetwork;
+
   options.useCache = useCache;
   options.useState = useState;
+  options.saveNetwork = saveNetwork;
+  options.useMemo = useMemo;
 
   return options;
 }

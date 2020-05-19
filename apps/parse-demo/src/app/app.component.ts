@@ -33,7 +33,8 @@ export class AppComponent implements OnInit {
     // this.parseSaveAll();
     // this.disableAutoIdentifier();
     // this.parseQuery();
-    this.parseSet();
+    // this.parseSet();
+    this.parseFindOne();
   }
 
   exerciseTest() {
@@ -201,16 +202,16 @@ export class AppComponent implements OnInit {
   }
 
   async reativeRun() {
-    collection(`Debrief`)
+    // collection(`Todo`)
+    //   .driver(`parse`)
+    //   .find()
+    //   .toPromise()
+    //   .then(it => console.log(111, it));
+
+    collection(`Task`)
       .driver(`parse`)
-      .key(`debrief-report`)
-      .run(`debriefReport`, {
-        company: '2BrFT6OrBm',
-        picker: {
-          startDate: '2019-01-01',
-          endDate: '2019-12-31'
-        }
-      })
+      .key(`collection-run`)
+      .run(`collectionRun`, {})
       .toPromise()
       .then(console.log);
   }
@@ -566,5 +567,30 @@ export class AppComponent implements OnInit {
       .toPromise()
       .catch(console.log)
       .then(console.log);
+  }
+
+  async parseDelete() {
+    const item: any = await collection(`Todo`)
+      .driver('parse')
+      .set({
+        text: 'hey'
+      })
+      .toPromise();
+
+    collection(`Todo`)
+      .driver('parse')
+      .doc(item.id)
+      .delete()
+      .toPromise()
+      .then(() => console.log('success'))
+      .catch(err => console.log(err));
+  }
+
+  async parseFindOne() {
+    collection(`Todo`)
+      .driver('parse')
+      .where(`doc_id`, `==`, `lol`)
+      .findOne()
+      .subscribe(it => console.log(`is empty`, it));
   }
 }

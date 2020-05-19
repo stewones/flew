@@ -1,7 +1,9 @@
 import { omit, get, isFunction } from 'lodash';
 import { ReativeChainPayload } from '../interfaces/chain';
-import { Response } from '../interfaces/response';
 
+/**
+ * @deprecated
+ */
 export function clearNetworkResponse(data) {
   return omit(data, [
     'took',
@@ -13,24 +15,27 @@ export function clearNetworkResponse(data) {
   ]);
 }
 
+/**
+ * @deprecated
+ */
 export function shouldTransformResponse(
   chain: ReativeChainPayload,
-  response: Response
+  response: any
 ) {
   const customTransform = isFunction(chain.transformResponse);
   let transformResponse: any = customTransform
     ? chain.transformResponse
-    : (data: Response) => data;
+    : (data: any) => data;
 
   if (chain.transformData) {
     //
     // transform elastic data
     const hits = get(response, 'data.hits.hits');
     if (hits) {
-      transformResponse = (data: Response) =>
+      transformResponse = (data: any) =>
         data.data.hits.hits.map(h => h._source);
     } else {
-      transformResponse = (data: Response) => data && data.data;
+      transformResponse = (data: any) => data && data.data;
     }
   }
 

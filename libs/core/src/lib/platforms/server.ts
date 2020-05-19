@@ -1,6 +1,6 @@
 // tslint:disable
 import { AxiosRequestConfig } from 'axios';
-import { isArray, isEmpty, isBoolean, isString, omit, startCase } from 'lodash';
+import { isArray, isEmpty, isString, omit, startCase } from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { Response } from '../interfaces/response';
 import { Reative } from '../symbols/reative';
@@ -15,8 +15,6 @@ import { isServer } from '../utils/platform';
 import { HttpDriver } from '../drivers/http';
 import { SHA256 } from '../utils/sha';
 import { R_VERSION } from '../version';
-import { map } from 'rxjs/operators';
-import { shouldTransformResponse } from '../utils/response';
 import { SetOptions } from '../interfaces/set';
 /**
  * @export
@@ -112,6 +110,8 @@ export class ReativeCore implements ReativeAPI {
   }
 
   protected createKey(verb, path, body): string {
+    if (this.chain.key) return this.chain.key;
+
     const chain = { ...this.chain };
     const options = { ...this.options };
     const payload = JSON.stringify({
@@ -119,11 +119,26 @@ export class ReativeCore implements ReativeAPI {
       ...body,
       ...{ path: path },
       ...{ driver: chain.driver },
-      ...omit(chain, ['ttl', 'key', 'transformResponse', 'diff'])
+      ...omit(chain, [
+        'key',
+        'useNetwork',
+        'useWorker',
+        'useCache',
+        'useMemo',
+        'ttl', // @deprecated
+        'transformResponse', // @deprecated
+        'diff' // @deprecated
+      ])
     });
-    const key = `${options.collection || 'rr'}:/${options.endpoint ||
-      ''}${path || ''}/${SHA256(payload)}`;
-    return chain.key || key.split('///').join('//');
+
+    const keyStart = options.collection || 'reative';
+    const keyEndpoint = chain.driver === 'http' ? options.endpoint : '';
+    const keyPath = chain.driver === 'http' ? path || options.pathname : '';
+    const keyCrypt = SHA256(payload);
+
+    const key = `${keyStart}:/${keyEndpoint}${keyPath}/${keyCrypt}`;
+
+    return key.split('///').join('//');
   }
 
   protected call<T>(
@@ -200,16 +215,7 @@ export class ReativeCore implements ReativeAPI {
 
     //
     // execute the request
-    return Reative.driver[_driver][_verb]<T>(arg1, arg2, arg3, arg4).pipe(
-      map((data: Response) => {
-        if (isServer()) {
-          if (!isBoolean(chain.transformData)) chain.transformData = true;
-          const transformResponse: any = shouldTransformResponse(chain, data);
-          return transformResponse(data);
-        }
-        return data;
-      })
-    );
+    return Reative.driver[_driver][_verb]<T>(arg1, arg2, arg3, arg4);
   }
 
   /**
@@ -222,10 +228,11 @@ export class ReativeCore implements ReativeAPI {
     this.chain = {
       driver: this.options.driver,
       useCache: this.options.useCache,
-      useState: this.options.useState,
       useNetwork: this.options.useNetwork,
       useWorker: this.options.useWorker,
-      saveNetwork: this.options.saveNetwork
+      useMemo: this.options.useMemo,
+      useState: this.options.useState, // @deprecated
+      saveNetwork: this.options.saveNetwork // @deprecated
     };
     return this;
   }
@@ -404,46 +411,6 @@ export class ReativeCore implements ReativeAPI {
   }
 
   /**
-   * Choose whether or not to save returned data in cache
-   *
-   * @param {boolean} active
-   * @returns {ReativeCore}
-   * @memberof ReativeCore
-   */
-  public save(active: boolean): ReativeCore {
-    this.chain.saveNetwork = active;
-    this.checkChainAvailability(this.chain.driver, 'save');
-    return this;
-  }
-
-  /**
-   * Shortcut to modify returned results without a pipe
-   *
-   * @template T
-   * @param {Function} transformFn
-   * @returns {ReativeCore}
-   * @memberof ReativeCore
-   */
-  public transform<T>(transformFn: (response: Response) => any): ReativeCore {
-    this.chain.transformResponse = transformFn;
-    this.checkChainAvailability(this.chain.driver, 'transform');
-    return this;
-  }
-
-  /**
-   * Define a time to live for cache
-   *
-   * @param {number} value
-   * @returns {ReativeCore}
-   * @memberof ReativeCore
-   */
-  public ttl(value: number): ReativeCore {
-    this.chain.ttl = value;
-    this.checkChainAvailability(this.chain.driver, 'ttl');
-    return this;
-  }
-
-  /**
    * Choose whether to use cached results
    *
    * @param {boolean} active
@@ -457,15 +424,15 @@ export class ReativeCore implements ReativeAPI {
   }
 
   /**
-   * Choose whether to use state results
+   * Choose whether to use cached results
    *
    * @param {boolean} active
    * @returns {ReativeCore}
    * @memberof ReativeCore
    */
-  public state(active: boolean): ReativeCore {
-    this.chain.useState = active;
-    this.checkChainAvailability(this.chain.driver, 'state');
+  public memo(active: boolean): ReativeCore {
+    this.chain.useMemo = active;
+    this.checkChainAvailability(this.chain.driver, 'memo');
     return this;
   }
 
@@ -604,19 +571,6 @@ export class ReativeCore implements ReativeAPI {
   }
 
   /**
-   * Use pure results without any internal transformation
-   *
-   * @param {boolean} active
-   * @returns {ReativeCore}
-   * @memberof ReativeCore
-   */
-  public raw(active: boolean): ReativeCore {
-    this.chain.transformData = !active;
-    this.checkChainAvailability(this.chain.driver, 'raw');
-    return this;
-  }
-
-  /**
    * Populate query fields
    *
    * @param {string[]} fields
@@ -626,19 +580,6 @@ export class ReativeCore implements ReativeAPI {
   public include(fields: string[]): ReativeCore {
     this.chain.fields = fields;
     this.checkChainAvailability(this.chain.driver, 'include');
-    return this;
-  }
-
-  /**
-   * Modify internal diff function
-   *
-   * @param {*} fn
-   * @returns {ReativeCore}
-   * @memberof ReativeCore
-   */
-  public diff(fn: any): ReativeCore {
-    this.chain.diff = fn;
-    this.checkChainAvailability(this.chain.driver, 'diff');
     return this;
   }
 
@@ -704,6 +645,91 @@ export class ReativeCore implements ReativeAPI {
   public select(value: string[]): ReativeCore {
     this.chain.select = value;
     this.checkChainAvailability(this.chain.driver, 'select');
+    return this;
+  }
+
+  /**
+   * Choose whether or not to save returned data in cache
+   *
+   * @param {boolean} active
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
+   * @deprecated
+   */
+  public save(active: boolean): ReativeCore {
+    this.chain.useCache = active;
+    this.checkChainAvailability(this.chain.driver, 'save');
+    return this;
+  }
+
+  /**
+   * Define a time to live for cache
+   *
+   * @param {number} value
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
+   * @deprecated
+   */
+  public ttl(value: number): ReativeCore {
+    this.chain.ttl = value;
+    this.checkChainAvailability(this.chain.driver, 'ttl');
+    return this;
+  }
+
+  /**
+   * Choose whether to use state results
+   *
+   * @param {boolean} active
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
+   * @deprecated
+   */
+  public state(active: boolean): ReativeCore {
+    this.chain.useMemo = active;
+    this.checkChainAvailability(this.chain.driver, 'memo');
+    return this;
+  }
+
+  /**
+   * Use pure results without any internal transformation
+   *
+   * @param {boolean} active
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
+   * @deprecated
+   */
+  public raw(active: boolean): ReativeCore {
+    this.chain.transformData = !active;
+    this.checkChainAvailability(this.chain.driver, 'raw');
+    return this;
+  }
+
+  /**
+   * Shortcut to modify returned results without a pipe
+   *
+   * @template T
+   * @param {Function} transformFn
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
+   * @deprecated
+   */
+  public transform<T>(transformFn: (response: Response) => any): ReativeCore {
+    this.chain.transformResponse = transformFn;
+    this.checkChainAvailability(this.chain.driver, 'transform');
+    return this;
+  }
+
+  /**
+   * Modify internal diff function
+   *
+   * @param {*} fn
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
+   * @deprecated
+   */
+  public diff(fn: any): ReativeCore {
+    this.chain.diff = fn;
+    this.checkChainAvailability(this.chain.driver, 'diff');
     return this;
   }
 }

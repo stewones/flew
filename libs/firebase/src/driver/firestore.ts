@@ -1,18 +1,16 @@
 import { isArray, isEmpty, isNil, isObject } from 'lodash';
-import { Observable, PartialObserver } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SetOptions } from '@reative/core';
 
 import {
   Logger,
-  Response,
   ReativeVerb,
   ReativeChain,
   ReativeDriver,
   ReativeOptions,
   ReativeDriverOption,
-  ReativeChainPayload,
-  clearNetworkResponse
+  ReativeChainPayload
 } from '@reative/core';
 
 export class FirestoreDriver implements ReativeDriver {
@@ -29,7 +27,7 @@ export class FirestoreDriver implements ReativeDriver {
     post: 'http.post',
     update: true,
     patch: 'http.patch',
-    delete: 'http.delete',
+    delete: true,
     set: true,
     count: false,
     run: false
@@ -46,21 +44,22 @@ export class FirestoreDriver implements ReativeDriver {
     at: true,
     after: true,
     ref: false,
-    raw: true,
-    transform: true,
-    diff: true,
     http: false,
     include: false,
     doc: true,
     master: false,
     token: false,
     object: false,
-    save: 'browser',
-    ttl: 'browser',
-    state: 'browser',
     cache: 'browser',
     worker: false,
-    select: false
+    select: false,
+    memo: true,
+    raw: true, // deprecated
+    transform: true, // deprecated
+    diff: true, // deprecated
+    save: 'browser', // deprecated
+    ttl: 'browser', // deprecated
+    state: 'browser' // deprecated
   };
 
   constructor(options: any) {
@@ -133,8 +132,8 @@ export class FirestoreDriver implements ReativeDriver {
     return firestore.limit(limit);
   }
 
-  public find<T>(chain: ReativeChainPayload, key: string): Observable<T> {
-    return new Observable((observer: PartialObserver<T>) => {
+  public find<T>(chain: ReativeChainPayload, key: string): Observable<T[]> {
+    return new Observable(observer => {
       const connector = this.getInstance();
       //
       // run exceptions
@@ -180,26 +179,12 @@ export class FirestoreDriver implements ReativeDriver {
 
           //
           // format data
-          const data: any[] = [];
+          const data: T[] = [];
           snapshot.forEach(doc => data.push(doc.data()));
 
           //
-          // define standard response
-          const response: Response = clearNetworkResponse({
-            data: data,
-            key: key,
-            collection: this.driverOptions.collection,
-            driver: this.driverName,
-            response: {
-              empty: snapshot.empty,
-              size: snapshot.size,
-              meta: snapshot.metadata
-            }
-          });
-
-          //
           // success callback
-          observer.next(response as T);
+          observer.next(data);
           observer.complete();
         })
         .catch(err => {
@@ -213,17 +198,7 @@ export class FirestoreDriver implements ReativeDriver {
 
   public findOne<T>(chain: ReativeChainPayload, key: string): Observable<T> {
     return this.find<T>(chain, key).pipe(
-      map((r: Response) => {
-        const response: Response = <Response>{
-          data: r.data && r.data.length ? r.data[0] : {},
-          key: r.key,
-          collection: this.driverOptions.collection,
-          driver: this.driverName,
-          response: r.response
-        };
-
-        return response as T;
-      })
+      map(r => (r && r.length ? r[0] : ({} as T)))
     );
   }
 
@@ -271,22 +246,9 @@ export class FirestoreDriver implements ReativeDriver {
             return turnOff();
           }
 
-          const data: any[] = [];
+          const data = [];
           snapshot.forEach(doc => data.push(doc.data()));
-          const response: Response = clearNetworkResponse({
-            data: data,
-            key: key,
-            collection: this.driverOptions.collection,
-            driver: this.driverOptions.driver,
-            response: {
-              empty: snapshot.empty,
-              size: snapshot.size,
-              meta: snapshot.metadata
-            }
-          });
-          //
-          // callback
-          observer.next(response as T);
+          observer.next(data as any);
         },
         err => observer.error(err)
       );
@@ -300,7 +262,7 @@ export class FirestoreDriver implements ReativeDriver {
   ): Observable<any> {
     return new Observable(observer => {
       const connector = this.getInstance();
-      const id = chain.doc;
+      const id = chain.doc || data.doc_id || data.id;
       const newData = { ...data };
       //
       // run exceptions
@@ -393,6 +355,47 @@ export class FirestoreDriver implements ReativeDriver {
       firestore
         .doc(id)
         .update(newData)
+        .then(response)
+        .catch(error);
+    });
+  }
+
+  public delete<T>(
+    path: string,
+    key: string,
+    payload: any,
+    chain: ReativeChainPayload
+  ): Observable<T> {
+    return new Observable(observer => {
+      const connector = this.getInstance();
+      const id = chain.doc;
+
+      //
+      // run exceptions
+      this.exceptions();
+
+      //
+      // define connector
+      const firestore: any = connector.collection(
+        this.driverOptions.collection
+      );
+
+      //
+      // define return
+      const response = r => {
+        observer.next(r);
+        observer.complete();
+      };
+      const error = err => {
+        observer.error(err);
+        observer.complete();
+      };
+
+      //
+      // call firestore
+      firestore
+        .doc(id)
+        .delete()
         .then(response)
         .catch(error);
     });

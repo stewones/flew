@@ -1,71 +1,37 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { RouterModule } from '@angular/router';
-
-import { environment } from '../environments/environment';
-
+import { ReativeModule, StateModule } from '@reative/angular';
 import { NgxsModule } from '@ngxs/store';
-import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
-import { HttpClientModule } from '@angular/common/http';
-import { FIREBASE_CONFIG } from '../environments/firebase.config';
-
-import { ReativeModule } from '@reative/angular';
-import { FirebaseModule } from '@reative/firebase';
-import { CacheModule } from '@reative/cache';
-import { State, StateModule } from '@reative/state';
-import { TodoListContainerModule } from './containers/todo-list-container/todo-list-container.module';
+import { environment } from '../environments/environment';
+export function someReducer(state = 0, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1;
+    case 'DECREMENT':
+      return state - 1;
+    default:
+      return state;
+  }
+}
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    RouterModule.forRoot([], { initialNavigation: 'enabled' }),
-    BrowserAnimationsModule,
-    HttpClientModule,
-    TodoListContainerModule,
-    //
-    // rr stuff
-    //
-    // init rr state
-    StateModule.forRoot(),
-    //
-    // init rr
     ReativeModule.forRoot({
-      silent: !isDev()
+      silent: false,
+      baseURL: 'https://jsonplaceholder.typicode.com'
     }),
-    //
-    // use rr with firebase
-    FirebaseModule.forRoot({
-      config: FIREBASE_CONFIG,
-      persistence: true
-    }),
-    //
-    // use rr with ionic (for cache)
-    CacheModule.forRoot({
-      dbName: environment.dbName,
-      dbStore: environment.dbStoreName
-    }),
-    // store stuff
-    NgxsModule.forRoot([State], {
-      developmentMode: isDev()
-    }),
-    NgxsReduxDevtoolsPluginModule.forRoot({ disabled: isProd() })
+    StateModule.forRoot({ production: false, trace: true })
+    // StoreModule.forRoot({
+    //   production: false,
+    //   reducers: { someReducer },
+    //   initialState: { someReducer: 32535 }
+    // }),
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
-
-//
-// some helpers
-export function isDev() {
-  return !environment.production;
-}
-
-export function isProd() {
-  return environment.production;
-}
