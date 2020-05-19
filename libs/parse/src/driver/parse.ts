@@ -23,6 +23,8 @@ import { limit } from '../api/limit';
 import { skip } from '../api/skip';
 import { find as findParse } from '../api/find';
 import { select } from '../api/select';
+import { near } from '../api/near';
+import { withinQuery } from '../api/within-query';
 
 export class ParseDriver implements ReativeDriver {
   options: Partial<ReativeParseOptions>;
@@ -440,6 +442,12 @@ export class ParseDriver implements ReativeDriver {
       // set skip
       if (chain.after) skip(chain.after, this.connector);
 
+      //
+      // set geo queries
+      if (chain.near) near(chain.near, this.connector)
+      else if (chain.withinKilometers) withinQuery(chain.withinKilometers, this.connector)
+      else if (chain.withinMiles) withinQuery(chain.withinMiles, this.connector)
+      
       //
       // network handle
       const success = async data => {
