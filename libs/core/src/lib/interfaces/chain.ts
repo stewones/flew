@@ -21,6 +21,9 @@ export type ReativeChain =
   | 'worker'
   | 'select'
   | 'memo'
+  | 'near'
+  | 'withinKilometers'
+  | 'withinMiles'
   | 'raw' // deprecated
   | 'transform' // deprecated
   | 'diff' // deprecated
@@ -57,7 +60,9 @@ export interface ReativeChainPayload {
   after?: any; // firestore
   fields?: string[]; // used for the include api from parse
   select?: string[]; // parse - select specific fields only
-
+  near?: any;
+  withinKilometers?: any;
+  withinMiles?: any;
   /**
    * @deprecated
    */

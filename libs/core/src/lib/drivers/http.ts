@@ -49,6 +49,9 @@ export class HttpDriver implements ReativeDriver {
     cache: 'browser',
     select: false,
     memo: true,
+    near: false,
+    withinKilometers: false,
+    withinMiles: false,
     save: 'browser', // deprecated
     ttl: 'browser', // deprecated
     state: 'browser', // deprecated

@@ -649,6 +649,78 @@ export class ReativeCore implements ReativeAPI {
   }
 
   /**
+   * Near geo query
+   *
+   * @param {string} active
+   * @param {ParseOptions.GeoPoint} geopoint
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
+   */
+  public near(field: string, geopoint: any): ReativeCore {
+    this.chain.near = { field: field, geopoint: geopoint };
+    this.checkChainAvailability(this.chain.driver, 'near');
+    return this;
+  }
+
+  /**
+   * Within Kilometers
+   *
+   * @param {string} active
+   * @param {ParseOptions.GeoPoint} geopoint
+   * @param {number} maxDistance
+   * @param {boolean} sorted
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
+   */
+  public withinKilometers(
+    field: string,
+    geopoint: any,
+    maxDistance: any,
+    sorted: boolean
+  ): ReativeCore {
+    this.chain.withinKilometers = {
+      field: field,
+      geopoint: geopoint,
+      method: 'withinKilometers'
+    };
+
+    if (maxDistance) this.chain.near.maxDistance = maxDistance;
+    if (sorted) this.chain.near.sorted = sorted;
+
+    this.checkChainAvailability(this.chain.driver, 'withinKilometers');
+    return this;
+  }
+
+  /**
+   * Within Miles
+   *
+   * @param {string} active
+   * @param {ParseOptions.GeoPoint} geopoint
+   * @param {number} maxDistance
+   * @param {boolean} sorted
+   * @returns {ReativeCore}
+   * @memberof ReativeCore
+   */
+  public withinMiles(
+    field: string,
+    geopoint: any,
+    maxDistance: any,
+    sorted: boolean
+  ): ReativeCore {
+    this.chain.withinMiles = {
+      field: field,
+      geopoint: geopoint,
+      method: 'withinMiles'
+    };
+
+    if (maxDistance) this.chain.near.maxDistance = maxDistance;
+    if (sorted) this.chain.near.sorted = sorted;
+
+    this.checkChainAvailability(this.chain.driver, 'withinMiles');
+    return this;
+  }
+
+  /**
    * Choose whether or not to save returned data in cache
    *
    * @param {boolean} active
