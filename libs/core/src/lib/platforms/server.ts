@@ -681,8 +681,8 @@ export class ReativeCore implements ReativeAPI {
   public withinKilometers(
     field: string,
     geopoint: any,
-    maxDistance?: any,
-    sorted?: boolean
+    maxDistance: number = 30,
+    sorted: boolean = false
   ): ReativeCore {
     this.chain.withinKilometers = {
       field: field,
@@ -690,8 +690,8 @@ export class ReativeCore implements ReativeAPI {
       method: 'withinKilometers'
     };
 
-    if (maxDistance) this.chain.withinKilometers.maxDistance = maxDistance;
-    if (sorted) this.chain.withinKilometers.sorted = sorted;
+    this.chain.withinKilometers.maxDistance = maxDistance;
+    this.chain.withinKilometers.sorted = sorted;
 
     this.checkChainAvailability(this.chain.driver, 'withinKilometers');
     return this;
@@ -713,8 +713,8 @@ export class ReativeCore implements ReativeAPI {
   public withinMiles(
     field: string,
     geopoint: any,
-    maxDistance?: any,
-    sorted?: boolean
+    maxDistance: number = 10,
+    sorted: boolean = false
   ): ReativeCore {
     this.chain.withinMiles = {
       field: field,
@@ -722,8 +722,8 @@ export class ReativeCore implements ReativeAPI {
       method: 'withinMiles'
     };
 
-    if (maxDistance) this.chain.withinMiles.maxDistance = maxDistance;
-    if (sorted) this.chain.withinMiles.sorted = sorted;
+    this.chain.withinMiles.maxDistance = maxDistance;
+    this.chain.withinMiles.sorted = sorted;
 
     this.checkChainAvailability(this.chain.driver, 'withinMiles');
     return this;
