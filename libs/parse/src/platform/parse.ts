@@ -52,6 +52,19 @@ export function pointer(name: string, id: string) {
 }
 
 /**
+ * Creates a Parse Geo Point
+ *
+ * @export
+ * @param {number} lat
+ * @param {number} lng
+ * @returns Parse.GeoPoint
+ */
+export function geopoint(lat: number, lng: number) {
+  const Parse = parse();
+  return new Parse.GeoPoint({latitude: lat, longitude: lng});
+}
+
+/**
  * Creates a Parse Object
  *
  * @export
