@@ -16,6 +16,7 @@ import { HttpDriver } from '../drivers/http';
 import { SHA256 } from '../utils/sha';
 import { R_VERSION } from '../version';
 import { SetOptions } from '../interfaces/set';
+import { ParseOptions } from 'querystring';
 /**
  * @export
  * @class ReativeCore
@@ -638,7 +639,7 @@ export class ReativeCore implements ReativeAPI {
   /**
    * Select custom fields
    *
-   * @param {boolean} active
+   * @param {string[]} value
    * @returns {ReativeCore}
    * @memberof ReativeCore
    */
@@ -651,7 +652,10 @@ export class ReativeCore implements ReativeAPI {
   /**
    * Near geo query
    *
-   * @param {string} active
+   * @example
+   * collection('locations').near('locationField', geopoint(40.0, -30.0)).find()
+   * @param {string} field
+   * @param {Parse.GeoPoint} geopoint
    * @param {ParseOptions.GeoPoint} geopoint
    * @returns {ReativeCore}
    * @memberof ReativeCore
@@ -664,7 +668,9 @@ export class ReativeCore implements ReativeAPI {
 
   /**
    * Within Kilometers
-   *
+   * 
+   * @example
+   * collection('locations').withinKilometers('locationField', geopoint(40.0, -30.0)).find()
    * @param {string} active
    * @param {ParseOptions.GeoPoint} geopoint
    * @param {number} maxDistance
@@ -694,6 +700,9 @@ export class ReativeCore implements ReativeAPI {
   /**
    * Within Miles
    *
+   * @example 
+   * collection('locations').withinMiles('locationField', geopoint(40.0, -30.0)).find()
+   * will return a field
    * @param {string} active
    * @param {ParseOptions.GeoPoint} geopoint
    * @param {number} maxDistance
