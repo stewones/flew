@@ -2,8 +2,15 @@
   {{ display$ | async | json }} <button (click)="increment()">Increment</button>
   <button (click)="decrement()">Decrement</button>
 </div>
+<hr />
 <div class="flex">
   {{ displayTree$ | async | json }}
   <button (click)="incrementTree()">Increment</button>
   <button (click)="decrementTree()">Decrement</button>
+</div>
+<hr />
+<div class="flex">
+  {{ displayBoolean$ | async | json }}
+  <button (click)="active()">Active</button>
+  <button (click)="deactive()">Deactive</button>
 </div>
