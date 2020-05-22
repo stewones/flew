@@ -593,4 +593,26 @@ export class AppComponent implements OnInit {
       .findOne()
       .subscribe(it => console.log(`is empty`, it));
   }
+
+  parseRealtimeTodo() {
+    unsubscribe(`realtime-todos`); // <-- this is important to not get snowballed
+    collection(`Todo`)
+      .driver('parse')
+      .key(`realtime-todos`)
+      .where(`doc_id`, `==`, `9fc04dcd92b3`)
+      .on()
+      .subscribe(todos => {
+        console.log(`realtime todos`, todos);
+      });
+
+    unsubscribe(`realtime-users`); // <-- this is important to not get snowballed
+    collection(`User`)
+      .driver('parse')
+      .key(`realtime-users`)
+      .where(`username`, `==`, `eu`)
+      .on()
+      .subscribe(users => {
+        console.log(`realtime users`, users);
+      });
+  }
 }

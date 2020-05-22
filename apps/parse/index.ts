@@ -41,7 +41,7 @@ const api = new ParseServer({
   masterKey: process.env.MASTER_KEY || 'AppParse', //Add your master key here. Keep it secret!
   serverURL: process.env.SERVER_URL || 'http://localhost:1337/api', // Don't forget to change to https if needed
   liveQuery: {
-    classNames: ['_User'] // List of classes to support for query subscriptions
+    classNames: ['_User', 'Todo'] // List of classes to support for query subscriptions
   },
   logsFolder: databaseUri ? '/tmp' : './logs',
   appName: 'Reative App',
