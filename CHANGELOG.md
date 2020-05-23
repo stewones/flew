@@ -1,3 +1,12 @@
+## [5.0.2](https://github.com/stewwan/reative/compare/v5.0.1...v5.0.2) (2020-05-23)
+
+
+### Bug Fixes
+
+* reative bridge type ([51c901e](https://github.com/stewwan/reative/commit/51c901e078d173b26a9dab2b1d4ce21aa1d206fd))
+
+
+
 ## [5.0.1](https://github.com/stewwan/reative/compare/v4.0.2...v5.0.1) (2020-05-23)
 
 
