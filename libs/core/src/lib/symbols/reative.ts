@@ -17,7 +17,7 @@ export interface ReativeProtocol {
   events?: { [key: string]: Subject<any> };
   worker?: { http: any; parse: any };
   bridge?: {
-    [key: string]: PartialObserver<any>;
+    [key: string]: any;
   };
   driver?: { [key: string]: ReativeDriver };
   drivers?: ReativeDriverOption[];
