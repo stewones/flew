@@ -1,15 +1,15 @@
 {
-	"name": "@reative/parse",
-	"version": "5.0.2",
-	"peerDependencies": {
-		"@reative/core": "5.0.0"
-	},
-	"dependencies": {
-		"@reative/core": "5.0.0",
-		"parse": "^2.11.0"
-	},
-	"devDependencies": {
-		"tsify": "^4.0.1",
-		"parse": "^2.11.0"
-	}
+  "name": "@reative/parse",
+  "version": "5.0.2",
+  "peerDependencies": {
+    "@reative/core": "^5.0.3"
+  },
+  "dependencies": {
+    "@reative/core": "^5.0.3",
+    "parse": "^2.11.0"
+  },
+  "devDependencies": {
+    "tsify": "^4.0.1",
+    "parse": "^2.11.0"
+  }
 }
