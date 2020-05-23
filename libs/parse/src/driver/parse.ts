@@ -1,6 +1,8 @@
 import { isEmpty, isFunction, trim, omit } from 'lodash';
 
 import {
+  R_IDENTIFIER,
+  Reative,
   ReativeDriver,
   ReativeChainPayload,
   ReativeDriverOption,
@@ -9,8 +11,7 @@ import {
   ReativeChain,
   subscribe,
   guid,
-  Logger,
-  R_IDENTIFIER
+  Logger
 } from '@reative/core';
 
 import { Observable } from 'rxjs';
@@ -153,7 +154,7 @@ export class ParseDriver implements ReativeDriver {
     return new Observable(observer => {
       const Parse = this.getInstance();
 
-      this.connector = new Parse.Query(this.getCollectionName());
+      Reative.bridge[key] = new Parse.Query(this.getCollectionName());
 
       //
       // Transpile chain query
@@ -169,53 +170,53 @@ export class ParseDriver implements ReativeDriver {
       //
       // Join query with connector
       if (!isEmpty(specialQueries) && this.isSpecialQuery(chain)) {
-        this.connector = Parse.Query.and(...specialQueries);
+        Reative.bridge[key] = Parse.Query.and(...specialQueries);
       } else {
         for (const q in chain.query) {
           if (isFunction(chain.query[q])) {
-            this.connector[q](...chain.query[q]());
+            Reative.bridge[key][q](...chain.query[q]());
           } else {
-            this.connector[q](...chain.query[q]);
+            Reative.bridge[key][q](...chain.query[q]);
           }
         }
       }
 
       //
       // set where
-      where(chain.where, this.connector);
+      where(chain.where, Reative.bridge[key]);
 
       //
       // set order
-      order(chain.sort, this.connector);
+      order(chain.sort, Reative.bridge[key]);
 
       //
       // set limit
-      if (chain.size) limit(chain.size, this.connector);
+      if (chain.size) limit(chain.size, Reative.bridge[key]);
 
       //
       // set include (pointers, relation, etc)
       if (chain.fields) {
-        this.connector.include(chain.fields);
+        Reative.bridge[key].include(chain.fields);
       }
 
       if (chain.query && chain.query.include) {
-        this.connector.include(chain.query.include);
+        Reative.bridge[key].include(chain.query.include);
       }
 
       //
       // set skip
-      if (chain.after) skip(chain.after, this.connector);
+      if (chain.after) skip(chain.after, Reative.bridge[key]);
 
       //
       // set select
-      if (chain.select) select(chain.select, this.connector);
+      if (chain.select) select(chain.select, Reative.bridge[key]);
 
       //
       // fire in the hole
       const getData = async (result?) => {
         if (isEmpty(result)) {
           result = [];
-          const entries: any[] = await this.connector.find();
+          const entries: any[] = await Reative.bridge[key].find();
           for (const item of entries) {
             // tslint:disable-next-line: deprecation
             const entry = isFunction(item.toJSON) ? item.toJSON() : item;
@@ -230,28 +231,21 @@ export class ParseDriver implements ReativeDriver {
         return result;
       };
 
-      this.connector.subscribe().then(async handler => {
+      Reative.bridge[key].subscribe().then(async handler => {
         observer.next((await getData()) as T);
         handler.on('create', async object => {
-          // console.log(`create`, object);
-          // observer.next((await getData(object.toJSON())) as T);
           observer.next((await getData()) as T);
         });
 
         handler.on('update', async object => {
-          // console.log(`update`, object);
-          // observer.next((await getData(object.toJSON())) as T);
           observer.next((await getData()) as T);
         });
 
         handler.on('delete', async object => {
-          // console.log(`delete`, object);
-          // observer.next((await getData(object.toJSON())) as T);
           observer.next((await getData()) as T);
         });
 
         handler.on('close', () => {
-          console.log('close');
           observer.complete();
         });
 
@@ -444,10 +438,12 @@ export class ParseDriver implements ReativeDriver {
 
       //
       // set geo queries
-      if (chain.near) near(chain.near, this.connector)
-      else if (chain.withinKilometers) withinQuery(chain.withinKilometers, this.connector)
-      else if (chain.withinMiles) withinQuery(chain.withinMiles, this.connector)
-      
+      if (chain.near) near(chain.near, this.connector);
+      else if (chain.withinKilometers)
+        withinQuery(chain.withinKilometers, this.connector);
+      else if (chain.withinMiles)
+        withinQuery(chain.withinMiles, this.connector);
+
       //
       // network handle
       const success = async data => {

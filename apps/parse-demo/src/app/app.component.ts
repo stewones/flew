@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
     // this.disableAutoIdentifier();
     // this.parseQuery();
     // this.parseSet();
-    this.parseFindOne();
+    // this.parseFindOne();
   }
 
   exerciseTest() {
@@ -600,6 +600,8 @@ export class AppComponent implements OnInit {
       .driver('parse')
       .key(`realtime-todos`)
       .where(`doc_id`, `==`, `9fc04dcd92b3`)
+      .memo(false)
+      .cache(false)
       .on()
       .subscribe(todos => {
         console.log(`realtime todos`, todos);
@@ -610,6 +612,8 @@ export class AppComponent implements OnInit {
       .driver('parse')
       .key(`realtime-users`)
       .where(`username`, `==`, `eu`)
+      .memo(false)
+      .cache(false)
       .on()
       .subscribe(users => {
         console.log(`realtime users`, users);

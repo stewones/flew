@@ -16,14 +16,9 @@ export interface ReativeProtocol {
   storage?: StorageAdapter;
   events?: { [key: string]: Subject<any> };
   worker?: { http: any; parse: any };
-  responses?: {
-    // reative key
-    [key: string]: {
-      key: string;
-      observer: PartialObserver<any>;
-    };
+  bridge?: {
+    [key: string]: PartialObserver<any>;
   };
-
   driver?: { [key: string]: ReativeDriver };
   drivers?: ReativeDriverOption[];
 }
@@ -66,5 +61,5 @@ export const Reative: ReativeProtocol = {
     http: false,
     parse: false
   },
-  responses: {} as any
+  bridge: {}
 };
