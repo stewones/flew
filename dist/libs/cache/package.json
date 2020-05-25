@@ -1,6 +1,6 @@
 {
   "name": "@reative/cache",
-  "version": "5.0.4",
+  "version": "5.0.5",
   "peerDependencies": {
     "@reative/core": "^5.0.3",
     "tslib": "^1.10.0"
