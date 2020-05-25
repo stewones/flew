@@ -101,7 +101,8 @@ export class HttpDriver implements ReativeDriver {
 
     //
     // set path to be requestes
-    const url = `${baseURL}${endpoint}${options.pathname}${path}`;
+    const url = `${baseURL || ''}${endpoint || ''}${options.pathname ||
+      ''}${path || ''}`;
     return new Observable((observer: PartialObserver<T>) => {
       //
       // error callback
