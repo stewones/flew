@@ -31,6 +31,7 @@ export async function feedState(key?: string) {
         });
       });
     }
+  } else {
+    throw new Error(`Can't locate storage instance`);
   }
-  throw new Error(`Can't locate storage instance`);
 }
