@@ -6,7 +6,7 @@ import { connect, ConnectOptions } from '../store/connect';
  */
 export function select<T>(
   key: string,
-  options?: ConnectOptions
+  options?: Partial<ConnectOptions>
 ): Observable<T> {
   return connect<T>(`_memo.${key}`, options);
 }
