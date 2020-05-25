@@ -40,3 +40,4 @@ testem.log
 Thumbs.db
 firebase.config.ts
 .build
+package-lock.json
