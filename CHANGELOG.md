@@ -1,3 +1,12 @@
+## [5.0.6](https://github.com/stewwan/reative/compare/v5.0.5...v5.0.6) (2020-05-25)
+
+
+### Features
+
+* add unsetState in favor of removeState and deprecate it ([39fe112](https://github.com/stewwan/reative/commit/39fe112491315594199fa2cbf67c695c12b35a27))
+
+
+
 ## [5.0.5](https://github.com/stewwan/reative/compare/v5.0.4...v5.0.5) (2020-05-25)
 
 
