@@ -6,7 +6,6 @@ import { setMemo } from './setMemo';
  * @param key
  * @param value
  * @param options
- * @deprecated replace with setMemo(key, value)
  */
 export function setState(
   key: string,
