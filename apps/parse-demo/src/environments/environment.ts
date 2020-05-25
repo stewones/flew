@@ -7,8 +7,8 @@ export const environment = {
   dbStoreName: 'parse-demo',
   dbName: 'dev',
   parse: {
-    appID: 'AppServer',
-    masterKey: 'AppParse', // from client used only for tests
+    appID: 'OnTimeServer',
+    masterKey: 'OnTimeParse', // from client used only for tests
     serverURL: 'http://localhost:1337/api'
   }
 };

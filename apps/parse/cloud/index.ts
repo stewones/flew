@@ -1,4 +1,5 @@
 import { collection, Reative } from '@reative/core';
+import { aggregate } from './aggregate';
 
 /**
  *  Imports
@@ -11,3 +12,5 @@ Parse.Cloud.define('collectionRun', req => {
     .find()
     .toPromise();
 });
+
+Parse.Cloud.define('aggregate', aggregate);

@@ -1,22 +1,32 @@
 {
   "name": "@reative/parse",
-  "version": "5.0.2",
+  "version": "5.0.3",
   "peerDependencies": {
-    "@reative/core": "5.0.0",
+    "@reative/core": "^5.0.3",
     "tslib": "^1.10.0"
   },
   "dependencies": {
-    "@reative/core": "5.0.0",
+    "@reative/core": "^5.0.3",
     "parse": "^2.11.0"
   },
   "main": "bundles/reative-parse.umd.js",
+  "module_ivy_ngcc": "__ivy_ngcc__/fesm5/reative-parse.js",
   "module": "fesm5/reative-parse.js",
   "es2015": "fesm2015/reative-parse.js",
   "esm5": "esm5/reative-parse.js",
   "esm2015": "esm2015/reative-parse.js",
+  "fesm5_ivy_ngcc": "__ivy_ngcc__/fesm5/reative-parse.js",
   "fesm5": "fesm5/reative-parse.js",
   "fesm2015": "fesm2015/reative-parse.js",
   "typings": "reative-parse.d.ts",
   "metadata": "reative-parse.metadata.json",
-  "sideEffects": false
+  "sideEffects": false,
+  "__processed_by_ivy_ngcc__": {
+    "fesm5": "9.1.3",
+    "module": "9.1.3",
+    "typings": "9.1.3"
+  },
+  "scripts": {
+    "prepublishOnly": "node --eval \"console.error('ERROR: Trying to publish a package that has been compiled by NGCC. This is not allowed.\\nPlease delete and rebuild the package, without compiling with NGCC, before attempting to publish.\\nNote that NGCC may have been run by importing this package into another project that is being built with Ivy enabled.\\n')\" && exit 1"
+  }
 }

@@ -619,4 +619,40 @@ export class AppComponent implements OnInit {
         console.log(`realtime users`, users);
       });
   }
+
+  parseAggregate() {
+    collection(`Debrief`)
+      .driver(`parse`)
+      .key(`parse-agg`)
+      .run('aggregate', {
+        collection: `Debrief`,
+        query: {
+          aggregate: {
+            match: {
+              _p_company: 'Company$Vh5hrUTUnG',
+              created_at: {
+                $gte: '2020-04-23T03:29:31.203Z',
+                $lt: '2020-05-23T03:29:31.203Z'
+              }
+            },
+            group: {
+              objectId: {
+                year: { $substr: ['$created_at', 0, 4] },
+                month: { $substr: ['$created_at', 5, 2] },
+                day: { $substr: ['$created_at', 8, 2] }
+              },
+              count: { $sum: 1 },
+              created: { $first: '$created_at' }
+            },
+            sort: { created: 1 }
+          }
+        }
+      })
+      .subscribe(
+        (response: any[]) => {
+          console.log(response);
+        },
+        err => console.log(err)
+      );
+  }
 }

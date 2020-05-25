@@ -35,10 +35,10 @@ if (!databaseUri)
   console.log('DATABASE_URI not specified, falling back to localhost.');
 
 const api = new ParseServer({
-  databaseURI: databaseUri || 'mongodb://localhost:27017/app-dev',
+  databaseURI: databaseUri || 'mongodb://localhost:27017/ontime-dev',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud',
-  appId: process.env.APP_ID || 'AppServer',
-  masterKey: process.env.MASTER_KEY || 'AppParse', //Add your master key here. Keep it secret!
+  appId: process.env.APP_ID || 'OnTimeServer',
+  masterKey: process.env.MASTER_KEY || 'OnTimeParse', //Add your master key here. Keep it secret!
   serverURL: process.env.SERVER_URL || 'http://localhost:1337/api', // Don't forget to change to https if needed
   liveQuery: {
     classNames: ['_User', 'Todo'] // List of classes to support for query subscriptions
