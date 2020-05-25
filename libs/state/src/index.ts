@@ -14,4 +14,5 @@ export * from './state/removeState';
 export * from './state/resetState';
 export * from './state/select';
 export * from './state/setState';
+export * from './state/unsetState';
 export * from './state/state';

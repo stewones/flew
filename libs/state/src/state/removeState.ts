@@ -1,5 +1,4 @@
-import { Reative } from '@reative/core';
-import { dispatch } from '../store/dispatch';
+import { unsetState } from './unsetState';
 
 /**
  * Remove memoized/cached state based on key
@@ -7,18 +6,12 @@ import { dispatch } from '../store/dispatch';
  * @export
  * @param {string} key
  * @param {{ cache: boolean }} [options={ cache: true }]
+ * @deprecated replace to the new unset() api
  * @returns {Promise<boolean>}
  */
 export function removeState(
   key: string,
   options: { cache: boolean } = { cache: true }
 ): Promise<boolean> {
-  dispatch({
-    type: 'MEMO_REMOVE',
-    key: key
-  });
-  if (options.cache) {
-    return Reative.storage.remove(key);
-  }
-  return Promise.resolve(true);
+  return unsetState(key, options);
 }
