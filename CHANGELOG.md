@@ -1,3 +1,12 @@
+## [5.0.4](https://github.com/stewwan/reative/compare/v5.0.3...v5.0.4) (2020-05-25)
+
+
+### Bug Fixes
+
+* **select:** options type must be partial ([09029b8](https://github.com/stewwan/reative/commit/09029b87aee656b79e0a55cb53b8319cd05e5327))
+
+
+
 ## [5.0.3](https://github.com/stewwan/reative/compare/v5.0.2...v5.0.3) (2020-05-23)
 
 
