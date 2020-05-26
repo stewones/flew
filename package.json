@@ -67,6 +67,7 @@
     "deep-diff": "1.0.2",
     "firebase": "^7.8.1",
     "hammerjs": "^2.0.8",
+    "immer": "^6.0.8",
     "js-beautify": "^1.10.3",
     "lodash": "^4.17.15",
     "parse": "^2.11.0",

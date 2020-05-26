@@ -50,7 +50,7 @@ export function connect<T>(
           observer.next({
             path,
             prev,
-            nextValue
+            next: nextValue
           } as any);
         } else {
           observer.next(nextValue);

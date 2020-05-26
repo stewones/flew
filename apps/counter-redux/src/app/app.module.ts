@@ -20,7 +20,7 @@ import { counter } from './reducers';
       trace: true,
       // define an initial state
       state: {
-        // counter: 420 // uncomment this line
+        counter: 420 // comment this line
       },
       // pass in the app reducers
       reducers: { counter }

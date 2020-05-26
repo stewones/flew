@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { dispatch, connect, getState } from '@reative/state';
 import { delayedIncrement } from './actions/delayedIncrement';
 import { delayedDecrement } from './actions/delayedDecrement';
+import { increment } from './actions/increment';
+import { decrement } from './actions/decrement';
 
 @Component({
   selector: 'reative-root',
@@ -20,11 +22,11 @@ export class AppComponent implements OnInit {
   ngOnInit() {}
 
   increment() {
-    dispatch({ type: 'INCREMENT', payload: 1 });
+    dispatch(increment(1));
   }
 
   decrement() {
-    dispatch({ type: 'DECREMENT', payload: 1 });
+    dispatch(decrement(1));
   }
 
   incrementAsync(seconds) {
