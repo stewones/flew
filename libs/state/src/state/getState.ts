@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, isUndefined } from 'lodash';
 import { Observable, of, from } from 'rxjs';
 import { Reative } from '@reative/core';
 import { GetStateOptions } from './state';
@@ -22,8 +22,13 @@ export function getState<T = any>(
   options: GetStateOptions = { raw: false }
 ): T {
   const currentState = store().getState();
-  const data = get(currentState, path) || get(currentState, `_memo.${path}`);
-  return path ? (data as T) : currentState;
+  // attempt to get current data from a reducer
+  let data = get(currentState, path);
+  // otherwise attempt to get memoized data
+  if (isUndefined(data)) {
+    data = get(currentState, `_memo.${path}`);
+  }
+  return path ? (data as T) : (currentState as T);
 }
 
 /**
