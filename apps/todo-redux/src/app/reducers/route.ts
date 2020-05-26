@@ -1,23 +1,17 @@
-export function route(
-  state = {
+import { createReducer } from '@reative/state';
+
+export const route = createReducer(
+  {
     pathname: null,
     loading: false
   },
-  action: { type: string; pathname: any }
-) {
-  switch (action.type) {
-    case 'NAVIGATE_TO':
-      return {
-        ...state,
-        loading: true,
-        pathname: action.pathname
-      };
-    case 'NAVIGATE_END':
-      return {
-        ...state,
-        loading: false
-      };
-    default:
-      return state;
+  {
+    navigateTo: (state, action) => {
+      state.loading = true;
+      state.pathname = action.payload;
+    },
+    navigateEnd: (state, action) => {
+      state.loading = false;
+    }
   }
-}
+);

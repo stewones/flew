@@ -1,8 +1,4 @@
 import { Todo } from '../interfaces/todo';
+import { createAction } from '@reative/state';
 
-export function addTodoView(todo: Partial<Todo>) {
-  return {
-    type: 'ADD_TODO_VIEW',
-    payload: todo
-  };
-}
+export const addTodoView = createAction<Todo>('addTodoView');

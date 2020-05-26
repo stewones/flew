@@ -1,7 +1,8 @@
 import { THE_CAT_API_SEARCH } from '../configs/cat';
+import { createReducer } from '@reative/state';
 
-export function control(
-  state = {
+export const control = createReducer(
+  {
     driver: 'firestore',
     pathname: THE_CAT_API_SEARCH,
     useMemo: true,
@@ -9,40 +10,24 @@ export function control(
     useNetwork: true,
     simulateHttpError: false
   },
-  action: { type: string; payload: any }
-) {
-  switch (action.type) {
-    case 'CONTROL_USE_MEMO':
-      return {
-        ...state,
-        useMemo: action.payload
-      };
-    case 'CONTROL_USE_CACHE':
-      return {
-        ...state,
-        useCache: action.payload
-      };
-    case 'CONTROL_USE_NETWORK':
-      return {
-        ...state,
-        useNetwork: action.payload
-      };
-    case 'CONTROL_SIMULATE_HTTP_ERROR':
-      return {
-        ...state,
-        simulateHttpError: action.payload
-      };
-    case 'CONTROL_DRIVER':
-      return {
-        ...state,
-        driver: action.payload
-      };
-    case 'CONTROL_PATHNAME':
-      return {
-        ...state,
-        pathname: action.payload
-      };
-    default:
-      return state;
+  {
+    useMemo: (state, action) => {
+      state.useMemo = action.payload;
+    },
+    useCache: (state, action) => {
+      state.useCache = action.payload;
+    },
+    useNetwork: (state, action) => {
+      state.useNetwork = action.payload;
+    },
+    setSimulateError: (state, action) => {
+      state.simulateHttpError = action.payload;
+    },
+    setDriver: (state, action) => {
+      state.driver = action.payload;
+    },
+    setPathname: (state, action) => {
+      state.pathname = action.payload;
+    }
   }
-}
+);

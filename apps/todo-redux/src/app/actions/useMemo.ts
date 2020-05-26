@@ -1,6 +1,3 @@
-export function useMemo(value) {
-  return {
-    type: 'CONTROL_USE_MEMO',
-    payload: value
-  };
-}
+import { createAction } from '@reative/state';
+
+export const useMemo = createAction<boolean>('useMemo');

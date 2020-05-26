@@ -1,6 +1,3 @@
-export function setDriver(value) {
-  return {
-    type: 'CONTROL_DRIVER',
-    payload: value
-  };
-}
+import { createAction } from '@reative/state';
+
+export const setDriver = createAction<string>('setDriver');

@@ -1,6 +1,3 @@
-export function useNetwork(value) {
-  return {
-    type: 'CONTROL_USE_NETWORK',
-    payload: value
-  };
-}
+import { createAction } from '@reative/state';
+
+export const useNetwork = createAction<boolean>('useNetwork');

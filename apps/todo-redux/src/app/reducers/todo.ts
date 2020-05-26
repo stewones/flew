@@ -1,64 +1,46 @@
-export function todo(
-  state = {
+import { createReducer } from '@reative/state';
+
+export const todo = createReducer(
+  {
     view: {},
     list: [],
     loading: false,
     error: null
   },
-  action: { type: string; payload: any }
-) {
-  switch (action.type) {
-    case 'LOADING_TODO':
-      return {
-        ...state,
-        loading: true,
-        error: null
-      };
-    case 'LOADING_TODOS':
-      return {
-        ...state,
-        loading: true,
-        error: null
-      };
-    case 'LOADING_ERROR':
-      return {
-        ...state,
-        error: action.payload,
-        loading: false
-      };
-    case 'ADD_TODO_LIST':
-      return {
-        ...state,
-        list: action.payload,
-        loading: false,
-        error: null
-      };
-    case 'ADD_TODO_VIEW':
-      return {
-        ...state,
-        view: action.payload,
-        loading: false,
-        error: null
-      };
-    case 'SAVING_TODO':
-      return {
-        ...state,
-        loading: true,
-        error: null
-      };
-    case 'CREATING_TODO':
-      return {
-        ...state,
-        loading: true,
-        error: null
-      };
-    case 'DELETING_TODO':
-      return {
-        ...state,
-        loading: true,
-        error: null
-      };
-    default:
-      return state;
+  {
+    getTodoLoading: state => {
+      state.loading = true;
+      state.error = null;
+    },
+    loadingTodo: state => {
+      state.loading = true;
+      state.error = null;
+    },
+    loadingTodos: state => {
+      state.loading = true;
+      state.error = null;
+    },
+    addTodoError: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    addTodoList: (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.list = action.payload;
+    },
+    addTodoView: (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.view = action.payload;
+    },
+    savingTodo: state => {
+      state.loading = true;
+      state.error = null;
+    },
+    deletingTodo: state => {
+      state.loading = true;
+      state.error = null;
+    }
   }
-}
+);

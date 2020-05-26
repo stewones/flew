@@ -1,5 +1,3 @@
-export function navigateEnd() {
-  return {
-    type: 'NAVIGATE_END'
-  };
-}
+import { createAction } from '@reative/state';
+
+export const navigateEnd = createAction('navigateEnd');

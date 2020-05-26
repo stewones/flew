@@ -1,6 +1,3 @@
-export function setPathname(value) {
-  return {
-    type: 'CONTROL_PATHNAME',
-    payload: value
-  };
-}
+import { createAction } from '@reative/state';
+
+export const setPathname = createAction<string>('setPathname');

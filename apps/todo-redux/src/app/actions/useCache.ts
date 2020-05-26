@@ -1,6 +1,3 @@
-export function useCache(value) {
-  return {
-    type: 'CONTROL_USE_CACHE',
-    payload: value
-  };
-}
+import { createAction } from '@reative/state';
+
+export const useCache = createAction<boolean>('useCache');

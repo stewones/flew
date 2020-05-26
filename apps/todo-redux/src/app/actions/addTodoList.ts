@@ -1,8 +1,4 @@
 import { Todo } from '../interfaces/todo';
+import { createAction } from '@reative/state';
 
-export function addTodoList(todos: Todo[]) {
-  return {
-    type: 'ADD_TODO_LIST',
-    payload: todos
-  };
-}
+export const addTodoList = createAction<Todo[]>('addTodoList');

@@ -1,6 +1,3 @@
-export function setSimulateError(value) {
-  return {
-    type: 'CONTROL_SIMULATE_HTTP_ERROR',
-    payload: value
-  };
-}
+import { createAction } from '@reative/state';
+
+export const setSimulateError = createAction('setSimulateError');

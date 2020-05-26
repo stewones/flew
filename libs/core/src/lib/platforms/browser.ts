@@ -6,8 +6,6 @@ import { ReativeChainPayload } from '../interfaces/chain';
 import { ReativeOptions } from '../interfaces/options';
 import { ReativeVerb } from '../interfaces/verb';
 import { Reative } from '../symbols/reative';
-
-import { shouldTransformResponse } from '../utils/response';
 import { Records } from './server';
 
 export class PlatformBrowser extends Records {
@@ -189,6 +187,7 @@ export class PlatformBrowser extends Records {
     if (!hasStore && !hasStorage) return of();
 
     const hasState = hasStore ? Reative.state.getState(key) : null;
+
     return !isEmpty(hasState) && useMemo
       ? of({ from: 'memo', data: hasState })
       : hasStorage && useCache

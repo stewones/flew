@@ -1,6 +1,3 @@
-export function navigateTo(pathname: string) {
-  return {
-    type: 'NAVIGATE_TO',
-    pathname: pathname
-  };
-}
+import { createAction } from '@reative/state';
+
+export const navigateTo = createAction<string>('navigateTo');
