@@ -1,3 +1,17 @@
+# [5.1.0](https://github.com/stewwan/reative/compare/v5.0.6...v5.1.0) (2020-05-26)
+
+
+### Bug Fixes
+
+* **state:** fix getState and improve createAction with types ([2267617](https://github.com/stewwan/reative/commit/2267617b882622645b36f69b46b83c185c69e94f))
+
+
+### Features
+
+* **state:** add createAction and createReducer helpers ([2c834d1](https://github.com/stewwan/reative/commit/2c834d12df5af2c946cc19a7f13aedbde69c6339))
+
+
+
 ## [5.0.6](https://github.com/stewwan/reative/compare/v5.0.5...v5.0.6) (2020-05-25)
 
 

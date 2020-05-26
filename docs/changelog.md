@@ -1,3 +1,119 @@
+# [5.1.0](https://github.com/stewwan/reative/compare/v5.0.6...v5.1.0) (2020-05-26)
+
+
+### Bug Fixes
+
+* **state:** fix getState and improve createAction with types ([2267617](https://github.com/stewwan/reative/commit/2267617b882622645b36f69b46b83c185c69e94f))
+
+
+### Features
+
+* **state:** add createAction and createReducer helpers ([2c834d1](https://github.com/stewwan/reative/commit/2c834d12df5af2c946cc19a7f13aedbde69c6339))
+
+
+
+## [5.0.6](https://github.com/stewwan/reative/compare/v5.0.5...v5.0.6) (2020-05-25)
+
+
+### Features
+
+* add unsetState in favor of removeState and deprecate it ([39fe112](https://github.com/stewwan/reative/commit/39fe112491315594199fa2cbf67c695c12b35a27))
+
+
+
+## [5.0.5](https://github.com/stewwan/reative/compare/v5.0.4...v5.0.5) (2020-05-25)
+
+
+### Bug Fixes
+
+* **http:** call path ([f7a31d6](https://github.com/stewwan/reative/commit/f7a31d6801fa48253a2dcb50975a1916455256ea))
+
+
+
+## [5.0.4](https://github.com/stewwan/reative/compare/v5.0.3...v5.0.4) (2020-05-25)
+
+
+### Bug Fixes
+
+* **select:** options type must be partial ([09029b8](https://github.com/stewwan/reative/commit/09029b87aee656b79e0a55cb53b8319cd05e5327))
+
+
+
+## [5.0.3](https://github.com/stewwan/reative/compare/v5.0.2...v5.0.3) (2020-05-23)
+
+
+
+## [5.0.2](https://github.com/stewwan/reative/compare/v5.0.1...v5.0.2) (2020-05-23)
+
+
+### Bug Fixes
+
+* reative bridge type ([51c901e](https://github.com/stewwan/reative/commit/51c901e078d173b26a9dab2b1d4ce21aa1d206fd))
+
+
+
+## [5.0.1](https://github.com/stewwan/reative/compare/v4.0.2...v5.0.1) (2020-05-23)
+
+
+### Bug Fixes
+
+* **find/geo:** this.connector is undefined ([0ba20cf](https://github.com/stewwan/reative/commit/0ba20cf5e19f02135867b4ab00b836454ecae71b))
+* **firestore:** declare new chains for geo queries ([7487319](https://github.com/stewwan/reative/commit/748731971071acf969d96d6f860dfc6bc3e08cd7))
+* **getState:** typo ([70064e5](https://github.com/stewwan/reative/commit/70064e5cb1a1830647e0ac4c296cf7cd1e992426))
+* **parse:**  `run(..)` response ([5731da5](https://github.com/stewwan/reative/commit/5731da5f0eecc1b1af126a919fe012b526ecb143))
+* **parse:** `.on()` simultaneous calls ([364a429](https://github.com/stewwan/reative/commit/364a4299cf9768e7c8562dd35ec0b9cb58b0d2ea))
+* **parse:** delete should catch errors ([180c069](https://github.com/stewwan/reative/commit/180c06951ee7a94dc369ba6d8d1314359b1b031c))
+* **parse:** findOne empty results ([d0fab9a](https://github.com/stewwan/reative/commit/d0fab9a506de5d0c103ee624a2debd01cceee604))
+* **platform:** remove server checker for .data ([2e10a73](https://github.com/stewwan/reative/commit/2e10a7373a0a67ecc4549b604e6916109cce6126))
+* **state:** applyDevTools ([f2bf5ca](https://github.com/stewwan/reative/commit/f2bf5ca4758db7bfbacef90490a5cd8420bee125))
+* setState issue related to cache and publish to reative@5.0.5-next ([6615f0f](https://github.com/stewwan/reative/commit/6615f0f94a6c63cf2461f799b335441fbafd1fc2))
+
+
+### Features
+
+* **angular:** add configurable StoreModule for the redux approach ([a8e8b6f](https://github.com/stewwan/reative/commit/a8e8b6fad85df3922b4d40d6273508cb7cfaf199))
+* **apps:** add parse server ([4b0508a](https://github.com/stewwan/reative/commit/4b0508a836d0640a5e8ee7945227bb7ef28fba2a))
+* **cache:** add new apis getCache and setCache ([201282f](https://github.com/stewwan/reative/commit/201282f90459e001ad4da8c63780609c382ec961))
+* **geo-queries:** near, withinKilometers, withinMiles ([1c404ec](https://github.com/stewwan/reative/commit/1c404ece7392c52baf765df7640eb29aa4e0fda8))
+* **geo/count:** add geo queries to count ([3569d70](https://github.com/stewwan/reative/commit/3569d70f6141ed8177c42e962624206908a66172))
+* **geopoint:** method to create a geopoint ([3cc748c](https://github.com/stewwan/reative/commit/3cc748c9004f4b527221d0032fd5425dda98ebfe))
+* **redux:** add initial design ([17320d2](https://github.com/stewwan/reative/commit/17320d2cb4f4729100bfeb70e9461698e9b6f068))
+* **state:** refact internal state to work in redux flow ([bd49400](https://github.com/stewwan/reative/commit/bd49400bfa9b320b4a44b939eddeb0a2e33551dc))
+* **store:** add devtools ([3e6a20f](https://github.com/stewwan/reative/commit/3e6a20fa3186ec672c64f61fbadc8c374685cbd8))
+* **todo-redux:** add a route reducer for navigation ([c55f168](https://github.com/stewwan/reative/commit/c55f16835528df58c478d446e6b87b2d806bbd1c))
+* **todo-redux:** add all drivers and a way to simulate errors ([295182c](https://github.com/stewwan/reative/commit/295182c3b363899a82f870cf23714534772903d7))
+* **todo-redux:** add control reducer ([5cb5e68](https://github.com/stewwan/reative/commit/5cb5e68cbc06cb267d2aa971bcc3df18d18d3338))
+* **todo-redux:** add createTodo action ([8fc640d](https://github.com/stewwan/reative/commit/8fc640deb2f06a62d8634c59d8a05ecbbdc01382))
+* **todo-redux:** add deleteTodo action ([d537b66](https://github.com/stewwan/reative/commit/d537b6672bc18074b6625df401740ac27db0197f))
+* **todo-redux:** add edit action ([2747de4](https://github.com/stewwan/reative/commit/2747de4281fd82f248362a790ec16bc2db0a83a1))
+* **todo-redux:** add more actions and a reload button ([ac49d05](https://github.com/stewwan/reative/commit/ac49d0521f87ad69252bad3a276fd2ecd5728780))
+* **todo-redux:** add saveTodo action ([8a16ab9](https://github.com/stewwan/reative/commit/8a16ab9b03afa6872103e8b36648266d58fd6455))
+* make counter-redux a real redux app ([e8dd1b9](https://github.com/stewwan/reative/commit/e8dd1b93c67baef139eb482abb6d21ec0df8af5d))
+
+
+
+## [4.0.2](https://github.com/stewwan/reative/compare/v4.0.1...v4.0.2) (2020-04-29)
+
+
+### Bug Fixes
+
+* **firebase:** catch firestore connector error ([a44bd71](https://github.com/stewwan/reative/commit/a44bd717d74f0c8da0c733ef246056dbadb86d06))
+
+
+
+## [3.0.2](https://github.com/stewwan/reative/compare/v3.0.1...v3.0.2) (2020-02-05)
+
+
+### Bug Fixes
+
+* **browser:** should complete observable even if result wasnt ship through network ([9c21fdd](https://github.com/stewwan/reative/commit/9c21fddda68e08e136658c314361c2c940ebd8bf))
+
+
+
+## [3.0.1](https://github.com/stewwan/reative/compare/v3.0.0...v3.0.1) (2020-02-05)
+
+
+
 # [3.0.0](https://github.com/stewwan/reative/compare/v2.9.11...v3.0.0) (2020-02-05)
 
 
