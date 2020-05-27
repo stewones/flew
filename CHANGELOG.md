@@ -1,3 +1,12 @@
+## [5.1.1](https://github.com/stewwan/reative/compare/v5.1.0...v5.1.1) (2020-05-27)
+
+
+### Bug Fixes
+
+* **state:** add types for createReducer ([4c426a2](https://github.com/stewwan/reative/commit/4c426a2d4b73cd38f8e4278931e491d4b842d30f))
+
+
+
 # [5.1.0](https://github.com/stewwan/reative/compare/v5.0.6...v5.1.0) (2020-05-26)
 
 
