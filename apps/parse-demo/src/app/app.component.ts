@@ -655,4 +655,15 @@ export class AppComponent implements OnInit {
         err => console.log(err)
       );
   }
+
+  realtimeDatabase() {
+    collection('any')
+      //.key('')
+      .driver('firebase')
+      .cache(false)
+      .memo(false)
+      .ref('some/deep/value')
+      .on()
+      .subscribe(it => console.log(it));
+  }
 }
