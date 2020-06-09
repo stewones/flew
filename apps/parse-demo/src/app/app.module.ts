@@ -42,7 +42,7 @@ export const FIREBASE_CONFIG = {
     //
     // init rr for angular
     ReativeModule.forRoot({
-      silent: true
+      silent: false
     }),
 
     //

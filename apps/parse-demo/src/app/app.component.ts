@@ -666,4 +666,12 @@ export class AppComponent implements OnInit {
       .on()
       .subscribe(it => console.log(it));
   }
+
+  parseResponseOrder() {
+    collection('Todo')
+      .key('parse-response-order')
+      .driver('parse')
+      .find()
+      .subscribe(it => console.log(it));
+  }
 }
