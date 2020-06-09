@@ -1,6 +1,6 @@
 {
 	"name": "@reative/state",
-	"version": "5.1.1",
+	"version": "5.1.2",
 	"dependencies": {
 		"@reative/core": "^5.0.3",
 		"rxjs": "^6.5.4",

@@ -1,3 +1,12 @@
+## [5.1.2](https://github.com/stewwan/reative/compare/v5.1.1...v5.1.2) (2020-06-09)
+
+
+### Bug Fixes
+
+* **browser:** make sure cache won't dispatch if network has been dispatched already ([fbff28a](https://github.com/stewwan/reative/commit/fbff28a45a823d3461ccda0d6982ebcf6c32bf3c))
+
+
+
 ## [5.1.1](https://github.com/stewwan/reative/compare/v5.1.0...v5.1.1) (2020-05-27)
 
 
