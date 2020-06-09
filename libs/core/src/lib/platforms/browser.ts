@@ -10,6 +10,7 @@ import { Records } from './server';
 
 export class PlatformBrowser extends Records {
   _memo_cache;
+  _memo_network;
 
   constructor(options: ReativeOptions) {
     super(options);
@@ -92,6 +93,7 @@ export class PlatformBrowser extends Records {
             if (this.log().enabled()) {
               console.table(response);
             }
+            this._memo_network = response;
             this.dispatch(chain, key, response, observer);
             this.setCache(chain, key, response);
           }
@@ -128,7 +130,7 @@ export class PlatformBrowser extends Records {
     return this.getDataFromStateOrCache$(key, chain).pipe(
       take(1),
       tap(payload => {
-        if (payload.data) {
+        if (payload.data && !this._memo_network) {
           this._memo_cache = payload.data;
           this.dispatch(chain, key, payload.data, observer);
           this.log().info()(`${key} dispatch from ${payload.from}`);
