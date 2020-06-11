@@ -1,7 +1,7 @@
 import { isArray, isEmpty, isNil, isObject } from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SetOptions } from '@reative/core';
+import { SetOptions, subscribe } from '@reative/core';
 
 import {
   Logger,
@@ -169,18 +169,6 @@ export class FirestoreDriver implements ReativeDriver {
         .get()
         .then(async (snapshot: any) => {
           //
-          // check for offline results
-          if (
-            snapshot.empty &&
-            snapshot.metadata &&
-            snapshot.metadata.fromCache
-          ) {
-            const message = `${key} [find] whoops, looks like you're offline`;
-            this.log().danger()(message);
-            return observer.complete();
-          }
-
-          //
           // format data
           const data: T[] = [];
           snapshot.forEach(doc => data.push(doc.data()));
@@ -234,27 +222,19 @@ export class FirestoreDriver implements ReativeDriver {
 
       //
       // fire in the hole
-      const turnOff = firestore.onSnapshot(
+      const unsubscription = firestore.onSnapshot(
         (snapshot: any) => {
-          //
-          // check for offline results
-          if (
-            snapshot.empty &&
-            snapshot.metadata &&
-            snapshot.metadata.fromCache
-          ) {
-            const message = `${key} [on] whoops, looks like you're offline`;
-            this.log().danger()(message);
-            observer.complete();
-            return turnOff();
-          }
-
           const data = [];
           snapshot.forEach(doc => data.push(doc.data()));
           observer.next(data as any);
         },
         err => observer.error(err)
       );
+
+      const internalHandler = subscribe(`unsubscribe-${key}`, () => {
+        unsubscription();
+        internalHandler.unsubscribe();
+      });
     });
   }
 
