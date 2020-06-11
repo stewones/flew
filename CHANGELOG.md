@@ -1,3 +1,12 @@
+## [5.1.3](https://github.com/stewwan/reative/compare/v5.1.2...v5.1.3) (2020-06-11)
+
+
+### Bug Fixes
+
+* **firestore:** remove offline checks and add unsubscription handler ([61a3c20](https://github.com/stewwan/reative/commit/61a3c20db9e55a9efc0658cc5f109495c667adee))
+
+
+
 ## [5.1.2](https://github.com/stewwan/reative/compare/v5.1.1...v5.1.2) (2020-06-09)
 
 
