@@ -1,0 +1,12 @@
+unit-test:
+  image: weboaks/node-karma-protractor-chrome
+  stage: test
+  environment: test
+  before_script:
+    - npm install -f
+
+  script:
+    - ./node_modules/.bin/ng test parse
+cache:
+  paths:
+    - node_modules/

@@ -1,0 +1,22 @@
+{
+  "name": "@rebased/state",
+  "version": "1.0.0",
+  "dependencies": {
+    "@rebased/core": "^5.0.3",
+    "rxjs": "^6.5.4",
+    "lodash": "^4.17.15",
+    "immer": "^6.0.8",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "redux-watch": "^1.1.1"
+  },
+  "peerDependencies": {
+    "@rebased/core": "^5.0.3",
+    "rxjs": "^6.5.4",
+    "lodash": "^4.17.15",
+    "immer": "^6.0.8",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "redux-watch": "^1.1.1"
+  }
+}

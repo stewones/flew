@@ -1,0 +1,59 @@
+<div class="flex flex-row p-2">
+  <div class="w-200">
+    Use Memo
+    <input
+      type="checkbox"
+      [checked]="useMemo$ | async"
+      (change)="changeUseMemo($event)"
+    />
+    <br />
+    Use Cache
+    <input
+      type="checkbox"
+      [checked]="useCache$ | async"
+      (change)="changeUseCache($event)"
+    />
+    <br />
+    Use Network
+    <input
+      type="checkbox"
+      [checked]="useNetwork$ | async"
+      (change)="changeUseNetwork($event)"
+    /><br />
+    <br />
+    Driver
+    <select (change)="changeDriver($event)">
+      <option
+        *ngFor="let item of drivers"
+        [selected]="item === (driver$ | async)"
+      >
+        {{ item }}
+      </option>
+    </select>
+    <br />
+    Simulate HTTP error
+    <input
+      type="checkbox"
+      [checked]="simulateHttpError$ | async"
+      (change)="simulateHttpError($event)"
+    />
+    <br />
+    <br />
+    <button (click)="load()">Reload</button>
+    <button (click)="create()">Create</button>
+  </div>
+
+  <div class="w-full pl-2">
+    Loading: {{ loading$ | async }}<br />
+    Error: {{ error$ | async | json }}<br />
+    <hr />
+    <ul [hidden]="loading$ | async">
+      <li *ngFor="let todo of todos$ | async">
+        <a (click)="edit(todo.doc_id)" [innerHTML]="todo.text"></a>
+      </li>
+    </ul>
+    <span [hidden]="(todos$ | async)?.length || (loading$ | async)">
+      no results found for {{ driver$ | async }}
+    </span>
+  </div>
+</div>

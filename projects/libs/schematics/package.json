@@ -1,0 +1,26 @@
+{
+  "name": "@rebased/schematics",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "Rebased Team",
+    "email": "support@rebased.dev",
+    "url": "https://rebased.dev"
+  },
+  "bugs": {
+    "url": "https://github.com/stewwan/rebased/issues",
+    "email": "support@rebased.dev"
+  },
+  "dependencies": {
+    "@schematics/angular": "^9.0.0",
+    "tslib": "^1.10.0",
+    "typescript": "~3.7.5"
+  },
+  "peerDependencies": {
+    "@angular-devkit/architect": ">=0.900.0",
+    "@angular-devkit/build-angular": ">=0.900.0",
+    "@angular-devkit/core": ">=9.0.0",
+    "@angular-devkit/schematics": ">=9.0.0"
+  },
+  "schematics": "./schemas.json"
+}

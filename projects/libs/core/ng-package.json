@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/libs/core",
+  "assets": [],
+  "lib": {
+    "entryFile": "src/index.ts",
+    "umdModuleIds": {
+      "lodash": "_",
+      "axios": "axios",
+      "rxjs": "rxjs"
+    }
+  },
+  "whitelistedNonPeerDependencies": ["axios", "lodash", "rxjs"]
+}

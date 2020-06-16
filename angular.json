@@ -1,0 +1,460 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "",
+  "projects": {
+    "core": {
+      "root": "projects/libs/core",
+      "sourceRoot": "projects/libs/core/src",
+      "projectType": "library",
+      "prefix": "",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/libs/core/tsconfig.lib.json",
+            "project": "projects/libs/core/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/libs/core/tsconfig.lib.json",
+              "projects/libs/core/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "projects/libs/core/jest.config.js",
+            "tsConfig": "projects/libs/core/tsconfig.spec.json",
+            "setupFile": "projects/libs/core/src/test-setup.ts"
+          },
+          "configurations": {
+            "ci": {
+              "watch": false,
+              "progress": false,
+              "browsers": "ChromeHeadlessCI"
+            }
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "cache": {
+      "root": "projects/libs/cache",
+      "sourceRoot": "projects/libs/cache/src",
+      "projectType": "library",
+      "prefix": "",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/libs/cache/tsconfig.lib.json",
+            "project": "projects/libs/cache/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/libs/cache/tsconfig.lib.json",
+              "projects/libs/cache/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "projects/libs/cache/jest.config.js",
+            "tsConfig": "projects/libs/cache/tsconfig.spec.json",
+            "setupFile": "projects/libs/cache/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "angular": {
+      "root": "projects/libs/angular",
+      "sourceRoot": "projects/libs/angular/src",
+      "projectType": "library",
+      "prefix": "",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/libs/angular/tsconfig.lib.json",
+            "project": "projects/libs/angular/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/libs/angular/tsconfig.lib.json",
+              "projects/libs/angular/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "projects/libs/angular/jest.config.js",
+            "tsConfig": "projects/libs/angular/tsconfig.spec.json",
+            "setupFile": "projects/libs/angular/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "state": {
+      "root": "projects/libs/state",
+      "sourceRoot": "projects/libs/state/src",
+      "projectType": "library",
+      "prefix": "",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/libs/state/tsconfig.lib.json",
+            "project": "projects/libs/state/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/libs/state/tsconfig.lib.json",
+              "projects/libs/state/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "projects/libs/state/jest.config.js",
+            "tsConfig": "projects/libs/state/tsconfig.spec.json",
+            "setupFile": "projects/libs/state/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "firebase": {
+      "root": "projects/libs/firebase",
+      "sourceRoot": "projects/libs/firebase/src",
+      "projectType": "library",
+      "prefix": "",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/libs/firebase/tsconfig.lib.json",
+            "project": "projects/libs/firebase/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/libs/firebase/tsconfig.lib.json",
+              "projects/libs/firebase/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "projects/libs/firebase/jest.config.js",
+            "tsConfig": "projects/libs/firebase/tsconfig.spec.json",
+            "setupFile": "projects/libs/firebase/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "parse": {
+      "root": "projects/libs/parse",
+      "sourceRoot": "projects/libs/parse/src",
+      "projectType": "library",
+      "prefix": "",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/libs/parse/tsconfig.lib.json",
+            "project": "projects/libs/parse/ng-package.json"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/libs/parse/tsconfig.lib.json",
+              "projects/libs/parse/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "projects/libs/parse/jest.config.js",
+            "tsConfig": "projects/libs/parse/tsconfig.spec.json",
+            "setupFile": "projects/libs/parse/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/schematics:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "todo": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/apps/todo",
+      "sourceRoot": "projects/apps/todo/src",
+      "prefix": "rebased",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/projects/apps/todo",
+            "index": "projects/apps/todo/src/index.html",
+            "main": "projects/apps/todo/src/main.ts",
+            "polyfills": "projects/apps/todo/src/polyfills.ts",
+            "tsConfig": "projects/apps/todo/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "projects/apps/todo/src/favicon.ico",
+              "projects/apps/todo/src/assets"
+            ],
+            "styles": ["projects/apps/todo/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/apps/todo/src/environments/environment.ts",
+                  "with": "projects/apps/todo/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "todo:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "todo:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "todo:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/apps/todo/tsconfig.app.json",
+              "projects/apps/todo/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!projects/apps/todo/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "projects/apps/todo/jest.config.js",
+            "tsConfig": "projects/apps/todo/tsconfig.spec.json",
+            "setupFile": "projects/apps/todo/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "counter": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/apps/counter",
+      "sourceRoot": "projects/apps/counter/src",
+      "prefix": "rebased",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/projects/apps/counter",
+            "index": "projects/apps/counter/src/index.html",
+            "main": "projects/apps/counter/src/main.ts",
+            "polyfills": "projects/apps/counter/src/polyfills.ts",
+            "tsConfig": "projects/apps/counter/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "projects/apps/counter/src/favicon.ico",
+              "projects/apps/counter/src/assets"
+            ],
+            "styles": ["projects/apps/counter/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/apps/counter/src/environments/environment.ts",
+                  "with": "projects/apps/counter/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "counter:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "counter:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "counter:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/apps/counter/tsconfig.app.json",
+              "projects/apps/counter/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!projects/apps/counter/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "projects/apps/counter/jest.config.js",
+            "tsConfig": "projects/apps/counter/tsconfig.spec.json",
+            "setupFile": "projects/apps/counter/src/test-setup.ts"
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "warnings": {
+      "typescriptMismatch": false,
+      "versionMismatch": false
+    },
+    "defaultCollection": "@rebased/schematics",
+    "analytics": false
+  },
+  "schematics": {},
+  "defaultProject": "todo"
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/libs/parse",
+  "lib": {
+    "entryFile": "src/index.ts",
+    "umdModuleIds": {
+      "@rebased/core": "@rebased/core",
+      "parse": "parse"
+    }
+  },
+  "whitelistedNonPeerDependencies": ["@rebased/core", "parse"]
+}

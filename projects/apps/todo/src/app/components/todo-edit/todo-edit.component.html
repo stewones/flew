@@ -1,0 +1,11 @@
+<div *ngIf="view$ | async as todo">
+  <textarea
+    rows="10"
+    cols="40"
+    [innerText]="todo.text"
+    [(ngModel)]="todo.text"
+  ></textarea>
+  <br />
+  <button (click)="save(todo)">Save</button>
+  <button [hidden]="!id" (click)="delete(todo)">Delete</button>
+</div>

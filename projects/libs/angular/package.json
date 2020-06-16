@@ -1,0 +1,24 @@
+{
+  "name": "@rebased/angular",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "@angular/common": "^9.0.0",
+    "@angular/core": "^9.0.0",
+    "@ionic/storage": "^2.2.0",
+    "@rebased/core": "^5.0.3",
+    "@rebased/state": "^5.0.3",
+    "@rebased/parse": "^5.0.3",
+    "@rebased/cache": "^5.0.3",
+    "@rebased/firebase": "^5.0.3"
+  },
+  "dependencies": {
+    "@angular/common": "^9.0.0",
+    "@angular/core": "^9.0.0",
+    "@ionic/storage": "^2.2.0",
+    "@rebased/core": "^5.0.3",
+    "@rebased/state": "^5.0.3",
+    "@rebased/parse": "^5.0.3",
+    "@rebased/cache": "^5.0.3",
+    "@rebased/firebase": "^5.0.3"
+  }
+}

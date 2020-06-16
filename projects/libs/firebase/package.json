@@ -1,0 +1,12 @@
+{
+  "name": "@rebased/firebase",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "@rebased/core": "^5.0.3",
+    "firebase": "^7.8.1"
+  },
+  "dependencies": {
+    "@rebased/core": "^5.0.3",
+    "firebase": "^7.8.1"
+  }
+}

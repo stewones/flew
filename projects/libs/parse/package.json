@@ -1,0 +1,15 @@
+{
+  "name": "@rebased/parse",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "@rebased/core": "^5.0.3"
+  },
+  "dependencies": {
+    "@rebased/core": "^5.0.3",
+    "parse": "^2.11.0"
+  },
+  "devDependencies": {
+    "tsify": "^4.0.1",
+    "parse": "^2.11.0"
+  }
+}

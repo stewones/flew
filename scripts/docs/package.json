@@ -1,0 +1,35 @@
+{
+  "name": "rebased-docs",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "doc:build": "npm run doc:angular && npm run doc:cache && npm run doc:core && npm run doc:firebase && npm run doc:parse && npm run doc:state && npm run doc:gen && npm run doc:getting:started",
+    "doc:gen": "npm run doc:chain && npm run doc:verbs",
+    "doc:verbs": "tsc && node ./.compiled/scripts/docs/transpilers/gen-doc-verbs.js",
+    "doc:chain": "tsc && node ./.compiled/scripts/docs/transpilers/gen-doc-chain.js",
+    "doc:angular": "jsdoc2md --files ../../projects/libs/angular/src/**/*.ts --configure ./setup.json --template ./content/angular-api.hbs > ../../docs/angular/api.md && shx sed -i '@---' '---' ../../docs/angular/api.md && shx sed -i '---@' '---' ../../docs/angular/api.md",
+    "doc:core": "jsdoc2md --files ../../projects/libs/core/src/platforms/server.ts --configure ./setup.json --template ./content/core-api.hbs > ../../docs/core/api.md && shx sed -i '@---' '---' ../../docs/core/api.md && shx sed -i '---@' '---' ../../docs/core/api.md",
+    "doc:cache": "jsdoc2md --files ../../projects/libs/cache/src/**/*.ts --configure ./setup.json --template ./content/cache-api.hbs > ../../docs/cache/api.md && shx sed -i '@---' '---' ../../docs/cache/api.md && shx sed -i '---@' '---' ../../docs/cache/api.md",
+    "doc:firebase": "jsdoc2md --files ../../projects/libs/firebase/src/**/*.ts --configure ./setup.json --template ./content/firebase-api.hbs > ../../docs/firebase/api.md && shx sed -i '@---' '---' ../../docs/firebase/api.md && shx sed -i '---@' '---' ../../docs/firebase/api.md",
+    "doc:parse": "jsdoc2md --files ../../projects/libs/parse/src/**/*.ts --configure ./setup.json --template ./content/parse-api.hbs > ../../docs/parse/api.md && shx sed -i '@---' '---' ../../docs/parse/api.md && shx sed -i '---@' '---' ../../docs/parse/api.md",
+    "doc:state": "jsdoc2md --files ../../projects/libs/state/src/**/*.ts --configure ./setup.json --template ./content/state-api.hbs > ../../docs/state/api.md && shx sed -i '@---' '---' ../../docs/state/api.md && shx sed -i '---@' '---' ../../docs/state/api.md",
+    "doc:getting:started": "tsc && node ./.compiled/scripts/docs/transpilers/getting-started.js"
+  },
+  "private": true,
+  "dependencies": {
+    "jsdoc-babel": "^0.5.0",
+    "jsdoc-to-markdown": "^5.0.3",
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-typescript": "^7.7.4"
+  },
+  "devDependencies": {
+    "shelljs": "^0.8.4",
+    "shx": "^0.3.2"
+  }
+}

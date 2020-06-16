@@ -1,0 +1,32 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es5",
+    "module": "esnext",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2018", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@rebased/cache": ["projects/libs/cache/src/index.ts"],
+      "@rebased/angular": ["projects/libs/angular/src/index.ts"],
+      "@rebased/state": ["projects/libs/state/src/index.ts"],
+      "@rebased/core": ["projects/libs/core/src/index.ts"],
+      "@rebased/firebase": ["projects/libs/firebase/src/index.ts"],
+      "@rebased/parse": ["projects/libs/parse/src/index.ts"]
+    },
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "rootDir": ".",
+    "types": ["node", "jest"]
+  },
+  "exclude": ["node_modules", "tmp"]
+}
