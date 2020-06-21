@@ -22,6 +22,6 @@ console.log(getState('counter'));
 // 1
 ```
 
-:::caution
-Whenever a key is provided `getState` will first try to return a result from custom reducers, and only then try the internal reducer `_memo`.
+:::info
+Whenever a key is provided `getState` will first try to return state from your custom reducers based on a given path. In case of no results it'll then attempt from the internal reducer `_memo`.
 :::
