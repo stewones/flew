@@ -26,6 +26,7 @@ collection('kitty', {
 ```
 
 
+
 ## Availability
 |                                          | http | firebase | firestore | parse |
 | ---------------------------------------- | ---- | -------- | --------- | ----- |

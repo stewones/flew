@@ -6,7 +6,7 @@ module.exports = {
   favicon: 'images/favicon.png',
   organizationName: 'rebased',
   projectName: 'rebased',
-  stylesheets: ['/src/css/fonts.css'],
+  stylesheets: [],
   themeConfig: {
     disableDarkMode: false,
     prism: {
@@ -57,7 +57,7 @@ module.exports = {
         src: 'images/r.svg',
         href: 'https://rebased.app'
       },
-      copyright: `<small><span>Copyright © 2016–${new Date().getFullYear()}</span><br />handcrafted by <a href="https://twitter.com/StewanSilva" target="_blank">Stew</a></small>`
+      copyright: `<small><span>Copyright © 2016–${new Date().getFullYear()}</span><br />handcrafted by <a href="https://twitter.com/StewanSilva" rel="noopener" target="_blank">Stew</a></small>`
     },
     algolia: {
       apiKey: 'asdf',
