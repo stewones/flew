@@ -1,3 +1,12 @@
+## [5.1.4](https://github.com/stewwan/reative/compare/v5.1.3...v5.1.4) (2020-06-22)
+
+
+### Bug Fixes
+
+* **core:** events ([870ac01](https://github.com/stewwan/reative/commit/870ac01ee4bb7f738fc37b744c1317017d959bd6))
+
+
+
 ## [5.1.3](https://github.com/stewwan/reative/compare/v5.1.2...v5.1.3) (2020-06-11)
 
 

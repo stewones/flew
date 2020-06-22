@@ -1,6 +1,6 @@
 {
 	"name": "@reative/parse",
-	"version": "5.1.3",
+	"version": "5.1.4",
 	"peerDependencies": {
 		"@reative/core": "^5.0.3"
 	},
