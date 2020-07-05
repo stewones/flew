@@ -7,7 +7,7 @@ let newVersion = '';
 
 export type SemanticTarget = 'major' | 'minor' | 'patch';
 
-export function bumpRR(target: SemanticTarget = 'patch') {
+export function bumpR(target: SemanticTarget = 'patch') {
   newVersion = bumpNumber(R_VERSION, target);
   fs.writeFile(
     '../libs/core/src/lib/version.ts',
@@ -17,7 +17,7 @@ export function bumpRR(target: SemanticTarget = 'patch') {
         console.log(err);
         process.exit(1);
       }
-      console.log('RR version updated');
+      console.log('version updated');
     }
   );
 }
@@ -97,7 +97,7 @@ export function gitTag() {
 }
 
 export function bump(target: SemanticTarget = 'patch') {
-  bumpRR(target);
+  bumpR(target);
   bumpPackages(target);
 }
 

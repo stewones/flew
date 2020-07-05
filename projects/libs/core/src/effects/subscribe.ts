@@ -5,8 +5,6 @@ export function subscribe<T>(
   key: string,
   handler: (arg: T) => any = arg => {}
 ): Subscription {
-  if (!Rebased.events[key]) {
-    Rebased.events[key] = new Subject();
-  }
+  Rebased.events[key] = new Subject();
   return Rebased.events[key].subscribe(handler);
 }

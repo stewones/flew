@@ -1,10 +1,8 @@
-import { Subject } from 'rxjs';
 import { AxiosRequestConfig } from 'axios';
-import { Log } from './log';
 import { RebasedOptions } from './options';
 
 /**
- * Public RR Api
+ * Public Api
  */
 export interface RebasedAPI {
   options: RebasedOptions;
@@ -14,6 +12,8 @@ export interface RebasedAPI {
   network(active: boolean): RebasedAPI; // response using network call
 
   cache(active: boolean): RebasedAPI; // use first response from cache if available
+  memo(active: boolean): RebasedAPI;
+
   key(name: string): RebasedAPI; // define an unique name for cache/state
   query(by: { [key: string]: {} } | { [key: string]: {} }[]): RebasedAPI; // firestore only - this is an object literal way for `where`
   where(
@@ -29,25 +29,24 @@ export interface RebasedAPI {
 
   //
   // utils
-  $log: Subject<Log>;
   http(transformFn: (config: AxiosRequestConfig) => void): RebasedAPI;
 
   //
-  // fire verbs
-  find();
-  findOne();
-  set(data: any, options?: any);
-  update(data: any);
-  on();
-  count();
-  run(name: string, payload: any);
+  // verbs
+  find<T>();
+  findOne<T>();
+  set<T>(data: any, options?: any);
+  update<T>(data: any);
+  on<T>();
+  count<T>();
+  run<T>(name: string, payload: any);
 
   //
   // http verbs
-  get(path: string);
-  post(path: string, body: any);
-  patch(path: string, body: any);
-  delete(path: string, body?: any);
+  get<T>(path: string);
+  post<T>(path: string, body: any);
+  patch<T>(path: string, body: any);
+  delete<T>(path: string, body?: any);
 
   //
   // parse
