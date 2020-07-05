@@ -1,22 +1,22 @@
 {
-  "name": "@rebased/core",
-  "version": "0.0.0",
-  "homepage": "https://github.com/stewwan/core#readme",
-  "license": "MIT",
-  "author": {
-    "name": "Rebased Team",
-    "email": "support@rebased.dev",
-    "url": "https://rebased.dev"
-  },
-  "bugs": {
-    "url": "https://github.com/stewwan/core/issues",
-    "email": "support@rebased.dev"
-  },
-  "dependencies": {
-    "axios": "^0.19.2",
-    "rxjs": "^6.6.0",
-    "lodash": "^4.17.15"
-  },
-  "peerDependencies": {},
-  "description": "It has never been easier to build high-quality apps using web technology"
+	"name": "@rebased/core",
+	"version": "0.0.1",
+	"homepage": "https://github.com/stewwan/core#readme",
+	"license": "MIT",
+	"author": {
+		"name": "Rebased Team",
+		"email": "support@rebased.dev",
+		"url": "https://rebased.dev"
+	},
+	"bugs": {
+		"url": "https://github.com/stewwan/core/issues",
+		"email": "support@rebased.dev"
+	},
+	"dependencies": {
+		"axios": "^0.19.2",
+		"rxjs": "^6.6.0",
+		"lodash": "^4.17.15"
+	},
+	"peerDependencies": {},
+	"description": "It has never been easier to build high-quality apps using web technology"
 }

@@ -1,6 +1,6 @@
 {
-  "name": "@rebased/firebase",
-  "version": "0.0.0",
-  "peerDependencies": {},
-  "dependencies": {}
+	"name": "@rebased/firebase",
+	"version": "0.0.1",
+	"peerDependencies": {},
+	"dependencies": {}
 }

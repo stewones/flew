@@ -1,6 +1,6 @@
 {
-  "name": "@rebased/cache",
-  "version": "0.0.0",
-  "peerDependencies": {},
-  "dependencies": {}
+	"name": "@rebased/cache",
+	"version": "0.0.1",
+	"peerDependencies": {},
+	"dependencies": {}
 }

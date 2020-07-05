@@ -1,8 +1,8 @@
 {
-  "name": "@rebased/parse",
-  "version": "0.0.0",
-  "dependencies": {
-    "parse": "^2.11.0"
-  },
-  "peerDependencies": {}
+	"name": "@rebased/parse",
+	"version": "0.0.1",
+	"dependencies": {
+		"parse": "^2.11.0"
+	},
+	"peerDependencies": {}
 }
