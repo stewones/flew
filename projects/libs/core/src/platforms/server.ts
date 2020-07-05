@@ -57,7 +57,7 @@ export class RebasedCore implements RebasedAPI {
     // log
     const name = options.from || options.endpoint;
     this.log().success()(
-      `Rebased ${R_VERSION} Initiated Collection for ${startCase(name)}`
+      `Rebased ${R_VERSION} initiated for ${startCase(name)}`
     );
 
     // initialize

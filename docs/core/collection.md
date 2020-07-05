@@ -1,11 +1,11 @@
 ---
 id: entry
-title: Collection
+title: Entry
 description: 'Unique api for data access'
 hide_title: false
 ---
 
-Collections on Rebased are meant to access data information whether using http, firebase or parse. The goal is to provide a single and simple api for such operations like getting, saving and updating data.
+The `entry` api on Rebased is the way we access data whether using http, firebase or parse. The goal is to provide a single and simple api for such operations like getting, saving and updating data.
 
 ### Doing a simple http call
 
