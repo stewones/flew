@@ -75,7 +75,7 @@ export function createFactory() {
 }
 
 function buildSelector(options, projectPrefix) {
-  let selector = strings.dasherize(options.name);
+  let selector = strings.dasherize(options.from);
   if (options.prefix) {
     selector = `${options.prefix}-${selector}`;
   } else if (options.prefix === undefined && projectPrefix) {

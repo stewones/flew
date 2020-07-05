@@ -46,7 +46,7 @@ export interface RebasedAPI {
   get<T>(path: string);
   post<T>(path: string, body: any);
   patch<T>(path: string, body: any);
-  delete<T>(path: string, body?: any);
+  delete<T>(path?: string, body?: any);
 
   //
   // parse

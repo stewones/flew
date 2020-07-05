@@ -1,10 +1,10 @@
-import { collection } from '@rebased/core';
+import { entry } from '@rebased/core';
 import { Todo } from '../interfaces/todo';
 import { TodoFindOptions } from '../interfaces/todoFindOptions';
 import { findTodoKey } from './findTodoKey';
 
 export function findTodo(id: string, options: TodoFindOptions) {
-  return collection(`Todo`, { pathname: options.pathname })
+  return entry(`Todo`, { pathname: options.pathname })
     .key(findTodoKey(id))
     .driver(options.driver)
     .memo(options.useMemo)

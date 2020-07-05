@@ -13,7 +13,7 @@ Set of options for Rebased initialisation
 | baseURL          | `null`       | used for http driver. eg: `https://api.thecatapi.com`                                                             |
 | endpoint         | `null`       | used for http driver. eg: `/v1`                                                                                   |
 | httpConfig       | `{}`         | used to extend http config. see [`AxiosRequestConfig`](https://github.com/axios/axios/blob/master/index.d.ts#L43) |
-| driver           | `http`       | used for any collection call                                                                                      |
+| driver           | `http`       | used for any entry call                                                                                           |
 | timestamp        | `true`       | enable/disable timestamp auto creation                                                                            |
 | timestampCreated | `created_at` | field name for created timestamp                                                                                  |
 | timestampUpdated | `updated_at` | field name for updated timestamp                                                                                  |

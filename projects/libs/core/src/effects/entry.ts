@@ -9,15 +9,12 @@ import { isServer } from './isServer';
  *
  *
  * @export
- * @param {string} name
+ * @param {string} from
  * @param {RebasedOptions} [options={}]
  * @returns {RebasedAPI}
  */
-export function collection(
-  name: string,
-  options: RebasedOptions = {}
-): RebasedAPI {
-  options.name = name;
+export function entry(from: string, options: RebasedOptions = {}): RebasedAPI {
+  options.from = from;
   const params = init(options);
   return isServer() ? new PlatformServer(params) : new PlatformBrowser(params);
 }
@@ -46,8 +43,6 @@ function init(options: RebasedOptions): RebasedOptions {
     : isBoolean(options.useNetwork)
     ? options.useNetwork
     : true;
-
-  if (options.name) options.collection = options.name;
 
   options.useNetwork = useNetwork;
   options.useCache = useCache;

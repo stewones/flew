@@ -22,7 +22,7 @@ export function find(handler: QueryHandler) {
 
   //
   // define adapter
-  let connector = new handler.Parse.Query(handler.collection);
+  let connector = new handler.Parse.Query(handler.from);
 
   //
   // Transpile chain query
@@ -66,9 +66,10 @@ export function find(handler: QueryHandler) {
 
   //
   // set geo queries
-  if (chain.near) near(chain.near, connector)
-  else if (chain.withinKilometers) withinQuery(chain.withinKilometers, connector)
-  else if (chain.withinMiles) withinQuery(chain.withinMiles, connector)
+  if (chain.near) near(chain.near, connector);
+  else if (chain.withinKilometers)
+    withinQuery(chain.withinKilometers, connector);
+  else if (chain.withinMiles) withinQuery(chain.withinMiles, connector);
 
   switch (verb) {
     case 'aggregate':

@@ -71,18 +71,14 @@ export function geopoint(lat: number, lng: number) {
  * Creates a Parse Object
  *
  * @export
- * @param {string} collection
+ * @param {string} from
  * @param {*} [attr={}]
  * @param {*} [options={}]
  * @returns Parse.Object
  */
-export function object(collection: string, attr = {}, options = {}) {
+export function object(from: string, attr = {}, options = {}) {
   const Parse = parse();
-  return new Parse.Object(
-    mapping[collection] ? mapping[collection] : collection,
-    attr,
-    options
-  );
+  return new Parse.Object(mapping[from] ? mapping[from] : from, attr, options);
 }
 
 /**

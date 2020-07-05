@@ -127,7 +127,7 @@ export class ParseDriver implements RebasedDriver {
       findParse({
         Parse: this.getInstance(),
         chain: chain,
-        collection: this.getCollectionName(),
+        from: this.getCollectionName(),
         skipOnQuery: this.skipOnQuery,
         skipOnOperator: this.skipOnOperator,
         specialOperators: this.specialOperators,
@@ -154,7 +154,7 @@ export class ParseDriver implements RebasedDriver {
       const specialQueries: any = transpileChainQuery(chain.query, {
         Parse: this.getInstance(),
         chain: chain,
-        collection: this.getCollectionName(),
+        from: this.getCollectionName(),
         skipOnQuery: this.skipOnQuery,
         skipOnOperator: this.skipOnOperator,
         specialOperators: this.specialOperators
@@ -411,7 +411,7 @@ export class ParseDriver implements RebasedDriver {
       const query: any = transpileChainQuery(chain.query, {
         Parse: this.getInstance(),
         chain: chain,
-        collection: this.getCollectionName(),
+        from: this.getCollectionName(),
         skipOnQuery: this.skipOnQuery,
         skipOnOperator: this.skipOnOperator,
         specialOperators: this.specialOperators
@@ -506,7 +506,7 @@ export class ParseDriver implements RebasedDriver {
       const query: any = transpileChainQuery(chain.query, {
         Parse: this.getInstance(),
         chain: chain,
-        collection: this.getCollectionName(),
+        from: this.getCollectionName(),
         skipOnQuery: this.skipOnQuery,
         skipOnOperator: this.skipOnOperator,
         specialOperators: this.specialOperators
@@ -576,7 +576,7 @@ export class ParseDriver implements RebasedDriver {
       Role: '_Role',
       Session: '_Session'
     };
-    const name = this.driverOptions.collection;
+    const name = this.driverOptions.from;
     return mapping[name] ? mapping[name] : name;
   }
 

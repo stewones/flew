@@ -9,12 +9,12 @@ hide_title: false
 
 Selecting a piece of data from store
 
-1. define a key on the collection call
+1. define a key on the entry call
 2. use the same key to grab its result from state
 
 ```ts
 // todo-container.component.ts
-import { collection } from '@rebased/core';
+import { entry } from '@rebased/core';
 import { connect } from '@rebased/state';
 
 interface Todo {
@@ -34,7 +34,7 @@ export class TodoContainerComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    collection('Todo')
+    entry('Todo')
       .key('my-todo-list') // #1 define a memo key
       .find()
       .subscribe();

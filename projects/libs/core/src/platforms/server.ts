@@ -55,7 +55,7 @@ export class RebasedCore implements RebasedAPI {
     this.initDrivers(options);
 
     // log
-    const name = options.collection || options.endpoint;
+    const name = options.from || options.endpoint;
     this.log().success()(
       `Rebased ${R_VERSION} Initiated Collection for ${startCase(name)}`
     );
@@ -121,7 +121,7 @@ export class RebasedCore implements RebasedAPI {
       ...omit(chain, ['key', 'useNetwork', 'useCache', 'useMemo'])
     });
 
-    const keyStart = options.collection || 'rebased';
+    const keyStart = options.from || 'rebased';
     const keyEndpoint = chain.driver === 'http' ? options.endpoint : '';
     const keyPath = chain.driver === 'http' ? path || options.pathname : '';
     const keyCrypt = SHA256(payload);
@@ -365,9 +365,9 @@ export class RebasedCore implements RebasedAPI {
    * @returns {RebasedCore}
    * @example
    * ```ts
-   * import { collection } from '@rebased/core';
+   * import { entry } from '@rebased/core';
    *
-   * collection('kitty', {
+   * entry('kitty', {
    *  baseURL: 'https://api.thecatapi.com',
    *  endpoint: '/v1'
    * })
@@ -613,7 +613,7 @@ export class RebasedCore implements RebasedAPI {
    * Near geo query
    *
    * @example
-   * collection('locations').near('locationField', geopoint(40.0, -30.0)).find()
+   * entry('locations').near('locationField', geopoint(40.0, -30.0)).find()
    * @param {string} field
    * @param {Parse.GeoPoint} geopoint
    * @param {ParseOptions.GeoPoint} geopoint
@@ -629,7 +629,7 @@ export class RebasedCore implements RebasedAPI {
    * Within Kilometers
    *
    * @example
-   * collection('locations').withinKilometers('locationField', geopoint(40.0, -30.0)).find()
+   * entry('locations').withinKilometers('locationField', geopoint(40.0, -30.0)).find()
    * @param {string} active
    * @param {ParseOptions.GeoPoint} geopoint
    * @param {number} maxDistance
@@ -659,7 +659,7 @@ export class RebasedCore implements RebasedAPI {
    * Within Miles
    *
    * @example
-   * collection('locations').withinMiles('locationField', geopoint(40.0, -30.0)).find()
+   * entry('locations').withinMiles('locationField', geopoint(40.0, -30.0)).find()
    * will return a field
    * @param {string} active
    * @param {ParseOptions.GeoPoint} geopoint

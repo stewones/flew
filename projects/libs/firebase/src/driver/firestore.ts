@@ -93,7 +93,7 @@ export class FirestoreDriver implements RebasedDriver {
   private exceptions() {
     const connector = this.getInstance();
     if (isEmpty(connector)) throw new Error('missing firestore connector');
-    if (!this.driverOptions.collection) throw new Error('missing collection');
+    if (!this.driverOptions.from) throw new Error('missing entry');
   }
 
   protected where(query: any[] = [], firestore: any) {
@@ -137,7 +137,7 @@ export class FirestoreDriver implements RebasedDriver {
 
       //
       // define adapter
-      let firestore: any = connector.collection(this.driverOptions.collection);
+      let firestore: any = connector.collection(this.driverOptions.from);
 
       //
       // set query
@@ -195,7 +195,7 @@ export class FirestoreDriver implements RebasedDriver {
 
       //
       // define adapter
-      let firestore: any = connector.collection(this.driverOptions.collection);
+      let firestore: any = connector.collection(this.driverOptions.from);
 
       //
       // set doc
@@ -246,9 +246,7 @@ export class FirestoreDriver implements RebasedDriver {
 
       //
       // define connector
-      const firestore: any = connector.collection(
-        this.driverOptions.collection
-      );
+      const firestore: any = connector.collection(this.driverOptions.from);
 
       //
       // auto update timestamp
@@ -298,9 +296,7 @@ export class FirestoreDriver implements RebasedDriver {
 
       //
       // define connector
-      const firestore: any = connector.collection(
-        this.driverOptions.collection
-      );
+      const firestore: any = connector.collection(this.driverOptions.from);
 
       //
       // auto update timestamp
@@ -352,9 +348,7 @@ export class FirestoreDriver implements RebasedDriver {
 
       //
       // define connector
-      const firestore: any = connector.collection(
-        this.driverOptions.collection
-      );
+      const firestore: any = connector.collection(this.driverOptions.from);
 
       //
       // define return

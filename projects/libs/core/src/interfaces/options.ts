@@ -3,8 +3,7 @@ import { AxiosRequestConfig } from 'axios';
 import { Logger } from '../effects/logger';
 
 export interface RebasedOptions {
-  name?: string; // collection name. eg: 'todos'
-  collection?: string; // eg: same as name
+  from?: string; // eg: 'todos'
   identifier?: string; // default to doc_id
   disableAutoID?: boolean; // disable doc_id generation
   disableTimestamp?: boolean;

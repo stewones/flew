@@ -107,7 +107,7 @@
 //           data: [1, 2, 3],
 //           response: {},
 //           key: '',
-//           collection: '',
+//           entry: '',
 //           driver: 'http'
 //         });
 //       });
@@ -129,7 +129,7 @@
 //           data: [1, 2, 3],
 //           response: [1, 2, 3],
 //           key: '',
-//           collection: '',
+//           entry: '',
 //           driver: 'http'
 //         });
 //       });
@@ -151,7 +151,7 @@
 //           data: 'okay',
 //           response: {},
 //           key: '',
-//           collection: '',
+//           entry: '',
 //           driver: 'http'
 //         });
 //       });
