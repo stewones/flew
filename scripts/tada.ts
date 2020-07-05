@@ -1,3 +1,3 @@
-import { R_VERSION } from '../libs/core/src/lib/version';
+import { R_VERSION } from '../projects/libs/core/src/version';
 
 console.log(`⚡️ 💥  🎉  🔥  New version ${R_VERSION} shipped 🦄  🌈  ☀️  🍭`);

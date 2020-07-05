@@ -1,6 +1,6 @@
 {
   "name": "@rebased/angular",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "peerDependencies": {},
   "dependencies": {
     "@angular/common": "^10.0.0",
