@@ -1,4 +1,4 @@
-# Rebased Schematics [![CI](https://github.com/stewwan/rebased/workflows/CI/badge.svg)](https://github.com/stewwan/rebased/actions)
+# Rebased Schematics [![CI](https://github.com/rebasedjs/rebasedjs/workflows/CI/badge.svg)](https://github.com/rebasedjs/rebasedjs/actions)
 
 ## Docs
 

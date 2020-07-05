@@ -25,7 +25,7 @@ class RecordsMock extends Records {
 
 describe('Records', () => {
   let lib: Records;
-  const baseURL = 'http://rebased.dev';
+  const baseURL = 'http://rebased.io';
   const collection = 'foo-collection';
 
   beforeEach(() => {

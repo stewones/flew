@@ -92,7 +92,7 @@ const otherLibraries = [
   {
     content: 'Enable Firebase Cloud Messaging for Capacitor apps',
     title: 'Capacitor FCM',
-    link: 'https://github.com/stewwan/capacitor-fcm',
+    link: 'https://github.com/capacitor-community/fcm',
     image: (
       <svg
         xmlns="http://www.w3.org/2000/svg"

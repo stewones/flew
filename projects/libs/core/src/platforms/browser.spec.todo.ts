@@ -33,7 +33,7 @@
 
 // describe('Browser Platform', () => {
 //   let lib: PlatformBrowser;
-//   const baseURL = 'http://rebased.dev';
+//   const baseURL = 'http://rebased.io';
 //   const collection = 'foo-collection';
 
 //   beforeEach(() => {

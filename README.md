@@ -1,4 +1,4 @@
-# Rebased [![CI](https://github.com/stewwan/rebased/workflows/CI/badge.svg)](https://github.com/stewwan/rebased/actions)
+# Rebased [![CI](https://github.com/rebasedjs/rebasedjs/workflows/CI/badge.svg)](https://github.com/rebasedjs/rebasedjs/actions)
 
 **Rebased** is a powerful toolchain for building javascript applications
 
