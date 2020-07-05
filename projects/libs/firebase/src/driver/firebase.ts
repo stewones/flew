@@ -10,7 +10,7 @@ import {
   Logger,
   RebasedVerb,
   RebasedChain
-} from '../../../core/src';
+} from '@rebased/core';
 
 export class FirebaseDriver implements RebasedDriver {
   driverName: RebasedDriverOption = 'firebase';

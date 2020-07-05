@@ -13,3 +13,6 @@ export * from './state/install';
 export * from './state/resetState';
 export * from './state/setMemo';
 export * from './state/unsetMemo';
+
+// setup
+export * from './loader';

@@ -2,14 +2,10 @@
   "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../../dist/libs/angular",
   "whitelistedNonPeerDependencies": [
-    "@rebased/core",
-    "@rebased/state",
-    "@rebased/firebase",
-    "@rebased/parse",
-    "@rebased/cache",
     "lodash",
     "@angular/common",
     "@angular/core",
+    "@rebased/core",
     "@ionic/storage"
   ],
   "lib": {
@@ -17,10 +13,6 @@
     "umdModuleIds": {
       "lodash": "_",
       "@rebased/core": "@rebased/core",
-      "@rebased/state": "@rebased/state",
-      "@rebased/firebase": "@rebased/firebase",
-      "@rebased/parse": "@rebased/parse",
-      "@rebased/cache": "@rebased/cache",
       "@angular/common": "@angular/common",
       "@angular/core": "@angular/core",
       "@ionic/storage": "@ionic/storage"

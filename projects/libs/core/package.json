@@ -14,13 +14,9 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "rxjs": "^6.5.4",
+    "rxjs": "^6.6.0",
     "lodash": "^4.17.15"
   },
-  "peerDependencies": {
-    "axios": "^0.19.2",
-    "lodash": "^4.17.15",
-    "rxjs": "^6.5.4"
-  },
+  "peerDependencies": {},
   "description": "It has never been easier to build high-quality apps using web technology"
 }

@@ -1,6 +1,3 @@
-import { install, storageConfig, CacheOptions } from '@rebased/cache';
-import { Storage } from '@ionic/storage';
-
 import {
   NgModule,
   ModuleWithProviders,
@@ -8,10 +5,20 @@ import {
   Inject
 } from '@angular/core';
 
+export interface CacheOptions {
+  dbName: string;
+  dbStore: string;
+  loader: any;
+}
+
 @Injectable()
 export class CacheSetup {
   constructor(@Inject('CacheOptions') public options) {
-    install(new Storage(storageConfig(options.dbName, options.dbStore)));
+    options.loader.install(
+      new options.loader.Storage(
+        options.loader.storageConfig(options.dbName, options.dbStore)
+      )
+    );
   }
 }
 

@@ -1,5 +1,10 @@
 import * as Firebase from 'firebase/app';
-import { install, RebasedFirebaseOptions } from '@rebased/firebase';
+
+export interface FirebaseOptions {
+  config: any;
+  persistence?: boolean;
+  loader: any;
+}
 
 import {
   NgModule,
@@ -10,8 +15,8 @@ import {
 
 @Injectable()
 export class RebasedFirebaseSetup {
-  constructor(@Inject('RebasedFirebaseOptions') public options) {
-    install(Firebase, options.config);
+  constructor(@Inject('FirebaseOptions') public options) {
+    options.loader.install(Firebase, options.config);
   }
 }
 
@@ -33,14 +38,14 @@ export class RebasedFirebaseSetup {
 @NgModule()
 export class FirebaseModule {
   public static forRoot(
-    options: RebasedFirebaseOptions = {} as RebasedFirebaseOptions
+    options: FirebaseOptions = {} as FirebaseOptions
   ): ModuleWithProviders<FirebaseModule> {
     return {
       ngModule: FirebaseModule,
       providers: [
         RebasedFirebaseSetup,
         {
-          provide: 'RebasedFirebaseOptions',
+          provide: 'FirebaseOptions',
           useValue: options
         }
       ]

@@ -6,11 +6,11 @@
     "umdModuleIds": {
       "lodash": "_",
       "rxjs": "rxjs",
-      "@rebased/core": "@rebased/core",
       "immer": "immer",
       "redux": "redux",
       "redux-thunk": "redux-thunk",
-      "redux-watch": "redux-watch"
+      "redux-watch": "redux-watch",
+      "@rebased/core": "@rebased/core"
     }
   },
   "whitelistedNonPeerDependencies": [

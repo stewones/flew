@@ -1,4 +1,4 @@
-export * from './modules/core.module';
+export * from './modules/rebased.module';
 export * from './modules/state.module';
 export * from './modules/cache.module';
 export * from './modules/firebase.module';

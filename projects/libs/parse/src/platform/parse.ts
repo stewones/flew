@@ -7,12 +7,6 @@ const mapping = {
   Session: '_Session'
 };
 
-export interface ParseOptions {
-  serverURL: string;
-  appID: string;
-  masterKey?: string;
-}
-
 /**
  * Extends Parse Object
  *

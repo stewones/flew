@@ -4,24 +4,24 @@ import {
   NgModule,
   ModuleWithProviders
 } from '@angular/core';
-import { createStore, applyDevTools, install } from '@rebased/state';
 
 export interface StoreOptions {
   production?: boolean;
   reducers?: any;
   state?: any; // the initial state
   trace?: boolean; // see more options at https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
+  loader: any;
 }
 
 @Injectable()
 export class StateSetup {
   constructor(@Inject('StoreOptions') public options) {
-    install();
+    options.loader.install();
 
-    createStore(
+    options.loader.createStore(
       (options && options.reducers) || {},
       (options && options.state) || {},
-      applyDevTools(options)
+      options.loader.applyDevTools(options)
     );
   }
 }

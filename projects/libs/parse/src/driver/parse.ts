@@ -16,7 +16,6 @@ import {
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { RebasedParseOptions } from '../interfaces/options';
 import { transpileChainQuery } from '../api/transpile';
 import { where } from '../api/where';
 import { order } from '../api/order';
@@ -26,9 +25,10 @@ import { find as findParse } from '../api/find';
 import { select } from '../api/select';
 import { near } from '../api/near';
 import { withinQuery } from '../api/within-query';
+import { ParseOptions } from '../interfaces/options';
 
 export class ParseDriver implements RebasedDriver {
-  options: Partial<RebasedParseOptions>;
+  options: Partial<ParseOptions>;
   instance: any; // parse instance
   driverName: RebasedDriverOption = 'parse';
   driverOptions: RebasedOptions = {};
@@ -81,7 +81,7 @@ export class ParseDriver implements RebasedDriver {
     withinMiles: true
   };
 
-  constructor(options: RebasedParseOptions) {
+  constructor(options: ParseOptions) {
     this.options = omit(options, ['instance']);
     this.instance = options.instance;
   }

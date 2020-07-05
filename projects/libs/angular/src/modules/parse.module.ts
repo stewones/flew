@@ -5,14 +5,17 @@ import {
   NgModule
 } from '@angular/core';
 
-import { install, ParseOptions } from '@rebased/parse';
-
-import Parse from 'parse';
+export interface ParseOptions {
+  serverURL: string;
+  appID: string;
+  instance: any;
+  loader: any;
+}
 
 @Injectable()
 export class ParseSetup {
-  constructor(@Inject('ParseOptions') public options) {
-    install(Parse, options);
+  constructor(@Inject('ParseOptions') public options: ParseOptions) {
+    options.loader.install(options.loader.Parse, options);
   }
 }
 

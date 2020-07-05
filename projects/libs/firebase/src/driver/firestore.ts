@@ -11,7 +11,7 @@ import {
   RebasedOptions,
   RebasedDriverOption,
   RebasedChainPayload
-} from '../../../core/src';
+} from '@rebased/core';
 
 export class FirestoreDriver implements RebasedDriver {
   driverName: RebasedDriverOption = 'firestore';

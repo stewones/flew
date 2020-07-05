@@ -1,12 +1,7 @@
-import { Rebased } from '../../../core/src';
+import { Rebased } from '@rebased/core';
 import { FirebaseConnector, FirestoreConnector } from './connectors';
 import { FirebaseDriver } from '../driver/firebase';
 import { FirestoreDriver } from '../driver/firestore';
-
-export interface RebasedFirebaseOptions {
-  config: any;
-  persistence: boolean;
-}
 
 export function firebase() {
   return Rebased.driver.firebase.getInstance();
