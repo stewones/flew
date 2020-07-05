@@ -2,7 +2,7 @@
 
 ## Docs
 
-https://docs.rebased.io
+https://rebased.io
 
 ## License
 
