@@ -6,8 +6,6 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 
-import { connect } from '@rebased/state';
-
 @Component({
   selector: '<%= selector %>',
   templateUrl: './<%= dasherize(name) %>.component.html',
@@ -17,7 +15,6 @@ import { connect } from '@rebased/state';
 export class <%= classify(name) %>Component implements OnInit {
 
   @Input() entry: any = {};
-  entry$ = connect<any>('entry');
 
   constructor() {}
 

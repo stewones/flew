@@ -35,10 +35,9 @@ export function createFactory() {
       const parsedPath = parseName(schema.path, schema.name);
       schema.name = parsedPath.name;
       schema.path = parsedPath.path;
-      schema.selector = project && project.prefix;
-      // schema.selector =
-      //   schema.selector ||
-      //   buildSelector(schema, (project && project.prefix) || '');
+      schema.selector =
+        schema.selector ||
+        buildSelector(schema, (project && project.prefix) || '');
 
       // todo remove these when we remove the deprecations
       schema.skipTests = schema.skipTests || !schema.spec;
@@ -75,13 +74,14 @@ export function createFactory() {
   };
 }
 
-// function buildSelector(options, projectPrefix) {
-//   let selector = strings.dasherize(options.from || projectPrefix);
-//   if (options.prefix) {
-//     selector = `${options.prefix}-${selector}`;
-//   } else if (options.prefix === undefined && projectPrefix) {
-//     selector = `${projectPrefix}-${selector}`;
-//   }
+function buildSelector(options, projectPrefix) {
+  let selector = strings.dasherize(options.from || '');
 
-//   return selector;
-// }
+  if (options.prefix) {
+    selector = `${options.prefix}-${selector}`;
+  } else if (options.prefix === undefined && projectPrefix) {
+    selector = `${projectPrefix}-${options.name}`;
+  }
+
+  return selector;
+}
