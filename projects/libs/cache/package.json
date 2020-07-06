@@ -1,6 +1,8 @@
 {
-	"name": "@rebased/cache",
-	"version": "0.0.1",
-	"peerDependencies": {},
-	"dependencies": {}
+  "name": "@rebased/cache",
+  "version": "0.0.1",
+  "peerDependencies": {},
+  "dependencies": {
+    "@ionic/storage": "^2.2.0"
+  }
 }
