@@ -1,5 +1,3 @@
-import * as Firebase from 'firebase/app';
-
 export interface FirebaseOptions {
   config: any;
   persistence?: boolean;
@@ -16,7 +14,7 @@ import {
 @Injectable()
 export class RebasedFirebaseSetup {
   constructor(@Inject('FirebaseOptions') public options) {
-    options.loader.install(Firebase, options.config);
+    options.loader.install(options.loader.Firebase, options.config);
   }
 }
 
