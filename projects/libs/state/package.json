@@ -1,6 +1,6 @@
 {
 	"name": "@rebased/state",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"dependencies": {
 		"rxjs": "^6.6.0",
 		"lodash": "^4.17.15",
