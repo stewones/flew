@@ -13,10 +13,10 @@
 # npm run test:firebase
 
 # -- BUMP -- ##
-# npm run bump:patch
-# npm run version:patch
-# npm run changelog
-# npm run git:tag
+npm run bump:patch
+npm run version:patch
+npm run changelog
+npm run git:tag
 
 # -- /BUMP -- ##
 
@@ -31,7 +31,7 @@ npm run build:parse
 # -- /BUILD -- ##
 
 
-# npm run deploy:npm
+npm run deploy:npm
 # npm run deploy:ci
 
 npm run tada
