@@ -8,15 +8,20 @@ import {
 export interface CacheOptions {
   dbName: string;
   dbStore: string;
+  driverOrder: string[];
   loader: any;
 }
 
 @Injectable()
 export class CacheSetup {
-  constructor(@Inject('CacheOptions') public options) {
+  constructor(@Inject('CacheOptions') public options: CacheOptions) {
     options.loader.install(
       new options.loader.Storage(
-        options.loader.storageConfig(options.dbName, options.dbStore)
+        options.loader.storageConfig(
+          options.dbName,
+          options.dbStore,
+          options.driverOrder
+        )
       )
     );
   }
