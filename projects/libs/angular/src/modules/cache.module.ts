@@ -6,9 +6,9 @@ import {
 } from '@angular/core';
 
 export interface CacheOptions {
-  dbName: string;
-  dbStore: string;
-  driverOrder: string[];
+  dbName?: string;
+  dbStore?: string;
+  driverOrder?: string[];
   loader: any;
 }
 
