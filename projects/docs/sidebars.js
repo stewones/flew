@@ -3,7 +3,7 @@ module.exports = {
     Introduction: ['getting-started'],
     Core: [
       'core/options',
-      'core/entry',
+      'core/fetch',
       'core/chain',
       'core/verbs',
       'core/api'

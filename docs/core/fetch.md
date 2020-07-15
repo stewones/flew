@@ -1,18 +1,18 @@
 ---
-id: entry
-title: Entry
+id: fetch
+title: Fetch
 description: 'Unique api for data access'
 hide_title: false
 ---
 
-The `entry` api on Rebased is the way we access data whether using http, firebase or parse. The goal is to provide a single and simple api for such operations like getting, saving and updating data.
+The `fetch` api on Rebased is the way we access data whether using http, firebase or parse. The goal is to provide a single and simple api for such operations like getting, saving and updating data.
 
 ### Doing a simple http call
 
 ```js
-import { entry } from '@rebased/core';
+import { fetch } from '@rebased/core';
 // Get a random kitty
-entry('kitty', {
+fetch('kitty', {
   driver: 'http', // use http driver
   silent: false, // show logs
   baseURL: 'https://api.thecatapi.com',
@@ -28,11 +28,11 @@ entry('kitty', {
 ### The same call but as a promise
 
 ```js
-import { entry } from '@rebased/core';
+import { fetch } from '@rebased/core';
 
 // Get a random kitty
 
-entry('kitty', {
+fetch('kitty', {
   silent: false,
   driver: 'http',
   baseURL: 'https://api.thecatapi.com',
@@ -57,7 +57,7 @@ Rebased.options = {
 };
 
 // Get a random kitty
-entry('kitty')
+fetch('kitty')
   .get('/images/search?size=small&mime_types=gif')
   .subscribe(
     kitty => console.log(kitty),
@@ -79,7 +79,7 @@ Rebased.options = {
 // Get a kitty from http and firestore
 // both using the same api
 ['firestore', 'http'].map(driver =>
-  entry('kitty')
+  fetch('kitty')
     .driver(driver, {
       endpoint: '/v1/images/search?size=small&mime_types=gif' // this is used by http only
     })

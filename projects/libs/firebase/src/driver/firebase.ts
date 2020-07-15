@@ -73,7 +73,7 @@ export class FirebaseDriver implements RebasedDriver {
 
   private exceptions() {
     const connector = this.getInstance();
-    if (!this.driverOptions.from) throw new Error('missing entry for firebase');
+    if (!this.driverOptions.from) throw new Error('missing fetch for firebase');
     if (isEmpty(connector))
       throw new Error(
         `missing database instance. did you add import 'firebase/database'; to your environment file?`

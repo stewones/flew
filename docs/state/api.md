@@ -50,7 +50,7 @@ hide_title: true
 
 ## \_memo([state], action)
 
-<p>Memo reducer from entry responses</p>
+<p>Memo reducer from fetch responses</p>
 
 **Kind**: global function
 

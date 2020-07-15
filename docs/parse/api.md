@@ -70,7 +70,7 @@ geopoint(40.0, -30.0);
 
 <a name="object"></a>
 
-## object(entry, [attr], [options]) ⇒
+## object(fetch, [attr], [options]) ⇒
 
 <p>Creates a Parse Object</p>
 
@@ -79,7 +79,7 @@ geopoint(40.0, -30.0);
 
 | Param     | Type                | Default         |
 | --------- | ------------------- | --------------- |
-| entry     | <code>string</code> |                 |
+| fetch     | <code>string</code> |                 |
 | [attr]    | <code>\*</code>     | <code>{}</code> |
 | [options] | <code>\*</code>     | <code>{}</code> |
 

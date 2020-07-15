@@ -7,7 +7,7 @@ hide_title: true
 
 # Get State
 
-Provides direct access to a piece of data wheter you made a [entry](/core/entry) call or has dispatched an action.
+Provides direct access to a piece of data wheter you made a [fetch](/core/fetch) call or has dispatched an action.
 
 ```ts
 import { getState } from '@rebased/state';

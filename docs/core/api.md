@@ -195,9 +195,9 @@ hide_title: true
 **Example**
 
 ```ts
-import { entry } from '@rebased/core';
+import { fetch } from '@rebased/core';
 
-entry('kitty', {
+fetch('kitty', {
   baseURL: 'https://api.thecatapi.com',
   endpoint: '/v1'
 })
@@ -435,7 +435,7 @@ entry('kitty', {
 **Example**
 
 ```js
-entry('locations')
+fetch('locations')
   .near('locationField', geopoint(40.0, -30.0))
   .find();
 ```
@@ -458,7 +458,7 @@ entry('locations')
 **Example**
 
 ```js
-entry('locations')
+fetch('locations')
   .withinKilometers('locationField', geopoint(40.0, -30.0))
   .find();
 ```
@@ -481,6 +481,6 @@ entry('locations')
 **Example**
 
 ```js
-entry('locations').withinMiles('locationField', geopoint(40.0, -30.0)).find()
+fetch('locations').withinMiles('locationField', geopoint(40.0, -30.0)).find()
 will return a field
 ```

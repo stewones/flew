@@ -365,9 +365,9 @@ export class RebasedCore implements RebasedAPI {
    * @returns {RebasedCore}
    * @example
    * ```ts
-   * import { entry } from '@rebased/core';
+   * import { fetch } from '@rebased/core';
    *
-   * entry('kitty', {
+   * fetch('kitty', {
    *  baseURL: 'https://api.thecatapi.com',
    *  endpoint: '/v1'
    * })
@@ -613,7 +613,7 @@ export class RebasedCore implements RebasedAPI {
    * Near geo query
    *
    * @example
-   * entry('locations').near('locationField', geopoint(40.0, -30.0)).find()
+   * fetch('locations').near('locationField', geopoint(40.0, -30.0)).find()
    * @param {string} field
    * @param {Parse.GeoPoint} geopoint
    * @param {ParseOptions.GeoPoint} geopoint
@@ -629,7 +629,7 @@ export class RebasedCore implements RebasedAPI {
    * Within Kilometers
    *
    * @example
-   * entry('locations').withinKilometers('locationField', geopoint(40.0, -30.0)).find()
+   * fetch('locations').withinKilometers('locationField', geopoint(40.0, -30.0)).find()
    * @param {string} active
    * @param {ParseOptions.GeoPoint} geopoint
    * @param {number} maxDistance
@@ -659,7 +659,7 @@ export class RebasedCore implements RebasedAPI {
    * Within Miles
    *
    * @example
-   * entry('locations').withinMiles('locationField', geopoint(40.0, -30.0)).find()
+   * fetch('locations').withinMiles('locationField', geopoint(40.0, -30.0)).find()
    * will return a field
    * @param {string} active
    * @param {ParseOptions.GeoPoint} geopoint

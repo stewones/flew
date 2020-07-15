@@ -93,7 +93,7 @@ export class FirestoreDriver implements RebasedDriver {
   private exceptions() {
     const connector = this.getInstance();
     if (isEmpty(connector)) throw new Error('missing firestore connector');
-    if (!this.driverOptions.from) throw new Error('missing entry');
+    if (!this.driverOptions.from) throw new Error('missing from');
   }
 
   protected where(query: any[] = [], firestore: any) {

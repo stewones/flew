@@ -1,11 +1,11 @@
-import { entry } from '@rebased/core';
+import { fetch } from '@rebased/core';
 import { map } from 'rxjs/operators';
 import { Todo } from '../interfaces/todo';
 import { TodoFindOptions } from '../interfaces/todoFindOptions';
 import { findTodosKey } from './findTodosKey';
 
 export function findTodos(options: TodoFindOptions) {
-  return entry(`Todo`, { pathname: options.pathname })
+  return fetch(`Todo`, { pathname: options.pathname })
     .key(findTodosKey())
     .driver(options.driver)
     .memo(options.useMemo)

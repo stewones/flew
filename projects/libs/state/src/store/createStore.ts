@@ -4,7 +4,7 @@ import { pickBy, isEmpty } from 'lodash';
 import { install } from '../state/install';
 
 /**
- * Memo reducer from entry responses
+ * Memo reducer from fetch responses
  *
  * @param {*} [state={}]
  * @param {*} action

@@ -15,7 +15,7 @@ export * from './symbols/rebased';
 
 //
 // effects
-export * from './effects/entry';
+export * from './effects/fetch';
 export * from './effects/guid';
 export * from './effects/isServer';
 export * from './effects/isOnline';
