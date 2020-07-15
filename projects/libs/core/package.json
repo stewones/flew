@@ -1,26 +1,26 @@
 {
-  "name": "@rebased/core",
-  "version": "0.0.2",
-  "homepage": "https://github.com/rebasedjs/rebasedjs#readme",
-  "license": "MIT",
-  "author": {
-    "name": "Rebased Team",
-    "email": "hey@rebased.io",
-    "url": "https://rebased.io"
-  },
-  "bugs": {
-    "url": "https://github.com/rebasedjs/rebasedjs/issues",
-    "email": "hey@rebased.io"
-  },
-  "dependencies": {
-    "axios": "^0.19.2",
-    "rxjs": "^6.6.0",
-    "lodash": "^4.17.15"
-  },
-  "peerDependencies": {
-    "axios": "^0.19.2",
-    "rxjs": "^6.6.0",
-    "lodash": "^4.17.15"
-  },
-  "description": "It has never been easier to build high-quality apps using web technology"
+	"name": "@rebased/core",
+	"version": "0.0.3",
+	"homepage": "https://github.com/rebasedjs/rebasedjs#readme",
+	"license": "MIT",
+	"author": {
+		"name": "Rebased Team",
+		"email": "hey@rebased.io",
+		"url": "https://rebased.io"
+	},
+	"bugs": {
+		"url": "https://github.com/rebasedjs/rebasedjs/issues",
+		"email": "hey@rebased.io"
+	},
+	"dependencies": {
+		"axios": "^0.19.2",
+		"rxjs": "^6.6.0",
+		"lodash": "^4.17.15"
+	},
+	"peerDependencies": {
+		"axios": "^0.19.2",
+		"rxjs": "^6.6.0",
+		"lodash": "^4.17.15"
+	},
+	"description": "It has never been easier to build high-quality apps using web technology"
 }
