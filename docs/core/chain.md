@@ -25,31 +25,32 @@ fetch('kitty', {
   .subscribe(kitty => console.log(kitty));
 ```
 
-## Availability
 
+## Availability
 |                                          | http | firebase | firestore | parse |
 | ---------------------------------------- | ---- | -------- | --------- | ----- |
-| <a href="/core/api">driver</a>           | ✅   | ✅       | ✅        | ✅    |
-| <a href="/core/api">network</a>          | ✅   | ✅       | ✅        | ✅    |
-| <a href="/core/api">key</a>              | ✅   | ✅       | ✅        | ✅    |
-| <a href="/core/api">query</a>            | ⛔️  | ⛔️      | ⛔️       | ✅    |
-| <a href="/core/api">where</a>            | ⛔️  | ✅       | ✅        | ✅    |
-| <a href="/core/api">sort</a>             | ⛔️  | ⛔️      | ✅        | ✅    |
-| <a href="/core/api">size</a>             | ⛔️  | ⛔️      | ✅        | ✅    |
-| <a href="/core/api">at</a>               | ⛔️  | ⛔️      | ✅        | ⛔️   |
-| <a href="/core/api">after</a>            | ⛔️  | ⛔️      | ✅        | ✅    |
-| <a href="/core/api">ref</a>              | ⛔️  | ✅       | ⛔️       | ⛔️   |
-| <a href="/core/api">http</a>             | ✅   | ⛔️      | ⛔️       | ⛔️   |
-| <a href="/core/api">include</a>          | ⛔️  | ⛔️      | ⛔️       | ✅    |
-| <a href="/core/api">doc</a>              | ⛔️  | ⛔️      | ✅        | ✅    |
-| <a href="/core/api">master</a>           | ⛔️  | ⛔️      | ⛔️       | ✅    |
-| <a href="/core/api">token</a>            | ⛔️  | ⛔️      | ⛔️       | ✅    |
-| <a href="/core/api">object</a>           | ⛔️  | ⛔️      | ⛔️       | ✅    |
+| <a href="/core/api">driver</a>           | ✅    | ✅        | ✅         | ✅     |
+| <a href="/core/api">network</a>          | ✅    | ✅        | ✅         | ✅     |
+| <a href="/core/api">key</a>              | ✅    | ✅        | ✅         | ✅     |
+| <a href="/core/api">query</a>            | ⛔️   | ⛔️       | ⛔️        | ✅     |
+| <a href="/core/api">where</a>            | ⛔️   | ✅        | ✅         | ✅     |
+| <a href="/core/api">sort</a>             | ⛔️   | ⛔️       | ✅         | ✅     |
+| <a href="/core/api">size</a>             | ⛔️   | ⛔️       | ✅         | ✅     |
+| <a href="/core/api">at</a>               | ⛔️   | ⛔️       | ✅         | ⛔️    |
+| <a href="/core/api">after</a>            | ⛔️   | ⛔️       | ✅         | ✅     |
+| <a href="/core/api">ref</a>              | ⛔️   | ✅        | ⛔️        | ⛔️    |
+| <a href="/core/api">http</a>             | ✅    | ⛔️       | ⛔️        | ⛔️    |
+| <a href="/core/api">include</a>          | ⛔️   | ⛔️       | ⛔️        | ✅     |
+| <a href="/core/api">doc</a>              | ⛔️   | ⛔️       | ✅         | ✅     |
+| <a href="/core/api">master</a>           | ⛔️   | ⛔️       | ⛔️        | ✅     |
+| <a href="/core/api">token</a>            | ⛔️   | ⛔️       | ⛔️        | ✅     |
+| <a href="/core/api">object</a>           | ⛔️   | ⛔️       | ⛔️        | ✅     |
 | <a href="/core/api">cache</a>            | ⚙    | ⚙        | ⚙         | ⚙     |
-| <a href="/core/api">select</a>           | ⛔️  | ⛔️      | ⛔️       | ✅    |
-| <a href="/core/api">memo</a>             | ✅   | ✅       | ✅        | ✅    |
-| <a href="/core/api">near</a>             | ⛔️  | ⛔️      | ⛔️       | ✅    |
-| <a href="/core/api">withinKilometers</a> | ⛔️  | ⛔️      | ⛔️       | ✅    |
-| <a href="/core/api">withinMiles</a>      | ⛔️  | ⛔️      | ⛔️       | ✅    |
+| <a href="/core/api">select</a>           | ⛔️   | ⛔️       | ⛔️        | ✅     |
+| <a href="/core/api">memo</a>             | ✅    | ✅        | ✅         | ✅     |
+| <a href="/core/api">near</a>             | ⛔️   | ⛔️       | ⛔️        | ✅     |
+| <a href="/core/api">withinKilometers</a> | ⛔️   | ⛔️       | ⛔️        | ✅     |
+| <a href="/core/api">withinMiles</a>      | ⛔️   | ⛔️       | ⛔️        | ✅     |
+
 
 ✅ available ⛔️ unavailable ⚙ only in browser

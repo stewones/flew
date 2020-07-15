@@ -47,7 +47,7 @@ fetch('kitty', {
 ### Configuring options only once
 
 ```js
-import { Rebased, entry } from '@rebased/core';
+import { Rebased, fetch } from '@rebased/core';
 
 Rebased.options = {
   silent: true,
@@ -68,7 +68,7 @@ fetch('kitty')
 ### Changing driver in runtime
 
 ```js
-import { entry, Rebased } from '@rebased/core';
+import { fetch, Rebased } from '@rebased/core';
 
 Rebased.options = {
   silent: false,

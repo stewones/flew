@@ -19,7 +19,7 @@
     "release:patch": "cd ./scripts && npm run release:patch",
     "build:schematics": "tsc -p tools/tsconfig.tools.json && ./tools/copy.sh",
     "build:doc": "cd scripts/docs && npm run doc:gen",
-    "build:docs": "cd projects/docs && npm run build",
+    "build:docs": "cd projects/docs && npm run build && npm run deploy",
     "build:libs": "./scripts/build-libs.sh"
   },
   "private": true,
