@@ -1,8 +1,8 @@
 {
-	"name": "@rebased/firebase",
-	"version": "0.0.4",
-	"dependencies": {},
-	"peerDependencies": {
-		"firebase": "^7.16.0"
-	}
+  "name": "@rebased/firebase",
+  "version": "0.0.4",
+  "dependencies": {},
+  "peerDependencies": {
+    "firebase": "^7.16.0"
+  }
 }
