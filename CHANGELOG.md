@@ -1,3 +1,12 @@
+## [0.0.5](https://github.com/rebasedjs/rebasedjs/compare/v0.0.4...v0.0.5) (2020-07-16)
+
+
+### Bug Fixes
+
+* package deps issues ([d19e211](https://github.com/rebasedjs/rebasedjs/commit/d19e21186e7c465b2295c8b1225b9632cb784b11))
+
+
+
 ## [0.0.4](https://github.com/rebasedjs/rebasedjs/compare/v0.0.3...v0.0.4) (2020-07-16)
 
 

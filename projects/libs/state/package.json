@@ -1,15 +1,15 @@
 {
-  "name": "@rebased/state",
-  "version": "0.0.4",
-  "dependencies": {
-    "immer": "^7.0.5",
-    "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0",
-    "redux-watch": "^1.1.1"
-  },
-  "peerDependencies": {
-    "@rebased/core": "^0.0.4",
-    "rxjs": "^6.6.0",
-    "lodash": "^4.17.15"
-  }
+	"name": "@rebased/state",
+	"version": "0.0.5",
+	"dependencies": {
+		"immer": "^7.0.5",
+		"redux": "^4.0.5",
+		"redux-thunk": "^2.3.0",
+		"redux-watch": "^1.1.1"
+	},
+	"peerDependencies": {
+		"@rebased/core": "^0.0.4",
+		"rxjs": "^6.6.0",
+		"lodash": "^4.17.15"
+	}
 }
