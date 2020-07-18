@@ -1,10 +1,10 @@
 {
-  "name": "@rebased/angular",
-  "version": "0.0.5",
-  "dependencies": {
-    "@rebased/core": "^0.0.5",
-    "@angular/common": "^10.0.0",
-    "@angular/core": "^10.0.0"
-  },
-  "peerDependencies": {}
+	"name": "@rebased/angular",
+	"version": "0.0.6",
+	"dependencies": {
+		"@rebased/core": "^0.0.5",
+		"@angular/common": "^10.0.0",
+		"@angular/core": "^10.0.0"
+	},
+	"peerDependencies": {}
 }

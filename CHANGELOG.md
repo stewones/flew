@@ -1,3 +1,12 @@
+## [0.0.6](https://github.com/rebasedjs/rebasedjs/compare/v0.0.5...v0.0.6) (2020-07-18)
+
+
+### Features
+
+* add parse server ([92bfa98](https://github.com/rebasedjs/rebasedjs/commit/92bfa98a46d2c8fcd9ccc1a578e56e5960b3073e))
+
+
+
 ## [0.0.5](https://github.com/rebasedjs/rebasedjs/compare/v0.0.4...v0.0.5) (2020-07-16)
 
 
