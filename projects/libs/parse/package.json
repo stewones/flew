@@ -2,9 +2,9 @@
   "name": "@rebased/parse",
   "version": "0.0.5",
   "dependencies": {
-    "parse": "^2.11.0"
+    "parse": "^2.15.0"
   },
   "peerDependencies": {
-    "parse": "^2.11.0"
+    "parse": "^2.15.0"
   }
 }
