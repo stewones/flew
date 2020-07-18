@@ -7,8 +7,8 @@ export const environment = {
   dbName: 'todo',
   dbStore: 'todo',
   parse: {
-    appID: 'OnTimeServer',
-    masterKey: 'OnTimeParse', // only for tests. this is not recommended from client
+    appID: 'AppServer',
+    masterKey: 'AppParse', // only for tests. this is not recommended from client
     serverURL: 'http://localhost:1337/api'
   }
 };
