@@ -53,4 +53,5 @@ export interface RebasedAPI {
   include(fields: string[]): RebasedAPI;
   doc(value: any): RebasedAPI;
   select(value: string[]): RebasedAPI;
+  master(value: boolean): RebasedAPI;
 }
