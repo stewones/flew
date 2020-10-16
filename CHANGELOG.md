@@ -1,3 +1,13 @@
+## [0.0.7](https://github.com/rebasedjs/rebasedjs/compare/v0.0.6...v0.0.7) (2020-10-16)
+
+
+### Bug Fixes
+
+* parse package ([f64aa2f](https://github.com/rebasedjs/rebasedjs/commit/f64aa2f06b2a998ee5a68e241a801530a2cd311d))
+* **parse:** expose master chain ([cf4a3f3](https://github.com/rebasedjs/rebasedjs/commit/cf4a3f3339aa739a6a53fa559295fed6cf02eb6d))
+
+
+
 ## [0.0.6](https://github.com/rebasedjs/rebasedjs/compare/v0.0.5...v0.0.6) (2020-07-18)
 
 
