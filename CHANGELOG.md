@@ -1,3 +1,12 @@
+## [0.0.8](https://github.com/rebasedjs/rebasedjs/compare/v0.0.7...v0.0.8) (2020-10-16)
+
+
+### Bug Fixes
+
+* parse import ([970e63e](https://github.com/rebasedjs/rebasedjs/commit/970e63e14d5cc266bc35f24c8d9e122a189db70d))
+
+
+
 ## [0.0.7](https://github.com/rebasedjs/rebasedjs/compare/v0.0.6...v0.0.7) (2020-10-16)
 
 
