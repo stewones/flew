@@ -5,7 +5,7 @@
     "entryFile": "src/index.ts",
     "umdModuleIds": {
       "@rebased/core": "@rebased/core",
-      "Parse": "parse",
+      "parse": "parse",
       "lodash": "lodash"
     }
   },
