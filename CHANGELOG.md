@@ -1,3 +1,12 @@
+## [0.0.9](https://github.com/rebasedjs/rebasedjs/compare/v0.0.8...v0.0.9) (2020-10-18)
+
+
+### Bug Fixes
+
+* parse update should append masterKey and session ([d9a1f92](https://github.com/rebasedjs/rebasedjs/commit/d9a1f92844840d3f5eb1289f5298b4aeb5742dd2))
+
+
+
 ## [0.0.8](https://github.com/rebasedjs/rebasedjs/compare/v0.0.7...v0.0.8) (2020-10-16)
 
 
