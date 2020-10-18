@@ -383,14 +383,20 @@ export class ParseDriver implements RebasedDriver {
       id2.equalTo(this.driverOptions.identifier, chain.doc);
 
       Parse.Query.or(id1, id2)
-        .find()
+        .find({
+          useMasterKey: chain.useMasterKey,
+          sessionToken: chain.useSessionToken
+        })
         .then((r: any[] = []) => {
           if (r.length) {
             for (const k in data) {
               r[0].set(k, data[k]);
             }
             r[0]
-              .save()
+              .save({
+                useMasterKey: chain.useMasterKey,
+                sessionToken: chain.useSessionToken
+              })
               .then(response)
               .catch(error);
           }
