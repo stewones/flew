@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from 'axios';
 import { Observable } from 'rxjs';
-import { RebasedCore } from 'src';
+import { RebasedCore } from '../platforms/server';
 import { RebasedOptions } from './options';
 
 /**
