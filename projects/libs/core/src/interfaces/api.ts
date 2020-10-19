@@ -1,5 +1,6 @@
 import { AxiosRequestConfig } from 'axios';
 import { Observable } from 'rxjs';
+import { RebasedCore } from 'src';
 import { RebasedOptions } from './options';
 
 /**
@@ -7,30 +8,30 @@ import { RebasedOptions } from './options';
  */
 export interface RebasedAPI {
   options: RebasedOptions;
-  reset(): RebasedAPI; // reset chaining payload
+  reset(): RebasedCore; // reset chaining payload
 
-  driver(name: string): RebasedAPI; // firebase / firestore / http
-  network(active: boolean): RebasedAPI; // response using network call
+  driver(name: string): RebasedCore; // firebase / firestore / http
+  network(active: boolean): RebasedCore; // response using network call
 
-  cache(active: boolean): RebasedAPI; // use first response from cache if available
-  memo(active: boolean): RebasedAPI;
+  cache(active: boolean): RebasedCore; // use first response from cache if available
+  memo(active: boolean): RebasedCore;
 
-  key(name: string): RebasedAPI; // define an unique name for cache/state
-  query(by: { [key: string]: {} } | { [key: string]: {} }[]): RebasedAPI; // firestore only - this is an object literal way for `where`
+  key(name: string): RebasedCore; // define an unique name for cache/state
+  query(by: { [key: string]: {} } | { [key: string]: {} }[]): RebasedCore; // firestore only - this is an object literal way for `where`
   where(
     field: string,
     operator: string,
     value: string | number | boolean | []
-  ): RebasedAPI; // firestore only - short way as firebase sdk does
-  sort(by: { [key: string]: string }): RebasedAPI; // firestore only
-  size(value: number): RebasedAPI; // firestore only
-  at(value: string | number): RebasedAPI;
-  after(value: string | number): RebasedAPI;
-  ref(path: string): RebasedAPI; // firebase only
+  ): RebasedCore; // firestore only - short way as firebase sdk does
+  sort(by: { [key: string]: string }): RebasedCore; // firestore only
+  size(value: number): RebasedCore; // firestore only
+  at(value: string | number): RebasedCore;
+  after(value: string | number): RebasedCore;
+  ref(path: string): RebasedCore; // firebase only
 
   //
   // utils
-  http(transformFn: (config: AxiosRequestConfig) => void): RebasedAPI;
+  http(transformFn: (config: AxiosRequestConfig) => void): RebasedCore;
 
   //
   // verbs
@@ -39,7 +40,7 @@ export interface RebasedAPI {
   set<T>(data: any, options?: any): Observable<T>;
   update<T>(data: any): Observable<T>;
   on<T>(): Observable<T>;
-  count<T>(): Observable<T>;
+  count(): Observable<number>;
   run<T>(name: string, payload: any): Observable<T>;
 
   //
@@ -51,8 +52,8 @@ export interface RebasedAPI {
 
   //
   // parse
-  include(fields: string[]): RebasedAPI;
-  doc(value: any): RebasedAPI;
-  select(value: string[]): RebasedAPI;
-  master(value: boolean): RebasedAPI;
+  include(fields: string[]): RebasedCore;
+  doc(value: any): RebasedCore;
+  select(value: string[]): RebasedCore;
+  master(value: boolean): RebasedCore;
 }
