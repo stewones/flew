@@ -1,4 +1,5 @@
 import { AxiosRequestConfig } from 'axios';
+import { Observable } from 'rxjs';
 import { RebasedOptions } from './options';
 
 /**
@@ -23,8 +24,8 @@ export interface RebasedAPI {
   ): RebasedAPI; // firestore only - short way as firebase sdk does
   sort(by: { [key: string]: string }): RebasedAPI; // firestore only
   size(value: number): RebasedAPI; // firestore only
-  at(value: string | number);
-  after(value: string | number);
+  at(value: string | number): RebasedAPI;
+  after(value: string | number): RebasedAPI;
   ref(path: string): RebasedAPI; // firebase only
 
   //
@@ -33,20 +34,20 @@ export interface RebasedAPI {
 
   //
   // verbs
-  find<T>();
-  findOne<T>();
-  set<T>(data: any, options?: any);
-  update<T>(data: any);
-  on<T>();
-  count<T>();
-  run<T>(name: string, payload: any);
+  find<T>(): Observable<T>;
+  findOne<T>(): Observable<T>;
+  set<T>(data: any, options?: any): Observable<T>;
+  update<T>(data: any): Observable<T>;
+  on<T>(): Observable<T>;
+  count<T>(): Observable<T>;
+  run<T>(name: string, payload: any): Observable<T>;
 
   //
   // http verbs
-  get<T>(path: string);
-  post<T>(path: string, body: any);
-  patch<T>(path: string, body: any);
-  delete<T>(path?: string, body?: any);
+  get<T>(path: string): Observable<T>;
+  post<T>(path: string, body: any): Observable<T>;
+  patch<T>(path: string, body: any): Observable<T>;
+  delete<T>(path?: string, body?: any): Observable<T>;
 
   //
   // parse
