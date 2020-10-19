@@ -1,3 +1,12 @@
+## [0.0.10](https://github.com/rebasedjs/rebasedjs/compare/v0.0.9...v0.0.10) (2020-10-19)
+
+
+### Bug Fixes
+
+* **parse:** map Installation collection ([dedd917](https://github.com/rebasedjs/rebasedjs/commit/dedd917c11bdb73c258384aae4725dd53fe4b444))
+
+
+
 ## [0.0.9](https://github.com/rebasedjs/rebasedjs/compare/v0.0.8...v0.0.9) (2020-10-18)
 
 
