@@ -580,7 +580,8 @@ export class ParseDriver implements RebasedDriver {
     const mapping = {
       User: '_User',
       Role: '_Role',
-      Session: '_Session'
+      Session: '_Session',
+      Installation: '_Installation'
     };
     const name = this.driverOptions.from;
     return mapping[name] ? mapping[name] : name;
