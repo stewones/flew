@@ -1,6 +1,6 @@
 {
 	"name": "@rebased/cache",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"dependencies": {
 		"@ionic/storage": "^2.2.0"
 	},

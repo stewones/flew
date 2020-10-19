@@ -1,3 +1,13 @@
+## [0.0.11](https://github.com/rebasedjs/rebasedjs/compare/v0.0.10...v0.0.11) (2020-10-19)
+
+
+### Bug Fixes
+
+* core api interface ([8989239](https://github.com/rebasedjs/rebasedjs/commit/89892398deeb9d7db6c666bf20b4b12a8b20ee08))
+* **api:** returned types from verbs ([b5166a0](https://github.com/rebasedjs/rebasedjs/commit/b5166a0cd7ae4b349dbf36054f05acfc3a3cc769))
+
+
+
 ## [0.0.10](https://github.com/rebasedjs/rebasedjs/compare/v0.0.9...v0.0.10) (2020-10-19)
 
 
