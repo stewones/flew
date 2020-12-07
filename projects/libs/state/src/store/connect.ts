@@ -7,7 +7,7 @@ import watch from 'redux-watch';
 export interface ConnectOptions {
   context: boolean;
   mutable: boolean;
-  memo: boolean;
+  state: boolean;
 }
 
 export interface StateContext<T = any> {
@@ -21,11 +21,11 @@ export function connect<T>(
   options: Partial<ConnectOptions> = {
     context: false,
     mutable: false,
-    memo: false
+    state: false
   }
 ): Observable<T> {
-  if (options.memo) {
-    path = `_memo.${path}`;
+  if (options.state) {
+    path = `_state.${path}`;
   }
   return new Observable(observer => {
     const storeInstance = store();

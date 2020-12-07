@@ -14,7 +14,7 @@ export interface RebasedAPI {
   network(active: boolean): RebasedCore; // response using network call
 
   cache(active: boolean): RebasedCore; // use first response from cache if available
-  memo(active: boolean): RebasedCore;
+  state(active: boolean): RebasedCore;
 
   key(name: string): RebasedCore; // define an unique name for cache/state
   query(by: { [key: string]: {} } | { [key: string]: {} }[]): RebasedCore; // firestore only - this is an object literal way for `where`

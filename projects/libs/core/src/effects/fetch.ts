@@ -26,10 +26,10 @@ export function fetch(from: string, options: RebasedOptions = {}): RebasedAPI {
  * @returns {Options}
  */
 function init(options: RebasedOptions): RebasedOptions {
-  const useMemo = isServer()
+  const useState = isServer()
     ? false
-    : isBoolean(options.useMemo)
-    ? options.useMemo
+    : isBoolean(options.useState)
+    ? options.useState
     : true;
 
   const useCache = isServer()
@@ -46,7 +46,7 @@ function init(options: RebasedOptions): RebasedOptions {
 
   options.useNetwork = useNetwork;
   options.useCache = useCache;
-  options.useMemo = useMemo;
+  options.useState = useState;
 
   return options;
 }

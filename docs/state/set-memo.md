@@ -1,5 +1,5 @@
 ---
-id: set-memo
+id: set-state
 title: Set Memo
 description: 'Great resources to get started learning and using Rebased with Redux State'
 hide_title: false
@@ -34,7 +34,7 @@ import { connect, setMemo } from '@rebased/state';
   styleUrls: ['./todo-container.component.scss']
 })
 export class TodoContainerComponent implements OnInit {
-  numbers$ = connect<number[]>('numbers', { memo: true });
+  numbers$ = connect<number[]>('numbers', { state: true });
 
   constructor() {}
 

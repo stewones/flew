@@ -75,7 +75,7 @@ export class ParseDriver implements RebasedDriver {
     object: true,
     cache: 'browser',
     select: true,
-    memo: true,
+    state: true,
     near: true,
     withinKilometers: true,
     withinMiles: true

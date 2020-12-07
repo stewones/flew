@@ -7,7 +7,7 @@ export function findTodo(id: string, options: TodoFindOptions) {
   return fetch(`Todo`, { pathname: options.pathname })
     .key(findTodoKey(id))
     .driver(options.driver)
-    .memo(options.useMemo)
+    .state(options.useState)
     .cache(options.useCache)
     .network(options.useNetwork)
     .where(`doc_id`, `==`, id)

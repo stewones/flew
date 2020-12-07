@@ -155,7 +155,7 @@ export class PlatformBrowser extends PlatformServer {
   }
 
   protected setState(key: string, chain: RebasedChainPayload, data: any): void {
-    if (Rebased.state.enabled && chain.useMemo) {
+    if (Rebased.state.enabled && chain.useState) {
       const currentState = Rebased.state.getState(key);
       if (diff(currentState, data).length > 0) {
         Rebased.state.setState(key, data, { save: false });
@@ -167,14 +167,14 @@ export class PlatformBrowser extends PlatformServer {
     const hasStore = Rebased.state.enabled;
     const hasStorage = Rebased.storage.enabled;
 
-    const useMemo = chain.useMemo;
+    const useState = chain.useState;
     const useCache = chain.useCache;
 
     if (!hasStore && !hasStorage) return of(null);
 
     const hasState = hasStore ? Rebased.state.getState(key) : null;
 
-    return !isEmpty(hasState) && useMemo
+    return !isEmpty(hasState) && useState
       ? of(hasState).pipe(
           first(),
           tap(it => {

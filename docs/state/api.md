@@ -46,9 +46,9 @@ hide_title: true
 | key       | <code>string</code> |                              |
 | [options] | <code>Object</code> | <code>{ cache: true }</code> |
 
-<a name="_memo"></a>
+<a name="_state"></a>
 
-## \_memo([state], action)
+## \_state([state], action)
 
 <p>Memo reducer from fetch responses</p>
 

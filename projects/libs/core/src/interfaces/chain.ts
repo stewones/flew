@@ -19,7 +19,7 @@ export type RebasedChain =
   | 'master'
   | 'object'
   | 'select'
-  | 'memo'
+  | 'state'
   | 'near'
   | 'withinKilometers'
   | 'withinMiles';
@@ -34,7 +34,7 @@ export interface RebasedChainPayload {
   key?: string; // key used as a property name for the memoized state and cached data
   driver?: RebasedDriverOption;
 
-  useMemo?: boolean; //  use memo for first response
+  useState?: boolean; //  use state for first response
   useCache?: boolean; //  use cache for first response
   useNetwork?: boolean; // use network for first response
 

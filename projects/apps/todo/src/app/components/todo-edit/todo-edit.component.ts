@@ -45,7 +45,7 @@ export class TodoEditComponent implements OnInit {
     // existing todo
     dispatch(
       getTodo(this.id, {
-        useMemo: getState('control.useMemo'),
+        useState: getState('control.useState'),
         useCache: getState('control.useCache'),
         useNetwork: getState('control.useNetwork'),
         driver: getState('control.driver'),

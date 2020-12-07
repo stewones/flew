@@ -1,3 +1,3 @@
 import { createAction } from '@rebased/state';
 
-export const useMemo = createAction<boolean>('useMemo');
+export const useState = createAction<boolean>('useState');

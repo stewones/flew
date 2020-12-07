@@ -5,7 +5,7 @@ import { THE_CAT_API_SEARCH } from '../../configs/cat';
 import { Todo } from '../../interfaces/todo';
 import { getTodos } from '../../actions/getTodos';
 import { navigateTo } from '../../actions/navigateTo';
-import { useMemo } from '../../actions/useMemo';
+import { useState } from '../../actions/useState';
 import { useCache } from '../../actions/useCache';
 import { useNetwork } from '../../actions/useNetwork';
 import { setDriver } from '../../actions/setDriver';
@@ -23,7 +23,7 @@ export class TodoListComponent implements OnInit {
   error$ = connect<boolean>('todo.error');
   todos$ = connect<Todo[]>('todo.list');
 
-  useMemo$ = connect<boolean>('control.useMemo');
+  useState$ = connect<boolean>('control.useState');
   useCache$ = connect<boolean>('control.useCache');
   useNetwork$ = connect<boolean>('control.useNetwork');
   simulateHttpError$ = connect<boolean>('control.simulateHttpError');
@@ -40,7 +40,7 @@ export class TodoListComponent implements OnInit {
   load() {
     dispatch(
       getTodos({
-        useMemo: getState('control.useMemo'),
+        useState: getState('control.useState'),
         useCache: getState('control.useCache'),
         useNetwork: getState('control.useNetwork'),
         driver: getState('control.driver'),
@@ -62,7 +62,7 @@ export class TodoListComponent implements OnInit {
   }
 
   changeUseMemo($event) {
-    dispatch(useMemo($event.target.checked));
+    dispatch(useState($event.target.checked));
   }
 
   changeUseCache($event) {

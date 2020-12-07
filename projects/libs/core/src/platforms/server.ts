@@ -118,7 +118,7 @@ export class RebasedCore implements RebasedAPI {
       ...body,
       ...{ path: path },
       ...{ driver: chain.driver },
-      ...omit(chain, ['key', 'useNetwork', 'useCache', 'useMemo'])
+      ...omit(chain, ['key', 'useNetwork', 'useCache', 'useState'])
     });
 
     const keyStart = options.from || 'rebased';
@@ -218,7 +218,7 @@ export class RebasedCore implements RebasedAPI {
       driver: this.options.driver,
       useCache: this.options.useCache,
       useNetwork: this.options.useNetwork,
-      useMemo: this.options.useMemo
+      useState: this.options.useState
     };
     return this;
   }
@@ -401,7 +401,7 @@ export class RebasedCore implements RebasedAPI {
   }
 
   /**
-   * Choose whether to use cached results
+   * Choose whether to use memoized results
    *
    * @param {boolean} active
    * @returns {RebasedCore}
@@ -418,9 +418,9 @@ export class RebasedCore implements RebasedAPI {
    * @param {boolean} active
    * @returns {RebasedCore}
    */
-  public memo(active: boolean): RebasedCore {
-    this.chain.useMemo = active;
-    this.checkChainAvailability(this.chain.driver, 'memo');
+  public state(active: boolean): RebasedCore {
+    this.chain.useState = active;
+    this.checkChainAvailability(this.chain.driver, 'state');
     return this;
   }
 

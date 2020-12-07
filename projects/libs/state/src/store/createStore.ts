@@ -9,7 +9,7 @@ import { install } from '../state/install';
  * @param {*} [state={}]
  * @param {*} action
  */
-function _memo(state = {}, action) {
+function _state(state = {}, action) {
   switch (action.type) {
     case 'MEMO_UPDATE':
       return { ...state, [action.key]: action.value };
@@ -73,7 +73,7 @@ export function createStore(reducers, initialState?, enhancers?) {
   }
   install();
   return (Rebased.store = createReduxStore(
-    combineReducers({ _memo, ...reducers }),
+    combineReducers({ _state, ...reducers }),
     initialState,
     enhancers
   ));

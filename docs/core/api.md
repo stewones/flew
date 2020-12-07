@@ -31,7 +31,7 @@ hide_title: true
   - [.http(fn)](#RebasedCore+http) ⇒ [<code>RebasedCore</code>](#RebasedCore)
   - [.network(active)](#RebasedCore+network) ⇒ [<code>RebasedCore</code>](#RebasedCore)
   - [.cache(active)](#RebasedCore+cache) ⇒ [<code>RebasedCore</code>](#RebasedCore)
-  - [.memo(active)](#RebasedCore+memo) ⇒ [<code>RebasedCore</code>](#RebasedCore)
+  - [.state(active)](#RebasedCore+state) ⇒ [<code>RebasedCore</code>](#RebasedCore)
   - [.key(name)](#RebasedCore+key) ⇒ [<code>RebasedCore</code>](#RebasedCore)
   - [.query(by)](#RebasedCore+query) ⇒ [<code>RebasedCore</code>](#RebasedCore)
   - [.where(field, operator, value)](#RebasedCore+where) ⇒ [<code>RebasedCore</code>](#RebasedCore)
@@ -236,9 +236,9 @@ fetch('kitty', {
 | ------ | -------------------- |
 | active | <code>boolean</code> |
 
-<a name="RebasedCore+memo"></a>
+<a name="RebasedCore+state"></a>
 
-### rebasedCore.memo(active) ⇒ [<code>RebasedCore</code>](#RebasedCore)
+### rebasedCore.state(active) ⇒ [<code>RebasedCore</code>](#RebasedCore)
 
 <p>Choose whether to use cached results</p>
 

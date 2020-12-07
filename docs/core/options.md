@@ -19,7 +19,7 @@ Set of options for Rebased initialisation
 | timestampUpdated | `updated_at` | field name for updated timestamp                                                                                  |
 | silent           | `false`      | whether or not display internal logs                                                                              |
 | useCache         | `true`       | whether use cache for results                                                                                     |
-| useMemo          | `true`       | whether use memoized state for results                                                                            |
+| useState         | `true`       | whether use memoized state for results                                                                            |
 
 ## Applying Globally
 

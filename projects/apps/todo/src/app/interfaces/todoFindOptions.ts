@@ -1,7 +1,7 @@
 import { RebasedDriverOption } from '@rebased/core';
 
 export interface TodoFindOptions {
-  useMemo?: boolean;
+  useState?: boolean;
   useCache?: boolean;
   useNetwork?: boolean;
   driver?: RebasedDriverOption;

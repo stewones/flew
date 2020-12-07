@@ -27,15 +27,15 @@ interface Todo {
   styleUrls: ['./todo-container.component.scss']
 })
 export class TodoContainerComponent implements OnInit {
-  // #2 connect to the memo key
-  // memo: true will automatically prepend `_memo` to the path
-  todos$ = connect<Todo[]>('my-todo-list', { memo: true });
+  // #2 connect to the state key
+  // state: true will automatically prepend `_state` to the path
+  todos$ = connect<Todo[]>('my-todo-list', { state: true });
 
   constructor() {}
 
   ngOnInit() {
     fetch('Todo')
-      .key('my-todo-list') // #1 define a memo key
+      .key('my-todo-list') // #1 define a state key
       .find()
       .subscribe();
   }

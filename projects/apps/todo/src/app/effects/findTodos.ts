@@ -8,7 +8,7 @@ export function findTodos(options: TodoFindOptions) {
   return fetch(`Todo`, { pathname: options.pathname })
     .key(findTodosKey())
     .driver(options.driver)
-    .memo(options.useMemo)
+    .state(options.useState)
     .cache(options.useCache)
     .network(options.useNetwork)
     .find<Todo[]>()

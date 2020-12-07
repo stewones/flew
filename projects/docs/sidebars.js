@@ -13,7 +13,7 @@ module.exports = {
       'state/getting-started',
       'state/get-state',
       'state/connect-data',
-      'state/set-memo',
+      'state/set-state',
       'state/reset-state',
       'state/api'
     ],

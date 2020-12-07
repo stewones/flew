@@ -48,7 +48,7 @@ export class HttpDriver implements RebasedDriver {
     object: false,
     cache: 'browser',
     select: false,
-    memo: true,
+    state: true,
     near: false,
     withinKilometers: false,
     withinMiles: false

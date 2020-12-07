@@ -5,14 +5,14 @@ export const control = createReducer(
   {
     driver: 'firestore',
     pathname: THE_CAT_API_SEARCH,
-    useMemo: true,
+    useState: true,
     useCache: true,
     useNetwork: true,
     simulateHttpError: false
   },
   {
-    useMemo: (state, action) => {
-      state.useMemo = action.payload;
+    useState: (state, action) => {
+      state.useState = action.payload;
     },
     useCache: (state, action) => {
       state.useCache = action.payload;

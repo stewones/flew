@@ -24,7 +24,7 @@ export interface RebasedOptions {
   //
   // browser
   useCache?: boolean;
-  useMemo?: boolean;
+  useState?: boolean;
   useNetwork?: boolean;
   persistence?: boolean;
 }
