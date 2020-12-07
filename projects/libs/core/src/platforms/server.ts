@@ -685,6 +685,30 @@ export class RebasedCore implements RebasedAPI {
     this.checkChainAvailability(this.chain.driver, 'withinMiles');
     return this;
   }
+
+  /**
+   * diff function callback
+   *
+   * @param {*} fn
+   * @returns {RebasedCore}
+   * @memberof RebasedCore
+   */
+  public diff(fn): RebasedCore {
+    this.chain.diff = fn;
+    return this;
+  }
+
+  /**
+   * network response callback
+   *
+   * @param {*} fn
+   * @returns {RebasedCore}
+   * @memberof RebasedCore
+   */
+  public response(fn): RebasedCore {
+    this.chain.response = fn;
+    return this;
+  }
 }
 
 export class PlatformServer extends RebasedCore {}

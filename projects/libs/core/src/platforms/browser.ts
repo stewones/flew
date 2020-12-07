@@ -1,6 +1,7 @@
-import { isBoolean, isEmpty, isEqual } from 'lodash';
-import { from, Observable, of, concat } from 'rxjs';
-import { take, tap } from 'rxjs/operators';
+import { isEmpty } from 'lodash';
+import { from, Observable, of } from 'rxjs';
+import { catchError, first, map, mergeMap, tap } from 'rxjs/operators';
+import { diff } from '../effects/diff';
 import { RebasedChainPayload } from '../interfaces/chain';
 import { RebasedOptions } from '../interfaces/options';
 import { RebasedVerb } from '../interfaces/verb';
@@ -8,9 +9,6 @@ import { Rebased } from '../symbols/rebased';
 import { PlatformServer } from './server';
 
 export class PlatformBrowser extends PlatformServer {
-  _memo_cache;
-  _memo_network;
-
   constructor(options: RebasedOptions) {
     super(options);
   }
@@ -66,80 +64,81 @@ export class PlatformBrowser extends PlatformServer {
      * 3 - network
      */
     return new Observable(observer => {
-      concat(
-        this.stateCache$(observer, chain, key),
-        this.network$(observer, verb, path, payload, chain, key)
-      )
+      this.getDataFromStateOrCache$<T>(key, chain)
         .pipe(
-          // ensure that we'll have at most two responses
-          take(2)
+          first(),
+          map(cache => {
+            if (cache) {
+              if (this.log().enabled()) {
+                console.table(cache);
+              }
+
+              this.setState(key, chain, cache);
+              observer.next(cache);
+              return cache;
+            }
+          }),
+          mergeMap(cache => {
+            return this.getDataFromNetwork$<T>(
+              key,
+              chain,
+              path,
+              verb,
+              payload
+            ).pipe(
+              tap(data => {
+                // response based on network
+                if (chain.response) {
+                  chain.response(data);
+                }
+
+                // response based on data diff
+                const isDifferent = chain.diff
+                  ? chain.diff(cache, data)
+                  : !isEmpty(diff(cache, data));
+
+                if (!cache || isDifferent) {
+                  this.log().info()(`${key} using data from network`);
+
+                  if (this.log().enabled()) {
+                    console.table(data);
+                  }
+
+                  this.setState(key, chain, data);
+                  this.setCache(key, chain, data);
+                  observer.next(data);
+                }
+
+                if (!['on'].includes(verb)) {
+                  observer.complete();
+                }
+
+                this.log().warn()(`${key} network request end`);
+              }),
+              catchError(err => {
+                observer.error(err);
+                return of(err);
+              })
+            );
+          })
         )
         .subscribe();
     });
   }
 
-  protected network$<T>(observer, verb, path, payload, chain, key) {
+  protected getDataFromNetwork$<T>(key, chain, path, verb, payload) {
     if (chain.useNetwork) {
       this.log().warn()(`${key} network request start`);
-      from(this.call<T>(verb, path, payload, chain, key)).subscribe(
-        response => {
-          if (!isEqual(this._memo_cache, response)) {
-            this.log().info()(`${key} dispatch from network`);
-            if (this.log().enabled()) {
-              console.table(response);
-            }
-            this._memo_network = response;
-            this.dispatch(chain, key, response, observer);
-            this.setCache(chain, key, response);
-          }
-          if (!['on'].includes(verb)) {
-            observer.complete();
-          }
-          this.log().warn()(`${key} network request end`);
-        },
-        err => {
-          observer.error(err);
-          if (!['on'].includes(verb)) {
-            observer.complete();
-          }
-        }
-      );
-    } else {
-      this.log().danger()(`${key} network disabled`);
-      if (!chain.useMemo && !chain.useCache) {
-        observer.next();
-        observer.complete();
-      }
-    }
-    return of();
-  }
-
-  protected stateCache$<T>(observer, chain, key) {
-    const hasState = Rebased.state.enabled;
-    const hasStorage = Rebased.storage.enabled;
-
-    if (!hasState || !hasStorage) {
-      return of();
+      return from(this.call<T>(verb, path, payload, chain, key)).pipe(first());
     }
 
-    return this.getDataFromStateOrCache$(key, chain).pipe(
-      take(1),
-      tap(payload => {
-        if (payload.data && !this._memo_network) {
-          this._memo_cache = payload.data;
-          this.dispatch(chain, key, payload.data, observer);
-          this.log().info()(`${key} dispatch from ${payload.from}`);
-          if (this.log().enabled()) {
-            console.table(payload.data);
-          }
-        }
-      })
-    );
+    this.log().danger()(`${key} network disabled`);
+    return of() as Observable<T>;
   }
 
   protected async setCache(
-    chain: RebasedChainPayload,
     key: string,
+    chain: RebasedChainPayload,
     data: any
   ): Promise<void> {
     if (!chain.useCache || !Rebased.storage.enabled) return Promise.resolve();
@@ -155,47 +154,44 @@ export class PlatformBrowser extends PlatformServer {
     }
   }
 
-  protected dispatch(
-    chain: RebasedChainPayload,
-    key: string,
-    data: any,
-    observer = { next: data => {} }
-  ) {
-    observer.next(data);
-
+  protected setState(key: string, chain: RebasedChainPayload, data: any): void {
     if (Rebased.state.enabled && chain.useMemo) {
       const currentState = Rebased.state.getState(key);
-      if (!isEqual(currentState, data)) {
-        Rebased.state.setMemo(key, data, { save: false });
+      if (diff(currentState, data).length > 0) {
+        Rebased.state.setState(key, data, { save: false });
       }
     }
   }
 
-  private getDataFromStateOrCache$(
-    key: string,
-    chain
-  ): Observable<{ from: 'memo' | 'cache'; data: any }> {
+  private getDataFromStateOrCache$<T>(key: string, chain): Observable<T> {
     const hasStore = Rebased.state.enabled;
     const hasStorage = Rebased.storage.enabled;
 
     const useMemo = chain.useMemo;
     const useCache = chain.useCache;
 
-    if (!hasStore && !hasStorage) return of();
+    if (!hasStore && !hasStorage) return of(null);
 
     const hasState = hasStore ? Rebased.state.getState(key) : null;
 
     return !isEmpty(hasState) && useMemo
-      ? of({ from: 'memo', data: hasState })
-      : hasStorage && useCache
-      ? (from(
-          Rebased.storage.get(key).then(it => {
-            return {
-              from: 'cache',
-              data: it
-            };
+      ? of(hasState).pipe(
+          first(),
+          tap(it => {
+            if (it) {
+              this.log().info()(`${key} using data from state`);
+            }
           })
-        ) as Observable<any>)
-      : of();
+        )
+      : hasStorage && useCache
+      ? from(Rebased.storage.get(key)).pipe(
+          first(),
+          tap(it => {
+            if (it) {
+              this.log().info()(`${key} using data from cache`);
+            }
+          })
+        )
+      : of(null).pipe(first());
   }
 }

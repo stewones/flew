@@ -24,6 +24,7 @@ export * from './effects/publish';
 export * from './effects/unsubscribe';
 export * from './effects/logger';
 export * from './effects/sha';
+export * from './effects/diff';
 
 //
 // interfaces

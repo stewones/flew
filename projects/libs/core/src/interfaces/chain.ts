@@ -56,4 +56,7 @@ export interface RebasedChainPayload {
   near?: any;
   withinKilometers?: any;
   withinMiles?: any;
+
+  diff?: any; // custom diff calculation
+  response?: any; // callback for network
 }
