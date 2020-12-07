@@ -1,7 +1,6 @@
 import { isEmpty, isFunction, trim, omit } from 'lodash';
 
 import {
-  R_IDENTIFIER,
   Rebased,
   RebasedDriver,
   RebasedChainPayload,
@@ -272,7 +271,7 @@ export class ParseDriver implements RebasedDriver {
 
       if (!options.all) {
         const connector = new Parse.Object(this.getCollectionName());
-        const id = chain.doc;
+        const id = chain.doc || data[this.driverOptions.identifier];
         const newData = { ...data };
 
         //
@@ -488,13 +487,7 @@ export class ParseDriver implements RebasedDriver {
         let orQueryExtended = {
           or: [
             {
-              equalTo: () => [
-                this.driverOptions.identifier || R_IDENTIFIER,
-                trim(chain.doc)
-              ]
-            },
-            {
-              equalTo: () => ['objectId', trim(chain.doc)]
+              equalTo: () => [this.driverOptions.identifier, trim(chain.doc)]
             }
           ]
         };

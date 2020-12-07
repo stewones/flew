@@ -10,7 +10,9 @@ import {
   RebasedDriver,
   RebasedOptions,
   RebasedDriverOption,
-  RebasedChainPayload
+  RebasedChainPayload,
+  Rebased,
+  guid
 } from '@rebased/core';
 
 export class FirestoreDriver implements RebasedDriver {
@@ -240,15 +242,27 @@ export class FirestoreDriver implements RebasedDriver {
   ): Observable<any> {
     return new Observable(observer => {
       const connector = this.getInstance();
-      const id = chain.doc || data.doc_id || data.id;
+      const id = chain.doc || data[Rebased.options.identifier];
       const newData = { ...data };
+
+      //
+      // define connector
+      const firestore: any = connector.collection(this.driverOptions.from);
+
       //
       // run exceptions
       this.exceptions();
 
       //
-      // define connector
-      const firestore: any = connector.collection(this.driverOptions.from);
+      // auto id generation
+      if (!this.driverOptions.disableAutoID) {
+        if (id) {
+          newData[this.driverOptions.identifier] = id;
+        } else {
+          if (!newData[this.driverOptions.identifier])
+            newData[this.driverOptions.identifier] = guid(3);
+        }
+      }
 
       //
       // auto update timestamp
