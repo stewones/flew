@@ -1,5 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
+} from '@angular/core';
 import { dispatch, connect, getState } from '@rebased/state';
+import { fetch } from '@rebased/core';
 import { delayedIncrement } from './actions/delayedIncrement';
 import { delayedDecrement } from './actions/delayedDecrement';
 import { increment } from './actions/increment';
@@ -15,11 +21,24 @@ export class AppComponent implements OnInit {
   display$ = connect<number>('counter');
   displayDetailed$ = connect<number>('counter', { context: true });
 
-  constructor() {
+  displayFirestoreRealtime = 0;
+
+  constructor(private detector: ChangeDetectorRef) {
     console.log('initial state', getState());
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    fetch('counter')
+      .driver('firestore')
+      .state(false)
+      .cache(false)
+      .on()
+      .subscribe(numbers => {
+        console.log('realtime counter from firestore', numbers[0]?.total);
+        this.displayFirestoreRealtime = numbers[0]?.total;
+        this.detector.detectChanges();
+      });
+  }
 
   increment() {
     dispatch(increment(1));
@@ -35,5 +54,13 @@ export class AppComponent implements OnInit {
 
   decrementAsync(seconds) {
     dispatch(delayedDecrement(seconds));
+  }
+
+  incrementFromFirestore() {
+    fetch('counter')
+      .driver('firestore')
+      .doc('some-id')
+      .set({ total: this.displayFirestoreRealtime + 1 })
+      .toPromise();
   }
 }

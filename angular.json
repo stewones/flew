@@ -276,6 +276,7 @@
             "polyfills": "projects/apps/todo/src/polyfills.ts",
             "tsConfig": "projects/apps/todo/tsconfig.app.json",
             "aot": true,
+            "preserveSymlinks": true,
             "assets": [
               "projects/apps/todo/src/favicon.ico",
               "projects/apps/todo/src/assets"
@@ -371,6 +372,7 @@
             "polyfills": "projects/apps/counter/src/polyfills.ts",
             "tsConfig": "projects/apps/counter/tsconfig.app.json",
             "aot": true,
+            "preserveSymlinks": true,
             "assets": [
               "projects/apps/counter/src/favicon.ico",
               "projects/apps/counter/src/assets"

@@ -5,7 +5,7 @@
  * @class Guid
  */
 
-export function guid(size: number) {
+export function guid(size = 4) {
   // tslint:disable-next-line: no-use-before-declare
   return Guid.make(size);
 }

@@ -108,7 +108,6 @@ export class PlatformBrowser extends PlatformServer {
                   this.setCache(key, chain, data);
                   observer.next(data);
                 }
-
                 if (!['on'].includes(verb)) {
                   observer.complete();
                 }
@@ -129,7 +128,9 @@ export class PlatformBrowser extends PlatformServer {
   protected getDataFromNetwork$<T>(key, chain, path, verb, payload) {
     if (chain.useNetwork) {
       this.log().warn()(`${key} network request start`);
-      return from(this.call<T>(verb, path, payload, chain, key)).pipe(first());
+      return from(this.call<T>(verb, path, payload, chain, key)).pipe(
+        !['on'].includes(verb) ? first() : tap()
+      );
     }
 
     this.log().danger()(`${key} network disabled`);
