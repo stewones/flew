@@ -55,7 +55,9 @@ export class FirebaseDriver implements RebasedDriver {
     state: true,
     near: false,
     withinKilometers: false,
-    withinMiles: false
+    withinMiles: false,
+    diff: true,
+    response: true
   };
 
   constructor(options: any) {

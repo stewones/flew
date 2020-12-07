@@ -78,7 +78,9 @@ export class ParseDriver implements RebasedDriver {
     state: true,
     near: true,
     withinKilometers: true,
-    withinMiles: true
+    withinMiles: true,
+    diff: true,
+    response: true
   };
 
   constructor(options: ParseOptions) {

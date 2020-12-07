@@ -695,6 +695,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public diff(fn): RebasedCore {
     this.chain.diff = fn;
+    this.checkChainAvailability(this.chain.driver, 'diff');
     return this;
   }
 
@@ -707,6 +708,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public response(fn): RebasedCore {
     this.chain.response = fn;
+    this.checkChainAvailability(this.chain.driver, 'response');
     return this;
   }
 }

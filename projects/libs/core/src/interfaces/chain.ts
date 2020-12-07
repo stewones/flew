@@ -22,7 +22,9 @@ export type RebasedChain =
   | 'state'
   | 'near'
   | 'withinKilometers'
-  | 'withinMiles';
+  | 'withinMiles'
+  | 'diff'
+  | 'response';
 
 export interface RebasedChainPayloadWhere {
   field: string;
