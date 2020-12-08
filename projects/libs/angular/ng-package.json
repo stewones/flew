@@ -19,7 +19,7 @@
       "@rebased/core": "@rebased/core",
       "@rebased/state": "@rebased/state",
       "@rebased/cache": "@rebased/cache",
-      "@rebased/parse": "@rebased/cache",
+      "@rebased/parse": "@rebased/parse",
       "@rebased/firebase": "@rebased/firebase",
       "@angular/common": "@angular/common",
       "@angular/core": "@angular/core",

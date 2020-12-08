@@ -1,4 +1,4 @@
-import { transform, isEqual, isObject } from 'lodash';
+import { transform, isEqual, isObject, isEmpty } from 'lodash';
 
 export function diff(from_, to_): any {
   function changes(from, to): any {
@@ -15,5 +15,9 @@ export function diff(from_, to_): any {
 }
 
 export function isDiff(from_, to_): any {
-  return from_?.length !== to_?.length ? true : diff(from_, to_)?.length;
+  return from_?.length !== to_?.length
+    ? true
+    : isEmpty(from_)
+    ? true
+    : diff(from_, to_)?.length;
 }

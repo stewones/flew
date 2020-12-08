@@ -3,7 +3,11 @@
   "version": "0.0.11",
   "dependencies": {
     "@angular/common": "^10.0.0",
-    "@angular/core": "^10.0.0"
+    "@angular/core": "^10.0.0",
+    "@rebased/parse": "~0.0.11",
+    "@rebased/firebase": "~0.0.11",
+    "@rebased/cache": "~0.0.11",
+    "@rebased/state": "~0.0.11"
   },
   "peerDependencies": {}
 }
