@@ -8,13 +8,14 @@ import {
 export interface ParseOptions {
   serverURL: string;
   appID: string;
-  loader: any;
 }
+
+import { parseLoader } from '@rebased/parse';
 
 @Injectable()
 export class ParseSetup {
   constructor(@Inject('ParseOptions') public options: ParseOptions) {
-    options.loader.install(options.loader.Parse, options);
+    parseLoader.install(parseLoader.Parse, options);
   }
 }
 

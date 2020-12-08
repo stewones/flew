@@ -16,10 +16,7 @@ import { environment } from '../environments/environment';
 import { FIREBASE_CONFIG } from './configs/firebase';
 import { AppComponent } from './app.component';
 import { RoutesModule } from './routes.module';
-import { stateLoader } from '@rebased/state';
-import { firebaseLoader } from '@rebased/firebase';
-import { cacheLoader } from '@rebased/cache';
-import { parseLoader } from '@rebased/parse';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -40,23 +37,19 @@ import { parseLoader } from '@rebased/parse';
       // define an initial state
       state: {},
       // pass in the app reducers
-      reducers: reducers,
-      loader: stateLoader
+      reducers: reducers
     }),
     FirebaseModule.forRoot({
       config: FIREBASE_CONFIG,
-      persistence: false,
-      loader: firebaseLoader
+      persistence: false
     }),
     CacheModule.forRoot({
       dbName: environment.dbName,
-      dbStore: environment.dbStore,
-      loader: cacheLoader
+      dbStore: environment.dbStore
     }),
     ParseModule.forRoot({
       serverURL: environment.parse.serverURL,
-      appID: environment.parse.appID,
-      loader: parseLoader
+      appID: environment.parse.appID
     })
   ],
   providers: [],

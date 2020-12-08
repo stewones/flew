@@ -6,6 +6,9 @@
     "@angular/common",
     "@angular/core",
     "@rebased/core",
+    "@rebased/state",
+    "@rebased/cache",
+    "@rebased/firebase",
     "@ionic/storage"
   ],
   "lib": {
@@ -13,6 +16,9 @@
     "umdModuleIds": {
       "lodash": "_",
       "@rebased/core": "@rebased/core",
+      "@rebased/state": "@rebased/state",
+      "@rebased/cache": "@rebased/cache",
+      "@rebased/firebase": "@rebased/firebase",
       "@angular/common": "@angular/common",
       "@angular/core": "@angular/core",
       "@ionic/storage": "@ionic/storage"

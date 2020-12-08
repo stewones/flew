@@ -30,8 +30,8 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     fetch('counter')
       .driver('firestore')
-      .state(false)
-      .cache(false)
+      // .state(false)
+      // .cache(false)
       .on()
       .subscribe(numbers => {
         console.log('realtime counter from firestore', numbers[0]?.total);
@@ -61,6 +61,14 @@ export class AppComponent implements OnInit {
       .driver('firestore')
       .doc('some-id')
       .set({ total: this.displayFirestoreRealtime + 1 })
+      .toPromise();
+  }
+
+  decrementFromFirestore() {
+    fetch('counter')
+      .driver('firestore')
+      .doc('some-id')
+      .set({ total: this.displayFirestoreRealtime - 1 })
       .toPromise();
   }
 }

@@ -61,7 +61,7 @@ export class TodoListComponent implements OnInit {
     dispatch(setDriver($event.target.value));
   }
 
-  changeUseMemo($event) {
+  changeUseState($event) {
     dispatch(useState($event.target.checked));
   }
 

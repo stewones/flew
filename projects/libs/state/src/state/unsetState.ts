@@ -9,12 +9,12 @@ import { Rebased } from '@rebased/core';
  * @param {{ cache: boolean }} [options={ cache: true }]
  * @returns {Promise<void>}
  */
-export function unsetMemo(
+export function unsetState(
   key: string,
   options: { cache: boolean } = { cache: true }
 ): Promise<void> {
   dispatch({
-    type: 'MEMO_REMOVE',
+    type: 'stateRemove',
     key: key
   });
   if (options.cache) {

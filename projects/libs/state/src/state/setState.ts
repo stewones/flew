@@ -1,22 +1,22 @@
 import { Rebased } from '@rebased/core';
 import { dispatch } from '../store/dispatch';
 
-export interface SetMemoOptions {
-  cacheSave?: boolean;
+export interface SetStateOptions {
+  saveCache?: boolean;
 }
 
-export function setMemo(
+export function setState(
   key: string,
   value: any,
-  options: SetMemoOptions = { cacheSave: true }
+  options: SetStateOptions = { saveCache: true }
 ) {
   dispatch({
-    type: 'MEMO_UPDATE',
+    type: 'stateUpdate',
     key: key,
     value: value
   });
 
-  if (Rebased.storage && options.cacheSave) {
+  if (Rebased.storage && options.saveCache) {
     try {
       Rebased.storage.set(key, value);
     } catch (err) {}

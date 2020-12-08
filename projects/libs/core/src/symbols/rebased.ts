@@ -1,4 +1,4 @@
-import { of, Subject, PartialObserver } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import {
   R_DRIVER,
   R_IDENTIFIER,
@@ -24,7 +24,7 @@ export interface RebasedProtocol {
 
 export const Rebased: RebasedProtocol = {
   options: {
-    silent: true,
+    silent: false,
     driver: R_DRIVER,
     identifier: R_IDENTIFIER,
     disableTimestamp: false,

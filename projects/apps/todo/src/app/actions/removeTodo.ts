@@ -1,4 +1,4 @@
-import { unsetMemo } from '@rebased/state';
+import { unsetState } from '@rebased/state';
 import { addTodoError } from './addTodoError';
 import { addTodoView } from './addTodoView';
 import { Todo } from '../interfaces/todo';
@@ -10,7 +10,7 @@ import { deletingTodo } from './deletingTodo';
 export function removeTodo(todo: Todo) {
   //
   // side effect of deleting one todo
-  const resetStateAndCache = () => unsetMemo(findTodoKey(todo.doc_id));
+  const resetStateAndCache = () => unsetState(findTodoKey(todo.doc_id));
 
   return function(dispatch) {
     //

@@ -11,10 +11,7 @@ import { CacheModule, FirebaseModule, StateModule } from '@rebased/angular';
 import { environment } from '../environments/environment';
 
 import { counter } from './reducers';
-import { stateLoader } from '@rebased/state';
 import { FIREBASE_CONFIG } from './configs/firebase';
-import { firebaseLoader } from '@rebased/firebase';
-import { cacheLoader } from '@rebased/cache';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,18 +28,15 @@ import { cacheLoader } from '@rebased/cache';
         counter: 420 // comment this line
       },
       // pass in the app reducers
-      reducers: { counter },
-      loader: stateLoader
+      reducers: { counter }
     }),
     FirebaseModule.forRoot({
       config: FIREBASE_CONFIG,
-      persistence: false,
-      loader: firebaseLoader
+      persistence: false
     }),
     CacheModule.forRoot({
       dbName: environment.dbName,
-      dbStore: environment.dbStore,
-      loader: cacheLoader
+      dbStore: environment.dbStore
     })
   ],
   providers: [],

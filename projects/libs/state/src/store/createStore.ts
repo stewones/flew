@@ -11,9 +11,9 @@ import { install } from '../state/install';
  */
 function _state(state = {}, action) {
   switch (action.type) {
-    case 'MEMO_UPDATE':
+    case 'stateUpdate':
       return { ...state, [action.key]: action.value };
-    case 'MEMO_REMOVE':
+    case 'stateRemove':
       return {
         ...pickBy(state, (it, key) => {
           return key !== action.key;

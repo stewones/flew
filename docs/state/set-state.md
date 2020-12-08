@@ -1,6 +1,6 @@
 ---
 id: set-state
-title: Set Memo
+title: Set State
 description: 'Great resources to get started learning and using Rebased with Redux State'
 hide_title: false
 ---
@@ -16,9 +16,9 @@ Use this api with caution, the most scalable way to modify a pieca of global sta
 By default Rebased detects if you're using cache and will also **save** data into storage.
 
 ```ts
-import { setMemo } from '@rebased/state';
+import { setState } from '@rebased/state';
 
-setMemo('numbers', [1, 2, 3], { save: false }); // skip cache
+setState('numbers', [1, 2, 3], { save: false }); // skip cache
 ```
 
 ## Play around
@@ -26,7 +26,7 @@ setMemo('numbers', [1, 2, 3], { save: false }); // skip cache
 Quick way to show up data from global state using angular
 
 ```ts
-import { connect, setMemo } from '@rebased/state';
+import { connect, setState } from '@rebased/state';
 
 @Component({
   selector: 'app-todo-container',
@@ -39,7 +39,7 @@ export class TodoContainerComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    setMemo('numbers', [1, 2, 3]);
+    setState('numbers', [1, 2, 3]);
   }
 }
 ```

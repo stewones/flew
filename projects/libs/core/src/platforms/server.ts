@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from 'axios';
-import { isArray, isEmpty, isString, omit, startCase } from 'lodash';
+import { isArray, isEmpty, isString, omit } from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { Rebased } from '../symbols/rebased';
 import { RebasedAPI } from '../interfaces/api';
@@ -56,9 +56,7 @@ export class RebasedCore implements RebasedAPI {
 
     // log
     const name = options.from || options.endpoint;
-    this.log().success()(
-      `Rebased ${R_VERSION} initiated for ${startCase(name)}`
-    );
+    this.log().success()(`${name} call [Rebased ${R_VERSION}]`);
 
     // initialize
     this.options = options;

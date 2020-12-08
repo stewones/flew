@@ -11,8 +11,8 @@ export * from './store/applyDevTools';
 export * from './state/getState';
 export * from './state/install';
 export * from './state/resetState';
-export * from './state/setMemo';
-export * from './state/unsetMemo';
+export * from './state/setState';
+export * from './state/unsetState';
 
 // setup
 export * from './loader';

@@ -5,23 +5,25 @@ import {
   Inject
 } from '@angular/core';
 
+import { cacheLoader } from '@rebased/cache';
+
 export interface CacheOptions {
   dbName?: string;
   dbStore?: string;
   driverOrder?: string[];
-  loader: any;
 }
 
 @Injectable()
 export class CacheSetup {
   constructor(@Inject('CacheOptions') public options: CacheOptions) {
-    options.loader.install(
-      new options.loader.Storage(
-        options.loader.storageConfig(
+    cacheLoader.install(
+      new cacheLoader.Storage(
+        cacheLoader.storageConfig(
           options.dbName,
           options.dbStore,
           options.driverOrder
-        )
+        ),
+        null
       )
     );
   }

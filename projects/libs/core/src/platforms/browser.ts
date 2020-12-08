@@ -95,9 +95,9 @@ export class PlatformBrowser extends PlatformServer {
                 // response based on data diff
                 const isDifferent = chain.diff
                   ? chain.diff(cache, data)
-                  : !isEmpty(diff(cache, data));
+                  : diff(cache, data);
 
-                if (!cache || isDifferent) {
+                if (isDifferent) {
                   this.log().info()(`${key} using data from network`);
 
                   if (this.log().enabled()) {
@@ -108,6 +108,7 @@ export class PlatformBrowser extends PlatformServer {
                   this.setCache(key, chain, data);
                   observer.next(data);
                 }
+
                 if (!['on'].includes(verb)) {
                   observer.complete();
                 }
@@ -157,9 +158,17 @@ export class PlatformBrowser extends PlatformServer {
 
   protected setState(key: string, chain: RebasedChainPayload, data: any): void {
     if (Rebased.state.enabled && chain.useState) {
-      const currentState = Rebased.state.getState(key);
-      if (diff(currentState, data).length > 0) {
-        Rebased.state.setState(key, data, { save: false });
+      try {
+        const currentState = Rebased.state.getState(key);
+        if (diff(currentState, data)) {
+          Rebased.state.setState(key, data, { save: false });
+          this.log().warn()(`${key} state updated`);
+        }
+      } catch (err) {
+        this.log().danger()(`${key} unable to save state`);
+        if (this.log().enabled()) {
+          console.log(err);
+        }
       }
     }
   }

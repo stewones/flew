@@ -33,9 +33,9 @@ hide_title: true
 <p>Fully reset current state</p>
 
 **Kind**: global function  
-<a name="unsetMemo"></a>
+<a name="unsetState"></a>
 
-## unsetMemo(key, [options]) ⇒ <code>Promise.&lt;void&gt;</code>
+## unsetState(key, [options]) ⇒ <code>Promise.&lt;void&gt;</code>
 
 <p>Remove memoized/cached state based on a key</p>
 

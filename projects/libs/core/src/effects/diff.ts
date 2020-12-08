@@ -1,15 +1,15 @@
 import { transform, isEqual, isObject } from 'lodash';
 
-export function diff(object_, base_): any {
-    function changes(object, base) {
-        return transform(object, function(result, value, key) {
-            if (!isEqual(value, base[key])) {
-                result[key] =
-                    isObject(value) && isObject(base[key])
-                        ? changes(value, base[key])
-                        : value;
-            }
-        });
-    }
-    return changes(object_, base_);
+export function diff(from_, to_): any {
+  function changes(from, to): any {
+    return transform(from, function(result, value, key) {
+      if (!isEqual(value, to[key])) {
+        result[key] =
+          isObject(value) && isObject(to[key])
+            ? changes(value, to[key])
+            : value;
+      }
+    });
+  }
+  return from_?.length !== to_?.length ? true : changes(from_, to_).length;
 }

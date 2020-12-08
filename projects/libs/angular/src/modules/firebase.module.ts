@@ -1,7 +1,6 @@
 export interface FirebaseOptions {
   config: any;
   persistence?: boolean;
-  loader: any;
 }
 
 import {
@@ -11,10 +10,12 @@ import {
   Inject
 } from '@angular/core';
 
+import { firebaseLoader } from '@rebased/firebase';
+
 @Injectable()
 export class RebasedFirebaseSetup {
   constructor(@Inject('FirebaseOptions') public options) {
-    options.loader.install(options.loader.Firebase, options.config);
+    firebaseLoader.install(firebaseLoader.Firebase.default, options.config);
   }
 }
 
