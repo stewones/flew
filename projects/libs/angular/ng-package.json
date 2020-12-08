@@ -9,6 +9,7 @@
     "@rebased/state",
     "@rebased/cache",
     "@rebased/firebase",
+    "@rebased/parse",
     "@ionic/storage"
   ],
   "lib": {
@@ -18,6 +19,7 @@
       "@rebased/core": "@rebased/core",
       "@rebased/state": "@rebased/state",
       "@rebased/cache": "@rebased/cache",
+      "@rebased/parse": "@rebased/cache",
       "@rebased/firebase": "@rebased/firebase",
       "@angular/common": "@angular/common",
       "@angular/core": "@angular/core",

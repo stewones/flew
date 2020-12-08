@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import { from, Observable, of } from 'rxjs';
 import { catchError, first, map, mergeMap, tap } from 'rxjs/operators';
-import { diff } from '../effects/diff';
+import { isDiff } from '../effects/diff';
 import { RebasedChainPayload } from '../interfaces/chain';
 import { RebasedOptions } from '../interfaces/options';
 import { RebasedVerb } from '../interfaces/verb';
@@ -95,7 +95,7 @@ export class PlatformBrowser extends PlatformServer {
                 // response based on data diff
                 const isDifferent = chain.diff
                   ? chain.diff(cache, data)
-                  : diff(cache, data);
+                  : isDiff(cache, data);
 
                 if (isDifferent) {
                   this.log().info()(`${key} using data from network`);
@@ -160,7 +160,7 @@ export class PlatformBrowser extends PlatformServer {
     if (Rebased.state.enabled && chain.useState) {
       try {
         const currentState = Rebased.state.getState(key);
-        if (diff(currentState, data)) {
+        if (isDiff(currentState, data)) {
           Rebased.state.setState(key, data, { save: false });
           this.log().warn()(`${key} state updated`);
         }

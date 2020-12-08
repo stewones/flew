@@ -11,5 +11,9 @@ export function diff(from_, to_): any {
       }
     });
   }
-  return from_?.length !== to_?.length ? true : changes(from_, to_).length;
+  return changes(from_, to_);
+}
+
+export function isDiff(from_, to_): any {
+  return from_?.length !== to_?.length ? true : diff(from_, to_)?.length;
 }
