@@ -35,7 +35,7 @@
     "request": "2.85.0",
     "request-promise": "4.2.2",
     "rimraf": "2.6.2",
-    "rxjs": "6.5.3",
+    "rxjs": "6.6.3",
     "shelljs": "0.7.8",
     "sparkpost": "^2.1.4",
     "stripe": "5.1.1",
