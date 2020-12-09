@@ -1,10 +1,10 @@
 {
-  "name": "@rebased/parse",
-  "version": "0.0.11",
-  "dependencies": {
-    "parse": "^2.15.0",
-    "lodash": "^4.17.15",
-    "tslib": "^2.0.0"
-  },
-  "peerDependencies": {}
+	"name": "@rebased/parse",
+	"version": "0.0.12",
+	"dependencies": {
+		"parse": "^2.15.0",
+		"lodash": "^4.17.15",
+		"tslib": "^2.0.0"
+	},
+	"peerDependencies": {}
 }

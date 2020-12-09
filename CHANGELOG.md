@@ -1,3 +1,19 @@
+## [0.0.12](https://github.com/rebasedjs/rebasedjs/compare/v0.0.11...v0.0.12) (2020-12-09)
+
+
+### Bug Fixes
+
+* identifier usage ([69c0444](https://github.com/rebasedjs/rebasedjs/commit/69c0444107a5e54c46322dadc1a9c6121f5a586a))
+* isDiff fn ([214e982](https://github.com/rebasedjs/rebasedjs/commit/214e9820871df5d936e9955096758ad24a20646b))
+* realtime call ([ab7d0b1](https://github.com/rebasedjs/rebasedjs/commit/ab7d0b1644e8eba68546e93d32489521e878e1e3))
+
+
+### Performance Improvements
+
+* revamp browser platform ([8aa7ed8](https://github.com/rebasedjs/rebasedjs/commit/8aa7ed8e4c9801a2412a81801f38f6c26f384ad2))
+
+
+
 ## [0.0.11](https://github.com/rebasedjs/rebasedjs/compare/v0.0.10...v0.0.11) (2020-10-19)
 
 
