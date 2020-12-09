@@ -15,7 +15,7 @@ export class FirebaseConnector {
 }
 
 export class FirestoreConnector {
-  constructor(firebase, config, namespace = '', settings = {}) {
+  constructor(firebase, config, namespace = '') {
     let firestore;
 
     try {
@@ -37,10 +37,7 @@ export class FirestoreConnector {
       app = firebase.app();
     }
 
-    try {
-      firestore = app.firestore();
-      firestore.settings(settings);
-      return firestore;
-    } catch (err) {}
+    firestore = app.firestore();
+    return firestore;
   }
 }
