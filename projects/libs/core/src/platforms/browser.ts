@@ -2,6 +2,7 @@ import { isEmpty } from 'lodash';
 import { from, Observable, of } from 'rxjs';
 import { catchError, first, map, mergeMap, tap } from 'rxjs/operators';
 import { isDiff } from '../effects/diff';
+import { isOnline } from '../effects/isOnline';
 import { RebasedChainPayload } from '../interfaces/chain';
 import { RebasedOptions } from '../interfaces/options';
 import { RebasedVerb } from '../interfaces/verb';
@@ -104,9 +105,13 @@ export class PlatformBrowser extends PlatformServer {
                     console.table(data);
                   }
 
-                  this.setState(key, chain, data);
-                  this.setCache(key, chain, data);
-                  observer.next(data);
+                  if (isOnline()) {
+                    this.setState(key, chain, data);
+                    this.setCache(key, chain, data);
+                    observer.next(data);
+                  } else {
+                    observer.error(`it seems you're offline`);
+                  }
                 }
 
                 if (!['on'].includes(verb)) {
