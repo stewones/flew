@@ -15,7 +15,7 @@ import { parseLoader } from '@rebased/parse';
 @Injectable()
 export class ParseSetup {
   constructor(@Inject('ParseOptions') public options: ParseOptions) {
-    parseLoader.install(parseLoader.Parse, options);
+    parseLoader.install(options);
   }
 }
 

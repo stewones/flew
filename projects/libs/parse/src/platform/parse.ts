@@ -1,3 +1,4 @@
+import Parse from 'parse';
 import { Rebased } from '@rebased/core';
 import { ParseDriver } from '../driver/parse';
 
@@ -93,7 +94,8 @@ export function parse() {
  * @param {*} config
  * @returns RebasedParse
  */
-export function install(sdk, config) {
+export function install(config) {
+  const sdk = Parse;
   const isDriverAvailable = Rebased.drivers.find(it => it === 'parse');
   if (!isDriverAvailable) {
     Rebased.drivers = [...Rebased.drivers, 'parse'];
