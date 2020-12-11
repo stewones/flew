@@ -74,7 +74,10 @@ export class PlatformBrowser extends PlatformServer {
                 console.table(cache);
               }
 
-              this.setState(key, chain, cache);
+              if (chain.useState) {
+                this.setState(verb, key, chain, cache);
+              }
+
               observer.next(cache);
               return cache;
             }
@@ -106,8 +109,12 @@ export class PlatformBrowser extends PlatformServer {
                   }
 
                   if (isOnline()) {
-                    this.setState(key, chain, data);
-                    this.setCache(key, chain, data);
+                    if (chain.useState) {
+                      this.setState(verb, key, chain, data);
+                    }
+                    if (chain.useCache) {
+                      this.setCache(verb, key, chain, data);
+                    }
                     observer.next(data);
                   } else {
                     observer.error(`it seems you're offline`);
@@ -144,6 +151,7 @@ export class PlatformBrowser extends PlatformServer {
   }
 
   protected async setCache(
+    verb: RebasedVerb,
     key: string,
     chain: RebasedChainPayload,
     data: any
@@ -152,25 +160,30 @@ export class PlatformBrowser extends PlatformServer {
 
     try {
       Rebased.storage.set(key, data);
-      this.log().warn()(`${key} cache updated`);
+      this.log().warn()(`${verb}/${key} cache updated`);
     } catch (err) {
-      this.log().danger()(`${key} unable to save cache`);
+      this.log().danger()(`${verb}/${key} unable to save cache`);
       if (this.log().enabled()) {
         console.log(err);
       }
     }
   }
 
-  protected setState(key: string, chain: RebasedChainPayload, data: any): void {
+  protected setState(
+    verb: RebasedVerb,
+    key: string,
+    chain: RebasedChainPayload,
+    data: any
+  ): void {
     if (Rebased.state.enabled && chain.useState) {
       try {
         const currentState = Rebased.state.getState(key);
         if (isDiff(currentState, data)) {
           Rebased.state.setState(key, data, { save: false });
-          this.log().warn()(`${key} state updated`);
+          this.log().warn()(`${verb}/${key} state updated`);
         }
       } catch (err) {
-        this.log().danger()(`${key} unable to save state`);
+        this.log().danger()(`${verb}/${key} unable to save state`);
         if (this.log().enabled()) {
           console.log(err);
         }

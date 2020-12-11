@@ -17,7 +17,7 @@ export function diff(from_, to_): any {
 export function isDiff(from_, to_): any {
   return from_?.length !== to_?.length
     ? true
-    : isEmpty(from_)
+    : isEmpty(from_) && !isEmpty(to_)
     ? true
     : diff(from_, to_)?.length;
 }
