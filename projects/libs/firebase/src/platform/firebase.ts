@@ -1,3 +1,4 @@
+import * as Firebase from 'firebase/app';
 import { Rebased } from '@rebased/core';
 import { FirebaseConnector, FirestoreConnector } from './connectors';
 import { FirebaseDriver } from '../driver/firebase';
@@ -11,7 +12,8 @@ export function firestore() {
   return Rebased.driver.firestore.getInstance();
 }
 
-export function install(sdk, config, namespace = '') {
+export function install(config, namespace = '') {
+  const sdk = Firebase.default;
   const isDriverAvailable = Rebased.drivers.find(it => it === 'firebase');
   if (!isDriverAvailable) {
     Rebased.drivers = [...Rebased.drivers, 'firebase', 'firestore'];
