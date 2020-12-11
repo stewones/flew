@@ -9,5 +9,10 @@ export function unsubscribe(key: string): void {
   }
   //
   // for any internal resource
-  publish(`unsubscribe-${key}`, {});
+  if (Rebased.events[`unsubscribe-${key}`]) {
+    Rebased.events[`unsubscribe-${key}`].unsubscribe();
+  }
+  //
+  // for drivers to be able to unsubscribe from realtime events
+  publish(`unsubscribe-${key}`);
 }

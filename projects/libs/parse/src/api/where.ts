@@ -1,4 +1,3 @@
-import { isNil } from 'lodash';
 import { setWhere } from './setWhere';
 
 export function where(query = [], connector) {
