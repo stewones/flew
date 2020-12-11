@@ -228,7 +228,7 @@ export class FirestoreDriver implements RebasedDriver {
         err => observer.error(err)
       );
 
-      const internalHandler = subscribe(`unsubscribe-${key}`, () => {
+      const internalHandler = subscribe(`internal-${key}`, () => {
         unsubscription();
         internalHandler.unsubscribe();
       });

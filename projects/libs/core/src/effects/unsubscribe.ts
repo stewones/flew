@@ -3,16 +3,15 @@ import { publish } from './publish';
 
 export function unsubscribe(key: string): void {
   //
-  // for user pub/sub events
+  // cancel client listeners
   if (Rebased.events[key]) {
     Rebased.events[key].unsubscribe();
   }
+
   //
-  // for any internal resource
-  if (Rebased.events[`unsubscribe-${key}`]) {
-    Rebased.events[`unsubscribe-${key}`].unsubscribe();
+  // cancel internal listeners (ie drivers realtime call)
+  if (Rebased.events[`internal-${key}`]) {
+    publish(`internal-${key}`);
+    Rebased.events[`internal-${key}`].unsubscribe();
   }
-  //
-  // for drivers to be able to unsubscribe from realtime events
-  publish(`unsubscribe-${key}`);
 }
