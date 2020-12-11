@@ -15,7 +15,7 @@ import { firebaseLoader } from '@rebased/firebase';
 @Injectable()
 export class RebasedFirebaseSetup {
   constructor(@Inject('FirebaseOptions') public options) {
-    firebaseLoader.install(options.config);
+    firebaseLoader.install({ config: options.config });
   }
 }
 
