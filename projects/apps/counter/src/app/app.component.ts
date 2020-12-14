@@ -38,6 +38,14 @@ export class AppComponent implements OnInit {
         this.displayFirestoreRealtime = numbers[0]?.total;
         this.detector.detectChanges();
       });
+
+    fetch('counter')
+      .driver('firestore')
+      .where('lol', '==', 'do not exists')
+      .findOne()
+      .subscribe(it => {
+        console.log('non existent result');
+      });
   }
 
   increment() {
