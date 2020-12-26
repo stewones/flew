@@ -1,3 +1,12 @@
+## [0.0.14](https://github.com/rebasedjs/rebasedjs/compare/v0.0.13...v0.0.14) (2020-12-26)
+
+
+### Bug Fixes
+
+* parse install ([3570b44](https://github.com/rebasedjs/rebasedjs/commit/3570b443167d861b99009b833385e1c206e7ac31))
+
+
+
 ## [0.0.13](https://github.com/rebasedjs/rebasedjs/compare/v0.0.12...v0.0.13) (2020-12-26)
 
 
