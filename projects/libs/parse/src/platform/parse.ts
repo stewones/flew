@@ -90,12 +90,11 @@ export function parse() {
  * Bootstraps Parse on Rebased
  *
  * @export
- * @param {*} sdk
  * @param {*} config
- * @returns RebasedParse
+ * @param {*} [sdk=Parse]
+ * @returns
  */
-export function install(config) {
-  const sdk = Parse;
+export function install(config, sdk = Parse) {
   const isDriverAvailable = Rebased.drivers.find(it => it === 'parse');
   if (!isDriverAvailable) {
     Rebased.drivers = [...Rebased.drivers, 'parse'];
