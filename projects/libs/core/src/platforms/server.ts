@@ -55,7 +55,7 @@ export class RebasedCore implements RebasedAPI {
     this.initDrivers(options);
 
     // log
-    const name = options.from || options.endpoint;
+    const name = options.from || options.endpoint || options.driver;
     this.log().success()(`${name} call [Rebased ${R_VERSION}]`);
 
     // initialize
@@ -120,13 +120,18 @@ export class RebasedCore implements RebasedAPI {
     });
 
     const keyStart = options.from || 'rebased';
+
     const keyEndpoint = chain.driver === 'http' ? options.endpoint : '';
+
     const keyPath = chain.driver === 'http' ? path || options.pathname : '';
+
     const keyCrypt = SHA256(payload);
 
-    const key = `${keyStart}:/${keyEndpoint}${keyPath}/${keyCrypt}`;
+    const key = `${keyStart}://${keyEndpoint || ''}${
+      keyPath ? keyPath + '/' : ''
+    }${keyCrypt}`;
 
-    return key.split('///').join('//');
+    return key;
   }
 
   protected call<T>(

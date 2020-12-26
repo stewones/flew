@@ -50,6 +50,16 @@ export class AppComponent implements OnInit {
 
   increment() {
     dispatch(increment(1));
+
+    // fetch()
+    //   .driver('http')
+    //   .cache(false)
+    //   .state(false)
+    //   .get(`https://api.thecatapi.com/v1/images/search`)
+    //   .toPromise()
+    //   .then((result: any) => {
+    //     console.log(result);
+    //   });
   }
 
   decrement() {

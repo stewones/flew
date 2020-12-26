@@ -275,6 +275,12 @@
             "main": "projects/apps/todo/src/main.ts",
             "polyfills": "projects/apps/todo/src/polyfills.ts",
             "tsConfig": "projects/apps/todo/tsconfig.app.json",
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "axios",
+              "redux-watch",
+              "parse"
+            ],
             "aot": true,
             "preserveSymlinks": true,
             "assets": [
@@ -370,6 +376,12 @@
             "main": "projects/apps/counter/src/main.ts",
             "polyfills": "projects/apps/counter/src/polyfills.ts",
             "tsConfig": "projects/apps/counter/tsconfig.app.json",
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "axios",
+              "redux-watch",
+              "parse"
+            ],
             "aot": true,
             "preserveSymlinks": true,
             "assets": [

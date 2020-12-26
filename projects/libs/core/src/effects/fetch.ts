@@ -9,11 +9,14 @@ import { isServer } from './isServer';
  *
  *
  * @export
- * @param {string} from
+ * @param {string} [from='']
  * @param {RebasedOptions} [options={}]
  * @returns {RebasedAPI}
  */
-export function fetch(from: string, options: RebasedOptions = {}): RebasedAPI {
+export function fetch(
+  from: string = '',
+  options: RebasedOptions = {}
+): RebasedAPI {
   const params = init(options);
   params.from = from;
   return isServer() ? new PlatformServer(params) : new PlatformBrowser(params);
