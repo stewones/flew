@@ -1,3 +1,12 @@
+## [0.0.15](https://github.com/rebasedjs/rebasedjs/compare/v0.0.14...v0.0.15) (2020-12-26)
+
+
+### Bug Fixes
+
+* state produce ([19f22d1](https://github.com/rebasedjs/rebasedjs/commit/19f22d1b1eaac8fbe5c30ea1acfd76c9aad4f21b))
+
+
+
 ## [0.0.14](https://github.com/rebasedjs/rebasedjs/compare/v0.0.13...v0.0.14) (2020-12-26)
 
 
