@@ -1,7 +1,6 @@
 import { Rebased } from '@rebased/core';
 import { combineReducers, createStore as createReduxStore } from 'redux';
 import { pickBy, isEmpty } from 'lodash';
-import { install } from '../state/install';
 
 /**
  * Memo reducer from fetch responses
@@ -71,7 +70,7 @@ export function createStore(reducers, initialState?, enhancers?) {
   if (!isEmpty(Rebased.store)) {
     console.warn(`oops looks like there's a store created already`);
   }
-  install();
+
   return (Rebased.store = createReduxStore(
     combineReducers({ _state, ...reducers }),
     initialState,

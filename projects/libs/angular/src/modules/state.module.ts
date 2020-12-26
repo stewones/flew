@@ -16,13 +16,7 @@ export interface StoreOptions {
 @Injectable()
 export class StateSetup {
   constructor(@Inject('StoreOptions') public options) {
-    stateLoader.install();
-
-    stateLoader.createStore(
-      (options && options.reducers) || {},
-      (options && options.state) || {},
-      stateLoader.applyDevTools(options)
-    );
+    stateLoader.install(options);
   }
 }
 

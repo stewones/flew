@@ -16,16 +16,7 @@ export interface CacheOptions {
 @Injectable()
 export class CacheSetup {
   constructor(@Inject('CacheOptions') public options: CacheOptions) {
-    cacheLoader.install(
-      new cacheLoader.Storage(
-        cacheLoader.storageConfig(
-          options.dbName,
-          options.dbStore,
-          options.driverOrder
-        ),
-        null
-      )
-    );
+    cacheLoader.install(options.dbName, options.dbStore, options.driverOrder);
   }
 }
 
