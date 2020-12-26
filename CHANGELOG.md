@@ -1,3 +1,18 @@
+## [0.0.13](https://github.com/rebasedjs/rebasedjs/compare/v0.0.12...v0.0.13) (2020-12-26)
+
+
+### Bug Fixes
+
+* browser diff ([8cd952c](https://github.com/rebasedjs/rebasedjs/commit/8cd952c522bbd7952e3a5698154ed86997376fc0))
+* diff logic for non existent results ([31925b2](https://github.com/rebasedjs/rebasedjs/commit/31925b2efd86f129df473665e8125db02889eddd))
+* firestore connector ([c2b87d4](https://github.com/rebasedjs/rebasedjs/commit/c2b87d4751b6a5f0fc506ba7b86470a546636568))
+* firestore realtime unsubscription ([efa2016](https://github.com/rebasedjs/rebasedjs/commit/efa20169c43c40abfcb7c0d2de78fa5a2b8f54c8))
+* installers ([9ac24fe](https://github.com/rebasedjs/rebasedjs/commit/9ac24fea6cd51b8aeed504b4ea6eb3ccf2aff2fd))
+* internal unsub ([41b3b42](https://github.com/rebasedjs/rebasedjs/commit/41b3b4277ebd8471c6c890800258f09e248b723c))
+* **browser:** check for online state before dispatching results ([8ff0592](https://github.com/rebasedjs/rebasedjs/commit/8ff05923c04f66646dc139dbc955cfef57a931d1))
+
+
+
 ## [0.0.12](https://github.com/rebasedjs/rebasedjs/compare/v0.0.11...v0.0.12) (2020-12-09)
 
 
