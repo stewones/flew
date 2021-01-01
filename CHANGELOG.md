@@ -1,3 +1,12 @@
+## [0.0.16](https://github.com/rebasedjs/rebasedjs/compare/v0.0.15...v0.0.16) (2021-01-01)
+
+
+### Bug Fixes
+
+* **state:** immer produce needs to differentiate objects ([a0cab7a](https://github.com/rebasedjs/rebasedjs/commit/a0cab7a5075f3644d436c46e76afb449df9575ca))
+
+
+
 ## [0.0.15](https://github.com/rebasedjs/rebasedjs/compare/v0.0.14...v0.0.15) (2020-12-26)
 
 
