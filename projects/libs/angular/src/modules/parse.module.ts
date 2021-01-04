@@ -10,12 +10,12 @@ export interface ParseOptions {
   appID: string;
 }
 
-import { parseLoader } from '@rebased/parse';
+import { install } from '@rebased/parse';
 
 @Injectable()
 export class ParseSetup {
   constructor(@Inject('ParseOptions') public options: ParseOptions) {
-    parseLoader.install(options);
+    install(options);
   }
 }
 

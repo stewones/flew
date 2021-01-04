@@ -5,7 +5,7 @@ import {
   ModuleWithProviders
 } from '@angular/core';
 
-import { stateLoader } from '@rebased/state';
+import { install } from '@rebased/state';
 export interface StoreOptions {
   production?: boolean;
   reducers?: any;
@@ -16,7 +16,7 @@ export interface StoreOptions {
 @Injectable()
 export class StateSetup {
   constructor(@Inject('StoreOptions') public options) {
-    stateLoader.install(options);
+    install(options);
   }
 }
 

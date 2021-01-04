@@ -48,7 +48,7 @@ export class TodoEditComponent implements OnInit {
         useState: getState('control.useState'),
         useCache: getState('control.useCache'),
         useNetwork: getState('control.useNetwork'),
-        driver: getState('control.driver'),
+        from: getState('control.from'),
         pathname: getState('control.pathname')
       })
     );

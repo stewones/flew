@@ -15,15 +15,15 @@ const specMap = {
   false: '⛔️'
 };
 
-Rebased.driver.firebase = new FirebaseDriver({
+Rebased.from.firebase = new FirebaseDriver({
   instance: {}
 });
 
-Rebased.driver.firestore = new FirestoreDriver({
+Rebased.from.firestore = new FirestoreDriver({
   instance: {}
 });
 
-Rebased.driver.parse = new ParseDriver({
+Rebased.from.parse = new ParseDriver({
   serverURL: 'xxx',
   appID: 'yyy',
   instance: {}
@@ -51,19 +51,19 @@ markdown += `
 
 const matrix = [['']];
 
-for (const driver in Rebased.driver) {
+for (const driver in Rebased.from) {
   matrix[0].push(driver);
 }
 
-const actions = Rebased.driver.http.chaining;
+const actions = Rebased.from.http.chaining;
 for (const action in actions) {
   matrix.push([`<a href="/core/api">${action}</a>`]);
 }
 
 let row = 1;
 let col = 1;
-for (const driver in Rebased.driver) {
-  const available = Rebased.driver[driver].chaining;
+for (const driver in Rebased.from) {
+  const available = Rebased.from[driver].chaining;
   for (const verb in available) {
     const spec = JSON.stringify(available[verb]);
 

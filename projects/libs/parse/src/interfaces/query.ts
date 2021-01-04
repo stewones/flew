@@ -2,7 +2,7 @@ import { RebasedChainPayload } from '@rebased/core';
 
 export interface QueryHandler {
   Parse: any;
-  from: string;
+  collection: string;
   skipOnQuery: string[];
   skipOnOperator: string[];
   specialOperators: string[];

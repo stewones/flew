@@ -34,7 +34,7 @@ export class FirebaseDriver implements RebasedDriver {
   };
 
   public chaining: { [key in RebasedChain]: string | boolean } = {
-    driver: true,
+    from: true,
     network: true,
     key: true,
     query: false,
@@ -75,7 +75,8 @@ export class FirebaseDriver implements RebasedDriver {
 
   private exceptions() {
     const connector = this.getInstance();
-    if (!this.driverOptions.from) throw new Error('missing fetch for firebase');
+    if (!this.driverOptions.collection)
+      throw new Error('missing fetch for firebase');
     if (isEmpty(connector))
       throw new Error(
         `missing database instance. did you add import 'firebase/database'; to your environment file?`
@@ -95,7 +96,7 @@ export class FirebaseDriver implements RebasedDriver {
 
       //
       // define adapter
-      const path = `${this.driverOptions.from}/${chain.ref || ''}`;
+      const path = `${this.driverOptions.collection}/${chain.ref || ''}`;
 
       let firebase: any = connector.database().ref(path);
 
@@ -168,7 +169,7 @@ export class FirebaseDriver implements RebasedDriver {
 
       //
       // define adapter
-      const path = `${this.driverOptions.from}/${chain.ref || ''}`;
+      const path = `${this.driverOptions.collection}/${chain.ref || ''}`;
       const firebase: any = connector.database().ref(path);
 
       //

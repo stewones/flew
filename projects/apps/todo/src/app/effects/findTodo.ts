@@ -6,7 +6,7 @@ import { findTodoKey } from './findTodoKey';
 export function findTodo(id: string, options: TodoFindOptions) {
   return fetch(`Todo`, { pathname: options.pathname })
     .key(findTodoKey(id))
-    .driver(options.driver)
+    .from(options.from)
     .state(options.useState)
     .cache(options.useCache)
     .network(options.useNetwork)

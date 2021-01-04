@@ -5,7 +5,7 @@ import {
   Inject
 } from '@angular/core';
 
-import { cacheLoader } from '@rebased/cache';
+import { install } from '@rebased/cache';
 
 export interface CacheOptions {
   dbName?: string;
@@ -16,7 +16,7 @@ export interface CacheOptions {
 @Injectable()
 export class CacheSetup {
   constructor(@Inject('CacheOptions') public options: CacheOptions) {
-    cacheLoader.install(options.dbName, options.dbStore, options.driverOrder);
+    install(options.dbName, options.dbStore, options.driverOrder);
   }
 }
 

@@ -36,7 +36,7 @@ export class FirestoreDriver implements RebasedDriver {
   };
 
   public chaining: { [key in RebasedChain]: string | boolean } = {
-    driver: true,
+    from: true,
     network: true,
     key: true,
     query: false,
@@ -97,7 +97,7 @@ export class FirestoreDriver implements RebasedDriver {
   private exceptions() {
     const connector = this.getInstance();
     if (isEmpty(connector)) throw new Error('missing firestore connector');
-    if (!this.driverOptions.from) throw new Error('missing from');
+    if (!this.driverOptions.collection) throw new Error('missing from');
   }
 
   protected where(query: any[] = [], firestore: any) {
@@ -141,7 +141,7 @@ export class FirestoreDriver implements RebasedDriver {
 
       //
       // define adapter
-      let firestore: any = connector.collection(this.driverOptions.from);
+      let firestore: any = connector.collection(this.driverOptions.collection);
 
       //
       // set query
@@ -199,7 +199,7 @@ export class FirestoreDriver implements RebasedDriver {
 
       //
       // define adapter
-      let firestore: any = connector.collection(this.driverOptions.from);
+      let firestore: any = connector.collection(this.driverOptions.collection);
 
       //
       // set doc
@@ -247,7 +247,9 @@ export class FirestoreDriver implements RebasedDriver {
 
       //
       // define connector
-      const firestore: any = connector.collection(this.driverOptions.from);
+      const firestore: any = connector.collection(
+        this.driverOptions.collection
+      );
 
       //
       // run exceptions
@@ -312,7 +314,9 @@ export class FirestoreDriver implements RebasedDriver {
 
       //
       // define connector
-      const firestore: any = connector.collection(this.driverOptions.from);
+      const firestore: any = connector.collection(
+        this.driverOptions.collection
+      );
 
       //
       // auto update timestamp
@@ -364,7 +368,9 @@ export class FirestoreDriver implements RebasedDriver {
 
       //
       // define connector
-      const firestore: any = connector.collection(this.driverOptions.from);
+      const firestore: any = connector.collection(
+        this.driverOptions.collection
+      );
 
       //
       // define return

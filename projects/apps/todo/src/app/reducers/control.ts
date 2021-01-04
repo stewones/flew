@@ -3,7 +3,7 @@ import { createReducer } from '@rebased/state';
 
 export const control = createReducer(
   {
-    driver: 'firestore',
+    from: 'firestore',
     pathname: THE_CAT_API_SEARCH,
     useState: true,
     useCache: true,
@@ -23,8 +23,8 @@ export const control = createReducer(
     setSimulateError: (state, action) => {
       state.simulateHttpError = action.payload;
     },
-    setDriver: (state, action) => {
-      state.driver = action.payload;
+    setFrom: (state, action) => {
+      state.from = action.payload;
     },
     setPathname: (state, action) => {
       state.pathname = action.payload;

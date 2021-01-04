@@ -1,16 +1,8 @@
-import * as Firebase from 'firebase/app';
 import { Rebased } from '@rebased/core';
+import * as Firebase from 'firebase/app';
 import { FirebaseConnector, FirestoreConnector } from './connectors';
 import { FirebaseDriver } from '../driver/firebase';
 import { FirestoreDriver } from '../driver/firestore';
-
-export function firebase() {
-  return Rebased.driver.firebase.getInstance();
-}
-
-export function firestore() {
-  return Rebased.driver.firestore.getInstance();
-}
 
 export function install(options: {
   config?: any;

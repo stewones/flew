@@ -1,16 +1,10 @@
 //
-// platforms
-export * from './platforms/browser';
-export * from './platforms/server';
+// platform
+export * from './fetch/browser';
+export * from './fetch/server';
 export * from './version';
 export * from './global';
-
-//
-// drivers
-export * from './drivers/http';
-
-//
-// symbols
+export * from './driver/http';
 export * from './symbols/rebased';
 
 //
@@ -27,5 +21,5 @@ export * from './effects/sha';
 export * from './effects/diff';
 
 //
-// interfaces
+// types
 export * from './interfaces';

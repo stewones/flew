@@ -1,4 +1,4 @@
-// import { PlatformBrowser } from './browser';
+// import { FetchBrowser } from './browser';
 // import { StorageAdapter } from '../interfaces/storage';
 
 // import { Subject, PartialObserver } from 'rxjs';
@@ -7,7 +7,7 @@
 // import { RebasedVerb } from '../interfaces/verb';
 // import { RebasedChainPayload, Rebased } from '..';
 
-// class PlatformBrowserMock extends PlatformBrowser {
+// class FetchBrowserMock extends FetchBrowser {
 //   _storage: StorageAdapter;
 
 //   constructor(options) {
@@ -32,13 +32,13 @@
 // }
 
 // describe('Browser Platform', () => {
-//   let lib: PlatformBrowser;
+//   let lib: FetchBrowser;
 //   const baseURL = 'http://rebased.io';
 //   const collection = 'foo-collection';
 
 //   beforeEach(() => {
 //     Rebased.connector = {};
-//     lib = new PlatformBrowser({
+//     lib = new FetchBrowser({
 //       silent: false,
 //       baseURL: baseURL,
 //       collection: collection,
@@ -47,13 +47,13 @@
 //   });
 
 //   it('should be created using minimal setup', () => {
-//     const lib_ = new PlatformBrowser({});
+//     const lib_ = new FetchBrowser({});
 //     expect(lib_).toBeTruthy();
 //   });
 
 //   // it('should fail if `useCache` true and no storage instance is available', () => {
 //   //   expect(() => {
-//   //     lib = new PlatformBrowser({
+//   //     lib = new FetchBrowser({
 //   //       silent: false,
 //   //       baseURL: baseURL,
 //   //       collection: collection,
@@ -65,7 +65,7 @@
 //   // });
 
 //   // it('should implement `clearCache`', () => {
-//   //   const spy = jest.spyOn(PlatformBrowser.prototype, 'clearCache');
+//   //   const spy = jest.spyOn(FetchBrowser.prototype, 'clearCache');
 //   //   lib.clearCache();
 //   //   expect(spy).toHaveBeenCalled();
 //   // });
@@ -73,7 +73,7 @@
 //   // it('should NOT `feed` responses from cache into rr store', () => {
 //   //   Rebased.storage = null;
 
-//   //   const lib_ = new PlatformBrowser({
+//   //   const lib_ = new FetchBrowser({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     collection: collection
@@ -127,7 +127,7 @@
 //   //     http: { get: () => Promise.resolve([1, 2, 3]) }
 //   //   };
 
-//   //   let lib_ = new PlatformBrowser({
+//   //   let lib_ = new FetchBrowser({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -138,7 +138,7 @@
 //   //     }
 //   //   } as any);
 
-//   //   const spy = jest.spyOn(PlatformBrowser.prototype, 'get');
+//   //   const spy = jest.spyOn(FetchBrowser.prototype, 'get');
 //   //   lib_
 //   //     .get()
 //   //     .toPromise()
@@ -157,7 +157,7 @@
 //   // });
 
 //   // it('should implement [post] verb', () => {
-//   //   let lib_ = new PlatformBrowser({
+//   //   let lib_ = new FetchBrowser({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -170,7 +170,7 @@
 //   //       set: () => Promise.resolve({})
 //   //     } as any
 //   //   });
-//   //   const spy = jest.spyOn(PlatformBrowser.prototype, 'post');
+//   //   const spy = jest.spyOn(FetchBrowser.prototype, 'post');
 //   //   lib_
 //   //     .post()
 //   //     .toPromise()
@@ -189,7 +189,7 @@
 //   // });
 
 //   // it('should implement [patch] verb', () => {
-//   //   let lib_ = new PlatformBrowser({
+//   //   let lib_ = new FetchBrowser({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -202,7 +202,7 @@
 //   //       set: () => Promise.resolve({})
 //   //     } as any
 //   //   });
-//   //   const spy = jest.spyOn(PlatformBrowser.prototype, 'patch');
+//   //   const spy = jest.spyOn(FetchBrowser.prototype, 'patch');
 //   //   lib_
 //   //     .patch()
 //   //     .toPromise()
@@ -221,7 +221,7 @@
 //   // });
 
 //   // it('should implement [find] verb', () => {
-//   //   let lib_ = new PlatformBrowser({
+//   //   let lib_ = new FetchBrowser({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -264,7 +264,7 @@
 //   //       set: () => Promise.resolve({})
 //   //     } as any
 //   //   });
-//   //   const spy = jest.spyOn(PlatformBrowser.prototype, 'find');
+//   //   const spy = jest.spyOn(FetchBrowser.prototype, 'find');
 //   //   lib_
 //   //     .find()
 //   //     .toPromise()
@@ -283,7 +283,7 @@
 //   // });
 
 //   // it('should implement [findOne] verb', () => {
-//   //   let lib_ = new PlatformBrowser({
+//   //   let lib_ = new FetchBrowser({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -326,7 +326,7 @@
 //   //       set: () => Promise.resolve({})
 //   //     } as any
 //   //   });
-//   //   const spy = jest.spyOn(PlatformBrowser.prototype, 'findOne');
+//   //   const spy = jest.spyOn(FetchBrowser.prototype, 'findOne');
 //   //   lib_
 //   //     .findOne()
 //   //     .toPromise()
@@ -345,7 +345,7 @@
 //   // });
 
 //   // it('should transform response', () => {
-//   //   let lib_ = new PlatformBrowser({
+//   //   let lib_ = new FetchBrowser({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -397,7 +397,7 @@
 //   // });
 
 //   // it('should transform data', () => {
-//   //   let lib_ = new PlatformBrowser({
+//   //   let lib_ = new FetchBrowser({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -449,7 +449,7 @@
 //   // });
 
 //   // it('should transform data from elasticsearch', () => {
-//   //   let lib_ = new PlatformBrowser({
+//   //   let lib_ = new FetchBrowser({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -496,7 +496,7 @@
 //   // });
 
 //   // it('should fail on network request', () => {
-//   //   let lib_ = new PlatformBrowser({
+//   //   let lib_ = new FetchBrowser({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -523,7 +523,7 @@
 //   // });
 
 //   // it('should return response from cache when using ttl', () => {
-//   //   let lib_ = new PlatformBrowserMock({
+//   //   let lib_ = new FetchBrowserMock({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -574,7 +574,7 @@
 //   // });
 
 //   // it('should call network', () => {
-//   //   let lib_ = new PlatformBrowserMock({
+//   //   let lib_ = new FetchBrowserMock({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -613,7 +613,7 @@
 //   // });
 
 //   // it('should NOT return cache', () => {
-//   //   let lib_ = new PlatformBrowserMock({
+//   //   let lib_ = new FetchBrowserMock({
 //   //       silent: false,
 //   //       baseURL: baseURL,
 //   //       endpoint: '/',
@@ -689,7 +689,7 @@
 //   // });
 
 //   // it('should return cache', () => {
-//   //   let lib_ = new PlatformBrowserMock({
+//   //   let lib_ = new FetchBrowserMock({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -739,7 +739,7 @@
 //   //       });
 //   //     });
 
-//   //   lib_ = new PlatformBrowserMock({
+//   //   lib_ = new FetchBrowserMock({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -795,7 +795,7 @@
 //   // });
 
 //   // it('should NOT set cache when saveNetwork is false', () => {
-//   //   let lib_ = new PlatformBrowserMock({
+//   //   let lib_ = new FetchBrowserMock({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -834,7 +834,7 @@
 //   // });
 
 //   // it('should NOT set cache if response is the same as the current cache', () => {
-//   //   let lib_ = new PlatformBrowserMock({
+//   //   let lib_ = new FetchBrowserMock({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -872,7 +872,7 @@
 //   // });
 
 //   // it('should set cache', () => {
-//   //   let lib_ = new PlatformBrowserMock({
+//   //   let lib_ = new FetchBrowserMock({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -921,7 +921,7 @@
 //   // });
 
 //   // it('should return network response from `setCache`', async () => {
-//   //   let lib__ = new PlatformBrowserMock({
+//   //   let lib__ = new FetchBrowserMock({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -962,7 +962,7 @@
 //   // });
 
 //   // it('should transform cache before it saves', async () => {
-//   //   let lib__ = new PlatformBrowserMock({
+//   //   let lib__ = new FetchBrowserMock({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -1005,7 +1005,7 @@
 //   // @todo tests to refactor
 //   //
 //   // it('should NOT return network response from `setCache`', async () => {
-//   //   let lib_ = new PlatformBrowserMock({
+//   //   let lib_ = new FetchBrowserMock({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',
@@ -1030,7 +1030,7 @@
 //   //     complete: () => {}
 //   //   };
 
-//   //   const spyDispatch = jest.spyOn(PlatformBrowserMock.prototype, 'dispatch');
+//   //   const spyDispatch = jest.spyOn(FetchBrowserMock.prototype, 'dispatch');
 //   //   spyDispatch.mockClear();
 
 //   //   await lib_.setCache(
@@ -1045,7 +1045,7 @@
 //   // });
 
 //   // it('should NOT call network and return from cache', () => {
-//   //   let lib_ = new PlatformBrowserMock({
+//   //   let lib_ = new FetchBrowserMock({
 //   //     silent: false,
 //   //     baseURL: baseURL,
 //   //     endpoint: '/',

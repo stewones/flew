@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     fetch('counter')
-      .driver('firestore')
+      .from('firestore')
       // .state(false)
       // .cache(false)
       .on()
@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
       });
 
     fetch('counter')
-      .driver('firestore')
+      .from('firestore')
       .where('lol', '==', 'do not exists')
       .findOne()
       .subscribe(it => {
@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
     dispatch(increment(1));
 
     // fetch()
-    //   .driver('http')
+    //   .from('http')
     //   .cache(false)
     //   .state(false)
     //   .get(`https://api.thecatapi.com/v1/images/search`)
@@ -76,7 +76,7 @@ export class AppComponent implements OnInit {
 
   incrementFromFirestore() {
     fetch('counter')
-      .driver('firestore')
+      .from('firestore')
       .doc('some-id')
       .set({ total: this.displayFirestoreRealtime + 1 })
       .toPromise();
@@ -84,7 +84,7 @@ export class AppComponent implements OnInit {
 
   decrementFromFirestore() {
     fetch('counter')
-      .driver('firestore')
+      .from('firestore')
       .doc('some-id')
       .set({ total: this.displayFirestoreRealtime - 1 })
       .toPromise();

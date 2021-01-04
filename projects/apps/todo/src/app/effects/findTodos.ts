@@ -7,14 +7,14 @@ import { findTodosKey } from './findTodosKey';
 export function findTodos(options: TodoFindOptions) {
   return fetch(`Todo`, { pathname: options.pathname })
     .key(findTodosKey())
-    .driver(options.driver)
+    .from(options.from)
     .state(options.useState)
     .cache(options.useCache)
     .network(options.useNetwork)
     .find<Todo[]>()
     .pipe(
       map((response: any[]) => {
-        if (options.driver === 'http') {
+        if (options.from === 'http') {
           response = response.map(it => {
             return {
               doc_id: it.id,

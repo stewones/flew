@@ -15,15 +15,15 @@ import {
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { transpileChainQuery } from '../api/transpile';
-import { where } from '../api/where';
-import { order } from '../api/order';
-import { limit } from '../api/limit';
-import { skip } from '../api/skip';
-import { find as findParse } from '../api/find';
-import { select } from '../api/select';
-import { near } from '../api/near';
-import { withinQuery } from '../api/within-query';
+import { transpileChainQuery } from '../effects/transpile';
+import { where } from '../effects/where';
+import { order } from '../effects/order';
+import { limit } from '../effects/limit';
+import { skip } from '../effects/skip';
+import { find as findParse } from '../effects/find';
+import { select } from '../effects/select';
+import { near } from '../effects/near';
+import { withinQuery } from '../effects/within-query';
 import { ParseOptions } from '../interfaces/options';
 
 export class ParseDriver implements RebasedDriver {
@@ -56,7 +56,7 @@ export class ParseDriver implements RebasedDriver {
   //
   // chaining tree
   public chaining: { [key in RebasedChain]: string | boolean } = {
-    driver: true,
+    from: true,
     network: true,
     key: true,
     query: true,
@@ -128,7 +128,7 @@ export class ParseDriver implements RebasedDriver {
       findParse({
         Parse: this.getInstance(),
         chain: chain,
-        from: this.getCollectionName(),
+        collection: this.getCollectionName(),
         skipOnQuery: this.skipOnQuery,
         skipOnOperator: this.skipOnOperator,
         specialOperators: this.specialOperators,
@@ -578,7 +578,7 @@ export class ParseDriver implements RebasedDriver {
       Session: '_Session',
       Installation: '_Installation'
     };
-    const name = this.driverOptions.from;
+    const name = this.driverOptions.collection;
     return mapping[name] ? mapping[name] : name;
   }
 

@@ -12,7 +12,7 @@ hide_title: true
 ## RebasedCore
 
 **Kind**: global class  
-**Implements**: <code>RebasedAPI</code>
+**Implements**: <code>RebasedProtocol</code>
 
 - [RebasedCore](#RebasedCore)
   - [.reset()](#RebasedCore+reset) ⇒ [<code>RebasedCore</code>](#RebasedCore)

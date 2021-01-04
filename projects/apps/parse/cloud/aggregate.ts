@@ -5,7 +5,7 @@ export async function aggregate(req) {
   const name = req.params.fetch;
 
   return fetch(name)
-    .driver(`parse`)
+    .from(`parse`)
     .query(query)
     .find()
     .toPromise();

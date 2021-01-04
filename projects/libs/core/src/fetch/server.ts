@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from 'axios';
 import { isArray, isEmpty, isString, omit } from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { Rebased } from '../symbols/rebased';
-import { RebasedAPI } from '../interfaces/api';
+import { RebasedBridge } from '../interfaces/bridge';
 import { RebasedChainPayload, RebasedChain } from '../interfaces/chain';
 import { RebasedDriverOption } from '../interfaces/driver';
 import { RebasedOptions } from '../interfaces/options';
@@ -10,7 +10,7 @@ import { RebasedVerb } from '../interfaces/verb';
 import { Log } from '../interfaces/log';
 import { Logger } from '../effects/logger';
 import { isServer } from '../effects/isServer';
-import { HttpDriver } from '../drivers/http';
+import { HttpDriver } from '../driver/http';
 import { SHA256 } from '../effects/sha';
 import { R_VERSION } from '../version';
 import { SetOptions } from '../interfaces/set';
@@ -18,9 +18,9 @@ import { SetOptions } from '../interfaces/set';
 /**
  * @export
  * @class RebasedCore
- * @implements {RebasedAPI}
+ * @implements {RebasedBridge}
  */
-export class RebasedCore implements RebasedAPI {
+export class RebasedCore implements RebasedBridge {
   chain: RebasedChainPayload = {};
   options: RebasedOptions;
 
@@ -55,7 +55,7 @@ export class RebasedCore implements RebasedAPI {
     this.initDrivers(options);
 
     // log
-    const name = options.from || options.endpoint || options.driver;
+    const name = options.collection || options.endpoint || options.from;
     this.log().success()(`${name} call [Rebased ${R_VERSION}]`);
 
     // initialize
@@ -115,15 +115,15 @@ export class RebasedCore implements RebasedAPI {
       ...verb,
       ...body,
       ...{ path: path },
-      ...{ driver: chain.driver },
+      ...{ driver: chain.from },
       ...omit(chain, ['key', 'useNetwork', 'useCache', 'useState'])
     });
 
-    const keyStart = options.from || 'rebased';
+    const keyStart = options.collection || 'rebased';
 
-    const keyEndpoint = chain.driver === 'http' ? options.endpoint : '';
+    const keyEndpoint = chain.from === 'http' ? options.endpoint : '';
 
-    const keyPath = chain.driver === 'http' ? path || options.pathname : '';
+    const keyPath = chain.from === 'http' ? path || options.pathname : '';
 
     const keyCrypt = SHA256(payload);
 
@@ -144,7 +144,7 @@ export class RebasedCore implements RebasedAPI {
     this.initDrivers(this.options);
 
     let _verb = method;
-    let _driver = chain.driver;
+    let _driver = chain.from;
     let arg1, arg2, arg3, arg4;
 
     //
@@ -218,7 +218,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public reset(): RebasedCore {
     this.chain = {
-      driver: this.options.driver,
+      from: this.options.from,
       useCache: this.options.useCache,
       useNetwork: this.options.useNetwork,
       useState: this.options.useState
@@ -352,12 +352,12 @@ export class RebasedCore implements RebasedAPI {
   /**
    * Modify the driver to be used on the fly
    *
-   * @param {RebasedDriverOption} name
+   * @param {RebasedDriverOption} driver
    * @returns {RebasedCore}
    */
-  public driver(name: RebasedDriverOption): RebasedCore {
-    this.chain.driver = name;
-    this.checkChainAvailability(this.chain.driver, 'driver');
+  public from(driver: RebasedDriverOption): RebasedCore {
+    this.chain.from = driver;
+    this.checkChainAvailability(this.chain.from, 'from');
     return this;
   }
 
@@ -386,7 +386,7 @@ export class RebasedCore implements RebasedAPI {
    * ```
    */
   public http(fn: (config: AxiosRequestConfig) => void): RebasedCore {
-    this.checkChainAvailability(this.chain.driver, 'http');
+    this.checkChainAvailability(this.chain.from, 'http');
     fn(this.options.httpConfig);
     return this;
   }
@@ -399,7 +399,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public network(active: boolean): RebasedCore {
     this.chain.useNetwork = active;
-    this.checkChainAvailability(this.chain.driver, 'network');
+    this.checkChainAvailability(this.chain.from, 'network');
     return this;
   }
 
@@ -411,7 +411,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public cache(active: boolean): RebasedCore {
     this.chain.useCache = active;
-    this.checkChainAvailability(this.chain.driver, 'cache');
+    this.checkChainAvailability(this.chain.from, 'cache');
     return this;
   }
 
@@ -423,7 +423,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public state(active: boolean): RebasedCore {
     this.chain.useState = active;
-    this.checkChainAvailability(this.chain.driver, 'state');
+    this.checkChainAvailability(this.chain.from, 'state');
     return this;
   }
 
@@ -435,7 +435,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public key(name: string): RebasedCore {
     this.chain.key = name;
-    this.checkChainAvailability(this.chain.driver, 'key');
+    this.checkChainAvailability(this.chain.from, 'key');
     return this;
   }
 
@@ -449,7 +449,7 @@ export class RebasedCore implements RebasedAPI {
     by: { [key: string]: {} } | { [key: string]: {} }[]
   ): RebasedCore {
     this.chain.query = by;
-    this.checkChainAvailability(this.chain.driver, 'query');
+    this.checkChainAvailability(this.chain.from, 'query');
     return this;
   }
 
@@ -470,7 +470,7 @@ export class RebasedCore implements RebasedAPI {
       operator: operator,
       value: value
     });
-    this.checkChainAvailability(this.chain.driver, 'where');
+    this.checkChainAvailability(this.chain.from, 'where');
     return this;
   }
 
@@ -488,7 +488,7 @@ export class RebasedCore implements RebasedAPI {
     for (const k in by) {
       this.chain.sort[k] = by[k];
     }
-    this.checkChainAvailability(this.chain.driver, 'sort');
+    this.checkChainAvailability(this.chain.from, 'sort');
     return this;
   }
 
@@ -500,7 +500,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public size(value: number): RebasedCore {
     this.chain.size = value;
-    this.checkChainAvailability(this.chain.driver, 'size');
+    this.checkChainAvailability(this.chain.from, 'size');
     return this;
   }
 
@@ -512,7 +512,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public at(value): RebasedCore {
     this.chain.at = value;
-    this.checkChainAvailability(this.chain.driver, 'at');
+    this.checkChainAvailability(this.chain.from, 'at');
     return this;
   }
 
@@ -524,7 +524,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public after(value): RebasedCore {
     this.chain.after = value;
-    this.checkChainAvailability(this.chain.driver, 'after');
+    this.checkChainAvailability(this.chain.from, 'after');
     return this;
   }
 
@@ -536,7 +536,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public ref(path: string): RebasedCore {
     this.chain.ref = path;
-    this.checkChainAvailability(this.chain.driver, 'ref');
+    this.checkChainAvailability(this.chain.from, 'ref');
     return this;
   }
 
@@ -548,7 +548,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public doc(value: any): RebasedCore {
     this.chain.doc = value;
-    this.checkChainAvailability(this.chain.driver, 'network');
+    this.checkChainAvailability(this.chain.from, 'network');
     return this;
   }
 
@@ -560,7 +560,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public include(fields: string[]): RebasedCore {
     this.chain.fields = fields;
-    this.checkChainAvailability(this.chain.driver, 'include');
+    this.checkChainAvailability(this.chain.from, 'include');
     return this;
   }
 
@@ -572,7 +572,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public master(active: boolean): RebasedCore {
     this.chain.useMasterKey = active;
-    this.checkChainAvailability(this.chain.driver, 'master');
+    this.checkChainAvailability(this.chain.from, 'master');
     return this;
   }
 
@@ -584,7 +584,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public token(session: string): RebasedCore {
     this.chain.useSessionToken = session;
-    this.checkChainAvailability(this.chain.driver, 'token');
+    this.checkChainAvailability(this.chain.from, 'token');
     return this;
   }
 
@@ -596,7 +596,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public object(active: boolean): RebasedCore {
     this.chain.useObject = active;
-    this.checkChainAvailability(this.chain.driver, 'object');
+    this.checkChainAvailability(this.chain.from, 'object');
     return this;
   }
 
@@ -608,7 +608,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public select(value: string[]): RebasedCore {
     this.chain.select = value;
-    this.checkChainAvailability(this.chain.driver, 'select');
+    this.checkChainAvailability(this.chain.from, 'select');
     return this;
   }
 
@@ -624,7 +624,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public near(field: string, geopoint: any): RebasedCore {
     this.chain.near = { field: field, geopoint: geopoint };
-    this.checkChainAvailability(this.chain.driver, 'near');
+    this.checkChainAvailability(this.chain.from, 'near');
     return this;
   }
 
@@ -654,7 +654,7 @@ export class RebasedCore implements RebasedAPI {
     this.chain.withinKilometers.maxDistance = maxDistance;
     this.chain.withinKilometers.sorted = sorted;
 
-    this.checkChainAvailability(this.chain.driver, 'withinKilometers');
+    this.checkChainAvailability(this.chain.from, 'withinKilometers');
     return this;
   }
 
@@ -685,7 +685,7 @@ export class RebasedCore implements RebasedAPI {
     this.chain.withinMiles.maxDistance = maxDistance;
     this.chain.withinMiles.sorted = sorted;
 
-    this.checkChainAvailability(this.chain.driver, 'withinMiles');
+    this.checkChainAvailability(this.chain.from, 'withinMiles');
     return this;
   }
 
@@ -698,7 +698,7 @@ export class RebasedCore implements RebasedAPI {
    */
   public diff(fn): RebasedCore {
     this.chain.diff = fn;
-    this.checkChainAvailability(this.chain.driver, 'diff');
+    this.checkChainAvailability(this.chain.from, 'diff');
     return this;
   }
 
@@ -711,9 +711,9 @@ export class RebasedCore implements RebasedAPI {
    */
   public response(fn): RebasedCore {
     this.chain.response = fn;
-    this.checkChainAvailability(this.chain.driver, 'response');
+    this.checkChainAvailability(this.chain.from, 'response');
     return this;
   }
 }
 
-export class PlatformServer extends RebasedCore {}
+export class FetchServer extends RebasedCore {}

@@ -4,4 +4,3 @@ export * from './getCache';
 export * from './setCache';
 export * from './storage';
 export * from './storageConfig';
-export * from './loader';

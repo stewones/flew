@@ -3,7 +3,7 @@ import { AxiosRequestConfig } from 'axios';
 import { Logger } from '../effects/logger';
 
 export interface RebasedOptions {
-  from?: string; // eg: 'todos'
+  collection?: string; // eg: 'todos'
   identifier?: string; // default to doc_id
   disableAutoID?: boolean; // disable doc_id generation
   disableTimestamp?: boolean;
@@ -13,7 +13,9 @@ export interface RebasedOptions {
   pathname?: string; // eg: /some/long/path/to/resource
   httpConfig?: AxiosRequestConfig;
 
+  from?: RebasedDriverOption;
   driver?: RebasedDriverOption;
+
   timestampCreated?: string; // field name
   timestampUpdated?: string; // field name
   timestampObject?: boolean;

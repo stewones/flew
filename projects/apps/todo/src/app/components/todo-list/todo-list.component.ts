@@ -8,7 +8,7 @@ import { navigateTo } from '../../actions/navigateTo';
 import { useState } from '../../actions/useState';
 import { useCache } from '../../actions/useCache';
 import { useNetwork } from '../../actions/useNetwork';
-import { setDriver } from '../../actions/setDriver';
+import { setFrom } from '../../actions/setFrom';
 import { setPathname } from '../../actions/setPathname';
 import { setSimulateError } from '../../actions/setSimulateError';
 
@@ -28,7 +28,7 @@ export class TodoListComponent implements OnInit {
   useNetwork$ = connect<boolean>('control.useNetwork');
   simulateHttpError$ = connect<boolean>('control.simulateHttpError');
 
-  driver$ = connect<RebasedDriverOption>('control.driver');
+  driver$ = connect<RebasedDriverOption>('control.from');
   drivers = ['firestore', 'firebase', 'http', 'parse'];
 
   constructor() {}
@@ -43,7 +43,7 @@ export class TodoListComponent implements OnInit {
         useState: getState('control.useState'),
         useCache: getState('control.useCache'),
         useNetwork: getState('control.useNetwork'),
-        driver: getState('control.driver'),
+        from: getState('control.from'),
         pathname: getState('control.pathname')
       })
     );
@@ -58,7 +58,7 @@ export class TodoListComponent implements OnInit {
   }
 
   changeDriver($event) {
-    dispatch(setDriver($event.target.value));
+    dispatch(setFrom($event.target.value));
   }
 
   changeUseState($event) {
@@ -77,10 +77,10 @@ export class TodoListComponent implements OnInit {
     const isChecked = $event.target.checked;
     dispatch(setSimulateError(isChecked));
     if (isChecked) {
-      dispatch(setDriver('http'));
+      dispatch(setFrom('http'));
       dispatch(setPathname('/some-weird-path'));
     } else {
-      dispatch(setDriver('firestore'));
+      dispatch(setFrom('firestore'));
       dispatch(setPathname(THE_CAT_API_SEARCH));
     }
     this.load();

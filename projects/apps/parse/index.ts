@@ -16,7 +16,7 @@ import { Rebased } from '@rebased/core';
 /**
  * Set default driver
  */
-Rebased.options.driver = `parse`;
+Rebased.options.from = `parse`;
 
 /**
  * Configure parse instance

@@ -1,26 +1,11 @@
-import { of, Subject } from 'rxjs';
+import { of } from 'rxjs';
 import {
   R_DRIVER,
   R_IDENTIFIER,
   R_TIMESTAMP_CREATED,
   R_TIMESTAMP_UPDATED
 } from '../global';
-import { RebasedOptions } from '../interfaces/options';
-import { StorageAdapter } from '../interfaces/storage';
-import { RebasedDriver, RebasedDriverOption } from '../interfaces/driver';
-
-export interface RebasedProtocol {
-  options: RebasedOptions;
-  store?: any;
-  state?: any;
-  storage?: StorageAdapter;
-  events?: { [key: string]: Subject<any> };
-  bridge?: {
-    [key: string]: any;
-  };
-  driver?: { [key: string]: RebasedDriver };
-  drivers?: RebasedDriverOption[];
-}
+import { RebasedProtocol, StorageAdapter } from '../interfaces';
 
 export const Rebased: RebasedProtocol = {
   options: {

@@ -1,25 +1,26 @@
 import { isBoolean } from 'lodash';
-import { RebasedAPI } from '../interfaces/api';
+import { RebasedBridge } from '../interfaces/bridge';
 import { RebasedOptions } from '../interfaces/options';
-import { PlatformServer } from '../platforms/server';
-import { PlatformBrowser } from '../platforms/browser';
+import { FetchServer } from '../fetch/server';
+import { FetchBrowser } from '../fetch/browser';
 import { isServer } from './isServer';
 
 /**
  *
  *
  * @export
- * @param {string} [from='']
+ * @param {string} [collection='']
  * @param {RebasedOptions} [options={}]
- * @returns {RebasedAPI}
+ * @returns {RebasedBridge}
  */
 export function fetch(
-  from: string = '',
+  collection: string = '',
   options: RebasedOptions = {}
-): RebasedAPI {
+): RebasedBridge {
   const params = init(options);
-  params.from = from;
-  return isServer() ? new PlatformServer(params) : new PlatformBrowser(params);
+  params.collection = collection;
+  params.from = options.from || 'http';
+  return isServer() ? new FetchServer(params) : new FetchBrowser(params);
 }
 
 /**

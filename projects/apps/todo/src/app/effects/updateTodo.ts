@@ -4,7 +4,7 @@ import { Todo } from '../interfaces/todo';
 
 export function updateTodo(todo: Todo) {
   return fetch(`Todo`)
-    .driver(getState('control.driver'))
+    .from(getState('control.from'))
     .doc(todo.doc_id)
     .update(todo);
 }

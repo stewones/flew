@@ -10,12 +10,12 @@ import {
   Inject
 } from '@angular/core';
 
-import { firebaseLoader } from '@rebased/firebase';
+import { install } from '@rebased/firebase';
 
 @Injectable()
 export class RebasedFirebaseSetup {
   constructor(@Inject('FirebaseOptions') public options) {
-    firebaseLoader.install({ config: options.config });
+    install({ config: options.config });
   }
 }
 

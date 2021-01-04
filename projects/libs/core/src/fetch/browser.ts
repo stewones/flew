@@ -7,9 +7,9 @@ import { RebasedChainPayload } from '../interfaces/chain';
 import { RebasedOptions } from '../interfaces/options';
 import { RebasedVerb } from '../interfaces/verb';
 import { Rebased } from '../symbols/rebased';
-import { PlatformServer } from './server';
+import { FetchServer } from './server';
 
-export class PlatformBrowser extends PlatformServer {
+export class FetchBrowser extends FetchServer {
   constructor(options: RebasedOptions) {
     super(options);
   }

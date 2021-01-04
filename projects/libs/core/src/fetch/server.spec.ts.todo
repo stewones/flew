@@ -75,7 +75,7 @@ describe('Records', () => {
   // it('should fail for unknown drivers', () => {
   //   expect(() => {
   //     lib
-  //       .driver('unknown' as RebasedDriverOption)
+  //       .from('unknown' as RebasedDriverOption)
   //       .find()
   //       .toPromise();
   //   }).toThrowError('[find] method unavailable for driver [unknown]');
@@ -211,7 +211,7 @@ describe('Records', () => {
   //     }
   //   });
   //   lib_.init({ driver: '' } as any);
-  //   expect(lib_.driver()).toEqual('firestore');
+  //   expect(lib_.from()).toEqual('firestore');
   // });
 
   // it('should fail when verbs and drivers does not match', () => {
@@ -229,7 +229,7 @@ describe('Records', () => {
   //   lib_.init();
 
   //   expect(() => {
-  //     lib_.driver('http').on(() => {}, () => {});
+  //     lib_.from('http').on(() => {}, () => {});
   //   }).toThrowError('[on] method unavailable for driver [http]');
   // });
 
@@ -534,7 +534,7 @@ describe('Records', () => {
   // it('should implement [reboot] chaining', () => {
   //   lib.init({ driver: 'firebase' });
   //   lib.reboot();
-  //   expect(lib.driver()).toEqual(R_DRIVER);
+  //   expect(lib.from()).toEqual(R_DRIVER);
   // });
 
   // it('should call network with a customized key', () => {

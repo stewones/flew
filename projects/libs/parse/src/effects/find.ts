@@ -22,7 +22,7 @@ export function find(handler: QueryHandler) {
 
   //
   // define adapter
-  let connector = new handler.Parse.Query(handler.from);
+  let connector = new handler.Parse.Query(handler.collection);
 
   //
   // Transpile chain query

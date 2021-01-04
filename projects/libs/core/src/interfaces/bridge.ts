@@ -1,16 +1,19 @@
 import { AxiosRequestConfig } from 'axios';
 import { Observable } from 'rxjs';
-import { RebasedCore } from '../platforms/server';
+import { RebasedCore } from '../fetch/server';
 import { RebasedOptions } from './options';
 
 /**
- * Public Api
+ * Rebased public api
+ *
+ * @export
+ * @interface RebasedBridge
  */
-export interface RebasedAPI {
+export interface RebasedBridge {
   options: RebasedOptions;
   reset(): RebasedCore; // reset chaining payload
 
-  driver(name: string): RebasedCore; // firebase / firestore / http
+  from(driver: string): RebasedCore; // firebase / firestore / http
   network(active: boolean): RebasedCore; // response using network call
 
   cache(active: boolean): RebasedCore; // use first response from cache if available

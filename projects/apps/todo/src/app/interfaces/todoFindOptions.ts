@@ -4,6 +4,6 @@ export interface TodoFindOptions {
   useState?: boolean;
   useCache?: boolean;
   useNetwork?: boolean;
-  driver?: RebasedDriverOption;
+  from?: RebasedDriverOption;
   pathname?: string;
 }

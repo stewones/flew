@@ -9,7 +9,7 @@ export function unsubscribe(key: string): void {
   }
 
   //
-  // cancel internal listeners (ie drivers realtime call)
+  // cancel internal listeners (ie realtime drivers call)
   if (Rebased.events[`internal-${key}`]) {
     publish(`internal-${key}`);
     Rebased.events[`internal-${key}`].unsubscribe();

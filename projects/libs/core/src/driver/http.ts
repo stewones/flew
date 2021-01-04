@@ -30,7 +30,7 @@ export class HttpDriver implements RebasedDriver {
   };
 
   public chaining: { [key in RebasedChain]: string | boolean } = {
-    driver: true,
+    from: true,
     network: true,
     key: true,
     query: false,

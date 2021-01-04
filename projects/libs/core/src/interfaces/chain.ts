@@ -1,7 +1,7 @@
 import { RebasedDriverOption } from './driver';
 
 export type RebasedChain =
-  | 'driver'
+  | 'from'
   | 'network'
   | 'cache'
   | 'key'
@@ -34,7 +34,7 @@ export interface RebasedChainPayloadWhere {
 
 export interface RebasedChainPayload {
   key?: string; // key used as a property name for the memoized state and cached data
-  driver?: RebasedDriverOption;
+  from?: RebasedDriverOption;
 
   useState?: boolean; //  use state for first response
   useCache?: boolean; //  use cache for first response

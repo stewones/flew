@@ -116,7 +116,7 @@ export function transpileQueryRouter(specialOperator, chainQuery, handler) {
 export function createQueryByOperator(value, operator, handler) {
   //
   // Start query
-  const query = new handler.Parse.Query(handler.from);
+  const query = new handler.Parse.Query(handler.collection);
 
   //
   // Create from a function
