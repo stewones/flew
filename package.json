@@ -1,6 +1,6 @@
 {
   "name": "rebased",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "license": "MIT",
   "browser": {
     "crypto": false
@@ -18,7 +18,7 @@
     "release:minor": "cd ./scripts && npm run release:minor",
     "release:patch": "cd ./scripts && npm run release:patch",
     "build:schematics": "tsc -p tools/tsconfig.tools.json && ./tools/copy.sh",
-    "build:docs": "cd scripts/docs && npm run doc:gen",
+    "build:docs": "cd scripts/docs && npm run doc:gen && npm run doc:build",
     "build:site": "npm run build:docs && cd projects/site && npm run build && npm run deploy --prod",
     "build:libs": "./scripts/build-libs.sh",
     "parse:serve": "./scripts/parse-serve-dev.sh",
