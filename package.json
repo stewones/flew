@@ -18,8 +18,8 @@
     "release:minor": "cd ./scripts && npm run release:minor",
     "release:patch": "cd ./scripts && npm run release:patch",
     "build:schematics": "tsc -p tools/tsconfig.tools.json && ./tools/copy.sh",
-    "build:doc": "cd scripts/docs && npm run doc:gen",
-    "build:docs": "npm run build:doc && cd projects/docs && npm run build && npm run deploy --prod",
+    "build:docs": "cd scripts/docs && npm run doc:gen",
+    "build:site": "npm run build:docs && cd projects/site && npm run build && npm run deploy --prod",
     "build:libs": "./scripts/build-libs.sh",
     "parse:serve": "./scripts/parse-serve-dev.sh",
     "parse:dashboard": "parse-dashboard --dev --appId AppServer --masterKey AppParse --serverURL 'http://localhost:1337/api' --appName Rebased"

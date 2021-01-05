@@ -8,35 +8,35 @@ module.exports = {
   projectName: 'rebased',
   stylesheets: [],
   themeConfig: {
-    disableDarkMode: false,
+    // disableDarkMode: false,
     prism: {
       theme: require('./src/js/monokaiTheme.js')
     },
     navbar: {
       title: 'Rebased',
-      image: 'images/r.svg',
       logo: {
         alt: 'Rebased',
         src: 'images/r.svg'
       },
-      links: [
-        {
-          label: 'Getting Started',
-          to: 'getting-started',
-          position: 'right'
-        },
-        { label: 'API', to: 'core/api', position: 'right' },
-        { label: 'FAQ', to: 'faq', position: 'right' },
-        {
-          label: 'GitHub',
-          href: 'https://github.com/rebasedjs/rebasedjs',
-          position: 'right'
-        },
-        {
-          label: 'Need help?',
-          href: 'https://github.com/rebasedjs/rebasedjs/issues',
-          position: 'right'
-        }
+      items: [
+        { label: 'API', to: 'core/api', position: 'right' }
+        // {
+        //   label: 'Getting Started',
+        //   to: 'getting-started',
+        //   position: 'right'
+        // },
+
+        // { label: 'FAQ', to: 'faq', position: 'right' },
+        // {
+        //   label: 'GitHub',
+        //   href: 'https://github.com/rebasedjs/rebasedjs',
+        //   position: 'right'
+        // },
+        // {
+        //   label: 'Need help?',
+        //   href: 'https://github.com/rebasedjs/rebasedjs/issues',
+        //   position: 'right'
+        // }
       ]
     },
     footer: {
@@ -57,13 +57,13 @@ module.exports = {
         src: 'images/r.svg',
         href: 'https://rebased.app'
       },
-      copyright: `<small><span>Copyright © 2016–${new Date().getFullYear()}</span><br />handcrafted by <a href="https://twitter.com/StewanSilva" rel="noopener" target="_blank">Stew</a></small>`
+      copyright: `<small><span>Copyright © ${new Date().getFullYear()}</span><br />handcrafted by <a href="https://twitter.com/stewones" rel="noopener" target="_blank">Stew</a></small>`
     },
-    algolia: {
-      apiKey: 'asdf',
-      indexName: 'rebased',
-      algoliaOptions: {}
-    },
+    // algolia: {
+    //   apiKey: 'asdf',
+    //   indexName: 'rebased',
+    //   algoliaOptions: {}
+    // },
     googleAnalytics: {
       trackingID: 'UA-xxx-1'
     }

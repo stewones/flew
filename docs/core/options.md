@@ -23,7 +23,7 @@ Set of options for Rebased initialisation
 
 ## Applying Globally
 
-Make sure to execute this only once. For angular users we have the [`RebasedModule`]()
+Make sure to execute this only once. For angular users we have the `RebasedModule`
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';

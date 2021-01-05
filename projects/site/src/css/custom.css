@@ -1,11 +1,12 @@
 :root {
-  --ifm-color-primary: #333;
-  --ifm-color-primary-dark: #e98c00;
-  --ifm-color-primary-darker: #cf7c00;
-  --ifm-color-primary-darkest: #995e06;
-  --ifm-color-primary-light: #ffd476;
-  --ifm-color-primary-lighter: #ffe09d;
-  --ifm-color-primary-lightest: #ffeeca;
+  --ifm-color-primary: #bc64ff;
+  --ifm-color-primary: #bc64ff;
+  --ifm-color-primary-dark: #bc64ff;
+  --ifm-color-primary-darker: #bc64ff;
+  --ifm-color-primary-darkest: #bc64ff;
+  --ifm-color-primary-light: #bc64ff;
+  --ifm-color-primary-lighter: #bc64ff;
+  --ifm-color-primary-lightest: #bc64ff;
 
   --ifm-code-font-size: 95%;
   --ifm-blockquote-color: #ecf4f9;
@@ -16,20 +17,27 @@
 }
 
 :root[data-theme='dark'] {
-  --ifm-color-primary: #ffc038;
-  --ifm-color-primary-dark: #e0a931;
-  --ifm-color-primary-darker: #ad8123;
-  --ifm-color-primary-darkest: #946d19;
-  --ifm-color-primary-light: #ffd476;
-  --ifm-color-primary-lighter: #ffe09d;
-  --ifm-color-primary-lightest: #ffeeca;
+  --ifm-link-color: rgb(188 100 255);
+  --ifm-color-primary: #bc64ff;
+  --ifm-color-primary-dark: #bc64ff;
+  --ifm-color-primary-darker: #bc64ff;
+  --ifm-color-primary-darkest: #bc64ff;
+  --ifm-color-primary-light: #bc64ff;
+  --ifm-color-primary-lighter: #bc64ff;
+  --ifm-color-primary-lightest: #bc64ff;
 
   --ifm-blockquote-color: #1a1d1e;
   --ifm-blockquote-color-dark: #ff8b3d;
+
+  --ifm-navbar-background-color: #1c1c1c;
+  --docsearch-searchbox-background: #121415;
+  --ifm-toc-border-color: #222222;
+  --ifm-table-border-color: #222222;
+  --ifm-color-emphasis-300: #333333;
 }
 
 :root[data-theme='dark'] .hero.hero--primary {
-  --ifm-hero-background-color: #e65c00;
+  --ifm-hero-background-color: #7731ac;
   --ifm-hero-text-color: #ffffff;
 }
 
@@ -37,7 +45,7 @@
   background-color: rgb(39, 40, 34);
 }
 :root {
-  --ifm-font-family-base: SFProDisplay, system-ui, -apple-system, Segoe UI,
+  --ifm-font-family-base: SFCompactRounded, system-ui, -apple-system, Segoe UI,
     Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont,
     'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol';
@@ -125,7 +133,8 @@ footer small span {
 }
 
 .navbar .navbar__title {
-  font-size: 21px;
+  color: #7731ac;
+  font-size: 20px;
 }
 
 .docSidebarContainer_node_modules-\@docusaurus-theme-classic-src-theme-DocPage- {
@@ -141,66 +150,65 @@ footer small span {
 /*
 FONTS
 */
-
 @font-face {
-  font-family: 'SFProDisplay';
-  src: url('/fonts/SF-Pro-Display-Black.otf') format('opentype');
+  font-family: 'SFCompactRounded';
+  src: url('/fonts/SF-Compact-Rounded-Black.otf') format('opentype');
   font-weight: 900;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SFProDisplay';
-  src: url('/fonts/SF-Pro-Display-Heavy.otf') format('opentype');
+  font-family: 'SFCompactRounded';
+  src: url('/fonts/SF-Compact-Rounded-Heavy.otf') format('opentype');
   font-weight: 800;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SFProDisplay';
-  src: url('/fonts/SF-Pro-Display-Bold.otf') format('opentype');
+  font-family: 'SFCompactRounded';
+  src: url('/fonts/SF-Compact-Rounded-Bold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SFProDisplay';
-  src: url('/fonts/SF-Pro-Display-Semibold.otf') format('opentype');
+  font-family: 'SFCompactRounded';
+  src: url('/fonts/SF-Compact-Rounded-Semibold.otf') format('opentype');
   font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SFProDisplay';
-  src: url('/fonts/SF-Pro-Display-Medium.otf') format('opentype');
+  font-family: 'SFCompactRounded';
+  src: url('/fonts/SF-Compact-Rounded-Medium.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SFProDisplay';
-  src: url('/fonts/SF-Pro-Display-Regular.otf') format('opentype');
+  font-family: 'SFCompactRounded';
+  src: url('/fonts/SF-Compact-Rounded-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SFProDisplay';
-  src: url('/fonts/SF-Pro-Display-Thin.otf') format('opentype');
+  font-family: 'SFCompactRounded';
+  src: url('/fonts/SF-Compact-Rounded-Thin.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SFProDisplay';
-  src: url('/fonts/SF-Pro-Display-Light.otf') format('opentype');
+  font-family: 'SFCompactRounded';
+  src: url('/fonts/SF-Compact-Rounded-Light.otf') format('opentype');
   font-weight: 200;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SFProDisplay';
-  src: url('/fonts/SF-Pro-Display-Ultralight.otf') format('opentype');
+  font-family: 'SFCompactRounded';
+  src: url('/fonts/SF-Compact-Rounded-Ultralight.otf') format('opentype');
   font-weight: 100;
   font-style: normal;
 }

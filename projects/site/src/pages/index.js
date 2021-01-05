@@ -183,7 +183,7 @@ function Home() {
             </div>
           </section>
         )}
-        {otherLibraries && otherLibraries.length && (
+        {/* {otherLibraries && otherLibraries.length && (
           <section className={styles.features}>
             <div className="container">
               <div className="row">
@@ -212,7 +212,7 @@ function Home() {
               </div>
             </div>
           </section>
-        )}
+        )} */}
       </main>
     </Layout>
   );

@@ -26,10 +26,11 @@ fetch('kitty', {
 ```
 
 
+
 ## Availability
 |                                          | http | firebase | firestore | parse |
 | ---------------------------------------- | ---- | -------- | --------- | ----- |
-| <a href="/core/api">driver</a>           | ✅    | ✅        | ✅         | ✅     |
+| <a href="/core/api">from</a>             | ✅    | ✅        | ✅         | ✅     |
 | <a href="/core/api">network</a>          | ✅    | ✅        | ✅         | ✅     |
 | <a href="/core/api">key</a>              | ✅    | ✅        | ✅         | ✅     |
 | <a href="/core/api">query</a>            | ⛔️   | ⛔️       | ⛔️        | ✅     |
