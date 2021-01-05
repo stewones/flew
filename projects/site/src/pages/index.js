@@ -76,7 +76,7 @@ const otherLibraries = [
   {
     content: 'A premium Ionic app built on top of Rebased',
     title: 'Rebased App',
-    link: 'https://rebased.app',
+    link: 'https://rebased.io',
     image: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -112,8 +112,8 @@ function Home() {
   const { siteConfig = {} } = context;
   return (
     <Layout
-      title={`Powerful toolchain for building javascript applications`}
-      description="Powerful toolchain for building javascript applications"
+      title={`Fetch and data management reimagined`}
+      description="Fetch and data management reimagined"
     >
       <div style={{ background: '#111', padding: '38px 0', lineHeight: 2 }}>
         <div className="container">

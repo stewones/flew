@@ -27,29 +27,6 @@ hide_title: true
   //...
   ```
   
-<a name="RebasedModule"></a>
-
-## RebasedModule
-**Kind**: global class  
-<a name="new_RebasedModule_new"></a>
-
-### new RebasedModule()
-<p>Rebased Module</p>
-
-**Example**  
-```js
-  import { RebasedModule } from '@rebased/angular';
-  //... 
-  RebasedModule.forRoot({
-    driver: 'parse', // define default data driver
-    silent: false, // whether show logs
-    timestamp: false // auto save timestamp
-    timestampCreated: 'createdAt',
-    timestampUpdated: 'updatedAt'
-  })
-  //...
-  ```
-  
 <a name="FirebaseModule"></a>
 
 ## FirebaseModule
@@ -87,6 +64,29 @@ hide_title: true
     serverURL: 'http://parse-endpoint.com',
     appID: 'Parse-APP-ID',
     masterKey: 'Parse-master-key'
+  })
+  //...
+  ```
+  
+<a name="RebasedModule"></a>
+
+## RebasedModule
+**Kind**: global class  
+<a name="new_RebasedModule_new"></a>
+
+### new RebasedModule()
+<p>Rebased Module</p>
+
+**Example**  
+```js
+  import { RebasedModule } from '@rebased/angular';
+  //... 
+  RebasedModule.forRoot({
+    driver: 'parse', // define default data driver
+    silent: false, // whether show logs
+    timestamp: false // auto save timestamp
+    timestampCreated: 'createdAt',
+    timestampUpdated: 'updatedAt'
   })
   //...
   ```

@@ -2,6 +2,14 @@ import { Rebased } from '@rebased/core';
 import { Storage } from '@ionic/storage';
 import { storageConfig } from './storageConfig';
 
+/**
+ * Cache install
+ *
+ * @export
+ * @param {*} name
+ * @param {*} store
+ * @param {string} [driver=['sqlite', 'indexeddb', 'localstorage']]
+ */
 export function install(
   name,
   store,

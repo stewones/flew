@@ -9,7 +9,7 @@ import { parse } from './parse';
  * @export
  * @param {*} config
  * @param {*} [sdk=Parse]
- * @returns
+ * @returns {Parse} Parse instance configured
  */
 export function install(config, sdk = Parse) {
   const isDriverAvailable = Rebased.drivers.find(it => it === 'parse');

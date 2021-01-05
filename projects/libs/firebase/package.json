@@ -1,6 +1,6 @@
 {
 	"name": "@rebased/firebase",
-	"version": "0.0.16",
+	"version": "0.0.17",
 	"dependencies": {
 		"firebase": "^8.1.2",
 		"tslib": "^2.0.0"

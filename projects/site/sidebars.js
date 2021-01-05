@@ -1,7 +1,8 @@
 module.exports = {
   docs: {
-    Introduction: ['getting-started'],
+    Intro: ['welcome', 'packages', 'changelog', 'getting-started'],
     Core: [
+      'core/setup',
       'core/options',
       'core/fetch',
       'core/chain',
@@ -10,7 +11,7 @@ module.exports = {
     ],
 
     State: [
-      'state/getting-started',
+      'state/create-store',
       'state/get-state',
       'state/connect-data',
       'state/set-state',

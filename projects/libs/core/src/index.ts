@@ -1,4 +1,3 @@
-//
 // platform
 export * from './fetch/browser';
 export * from './fetch/server';
@@ -6,20 +5,7 @@ export * from './version';
 export * from './global';
 export * from './driver/http';
 export * from './symbols/rebased';
+export * from './effects';
 
-//
-// effects
-export * from './effects/fetch';
-export * from './effects/guid';
-export * from './effects/isServer';
-export * from './effects/isOnline';
-export * from './effects/subscribe';
-export * from './effects/publish';
-export * from './effects/unsubscribe';
-export * from './effects/logger';
-export * from './effects/sha';
-export * from './effects/diff';
-
-//
 // types
 export * from './interfaces';

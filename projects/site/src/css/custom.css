@@ -29,15 +29,20 @@
   --ifm-blockquote-color: #1a1d1e;
   --ifm-blockquote-color-dark: #ff8b3d;
 
-  --ifm-navbar-background-color: #1c1c1c;
+  /* --ifm-navbar-background-color: #1c1c1c; */
   --docsearch-searchbox-background: #121415;
   --ifm-toc-border-color: #222222;
   --ifm-table-border-color: #222222;
   --ifm-color-emphasis-300: #333333;
 }
 
+:root[data-theme='dark'] .navbar .navbar__title {
+  color: #eeeeee;
+  font-size: 20px;
+}
+
 :root[data-theme='dark'] .hero.hero--primary {
-  --ifm-hero-background-color: #7731ac;
+  --ifm-hero-background-color: #9449cc;
   --ifm-hero-text-color: #ffffff;
 }
 

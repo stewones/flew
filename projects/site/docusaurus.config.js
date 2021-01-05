@@ -1,7 +1,7 @@
 module.exports = {
   title: 'Rebased',
-  tagline: 'Powerful toolchain for building javascript applications',
-  url: 'https://rebased.app',
+  tagline: 'Fetch and data management reimagined',
+  url: 'https://rebased.io',
   baseUrl: '/',
   favicon: 'images/favicon.png',
   organizationName: 'rebased',
@@ -19,7 +19,8 @@ module.exports = {
         src: 'images/r.svg'
       },
       items: [
-        { label: 'API', to: 'core/api', position: 'right' }
+        { label: 'Packages', to: 'packages', position: 'right' },
+        { label: 'Changelog', to: 'changelog', position: 'right' }
         // {
         //   label: 'Getting Started',
         //   to: 'getting-started',
@@ -54,8 +55,8 @@ module.exports = {
       ],
       logo: {
         alt: 'Rebased Logo',
-        src: 'images/r.svg',
-        href: 'https://rebased.app'
+        src: 'images/r-trace.svg',
+        href: 'https://rebased.io'
       },
       copyright: `<small><span>Copyright © ${new Date().getFullYear()}</span><br />handcrafted by <a href="https://twitter.com/stewones" rel="noopener" target="_blank">Stew</a></small>`
     },

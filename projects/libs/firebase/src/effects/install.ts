@@ -4,12 +4,20 @@ import { FirebaseConnector, FirestoreConnector } from './connectors';
 import { FirebaseDriver } from '../driver/firebase';
 import { FirestoreDriver } from '../driver/firestore';
 
-export function install(options: {
+export interface FirebaseInstallOptions {
   config?: any;
   firebaseInstance?: any;
   firestoreInstance?: any;
   namespace?: string;
-}) {
+}
+
+/**
+ * Firebase install
+ *
+ * @export
+ * @param {FirebaseInstallOptions} options
+ */
+export function install(options: FirebaseInstallOptions) {
   const sdk = Firebase.default;
 
   if (

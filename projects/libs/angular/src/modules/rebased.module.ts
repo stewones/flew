@@ -4,11 +4,12 @@ import {
   ModuleWithProviders,
   NgModule
 } from '@angular/core';
-import { Rebased, RebasedOptions } from '@rebased/core';
+import { Rebased, RebasedOptions, install } from '@rebased/core';
 
 @Injectable()
 export class RebasedAngularSetup {
   constructor(@Inject('RebasedAngularOptions') public options) {
+    install(options);
     for (const k in options) {
       Rebased.options[k] = options[k];
     }

@@ -21,46 +21,6 @@ Set of options for Rebased initialisation
 | useCache         | `true`       | whether use cache for results                                                                                     |
 | useState         | `true`       | whether use memoized state for results                                                                            |
 
-## Applying Globally
-
-Make sure to execute this only once. For angular users we have the `RebasedModule`
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
-<Tabs
-defaultValue="vanilla"
-values={[
-{label: 'Vanilla', value: 'vanilla'},
-{label: 'Angular', value: 'angular'}
-]}>
-<TabItem value="vanilla">
-
-```js
-import { Rebased } from '@rebased/core';
-
-Rebased.options = {
-  silent: false,
-  driver: 'parse'
-};
-```
-
-</TabItem>
-<TabItem value="angular">
-
-```ts
-import { RebasedModule } from '@rebased/angular';
-
-RebasedModule.forRoot({
-  driver: 'parse', // define default data driver
-  silent: false, // whether show logs
-  timestamp: false // auto save timestamp
-});
-```
-
-</TabItem>
-</Tabs>
-
 ## Available Drivers
 
 - http
