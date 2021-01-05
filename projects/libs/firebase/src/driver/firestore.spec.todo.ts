@@ -236,7 +236,7 @@
 //       firestore: firestoreStub
 //     };
 //     driver = new FirestoreDriverMock({
-//       driver: 'firestore'
+//       from: 'firestore'
 //     });
 //     try {
 //       await driver.find({}, 'my-key').toPromise();
@@ -325,7 +325,7 @@
 //       firestore: firestoreStub
 //     };
 //     driver = new FirestoreDriverMock({
-//       driver: 'firestore',
+//       from: 'firestore',
 //       collection: collection
 //     });
 //     const spy = jest.spyOn(FirestoreDriverMock.prototype, 'limit');
@@ -355,7 +355,7 @@
 //       }
 //     };
 //     driver = new FirestoreDriverMock({
-//       driver: 'firestore',
+//       from: 'firestore',
 //       collection: collection
 //     });
 //     const spy = jest.spyOn(FirestoreDriverMock.prototype, 'limit');
@@ -370,7 +370,7 @@
 //       }
 //     };
 //     driver = new FirestoreFailMock({
-//       driver: 'firestore',
+//       from: 'firestore',
 //       collection: collection,
 
 //       chain: { a: 123 }

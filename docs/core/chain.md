@@ -1,28 +1,130 @@
 ---
 id: chain
-title: Chaining
+title: Chain
 description: 'Set of operations for Rebased calls'
 hide_title: false
 ---
 
-We call chaining api the set of operations we can do on a single call, combining queries and controlling results from state, cache and network.
+The chaining api is responsible for operations we can do at runtime in a single call, combining queries and controlling results from drivers, state, cache and network all together.
 
 ## Example
+
+For a fresh result from network we can do
 
 ```js
 import { fetch } from '@rebased/core';
 
 fetch('kitty', {
   silent: false,
-  driver: 'http',
+  from: 'http',
   baseURL: 'https://api.thecatapi.com',
   endpoint: '/v1'
 })
-  .key('random-kitty') // chain
-  .cache(false) // chain
-  .state(false) // chain
-  .get('/images/search?size=small') // get is the verb
+  .key('a-random-kitty') // identify this result
+  .cache(false) // never use cache as result
+  .state(false) // never use memoized state as result
+  .get('/images/search?size=small')
+  .subscribe(kitty => console.log(kitty)); // fresh result from network
+```
+
+## Cache response
+
+```js
+import { fetch } from '@rebased/core';
+
+fetch('kitty', {
+  silent: false,
+  from: 'http',
+  baseURL: 'https://api.thecatapi.com',
+  endpoint: '/v1'
+})
+  .key('a-random-kitty') // identify this result
+  .cache(true) // use cache as result
+  .state(false) // never use memoized state as result
+  .get('/images/search?size=small')
+  // first result from this stream should be from cache
+  // but network is still being requested
+  // case network result differs from cache
+  // the stream will end up having 2 responses in a row
+  // unless the result from network is the same as in the cache
+  // then you should expect only one response in this subscription
   .subscribe(kitty => console.log(kitty));
+```
+
+> Except for `.on` calls, all observables from fetch are destroyed internally once the network response lands.
+
+## State response
+
+```js
+import { fetch } from '@rebased/core';
+
+fetch('kitty', {
+  silent: false,
+  from: 'http',
+  baseURL: 'https://api.thecatapi.com',
+  endpoint: '/v1'
+})
+  .key('a-random-kitty') // identify this result
+  .cache(false) // don't use cache as result
+  .state(true) //  use memoized state as result
+  .get('/images/search?size=small')
+  // first result from this stream should be from network
+  // as there wasn't any memoized result yet
+  // but network is still being requested
+  // case a memoized state exists and network result differs from it
+  // the stream will end up having 2 responses in a row
+  // unless the result from network is the same as in the state
+  // then you should expect only one response in this subscription
+  .subscribe(kitty => console.log(kitty));
+```
+
+## All together
+
+```js
+import { fetch } from '@rebased/core';
+
+fetch('kitty', {
+  silent: false,
+  from: 'http',
+  baseURL: 'https://api.thecatapi.com',
+  endpoint: '/v1'
+})
+  .key('a-random-kitty') // identify this result
+  .cache(true) // use cache as result
+  .state(true) //  use memoized state as result
+  .get('/images/search?size=small')
+  // same rule above is applied in this sequence
+  // 1 - response from cache or state (the faster one)
+  // 2 - response from network (case it differs from previous result)
+  .subscribe(kitty => console.log(kitty));
+```
+
+:::note
+Cache and state are enabled by default in case of its packages are present and running
+:::
+
+## Using rxjs toPromise()
+
+Another way to guarantee responses only from network, or in case you're working with fetch calls on server where there's no cache/state needs, you can take advantage of rxjs' `toPromise()`
+
+```js
+import { fetch } from '@rebased/core';
+
+fetch('kitty', {
+  silent: false,
+  from: 'http',
+  baseURL: 'https://api.thecatapi.com',
+  endpoint: '/v1'
+})
+  .key('a-random-kitty') // identify this result
+  .cache(true) // use cache as result
+  .state(true) //  use memoized state as result
+  .get('/images/search?size=small')
+  .toPromise()
+  // even though we have defined .cache and .state above
+  // this promise will only be resolved once the network call land
+  // and it will only have the network response as result
+  .then(kitty => console.log(kitty));
 ```
 
 
@@ -48,33 +150,75 @@ fetch('kitty', {
 
 
 
-## Availability
-|                                          | http | firebase | firestore | parse |
-| ---------------------------------------- | ---- | -------- | --------- | ----- |
-| <a href="/core/api">from</a>             | ✅    | ✅        | ✅         | ✅     |
-| <a href="/core/api">network</a>          | ✅    | ✅        | ✅         | ✅     |
-| <a href="/core/api">key</a>              | ✅    | ✅        | ✅         | ✅     |
-| <a href="/core/api">query</a>            | ⛔️   | ⛔️       | ⛔️        | ✅     |
-| <a href="/core/api">where</a>            | ⛔️   | ✅        | ✅         | ✅     |
-| <a href="/core/api">sort</a>             | ⛔️   | ⛔️       | ✅         | ✅     |
-| <a href="/core/api">size</a>             | ⛔️   | ⛔️       | ✅         | ✅     |
-| <a href="/core/api">at</a>               | ⛔️   | ⛔️       | ✅         | ⛔️    |
-| <a href="/core/api">after</a>            | ⛔️   | ⛔️       | ✅         | ✅     |
-| <a href="/core/api">ref</a>              | ⛔️   | ✅        | ⛔️        | ⛔️    |
-| <a href="/core/api">http</a>             | ✅    | ⛔️       | ⛔️        | ⛔️    |
-| <a href="/core/api">include</a>          | ⛔️   | ⛔️       | ⛔️        | ✅     |
-| <a href="/core/api">doc</a>              | ⛔️   | ⛔️       | ✅         | ✅     |
-| <a href="/core/api">master</a>           | ⛔️   | ⛔️       | ⛔️        | ✅     |
-| <a href="/core/api">token</a>            | ⛔️   | ⛔️       | ⛔️        | ✅     |
-| <a href="/core/api">object</a>           | ⛔️   | ⛔️       | ⛔️        | ✅     |
-| <a href="/core/api">cache</a>            | ⚙    | ⚙        | ⚙         | ⚙     |
-| <a href="/core/api">select</a>           | ⛔️   | ⛔️       | ⛔️        | ✅     |
-| <a href="/core/api">state</a>            | ✅    | ✅        | ✅         | ✅     |
-| <a href="/core/api">near</a>             | ⛔️   | ⛔️       | ⛔️        | ✅     |
-| <a href="/core/api">withinKilometers</a> | ⛔️   | ⛔️       | ⛔️        | ✅     |
-| <a href="/core/api">withinMiles</a>      | ⛔️   | ⛔️       | ⛔️        | ✅     |
-| <a href="/core/api">diff</a>             | ✅    | ✅        | ✅         | ✅     |
-| <a href="/core/api">response</a>         | ✅    | ✅        | ✅         | ✅     |
 
 
-✅ available ⛔️ unavailable ⚙ only in browser
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Chain Availability
+|                                                                       | http                                                        | firebase                                                    | firestore                                                   | parse                                                       |
+| --------------------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
+| <a href="/core/api#RebasedCore+from">from</a>                         | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+network">network</a>                   | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+key">key</a>                           | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+query">query</a>                       | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+where">where</a>                       | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+sort">sort</a>                         | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+size">size</a>                         | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+at">at</a>                             | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">✅</span>                     | <span className="block-center">⛔️</span>                    |
+| <a href="/core/api#RebasedCore+after">after</a>                       | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+ref">ref</a>                           | <span className="block-center">⛔️</span>                    | <span className="block-center">✅</span>                     | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    |
+| <a href="/core/api#RebasedCore+http">http</a>                         | <span className="block-center">✅</span>                     | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    |
+| <a href="/core/api#RebasedCore+include">include</a>                   | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+doc">doc</a>                           | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+master">master</a>                     | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+token">token</a>                       | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+object">object</a>                     | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+cache">cache</a>                       | <small className="block-center">🛣️ <br />`browser`</small> | <small className="block-center">🛣️ <br />`browser`</small> | <small className="block-center">🛣️ <br />`browser`</small> | <small className="block-center">🛣️ <br />`browser`</small> |
+| <a href="/core/api#RebasedCore+select">select</a>                     | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+state">state</a>                       | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+near">near</a>                         | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+withinKilometers">withinKilometers</a> | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+withinMiles">withinMiles</a>           | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">⛔️</span>                    | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+diff">diff</a>                         | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     |
+| <a href="/core/api#RebasedCore+response">response</a>                 | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     | <span className="block-center">✅</span>                     |
+
+
+<div className="availability">
+
+| symbol                                    | meaning                                              | description                               |
+| ----------------------------------------- | ---------------------------------------------------- | ---------------------- ------------------ |
+| <span className="block-center">✅ </span> | <span className="block-center"> available </span>    | method is available for this driver   |
+| <span className="block-center">⛔️ </span> | <span className="block-center"> unavailable </span>  | method is not allowed for this driver | 
+| <span className="block-center">🛣️ </span> | <span className="block-center"> routed </span>       | method is routed to another platform    | 
+
+</div>

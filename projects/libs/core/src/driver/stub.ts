@@ -64,7 +64,7 @@ export const FirebaseStub = ({
           data: [{ a: 1 }, { b: 2 }, { c: 3 }],
           key: 'mocked-key',
           collection: 'mocked-collection',
-          driver: 'mocked-driver',
+          from: 'mocked-driver',
           response: {}
         });
       },
@@ -87,7 +87,7 @@ export const FirebaseStub = ({
           data: [{ a: 1 }, { b: 2 }, { c: 3 }],
           key: 'mocked-key',
           collection: 'mocked-collection',
-          driver: 'mocked-driver',
+          from: 'mocked-driver',
           response: {}
         });
       },

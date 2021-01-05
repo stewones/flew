@@ -7,7 +7,7 @@ describe('RRSymbol', () => {
   //   expect(spy).toBeCalledWith(`rr rulez!`);
   // });
   // it('should get options', () => {
-  //   expect(optionGet()).toEqual({ driver: 'firestore' });
+  //   expect(optionGet()).toEqual({ from: 'firestore' });
   // });
   // it('should set options', () => {
   //   optionSet({ useLog: false });

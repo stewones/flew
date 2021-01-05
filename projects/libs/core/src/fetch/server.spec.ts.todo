@@ -210,7 +210,7 @@ describe('Records', () => {
   //       firestore: { _: 'firestore instance' }
   //     }
   //   });
-  //   lib_.init({ driver: '' } as any);
+  //   lib_.init({ from: '' } as any);
   //   expect(lib_.from()).toEqual('firestore');
   // });
 
@@ -307,7 +307,7 @@ describe('Records', () => {
   //       expect(r).toEqual({
   //         collection: 'foo-collection',
   //         data: [1, 2, 3],
-  //         driver: 'http',
+  //         from: 'http',
   //         key:
   //           'foo-collection://0c023abe328e9c53d23457a7f698b38e370e0a83d081ba7779b91dd3b45cbf7b',
   //         response: [1, 2, 3]
@@ -335,7 +335,7 @@ describe('Records', () => {
   //       expect(r).toEqual({
   //         collection: 'foo-collection',
   //         data: [1, 2, 3],
-  //         driver: 'http',
+  //         from: 'http',
   //         key:
   //           'foo-collection://0c023abe328e9c53d23457a7f698b38e370e0a83d081ba7779b91dd3b45cbf7b',
   //         response: [1, 2, 3]
@@ -364,7 +364,7 @@ describe('Records', () => {
   //       expect(r).toEqual({
   //         collection: 'foo-collection',
   //         data: [1, 2, 3],
-  //         driver: 'http',
+  //         from: 'http',
   //         key:
   //           'foo-collection://0c023abe328e9c53d23457a7f698b38e370e0a83d081ba7779b91dd3b45cbf7b',
   //         response: [1, 2, 3]
@@ -393,7 +393,7 @@ describe('Records', () => {
   //       expect(r).toEqual({
   //         collection: 'foo-collection',
   //         data: [1, 2, 3],
-  //         driver: 'http',
+  //         from: 'http',
   //         key:
   //           'foo-collection://a2e6d09860274a6824131858958a4f0eaf2f865d3542486254e82fbe37d8ca64',
   //         response: [1, 2, 3]
@@ -532,7 +532,7 @@ describe('Records', () => {
   // });
 
   // it('should implement [reboot] chaining', () => {
-  //   lib.init({ driver: 'firebase' });
+  //   lib.init({ from: 'firebase' });
   //   lib.reboot();
   //   expect(lib.from()).toEqual(R_DRIVER);
   // });

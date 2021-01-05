@@ -14,6 +14,10 @@
 
   --ifm-code-padding-vertical: 0.1rem;
   --ifm-code-padding-horizontal: 0.2rem;
+
+  --ifm-toc-border-color: #eeeeee;
+  --ifm-table-border-color: #eeeeee;
+  --ifm-color-emphasis-300: #eeeeee;
 }
 
 :root[data-theme='dark'] {
@@ -85,8 +89,25 @@ footer small {
   line-height: 19px;
   display: block;
 }
+
 footer small span {
+  opacity: 0.85;
+}
+
+.footer__copyright {
   opacity: 0.55;
+}
+
+.footer__copyright:hover {
+  opacity: 1;
+}
+
+a[href="https://rebased.io"] {
+  opacity: 0.75 !important;
+}
+
+a[href="https://rebased.io"]:hover {
+  opacity: 1 !important;
 }
 
 .menu__link {
@@ -144,6 +165,11 @@ footer small span {
 
 .docSidebarContainer_node_modules-\@docusaurus-theme-classic-src-theme-DocPage- {
   border-right: 0 !important;
+}
+
+.block-center {
+  display: block;
+  text-align: center;
 }
 
 /* .codeBlockLines_node_modules-\@docusaurus-theme-classic-src-theme-CodeBlock- {

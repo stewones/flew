@@ -1,6 +1,6 @@
 module.exports = {
   docs: {
-    Intro: ['welcome', 'packages', 'changelog', 'getting-started'],
+    Intro: ['welcome', 'packages', 'changelog', 'get-started'],
     Core: [
       'core/setup',
       'core/options',

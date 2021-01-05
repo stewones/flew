@@ -37,7 +37,7 @@ const markdownOrigin = fs.readFileSync('../../docs/core/chain.md', {
 });
 const markdownResult = [];
 
-const markdownSplit = markdownOrigin.split('## Availability');
+const markdownSplit = markdownOrigin.split('## Chain Availability');
 
 for (let counter = 0; counter < markdownSplit.length - 1; counter++) {
   markdownResult.push(markdownSplit[counter]);
@@ -46,7 +46,7 @@ for (let counter = 0; counter < markdownSplit.length - 1; counter++) {
 markdown = markdownResult.join('\n');
 
 markdown += `
-## Availability
+## Chain Availability
 `;
 
 const matrix = [['']];
@@ -57,7 +57,7 @@ for (const driver in Rebased.driver) {
 
 const actions = Rebased.driver.http.chaining;
 for (const action in actions) {
-  matrix.push([`<a href="/core/api">${action}</a>`]);
+  matrix.push([`<a href="/core/api#RebasedCore+${action}">${action}</a>`]);
 }
 
 let row = 1;
@@ -67,7 +67,13 @@ for (const driver in Rebased.driver) {
   for (const verb in available) {
     const spec = JSON.stringify(available[verb]);
 
-    matrix[col].push(specMap[spec] ? specMap[spec] : `⚙`);
+    matrix[col].push(
+      specMap[spec]
+        ? `<span className="block-center">${specMap[spec]}</span>`
+        : '<small className="block-center">🛣️ <br />`' +
+            JSON.parse(spec) +
+            '`</small>'
+    );
 
     col += 1;
   }
@@ -77,7 +83,18 @@ for (const driver in Rebased.driver) {
 
 markdown += table(matrix);
 markdown += `\n\n\n`;
-markdown += `✅ available ⛔️ unavailable ⚙ only in browser`;
+
+markdown += `<div className="availability">\n`;
+
+markdown += `
+| symbol                                    | meaning                                              | description                               |
+| ----------------------------------------- | ---------------------------------------------------- | ---------------------- ------------------ |
+| <span className="block-center">✅ </span> | <span className="block-center"> available </span>    | method is available for this driver   |
+| <span className="block-center">⛔️ </span> | <span className="block-center"> unavailable </span>  | method is not allowed for this driver | 
+| <span className="block-center">🛣️ </span> | <span className="block-center"> routed </span>       | method is routed to another platform    | 
+`;
+
+markdown += `\n</div>`;
 
 console.log(markdown);
 

@@ -1,3 +1,10 @@
+---
+id: welcome
+title: Welcome
+description: 'Great resources to get started learning and using Rebased'
+hide_title: true
+---
+
 # Rebased [![CI](https://github.com/rebasedjs/rebasedjs/workflows/CI/badge.svg)](https://github.com/rebasedjs/rebasedjs/actions)
 
 **Rebased** is a powerful reimagined toolchain providing an unified api for fetch and data management

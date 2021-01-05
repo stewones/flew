@@ -19,8 +19,10 @@ module.exports = {
         src: 'images/r.svg'
       },
       items: [
-        { label: 'Packages', to: 'packages', position: 'right' },
-        { label: 'Changelog', to: 'changelog', position: 'right' }
+        { label: 'API', to: 'core/api', position: 'right' },
+        { label: 'Changelog', to: 'changelog', position: 'right' },
+        { label: 'Packages', to: 'packages', position: 'right' }
+
         // {
         //   label: 'Getting Started',
         //   to: 'getting-started',
@@ -42,17 +44,17 @@ module.exports = {
     },
     footer: {
       style: 'light',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Getting Started',
-              to: 'getting-started'
-            }
-          ]
-        }
-      ],
+      // links: [
+      //   {
+      //     title: 'Docs',
+      //     items: [
+      //       {
+      //         label: 'Getting Started',
+      //         to: 'getting-started'
+      //       }
+      //     ]
+      //   }
+      // ],
       logo: {
         alt: 'Rebased Logo',
         src: 'images/r-trace.svg',

@@ -12,7 +12,7 @@ export const Rebased: RebasedProtocol = {
     silent: false,
     driver: R_DRIVER,
     identifier: R_IDENTIFIER,
-    disableTimestamp: false,
+    timestampEnabled: false,
     disableAutoID: false,
     timestampCreated: R_TIMESTAMP_CREATED,
     timestampUpdated: R_TIMESTAMP_UPDATED,

@@ -146,7 +146,7 @@
 //   //       expect(r).toEqual({
 //   //         collection: 'foo-collection',
 //   //         data: [1, 2, 3],
-//   //         driver: 'http',
+//   //         from: 'http',
 //   //         key:
 //   //           'foo-collection://ce7f8c3d4d180e4d01e7e074af47f093f79e38b793b69f344f4d4b8be455397a',
 //   //         response: [1, 2, 3]
@@ -178,7 +178,7 @@
 //   //       expect(r).toEqual({
 //   //         collection: 'foo-collection',
 //   //         data: [1, 2, 3],
-//   //         driver: 'http',
+//   //         from: 'http',
 //   //         key:
 //   //           'foo-collection://9bec985c576e8467c4b1986bda0e6e09fc421796c2e97c7ecb5112784ef4137f',
 //   //         response: [1, 2, 3]
@@ -210,7 +210,7 @@
 //   //       expect(r).toEqual({
 //   //         collection: 'foo-collection',
 //   //         data: [1, 2, 3],
-//   //         driver: 'http',
+//   //         from: 'http',
 //   //         key:
 //   //           'foo-collection://824cb3473e9415ed8136c7e97d9cb0027542fe1b78ea587cf9c1de22c666be03',
 //   //         response: [1, 2, 3]
@@ -272,7 +272,7 @@
 //   //       expect(r).toEqual({
 //   //         collection: 'foo-collection',
 //   //         data: [{ a: 1, b: 2, c: 3 }],
-//   //         driver: 'firestore',
+//   //         from: 'firestore',
 //   //         key:
 //   //           'foo-collection://dd4bc65734b5835fbe48cec541fa70bea687d5b9874e08d9b0922b9aa1d792bb',
 //   //         response: { empty: undefined, meta: undefined, size: undefined }
@@ -334,7 +334,7 @@
 //   //       expect(r).toEqual({
 //   //         collection: 'foo-collection',
 //   //         data: { a: 1, b: 2, c: 3 },
-//   //         driver: 'firestore',
+//   //         from: 'firestore',
 //   //         key:
 //   //           'foo-collection://2aff32a65583745d3ef90a7e6e1102ff4027bbc0f3a605e97018ce6a01d6623a',
 //   //         response: { empty: undefined, meta: undefined, size: undefined }

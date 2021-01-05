@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosInstance } from 'axios';
-import { get } from 'lodash';
+import { get, isArray } from 'lodash';
 import { from, Observable, PartialObserver } from 'rxjs';
 import { RebasedDriver, RebasedDriverOption } from '../interfaces/driver';
 import { RebasedOptions } from '../interfaces/options';
@@ -34,9 +34,9 @@ export class HttpDriver implements RebasedDriver {
     network: true,
     key: true,
     query: false,
-    where: false,
+    where: true,
     sort: false,
-    size: false,
+    size: true,
     at: false,
     after: false,
     ref: false,
@@ -96,8 +96,28 @@ export class HttpDriver implements RebasedDriver {
 
     //
     // set path to be requestes
-    const url = `${baseURL || ''}${endpoint || ''}${options.pathname ||
+    let url = `${baseURL || ''}${endpoint || ''}${options.pathname ||
       ''}${path || ''}`;
+
+    //
+    // set limit
+    if (chain.size) {
+      url += !url.includes('?') ? '?' : '';
+      url += `limit=${chain.size}`;
+    }
+
+    //
+    // set where
+    if (isArray(chain.where)) {
+      url += !url.includes('?') ? '?' : '';
+      chain.where.forEach(
+        (it, i) =>
+          (url += `${i > 0 || url.includes('?') ? '&' : ''}${
+            it.field
+          }${this.translateOperator(it.operator)}${it.value}`)
+      );
+    }
+
     return new Observable((observer: PartialObserver<T>) => {
       //
       // error callback
@@ -178,5 +198,13 @@ export class HttpDriver implements RebasedDriver {
     chain: RebasedChainPayload
   ): Observable<T> {
     return this.executeRequest('delete', path, key, payload, chain);
+  }
+
+  private translateOperator(operator: string) {
+    const options = {
+      '==': '=',
+      '!==': '!='
+    };
+    return options[operator] || operator;
   }
 }

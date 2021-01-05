@@ -6,7 +6,6 @@ export interface RebasedOptions {
   collection?: string; // eg: 'todos'
   identifier?: string; // default to doc_id
   disableAutoID?: boolean; // disable doc_id generation
-  disableTimestamp?: boolean;
 
   baseURL?: string; // eg: http://35.102.182.155:9200
   endpoint?: string; // eg: /api
@@ -16,9 +15,10 @@ export interface RebasedOptions {
   from?: RebasedDriverOption;
   driver?: RebasedDriverOption;
 
+  timestampEnabled?: boolean;
+  timestampObject?: boolean;
   timestampCreated?: string; // field name
   timestampUpdated?: string; // field name
-  timestampObject?: boolean;
 
   silent?: boolean; // controls whether or not show internal logs
   logger?: Logger;

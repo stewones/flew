@@ -40,7 +40,7 @@ export class FirebaseDriver implements RebasedDriver {
     query: false,
     where: true,
     sort: false,
-    size: false,
+    size: true,
     at: false,
     after: false,
     ref: true,
@@ -106,16 +106,25 @@ export class FirebaseDriver implements RebasedDriver {
 
       //
       // add where
-      if (
-        isArray(chain.where) &&
-        isObject(chain.where[0]) &&
-        chain.where[0].operator === '=='
-      ) {
-        firebase = firebase.orderByChild(chain.where[0].field);
-        firebase = firebase.equalTo(chain.where[0].value);
-        this.log().success()(
-          `firebase where -> ${chain.where[0].field} ${chain.where[0].operator} ${chain.where[0].value}`
-        );
+      chain.where.forEach((it, i) => {
+        if (it.operator === '==') {
+          if (i === 0) {
+            firebase = firebase.orderByChild(it.field);
+            firebase = firebase.equalTo(it.value);
+            this.log().success()(
+              `firebase where -> ${it.field} ${it.operator} ${it.value}`
+            );
+          } else {
+            this.log().warn()(
+              `firebase where -> can't combine multiple where for firebase driver. used ${it.field} ${it.operator} ${it.value}`
+            );
+          }
+        }
+      });
+
+      // add size
+      if (chain.size) {
+        firebase = firebase.limitToFirst(chain.size);
       }
 
       //

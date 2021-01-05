@@ -268,7 +268,7 @@ export class FirestoreDriver implements RebasedDriver {
 
       //
       // auto update timestamp
-      if (!this.driverOptions.disableTimestamp) {
+      if (!this.driverOptions.timestampEnabled) {
         const timestamp = this.driverOptions.timestampObject
           ? new Date()
           : new Date().toISOString();
@@ -320,7 +320,7 @@ export class FirestoreDriver implements RebasedDriver {
 
       //
       // auto update timestamp
-      if (!this.driverOptions.disableTimestamp) {
+      if (!this.driverOptions.timestampEnabled) {
         const timestamp = this.driverOptions.timestampObject
           ? new Date()
           : new Date().toISOString();

@@ -82,7 +82,7 @@ hide_title: true
   import { RebasedModule } from '@rebased/angular';
   //... 
   RebasedModule.forRoot({
-    driver: 'parse', // define default data driver
+    from: 'parse', // define default data driver
     silent: false, // whether show logs
     timestamp: false // auto save timestamp
     timestampCreated: 'createdAt',

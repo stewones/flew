@@ -108,7 +108,7 @@
 //           response: {},
 //           key: '',
 //           entry: '',
-//           driver: 'http'
+//           from: 'http'
 //         });
 //       });
 //     Rebased.connector = {
@@ -130,7 +130,7 @@
 //           response: [1, 2, 3],
 //           key: '',
 //           entry: '',
-//           driver: 'http'
+//           from: 'http'
 //         });
 //       });
 //     Rebased.connector = {
@@ -152,7 +152,7 @@
 //           response: {},
 //           key: '',
 //           entry: '',
-//           driver: 'http'
+//           from: 'http'
 //         });
 //       });
 //   });
