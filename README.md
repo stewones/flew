@@ -8,6 +8,19 @@
 $ npm install --save @rebased/core
 ```
 
+## Docs
+
+https://rebased.io
+
+## Examples
+
+- [Todo App](/projects/apps/todo)
+- [Counter App](/projects/apps/counter)
+
+## Changelog
+
+Check out our [`changelog`](/changelog.md)
+
 ## Packages
 
 | Project                                     | Package                                                                    | Version                                                                                                                      | Framework |
@@ -19,19 +32,6 @@ $ npm install --save @rebased/core
 | [Parse](https://rebased.io/parse)           | [`@rebased/parse`](https://www.npmjs.com/package/@rebased/parse)           | [![version](https://img.shields.io/npm/v/@rebased/parse/latest.svg)](https://www.npmjs.com/package/@rebased/parse)           | agnostic  |
 | [Angular](https://rebased.io/angular)       | [`@rebased/angular`](https://www.npmjs.com/package/@rebased/angular)       | [![version](https://img.shields.io/npm/v/@rebased/angular/latest.svg)](https://www.npmjs.com/package/@rebased/angular)       |  angular  |
 | [Schematics](https://rebased.io/schematics) | [`@rebased/schematics`](https://www.npmjs.com/package/@rebased/schematics) | [![version](https://img.shields.io/npm/v/@rebased/schematics/latest.svg)](https://www.npmjs.com/package/@rebased/schematics) |  angular  |
-
-## Changelog
-
-Check out our [`changelog`](/changelog.md)
-
-## Examples
-
-- [Counter App](/projects/apps/counter)
-- [Todo App](/projects/apps/todo)
-
-## Docs
-
-https://rebased.io
 
 ## License
 
