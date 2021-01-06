@@ -1,3 +1,7 @@
+## [0.0.20](https://github.com/rebasedjs/rebasedjs/compare/v0.0.19...v0.0.20) (2021-01-06)
+
+
+
 ## [0.0.19](https://github.com/rebasedjs/rebasedjs/compare/v0.0.18...v0.0.19) (2021-01-06)
 
 
