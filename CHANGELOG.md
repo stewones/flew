@@ -1,3 +1,12 @@
+## [0.0.21](https://github.com/rebasedjs/rebasedjs/compare/v0.0.20...v0.0.21) (2021-01-06)
+
+
+### Bug Fixes
+
+* angular module default driver init ([19472b8](https://github.com/rebasedjs/rebasedjs/commit/19472b86719dae9bc5427a5da0cba37943db450a))
+
+
+
 ## [0.0.20](https://github.com/rebasedjs/rebasedjs/compare/v0.0.19...v0.0.20) (2021-01-06)
 
 
