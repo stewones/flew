@@ -1,6 +1,6 @@
 {
 	"name": "@rebased/angular",
-	"version": "0.0.18",
+	"version": "0.0.19",
 	"dependencies": {
 		"@angular/common": "~11.0.0",
 		"@angular/core": "~11.0.0",
