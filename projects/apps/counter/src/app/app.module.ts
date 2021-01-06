@@ -7,7 +7,12 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 
-import { CacheModule, FirebaseModule, StateModule } from '@rebased/angular';
+import {
+  CacheModule,
+  FirebaseModule,
+  RebasedModule,
+  StateModule
+} from '@rebased/angular';
 import { environment } from '../environments/environment';
 
 import { counter } from './reducers';
@@ -37,6 +42,16 @@ import { FIREBASE_CONFIG } from './configs/firebase';
     CacheModule.forRoot({
       dbName: environment.dbName,
       dbStore: environment.dbStore
+    }),
+    RebasedModule.forRoot({
+      silent: true,
+      driver: 'firestore',
+      timestampCreated: 'createdAt',
+      timestampUpdated: 'updatedAt',
+      identifier: 'objectId',
+      httpConfig: {
+        timeout: 60 * 1000 * 2
+      }
     })
   ],
   providers: [],

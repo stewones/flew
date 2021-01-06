@@ -28,24 +28,30 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    fetch('counter')
-      .from('firestore')
-      // .state(false)
-      // .cache(false)
-      .on()
-      .subscribe(numbers => {
-        console.log('realtime counter from firestore', numbers[0]?.total);
-        this.displayFirestoreRealtime = numbers[0]?.total;
-        this.detector.detectChanges();
-      });
-
-    fetch('counter')
-      .from('firestore')
-      .where('lol', '==', 'do not exists')
-      .findOne()
-      .subscribe(it => {
-        console.log('non existent result');
-      });
+    // fetch('counter')
+    //   .from('firestore')
+    //   // .state(false)
+    //   // .cache(false)
+    //   .on()
+    //   .subscribe(numbers => {
+    //     console.log('realtime counter from firestore', numbers[0]?.total);
+    //     this.displayFirestoreRealtime = numbers[0]?.total;
+    //     this.detector.detectChanges();
+    //   });
+    // fetch('counter')
+    //   .from('firestore')
+    //   .where('lol', '==', 'do not exists')
+    //   .findOne()
+    //   .subscribe(it => {
+    //     console.log('non existent result');
+    //   });
+    // fetch('counter')
+    //   // .from('firestore')
+    //   // .where('lol', '==', 'do not exists')
+    //   .findOne()
+    //   .subscribe(it => {
+    //     console.log(it, 'existent result');
+    //   });
   }
 
   increment() {

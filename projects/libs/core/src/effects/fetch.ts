@@ -4,6 +4,7 @@ import { RebasedOptions } from '../interfaces/options';
 import { FetchServer } from '../fetch/server';
 import { FetchBrowser } from '../fetch/browser';
 import { isServer } from './isServer';
+import { Rebased } from '../symbols/rebased';
 
 /**
  *
@@ -19,7 +20,7 @@ export function fetch(
 ): RebasedBridge {
   const params = init(options);
   params.collection = collection;
-  params.from = options.from || 'http';
+  params.from = options.from || Rebased.options.driver || 'http';
   return isServer() ? new FetchServer(params) : new FetchBrowser(params);
 }
 

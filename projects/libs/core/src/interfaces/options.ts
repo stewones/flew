@@ -12,8 +12,8 @@ export interface RebasedOptions {
   pathname?: string; // eg: /some/long/path/to/resource
   httpConfig?: AxiosRequestConfig;
 
-  from?: RebasedDriverOption;
-  driver?: RebasedDriverOption;
+  from?: RebasedDriverOption; // driver that can be instantiated at runtime
+  driver?: RebasedDriverOption; // default driver to be instantiated only once
 
   timestampEnabled?: boolean;
   timestampObject?: boolean;
