@@ -15,7 +15,7 @@ Speed up your workflow by using angular schematics
 $ npm install --save-dev @rebased/schematics
 ```
 
-### Templates Available
+### Available templates
 
 - component
 - page

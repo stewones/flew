@@ -1,6 +1,6 @@
 module.exports = {
   docs: {
-    Intro: ['welcome', 'packages', 'changelog', 'get-started'],
+    Intro: ['welcome', 'get-started', 'changelog'],
     Core: [
       'core/setup',
       'core/options',
@@ -21,8 +21,8 @@ module.exports = {
       'state/api'
     ],
     Cache: ['cache/setup', 'cache/api'],
-    Firebase: ['firebase/api'],
-    Parse: ['parse/api'],
+    Firebase: ['firebase/setup', 'firebase/api'],
+    Parse: ['parse/setup', 'parse/api'],
     Angular: ['angular/api', 'angular/schematics']
   }
 };

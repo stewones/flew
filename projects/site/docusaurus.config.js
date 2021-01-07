@@ -19,9 +19,9 @@ module.exports = {
         src: 'images/r.svg'
       },
       items: [
+        { label: 'Get Started', to: 'get-started', position: 'right' },
         { label: 'API', to: 'core/api', position: 'right' },
-        { label: 'Changelog', to: 'changelog', position: 'right' },
-        { label: 'Packages', to: 'packages', position: 'right' }
+        { label: 'Changelog', to: 'changelog', position: 'right' }
 
         // {
         //   label: 'Getting Started',

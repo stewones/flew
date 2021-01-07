@@ -12,7 +12,7 @@ export interface FirebaseInstallOptions {
 }
 
 /**
- * Firebase install
+ * Firebase setup
  *
  * @export
  * @param {FirebaseInstallOptions} options

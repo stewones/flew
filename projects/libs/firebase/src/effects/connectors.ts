@@ -1,3 +1,9 @@
+/**
+ * Firebase initializer
+ *
+ * @export
+ * @class FirebaseConnector
+ */
 export class FirebaseConnector {
   constructor(firebase, config) {
     try {
@@ -14,6 +20,12 @@ export class FirebaseConnector {
   }
 }
 
+/**
+ * Firestore initializer
+ *
+ * @export
+ * @class FirestoreConnector
+ */
 export class FirestoreConnector {
   constructor(firebase, config, namespace = '') {
     let firestore;

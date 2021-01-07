@@ -24,6 +24,17 @@ export class StateSetup {
   State Module 
   @export
   @class StateModule
+  @example
+  ```js
+  import { RebasedModule } from '@rebased/angular';
+  //... 
+  RebasedModule.forRoot({
+    production: true,
+    trace: false,
+    reducers: {...},
+  })
+  //...
+  ```
 */
 @NgModule()
 export class StateModule {
