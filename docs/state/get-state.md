@@ -13,7 +13,7 @@ Provides programmatically access to a piece of content whether you've made a fet
 import { getState } from '@rebased/state';
 
 console.log(getState());
-// { inner: { counter: { value: 1 } }, _state: { hello: 'there' }}
+// { inner: { counter: { value: 1 } }, _fetch: { hello: 'there' }}
 
 console.log(getState('inner.counter.value'));
 // 1
@@ -23,5 +23,5 @@ console.log(getState('hello'));
 ```
 
 :::info
-Responses from `fetch` and `setState` lives under the `_state` reducer
+Responses from `fetch` and `setState` lives under the `_fetch` reducer
 :::

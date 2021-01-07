@@ -10,64 +10,71 @@ hide_title: true
 <a name="getState"></a>
 
 ## getState(path) ⇒ <code>T</code>
+
 <p>Grab a piece of data from state synchronously</p>
 
-**Kind**: global function  
+**Kind**: global function
 
-| Param | Type |
-| --- | --- |
-| path | <code>string</code> | 
+| Param | Type                |
+| ----- | ------------------- |
+| path  | <code>string</code> |
 
 <a name="install"></a>
 
 ## install()
+
 <p>Initiate state stuff on Rebased</p>
 
 **Kind**: global function  
 <a name="resetState"></a>
 
 ## resetState()
+
 <p>Fully reset current state</p>
 
 **Kind**: global function  
 <a name="unsetState"></a>
 
 ## unsetState(key, [options]) ⇒ <code>Promise.&lt;void&gt;</code>
+
 <p>Remove memoized/cached state based on a key</p>
 
-**Kind**: global function  
+**Kind**: global function
 
-| Param | Type | Default |
-| --- | --- | --- |
-| key | <code>string</code> |  | 
-| [options] | <code>Object</code> | <code>{ cache: true }</code> | 
+| Param     | Type                | Default                      |
+| --------- | ------------------- | ---------------------------- |
+| key       | <code>string</code> |                              |
+| [options] | <code>Object</code> | <code>{ cache: true }</code> |
 
-<a name="_state"></a>
+<a name="_fetch"></a>
 
-## \_state([state], action)
+## \_fetch([state], action)
+
 <p>Memo reducer from fetch responses</p>
 
-**Kind**: global function  
+**Kind**: global function
 
-| Param | Type | Default |
-| --- | --- | --- |
-| [state] | <code>\*</code> | <code>{}</code> | 
-| action | <code>\*</code> |  | 
+| Param   | Type            | Default         |
+| ------- | --------------- | --------------- |
+| [state] | <code>\*</code> | <code>{}</code> |
+| action  | <code>\*</code> |                 |
 
 <a name="createStore"></a>
 
 ## createStore(reducers, initialState, [enhancers])
+
 <p>Create a rebased redux store</p>
 
-**Kind**: global function  
+**Kind**: global function
 
-| Param | Type |
-| --- | --- |
-| reducers | <code>\*</code> | 
-| initialState | <code>\*</code> | 
-| [enhancers] | <code>\*</code> | 
+| Param        | Type            |
+| ------------ | --------------- |
+| reducers     | <code>\*</code> |
+| initialState | <code>\*</code> |
+| [enhancers]  | <code>\*</code> |
 
-**Example**  
+**Example**
+
 ```js
 import {
   createStore,
@@ -81,22 +88,22 @@ export const counter = createReducer(0, {
   decrement: (state, action) => state - action.payload
 });
 
- // logger middleware example
- const logger = store => next => action => {
-   console.log('dispatching', action);
-   const result = next(action);
-   console.log('next state', store.getState());
-   return result;
- };
+// logger middleware example
+const logger = store => next => action => {
+  console.log('dispatching', action);
+  const result = next(action);
+  console.log('next state', store.getState());
+  return result;
+};
 
- createStore(
-   // list of reducers
-   { counter },
-   // initial state
-   { counter: 420 },
-   // composing enhancers
-   compose(applyDevTools({ production: false }), applyMiddleware(logger))
- );
+createStore(
+  // list of reducers
+  { counter },
+  // initial state
+  { counter: 420 },
+  // composing enhancers
+  compose(applyDevTools({ production: false }), applyMiddleware(logger))
+);
 
- store().subscribe(it => console.log(it, store().getState()));
+store().subscribe(it => console.log(it, store().getState()));
 ```

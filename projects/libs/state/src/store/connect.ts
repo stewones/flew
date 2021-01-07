@@ -23,7 +23,7 @@ export function connect<T>(
   }
 ): Observable<T> {
   if (options.fetch) {
-    path = `_state.${path}`;
+    path = `_fetch.${path}`;
   }
 
   return new Observable(observer => {

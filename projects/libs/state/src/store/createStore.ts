@@ -8,7 +8,7 @@ import { pickBy, isEmpty } from 'lodash';
  * @param {*} [state={}]
  * @param {*} action
  */
-function _state(state = {}, action) {
+function _fetch(state = {}, action) {
   switch (action.type) {
     case 'stateUpdate':
       return { ...state, [action.key]: action.value };
@@ -72,7 +72,7 @@ export function createStore(reducers, initialState?, enhancers?) {
   }
 
   return (Rebased.store = createReduxStore(
-    combineReducers({ _state, ...reducers }),
+    combineReducers({ _fetch, ...reducers }),
     initialState,
     enhancers
   ));

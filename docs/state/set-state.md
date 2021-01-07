@@ -11,12 +11,12 @@ Arbitrary way to persist some state into store.
 import { getState, setState } from '@rebased/state';
 
 console.log(getState());
-// { _state: {} }
+// { _fetch: {} }
 
 setState('hello', { world: 2021 });
 
 console.log(getState());
-// { _state: { hello: { world: 2021 } } }
+// { _fetch: { hello: { world: 2021 } } }
 ```
 
 :::caution
