@@ -160,9 +160,9 @@ export class FetchBrowser extends FetchServer {
 
     try {
       Rebased.storage.set(key, data);
-      this.log().warn()(`${verb}/${key} cache updated`);
+      this.log().warn()(`${key} cache updated`);
     } catch (err) {
-      this.log().danger()(`${verb}/${key} unable to save cache`);
+      this.log().danger()(`${key} unable to save cache`);
       if (this.log().enabled()) {
         console.log(err);
       }
@@ -180,10 +180,10 @@ export class FetchBrowser extends FetchServer {
         const currentState = Rebased.state.getState(key);
         if (isDiff(currentState, data)) {
           Rebased.state.setState(key, data, { save: false });
-          this.log().warn()(`${verb}/${key} state updated`);
+          this.log().warn()(`${key} state updated`);
         }
       } catch (err) {
-        this.log().danger()(`${verb}/${key} unable to save state`);
+        this.log().danger()(`${key} unable to save state`);
         if (this.log().enabled()) {
           console.log(err);
         }

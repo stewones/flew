@@ -13,6 +13,8 @@ import { saveTodo } from '../../actions/saveTodo';
 import { addTodoView } from '../../actions/addTodoView';
 import { createTodo } from '../../actions/createTodo';
 import { removeTodo } from '../../actions/removeTodo';
+import { cloneDeep } from 'lodash';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'rebased-todo-edit',
@@ -23,8 +25,9 @@ import { removeTodo } from '../../actions/removeTodo';
 export class TodoEditComponent implements OnInit {
   @Input() id: string;
 
-  // mutable option is meant for not changing redux state. ie: while performing form actions (ngModel)
-  view$ = connect<Todo>('todo.view', { mutable: true });
+  // cloneDeep due to the ngModel mutability.
+  // so we can avoid the freeze error while in dev mode
+  view$ = connect<Todo>('todo.view').pipe(map(it => cloneDeep(it)));
 
   constructor() {}
 

@@ -28,16 +28,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // fetch('counter')
-    //   .from('firestore')
-    //   // .state(false)
-    //   // .cache(false)
-    //   .on()
-    //   .subscribe(numbers => {
-    //     console.log('realtime counter from firestore', numbers[0]?.total);
-    //     this.displayFirestoreRealtime = numbers[0]?.total;
-    //     this.detector.detectChanges();
-    //   });
+    this.realtimeFirestoreCounter();
     // fetch('counter')
     //   .from('firestore')
     //   .where('lol', '==', 'do not exists')
@@ -94,5 +85,18 @@ export class AppComponent implements OnInit {
       .doc('some-id')
       .set({ total: this.displayFirestoreRealtime - 1 })
       .toPromise();
+  }
+
+  realtimeFirestoreCounter() {
+    fetch('counter')
+      .from('firestore')
+      // .state(false)
+      // .cache(false)
+      .on()
+      .subscribe(numbers => {
+        console.log('realtime counter from firestore', numbers[0]?.total);
+        this.displayFirestoreRealtime = numbers[0]?.total;
+        this.detector.detectChanges();
+      });
   }
 }
