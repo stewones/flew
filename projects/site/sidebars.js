@@ -11,10 +11,11 @@ module.exports = {
     ],
 
     State: [
+      'state/setup',
       'state/create-store',
-      'state/get-state',
-      'state/connect-data',
       'state/set-state',
+      'state/get-state',
+      'state/connect',
       'state/reset-state',
       'state/api'
     ],

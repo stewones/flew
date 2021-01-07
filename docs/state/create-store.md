@@ -7,89 +7,50 @@ hide_title: true
 
 # Create Store
 
-Easy as cake, start working with rebased redux by creating a store.
-
-### Installation
-
-```bash
-$ npm install --save @rebased/state
-```
-
-### Create Store
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
-<Tabs
-defaultValue="vanilla"
-values={[
-{label: 'Vanilla', value: 'vanilla'},
-{label: 'Angular', value: 'angular'}
-]}>
-<TabItem value="vanilla">
+Rebased also offers an api to easily create custom enhanced stores
 
 ```ts
+import { applyMiddleware, compose } from 'redux';
 import {
+  store,
   createStore,
   createReducer,
   applyDevTools,
-  applyMiddleware
+  dispatch
 } from '@rebased/state';
 
-// counter reducer
+// create a counter reducer
 export const counter = createReducer(0, {
   increment: (state, action) => state + action.payload,
   decrement: (state, action) => state - action.payload
 });
 
-// logger middleware example
+// create a logger middleware
 const logger = store => next => action => {
-  console.log('dispatching', action);
+  console.log('action dispatch', action);
   const result = next(action);
   console.log('next state', store.getState());
   return result;
 };
 
+// create the store
 createStore(
   // list of reducers
   { counter },
   // initial state
-  { counter: 420 },
+  { counter: 410 },
   // composing enhancers
   compose(applyDevTools({ production: false }), applyMiddleware(logger))
 );
 
-store().subscribe(it => console.log(it, store().getState()));
+// log initial state from store
+console.log('initial store state', store().getState());
+
+// dispatch next state
+dispatch({
+  type: 'increment',
+  payload: 10
+});
 ```
 
-</TabItem>
-
-<TabItem value="angular">
-
-```ts
-// app.module.ts
-import { StateModule } from '@rebased/state';
-import { environment } from '../environments/environment';
-
-@NgModule({
-  // ...
-  imports: [
-    // ...
-    StateModule.forRoot({
-      // enable devtools when production is false https://bit.ly/2ACP7QY
-      production: environment.production,
-      // devtools option https://bit.ly/3fu7vKU
-      trace: true,
-      // define an initial state
-      state: {},
-      // pass in custom reducers
-      reducers: {}
-    })
-  ]
-})
-export class AppModule {}
-```
-
-</TabItem>
-
-</Tabs>
+> See more at [example source](https://github.com/rebasedjs/examples/blob/master/store/src/index.ts)

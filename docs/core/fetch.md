@@ -28,6 +28,8 @@ fetch('kitty', {
   );
 ```
 
+> See more at [example source](https://github.com/rebasedjs/examples/blob/master/node/fetch.js)
+
 ### Switching drivers at runtime
 
 ```js

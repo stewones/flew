@@ -7,21 +7,21 @@ hide_title: true
 
 # Get State
 
-Provides direct access to a piece of data wheter you made a [fetch](/core/fetch) call or has dispatched an action.
+Provides programmatically access to a piece of content whether you've made a fetch call, set a piece of state arbitrary or just dispatched an action.
 
 ```ts
 import { getState } from '@rebased/state';
 
 console.log(getState());
-// { counter: 1, _state: { hello: 'there', counter: 54 }}
+// { inner: { counter: { value: 1 } }, _state: { hello: 'there' }}
+
+console.log(getState('inner.counter.value'));
+// 1
 
 console.log(getState('hello'));
 // 'there'
-
-console.log(getState('counter'));
-// 1
 ```
 
 :::info
-Whenever a key is provided `getState` will first try to return state from your custom reducers based on a given path. In case of no results it'll then attempt from the internal reducer `_state`.
+Responses from `fetch` and `setState` lives under the `_state` reducer
 :::

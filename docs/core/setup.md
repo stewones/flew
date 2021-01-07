@@ -59,7 +59,7 @@ install({
 </TabItem>
 <TabItem value="angular">
 
-```ts
+```ts title="app.module.ts"
 import { RebasedModule } from '@rebased/angular';
 
 RebasedModule.forRoot({
