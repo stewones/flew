@@ -1,5 +1,5 @@
 ---
-id: create-store
+id: createStore
 title: Create Store
 description: 'Great resources to get started learning and using Rebased with Redux State'
 hide_title: true

@@ -4,9 +4,12 @@
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
-      "@rebased/core": "@rebased/core",
-      "@ionic/storage": "@ionic/storage"
+      "@rebased/core": "@rebased/core"
     }
   },
-  "whitelistedNonPeerDependencies": ["@rebased/core", "@ionic/storage"]
+  "whitelistedNonPeerDependencies": [
+    "@rebased/core",
+    "localforage",
+    "localforage-cordovasqlitedriver"
+  ]
 }

@@ -1,5 +1,5 @@
 ---
-id: get-state
+id: getState
 title: Get State
 description: 'Great resources to get started learning and using Rebased with Redux State'
 hide_title: true

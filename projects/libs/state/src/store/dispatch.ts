@@ -1,9 +1,16 @@
 import { store } from './store';
 export interface Action {
   type: string;
-  [key: string]: any;
+  payload: any;
 }
 
+/**
+ * Action dispatcher
+ *
+ * @export
+ * @param {Action} action
+ * @returns {any}
+ */
 export function dispatch(action: Action & any) {
   return store().dispatch(action);
 }

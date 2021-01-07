@@ -1,9 +1,8 @@
 import { Rebased } from '@rebased/core';
-import { Storage } from '@ionic/storage';
-import { storageConfig } from './storageConfig';
+import { Storage, storageConfig } from './storage';
 
 /**
- * Cache install
+ * Cache setup
  *
  * @export
  * @param {*} name
@@ -15,6 +14,6 @@ export function install(
   store,
   driver = ['sqlite', 'indexeddb', 'localstorage']
 ) {
-  Rebased.storage = new Storage(storageConfig(name, store, driver), null);
+  Rebased.storage = new Storage(storageConfig(name, store, driver));
   Rebased.storage.enabled = true;
 }

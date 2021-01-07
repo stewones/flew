@@ -1,5 +1,5 @@
 ---
-id: set-state
+id: setState
 title: Set State
 description: 'Great resources to get started learning and using Rebased with Redux State'
 hide_title: false

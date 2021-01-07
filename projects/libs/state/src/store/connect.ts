@@ -15,6 +15,18 @@ export interface StateContext<T = any> {
   next: T;
 }
 
+/**
+ * Provides reactive data access through observables
+ *
+ * @export
+ * @template T
+ * @param {string} path
+ * @param {Partial<ConnectOptions>} [options={
+ *     context: false,
+ *     fetch: false
+ *   }]
+ * @returns {Observable<T>}
+ */
 export function connect<T>(
   path: string,
   options: Partial<ConnectOptions> = {

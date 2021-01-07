@@ -1,12 +1,12 @@
 import { dispatch } from '../store/dispatch';
 
 /**
- * Fully reset current state
+ * Fully reset current fetch state
  *
  * @export
  */
 export function resetState() {
   dispatch({
-    type: 'MEMO_RESET'
+    type: 'fetchStateReset'
   });
 }

@@ -2,23 +2,18 @@ import { Rebased } from '@rebased/core';
 import { combineReducers, createStore as createReduxStore } from 'redux';
 import { pickBy, isEmpty } from 'lodash';
 
-/**
- * Memo reducer from fetch responses
- *
- * @param {*} [state={}]
- * @param {*} action
- */
+// the fetch reducer
 function _fetch(state = {}, action) {
   switch (action.type) {
-    case 'stateUpdate':
+    case 'fetchStateUpdate':
       return { ...state, [action.key]: action.value };
-    case 'stateRemove':
+    case 'fetchStateRemove':
       return {
         ...pickBy(state, (it, key) => {
           return key !== action.key;
         })
       };
-    case 'MEMO_RESET':
+    case 'fetchStateReset':
       return {};
     default:
       return state;
@@ -26,7 +21,7 @@ function _fetch(state = {}, action) {
 }
 
 /**
- * Create a rebased redux store
+ * Create custom redux store
  * @example
  * import {
  *   createStore,

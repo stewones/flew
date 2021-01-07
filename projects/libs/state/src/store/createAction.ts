@@ -1,3 +1,21 @@
+/**
+ * Helper for creating redux actions
+ *
+ * @export
+ * @template T
+ * @param {string} type
+ * @returns {fn}
+ *
+ * @example
+ *
+ * import { createAction, dispatch } from '@rebased/state';
+ *
+ * // create action
+ * const increment = createAction<number>('increment');
+ *
+ * // dispatch
+ * dispatch(increment(54))
+ */
 export function createAction<T = any>(
   type: string
 ): (

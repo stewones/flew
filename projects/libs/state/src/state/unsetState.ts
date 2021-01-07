@@ -2,7 +2,7 @@ import { dispatch } from '../store/dispatch';
 import { Rebased } from '@rebased/core';
 
 /**
- * Remove memoized/cached state based on a key
+ * Remove specific fetch state
  *
  * @export
  * @param {string} key
@@ -14,7 +14,7 @@ export function unsetState(
   options: { cache: boolean } = { cache: true }
 ): Promise<void> {
   dispatch({
-    type: 'stateRemove',
+    type: 'fetchStateRemove',
     key: key
   });
   if (options.cache) {

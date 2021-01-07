@@ -1,7 +1,7 @@
 module.exports = {
-  name: 'fire',
+  name: 'firebase',
   preset: '../../jest.config.js',
-  coverageDirectory: '../../coverage/libs/fire',
+  coverageDirectory: '../../coverage/libs/firebase',
   snapshotSerializers: [
     'jest-preset-angular/AngularSnapshotSerializer.js',
     'jest-preset-angular/HTMLCommentSerializer.js'

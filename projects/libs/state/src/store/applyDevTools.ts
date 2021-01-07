@@ -3,9 +3,15 @@ import thunk from 'redux-thunk';
 
 declare var window;
 
-// full list of options at
-// https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
-
+/**
+ * Apply Redux DevTools
+ * full list of options at
+ * https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
+ *
+ * @export
+ * @param {*} [options]
+ * @returns {compose}
+ */
 export function applyDevTools(options?: any) {
   const reduxExtension =
     window.__REDUX_DEVTOOLS_EXTENSION__ &&

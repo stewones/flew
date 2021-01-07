@@ -6,7 +6,7 @@ import { createStore } from '../store/createStore';
 import { applyDevTools } from '../store/applyDevTools';
 
 /**
- * Initiate state stuff on Rebased
+ * Bootstrap state stuff for Rebased
  *
  * @export
  */
