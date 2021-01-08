@@ -6,7 +6,7 @@ import { mapping } from './mapping';
  *
  * @export
  * @param {string} name
- * @returns Parse.Query
+ * @returns {Parse.Query}
  */
 export function query(name: string) {
   const Parse = parse();

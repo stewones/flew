@@ -21,7 +21,12 @@ module.exports = {
       items: [
         { label: 'Get Started', to: 'get-started', position: 'right' },
         { label: 'API', to: 'core/api', position: 'right' },
-        { label: 'Changelog', to: 'changelog', position: 'right' }
+        {
+          label: 'Github',
+          to: 'https://github.com/rebasedjs/rebasedjs',
+          position: 'right',
+          external: true
+        }
 
         // {
         //   label: 'Getting Started',

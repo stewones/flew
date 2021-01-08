@@ -1,5 +1,12 @@
 import { isArray, isEmpty, isObject } from 'lodash';
 
+/**
+ * Apply order on query
+ *
+ * @export
+ * @param {*} sort
+ * @param {*} connector
+ */
 export function order(sort: any, connector: any) {
   if (isArray(sort)) {
     // this.log().success()(`parse sort array -> ${sort}`);

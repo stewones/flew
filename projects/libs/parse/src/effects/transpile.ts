@@ -1,5 +1,12 @@
 import { isArray, isString, isFunction, isEmpty } from 'lodash';
 
+/**
+ * Chain query transpiler
+ *
+ * @export
+ * @param {*} query
+ * @param {*} handler
+ */
 export function transpileChainQuery(query, handler) {
   //
   // Hold queries
@@ -76,6 +83,14 @@ export function transpileQuery(operator, chainQuery, handler) {
   return queries;
 }
 
+/**
+ * Query router transpiler
+ *
+ * @export
+ * @param {*} specialOperator
+ * @param {*} chainQuery
+ * @param {*} handler
+ */
 export function transpileQueryRouter(specialOperator, chainQuery, handler) {
   //
   // Hold queries
@@ -113,6 +128,14 @@ export function transpileQueryRouter(specialOperator, chainQuery, handler) {
   return handler.Parse.Query[specialOperator](...queries);
 }
 
+/**
+ * Create query by operator
+ *
+ * @export
+ * @param {*} value
+ * @param {*} operator
+ * @param {*} handler
+ */
 export function createQueryByOperator(value, operator, handler) {
   //
   // Start query

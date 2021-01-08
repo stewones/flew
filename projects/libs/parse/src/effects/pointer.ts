@@ -7,7 +7,7 @@ import { mapping } from './mapping';
  * @export
  * @param {string} name
  * @param {string} id
- * @returns Parse.Object
+ * @returns {Parse.Object}
  */
 export function pointer(name: string, id: string) {
   const Parse = parse();

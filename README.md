@@ -14,12 +14,12 @@ https://rebased.io
 
 ## Examples
 
-- [Todo App](/projects/apps/todo)
-- [Counter App](/projects/apps/counter)
+- [Counter App](https://github.com/rebasedjs/rebasedjs/tree/master/projects/apps/counter)
+- [Redux Todo App](https://github.com/rebasedjs/rebasedjs/tree/master/projects/apps/todo)
 
 ## Changelog
 
-Check out our [`changelog`](/changelog.md)
+Check out our [`changelog`](https://rebased.io/changelog)
 
 ## Packages
 

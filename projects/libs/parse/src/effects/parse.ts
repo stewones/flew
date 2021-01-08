@@ -1,10 +1,10 @@
 import { Rebased } from '@rebased/core';
 
 /**
- * Get the Parse instance
+ * Retrieve the Parse instance
  *
  * @export
- * @returns Parse
+ * @returns {Parse}
  */
 export function parse() {
   return Rebased.driver.parse.getInstance();

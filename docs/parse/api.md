@@ -7,6 +7,29 @@ hide_title: true
 
 # Parse API
 
+<a name="find"></a>
+
+## find(handler)
+<p>Parse Find</p>
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| handler | <code>QueryHandler</code> | 
+
+<a name="geopoint"></a>
+
+## geopoint(lat, lng) ⇒ <code>Parse</code>
+<p>Apply geopoint on query</p>
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| lat | <code>number</code> | 
+| lng | <code>number</code> | 
+
 <a name="install"></a>
 
 ## install(config, [sdk]) ⇒ <code>Parse</code>
@@ -20,25 +43,47 @@ hide_title: true
 | config | <code>\*</code> |  | 
 | [sdk] | <code>\*</code> | <code>Parse</code> | 
 
+<a name="limit"></a>
+
+## limit(it, connector)
+<p>Apply limit on query</p>
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| it | <code>number</code> | 
+| connector | <code>\*</code> | 
+
 <a name="model"></a>
 
-## model(name) ⇒
+## model(name) ⇒ <code>Parse.Object</code>
 <p>Extends Parse Object</p>
 
 **Kind**: global function  
-**Returns**: <p>Parse.Object</p>  
 
 | Param | Type |
 | --- | --- |
 | name | <code>string</code> | 
 
-<a name="object"></a>
+<a name="near"></a>
 
-## object(from, [attr], [options]) ⇒
-<p>Creates a Parse Object</p>
+## near(it, connector)
+<p>Apply near on query</p>
 
 **Kind**: global function  
-**Returns**: <p>Parse.Object</p>  
+
+| Param | Type |
+| --- | --- |
+| it | <code>NearOptions</code> | 
+| connector | <code>\*</code> | 
+
+<a name="object"></a>
+
+## object(from, [attr], [options]) ⇒ <code>Parse.Object</code>
+<p>Creates a new Parse Object</p>
+
+**Kind**: global function  
 
 | Param | Type | Default |
 | --- | --- | --- |
@@ -46,20 +91,30 @@ hide_title: true
 | [attr] | <code>\*</code> | <code>{}</code> | 
 | [options] | <code>\*</code> | <code>{}</code> | 
 
-<a name="parse"></a>
+<a name="order"></a>
 
-## parse() ⇒
-<p>Get the Parse instance</p>
+## order(sort, connector)
+<p>Apply order on query</p>
 
 **Kind**: global function  
-**Returns**: <p>Parse</p>  
+
+| Param | Type |
+| --- | --- |
+| sort | <code>\*</code> | 
+| connector | <code>\*</code> | 
+
+<a name="parse"></a>
+
+## parse() ⇒ <code>Parse</code>
+<p>Retrieve the Parse instance</p>
+
+**Kind**: global function  
 <a name="pointer"></a>
 
-## pointer(name, id) ⇒
+## pointer(name, id) ⇒ <code>Parse.Object</code>
 <p>Creates a Parse Pointer</p>
 
 **Kind**: global function  
-**Returns**: <p>Parse.Object</p>  
 
 | Param | Type |
 | --- | --- |
@@ -68,13 +123,110 @@ hide_title: true
 
 <a name="query"></a>
 
-## query(name) ⇒
+## query(name) ⇒ <code>Parse.Query</code>
 <p>Creates a Parse Query</p>
 
 **Kind**: global function  
-**Returns**: <p>Parse.Query</p>  
 
 | Param | Type |
 | --- | --- |
 | name | <code>string</code> | 
+
+<a name="select"></a>
+
+## select(it, connector)
+<p>Apply select on query</p>
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| it | <code>Array.&lt;string&gt;</code> | 
+| connector | <code>\*</code> | 
+
+<a name="setWhere"></a>
+
+## setWhere(q, connector)
+<p>Set where clause standardized</p>
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| q | <code>\*</code> | 
+| connector | <code>\*</code> | 
+
+<a name="skip"></a>
+
+## skip(value, connector)
+<p>Apply skip on query</p>
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| value | <code>number</code> | 
+| connector | <code>\*</code> | 
+
+<a name="transpileChainQuery"></a>
+
+## transpileChainQuery(query, handler)
+<p>Chain query transpiler</p>
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| query | <code>\*</code> | 
+| handler | <code>\*</code> | 
+
+<a name="transpileQueryRouter"></a>
+
+## transpileQueryRouter(specialOperator, chainQuery, handler)
+<p>Query router transpiler</p>
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| specialOperator | <code>\*</code> | 
+| chainQuery | <code>\*</code> | 
+| handler | <code>\*</code> | 
+
+<a name="createQueryByOperator"></a>
+
+## createQueryByOperator(value, operator, handler)
+<p>Create query by operator</p>
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| value | <code>\*</code> | 
+| operator | <code>\*</code> | 
+| handler | <code>\*</code> | 
+
+<a name="where"></a>
+
+## where([query], connector)
+<p>Apply where on query</p>
+
+**Kind**: global function  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| [query] | <code>\*</code> | <code>[]</code> | 
+| connector | <code>\*</code> |  | 
+
+<a name="withinQuery"></a>
+
+## withinQuery(it, connector)
+<p>Apply withinQuery</p>
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| it | <code>WithInQueryOptions</code> | 
+| connector | <code>\*</code> | 
 

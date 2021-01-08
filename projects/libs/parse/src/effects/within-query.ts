@@ -1,15 +1,21 @@
 import { isEmpty } from 'lodash';
 
-export function withinQuery(
-  it: {
-    field: string;
-    geopoint: any;
-    maxDistance: number;
-    sorted: boolean;
-    method: string; // withinKilometers or withinMiles
-  },
-  connector: any
-) {
+export interface WithInQueryOptions {
+  field: string;
+  geopoint: any;
+  maxDistance: number;
+  sorted: boolean;
+  method: string; // withinKilometers or withinMiles
+}
+
+/**
+ * Apply withinQuery
+ *
+ * @export
+ * @param {WithInQueryOptions} it
+ * @param {*} connector
+ */
+export function withinQuery(it: WithInQueryOptions, connector: any) {
   //
   // Validate - must have field, geopoint and method
   if (

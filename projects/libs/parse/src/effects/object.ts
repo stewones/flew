@@ -2,13 +2,13 @@ import { parse } from './parse';
 import { mapping } from './mapping';
 
 /**
- * Creates a Parse Object
+ * Creates a new Parse Object
  *
  * @export
  * @param {string} from
  * @param {*} [attr={}]
  * @param {*} [options={}]
- * @returns Parse.Object
+ * @returns {Parse.Object}
  */
 export function object(from: string, attr = {}, options = {}) {
   const Parse = parse();

@@ -9,6 +9,12 @@ import { withinQuery } from './within-query';
 import { skip } from './skip';
 import { QueryHandler } from '../interfaces/query';
 
+/**
+ * Parse Find
+ *
+ * @export
+ * @param {QueryHandler} handler
+ */
 export function find(handler: QueryHandler) {
   const chain = handler.chain;
   //

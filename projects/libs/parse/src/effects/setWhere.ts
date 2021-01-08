@@ -1,5 +1,12 @@
 import { isArray } from 'lodash';
 
+/**
+ * Set where clause standardized
+ *
+ * @export
+ * @param {*} q
+ * @param {*} connector
+ */
 export function setWhere(q, connector) {
   switch (q.operator) {
     case '==':

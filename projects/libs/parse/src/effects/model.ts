@@ -6,7 +6,7 @@ import { mapping } from './mapping';
  *
  * @export
  * @param {string} name
- * @returns Parse.Object
+ * @returns {Parse.Object}
  */
 export function model(name: string) {
   const Parse = parse();
