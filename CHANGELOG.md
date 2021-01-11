@@ -1,3 +1,13 @@
+## [0.0.22](https://github.com/rebasedjs/rebasedjs/compare/v0.0.21...v0.0.22) (2021-01-11)
+
+
+### Bug Fixes
+
+* browser diff ([b59bdde](https://github.com/rebasedjs/rebasedjs/commit/b59bdded6a93fec1e65bacf74520625d9fa72dde))
+* store import to bundle ([abc8982](https://github.com/rebasedjs/rebasedjs/commit/abc8982c44602a5e54c9f5c0d5e6f9a921c4f31a))
+
+
+
 ## [0.0.21](https://github.com/rebasedjs/rebasedjs/compare/v0.0.20...v0.0.21) (2021-01-06)
 
 

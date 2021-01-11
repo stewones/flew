@@ -1,10 +1,10 @@
 {
-  "name": "@rebased/cache",
-  "version": "0.0.21",
-  "dependencies": {
-    "tslib": "^2.0.0",
-    "localforage": "^1.9.0",
-    "localforage-cordovasqlitedriver": "^1.8.0"
-  },
-  "peerDependencies": {}
+	"name": "@rebased/cache",
+	"version": "0.0.22",
+	"dependencies": {
+		"tslib": "^2.0.0",
+		"localforage": "^1.9.0",
+		"localforage-cordovasqlitedriver": "^1.8.0"
+	},
+	"peerDependencies": {}
 }
