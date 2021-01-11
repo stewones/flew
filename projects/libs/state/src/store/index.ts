@@ -4,4 +4,3 @@ export * from './createAction';
 export * from './createReducer';
 export * from './createStore';
 export * from './dispatch';
-export * from './store';

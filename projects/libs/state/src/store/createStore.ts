@@ -72,3 +72,13 @@ export function createStore(reducers, initialState?, enhancers?) {
     enhancers
   ));
 }
+
+/**
+ * Retrieve Rebased store instance
+ *
+ * @export
+ * @returns {RebasedStore}
+ */
+export function store() {
+  return Rebased.store;
+}

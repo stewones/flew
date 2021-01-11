@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
-import { store } from './store';
 import { get } from 'lodash';
 
 import watch from 'redux-watch';
+import { store } from './createStore';
 
 export interface ConnectOptions {
   context: boolean;

@@ -1,5 +1,5 @@
 import { get, isUndefined } from 'lodash';
-import { store } from '../store/store';
+import { store } from '../store';
 
 /**
  * Grab a piece of data from state synchronously

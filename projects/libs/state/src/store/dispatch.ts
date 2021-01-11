@@ -1,4 +1,5 @@
-import { store } from './store';
+import { store } from './createStore';
+
 export interface Action {
   type: string;
   payload: any;
