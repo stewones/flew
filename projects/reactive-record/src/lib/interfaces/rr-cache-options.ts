@@ -9,7 +9,7 @@ import { RRClientToken } from './rr-client-token';
  * @extends {RROptions}
  */
 export interface RRCacheOptions extends RROptions {
-  ttl?: number; // time to live in seconds. (default 0)
+  // ttl?: number; // @todo causing bug with RR instance. time to live in seconds. (default 0)
   config?: FirebaseConfig; // firebase web config
   firebase?: any; // firebase sdk to initialize connectors
   storage?: RRCacheStorage | any; // storage adapter

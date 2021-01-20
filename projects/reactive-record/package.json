@@ -20,8 +20,7 @@
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
-    "rxjs": "^6.3.3",
-    "rxjs-compat": "^6.3.3"
+    "rxjs": "^6.3.3"
   },
   "description": "It has never been easier to work with cross-platform data using firebase, firestore, http and elasticsearch."
 }

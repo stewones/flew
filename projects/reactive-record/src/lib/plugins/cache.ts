@@ -17,7 +17,6 @@ export class RRCachePlugin {
   //
   // default params
   public params: RRCacheOptions = {
-    ttl: 0,
     hook: {},
     token: {
       type: 'Bearer'
@@ -144,7 +143,12 @@ export class RRCachePlugin {
     // check for TTL
     // should not call network
     const seconds = new Date().getTime() / 1000 /*/ 60 / 60 / 24 / 365*/;
+    // console.log(`seconds`, seconds);
+    // console.log(`useCache`, useCache);
+    // console.log(`cache`, cache);
+
     if (useCache && (cache && seconds < cache.ttl) && !isEmpty(cache.data)) {
+      // console.log(`dont call network`);
       observer.complete();
       return false;
     }
@@ -207,7 +211,7 @@ export class RRCachePlugin {
           (cache && seconds >= cache.ttl))
       ) {
         console.log(`${key} cache empty or updated`);
-        let ttl = extraOptions.ttl || this.params.ttl;
+        let ttl = extraOptions.ttl /*|| this.params.ttl*/ || 0;
         //
         // set cache response
         ttl += seconds;
