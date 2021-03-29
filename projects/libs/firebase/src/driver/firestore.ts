@@ -324,9 +324,7 @@ export class FirestoreDriver implements RebasedDriver {
         const timestamp = this.driverOptions.timestampObject
           ? new Date()
           : new Date().toISOString();
-        if (!newData[this.driverOptions.timestampCreated]) {
-          newData[this.driverOptions.timestampCreated] = timestamp;
-        }
+
         if (!newData[this.driverOptions.timestampUpdated]) {
           newData[this.driverOptions.timestampUpdated] = timestamp;
         }
