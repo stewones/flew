@@ -1,3 +1,12 @@
+## [0.0.23](https://github.com/rebasedjs/rebasedjs/compare/v0.0.22...v0.0.23) (2021-03-29)
+
+
+### Bug Fixes
+
+* **firestore:** update method should not auto populate the created field ([f8e7cae](https://github.com/rebasedjs/rebasedjs/commit/f8e7cae9f97c9e6d978796ae92c2256ca79d5beb))
+
+
+
 ## [0.0.22](https://github.com/rebasedjs/rebasedjs/compare/v0.0.21...v0.0.22) (2021-01-11)
 
 
