@@ -1,3 +1,12 @@
+## [0.0.24](https://github.com/rebasedjs/rebasedjs/compare/v0.0.23...v0.0.24) (2021-05-27)
+
+
+### Bug Fixes
+
+* timestampEnabled ([af0fba9](https://github.com/rebasedjs/rebasedjs/commit/af0fba9774c6d1b876575731d7e3b6ac87c667f0))
+
+
+
 ## [0.0.23](https://github.com/rebasedjs/rebasedjs/compare/v0.0.22...v0.0.23) (2021-03-29)
 
 
