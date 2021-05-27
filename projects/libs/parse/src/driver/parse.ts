@@ -287,7 +287,7 @@ export class ParseDriver implements RebasedDriver {
 
         //
         // auto update timestamp
-        if (!this.driverOptions.timestampEnabled) {
+        if (this.driverOptions.timestampEnabled !== false) {
           const timestamp = this.driverOptions.timestampObject
             ? new Date()
             : new Date().toISOString();
@@ -355,7 +355,7 @@ export class ParseDriver implements RebasedDriver {
 
       //
       // auto update timestamp
-      if (!this.driverOptions.timestampEnabled) {
+      if (this.driverOptions.timestampEnabled !== false) {
         if (!newData[this.driverOptions.timestampUpdated]) {
           newData[this.driverOptions.timestampUpdated] = this.driverOptions
             .timestampObject
