@@ -91,6 +91,6 @@ fetch('Todo')
   .size(10)
   .where('text', '==', 'hey1')
   .where('doc_id', '==', '9fc04dcd92b3')
-  .find()
+  .count()
   .toPromise()
   .then(console.log);
