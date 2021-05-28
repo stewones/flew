@@ -1,4 +1,4 @@
-import { isEmpty, isFunction, trim, omit, isNumber } from 'lodash';
+import { isEmpty, isFunction, trim, omit } from 'lodash';
 
 import {
   Rebased,
@@ -101,7 +101,11 @@ export class ParseDriver implements RebasedDriver {
     return this.logger;
   }
 
-  public find<T>(chain: RebasedChainPayload, method = 'find'): Observable<T[]> {
+  public find<T>(
+    chain: RebasedChainPayload,
+    key: string,
+    method = 'find'
+  ): Observable<T[]> {
     return new Observable(observer => {
       //
       // network handle
@@ -112,7 +116,7 @@ export class ParseDriver implements RebasedDriver {
 
       const success = (r: any) => {
         const response: T[] = [];
-        if (!isNumber(r)) {
+        if (method === 'find') {
           for (const item of r) {
             // tslint:disable-next-line: deprecation
             const entry =
@@ -145,7 +149,7 @@ export class ParseDriver implements RebasedDriver {
   }
 
   public findOne<T>(chain: RebasedChainPayload, key: string): Observable<T> {
-    return this.find<T>(chain).pipe(
+    return this.find<T>(chain, key).pipe(
       map(r => (r && r.length ? r[0] : ({} as T)))
     );
   }
@@ -411,8 +415,8 @@ export class ParseDriver implements RebasedDriver {
     });
   }
 
-  public count<T>(chain: RebasedChainPayload): Observable<any> {
-    return this.find<T>(chain, 'count');
+  public count<T>(chain: RebasedChainPayload, key: string): Observable<any> {
+    return this.find<T>(chain, key, 'count');
   }
 
   public delete<T>(
