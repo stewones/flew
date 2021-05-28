@@ -9,4 +9,5 @@ export interface QueryHandler {
   chain: RebasedChainPayload;
   success: any;
   error: any;
+  method: string;
 }

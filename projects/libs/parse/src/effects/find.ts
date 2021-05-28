@@ -20,12 +20,13 @@ export function find(handler: QueryHandler) {
   //
   // @todo abstract common functions to remove this whole part
   const verb =
-    handler.chain.query && handler.chain.query['aggregate']
+    handler.method === 'count'
+      ? 'count'
+      : handler.chain.query && handler.chain.query['aggregate']
       ? 'aggregate'
       : chain.query && handler.chain.query['or']
       ? 'or'
       : 'find';
-
   //
   // define adapter
   let connector = new handler.Parse.Query(handler.collection);
@@ -87,7 +88,15 @@ export function find(handler: QueryHandler) {
         .then(r => handler.success(r))
         .catch(err => handler.error(err));
       break;
-
+    case 'count':
+      connector
+        .count({
+          useMasterKey: chain.useMasterKey,
+          sessionToken: chain.useSessionToken
+        })
+        .then(r => handler.success(r))
+        .catch(err => handler.error(err));
+      break;
     default:
       connector
         .find({

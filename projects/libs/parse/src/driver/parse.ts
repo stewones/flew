@@ -101,7 +101,7 @@ export class ParseDriver implements RebasedDriver {
     return this.logger;
   }
 
-  public find<T>(chain: RebasedChainPayload, key: string): Observable<T[]> {
+  public find<T>(chain: RebasedChainPayload, method = 'find'): Observable<T[]> {
     return new Observable(observer => {
       //
       // network handle
@@ -121,7 +121,7 @@ export class ParseDriver implements RebasedDriver {
           }
           response.push(entry);
         }
-        observer.next(response);
+        observer.next(method === 'find' ? response : r);
         observer.complete();
       };
 
@@ -133,13 +133,14 @@ export class ParseDriver implements RebasedDriver {
         skipOnOperator: this.skipOnOperator,
         specialOperators: this.specialOperators,
         success: r => success(r),
-        error: err => error(err)
+        error: err => error(err),
+        method
       });
     });
   }
 
   public findOne<T>(chain: RebasedChainPayload, key: string): Observable<T> {
-    return this.find<T>(chain, key).pipe(
+    return this.find<T>(chain).pipe(
       map(r => (r && r.length ? r[0] : ({} as T)))
     );
   }
@@ -405,67 +406,8 @@ export class ParseDriver implements RebasedDriver {
     });
   }
 
-  public count<T>(chain: RebasedChainPayload, key: string): Observable<T> {
-    return new Observable(observer => {
-      const Parse = this.getInstance();
-
-      //
-      // define adapter
-      this.connector = new Parse.Query(this.getCollectionName());
-
-      //
-      // Transpile chain query
-      const query: any = transpileChainQuery(chain.query, {
-        Parse: this.getInstance(),
-        chain: chain,
-        from: this.getCollectionName(),
-        skipOnQuery: this.skipOnQuery,
-        skipOnOperator: this.skipOnOperator,
-        specialOperators: this.specialOperators
-      });
-
-      //
-      // Join query with connector
-      if (!isEmpty(query)) this.connector = Parse.Query.and(...query);
-
-      //
-      // set where
-      where(chain.where, this.connector);
-
-      //
-      // set skip
-      if (chain.after) skip(chain.after, this.connector);
-
-      //
-      // set geo queries
-      if (chain.near) near(chain.near, this.connector);
-      else if (chain.withinKilometers)
-        withinQuery(chain.withinKilometers, this.connector);
-      else if (chain.withinMiles)
-        withinQuery(chain.withinMiles, this.connector);
-
-      //
-      // network handle
-      const success = async data => {
-        //
-        // success callback
-        observer.next(data);
-        observer.complete();
-      };
-
-      const error = err => {
-        observer.error(err);
-        observer.complete();
-      };
-
-      this.connector
-        .count({
-          useMasterKey: chain.useMasterKey,
-          sessionToken: chain.useSessionToken
-        })
-        .then(success)
-        .catch(error);
-    });
+  public count<T>(chain: RebasedChainPayload): Observable<any> {
+    return this.find<T>(chain, 'count');
   }
 
   public delete<T>(
