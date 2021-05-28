@@ -1,4 +1,4 @@
-import { isEmpty, isFunction, trim, omit } from 'lodash';
+import { isEmpty, isFunction, trim, omit, isArray } from 'lodash';
 
 import {
   Rebased,
@@ -112,14 +112,18 @@ export class ParseDriver implements RebasedDriver {
 
       const success = (r: any) => {
         const response: T[] = [];
-        for (const item of r) {
-          // tslint:disable-next-line: deprecation
-          const entry =
-            isFunction(item.toJSON) && !chain.useObject ? item.toJSON() : item;
-          if (!chain.useObject) {
-            entry.id = entry.objectId;
+        if (isArray(r)) {
+          for (const item of r) {
+            // tslint:disable-next-line: deprecation
+            const entry =
+              isFunction(item.toJSON) && !chain.useObject
+                ? item.toJSON()
+                : item;
+            if (!chain.useObject) {
+              entry.id = entry.objectId;
+            }
+            response.push(entry);
           }
-          response.push(entry);
         }
         observer.next(method === 'find' ? response : r);
         observer.complete();
