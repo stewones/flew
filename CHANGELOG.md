@@ -1,3 +1,12 @@
+## [0.0.28](https://github.com/rebasedjs/rebasedjs/compare/v0.0.27...v0.0.28) (2021-05-28)
+
+
+### Bug Fixes
+
+* parse .find result ([00f5321](https://github.com/rebasedjs/rebasedjs/commit/00f53210fcd8219168e6f2ab2b37227fe89e5748))
+
+
+
 ## [0.0.27](https://github.com/rebasedjs/rebasedjs/compare/v0.0.26...v0.0.27) (2021-05-28)
 
 
