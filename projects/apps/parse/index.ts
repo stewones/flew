@@ -11,7 +11,7 @@ import { ParseServer } from 'parse-server';
  * Configure Rebased
  */
 import { install } from '@rebased/parse';
-import { Rebased } from '@rebased/core';
+import { Rebased, fetch } from '@rebased/core';
 
 /**
  * Set default driver
@@ -21,11 +21,14 @@ Rebased.options.from = `parse`;
 /**
  * Configure parse instance
  */
-install(Parse, {
-  appID: process.env.APP_ID || 'AppServer',
-  serverURL: process.env.SERVER_URL || 'http://localhost:1337/api',
-  masterKey: process.env.MASTER_KEY || 'AppParse'
-});
+install(
+  {
+    appID: process.env.APP_ID || 'AppServer',
+    serverURL: process.env.SERVER_URL || 'http://localhost:1337/api',
+    masterKey: process.env.MASTER_KEY || 'AppParse'
+  },
+  Parse
+);
 
 /**
  * Configure API
@@ -81,3 +84,13 @@ httpServer.listen(port, function() {
 
 // This will enable the Live Query real-time server
 ParseServer.createLiveQueryServer(httpServer);
+
+fetch('Todo')
+  .from('parse')
+  .after(0)
+  .size(10)
+  .where('text', '==', 'hey1')
+  .where('doc_id', '==', '9fc04dcd92b3')
+  .find()
+  .toPromise()
+  .then(console.log);

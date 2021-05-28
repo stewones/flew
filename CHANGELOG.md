@@ -1,3 +1,12 @@
+## [0.0.25](https://github.com/rebasedjs/rebasedjs/compare/v0.0.24...v0.0.25) (2021-05-28)
+
+
+### Bug Fixes
+
+* **parse:** make .count work as .find ([1727909](https://github.com/rebasedjs/rebasedjs/commit/17279098eb816210f57c140506e422c345d664a7))
+
+
+
 ## [0.0.24](https://github.com/rebasedjs/rebasedjs/compare/v0.0.23...v0.0.24) (2021-05-27)
 
 
