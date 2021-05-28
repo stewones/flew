@@ -1,6 +1,6 @@
 {
 	"name": "@rebased/parse",
-	"version": "0.0.25",
+	"version": "0.0.26",
 	"dependencies": {
 		"parse": "^2.15.0",
 		"lodash": "^4.17.15",

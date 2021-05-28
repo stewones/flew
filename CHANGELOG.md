@@ -1,3 +1,12 @@
+## [0.0.26](https://github.com/rebasedjs/rebasedjs/compare/v0.0.25...v0.0.26) (2021-05-28)
+
+
+### Bug Fixes
+
+* parse response ([b9188b2](https://github.com/rebasedjs/rebasedjs/commit/b9188b24f4dfbc15c6fada58398e01fd2591b657))
+
+
+
 ## [0.0.25](https://github.com/rebasedjs/rebasedjs/compare/v0.0.24...v0.0.25) (2021-05-28)
 
 
