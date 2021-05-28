@@ -1,4 +1,4 @@
-import { isEmpty, isFunction, trim, omit, isArray } from 'lodash';
+import { isEmpty, isFunction, trim, omit, isNumber } from 'lodash';
 
 import {
   Rebased,
@@ -112,7 +112,7 @@ export class ParseDriver implements RebasedDriver {
 
       const success = (r: any) => {
         const response: T[] = [];
-        if (isArray(r)) {
+        if (!isNumber(r)) {
           for (const item of r) {
             // tslint:disable-next-line: deprecation
             const entry =
@@ -125,6 +125,7 @@ export class ParseDriver implements RebasedDriver {
             response.push(entry);
           }
         }
+
         observer.next(method === 'find' ? response : r);
         observer.complete();
       };
