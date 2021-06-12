@@ -404,10 +404,7 @@ export class ParseDriver implements RebasedDriver {
               r[0].set(k, data[k]);
             }
             r[0]
-              .save({
-                useMasterKey: chain.useMasterKey,
-                sessionToken: chain.useSessionToken
-              })
+              .save()
               .then(response)
               .catch(error);
           }

@@ -2,7 +2,6 @@ import { isEmpty } from 'lodash';
 import { from, Observable, of } from 'rxjs';
 import { catchError, first, map, mergeMap, tap } from 'rxjs/operators';
 import { isDiff } from '../effects/diff';
-import { isOnline } from '../effects/isOnline';
 import { RebasedChainPayload } from '../interfaces/chain';
 import { RebasedOptions } from '../interfaces/options';
 import { RebasedVerb } from '../interfaces/verb';
@@ -108,17 +107,13 @@ export class FetchBrowser extends FetchServer {
                     console.table(data);
                   }
 
-                  if (isOnline()) {
-                    if (chain.useState) {
-                      this.setState(verb, key, chain, data);
-                    }
-                    if (chain.useCache) {
-                      this.setCache(verb, key, chain, data);
-                    }
-                    observer.next(data);
-                  } else {
-                    observer.error(`it seems you're offline`);
+                  if (chain.useState) {
+                    this.setState(verb, key, chain, data);
                   }
+                  if (chain.useCache) {
+                    this.setCache(verb, key, chain, data);
+                  }
+                  observer.next(data);
                 }
 
                 if (!['on'].includes(verb)) {
