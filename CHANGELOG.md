@@ -1,3 +1,12 @@
+## [0.0.29](https://github.com/rebasedjs/rebasedjs/compare/v0.0.28...v0.0.29) (2021-06-12)
+
+
+### Bug Fixes
+
+* **parse:** stop checking isOnline ([58806ee](https://github.com/rebasedjs/rebasedjs/commit/58806ee2384eadd4bb360cd5306ec7f397950c35))
+
+
+
 ## [0.0.28](https://github.com/rebasedjs/rebasedjs/compare/v0.0.27...v0.0.28) (2021-05-28)
 
 
