@@ -1,3 +1,12 @@
+## [0.0.30](https://github.com/rebasedjs/rebasedjs/compare/v0.0.29...v0.0.30) (2021-07-09)
+
+
+### Features
+
+* add not-in operator for parse ([248cff9](https://github.com/rebasedjs/rebasedjs/commit/248cff9e191d3262d499a4af08d00d0e3e50a803))
+
+
+
 ## [0.0.29](https://github.com/rebasedjs/rebasedjs/compare/v0.0.28...v0.0.29) (2021-06-12)
 
 
