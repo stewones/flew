@@ -33,6 +33,10 @@ export function setWhere(q, connector) {
       connector.containedIn(q.field, isArray(q.value) ? q.value : [q.value]);
       break;
 
+    case 'not-in':
+      connector.notContainedIn(q.field, isArray(q.value) ? q.value : [q.value]);
+      break;
+
     default:
       break;
   }
