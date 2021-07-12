@@ -1,3 +1,12 @@
+## [0.0.31](https://github.com/rebasedjs/rebasedjs/compare/v0.0.30...v0.0.31) (2021-07-12)
+
+
+### Features
+
+* **state:** add readonly option to connect ([cc6ca67](https://github.com/rebasedjs/rebasedjs/commit/cc6ca67d6b7711b80fb01385d17600cfa403b68f))
+
+
+
 ## [0.0.30](https://github.com/rebasedjs/rebasedjs/compare/v0.0.29...v0.0.30) (2021-07-09)
 
 
