@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { get } from 'lodash';
+import { cloneDeep, get } from 'lodash';
 
 import watch from 'redux-watch';
 import { store } from './createStore';
@@ -7,6 +7,7 @@ import { store } from './createStore';
 export interface ConnectOptions {
   context: boolean;
   fetch: boolean;
+  readonly: boolean;
 }
 
 export interface StateContext<T = any> {
@@ -31,7 +32,8 @@ export function connect<T>(
   path: string,
   options: Partial<ConnectOptions> = {
     context: false,
-    fetch: false
+    fetch: false,
+    readonly: true
   }
 ): Observable<T> {
   if (options.fetch) {
@@ -40,7 +42,10 @@ export function connect<T>(
 
   return new Observable(observer => {
     const storeInstance = store();
-    const storeValue = get(storeInstance.getState(), path);
+    const storeValue =
+      options.readonly === false
+        ? cloneDeep(get(storeInstance.getState(), path))
+        : get(storeInstance.getState(), path);
 
     const w = watch(storeInstance.getState, path);
     if (options.context) {
@@ -63,11 +68,13 @@ export function connect<T>(
         //   new Date().toLocaleTimeString()
         // );
 
+        const nextValue = options.readonly === false ? cloneDeep(next) : next;
+
         if (options.context) {
           observer.next({
             path,
             prev,
-            next
+            next: nextValue
           } as any);
         } else {
           observer.next(next);
