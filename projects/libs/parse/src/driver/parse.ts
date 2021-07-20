@@ -165,7 +165,7 @@ export class ParseDriver implements RebasedDriver {
       const specialQueries: any = transpileChainQuery(chain.query, {
         Parse: this.getInstance(),
         chain: chain,
-        from: this.getCollectionName(),
+        collection: this.getCollectionName(),
         skipOnQuery: this.skipOnQuery,
         skipOnOperator: this.skipOnOperator,
         specialOperators: this.specialOperators
