@@ -1,3 +1,12 @@
+## [0.0.32](https://github.com/rebasedjs/rebasedjs/compare/v0.0.31...v0.0.32) (2021-07-20)
+
+
+### Bug Fixes
+
+* **parse:** should pass `collection` to .on method instead of `from` ([3a09506](https://github.com/rebasedjs/rebasedjs/commit/3a09506676df284c4b5c6016e1640905fe4a97b1))
+
+
+
 ## [0.0.31](https://github.com/rebasedjs/rebasedjs/compare/v0.0.30...v0.0.31) (2021-07-12)
 
 
