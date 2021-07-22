@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import {
   CacheModule,
   FirebaseModule,
+  ParseModule,
   RebasedModule,
   StateModule
 } from '@rebased/angular';
@@ -52,6 +53,10 @@ import { FIREBASE_CONFIG } from './configs/firebase';
       httpConfig: {
         timeout: 60 * 1000 * 2
       }
+    }),
+    ParseModule.forRoot({
+      serverURL: environment.parse.serverURL,
+      appID: environment.parse.appID
     })
   ],
   providers: [],

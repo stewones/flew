@@ -17,6 +17,7 @@ import { Rebased, fetch } from '@rebased/core';
  * Set default driver
  */
 Rebased.options.from = `parse`;
+Rebased.options.identifier = 'objectId';
 
 /**
  * Configure parse instance
@@ -85,12 +86,22 @@ httpServer.listen(port, function() {
 // This will enable the Live Query real-time server
 ParseServer.createLiveQueryServer(httpServer);
 
-fetch('Todo')
+// fetch('Todo')
+//   .from('parse')
+//   .after(0)
+//   .size(10)
+//   .where('text', '==', 'hey1')
+//   .where('doc_id', '==', '9fc04dcd92b3')
+//   .count()
+//   .toPromise()
+//   .then(console.log);
+
+fetch('Entry')
   .from('parse')
-  .after(0)
-  .size(10)
-  .where('text', '==', 'hey1')
-  .where('doc_id', '==', '9fc04dcd92b3')
-  .count()
+  .doc('FVgqO9ySX5')
+  .delete()
   .toPromise()
-  .then(console.log);
+  .then((result: any) => {
+    console.log(result);
+  })
+  .catch(err => console.log(err));

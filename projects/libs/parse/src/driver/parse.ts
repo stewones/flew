@@ -281,19 +281,20 @@ export class ParseDriver implements RebasedDriver {
 
       if (!options.all) {
         const connector = new Parse.Object(this.getCollectionName());
-        const id = chain.doc || data[this.driverOptions.identifier];
+        // const id = chain.doc || data[this.driverOptions.identifier];
         const newData = { ...data };
 
         //
         // auto id generation
-        if (!this.driverOptions.disableAutoID) {
-          if (id) {
-            newData[this.driverOptions.identifier] = id;
-          } else {
-            if (!newData[this.driverOptions.identifier])
-              newData[this.driverOptions.identifier] = guid(3);
-          }
-        }
+        // we can't have this feature for parse
+        // if (!this.driverOptions.disableAutoID) {
+        //   if (id) {
+        //     newData[this.driverOptions.identifier] = id;
+        //   } else {
+        //     if (!newData[this.driverOptions.identifier])
+        //       newData[this.driverOptions.identifier] = guid(3);
+        //   }
+        // }
 
         //
         // auto update timestamp
@@ -432,6 +433,7 @@ export class ParseDriver implements RebasedDriver {
       //
       // add or condition when doc is set
       if (chain.doc) {
+        console.log(this.driverOptions.identifier, trim(chain.doc));
         let orQueryExtended = {
           or: [
             {

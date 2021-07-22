@@ -57,10 +57,28 @@ export class AppComponent implements OnInit {
     //   .then((result: any) => {
     //     console.log(result);
     //   });
+
+    // fetch('Entry')
+    //   .from('parse')
+    //   .set({
+    //     a: 123
+    //   })
+    //   .toPromise()
+    //   .then((result: any) => {
+    //     console.log(result);
+    //   });
   }
 
   decrement() {
     dispatch(decrement(1));
+    // fetch('Entry')
+    //   .from('parse')
+    //   .doc('oaJ9tKmWCg')
+    //   .delete()
+    //   .toPromise()
+    //   .then((result: any) => {
+    //     console.log(result);
+    //   });
   }
 
   incrementAsync(seconds) {

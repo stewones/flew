@@ -5,7 +5,12 @@
 export const environment = {
   production: false,
   dbName: 'todo',
-  dbStore: 'todo'
+  dbStore: 'todo',
+  parse: {
+    appID: 'AppServer',
+    masterKey: 'AppParse', // only for tests. this is not recommended from client
+    serverURL: 'http://localhost:1337/api'
+  }
 };
 
 /*
