@@ -149,6 +149,7 @@ export class ParseDriver implements RebasedDriver {
   }
 
   public findOne<T>(chain: RebasedChainPayload, key: string): Observable<T> {
+    chain.size = 1;
     return this.find<T>(chain, key).pipe(
       map(r => (r && r.length ? r[0] : ({} as T)))
     );
