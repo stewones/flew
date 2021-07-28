@@ -1,3 +1,13 @@
+## [0.0.34](https://github.com/rebasedjs/rebasedjs/compare/v0.0.33...v0.0.34) (2021-07-28)
+
+
+### Bug Fixes
+
+* **parse:** apply size=1 to findOne ([36451c1](https://github.com/rebasedjs/rebasedjs/commit/36451c1734fa8c7d09664164e09e774f15652a3a))
+* **parse:** we can't rely on auto id generation for parse ([6a68250](https://github.com/rebasedjs/rebasedjs/commit/6a68250d6683a30e2d84040d6f52531aff8283d0))
+
+
+
 ## [0.0.33](https://github.com/rebasedjs/rebasedjs/compare/v0.0.32...v0.0.33) (2021-07-22)
 
 
