@@ -1,4 +1,4 @@
-import { transform, isEqual, isObject, isEmpty } from 'lodash';
+import { transform, isEqual, isObject, isEmpty } from 'lodash-es';
 
 export function diff(from_, to_): any {
   function changes(from, to): any {

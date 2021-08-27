@@ -1,4 +1,4 @@
-import { isArray, isEmpty, isObject } from 'lodash';
+import { isArray, isEmpty, isObject } from 'lodash-es';
 
 /**
  * Apply order on query

@@ -1,4 +1,4 @@
-import { isArray, isString, isFunction, isEmpty } from 'lodash';
+import { isArray, isString, isFunction, isEmpty } from 'lodash-es';
 
 /**
  * Chain query transpiler

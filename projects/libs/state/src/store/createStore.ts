@@ -1,6 +1,6 @@
 import { Rebased } from '@rebased/core';
 import { combineReducers, createStore as createReduxStore } from 'redux';
-import { pickBy, isEmpty } from 'lodash';
+import { pickBy, isEmpty } from 'lodash-es';
 
 // the fetch reducer
 function _fetch(state = {}, action) {

@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { isEmpty } from 'lodash-es';
 import { from, Observable, of } from 'rxjs';
 import { catchError, first, map, mergeMap, tap } from 'rxjs/operators';
 import { isDiff } from '../effects/diff';

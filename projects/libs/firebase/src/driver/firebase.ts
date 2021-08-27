@@ -1,4 +1,4 @@
-import { get, isArray, isEmpty, isObject } from 'lodash';
+import { get, isArray, isEmpty, isObject } from 'lodash-es';
 import { Observable, PartialObserver } from 'rxjs';
 import { map } from 'rxjs/operators';
 

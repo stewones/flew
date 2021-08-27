@@ -1,5 +1,5 @@
 import { transpileChainQuery } from './transpile';
-import { isEmpty } from 'lodash';
+import { isEmpty } from 'lodash-es';
 import { where } from './where';
 import { order } from './order';
 import { limit } from './limit';

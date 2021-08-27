@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from 'axios';
-import { isArray, isEmpty, isString, omit } from 'lodash';
+import { isArray, isEmpty, isString, omit } from 'lodash-es';
 import { Observable, Subject } from 'rxjs';
 import { Rebased } from '../symbols/rebased';
 import { RebasedBridge } from '../interfaces/bridge';

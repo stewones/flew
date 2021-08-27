@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosInstance } from 'axios';
-import { get, isArray } from 'lodash';
+import { get, isArray } from 'lodash-es';
 import { from, Observable, PartialObserver } from 'rxjs';
 import { RebasedDriver, RebasedDriverOption } from '../interfaces/driver';
 import { RebasedOptions } from '../interfaces/options';
