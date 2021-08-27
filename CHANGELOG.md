@@ -1,3 +1,12 @@
+## [0.0.35](https://github.com/rebasedjs/rebasedjs/compare/v0.0.34...v0.0.35) (2021-08-27)
+
+
+### Bug Fixes
+
+* get rid of lodash in favor of lodash-es ([d7c93ad](https://github.com/rebasedjs/rebasedjs/commit/d7c93adad49c91c34785b0e842d053711ff8c070))
+
+
+
 ## [0.0.34](https://github.com/rebasedjs/rebasedjs/compare/v0.0.33...v0.0.34) (2021-07-28)
 
 
