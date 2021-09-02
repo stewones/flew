@@ -1,6 +1,6 @@
 {
 	"name": "@rebased/state",
-	"version": "0.0.35",
+	"version": "0.0.36",
 	"dependencies": {
 		"immer": "^7.0.5",
 		"redux": "^4.0.5",

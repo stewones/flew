@@ -1,3 +1,12 @@
+## [0.0.36](https://github.com/rebasedjs/rebasedjs/compare/v0.0.35...v0.0.36) (2021-09-02)
+
+
+### Bug Fixes
+
+* add token to bridge interface ([149622a](https://github.com/rebasedjs/rebasedjs/commit/149622ab9964b2175371dd40781ff5367ef6c7dd))
+
+
+
 ## [0.0.35](https://github.com/rebasedjs/rebasedjs/compare/v0.0.34...v0.0.35) (2021-08-27)
 
 
