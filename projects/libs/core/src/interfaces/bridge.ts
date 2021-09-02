@@ -35,6 +35,7 @@ export interface RebasedBridge {
   //
   // utils
   http(transformFn: (config: AxiosRequestConfig) => void): RebasedCore;
+  token(session: string): RebasedCore;
 
   //
   // verbs
