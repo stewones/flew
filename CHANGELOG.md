@@ -1,3 +1,12 @@
+## [0.0.37](https://github.com/rebasedjs/rebasedjs/compare/v0.0.36...v0.0.37) (2021-09-15)
+
+
+### Bug Fixes
+
+* **state:** enable custom enhancers ([df066e8](https://github.com/rebasedjs/rebasedjs/commit/df066e8e4c93521af41e7f950f6aab3c23e33bd8))
+
+
+
 ## [0.0.36](https://github.com/rebasedjs/rebasedjs/compare/v0.0.35...v0.0.36) (2021-09-02)
 
 
