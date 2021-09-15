@@ -7,7 +7,7 @@
       "@rebased/core": "@rebased/core"
     }
   },
-  "whitelistedNonPeerDependencies": [
+  "allowedNonPeerDependencies": [
     "@rebased/core",
     "localforage",
     "localforage-cordovasqlitedriver"

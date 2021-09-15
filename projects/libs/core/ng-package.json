@@ -10,5 +10,5 @@
       "rxjs": "rxjs"
     }
   },
-  "whitelistedNonPeerDependencies": ["axios", "lodash-es", "rxjs"]
+  "allowedNonPeerDependencies": ["axios", "lodash-es", "rxjs"]
 }
