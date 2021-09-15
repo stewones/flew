@@ -6,8 +6,8 @@
     "umdModuleIds": {
       "@rebased/core": "@rebased/core",
       "parse": "parse",
-      "lodash": "lodash"
+      "lodash-es": "lodash-es"
     }
   },
-  "whitelistedNonPeerDependencies": ["@rebased/core", "parse", "lodash"]
+  "whitelistedNonPeerDependencies": ["@rebased/core", "parse", "lodash-es"]
 }

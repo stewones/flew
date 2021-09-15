@@ -11,6 +11,8 @@ export interface StoreOptions {
   reducers?: any;
   state?: any; // the initial state
   trace?: boolean; // see more options at https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/API/Arguments.md
+  traceLimit?: number;
+  enhancers?: any;
 }
 
 @Injectable()

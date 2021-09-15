@@ -17,8 +17,8 @@ export function install(options) {
   Rebased.state.setState = setState;
 
   createStore(
-    (options && options.reducers) || {},
-    (options && options.state) || {},
-    applyDevTools(options)
+    options?.reducers || {},
+    options?.state || {},
+    options?.enhancers || applyDevTools(options)
   );
 }

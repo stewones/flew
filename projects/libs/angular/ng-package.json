@@ -2,7 +2,7 @@
   "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../../dist/libs/angular",
   "whitelistedNonPeerDependencies": [
-    "lodash",
+    "lodash-es",
     "@angular/common",
     "@angular/core",
     "@rebased/core",
@@ -15,7 +15,7 @@
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
-      "lodash": "_",
+      "lodash-es": "_",
       "@rebased/core": "@rebased/core",
       "@rebased/state": "@rebased/state",
       "@rebased/cache": "@rebased/cache",
