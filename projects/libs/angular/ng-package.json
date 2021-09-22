@@ -15,7 +15,7 @@
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
-      "lodash-es": "_",
+      "lodash-es": "lodash-es",
       "@rebased/core": "@rebased/core",
       "@rebased/state": "@rebased/state",
       "@rebased/cache": "@rebased/cache",

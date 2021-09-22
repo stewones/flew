@@ -5,7 +5,7 @@
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
-      "lodash-es": "_",
+      "lodash-es": "lodash-es",
       "axios": "axios",
       "rxjs": "rxjs"
     }
