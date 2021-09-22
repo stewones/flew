@@ -1,14 +1,14 @@
 {
-	"name": "@rebased/state",
-	"version": "0.0.38",
-	"dependencies": {
-		"immer": "^7.0.5",
-		"redux": "^4.0.5",
-		"redux-thunk": "^2.3.0",
-		"redux-watch": "^1.1.1",
-		"rxjs": "^6.6.3",
-		"lodash-es": "^4.17.21",
-		"tslib": "^2.0.0"
-	},
-	"peerDependencies": {}
+  "name": "@rebased/state",
+  "version": "0.0.38",
+  "dependencies": {
+    "immer": "^7.0.5",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "redux-watch": "^1.1.1",
+    "rxjs": "^6.6.3",
+    "lodash": "^4.17.21",
+    "tslib": "^2.0.0"
+  },
+  "peerDependencies": {}
 }

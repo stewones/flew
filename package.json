@@ -45,7 +45,7 @@
     "deep-diff": "1.0.2",
     "firebase": "^8.1.2",
     "immer": "^6.0.8",
-    "lodash-es": "^4.17.21",
+    "lodash": "^4.17.21",
     "parse": "^2.13.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",

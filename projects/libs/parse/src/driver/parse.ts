@@ -1,4 +1,4 @@
-import { isEmpty, isFunction, trim, omit } from 'lodash-es';
+import { isEmpty, isFunction, trim, omit } from 'lodash';
 
 import {
   Rebased,

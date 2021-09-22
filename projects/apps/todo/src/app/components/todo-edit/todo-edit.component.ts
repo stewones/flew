@@ -13,7 +13,7 @@ import { saveTodo } from '../../actions/saveTodo';
 import { addTodoView } from '../../actions/addTodoView';
 import { createTodo } from '../../actions/createTodo';
 import { removeTodo } from '../../actions/removeTodo';
-import { cloneDeep } from 'lodash-es';
+import { cloneDeep } from 'lodash';
 import { map } from 'rxjs/operators';
 
 @Component({

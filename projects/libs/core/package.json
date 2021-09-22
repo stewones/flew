@@ -1,23 +1,23 @@
 {
-	"name": "@rebased/core",
-	"version": "0.0.38",
-	"homepage": "https://github.com/rebasedjs/rebasedjs#readme",
-	"license": "MIT",
-	"author": {
-		"name": "Rebased Team",
-		"email": "support@rebased.io",
-		"url": "https://rebased.io"
-	},
-	"bugs": {
-		"url": "https://github.com/rebasedjs/rebasedjs/issues",
-		"email": "support@rebased.io"
-	},
-	"dependencies": {
-		"tslib": "^2.0.0",
-		"axios": "^0.19.2",
-		"rxjs": "^6.6.3",
-		"lodash-es": "^4.17.21"
-	},
-	"peerDependencies": {},
-	"description": "Fetch and data management reimagined"
+  "name": "@rebased/core",
+  "version": "0.0.38",
+  "homepage": "https://github.com/rebasedjs/rebasedjs#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Rebased Team",
+    "email": "support@rebased.io",
+    "url": "https://rebased.io"
+  },
+  "bugs": {
+    "url": "https://github.com/rebasedjs/rebasedjs/issues",
+    "email": "support@rebased.io"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0",
+    "axios": "^0.19.2",
+    "rxjs": "^6.6.3",
+    "lodash": "^4.17.21"
+  },
+  "peerDependencies": {},
+  "description": "Fetch and data management reimagined"
 }

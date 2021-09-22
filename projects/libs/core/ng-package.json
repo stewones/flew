@@ -5,10 +5,10 @@
   "lib": {
     "entryFile": "src/index.ts",
     "umdModuleIds": {
-      "lodash-es": "lodash-es",
+      "lodash": "lodash",
       "axios": "axios",
       "rxjs": "rxjs"
     }
   },
-  "allowedNonPeerDependencies": ["axios", "lodash-es", "rxjs"]
+  "allowedNonPeerDependencies": ["axios", "lodash", "rxjs"]
 }

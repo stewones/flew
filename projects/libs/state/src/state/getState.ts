@@ -1,4 +1,4 @@
-import { get, isUndefined } from 'lodash-es';
+import { get, isUndefined } from 'lodash';
 import { store } from '../store';
 
 /**

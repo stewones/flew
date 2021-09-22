@@ -1,4 +1,4 @@
-import { isBoolean } from 'lodash-es';
+import { isBoolean } from 'lodash';
 import { RebasedBridge } from '../interfaces/bridge';
 import { RebasedOptions } from '../interfaces/options';
 import { FetchServer } from '../fetch/server';
