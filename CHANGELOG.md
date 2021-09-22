@@ -1,3 +1,12 @@
+## [0.0.39](https://github.com/rebasedjs/rebasedjs/compare/v0.0.38...v0.0.39) (2021-09-22)
+
+
+### Bug Fixes
+
+* revert to lodash for now due to bundle incompatibilities ([6ec1560](https://github.com/rebasedjs/rebasedjs/commit/6ec1560332105d57cc099b42e83fe291262c914e))
+
+
+
 ## [0.0.38](https://github.com/rebasedjs/rebasedjs/compare/v0.0.37...v0.0.38) (2021-09-22)
 
 
