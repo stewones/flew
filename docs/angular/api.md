@@ -1,3 +1,12 @@
+---
+id: api
+title: API
+description: 'Great resources to get started learning and using Rebased with Angular'
+hide_title: true
+---
+
+# Angular API
+
 <a name="CacheModule"></a>
 
 ## CacheModule
@@ -10,6 +19,7 @@
 **Example**  
 ```js
   import { CacheModule } from '@reative/angular';
+  import { CacheModule } from '@rebased/angular';
   //... 
   CacheModule.forRoot({
     dbName: 'kitty',
@@ -53,6 +63,7 @@
 **Example**  
 ```js
   import { FirebaseModule } from '@reative/angular';
+  import { FirebaseModule } from '@rebased/angular';
   //... 
   FirebaseModule.forRoot({
     config: FIREBASE_CONFIG, // from firebase console
@@ -73,6 +84,7 @@
 **Example**  
 ```js
   import { ParseModule } from '@reative/angular';
+  import { ParseModule } from '@rebased/angular';
   //... 
   ParseModule.forRoot({
     serverURL: 'http://parse-endpoint.com',
@@ -101,6 +113,26 @@
     NgxsModule.forRoot([ReativeState], {
         developmentMode: !environment.production
     }),
+<a name="RebasedModule"></a>
+
+## RebasedModule
+**Kind**: global class  
+<a name="new_RebasedModule_new"></a>
+
+### new RebasedModule()
+<p>Rebased Module</p>
+
+**Example**  
+```js
+  import { RebasedModule } from '@rebased/angular';
+  //... 
+  RebasedModule.forRoot({
+    driver: 'firestore', // define default data driver
+    silent: false, // whether show logs
+    timestampEnabled: true // auto save timestamp
+    timestampCreated: 'createdAt',
+    timestampUpdated: 'updatedAt'
+  })
   //...
   ```
   
@@ -121,3 +153,12 @@
   //...
   ```
   
+  import { RebasedModule } from '@rebased/angular';
+  //... 
+  RebasedModule.forRoot({
+    production: true,
+    trace: false,
+    reducers: {...},
+  })
+  //...
+  ```

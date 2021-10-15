@@ -5,13 +5,13 @@
     "component": {
       "aliases": ["co"],
       "factory": "./component",
-      "description": "Create a Reative component",
+      "description": "Create a Rebased component",
       "schema": "./component/schema.json"
     },
     "page": {
       "aliases": ["pg"],
       "factory": "./page",
-      "description": "Create a Reative page",
+      "description": "Create a Rebased page",
       "schema": "./page/schema.json"
     }
   }

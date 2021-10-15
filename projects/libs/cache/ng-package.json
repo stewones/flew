@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/libs/cache",
+  "lib": {
+    "entryFile": "src/index.ts",
+    "umdModuleIds": {
+      "@rebased/core": "@rebased/core"
+    }
+  },
+  "allowedNonPeerDependencies": [
+    "@rebased/core",
+    "localforage",
+    "localforage-cordovasqlitedriver"
+  ]
+}

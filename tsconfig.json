@@ -48,11 +48,19 @@
       "@reative/core": ["libs/core/src/index.ts"],
       "@reative/firebase": ["libs/firebase/src/index.ts"],
       "@reative/parse": ["libs/parse/src/index.ts"]
+      "@rebased/cache": ["projects/libs/cache/src/index.ts"],
+      "@rebased/angular": ["projects/libs/angular/src/index.ts"],
+      "@rebased/state": ["projects/libs/state/src/index.ts"],
+      "@rebased/core": ["projects/libs/core/src/index.ts"],
+      "@rebased/firebase": ["projects/libs/firebase/src/index.ts"],
+      "@rebased/parse": ["projects/libs/parse/src/index.ts"]
     },
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "rootDir": "."
+    "rootDir": ".",
+    "types": ["node", "jest"]
   },
   "exclude": ["node_modules", "tmp"]
 }

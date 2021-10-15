@@ -42,3 +42,5 @@ Thumbs.db
 firebase.config.ts
 .build
 package-lock.json
+projects/apps/counter/src/app/configs/firebase.ts
+projects/apps/todo/src/app/configs/firebase.ts

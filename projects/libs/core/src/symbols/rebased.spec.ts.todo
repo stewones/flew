@@ -1,0 +1,41 @@
+import { Rebased } from './rebased';
+
+describe('RRSymbol', () => {
+  // it('should dispatch payloads to store', () => {
+  //   const spy = jest.spyOn(Rebased.state.sync, 'next');
+  //   Rebased.state.sync.next(`rr rulez!`);
+  //   expect(spy).toBeCalledWith(`rr rulez!`);
+  // });
+  // it('should get options', () => {
+  //   expect(optionGet()).toEqual({ from: 'firestore' });
+  // });
+  // it('should set options', () => {
+  //   optionSet({ useLog: false });
+  //   expect(Rebased.options.useLog).toBe(false);
+  // });
+  // it('should get store', () => {
+  //   expect(storeGet()).toBeTruthy();
+  // });
+  // it('should set store', () => {
+  //   const store = { _: 'ngxs' };
+  //   storeSet(store);
+  //   expect(Rebased.state).toBe(store);
+  // });
+  // @todo move to rr state
+  // it('should return a state response from a key', () => {
+  //   expect(
+  //     key('kitty')({
+  //       State: {
+  //         responses: [{ key: 'kitty', data: { name: 'kitty', color: 'grey' } }]
+  //       }
+  //     })
+  //   ).toBeTruthy();
+  //   expect(
+  //     key('kitty', true)({
+  //       State: {
+  //         responses: [{ key: 'kitty', data: { name: 'kitty', color: 'grey' } }]
+  //       }
+  //     })
+  //   ).toEqual({ name: 'kitty', color: 'grey' });
+  // });
+});

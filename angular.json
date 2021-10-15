@@ -13,6 +13,11 @@
     "core": {
       "root": "libs/core",
       "sourceRoot": "libs/core/src",
+  "newProjectRoot": "",
+  "projects": {
+    "core": {
+      "root": "projects/libs/core",
+      "sourceRoot": "projects/libs/core/src",
       "projectType": "library",
       "prefix": "",
       "architect": {
@@ -23,6 +28,10 @@
             "project": "projects/reactive-record/ng-package.json"
             "tsConfig": "libs/core/tsconfig.lib.json",
             "project": "libs/core/ng-package.json"
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/libs/core/tsconfig.lib.json",
+            "project": "projects/libs/core/ng-package.json"
           },
           "configurations": {
             "production": {}
@@ -40,6 +49,8 @@
             "tsConfig": [
               "libs/core/tsconfig.lib.json",
               "libs/core/tsconfig.spec.json"
+              "projects/libs/core/tsconfig.lib.json",
+              "projects/libs/core/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
@@ -50,6 +61,9 @@
             "jestConfig": "libs/core/jest.config.js",
             "tsConfig": "libs/core/tsconfig.spec.json",
             "setupFile": "libs/core/src/test-setup.ts"
+            "jestConfig": "projects/libs/core/jest.config.js",
+            "tsConfig": "projects/libs/core/tsconfig.spec.json",
+            "setupFile": "projects/libs/core/src/test-setup.ts"
           },
           "configurations": {
             "ci": {
@@ -69,6 +83,8 @@
     "cache": {
       "root": "libs/cache",
       "sourceRoot": "libs/cache/src",
+      "root": "projects/libs/cache",
+      "sourceRoot": "projects/libs/cache/src",
       "projectType": "library",
       "prefix": "",
       "architect": {
@@ -77,6 +93,10 @@
           "options": {
             "tsConfig": "libs/cache/tsconfig.lib.json",
             "project": "libs/cache/ng-package.json"
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/libs/cache/tsconfig.lib.json",
+            "project": "projects/libs/cache/ng-package.json"
           },
           "configurations": {
             "production": {}
@@ -88,6 +108,8 @@
             "tsConfig": [
               "libs/cache/tsconfig.lib.json",
               "libs/cache/tsconfig.spec.json"
+              "projects/libs/cache/tsconfig.lib.json",
+              "projects/libs/cache/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
@@ -98,6 +120,9 @@
             "jestConfig": "libs/cache/jest.config.js",
             "tsConfig": "libs/cache/tsconfig.spec.json",
             "setupFile": "libs/cache/src/test-setup.ts"
+            "jestConfig": "projects/libs/cache/jest.config.js",
+            "tsConfig": "projects/libs/cache/tsconfig.spec.json",
+            "setupFile": "projects/libs/cache/src/test-setup.ts"
           }
         }
       },
@@ -110,6 +135,8 @@
     "angular": {
       "root": "libs/angular",
       "sourceRoot": "libs/angular/src",
+      "root": "projects/libs/angular",
+      "sourceRoot": "projects/libs/angular/src",
       "projectType": "library",
       "prefix": "",
       "architect": {
@@ -118,6 +145,10 @@
           "options": {
             "tsConfig": "libs/angular/tsconfig.lib.json",
             "project": "libs/angular/ng-package.json"
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/libs/angular/tsconfig.lib.json",
+            "project": "projects/libs/angular/ng-package.json"
           },
           "configurations": {
             "production": {}
@@ -129,6 +160,8 @@
             "tsConfig": [
               "libs/angular/tsconfig.lib.json",
               "libs/angular/tsconfig.spec.json"
+              "projects/libs/angular/tsconfig.lib.json",
+              "projects/libs/angular/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
@@ -139,6 +172,9 @@
             "jestConfig": "libs/angular/jest.config.js",
             "tsConfig": "libs/angular/tsconfig.spec.json",
             "setupFile": "libs/angular/src/test-setup.ts"
+            "jestConfig": "projects/libs/angular/jest.config.js",
+            "tsConfig": "projects/libs/angular/tsconfig.spec.json",
+            "setupFile": "projects/libs/angular/src/test-setup.ts"
           }
         }
       },
@@ -151,6 +187,8 @@
     "state": {
       "root": "libs/state",
       "sourceRoot": "libs/state/src",
+      "root": "projects/libs/state",
+      "sourceRoot": "projects/libs/state/src",
       "projectType": "library",
       "prefix": "",
       "architect": {
@@ -159,6 +197,10 @@
           "options": {
             "tsConfig": "libs/state/tsconfig.lib.json",
             "project": "libs/state/ng-package.json"
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/libs/state/tsconfig.lib.json",
+            "project": "projects/libs/state/ng-package.json"
           },
           "configurations": {
             "production": {}
@@ -170,6 +212,8 @@
             "tsConfig": [
               "libs/state/tsconfig.lib.json",
               "libs/state/tsconfig.spec.json"
+              "projects/libs/state/tsconfig.lib.json",
+              "projects/libs/state/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
@@ -180,6 +224,9 @@
             "jestConfig": "libs/state/jest.config.js",
             "tsConfig": "libs/state/tsconfig.spec.json",
             "setupFile": "libs/state/src/test-setup.ts"
+            "jestConfig": "projects/libs/state/jest.config.js",
+            "tsConfig": "projects/libs/state/tsconfig.spec.json",
+            "setupFile": "projects/libs/state/src/test-setup.ts"
           }
         }
       },
@@ -192,6 +239,8 @@
     "firebase": {
       "root": "libs/firebase",
       "sourceRoot": "libs/firebase/src",
+      "root": "projects/libs/firebase",
+      "sourceRoot": "projects/libs/firebase/src",
       "projectType": "library",
       "prefix": "",
       "architect": {
@@ -200,6 +249,10 @@
           "options": {
             "tsConfig": "libs/firebase/tsconfig.lib.json",
             "project": "libs/firebase/ng-package.json"
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/libs/firebase/tsconfig.lib.json",
+            "project": "projects/libs/firebase/ng-package.json"
           },
           "configurations": {
             "production": {}
@@ -211,6 +264,8 @@
             "tsConfig": [
               "libs/firebase/tsconfig.lib.json",
               "libs/firebase/tsconfig.spec.json"
+              "projects/libs/firebase/tsconfig.lib.json",
+              "projects/libs/firebase/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
@@ -221,6 +276,9 @@
             "jestConfig": "libs/firebase/jest.config.js",
             "tsConfig": "libs/firebase/tsconfig.spec.json",
             "setupFile": "libs/firebase/src/test-setup.ts"
+            "jestConfig": "projects/libs/firebase/jest.config.js",
+            "tsConfig": "projects/libs/firebase/tsconfig.spec.json",
+            "setupFile": "projects/libs/firebase/src/test-setup.ts"
           }
         }
       },
@@ -233,6 +291,8 @@
     "parse": {
       "root": "libs/parse",
       "sourceRoot": "libs/parse/src",
+      "root": "projects/libs/parse",
+      "sourceRoot": "projects/libs/parse/src",
       "projectType": "library",
       "prefix": "",
       "architect": {
@@ -241,6 +301,10 @@
           "options": {
             "tsConfig": "libs/parse/tsconfig.lib.json",
             "project": "libs/parse/ng-package.json"
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/libs/parse/tsconfig.lib.json",
+            "project": "projects/libs/parse/ng-package.json"
           },
           "configurations": {
             "production": {}
@@ -252,6 +316,8 @@
             "tsConfig": [
               "libs/parse/tsconfig.lib.json",
               "libs/parse/tsconfig.spec.json"
+              "projects/libs/parse/tsconfig.lib.json",
+              "projects/libs/parse/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
@@ -262,6 +328,9 @@
             "jestConfig": "libs/parse/jest.config.js",
             "tsConfig": "libs/parse/tsconfig.spec.json",
             "setupFile": "libs/parse/src/test-setup.ts"
+            "jestConfig": "projects/libs/parse/jest.config.js",
+            "tsConfig": "projects/libs/parse/tsconfig.spec.json",
+            "setupFile": "projects/libs/parse/src/test-setup.ts"
           }
         }
       },
@@ -499,6 +568,16 @@
       "root": "apps/todo-redux",
       "sourceRoot": "apps/todo-redux/src",
       "prefix": "reative",
+    "todo": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/apps/todo",
+      "sourceRoot": "projects/apps/todo/src",
+      "prefix": "rebased",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -514,6 +593,19 @@
               "apps/todo-redux/src/assets"
             ],
             "styles": ["apps/todo-redux/src/styles.scss"],
+            "outputPath": "dist/projects/apps/todo",
+            "index": "projects/apps/todo/src/index.html",
+            "main": "projects/apps/todo/src/main.ts",
+            "polyfills": "projects/apps/todo/src/polyfills.ts",
+            "tsConfig": "projects/apps/todo/tsconfig.app.json",
+            "allowedCommonJsDependencies": ["axios", "redux-watch", "parse"],
+            "aot": true,
+            "preserveSymlinks": true,
+            "assets": [
+              "projects/apps/todo/src/favicon.ico",
+              "projects/apps/todo/src/assets"
+            ],
+            "styles": ["projects/apps/todo/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -522,6 +614,8 @@
                 {
                   "replace": "apps/todo-redux/src/environments/environment.ts",
                   "with": "apps/todo-redux/src/environments/environment.prod.ts"
+                  "replace": "projects/apps/todo/src/environments/environment.ts",
+                  "with": "projects/apps/todo/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -759,6 +853,10 @@
               "apps/counter-redux/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!apps/counter-redux/**"]
+              "projects/apps/todo/tsconfig.app.json",
+              "projects/apps/todo/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!projects/apps/todo/**"]
           }
         },
         "test": {
@@ -767,6 +865,9 @@
             "jestConfig": "apps/counter-redux/jest.config.js",
             "tsConfig": "apps/counter-redux/tsconfig.spec.json",
             "setupFile": "apps/counter-redux/src/test-setup.ts"
+            "jestConfig": "projects/apps/todo/jest.config.js",
+            "tsConfig": "projects/apps/todo/tsconfig.spec.json",
+            "setupFile": "projects/apps/todo/src/test-setup.ts"
           }
         }
       }
@@ -781,6 +882,9 @@
       "root": "apps/counter",
       "sourceRoot": "apps/counter/src",
       "prefix": "reative",
+      "root": "projects/apps/counter",
+      "sourceRoot": "projects/apps/counter/src",
+      "prefix": "rebased",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -796,6 +900,19 @@
               "apps/counter/src/assets"
             ],
             "styles": ["apps/counter/src/styles.scss"],
+            "outputPath": "dist/projects/apps/counter",
+            "index": "projects/apps/counter/src/index.html",
+            "main": "projects/apps/counter/src/main.ts",
+            "polyfills": "projects/apps/counter/src/polyfills.ts",
+            "tsConfig": "projects/apps/counter/tsconfig.app.json",
+            "allowedCommonJsDependencies": ["axios", "redux-watch", "parse"],
+            "aot": true,
+            "preserveSymlinks": true,
+            "assets": [
+              "projects/apps/counter/src/favicon.ico",
+              "projects/apps/counter/src/assets"
+            ],
+            "styles": ["projects/apps/counter/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -804,6 +921,8 @@
                 {
                   "replace": "apps/counter/src/environments/environment.ts",
                   "with": "apps/counter/src/environments/environment.prod.ts"
+                  "replace": "projects/apps/counter/src/environments/environment.ts",
+                  "with": "projects/apps/counter/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -860,6 +979,10 @@
               "apps/counter/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!apps/counter/**"]
+              "projects/apps/counter/tsconfig.app.json",
+              "projects/apps/counter/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!projects/apps/counter/**"]
           }
         },
         "test": {
@@ -868,6 +991,9 @@
             "jestConfig": "apps/counter/jest.config.js",
             "tsConfig": "apps/counter/tsconfig.spec.json",
             "setupFile": "apps/counter/src/test-setup.ts"
+            "jestConfig": "projects/apps/counter/jest.config.js",
+            "tsConfig": "projects/apps/counter/tsconfig.spec.json",
+            "setupFile": "projects/apps/counter/src/test-setup.ts"
           }
         }
       }
@@ -906,4 +1032,13 @@
     }
   },
   "defaultProject": "todo-redux"
+  "cli": {
+    "warnings": {
+      "versionMismatch": false
+    },
+    "defaultCollection": "@rebased/schematics",
+    "analytics": false
+  },
+  "schematics": {},
+  "defaultProject": "todo"
 }

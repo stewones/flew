@@ -1,5 +1,5 @@
 {
-  "name": "reative-libs",
+  "name": "rebased-libs",
   "version": "0.2.14",
   "description": "scripts used for release all the packages at same time",
   "scripts": {

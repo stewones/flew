@@ -1,0 +1,14 @@
+{
+	"name": "@rebased/angular",
+	"version": "0.0.39",
+	"dependencies": {
+		"@angular/common": "~11.0.0",
+		"@angular/core": "~11.0.0",
+		"@rebased/parse": "~0.0.11",
+		"@rebased/firebase": "~0.0.11",
+		"@rebased/cache": "~0.0.11",
+		"@rebased/state": "~0.0.11",
+		"tslib": "^2.0.0"
+	},
+	"peerDependencies": {}
+}

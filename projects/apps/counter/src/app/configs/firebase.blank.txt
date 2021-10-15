@@ -1,0 +1,5 @@
+// grab this config from firebase console
+// https://docs.chatness.app/setup/firebase-add-sdk
+export const FIREBASE_CONFIG = {
+  // ..
+};

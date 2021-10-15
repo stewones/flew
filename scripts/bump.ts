@@ -1,4 +1,5 @@
 import { R_VERSION } from '../libs/core/src/lib/version';
+import { R_VERSION } from '../projects/libs/core/src/version';
 import * as fs from 'fs';
 import { LIBS } from './libs';
 import * as shell from 'shelljs';
@@ -11,6 +12,10 @@ export function bumpRR(target: SemanticTarget = 'patch') {
   newVersion = bumpNumber(R_VERSION, target);
   fs.writeFile(
     '../libs/core/src/lib/version.ts',
+export function bumpR(target: SemanticTarget = 'patch') {
+  newVersion = bumpNumber(R_VERSION, target);
+  fs.writeFile(
+    '../projects/libs/core/src/version.ts',
     `export const R_VERSION = '${newVersion}';`,
     function(err) {
       if (err) {
@@ -18,6 +23,7 @@ export function bumpRR(target: SemanticTarget = 'patch') {
         process.exit(1);
       }
       console.log('RR version updated');
+      console.log('version updated');
     }
   );
 }
@@ -25,13 +31,14 @@ export function bumpRR(target: SemanticTarget = 'patch') {
 export function bumpPackages(target: SemanticTarget = 'patch') {
   LIBS.map(libName => {
     fs.readFile(`../libs/${libName}/package.json`, 'utf8', function(
+    fs.readFile(`../projects/libs/${libName}/package.json`, 'utf8', function(
       err,
       contents
     ) {
       const pkg = JSON.parse(contents);
       pkg.version = bumpNumber(pkg.version, target);
       fs.writeFile(
-        `../libs/${libName}/package.json`,
+        `../projects/libs/${libName}/package.json`,
         JSON.stringify(pkg, null, '\t'),
         function(err) {
           if (err) {
@@ -47,20 +54,18 @@ export function bumpPackages(target: SemanticTarget = 'patch') {
 
 export function bumpPackage(target: SemanticTarget = 'patch') {
   LIBS.map(libName => {
-    fs.readFile(`../../package.json`, 'utf8', function(err, contents) {
+    fs.readFile(`../package.json`, 'utf8', function(err, contents) {
       const pkg = JSON.parse(contents);
       pkg.version = bumpNumber(pkg.version, target);
-      fs.writeFile(
-        `../../package.json`,
-        JSON.stringify(pkg, null, '\t'),
-        function(err) {
-          if (err) {
-            console.log(err);
-            process.exit(1);
-          }
-          console.log(`${libName} package updated`);
+      fs.writeFile(`../package.json`, JSON.stringify(pkg, null, '\t'), function(
+        err
+      ) {
+        if (err) {
+          console.log(err);
+          process.exit(1);
         }
-      );
+        console.log(`${libName} package updated`);
+      });
     });
   });
 }
@@ -97,7 +102,7 @@ export function gitTag() {
 }
 
 export function bump(target: SemanticTarget = 'patch') {
-  bumpRR(target);
+  bumpR(target);
   bumpPackages(target);
 }
 
