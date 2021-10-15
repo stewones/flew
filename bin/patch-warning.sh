@@ -1,1 +1,0 @@
-echo 'project patched. bump version inside projects/active-record/package.json and then issue npm run publish'

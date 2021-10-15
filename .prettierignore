@@ -1,1 +1,6 @@
-# Add files here to ignore them from prettier formatting
+dist
+package.json
+package-lock.json
+config
+types
+coverage
