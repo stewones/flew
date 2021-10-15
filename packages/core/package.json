@@ -1,6 +1,6 @@
 {
   "name": "@flew/core",
-  "version": "0.0.10",
+  "version": "0.0.12",
   "description": "Flew core",
   "keywords": [],
   "homepage": "https://flew.dev",
@@ -9,6 +9,7 @@
   "module": "dist/@flew/core.mjs",
   "types": "types/src/index.d.ts",
   "scripts": {
+    "prepublishOnly": "npm run build",
     "rollup": "rollup",
     "eslint": "eslint",
     "jest": "jest",

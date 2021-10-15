@@ -15,7 +15,7 @@ export function getState<T = any>(path?: string): T {
   let data = get(currentState, path);
   // otherwise attempt to get memoized data
   if (isUndefined(data)) {
-    data = get(currentState, `_fetch.${path}`);
+    data = get(currentState, `_network_.${path}`);
   }
   return path ? (data as T) : (currentState as T);
 }

@@ -21,7 +21,7 @@ export function setState(
   options: SetStateOptions = { cache: true },
 ) {
   dispatch({
-    type: 'fetchStateUpdate',
+    type: 'networkStateUpdate',
     key: key,
     value: value,
   });

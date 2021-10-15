@@ -4,7 +4,26 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 
 import { Injectable } from '@angular/core';
-import { getCache, installCache } from '@flew/cache';
+import { getCache, cachePlugin } from '@flew/cache';
+import { statePlugin } from '@flew/state';
+import { setup } from '@flew/core';
+
+setup({
+  options: {
+    silent: false,
+  },
+  plugins: [
+    cachePlugin({
+      name: 'flew',
+      store: 'todo-app',
+    }),
+    statePlugin({
+      production: false,
+      trace: true,
+      traceLimit: 25,
+    }),
+  ],
+});
 
 const states = ['oi'];
 
@@ -23,23 +42,6 @@ export class AppStart {
   }
 }
 
-import { installNetwork } from '@flew/network';
-import { installState } from '@flew/state';
-
-installNetwork({
-  silent: false,
-});
-
-installCache({
-  name: 'flew',
-  store: 'todo-app',
-});
-
-installState({
-  production: false,
-  trace: true,
-  traceLimit: 25,
-});
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule],

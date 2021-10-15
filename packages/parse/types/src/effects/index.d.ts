@@ -1,6 +1,5 @@
 export * from './find';
 export * from './geopoint';
-export * from './install';
 export * from './limit';
 export * from './mapping';
 export * from './model';

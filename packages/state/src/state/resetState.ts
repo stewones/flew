@@ -7,6 +7,6 @@ import { dispatch } from '../store/dispatch';
  */
 export function resetState() {
   dispatch({
-    type: 'fetchStateReset',
+    type: 'networkStateReset',
   });
 }

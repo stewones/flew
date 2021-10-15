@@ -1,20 +1,56 @@
 {
-  "name": "root",
+  "name": "flew",
+  "version": "0.0.12",
   "private": true,
   "devDependencies": {
+    "@auto-it/all-contributors": "^10.32.1",
+    "@auto-it/conventional-commits": "^10.32.1",
+    "@auto-it/first-time-contributor": "^10.32.1",
+    "@auto-it/slack": "^10.32.1",
+    "@auto-it/twitter": "^10.32.1",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
+    "auto": "^10.32.1",
+    "chalk": "^4.1.2",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^7.0.0",
     "husky": "^4.3.8",
     "lerna": "^4.0.0",
     "prettier": "^2.4.1",
-    "typescript": "^4.3.5"
+    "semver": "^7.3.5",
+    "typescript": "4.3.5"
   },
   "scripts": {
     "prettier": "prettier",
     "eslint": "eslint",
     "write:prettier": "prettier --write .",
-    "write:eslint": "eslint --fix --quiet ."
+    "write:eslint": "eslint --fix --quiet .",
+    "release:patch": "node ./scripts/releasePatch.js",
+    "bump:patch:cache": "cd packages/cache && npm version patch",
+    "bump:patch:core": "cd packages/core && npm version patch",
+    "bump:patch:firebase": "cd packages/firebase && npm version patch",
+    "bump:patch:network": "cd packages/network && npm version patch",
+    "bump:patch:parse": "cd packages/parse && npm version patch",
+    "bump:patch:state": "cd packages/state && npm version patch",
+    "publish:cache": "cd packages/cache && npm publish",
+    "publish:core": "cd packages/core && npm publish",
+    "publish:firebase": "cd packages/firebase && npm publish",
+    "publish:network": "cd packages/network && npm publish",
+    "publish:parse": "cd packages/parse && npm publish",
+    "publish:state": "cd packages/state && npm publish"
+  },
+  "dependencies": {},
+  "repository": "flewjs/flewjs",
+  "author": "flewbot <bot@flew.dev>",
+  "auto": {
+    "plugins": [
+      "npm",
+      "all-contributors",
+      "conventional-commits",
+      "first-time-contributor",
+      "released",
+      "slack"
+    ],
+    "onlyPublishWithReleaseLabel": true
   }
 }

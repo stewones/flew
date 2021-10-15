@@ -15,7 +15,7 @@ export declare class FirebaseDriver implements FlewDriver {
     configure(options: FlewOptions): void;
     getInstance(): any;
     private exceptions;
-    log(): any;
+    log(): Logger;
     find<T>(chain: FlewChainPayload, key: string): Observable<T[]>;
     findOne<T>(chain: FlewChainPayload, key: string): Observable<T>;
     on<T>(chain: FlewChainPayload, key: string): Observable<T>;

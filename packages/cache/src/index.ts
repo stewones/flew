@@ -1,4 +1,4 @@
-export * from './install';
+export * from './cachePlugin';
 export * from './resetCache';
 export * from './getCache';
 export * from './setCache';

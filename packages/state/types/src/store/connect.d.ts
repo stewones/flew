@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 export interface ConnectOptions {
     context: boolean;
-    fetch: boolean;
+    network: boolean;
     readonly: boolean;
 }
 export interface StateContext<T = any> {
@@ -17,7 +17,7 @@ export interface StateContext<T = any> {
  * @param {string} path
  * @param {Partial<ConnectOptions>} [options={
  *     context: false,
- *     fetch: false
+ *     network: false
  *   }]
  * @returns {Observable<T>}
  */

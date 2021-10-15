@@ -14,7 +14,7 @@ export function unsetState(
   options: { cache: boolean } = { cache: true },
 ): Promise<void> {
   dispatch({
-    type: 'fetchStateRemove',
+    type: 'networkStateRemove',
     key: key,
   });
   if (options.cache) {

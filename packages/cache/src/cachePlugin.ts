@@ -16,13 +16,15 @@ export interface FlewCacheOptions {
  * @param {*} store
  * @param {string} [driver=['sqlite', 'indexeddb', 'localstorage']]
  */
-export function installCache(options: FlewCacheOptions) {
-  workspace.storage = new Storage(
-    storageConfig(
-      options.name,
-      options.store,
-      options.driver || ['sqlite', 'indexeddb', 'localstorage'],
-    ),
-  );
-  workspace.storage.enabled = true;
+export function cachePlugin(options: FlewCacheOptions) {
+  return () => {
+    workspace.storage = new Storage(
+      storageConfig(
+        options.name,
+        options.store,
+        options.driver || ['sqlite', 'indexeddb', 'localstorage'],
+      ),
+    );
+    workspace.storage.enabled = true;
+  };
 }

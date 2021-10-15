@@ -21,15 +21,17 @@ export interface FlewStateOptions {
  *
  * @export
  */
-export function installState(options: FlewStateOptions) {
-  workspace.state.enabled = true;
-  workspace.state.getState = getState;
-  workspace.state.resetState = resetState;
-  workspace.state.setState = setState;
+export function statePlugin(options: FlewStateOptions) {
+  return () => {
+    workspace.state.enabled = true;
+    workspace.state.getState = getState;
+    workspace.state.resetState = resetState;
+    workspace.state.setState = setState;
 
-  createStore(
-    options?.reducers || {},
-    options?.state || {},
-    options?.enhancers || applyDevTools(options),
-  );
+    createStore(
+      options?.reducers || {},
+      options?.state || {},
+      options?.enhancers || applyDevTools(options),
+    );
+  };
 }

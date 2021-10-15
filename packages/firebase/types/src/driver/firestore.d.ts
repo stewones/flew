@@ -14,7 +14,7 @@ export declare class FirestoreDriver implements FlewDriver {
     constructor(options: any);
     getInstance(): any;
     configure(options: FlewOptions): void;
-    log(): any;
+    log(): Logger;
     private exceptions;
     protected where(query: any[], firestore: any): any;
     protected order(sort: any, firestore: any): any;

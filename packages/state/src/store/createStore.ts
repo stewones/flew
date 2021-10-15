@@ -5,17 +5,17 @@ import { pickBy, isEmpty } from 'lodash';
 const workspace = namespace();
 
 // the fetch reducer
-function _fetch(state = {}, action) {
+function _network_(state = {}, action) {
   switch (action.type) {
-    case 'fetchStateUpdate':
+    case 'networkStateUpdate':
       return { ...state, [action.key]: action.value };
-    case 'fetchStateRemove':
+    case 'networkStateRemove':
       return {
         ...pickBy(state, (it, key) => {
           return key !== action.key;
         }),
       };
-    case 'fetchStateReset':
+    case 'networkStateReset':
       return {};
     default:
       return state;
@@ -69,7 +69,7 @@ export function createStore(reducers, initialState?, enhancers?) {
   }
 
   return (workspace.store = createReduxStore(
-    combineReducers({ _fetch, ...reducers }),
+    combineReducers({ _network_, ...reducers }),
     initialState,
     enhancers,
   ));

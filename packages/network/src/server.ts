@@ -72,7 +72,8 @@ export class FlewNetwork {
     options.logger = this.logger;
 
     // install default driver
-    if (!workspace.driver.http) workspace.driver.http = new HttpDriver();
+    if (isEmpty(workspace.driver.http))
+      workspace.driver.http = new HttpDriver();
 
     // instantiate everyone
     for (const driver of workspace.drivers) {
