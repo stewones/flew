@@ -1,4 +1,6 @@
-import { namespace, FlewOptions } from '@flew/core';
+import { namespace } from './platform/namespace';
+import { FlewOptions } from './structure/options';
+
 const workspace = namespace();
 
 export function setup(params: { options?: FlewOptions; plugins?: any[] }) {
