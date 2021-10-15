@@ -1,0 +1,21 @@
+# Sync Response
+
+By default _RR_ will automatically take care of this. But if you find yourself in a situation where you need, you can manually sync some response into _RR_ internal store.
+
+{% code title="sync-state.ts" %}
+```typescript
+import { syncState } from '@reative/state';
+import { Response } from '@reative/core';
+
+// ...
+const result:Response = {
+    collection: 'numbers',
+    key: 'numbers-search',
+    data: [1, 2, 3]
+}
+syncState(result);
+```
+{% endcode %}
+
+
+

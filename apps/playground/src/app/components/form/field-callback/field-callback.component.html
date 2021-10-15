@@ -1,0 +1,19 @@
+<!-- <mat-form-field>
+  <textarea
+    matInput
+    [placeholder]="data.placeholder || data.name"
+    [(ngModel)]="data.value"
+    (keyup)="didChange($event)"
+  ></textarea>
+</mat-form-field> -->
+
+<ngx-codemirror
+  [(ngModel)]="data.value"
+  [options]="{
+    lineNumbers: false,
+    theme: 'material',
+    mode: 'javascript',
+    autofocus: true
+  }"
+  (ngModelChange)="didChange($event)"
+></ngx-codemirror>

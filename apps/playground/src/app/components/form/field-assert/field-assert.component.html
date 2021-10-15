@@ -1,0 +1,8 @@
+<mat-radio-group (change)="didChange($event)">
+  <mat-radio-button value="true" [checked]="data.value === 'true'"
+    >Yes</mat-radio-button
+  >
+  <mat-radio-button value="false" [checked]="data.value === 'false'"
+    >No</mat-radio-button
+  >
+</mat-radio-group>

@@ -27,3 +27,32 @@
     }
   }
 }
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es5",
+    "module": "esnext",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2018", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@reative/firetask": ["apps/firetask/src/index.ts"],
+      "@reative/cache": ["libs/cache/src/index.ts"],
+      "@reative/angular": ["libs/angular/src/index.ts"],
+      "@reative/state": ["libs/state/src/index.ts"],
+      "@reative/core": ["libs/core/src/index.ts"],
+      "@reative/firebase": ["libs/firebase/src/index.ts"],
+      "@reative/parse": ["libs/parse/src/index.ts"]
+    },
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "rootDir": "."
+  },
+  "exclude": ["node_modules", "tmp"]
+}

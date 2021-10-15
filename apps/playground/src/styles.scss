@@ -1,0 +1,268 @@
+//
+// common imports
+@import "~codemirror/lib/codemirror.css";
+@import "~codemirror/theme/material.css";
+@import "~codemirror/theme/neo.css";
+
+//
+// common resets
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+    background-color: #F5F5F5;
+}
+
+/**  STYLE 11 */
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: linear-gradient(to left, #fff, #e4e4e4);
+    border: 1px solid #aaa;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #fff;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(to left, #22ADD4, #1E98BA);
+}
+
+//
+// common customizations
+
+play-chaining-picker {
+    .field {
+        &.field-callback {
+            .CodeMirror {
+                height: 150px;
+            }
+
+            // margin-top: -16px;
+
+            // .mat-form-field-label-wrapper {
+            //     display: none;
+            // }
+
+            // mat-form-field {
+            //     width: 95%;
+            // }
+
+            // textarea {
+            //     height: 78px;
+            // }
+       
+        }
+
+        &.field-assert {
+            margin-bottom: 8px;
+
+            .mat-radio-label-content {
+                margin-right: 10px;
+            }
+        }
+
+        &.field-select {
+            .mat-form-field {
+                width: 100%;
+            }
+
+            .mat-form-field-wrapper {
+                margin-bottom: -14px;
+            }
+        }
+    }
+}
+
+//
+// common defaults
+
+.card {
+    border: 1px solid #eee;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+
+    .header {
+        border: 1px solid #eee;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 5px;
+        font-size: 11px;
+        position: absolute;
+        margin: -29px 0 0 -1px;
+        font-family: Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+        padding: 10px 15px 7px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        border-bottom: 0;
+        text-transform: uppercase;
+    }
+
+    .multi-header {
+        position: absolute;
+        margin: 0px 0 0 0px;
+
+        .header {
+            cursor: pointer;
+            position: relative !important;
+
+            &.inactive {
+                border: 0px !important;
+                background-color: transparent !important;
+                color: #999;
+            }
+
+            // margin: 0 !important;
+            // padding: 0 !important;
+       
+        }
+    }
+}
+
+.jsontree_tree {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    /*
+     * JSON Tree Viewer
+     * http://github.com/summerstyle/jsonTreeViewer
+     *
+     * Copyright 2017 Vera Lobacheva (http://iamvera.com)
+     * Released under the MIT license (LICENSE.txt)
+     */
+
+    /* Background for the tree. May use for <body> element */
+    .jsontree_bg {
+        background: #333;
+    }
+
+    /* Styles for the container of the tree (e.g. fonts, margins etc.) */
+    .jsontree_tree {
+        margin-left: 0;
+        font-family: 'PT Mono', monospace;
+        font-size: 14px;
+    }
+
+    /* Styles for a list of child nodes */
+    .jsontree_child-nodes {
+        display: none;
+        margin-left: 35px;
+        margin-bottom: 5px;
+        line-height: 2;
+    }
+
+    .jsontree_node_expanded > .jsontree_value-wrapper > .jsontree_value > .jsontree_child-nodes {
+        display: block;
+    }
+
+    /* Styles for labels */
+    .jsontree_label-wrapper {
+        float: left;
+        margin-right: 8px;
+    }
+
+    .jsontree_label {
+        font-weight: normal;
+        vertical-align: top;
+        color: #000;
+        position: relative;
+        padding: 1px;
+        border-radius: 4px;
+        cursor: default;
+    }
+
+    .jsontree_node_marked > .jsontree_label-wrapper > .jsontree_label {
+        background: #fff2aa;
+    }
+
+    /* Styles for values */
+    .jsontree_value-wrapper {
+        display: block;
+        overflow: hidden;
+    }
+
+    .jsontree_node_complex > .jsontree_value-wrapper {
+        overflow: inherit;
+    }
+
+    .jsontree_value {
+        vertical-align: top;
+        display: inline;
+    }
+
+    .jsontree_value_null {
+        color: #777;
+        font-weight: bold;
+    }
+
+    .jsontree_value_string {
+        color: #025900;
+        font-weight: bold;
+    }
+
+    .jsontree_value_number {
+        color: #000E59;
+        font-weight: bold;
+    }
+
+    .jsontree_value_boolean {
+        color: #600100;
+        font-weight: bold;
+    }
+
+    /* Styles for active elements */
+    .jsontree_expand-button {
+        position: absolute;
+        top: 3px;
+        left: -15px;
+        display: block;
+        width: 11px;
+        height: 11px;
+        background-image: url("/assets/icons.svg");
+    }
+
+    .jsontree_node_expanded > .jsontree_label-wrapper > .jsontree_label > .jsontree_expand-button {
+        background-position: 0 -11px;
+    }
+
+    .jsontree_show-more {
+        cursor: pointer;
+    }
+
+    .jsontree_node_expanded > .jsontree_value-wrapper > .jsontree_value > .jsontree_show-more {
+        display: none;
+    }
+
+    .jsontree_node_empty > .jsontree_label-wrapper > .jsontree_label > .jsontree_expand-button,
+    .jsontree_node_empty > .jsontree_value-wrapper > .jsontree_value > .jsontree_show-more {
+        display: none !important;
+    }
+
+    .jsontree_node_complex > .jsontree_label-wrapper > .jsontree_label {
+        cursor: pointer;
+    }
+
+    .jsontree_node_empty > .jsontree_label-wrapper > .jsontree_label {
+        cursor: default !important;
+    }
+}

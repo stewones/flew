@@ -1,0 +1,24 @@
+
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
+
+import { connect } from '@reative/state';
+
+@Component({
+  selector: '<%= selector %>-page',
+  templateUrl: './<%= dasherize(name) %>-page.component.html',
+  styleUrls: ['./<%= dasherize(name) %>-page.component.<%= style %>'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class <%= classify(name) %>PageComponent implements OnInit {
+
+  entries$ = connect<any[]>('entries');
+
+  constructor() {}
+
+  ngOnInit() {}
+
+}

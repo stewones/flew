@@ -1,0 +1,24 @@
+<div class="text-md">
+  <p class="m-0" style="font-size: 12px">
+    this.$collection
+  </p>
+  <ul class="list-reset m-0 ml-3">
+    <li class="" *ngFor="let method of methods">
+      .<strong>{{ method.name }}</strong>
+      <span>(</span>
+
+      <pre
+        *ngIf="method.type === 'callback'"
+        [innerHTML]="beautify(method)"
+        class="m-0 ml-3"
+      ></pre>
+      <span
+        *ngIf="method.type !== 'callback'"
+        [innerHTML]="highlight(method)"
+      ></span>
+
+      <span>)</span>
+    </li>
+    .<strong>{{ verb.name }}()</strong>
+  </ul>
+</div>

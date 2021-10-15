@@ -1,0 +1,12 @@
+<div *ngFor="let response of data; let i = index" class="card mb-10">
+  <div class="header">
+    Response #{{ i + 1 }}
+    <small class="text-grey-dark"
+      >{{ isFromCache(response) ? '/cache' : ''
+      }}{{ isFromNetwork(response) ? '/network' : '' }}</small
+    >
+  </div>
+  <div class="block px-4 py-6">
+    <div id="response-tree-{{ i + 1 }}"></div>
+  </div>
+</div>
