@@ -23,9 +23,6 @@ fs.writeFile(
       ['npm', 'run', 'bump:patch:parse'],
       ['npm', 'run', 'bump:patch:state'],
 
-      ['git', 'commit', '-a', '-m', `chore: bump libs to ${newVersion}`],
-      ['npm', 'version', 'patch', '-m', `chore: bump version to ${newVersion}`],
-
       // auto not working
       // ['git', 'push', 'origin', 'master'],
       // ['auto', 'changelog', '-m', `chore: update changelog`],
@@ -37,6 +34,9 @@ fs.writeFile(
       ['npm', 'run', 'publish:network'],
       ['npm', 'run', 'publish:parse'],
       ['npm', 'run', 'publish:state'],
+
+      ['git', 'commit', '-a', '-m', `chore: bump libs to ${newVersion}`],
+      ['npm', 'version', 'patch', '-m', `chore: bump version to ${newVersion}`],
 
       ['git', 'push', '--follow-tags', '--set-upstream', 'origin', 'master'],
     ];
