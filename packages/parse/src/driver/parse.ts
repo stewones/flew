@@ -1,4 +1,4 @@
-import { namespace, subscribe } from '@flew/core';
+import { guid, namespace, subscribe } from '@flew/core';
 import {
   FlewDriver,
   FlewChainPayload,
@@ -284,15 +284,10 @@ export class ParseDriver implements FlewDriver {
 
         //
         // auto id generation
-        // we can't have this feature for parse
-        // if (!this.driverOptions.disableAutoID) {
-        //   if (id) {
-        //     newData[this.driverOptions.identifier] = id;
-        //   } else {
-        //     if (!newData[this.driverOptions.identifier])
-        //       newData[this.driverOptions.identifier] = guid(3);
-        //   }
-        // }
+        if (!this.driverOptions.disableAutoID) {
+          if (!newData[this.driverOptions.identifier])
+            newData[this.driverOptions.identifier] = guid();
+        }
 
         //
         // auto update timestamp
