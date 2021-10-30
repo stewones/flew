@@ -1,4 +1,5 @@
-import { get, isUndefined } from 'lodash';
+import lodash from 'lodash';
+const { get, isUndefined } = lodash;
 import { store } from '../store';
 
 /**

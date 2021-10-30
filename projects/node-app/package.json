@@ -8,7 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@flew/network": "^0.0.1",
-    "@flew/core": "^0.0.10"
+    "@flew/network": "0.0.14",
+    "@flew/core": "0.0.14"
   }
 }

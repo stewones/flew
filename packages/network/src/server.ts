@@ -11,12 +11,12 @@ import {
   Logger,
   SetOptions,
   FL_VERSION,
+  FlewRequestConfig,
 } from '@flew/core';
 
-import { omit, isString, isArray, isEmpty } from 'lodash';
-import { AxiosRequestConfig } from 'axios';
-import { Observable, Subject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import lodash from 'lodash';
+const { omit, isString, isArray, isEmpty } = lodash;
+import { Observable, Subject, tap } from 'rxjs';
 import { HttpDriver } from './http';
 
 const workspace = namespace();
@@ -390,7 +390,7 @@ export class FlewNetwork {
    *
    * ```
    */
-  public http(fn: (config: AxiosRequestConfig) => void): FlewNetwork {
+  public http(fn: (config: FlewRequestConfig) => void): FlewNetwork {
     this.checkChainAvailability(this.chain.from, 'http');
     fn(this.options.httpConfig);
     return this;

@@ -1,4 +1,5 @@
-import { isEmpty } from 'lodash';
+import lodash from 'lodash';
+const { isEmpty } = lodash;
 import { diff } from './diff';
 
 export function isDiff(from_, to_): any {

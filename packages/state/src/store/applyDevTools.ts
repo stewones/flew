@@ -1,4 +1,4 @@
-import { applyMiddleware, compose } from 'redux';
+import { applyMiddleware, compose } from 'redux/es/redux';
 import thunk from 'redux-thunk';
 
 declare var window;

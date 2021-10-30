@@ -1,4 +1,5 @@
-import { isEqual, isObject, transform } from 'lodash';
+import lodash from 'lodash';
+const { transform, isEqual, isObject } = lodash;
 
 export function diff(from_, to_): any {
   function changes(from, to): any {

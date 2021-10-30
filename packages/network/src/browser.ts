@@ -5,9 +5,18 @@ import {
   isDiff,
   namespace,
 } from '@flew/core';
-import { isEmpty } from 'lodash';
-import { from, Observable, of } from 'rxjs';
-import { catchError, first, map, mergeMap, tap } from 'rxjs/operators';
+import lodash from 'lodash';
+const { isEmpty } = lodash;
+import {
+  from,
+  Observable,
+  of,
+  catchError,
+  first,
+  map,
+  mergeMap,
+  tap,
+} from 'rxjs';
 import { FetchServer } from './server';
 
 const workspace = namespace();

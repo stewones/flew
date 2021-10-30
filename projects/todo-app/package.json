@@ -21,10 +21,10 @@
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4",
-    "@flew/network": "0.0.11",
-    "@flew/core": "0.0.11",
-    "@flew/cache": "0.0.11",
-    "@flew/state": "0.0.11"
+    "@flew/network": "../../packages/network",
+    "@flew/core": "../../packages/core",
+    "@flew/cache": "../../packages/cache",
+    "@flew/state": "../../packages/state"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.2.6",

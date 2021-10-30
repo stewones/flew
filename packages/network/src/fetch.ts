@@ -1,5 +1,6 @@
 import { namespace, FlewOptions, isServer } from '@flew/core';
-import { isBoolean } from 'lodash';
+import lodash from 'lodash';
+const { isBoolean } = lodash;
 import { FetchServer } from './server';
 import { FetchBrowser } from './browser';
 

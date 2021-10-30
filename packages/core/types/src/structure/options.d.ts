@@ -1,5 +1,5 @@
 import { FlewDriverOption } from './driver';
-import { AxiosRequestConfig } from 'axios';
+import { FlewRequestConfig } from './request';
 import { Logger } from '../logger';
 export interface FlewOptions {
     collection?: string;
@@ -8,7 +8,7 @@ export interface FlewOptions {
     baseURL?: string;
     endpoint?: string;
     pathname?: string;
-    httpConfig?: AxiosRequestConfig;
+    httpConfig?: FlewRequestConfig;
     from?: FlewDriverOption;
     driver?: FlewDriverOption;
     timestampEnabled?: boolean;

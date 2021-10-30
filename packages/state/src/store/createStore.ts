@@ -1,6 +1,11 @@
 import { namespace } from '@flew/core';
-import { combineReducers, createStore as createReduxStore } from 'redux';
-import { pickBy, isEmpty } from 'lodash';
+import {
+  combineReducers,
+  createStore as createReduxStore,
+} from 'redux/es/redux';
+import lodash from 'lodash';
+
+const { pickBy, isEmpty } = lodash;
 
 const workspace = namespace();
 

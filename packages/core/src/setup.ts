@@ -10,5 +10,5 @@ export function setup(params: { options?: FlewOptions; plugins?: any[] }) {
     }
   }
 
-  params?.plugins.map(plugin => plugin());
+  params?.plugins?.map(plugin => plugin());
 }

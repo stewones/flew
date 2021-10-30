@@ -9,30 +9,13 @@ import yaml from '@rollup/plugin-yaml';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import { terser } from 'rollup-plugin-terser';
 
-const externals = {
-  axios: 'axios',
-  lodash: 'lodash',
-  rxjs: 'rxjs',
-  parse: 'parse',
-  localforage: 'localforage',
-  redux:'redux',
-  immer:'immer',
-  'redux-thunk': 'redux-thunk',
-  'localforage-cordovasqlitedriver': 'localforage-cordovasqlitedriver',
-  'rxjs/operators': 'rxjs/operators',
-  'firebase/app': 'firebase/app',
-  '@flew/core': '@flew/core',
-  '@flew/network': '@flew/network',
-  '@flew/cache': '@flew/cache',
-  '@flew/state': '@flew/state',
-};
-
 export function createRollupConfig(
   distDir,
   name,
   format,
   suffix,
-  minify = false
+  minify = false,
+  externals = {}
 ) {
   return {
     input: path.resolve(__dirname, './src/index.ts'),

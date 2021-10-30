@@ -1,6 +1,6 @@
 {
   "name": "@flew/core",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Flew core",
   "keywords": [],
   "homepage": "https://flew.dev",
@@ -39,7 +39,7 @@
     "email": "support@flew.dev"
   },
   "dependencies": {
-    "rxjs": "~6.6.0",
+    "rxjs": "~7.4.0",
     "lodash": "^4.17.21"
   },
   "devDependencies": {

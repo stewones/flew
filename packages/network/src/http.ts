@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, AxiosInstance } from 'axios';
-import { isArray, get } from 'lodash';
+import lodash from 'lodash';
+const { isArray, get } = lodash;
 import { from, Observable, PartialObserver } from 'rxjs';
 import {
   FlewDriver,
@@ -94,7 +95,7 @@ export class HttpDriver implements FlewDriver {
       ] = `Bearer ${chain.useSessionToken}`;
     }
 
-    this.instance = axios.create(options.httpConfig);
+    this.instance = axios.create(options.httpConfig as any);
 
     const baseURL = options.baseURL || get(options, 'httpConfig.baseURL');
     const endpoint = options.endpoint;

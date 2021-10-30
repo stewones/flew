@@ -4,6 +4,7 @@
   "compilerOptions": {
     "declaration": true,
     "declarationDir": "./types",
-    "rootDir": "./"
+    "rootDir": "./",
+    "module": "ESNext"
   }
 }

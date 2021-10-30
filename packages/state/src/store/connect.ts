@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
-import { cloneDeep, get } from 'lodash';
-
+import lodash from 'lodash';
+const { cloneDeep, get } = lodash;
 import watch from 'redux-watch';
 import { store } from './createStore';
 

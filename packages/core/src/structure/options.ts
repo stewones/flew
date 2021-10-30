@@ -1,5 +1,5 @@
 import { FlewDriverOption } from './driver';
-import { AxiosRequestConfig } from 'axios';
+import { FlewRequestConfig } from './request';
 import { Logger } from '../logger';
 
 export interface FlewOptions {
@@ -10,7 +10,7 @@ export interface FlewOptions {
   baseURL?: string; // eg: http://35.102.182.155:9200
   endpoint?: string; // eg: /api
   pathname?: string; // eg: /some/long/path/to/resource
-  httpConfig?: AxiosRequestConfig;
+  httpConfig?: FlewRequestConfig;
 
   from?: FlewDriverOption; // driver that can be instantiated at runtime
   driver?: FlewDriverOption; // default driver to be instantiated only once

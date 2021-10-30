@@ -1,5 +1,4 @@
-import { FlewChainPayload, FlewDriverOption, FlewOptions, FlewVerb, Log, Logger, SetOptions } from '@flew/core';
-import { AxiosRequestConfig } from 'axios';
+import { FlewChainPayload, FlewDriverOption, FlewOptions, FlewVerb, Log, Logger, SetOptions, FlewRequestConfig } from '@flew/core';
 import { Observable, Subject } from 'rxjs';
 /**
  * @export
@@ -140,7 +139,7 @@ export declare class FlewNetwork {
      *
      * ```
      */
-    http(fn: (config: AxiosRequestConfig) => void): FlewNetwork;
+    http(fn: (config: FlewRequestConfig) => void): FlewNetwork;
     /**
      * Choose whether or not to make a network request
      *
