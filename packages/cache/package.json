@@ -1,6 +1,6 @@
 {
   "name": "@flew/cache",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Cache support for Flew",
   "keywords": [],
   "homepage": "https://flew.dev",
@@ -35,7 +35,7 @@
     "email": "support@flew.dev"
   },
   "dependencies": {
-    "@flew/core": "0.0.15-preview.3",
+    "@flew/core": "^0.0.15",
     "localforage": "^1.10.0",
     "localforage-cordovasqlitedriver": "^1.8.0"
   },
