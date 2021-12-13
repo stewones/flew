@@ -77,6 +77,7 @@ export class ParseDriver implements FlewDriver {
     withinMiles: true,
     diff: true,
     response: true,
+    context: true,
   };
 
   constructor(options: ParseOptions) {
@@ -307,6 +308,7 @@ export class ParseDriver implements FlewDriver {
           .save(newData, {
             useMasterKey: chain.useMasterKey,
             sessionToken: chain.useSessionToken,
+            context: chain.context,
           })
           .then(response)
           .catch(error);
@@ -316,6 +318,7 @@ export class ParseDriver implements FlewDriver {
           .saveAll(data, {
             useMasterKey: chain.useMasterKey,
             sessionToken: chain.useSessionToken,
+            context: chain.context,
           })
           .then(response)
           .catch(error);
@@ -323,9 +326,18 @@ export class ParseDriver implements FlewDriver {
     });
   }
 
-  public run(name: string, payload: any, key: string): Observable<any> {
+  public run(
+    name: string,
+    payload: any,
+    key: string,
+    chain: FlewChainPayload,
+  ): Observable<any> {
     return new Observable(observer => {
       const Parse = this.getInstance();
+      const context = chain.context;
+      const useMasterKey = chain.useMasterKey;
+      const sessionToken = chain.useSessionToken;
+
       //
       // define connector
       const cloud = Parse.Cloud;
@@ -342,7 +354,10 @@ export class ParseDriver implements FlewDriver {
         observer.complete();
       };
 
-      cloud.run(name, payload).then(response).catch(error);
+      cloud
+        .run(name, payload, { context, useMasterKey, sessionToken })
+        .then(response)
+        .catch(error);
     });
   }
 
@@ -394,7 +409,14 @@ export class ParseDriver implements FlewDriver {
             for (const k in data) {
               r[0].set(k, data[k]);
             }
-            r[0].save().then(response).catch(error);
+            r[0]
+              .save(null, {
+                useMasterKey: chain.useMasterKey,
+                sessionToken: chain.useSessionToken,
+                context: chain.context,
+              })
+              .then(response)
+              .catch(error);
           }
         });
     });

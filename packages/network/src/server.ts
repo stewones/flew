@@ -197,6 +197,7 @@ export class FlewNetwork {
         arg1 = path;
         arg2 = payload;
         arg3 = key;
+        arg4 = chain;
         break;
       default:
         arg1 = path;
@@ -717,6 +718,19 @@ export class FlewNetwork {
   public response(fn): FlewNetwork {
     this.chain.response = fn;
     this.checkChainAvailability(this.chain.from, 'response');
+    return this;
+  }
+
+  /**
+   * Extra context
+   *
+   * @param {*} fn
+   * @returns {FlewNetwork}
+   * @memberof FlewNetwork
+   */
+  public context(params): FlewNetwork {
+    this.chain.context = params;
+    this.checkChainAvailability(this.chain.from, 'context');
     return this;
   }
 }

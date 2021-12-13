@@ -319,6 +319,14 @@ export declare class FlewNetwork {
      * @memberof FlewNetwork
      */
     response(fn: any): FlewNetwork;
+    /**
+     * Extra context
+     *
+     * @param {*} fn
+     * @returns {FlewNetwork}
+     * @memberof FlewNetwork
+     */
+    context(params: any): FlewNetwork;
 }
 export declare class FetchServer extends FlewNetwork {
 }

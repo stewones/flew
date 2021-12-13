@@ -24,7 +24,8 @@ export type FlewChain =
   | 'withinKilometers'
   | 'withinMiles'
   | 'diff'
-  | 'response';
+  | 'response'
+  | 'context';
 
 export interface FlewChainPayloadWhere {
   field: string;
@@ -61,4 +62,5 @@ export interface FlewChainPayload {
 
   diff?: any; // custom diff calculation
   response?: any; // callback for network
+  context?: any; // extra context
 }

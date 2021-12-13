@@ -1,5 +1,5 @@
 import { FlewDriverOption } from './driver';
-export declare type FlewChain = 'from' | 'network' | 'cache' | 'key' | 'query' | 'where' | 'sort' | 'size' | 'at' | 'after' | 'ref' | 'http' | 'include' | 'doc' | 'token' | 'master' | 'object' | 'select' | 'state' | 'near' | 'withinKilometers' | 'withinMiles' | 'diff' | 'response';
+export declare type FlewChain = 'from' | 'network' | 'cache' | 'key' | 'query' | 'where' | 'sort' | 'size' | 'at' | 'after' | 'ref' | 'http' | 'include' | 'doc' | 'token' | 'master' | 'object' | 'select' | 'state' | 'near' | 'withinKilometers' | 'withinMiles' | 'diff' | 'response' | 'context';
 export interface FlewChainPayloadWhere {
     field: string;
     operator: string;
@@ -30,4 +30,5 @@ export interface FlewChainPayload {
     withinMiles?: any;
     diff?: any;
     response?: any;
+    context?: any;
 }

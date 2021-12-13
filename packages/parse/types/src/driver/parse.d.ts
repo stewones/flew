@@ -27,7 +27,7 @@ export declare class ParseDriver implements FlewDriver {
     set(chain: FlewChainPayload, data: any, options?: {
         all: boolean;
     }): Observable<any>;
-    run(name: string, payload: any, key: string): Observable<any>;
+    run(name: string, payload: any, key: string, chain: FlewChainPayload): Observable<any>;
     update(chain: FlewChainPayload, data: any): Observable<any>;
     count<T>(chain: FlewChainPayload, key: string): Observable<any>;
     delete<T>(path: string, key: string, payload: any, chain: FlewChainPayload): Observable<T>;

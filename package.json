@@ -39,7 +39,6 @@
     "publish:parse": "cd packages/parse && npm publish",
     "publish:state": "cd packages/state && npm publish"
   },
-  "dependencies": {},
   "repository": "flewjs/flewjs",
   "author": "flewbot <bot@flew.dev>",
   "auto": {

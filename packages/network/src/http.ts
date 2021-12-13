@@ -60,6 +60,7 @@ export class HttpDriver implements FlewDriver {
     withinMiles: false,
     diff: true,
     response: true,
+    context: false,
   };
 
   constructor() {}
