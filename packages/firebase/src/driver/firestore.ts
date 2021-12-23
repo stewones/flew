@@ -242,8 +242,8 @@ export class FirestoreDriver implements FlewDriver {
     options: SetOptions = { merge: true },
   ): Observable<any> {
     return new Observable(observer => {
+      let id = chain.doc || data[workspace.options.identifier];
       const connector = this.getInstance();
-      const id = chain.doc || data[workspace.options.identifier];
       const newData = { ...data };
 
       //
@@ -263,7 +263,7 @@ export class FirestoreDriver implements FlewDriver {
           newData[this.driverOptions.identifier] = id;
         } else {
           if (!newData[this.driverOptions.identifier])
-            newData[this.driverOptions.identifier] = guid(3);
+            newData[this.driverOptions.identifier] = id = guid(3);
         }
       }
 
