@@ -44,7 +44,7 @@ export class ParseDriver implements FlewDriver {
     post: 'parse.find',
     update: 'parse.update',
     patch: 'parse.set',
-    delete: true, // can use both doc_id or objectId
+    delete: true,
     set: true,
     count: true,
     run: true,

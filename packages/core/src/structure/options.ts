@@ -4,8 +4,8 @@ import { Logger } from '../logger';
 
 export interface FlewOptions {
   collection?: string; // eg: 'todos'
-  identifier?: string; // default to doc_id
-  disableAutoID?: boolean; // disable doc_id generation
+  identifier?: string; // default to objectId
+  disableAutoID?: boolean; // disable objectId generation
 
   baseURL?: string; // eg: http://35.102.182.155:9200
   endpoint?: string; // eg: /api
