@@ -494,7 +494,9 @@ export class ParseDriver implements FlewDriver {
       const success = async (data: any[]) => {
         if (isEmpty(data)) return error({ message: `data wasn't found` });
 
-        const list = await Parse.Object.destroyAll(data).catch(err => {
+        const list = await Parse.Object.destroyAll(data, {
+          context: chain.context,
+        }).catch(err => {
           // An error occurred while deleting one or more of the objects.
           // If this is an aggregate error, then we can inspect each error
           // object individually to determine the reason why a particular
