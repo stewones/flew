@@ -19,7 +19,7 @@ export function firebasePlugin(options: FirebaseInstallOptions) {
       options.config &&
       (options.firestoreInstance || options.firebaseInstance)
     ) {
-      throw 'you can only pass config and either firebaseInstance or firestoreInstance';
+      throw 'you can only set config or firebaseInstance or firestoreInstance';
     }
 
     if (options.config) {

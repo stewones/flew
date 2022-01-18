@@ -76,8 +76,6 @@ export class FirestoreDriver implements FlewDriver {
     this.driverOptions = options;
     this.logger = options.logger;
 
-    //
-    // @todo need more tests (capacitor showing warnings)
     if (options.useCache !== false && options.persistence) {
       if (this.log())
         this.log().danger()(

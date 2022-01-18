@@ -1,0 +1,37 @@
+{
+  "title": "Flew Docs",
+  "url": "https://flew.dev",
+  "logo": {
+    "light": "/logo-light.svg",
+    "dark": "/logo-dark.svg"
+  },
+  "github": "flewjs/flewjs",
+  "twitter": "@stewones",
+  "defaultBranch": "master",
+  "apiLinks": [
+    {
+      "name": "Core",
+      "url": "https://paka.dev/npm/@flew/core"
+    },
+    {
+      "name": "Network",
+      "url": "https://paka.dev/npm/@flew/network"
+    },
+    {
+      "name": "Cache",
+      "url": "https://paka.dev/npm/@flew/cache"
+    },
+    {
+      "name": "State",
+      "url": "https://paka.dev/npm/@flew/state"
+    },
+    {
+      "name": "Firebase",
+      "url": "https://paka.dev/npm/@flew/firebase"
+    },
+    {
+      "name": "Parse",
+      "url": "https://paka.dev/npm/@flew/parse"
+    }
+  ]
+}
