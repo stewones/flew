@@ -1,0 +1,16 @@
+<button (click)="increment()">increment</button>
+<button (click)="decrement()">decrement</button>
+<hr />
+{{ display$ | async }} {{ displayDetailed$ | async | json }}
+<hr />
+
+<button (click)="incrementAsync(5)">increment after 5 seconds</button>
+
+<button (click)="decrementAsync(5)">decrement after 5 seconds</button>
+
+<hr />
+counter from firestore realtime using internal state
+{{ displayFirestoreRealtime }}
+<hr />
+<button (click)="incrementFromFirestore()">increment from Firestore</button>
+<button (click)="decrementFromFirestore()">decrement from Firestore</button>

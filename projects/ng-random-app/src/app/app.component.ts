@@ -9,7 +9,7 @@ import { setCache, getCache } from '@flew/cache';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'todo-app';
+  title = 'random-app';
 
   async ngOnInit() {
     /**

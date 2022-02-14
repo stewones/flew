@@ -1,0 +1,7 @@
+// 1. grab this config from firebase console
+// 2. paste within the constant below
+// 3. rename this file to firebase.ts
+
+export const FIREBASE_CONFIG = {
+  // ..
+};
