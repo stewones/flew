@@ -9,9 +9,11 @@ const { name } = pkg;
 const externals = {
   lodash: 'lodash',
   rxjs: 'rxjs',
+  '@flew/core': '@flew/core',
   'rxjs/operators': 'rxjs/operators',
   'firebase/app': 'firebase/app',
-  '@flew/core': '@flew/core',
+  'firebase/database': 'firebase/database',
+  'firebase/firestore': 'firebase/firestore',
 };
 
 export default [

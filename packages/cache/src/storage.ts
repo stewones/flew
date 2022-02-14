@@ -59,9 +59,9 @@ export class Storage {
       let db: LocalForage;
 
       const defaultConfig = {
-        name: '_rebased_storage_',
-        storeName: '_rebased_store_',
-        dbKey: '_rebased_key_',
+        name: '_flew_storage_',
+        storeName: '_flew_store_',
+        dbKey: '_flew_key_',
         driverOrder: ['sqlite', 'indexeddb', 'websql', 'localstorage'],
       };
 

@@ -15,7 +15,7 @@ setup({
   plugins: [
     cachePlugin({
       name: 'flew',
-      store: 'todo-app',
+      store: 'random-app',
     }),
     statePlugin({
       production: false,

@@ -46,7 +46,6 @@ export class FirestoreConnector {
     } else {
       app = firebase.app();
     }
-
     return app.firestore();
   }
 }

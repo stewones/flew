@@ -1,4 +1,8 @@
 import * as Firebase from 'firebase/app';
+
+import 'firebase/database';
+import 'firebase/firestore';
+
 import { namespace } from '@flew/core';
 import { FirebaseDriver } from './driver/firebase';
 import { FirebaseConnector, FirestoreConnector } from './setup/connectors';

@@ -61,6 +61,7 @@ export class FirestoreDriver implements FlewDriver {
     withinMiles: false,
     diff: true,
     response: true,
+    context: false,
   };
 
   constructor(options: any) {
