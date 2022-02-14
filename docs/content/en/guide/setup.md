@@ -5,7 +5,7 @@ position: 4
 category: Guide
 ---
 
-Start working with Flew today with 2 easy steps, for any framework, on client or server.
+As easy as cake Start working with Flew in 2 easy steps, for any framework, either on client or server.
 
 ## Install
 

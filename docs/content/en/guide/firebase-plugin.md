@@ -80,6 +80,7 @@ await lastValueFrom(
 // get user
 fetch('User')
   .where('name', '==', 'John Doe')
+  .findOne()
   .subscribe(
     user => console.log(user),
     err => console.log(err),
@@ -110,6 +111,7 @@ await lastValueFrom(
 // get user
 fetch('User')
   .where('name', '==', 'John Doe')
+  .findOne()
   .subscribe(
     user => console.log(user),
     err => console.log(err),

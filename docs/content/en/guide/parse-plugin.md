@@ -20,16 +20,20 @@ npm install @flew/core @flew/network @flew/parse
 
 ```ts
 import { setup } from '@flew/core';
-import { firebasePlugin } from '@flew/firebase';
+import { parsePlugin } from '@flew/parse';
 
 setup({
   options: {
-    // firebase driver means the Realtime database.
-    // you can also use "firestore" as option.
-    driver: 'firebase',
+    driver: 'parse',
     silent: true, // disable internal logs
   },
-  plugins: [firebasePlugin()],
+  plugins: [
+    parsePlugin({
+      appID: 'MyParseAppId',
+      serverURL: 'http://localhost:1337/parse',
+      masterKey: 'MyParseAppMasterKey',
+    }),
+  ],
 });
 ```
 
@@ -37,22 +41,32 @@ setup({
 <code-block label="Node">
 
 ```js
+const Parse = require('parse/node');
 const { setup } = require('@flew/core');
-const { firebasePlugin } = require('@flew/firebase');
+const { parsePlugin } = require('@flew/parse');
 
 setup({
   options: {
-    // firebase driver means the Realtime database.
-    // you can also use "firestore" as option.
-    driver: 'firebase',
+    driver: 'parse',
     silent: true, // disable internal logs
   },
-  plugins: [firebasePlugin()],
+  plugins: [
+    parsePlugin(
+      {
+        appID: 'MyParseAppId',
+        serverURL: 'http://localhost:1337/parse',
+        masterKey: 'MyParseAppMasterKey',
+      },
+      Parse,
+    ),
+  ],
 });
 ```
 
 </code-block>
 </code-group>
+
+> Note that when running on Node we need to pass the Parse instance along the plugin to keep its reference internally.
 
 ## Network call
 
@@ -80,6 +94,7 @@ await lastValueFrom(
 // get user
 fetch('User')
   .where('name', '==', 'John Doe')
+  .findOne()
   .subscribe(
     user => console.log(user),
     err => console.log(err),
@@ -102,7 +117,7 @@ const newUser = await lastValueFrom(
 
 // update user
 await lastValueFrom(
-  fetch('User').doc(user.objectId).update({
+  fetch('User').doc(newUser.objectId).update({
     name: 'John Doe',
   }),
 );
@@ -110,6 +125,7 @@ await lastValueFrom(
 // get user
 fetch('User')
   .where('name', '==', 'John Doe')
+  .findOne()
   .subscribe(
     user => console.log(user),
     err => console.log(err),
