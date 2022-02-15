@@ -1,5 +1,4 @@
-import * as Firebase from 'firebase/app';
-
+import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/firestore';
 
@@ -17,7 +16,7 @@ export interface FirebaseInstallOptions {
 
 export function firebasePlugin(options: FirebaseInstallOptions) {
   return () => {
-    const sdk = Firebase.default;
+    const sdk = firebase;
 
     if (
       options.config &&

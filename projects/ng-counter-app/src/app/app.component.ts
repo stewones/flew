@@ -29,56 +29,14 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.realtimeFirestoreCounter();
-    // fetch('counter')
-    //   .from('firestore')
-    //   .where('lol', '==', 'do not exists')
-    //   .findOne()
-    //   .subscribe(it => {
-    //     console.log('non existent result');
-    //   });
-    // fetch('counter')
-    //   // .from('firestore')
-    //   // .where('lol', '==', 'do not exists')
-    //   .findOne()
-    //   .subscribe(it => {
-    //     console.log(it, 'existent result');
-    //   });
   }
 
   increment() {
     dispatch(increment(1));
-
-    // fetch()
-    //   .from('http')
-    //   .cache(false)
-    //   .state(false)
-    //   .get(`https://api.thecatapi.com/v1/images/search`)
-    //   .toPromise()
-    //   .then((result: any) => {
-    //     console.log(result);
-    //   });
-
-    // fetch('Entry')
-    //   .from('parse')
-    //   .set({
-    //     a: 123
-    //   })
-    //   .toPromise()
-    //   .then((result: any) => {
-    //     console.log(result);
-    //   });
   }
 
   decrement() {
     dispatch(decrement(1));
-    // fetch('Entry')
-    //   .from('parse')
-    //   .doc('oaJ9tKmWCg')
-    //   .delete()
-    //   .toPromise()
-    //   .then((result: any) => {
-    //     console.log(result);
-    //   });
   }
 
   incrementAsync(seconds) {

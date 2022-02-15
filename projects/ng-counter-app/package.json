@@ -1,5 +1,5 @@
 {
-  "name": "random-app",
+  "name": "counter-app",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -18,14 +18,16 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
+    "@flew/cache": "../../packages/cache",
+    "@flew/core": "../../packages/core",
+    "@flew/firebase": "../../packages/firebase",
+    "@flew/network": "../../packages/network",
+    "@flew/state": "../../packages/state",
+    "firebase": "^8.10.0",
+    "lodash": "^4.17.21",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.11.4",
-    "@flew/network": "../../packages/network",
-    "@flew/core": "../../packages/core",
-    "@flew/cache": "../../packages/cache",
-    "@flew/state": "../../packages/state",
-    "@flew/firebase": "../../packages/firebase"
+    "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.2.6",

@@ -1,4 +1,4 @@
-import * as LocalForage from 'localforage';
+import localForage from 'localforage';
 import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { namespace, StorageAdapter } from '@flew/core';
 const workspace = namespace();
@@ -67,9 +67,10 @@ export class Storage {
 
       const actualConfig = Object.assign(defaultConfig, config || {});
 
-      LocalForage.defineDriver(CordovaSQLiteDriver)
+      localForage
+        .defineDriver(CordovaSQLiteDriver)
         .then(() => {
-          db = LocalForage.createInstance(actualConfig);
+          db = localForage.createInstance(actualConfig);
         })
         .then(() =>
           db.setDriver(this._getDriverOrder(actualConfig.driverOrder)),
@@ -105,11 +106,11 @@ export class Storage {
         case 'sqlite':
           return CordovaSQLiteDriver._driver;
         case 'indexeddb':
-          return LocalForage.INDEXEDDB;
+          return localForage.INDEXEDDB;
         case 'websql':
-          return LocalForage.WEBSQL;
+          return localForage.WEBSQL;
         case 'localstorage':
-          return LocalForage.LOCALSTORAGE;
+          return localForage.LOCALSTORAGE;
       }
     });
   }

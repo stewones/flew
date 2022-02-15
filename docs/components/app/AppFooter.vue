@@ -14,7 +14,8 @@
             target="_blank"
             title="Powered by Intenseloop"
             >Intenseloop</a
-          >. Built by
+          >.
+          <!-- Built by
           <a
             v-if="settings.twitter"
             :href="`https://twitter.com/${settings.twitter}`"
@@ -24,11 +25,10 @@
             name="Twitter"
             class="text-gray-700 underline dark:text-gray-300 hover:text-primary-500 dark-hover:text-primary-500"
             >stewones</a
-          >.
+          >. -->
         </small>
         <small>
-          Code licensed under MIT License. Documentation licensed under CC BY
-          4.0.
+          Code licensed under MIT License. Docs licensed under CC BY 4.0.
         </small>
       </div>
       <div class="flex items-center space-x-4">
