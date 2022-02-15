@@ -66,8 +66,8 @@ export class AppComponent implements OnInit {
   realtimeFirestoreCounter() {
     fetch('counter')
       .from('firestore')
-      // .state(false)
-      // .cache(false)
+      .state(false)
+      .cache(false)
       .on()
       .subscribe(numbers => {
         console.log('realtime counter from firestore', numbers[0]?.total);
