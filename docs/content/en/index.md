@@ -17,14 +17,14 @@ category: 'Getting Started'
 
 </div>
 
-| Package                                                          | Version                                                                                                            |
-| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| [`@flew/core`](https://www.npmjs.com/package/@flew/core)         | [![version](https://img.shields.io/npm/v/@flew/core/latest.svg)](https://www.npmjs.com/package/@flew/core)         |
-| [`@flew/core`](https://www.npmjs.com/package/@flew/network)      | [![version](https://img.shields.io/npm/v/@flew/core/latest.svg)](https://www.npmjs.com/package/@flew/core)         |
-| [`@flew/cache`](https://www.npmjs.com/package/@flew/cache)       | [![version](https://img.shields.io/npm/v/@flew/cache/latest.svg)](https://www.npmjs.com/package/@flew/cache)       |
-| [`@flew/state`](https://www.npmjs.com/package/@flew/state)       | [![version](https://img.shields.io/npm/v/@flew/state/latest.svg)](https://www.npmjs.com/package/@flew/state)       |
-| [`@flew/firebase`](https://www.npmjs.com/package/@flew/firebase) | [![version](https://img.shields.io/npm/v/@flew/firebase/latest.svg)](https://www.npmjs.com/package/@flew/firebase) |
-| [`@flew/parse`](https://www.npmjs.com/package/@flew/parse)       | [![version](https://img.shields.io/npm/v/@flew/parse/latest.svg)](https://www.npmjs.com/package/@flew/parse)       |
+| Package                                                 | Version                                                                                                            |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| [`@flew/core`](https://paka.dev/npm/@flew/core)         | [![version](https://img.shields.io/npm/v/@flew/core/latest.svg)](https://www.npmjs.com/package/@flew/core)         |
+| [`@flew/network`](https://paka.dev/npm/@flew/network)   | [![version](https://img.shields.io/npm/v/@flew/core/latest.svg)](https://www.npmjs.com/package/@flew/network)      |
+| [`@flew/cache`](https://paka.dev/npm/@flew/cache)       | [![version](https://img.shields.io/npm/v/@flew/cache/latest.svg)](https://www.npmjs.com/package/@flew/cache)       |
+| [`@flew/state`](https://paka.dev/npm/@flew/state)       | [![version](https://img.shields.io/npm/v/@flew/state/latest.svg)](https://www.npmjs.com/package/@flew/state)       |
+| [`@flew/firebase`](https://paka.dev/npm/@flew/firebase) | [![version](https://img.shields.io/npm/v/@flew/firebase/latest.svg)](https://www.npmjs.com/package/@flew/firebase) |
+| [`@flew/parse`](https://paka.dev/npm/@flew/parse)       | [![version](https://img.shields.io/npm/v/@flew/parse/latest.svg)](https://www.npmjs.com/package/@flew/parse)       |
 
 ## Built with Flew
 
