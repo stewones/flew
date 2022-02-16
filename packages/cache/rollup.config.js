@@ -1,7 +1,7 @@
 // Lib
 import path from 'path';
 import * as pkg from './package.json';
-import { createRollupConfig } from '../../config/create-rollup-config';
+import { createRollupConfig } from '../../configs/rollup';
 
 const distDir = path.resolve(__dirname, './dist');
 const { name } = pkg;
