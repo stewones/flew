@@ -61,3 +61,10 @@ People _love_ thorough bug reports.
 - issue `npm run start`
 
 > Note that every time you change some package code and wat it to be reflected in a project, you must run `npm run build` from inside the package.
+
+## Working with docs
+
+- clone this respository
+- cd to `docs`
+- issue `npm install`
+- issue `npm run start`
