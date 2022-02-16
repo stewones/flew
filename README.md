@@ -1,3 +1,5 @@
-# flew
+# Flew
 
-Fetch and data management reimagined
+Network, cache and state management reimagined.
+
+Learn more at [flew.dev](https://flew.dev)
