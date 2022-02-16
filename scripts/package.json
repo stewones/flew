@@ -1,0 +1,35 @@
+{
+    "name": "scripts",
+    "private": true,
+    "scripts": {
+        "bump:patch:cache": "cd ../packages/cache && npm version patch",
+        "bump:patch:core": "cd ../packages/core && npm version patch",
+        "bump:patch:firebase": "cd ../packages/firebase && npm version patch",
+        "bump:patch:network": "cd ../packages/network && npm version patch",
+        "bump:patch:parse": "cd ../packages/parse && npm version patch",
+        "bump:patch:state": "cd ../packages/state && npm version patch",
+        "publish:cache": "cd ../packages/cache && npm publish",
+        "publish:core": "cd ../packages/core && npm publish",
+        "publish:firebase": "cd ../packages/firebase && npm publish",
+        "publish:network": "cd ../packages/network && npm publish",
+        "publish:parse": "cd ../packages/parse && npm publish",
+        "publish:state": "cd ../packages/state && npm publish",
+        "install:cache": "cd ../packages/cache && npm install",
+        "install:core": "cd ../packages/core && npm install",
+        "install:firebase": "cd ../packages/firebase && npm install",
+        "install:network": "cd ../packages/network && npm install",
+        "install:parse": "cd ../packages/parse && npm install",
+        "install:state": "cd ../packages/state && npm install",
+        "build:cache": "cd ../packages/cache && npm run build",
+        "build:core": "cd ../packages/core && npm run build",
+        "build:firebase": "cd ../packages/firebase && npm run build",
+        "build:network": "cd ../packages/network && npm run build",
+        "build:parse": "cd ../packages/parse && npm run build",
+        "build:state": "cd ../packages/state && npm run build",
+        "setup:packages": "npm run install:cache && npm run install:core && npm run install:firebase && npm run install:network && npm run install:parse && npm run install:state && npm run build:cache && npm run build:core && npm run build:firebase && npm run build:network && npm run build:parse && npm run build:state"
+    },
+    "devDependencies": {
+        "chalk": "^4.1.2",
+        "semver": "^7.3.5"
+    }
+}

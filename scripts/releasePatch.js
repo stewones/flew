@@ -7,7 +7,7 @@ const { version } = require('../package.json');
 const newVersion = inc(version, 'patch');
 
 fs.writeFile(
-  './packages/core/src/version.ts',
+  '../packages/core/src/version.ts',
   `export const FL_VERSION = '${newVersion}';`,
   {},
   async err => {
@@ -16,18 +16,11 @@ fs.writeFile(
       process.exit(1);
     }
     const invocations = [
-      ['npm', 'run', 'bump:patch:cache'],
       ['npm', 'run', 'bump:patch:core'],
       ['npm', 'run', 'bump:patch:firebase'],
       ['npm', 'run', 'bump:patch:network'],
       ['npm', 'run', 'bump:patch:parse'],
       ['npm', 'run', 'bump:patch:state'],
-
-      // auto not working
-      // ['git', 'push', 'origin', 'master'],
-      // ['auto', 'changelog', '-m', `chore: update changelog`],
-      // ['auto', 'release'],
-
       ['npm', 'run', 'publish:cache'],
       ['npm', 'run', 'publish:core'],
       ['npm', 'run', 'publish:firebase'],
@@ -37,7 +30,6 @@ fs.writeFile(
 
       ['git', 'commit', '-a', '-m', `chore: bump libs to ${newVersion}`],
       ['npm', 'version', 'patch', '-m', `chore: bump version to ${newVersion}`],
-
       ['git', 'push', '--follow-tags', '--set-upstream', 'origin', 'master'],
     ];
     for (const [program, ...args] of invocations) {

@@ -11,7 +11,6 @@
     "resolveJsonModule": true,
     "strict": false,
     "target": "esnext",
-    "typeRoots": ["./node_modules/@types"],
     "paths": {
       "@flew/cache": ["./packages/cache/src/index.ts"],
       "@flew/core": ["./packages/core/src/index.ts"],

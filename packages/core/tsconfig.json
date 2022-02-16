@@ -1,8 +1,10 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "__tests__/**/*"],
   "compilerOptions": {
     "declaration": true,
-    "declarationDir": "./types"
+    "declarationDir": "./types",
+    "types": ["jest"],
+    "typeRoots": ["./types", "./node_modules/@types"]
   }
 }
