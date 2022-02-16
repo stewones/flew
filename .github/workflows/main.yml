@@ -1,0 +1,38 @@
+name: CI/CD
+'on':
+  push:
+    branches:
+      - master
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm ci
+      - name: Run tests
+        run: npm test
+      - name: Upload core coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./packages/core/coverage
+          # env_vars: OS,PYTHON
+          fail_ci_if_error: true
+          # files: ./coverage1.xml,./coverage2.xml
+          # flags: core
+          name: core
+          # path_to_write_report: ./coverage/codecov_report.txt
+          verbose: true
+      - name: Upload cache coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./packages/core/cache
+          # env_vars: OS,PYTHON
+          fail_ci_if_error: true
+          # files: ./coverage1.xml,./coverage2.xml
+          # flags: core
+          name: core
+          # path_to_write_report: ./coverage/codecov_report.txt
+          verbose: true

@@ -5,12 +5,12 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
+    "auto-changelog": "^2.4.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^7.0.0",
     "husky": "^4.3.8",
     "prettier": "^2.4.1",
-    "typescript": "4.3.5",
-    "auto-changelog": "^2.4.0"
+    "typescript": "4.3.5"
   },
   "scripts": {
     "prettier": "prettier",
@@ -20,6 +20,9 @@
     "write:prettier": "prettier --write .",
     "write:eslint": "eslint --fix --quiet .",
     "changelog": "auto-changelog --output ./docs/content/en/changelog.md --template ./changelog.hbs",
+    "coverage": "cd ./scripts && npm run coverage",
+    "test": "cd ./scripts && npm run test",
     "release:patch": "cd ./scripts && node ./releasePatch.js"
-  }
+  },
+  "dependencies": {}
 }

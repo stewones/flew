@@ -26,6 +26,8 @@
         "build:network": "cd ../packages/network && npm run build",
         "build:parse": "cd ../packages/parse && npm run build",
         "build:state": "cd ../packages/state && npm run build",
+        "test": "cd ../packages/core && npm run test && cd ../cache && npm run test && cd ../firebase && npm run test && cd ../network && npm run test && cd ../parse && npm run test && cd ../state && npm run test",
+        "coverage": "node ./coverageBadge.js --input '../packages/core/coverage/coverage-summary.json' --output '../.badges/core' && node ./coverageBadge.js --input '../packages/cache/coverage/coverage-summary.json' --output '../.badges/cache' && node ./coverageBadge.js --input '../packages/firebase/coverage/coverage-summary.json' --output '../.badges/firebase' && node ./coverageBadge.js --input '../packages/network/coverage/coverage-summary.json' --output '../.badges/network' && node ./coverageBadge.js --input '../packages/parse/coverage/coverage-summary.json' --output '../.badges/parse' && node ./coverageBadge.js --input '../packages/state/coverage/coverage-summary.json' --output '../.badges/state'",
         "setup:packages": "npm run install:cache && npm run install:core && npm run install:firebase && npm run install:network && npm run install:parse && npm run install:state && npm run build:cache && npm run build:core && npm run build:firebase && npm run build:network && npm run build:parse && npm run build:state"
     },
     "devDependencies": {

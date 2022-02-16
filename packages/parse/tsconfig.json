@@ -1,11 +1,10 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "__tests__/**/*"],
   "exclude": ["./dist", "node_modules", "./types"],
   "compilerOptions": {
     "declaration": true,
     "declarationDir": "./types",
-    "types": ["jest"],
     "typeRoots": ["./types", "./node_modules/@types"]
   }
 }
