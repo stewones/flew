@@ -10,29 +10,63 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install modules
         run: npm ci
-      - name: Run tests
-        run: npm test
+      - name: Run core tests
+        run: cd ./packages/core && npm test
       - name: Upload core coverage
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./packages/core/coverage
-          # env_vars: OS,PYTHON
           fail_ci_if_error: true
-          # files: ./coverage1.xml,./coverage2.xml
-          # flags: core
           name: core
-          # path_to_write_report: ./coverage/codecov_report.txt
           verbose: true
+      - name: Run cache tests
+        run: cd ./packages/cache && npm test
       - name: Upload cache coverage
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./packages/core/cache
-          # env_vars: OS,PYTHON
+          directory: ./packages/cache/coverage
           fail_ci_if_error: true
-          # files: ./coverage1.xml,./coverage2.xml
-          # flags: core
-          name: core
-          # path_to_write_report: ./coverage/codecov_report.txt
+          name: cache
+          verbose: true
+      - name: Run firebase tests
+        run: cd ./packages/firebase && npm test
+      - name: Upload firebase coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./packages/firebase/coverage
+          fail_ci_if_error: true
+          name: firebase
+          verbose: true
+      - name: Run network tests
+        run: cd ./packages/network && npm test
+      - name: Upload network coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./packages/network/coverage
+          fail_ci_if_error: true
+          name: network
+          verbose: true
+      - name: Run parse tests
+        run: cd ./packages/parse && npm test
+      - name: Upload parse coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./packages/parse/coverage
+          fail_ci_if_error: true
+          name: parse
+          verbose: true
+      - name: Run state tests
+        run: cd ./packages/state && npm test
+      - name: Upload state coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./packages/state/coverage
+          fail_ci_if_error: true
+          name: state
           verbose: true
