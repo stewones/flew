@@ -1,0 +1,22 @@
+name: CI/CD
+'on':
+  push:
+    branches:
+      - master
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm ci
+      - name: Run network tests
+        run: cd ./packages/network && npm test
+      - name: Upload network coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./packages/network/coverage
+          fail_ci_if_error: true
+          name: network
+          verbose: true

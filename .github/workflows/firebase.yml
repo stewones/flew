@@ -1,0 +1,22 @@
+name: CI/CD
+'on':
+  push:
+    branches:
+      - master
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm ci
+      - name: Run firebase tests
+        run: cd ./packages/firebase && npm test
+      - name: Upload firebase coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./packages/firebase/coverage
+          fail_ci_if_error: true
+          name: firebase
+          verbose: true
