@@ -3,6 +3,8 @@ name: parse
   push:
     branches:
       - master
+    paths:
+      - 'packages/parse/**'
 jobs:
   test:
     runs-on: ubuntu-latest

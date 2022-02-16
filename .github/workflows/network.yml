@@ -3,6 +3,8 @@ name: network
   push:
     branches:
       - master
+    paths:
+      - 'packages/network/**'
 jobs:
   test:
     runs-on: ubuntu-latest

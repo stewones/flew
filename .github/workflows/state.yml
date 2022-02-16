@@ -3,6 +3,8 @@ name: state
   push:
     branches:
       - master
+    paths:
+      - 'packages/state/**'
 jobs:
   test:
     runs-on: ubuntu-latest

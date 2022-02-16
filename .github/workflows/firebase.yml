@@ -3,6 +3,8 @@ name: firebase
   push:
     branches:
       - master
+    paths:
+      - 'packages/firebase/**'
 jobs:
   test:
     runs-on: ubuntu-latest

@@ -3,6 +3,8 @@ name: cache
   push:
     branches:
       - master
+    paths:
+      - 'packages/cache/**'
 jobs:
   test:
     runs-on: ubuntu-latest

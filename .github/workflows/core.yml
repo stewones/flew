@@ -3,6 +3,8 @@ name: core
   push:
     branches:
       - master
+    paths:
+      - 'packages/core/**'
 jobs:
   test:
     runs-on: ubuntu-latest
