@@ -1,4 +1,4 @@
-name: CI/CD
+name: firebase
 'on':
   push:
     branches:
