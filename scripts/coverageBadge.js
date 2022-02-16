@@ -45,10 +45,10 @@ const getBadge = (report, key) => {
   const colour = getColour(coverage);
 
   return key === 'lines'
-    ? `https://img.shields.io/badge/Coverage-${coverage}${encodeURI(
+    ? `https://img.shields.io/badge/coverage-${coverage}${encodeURI(
         '%',
       )}-${colour}.svg`
-    : `https://img.shields.io/badge/Coverage${encodeURI(
+    : `https://img.shields.io/badge/coverage${encodeURI(
         ':',
       )}${key}-${coverage}${encodeURI('%')}-${colour}.svg`;
 };
