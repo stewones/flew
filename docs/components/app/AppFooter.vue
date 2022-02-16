@@ -15,7 +15,8 @@
             title="Powered by Intenseloop"
             >Intenseloop</a
           >.
-          <!-- Built by
+          <!-- 
+            Built by
           <a
             v-if="settings.twitter"
             :href="`https://twitter.com/${settings.twitter}`"
