@@ -19,7 +19,5 @@
       "@flew/parse": ["./packages/parse/src/index.ts"],
       "@flew/state": ["./packages/state/src/index.ts"]
     }
-  },
-
-  "exclude": ["./dist", "node_modules", "./types"]
+  }
 }
