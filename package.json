@@ -22,6 +22,7 @@
   "scripts": {
     "prettier": "prettier",
     "eslint": "eslint",
+    "auto-changelog": "auto-changelog",
     "write:prettier": "prettier --write .",
     "write:eslint": "eslint --fix --quiet .",
     "release:patch": "node ./scripts/releasePatch.js",
@@ -36,7 +37,8 @@
     "publish:firebase": "cd packages/firebase && npm publish",
     "publish:network": "cd packages/network && npm publish",
     "publish:parse": "cd packages/parse && npm publish",
-    "publish:state": "cd packages/state && npm publish"
+    "publish:state": "cd packages/state && npm publish",
+    "changelog": "auto-changelog --output ./docs/content/en/changelog.md --template ./changelog.hbs"
   },
   "repository": "flewjs/flewjs",
   "author": "flewbot <bot@flew.dev>",
@@ -50,5 +52,8 @@
       "slack"
     ],
     "onlyPublishWithReleaseLabel": true
+  },
+  "dependencies": {
+    "auto-changelog": "^2.4.0"
   }
 }
