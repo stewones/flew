@@ -16,14 +16,14 @@ fs.writeFile(
       process.exit(1);
     }
     const invocations = [
-      // ['npm', 'run', 'bump:patch:cache'],
-      // ['npm', 'run', 'bump:patch:core'],
-      // ['npm', 'run', 'bump:patch:firebase'],
-      // ['npm', 'run', 'bump:patch:network'],
-      // ['npm', 'run', 'bump:patch:parse'],
-      // ['npm', 'run', 'bump:patch:state'],
-      // ['npm', 'run', 'publish:cache'],
-      // ['npm', 'run', 'publish:core'],
+      ['npm', 'run', 'bump:patch:cache'],
+      ['npm', 'run', 'bump:patch:core'],
+      ['npm', 'run', 'bump:patch:firebase'],
+      ['npm', 'run', 'bump:patch:network'],
+      ['npm', 'run', 'bump:patch:parse'],
+      ['npm', 'run', 'bump:patch:state'],
+      ['npm', 'run', 'publish:cache'],
+      ['npm', 'run', 'publish:core'],
       ['npm', 'run', 'publish:firebase'],
       ['npm', 'run', 'publish:network'],
       ['npm', 'run', 'publish:parse'],
