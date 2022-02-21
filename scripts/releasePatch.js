@@ -28,38 +28,9 @@ fs.writeFile(
       ['npm', 'run', 'publish:network'],
       ['npm', 'run', 'publish:parse'],
       ['npm', 'run', 'publish:state'],
-      [
-        'cd',
-        '..',
-        '&&',
-        'git',
-        'commit',
-        '-a',
-        '-m',
-        `chore: bump libs to ${newVersion}`,
-      ],
-      [
-        'cd',
-        '..',
-        '&&',
-        'npm',
-        'version',
-        'patch',
-        '-m',
-        `chore: bump version to ${newVersion}`,
-      ],
-
-      [
-        'cd',
-        '..',
-        '&&',
-        'git',
-        'push',
-        '--follow-tags',
-        '--set-upstream',
-        'origin',
-        'master',
-      ],
+      ['npm', 'run', 'commit:libs'],
+      ['npm', 'run', 'version:patch'],
+      ['npm', 'run', 'commit:push'],
     ];
     for (const [program, ...args] of invocations) {
       await spawnAsync(program, args, {
