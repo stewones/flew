@@ -16,6 +16,7 @@ fs.writeFile(
       process.exit(1);
     }
     const invocations = [
+      ['npm', 'run', 'bump:patch:cache'],
       ['npm', 'run', 'bump:patch:core'],
       ['npm', 'run', 'bump:patch:firebase'],
       ['npm', 'run', 'bump:patch:network'],
