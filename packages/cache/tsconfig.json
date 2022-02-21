@@ -1,10 +1,11 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src/**/*", "__tests__/**/*"],
+  "include": ["src/**/*"],
   "compilerOptions": {
     "typeRoots": ["./node_modules/@types"],
     "types": ["node", "jest"],
     "declaration": true,
-    "declarationDir": "./types"
+    "declarationDir": "./types",
+    "module": "ESNext"
   }
 }

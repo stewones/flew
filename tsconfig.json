@@ -11,14 +11,7 @@
     "resolveJsonModule": true,
     "strict": false,
     "target": "esnext",
-    "paths": {
-      "@flew/cache": ["./packages/cache/src/index.ts"],
-      "@flew/core": ["./packages/core/src/index.ts"],
-      "@flew/firebase": ["./packages/firebase/src/index.ts"],
-      "@flew/network": ["./packages/network/src/index.ts"],
-      "@flew/parse": ["./packages/parse/src/index.ts"],
-      "@flew/state": ["./packages/state/src/index.ts"]
-    }
+    "typeRoots": ["./node_modules/@types"]
   },
   "exclude": ["./dist", "node_modules"]
 }
