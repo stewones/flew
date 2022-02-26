@@ -7,7 +7,7 @@
   "license": "MIT",
   "main": "dist/@flew/core.js",
   "module": "dist/@flew/core.mjs",
-  "types": "types/core/src/index.d.ts",
+  "types": "types/index.d.ts",
   "scripts": {
     "prepublishOnly": "npm run build",
     "rollup": "rollup",
