@@ -153,7 +153,11 @@ export class ParseDriver implements FlewDriver {
     );
   }
 
-  public on<T>(chain: FlewChainPayload, key: string): Observable<T> {
+  public on<T>(
+    chain: FlewChainPayload,
+    key: string,
+    options?: { debounceTime?: number },
+  ): Observable<T> {
     return new Observable(observer => {
       const Parse = this.getInstance();
 
@@ -235,17 +239,37 @@ export class ParseDriver implements FlewDriver {
       };
 
       workspace.calls[key].subscribe().then(async handler => {
+        let lastTimeChecked = new Date().getTime();
         observer.next((await getData()) as T);
+
         handler.on('create', async object => {
-          observer.next((await getData()) as T);
+          var lastTimeCheckedDue =
+            new Date().getTime() >
+            (lastTimeChecked + options?.debounceTime || 0);
+          if (lastTimeCheckedDue) {
+            lastTimeChecked = new Date().getTime();
+            observer.next((await getData()) as T);
+          }
         });
 
         handler.on('update', async object => {
-          observer.next((await getData()) as T);
+          var lastTimeCheckedDue =
+            new Date().getTime() >
+            (lastTimeChecked + options?.debounceTime || 0);
+          if (lastTimeCheckedDue) {
+            lastTimeChecked = new Date().getTime();
+            observer.next((await getData()) as T);
+          }
         });
 
         handler.on('delete', async object => {
-          observer.next((await getData()) as T);
+          var lastTimeCheckedDue =
+            new Date().getTime() >
+            (lastTimeChecked + options?.debounceTime || 0);
+          if (lastTimeCheckedDue) {
+            lastTimeChecked = new Date().getTime();
+            observer.next((await getData()) as T);
+          }
         });
 
         handler.on('close', () => {

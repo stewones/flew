@@ -192,6 +192,7 @@ export class FlewNetwork {
       case 'on':
         arg1 = chain;
         arg2 = key;
+        arg3 = payload;
         break;
       case 'run':
         arg1 = path;
@@ -328,13 +329,15 @@ export class FlewNetwork {
   }
 
   /**
-   * Get documents in realtime
+   *  Get documents in realtime
    *
    * @template T
-   * @returns {Observable<T>}
+   * @param {{ debounceTime?: number }} [options]
+   * @returns {*}  {Observable<T>}
+   * @memberof FlewNetwork
    */
-  public on<T>(): Observable<T> {
-    return this.call<T>('on');
+  public on<T>(options?: { debounceTime?: number }): Observable<T> {
+    return this.call<T>('on', null, options);
   }
 
   /**

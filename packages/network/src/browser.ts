@@ -45,8 +45,8 @@ export class FetchBrowser extends FetchServer {
     return this.call$('findOne');
   }
 
-  public on<T>(): Observable<T> {
-    return this.call$<T>('on');
+  public on<T>(options?: { debounceTime?: number }): Observable<T> {
+    return this.call$<T>('on', null, options);
   }
 
   public count(): Observable<number> {
