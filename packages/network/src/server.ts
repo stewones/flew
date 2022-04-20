@@ -269,6 +269,18 @@ export class FlewNetwork {
   }
 
   /**
+   * Put a document
+   *
+   * @template T
+   * @param {string} [path='']
+   * @param {*} [body={}]
+   * @returns {Observable<T>}
+   */
+  public put<T>(path = '', body: any = {}): Observable<T> {
+    return this.call<T>('put', path, body);
+  }
+
+  /**
    * Delete a document
    *
    * @template T
