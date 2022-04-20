@@ -36,7 +36,7 @@
     "email": "support@flew.dev"
   },
   "dependencies": {
-    "@flew/core": "^0.0.28-beta.0",
+    "@flew/core": "^0.0.28",
     "firebase": "^8.10.0"
   },
   "devDependencies": {
