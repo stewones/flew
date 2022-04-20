@@ -1,6 +1,6 @@
 {
   "name": "@flew/firebase",
-  "version": "0.0.27",
+  "version": "0.0.28-beta.0",
   "description": "Firebase support for Flew",
   "keywords": [],
   "homepage": "https://flew.dev",
@@ -36,7 +36,7 @@
     "email": "support@flew.dev"
   },
   "dependencies": {
-    "@flew/core": "^0.0.20",
+    "@flew/core": "^0.0.28-beta.0",
     "firebase": "^8.10.0"
   },
   "devDependencies": {

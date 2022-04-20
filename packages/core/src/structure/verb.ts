@@ -7,6 +7,7 @@ export type FlewVerb =
   | 'findOne'
   | 'set'
   | 'update'
+  | 'put'
   | 'on'
   | 'count'
   | 'run';

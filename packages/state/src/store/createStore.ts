@@ -69,9 +69,9 @@ function _network_(state = {}, action) {
 export function createStore(reducers, enhancers?);
 export function createStore(reducers, initialState?, enhancers?);
 export function createStore(reducers, initialState?, enhancers?) {
-  if (!isEmpty(workspace.store)) {
-    console.warn(`oops looks like there's a store created already`);
-  }
+  // if (!isEmpty(workspace.store)) {
+  //   console.warn(`oops looks like there's a store created already`);
+  // }
 
   return (workspace.store = createReduxStore(
     combineReducers({ _network_, ...reducers }),

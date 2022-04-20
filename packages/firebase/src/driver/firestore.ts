@@ -29,6 +29,7 @@ export class FirestoreDriver implements FlewDriver {
     get: 'http.get',
     post: 'http.post',
     update: true,
+    put: 'http.put',
     patch: 'http.patch',
     delete: true,
     set: true,

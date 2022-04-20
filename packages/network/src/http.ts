@@ -28,6 +28,7 @@ export class HttpDriver implements FlewDriver {
     get: true,
     post: true,
     update: 'http.patch',
+    put: true,
     patch: true,
     delete: true,
     set: 'http.post',

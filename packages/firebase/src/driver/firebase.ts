@@ -26,6 +26,7 @@ export class FirebaseDriver implements FlewDriver {
     get: 'http.get',
     post: 'http.post',
     update: 'http.patch',
+    put: 'http.put',
     patch: 'http.patch',
     delete: 'http.delete',
     set: 'http.post',
