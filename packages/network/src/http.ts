@@ -79,7 +79,7 @@ export class HttpDriver implements FlewDriver {
   }
 
   public executeRequest<T>(
-    method: 'get' | 'post' | 'patch' | 'delete',
+    method: 'get' | 'post' | 'patch' | 'delete' | 'put',
     path: string,
     key: string,
     body: any = {},
@@ -198,6 +198,15 @@ export class HttpDriver implements FlewDriver {
     chain: FlewChainPayload,
   ): Observable<T> {
     return this.executeRequest('patch', path, key, payload, chain);
+  }
+
+  public put<T>(
+    path = '',
+    key = '',
+    payload: any = {},
+    chain: FlewChainPayload,
+  ): Observable<T> {
+    return this.executeRequest('put', path, key, payload, chain);
   }
 
   public delete<T>(
