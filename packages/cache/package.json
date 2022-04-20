@@ -1,6 +1,6 @@
 {
   "name": "@flew/cache",
-  "version": "0.0.28-beta.0",
+  "version": "0.0.28",
   "description": "Cache support for Flew",
   "keywords": [],
   "homepage": "https://flew.dev",

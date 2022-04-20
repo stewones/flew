@@ -1,6 +1,6 @@
 {
   "name": "@flew/network",
-  "version": "0.0.28-beta.0",
+  "version": "0.0.28",
   "description": "Fetch and data management reimagined for Flew",
   "keywords": [
     "fetch",
