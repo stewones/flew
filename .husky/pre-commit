@@ -3,4 +3,5 @@
 
 npm run write:prettier
 npm run write:eslint
+npm run changelog
 git add .
