@@ -22,6 +22,8 @@ jobs:
         run: cd ./docs && npm ci
       # - name: Run changelog and build
       #   run: npm run changelog && cd ./docs && npm run generate
+      - name: Build docs
+        run: cd ./docs && npm run generate
       - name: Deploy docs
         uses: cloudflare/wrangler-action@1.3.0
         env:
