@@ -5,7 +5,7 @@ position: 9
 category: Guide
 ---
 
-With [State plugin](https://github.com/flewjs/flewjs/tree/master/packages/state/src) you can develop as a hero using redux patterns, also when using this package, all Flew's network calls are sped up by default using results stored in memory.
+With [State plugin](https://github.com/intenseloop/flew/tree/master/packages/state/src) you can develop as a hero using redux patterns, also when using this package, all Flew's network calls are sped up by default using results stored in memory.
 
 > The state plugin is suited to work on client side only. It won't work on server.
 

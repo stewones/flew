@@ -19,18 +19,18 @@ We actively welcome your pull requests:
 
 1. Fork the repo and create your branch from `master`.
 2. If you've added code that should be tested, add tests.
-3. If you've changed APIs, update the [documentation](https://github.com/flewjs/flewjs/tree/master/docs/content/en).
+3. If you've changed APIs, update the [documentation](https://github.com/intenseloop/flew/tree/master/docs/content/en).
 4. Ensure the test suite passes.
 5. Make sure your code lints.
 6. Issue that pull request!
 
 ## MIT Software License
 
-Any contributions you make will be under the MIT Software License. In short, when you submit code changes, your submissions are understood to be under the same [MIT License](https://github.com/flewjs/flewjs/blob/master/LICENSE) that covers the project. Feel free to contact the maintainers if that's a concern. By contributing, you agree that your contributions will be licensed under its MIT License.
+Any contributions you make will be under the MIT Software License. In short, when you submit code changes, your submissions are understood to be under the same [MIT License](https://github.com/intenseloop/flew/blob/master/LICENSE) that covers the project. Feel free to contact the maintainers if that's a concern. By contributing, you agree that your contributions will be licensed under its MIT License.
 
-## Report bugs using [Github's issues](https://github.com/flewjs/flewjs/issues/new/choose)
+## Report bugs using [Github's issues](https://github.com/intenseloop/flew/issues/new/choose)
 
-Report a bug by [opening a new issue](https://github.com/flewjs/flewjs/issues/new/choose). it's that easy!
+Report a bug by [opening a new issue](https://github.com/intenseloop/flew/issues/new/choose). it's that easy!
 
 Write bug reports with detail, background, and sample code. [This is a great example](http://stackoverflow.com/q/12488905/180626) of a bug report. Here's [another example from Craig Hockenberry](http://www.openradar.me/11905408).
 

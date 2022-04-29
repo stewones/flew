@@ -5,7 +5,7 @@
     "light": "/logo-light.svg",
     "dark": "/logo-dark.svg"
   },
-  "github": "flewjs/flewjs",
+  "github": "intenseloop/flew",
   "twitter": "@stewones",
   "defaultBranch": "master",
   "apiLinks": [

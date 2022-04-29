@@ -5,7 +5,7 @@ position: 6
 category: Guide
 ---
 
-[Firebase plugin](https://github.com/flewjs/flewjs/tree/master/packages/firebase/src/driver) provides everything you need to work with Firebase and/or Firestore as your data source. The fetch api and its chaining methods are heavily inspired by Firebase SDK so you should feel at home without the overhead of packages like AngularFire. Keep in mind that this plugin as well as any other Flew package is completely framework-agnostic, meaning you can write once and deploy everywhere.
+[Firebase plugin](https://github.com/intenseloop/flew/tree/master/packages/firebase/src/driver) provides everything you need to work with Firebase and/or Firestore as your data source. The fetch api and its chaining methods are heavily inspired by Firebase SDK so you should feel at home without the overhead of packages like AngularFire. Keep in mind that this plugin as well as any other Flew package is completely framework-agnostic, meaning you can write once and deploy everywhere.
 
 ## Install
 

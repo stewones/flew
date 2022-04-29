@@ -5,7 +5,7 @@ position: 8
 category: Guide
 ---
 
-[Cache plugin](https://github.com/flewjs/flewjs/tree/master/packages/cache/src) provides an useful api for manipulating everything about cache. It's also integrated deep inside Flew's network calls to internally handle it for you.
+[Cache plugin](https://github.com/intenseloop/flew/tree/master/packages/cache/src) provides an useful api for manipulating everything about cache. It's also integrated deep inside Flew's network calls to internally handle it for you.
 
 > The cache plugin is suited to work on client side only. It won't work on server.
 

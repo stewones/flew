@@ -31,7 +31,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/flewjs/flewjs.git"
+    "url": "git+https://github.com/intenseloop/flew.git"
   },
   "author": {
     "name": "Flew Team",
@@ -39,7 +39,7 @@
     "url": "https://flew.dev"
   },
   "bugs": {
-    "url": "https://github.com/flewjs/flewjs/issues",
+    "url": "https://github.com/intenseloop/flew/issues",
     "email": "support@flew.dev"
   },
   "dependencies": {

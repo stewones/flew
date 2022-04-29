@@ -5,7 +5,7 @@ position: 7
 category: Guide
 ---
 
-[Parse plugin](https://github.com/flewjs/flewjs/blob/master/packages/parse/src/driver/parse.ts) provides the bridge necessary to work with [Parse JS Client SDK](http://parseplatform.org/Parse-SDK-JS/api/3.4.1/) through the intuitive Flew's fetch api.
+[Parse plugin](https://github.com/intenseloop/flew/blob/master/packages/parse/src/driver/parse.ts) provides the bridge necessary to work with [Parse JS Client SDK](http://parseplatform.org/Parse-SDK-JS/api/3.4.1/) through the intuitive Flew's fetch api.
 
 ## Install
 
