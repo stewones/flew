@@ -9,7 +9,7 @@ import { mapping } from './mapping';
  * @param {string} id
  * @returns {Parse.Object}
  */
-export function pointer(name: string, id: string) {
+export function pointer(name: string, id: string | any) {
   const Parse = parse();
   return new Parse.Object(mapping[name] ? mapping[name] : name).set('id', id);
 }
