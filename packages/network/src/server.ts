@@ -117,7 +117,14 @@ export class FlewNetwork {
 
     const chain = { ...this.chain };
     const options = { ...this.options };
-    const payload = btoa(
+
+    const buffer = payload => {
+      return isServer()
+        ? Buffer.from(payload).toString('base64')
+        : btoa(payload);
+    };
+
+    const payload = buffer(
       serialize({
         ...verb,
         ...body,
