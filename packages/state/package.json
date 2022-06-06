@@ -1,6 +1,6 @@
 {
   "name": "@flew/state",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "description": "State support for Flew",
   "keywords": [],
   "homepage": "https://flew.dev",
@@ -36,7 +36,7 @@
     "email": "support@flew.dev"
   },
   "dependencies": {
-    "@flew/core": "^0.0.28",
+    "@flew/core": "^0.0.31",
     "lodash": "^4.17.21",
     "rxjs": "~7.4.0",
     "immer": "^9.0.6",

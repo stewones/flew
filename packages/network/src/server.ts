@@ -1,5 +1,5 @@
 import {
-  sha256,
+  serialize,
   isServer,
   namespace,
   FlewChain,
@@ -117,13 +117,15 @@ export class FlewNetwork {
 
     const chain = { ...this.chain };
     const options = { ...this.options };
-    const payload = JSON.stringify({
-      ...verb,
-      ...body,
-      ...{ path: path },
-      ...{ driver: chain.from },
-      ...omit(chain, ['key', 'useNetwork', 'useCache', 'useState']),
-    });
+    const payload = btoa(
+      serialize({
+        ...verb,
+        ...body,
+        ...{ path: path },
+        ...{ driver: chain.from },
+        ...omit(chain, ['key', 'useNetwork', 'useCache', 'useState']),
+      }),
+    );
 
     const keyStart = options.collection || 'flew';
 
@@ -131,7 +133,7 @@ export class FlewNetwork {
 
     const keyPath = chain.from === 'http' ? path || options.pathname : '';
 
-    const keyCrypt = sha256(payload);
+    const keyCrypt = payload;
 
     const key = `${keyStart}://${keyCrypt}${keyEndpoint || ''}${keyPath || ''}`;
 
