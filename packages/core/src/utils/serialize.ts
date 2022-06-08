@@ -1,3 +1,5 @@
+import { stripEmoji } from './strip';
+
 /**
  *
  *
@@ -25,7 +27,7 @@ function serializeObject(_key, value) {
   if (typeof data === 'object') {
     for (const key in data) {
       if (Object.hasOwnProperty.call(data, key)) {
-        data[key] = serializeObject(key, data[key]);
+        data[key] = serializeObject(key, stripEmoji(data[key]));
       }
     }
   }
