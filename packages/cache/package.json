@@ -36,7 +36,7 @@
     "email": "support@flew.dev"
   },
   "dependencies": {
-    "@flew/core": "^0.0.31",
+    "@flew/core": "^0.0.34",
     "localforage": "^1.10.0",
     "localforage-cordovasqlitedriver": "^1.8.0"
   },
