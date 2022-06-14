@@ -1,4 +1,5 @@
-import Parse from 'parse';
+import Parse from 'parse/dist/parse.js';
+
 import { namespace } from '@flew/core';
 import { ParseDriver } from './driver';
 import { ParseOptions } from './structure';
@@ -15,6 +16,7 @@ export function parsePlugin(config: ParseOptions, sdk = Parse) {
     sdk.initialize(config.appID);
     sdk.serverURL = config.serverURL;
     sdk.masterKey = config.masterKey;
+
     workspace.driver.parse = new ParseDriver({
       serverURL: sdk.serverURL,
       appID: config.appID,

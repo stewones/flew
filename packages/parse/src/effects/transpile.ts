@@ -1,4 +1,5 @@
 import { isArray, isString, isFunction, isEmpty } from 'lodash';
+import { mapping } from './mapping';
 
 /**
  * Chain query transpiler
@@ -137,13 +138,30 @@ export function transpileQueryRouter(specialOperator, chainQuery, handler) {
  * @param {*} handler
  */
 export function createQueryByOperator(value, operator, handler) {
-  //
-  // Start query
+  // query start
   const query = new handler.Parse.Query(handler.collection);
 
-  //
-  // Create from a function
-  if (isFunction(value)) {
+  // special cases
+  if (operator === 'matchesQuery') {
+    const mappedChainValue: any = value;
+    const mappedValue = mappedChainValue();
+
+    const subCollection = mapping[mappedValue[1]] || mappedValue[1];
+
+    const localField = mappedValue[0];
+    const queries = mappedValue[2];
+
+    const subQuery = new handler.Parse.Query(subCollection);
+
+    queries.map(q => {
+      for (const key in q) {
+        subQuery[key](...q[key]());
+      }
+    });
+
+    // apply to main query
+    query.matchesQuery(localField, subQuery);
+  } else if (isFunction(value)) {
     query[operator](...value());
   } else if (isArray(value)) {
     value.map(it => createQueryByOperator(it, operator, handler));
