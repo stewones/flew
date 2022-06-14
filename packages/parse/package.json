@@ -7,7 +7,7 @@
   "license": "MIT",
   "main": "dist/@flew/parse.js",
   "module": "dist/@flew/parse.mjs",
-  "types": "types/parse/src/index.d.ts",
+  "types": "types/index.d.ts",
   "scripts": {
     "prepublishOnly": "npm run build",
     "build": "./node_modules/.bin/rollup -c rollup.config.js",
@@ -38,7 +38,7 @@
   "dependencies": {
     "lodash": "^4.17.21",
     "parse": "^3.3.1",
-    "@flew/core": "^0.0.34"
+    "@flew/core": "^0.0.35"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
