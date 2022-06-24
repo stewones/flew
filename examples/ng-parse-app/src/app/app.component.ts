@@ -62,10 +62,10 @@ export class AppComponent implements OnInit {
   flewSortQuery() {
     lastValueFrom(
       fetch('OrgUser')
+        .where('org', '==', pointer('Org', 'FLXfiqHDGB'))
         .sort({
-          userEmail: 'desc',
+          userEmail: 'asc',
           userName: 'asc',
-          perm: 'desc',
         })
         .find(),
     ).then(result => (this.flewSortQueryResult = result));
