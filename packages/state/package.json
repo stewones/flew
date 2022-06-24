@@ -36,7 +36,7 @@
     "email": "support@flew.dev"
   },
   "dependencies": {
-    "@flew/core": "^0.0.35",
+    "@flew/core": "^0.0.38",
     "lodash": "^4.17.21",
     "rxjs": "~7.4.0",
     "immer": "^9.0.6",
