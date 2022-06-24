@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { fetch } from '@flew/network';
+import { pointer } from '@flew/parse';
 import Parse from 'parse/dist/parse.min.js';
 import { lastValueFrom } from 'rxjs';
 
@@ -15,6 +16,7 @@ Parse.serverURL = 'http://localhost:1337/parse';
 export class AppComponent implements OnInit {
   parseMatchesQueryResult: any;
   flewMatchesQueryResult: any;
+  flewSortQueryResult: any;
 
   async ngOnInit() {}
 
@@ -38,6 +40,9 @@ export class AppComponent implements OnInit {
         .query({
           and: [
             {
+              equalTo: () => ['org', pointer('Org', 'ZmUCiiuAfU')],
+            },
+            {
               matchesQuery: () => [
                 'org',
                 'Org',
@@ -52,5 +57,17 @@ export class AppComponent implements OnInit {
         })
         .find(),
     ).then(result => (this.flewMatchesQueryResult = result));
+  }
+
+  flewSortQuery() {
+    lastValueFrom(
+      fetch('OrgUser')
+        .sort({
+          userEmail: 'desc',
+          userName: 'asc',
+          perm: 'desc',
+        })
+        .find(),
+    ).then(result => (this.flewSortQueryResult = result));
   }
 }

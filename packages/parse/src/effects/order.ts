@@ -8,18 +8,15 @@ import { isArray, isEmpty, isObject } from 'lodash';
  * @param {*} connector
  */
 export function order(sort: any, connector: any) {
-  const asc = [];
-  const desc = [];
-
   if (isArray(sort)) {
     sort.map(s => {
       if (isEmpty(s)) throw new Error(`sort object in array can't be null`);
       for (const k in s) {
         if (s[k] === 'asc') {
-          asc.push(k);
+          connector.addAscending(k);
         }
         if (s[k] === 'desc') {
-          desc.push(k);
+          connector.addDescending(k);
         }
       }
     });
@@ -27,18 +24,11 @@ export function order(sort: any, connector: any) {
     if (isEmpty(sort)) throw new Error(`sort object can't be null`);
     for (const k in sort) {
       if (sort[k] === 'asc') {
-        asc.push(k);
+        connector.addAscending(k);
       }
       if (sort[k] === 'desc') {
-        desc.push(k);
+        connector.addDescending(k);
       }
     }
-  }
-
-  if (asc.length > 0) {
-    connector.addAscending(asc.join(','));
-  }
-  if (desc.length > 0) {
-    connector.addDescending(desc.join(','));
   }
 }
