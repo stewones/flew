@@ -8,6 +8,7 @@ import { isArray, isEmpty, isObject } from 'lodash';
  * @param {*} connector
  */
 export function order(sort: any, connector: any) {
+  if (isEmpty(sort)) return;
   if (isArray(sort)) {
     sort.map(s => {
       if (isEmpty(s)) throw new Error(`sort object in array can't be null`);

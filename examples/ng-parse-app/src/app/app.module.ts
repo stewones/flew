@@ -24,7 +24,7 @@ setup({
   plugins: [
     parsePlugin({
       serverURL: 'http://localhost:1337/parse',
-      appID: 'IntenseplusServer',
+      appID: 'IntenseloopServer',
     }),
     cachePlugin({
       name: 'flew',

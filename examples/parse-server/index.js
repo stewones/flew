@@ -20,7 +20,7 @@ setup({
   plugins: [
     parsePlugin(
       {
-        appID: process.env.APP_ID || 'IntenseplusServer',
+        appID: process.env.APP_ID || 'IntenseloopServer',
         serverURL: process.env.SERVER_URL || 'http://localhost:1337/server',
         masterKey: process.env.MASTER_KEY || 'mySecret', //Add your master key here. Keep it secret!
       },
@@ -44,9 +44,9 @@ if (!databaseUri) {
   console.log('DATABASE_URI not specified, falling back to localhost.');
 }
 const config = {
-  databaseURI: databaseUri || 'mongodb://localhost:27017/intenseplus-dev',
+  databaseURI: databaseUri || 'mongodb://localhost:27017/intenseloop-dev',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
-  appId: process.env.APP_ID || 'IntenseplusServer',
+  appId: process.env.APP_ID || 'IntenseloopServer',
   masterKey: process.env.MASTER_KEY || 'mySecret', //Add your master key here. Keep it secret!
   serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse', // Don't forget to change to https if needed
   liveQuery: {

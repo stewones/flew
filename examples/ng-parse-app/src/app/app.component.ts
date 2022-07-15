@@ -4,7 +4,7 @@ import { pointer } from '@flew/parse';
 import Parse from 'parse/dist/parse.min.js';
 import { lastValueFrom } from 'rxjs';
 
-Parse.initialize('IntenseplusServer');
+Parse.initialize('IntenseloopServer');
 Parse.serverURL = 'http://localhost:1337/parse';
 
 @Component({
@@ -42,6 +42,9 @@ export class AppComponent implements OnInit {
             {
               equalTo: () => ['org', pointer('Org', 'ZmUCiiuAfU')],
             },
+            // {
+            //   equalTo: () => ['org', pointer('Org', 'FLXfiqHDGB')],
+            // },
             {
               matchesQuery: () => [
                 'org',
