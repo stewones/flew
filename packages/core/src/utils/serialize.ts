@@ -34,9 +34,6 @@ function serializeObject(_key, value) {
   if (Array.isArray(value)) {
     for (let item of value) {
       item = serialize(item);
-      // for (const key in item) {
-      //   value[key] = serializeObject(key, item[key]);
-      // }
     }
   }
 
