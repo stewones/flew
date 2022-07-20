@@ -1,3 +1,4 @@
+import { isString } from 'lodash';
 import { stripEmoji } from './strip';
 
 /**
@@ -12,25 +13,32 @@ export function serialize(data) {
 }
 
 function serializeObject(_key, value) {
-  let data = value;
-  if (Array.isArray(data)) {
-    data = [...value];
-  } else if (data && typeof data === 'object') {
-    if ('toJSON' in data) return data.toJSON();
-    data = { ...data };
+  if (typeof value === 'object') {
+    if ('toJSON' in value) {
+      value = serialize(value.toJSON());
+    }
   }
 
-  if (typeof data === 'function') {
-    data = data();
+  if (typeof value === 'function') {
+    value = serialize(value());
   }
 
-  if (typeof data === 'object') {
-    for (const key in data) {
-      if (Object.hasOwnProperty.call(data, key)) {
-        data[key] = serializeObject(key, stripEmoji(data[key]));
+  if (typeof value === 'object') {
+    for (const key in value) {
+      if (Object.hasOwnProperty.call(value, key)) {
+        value[key] = serializeObject(key, stripEmoji(value[key]));
       }
     }
   }
 
-  return data;
+  if (Array.isArray(value)) {
+    for (let item of value) {
+      item = serialize(item);
+      // for (const key in item) {
+      //   value[key] = serializeObject(key, item[key]);
+      // }
+    }
+  }
+
+  return value;
 }

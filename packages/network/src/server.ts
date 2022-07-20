@@ -15,7 +15,7 @@ import {
 } from '@flew/core';
 
 import lodash from 'lodash';
-const { omit, isString, isArray, isEmpty } = lodash;
+const { omit, isString, isArray, isEmpty, cloneDeep } = lodash;
 import { Observable, Subject, tap } from 'rxjs';
 import { HttpDriver } from './http';
 
@@ -118,29 +118,21 @@ export class FlewNetwork {
     const chain = { ...this.chain };
     const options = { ...this.options };
 
-    const buffer = payload => {
-      return isServer()
-        ? Buffer.from(payload).toString('base64')
-        : btoa(payload);
+    const data = {
+      ...{ verb },
+      ...{ path },
+      ...{ driver: chain.from },
+      ...cloneDeep(body),
+      ...omit(cloneDeep(chain), ['key', 'useNetwork', 'useCache', 'useState']),
     };
 
-    const payload = buffer(
-      serialize({
-        ...verb,
-        ...body,
-        ...{ path: path },
-        ...{ driver: chain.from },
-        ...omit(chain, ['key', 'useNetwork', 'useCache', 'useState']),
-      }),
-    );
+    const keyCrypt = serialize(data);
 
     const keyStart = options.collection || 'flew';
 
     const keyEndpoint = chain.from === 'http' ? options.endpoint : '';
 
     const keyPath = chain.from === 'http' ? path || options.pathname : '';
-
-    const keyCrypt = payload;
 
     const key = `${keyStart}://${keyCrypt}${keyEndpoint || ''}${keyPath || ''}`;
 
