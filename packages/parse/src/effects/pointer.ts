@@ -14,7 +14,7 @@ import { mapping } from './mapping';
 export function pointer<T = any>(
   name: string,
   id: string | any,
-  options: { clear?: boolean } = { clear: true },
+  options: { clear?: boolean } = { clear: false },
 ): T {
   const Parse = parse();
   const parsePointer = new Parse.Object(
