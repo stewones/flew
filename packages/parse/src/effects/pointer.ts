@@ -2,14 +2,26 @@ import { parse } from './parse';
 import { mapping } from './mapping';
 
 /**
- * Creates a Parse Pointer
+ * Creates a Parse pointer for relations
  *
  * @export
+ * @template T
  * @param {string} name
- * @param {string} id
- * @returns {Parse.Object}
+ * @param {(string | any)} id
+ * @param {{ clear?: boolean }} [options={ clear: true }]
+ * @returns {*}  {T}
  */
-export function pointer(name: string, id: string | any) {
+export function pointer<T = any>(
+  name: string,
+  id: string | any,
+  options: { clear?: boolean } = { clear: true },
+): T {
   const Parse = parse();
-  return new Parse.Object(mapping[name] ? mapping[name] : name).set('id', id);
+  const parsePointer = new Parse.Object(
+    mapping[name] ? mapping[name] : name,
+  ).set('id', id);
+  if (options.clear) {
+    return parsePointer.clear();
+  }
+  return parsePointer;
 }
