@@ -224,7 +224,10 @@ export class ParseDriver implements FlewDriver {
       const getData = async (result?) => {
         if (isEmpty(result)) {
           result = [];
-          const entries: any[] = await workspace.calls[key].find();
+          const entries: any[] = await workspace.calls[key].find({
+            useMasterKey: chain.useMasterKey,
+            sessionToken: chain.useSessionToken,
+          });
           for (const item of entries) {
             // tslint:disable-next-line: deprecation
             const entry = isFunction(item.toJSON) ? item.toJSON() : item;
@@ -467,7 +470,7 @@ export class ParseDriver implements FlewDriver {
       //
       // add or condition when doc is set
       if (chain.doc) {
-        console.log(this.driverOptions.identifier, trim(chain.doc));
+        // console.log(this.driverOptions.identifier, trim(chain.doc));
         let orQueryExtended = {
           or: [
             {
