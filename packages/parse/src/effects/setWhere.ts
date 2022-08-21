@@ -29,11 +29,25 @@ export function setWhere(q, connector) {
       connector.lessThan(q.field, q.value);
       break;
 
+    /**
+     * @deprecated in favor of in
+     */
     case 'array-contains':
       connector.containedIn(q.field, isArray(q.value) ? q.value : [q.value]);
       break;
 
+    case 'in':
+      connector.containedIn(q.field, isArray(q.value) ? q.value : [q.value]);
+      break;
+
+    /**
+     * @deprecated in favor of !in
+     */
     case 'not-in':
+      connector.notContainedIn(q.field, isArray(q.value) ? q.value : [q.value]);
+      break;
+
+    case '!in':
       connector.notContainedIn(q.field, isArray(q.value) ? q.value : [q.value]);
       break;
 
