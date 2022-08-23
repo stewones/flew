@@ -1,1 +1,1 @@
-export const FL_VERSION = '0.0.48';
+export const FL_VERSION = '0.0.49';
