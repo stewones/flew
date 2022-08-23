@@ -164,7 +164,7 @@ export class ParseDriver implements FlewDriver {
   ) {
     let livequery: any;
     const livequerySubscription = subscribe(
-      `flew-livequery-subscription-${key}`,
+      `flew-livequery-unsubscribe-${key}`,
       () => {
         livequery.unsubscribe();
         livequerySubscription.unsubscribe();

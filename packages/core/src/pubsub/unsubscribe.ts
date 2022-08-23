@@ -9,8 +9,8 @@ export function unsubscribe(key: string): void {
     workspace.events[key].unsubscribe();
   }
   // cancel livequery listeners
-  if (workspace.events[`flew-livequery-subscription-${key}`]) {
-    publish(`flew-livequery-subscription-${key}`);
-    workspace.events[`flew-livequery-subscription-${key}`].unsubscribe();
+  if (workspace.events[`flew-livequery-unsubscribe-${key}`]) {
+    publish(`flew-livequery-unsubscribe-${key}`);
+    workspace.events[`flew-livequery-unsubscribe-${key}`].unsubscribe();
   }
 }

@@ -150,7 +150,7 @@ export class FetchBrowser extends FetchServer {
     }).pipe(
       finalize(() => {
         if (['on'].includes(verb)) {
-          publish(`flew-livequery-subscription-${key}`);
+          publish(`flew-livequery-unsubscribe-${key}`);
         }
       }),
     );
