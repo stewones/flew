@@ -171,7 +171,7 @@ export class ParseDriver implements FlewDriver {
       },
     );
     return new Observable<T[]>(subject => {
-      if (!options) {
+      if (isEmpty(options)) {
         options = {
           find: true,
           create: true,
