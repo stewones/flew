@@ -16,7 +16,7 @@ import {
 
 import lodash from 'lodash';
 const { omit, isString, isArray, isEmpty, cloneDeep } = lodash;
-import { Observable, Subject, tap } from 'rxjs';
+import { first, Observable, Subject, tap } from 'rxjs';
 import { HttpDriver } from './http';
 
 const workspace = namespace();
@@ -216,6 +216,7 @@ export class FlewNetwork {
         const end = Date.now();
         this.log().warn()(`${key} network request end [${end - start}ms]`);
       }),
+      !['on'].includes(_verb) ? first() : tap(), // kill observable after network result
     );
   }
 
@@ -342,14 +343,32 @@ export class FlewNetwork {
   }
 
   /**
-   *  Get documents in realtime
+   * Get documents in realtime
    *
    * @template T
-   * @param {{ debounceTime?: number }} [options]
+   * @param {{
+   *     find?: boolean;
+   *     enter?: boolean;
+   *     leave?: boolean;
+   *     create?: boolean;
+   *     update?: boolean;
+   *     delete?: boolean;
+   *     wsOpen?: any;
+   *     wsClose?: any;
+   *   }} [options]
    * @returns {*}  {Observable<T>}
    * @memberof FlewNetwork
    */
-  public on<T>(options?: { debounceTime?: number }): Observable<T> {
+  public on<T>(options?: {
+    find?: boolean;
+    enter?: boolean;
+    leave?: boolean;
+    create?: boolean;
+    update?: boolean;
+    delete?: boolean;
+    wsOpen?: any;
+    wsClose?: any;
+  }): Observable<T> {
     return this.call<T>('on', null, options);
   }
 

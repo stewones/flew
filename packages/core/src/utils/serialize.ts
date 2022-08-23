@@ -13,17 +13,17 @@ export function serialize(data) {
 }
 
 function serializeObject(_key, value) {
-  if (typeof value === 'object') {
+  if (value && typeof value === 'object') {
     if ('toJSON' in value) {
       value = serialize(value.toJSON());
     }
   }
 
-  if (typeof value === 'function') {
+  if (value && typeof value === 'function') {
     value = serialize(value());
   }
 
-  if (typeof value === 'object') {
+  if (value && typeof value === 'object') {
     for (const key in value) {
       if (Object.hasOwnProperty.call(value, key)) {
         value[key] = serializeObject(key, stripEmoji(value[key]));

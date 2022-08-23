@@ -1,5 +1,5 @@
-import { namespace, FlewOptions, isServer } from '@flew/core';
 import lodash from 'lodash';
+import { namespace, FlewOptions, isServer } from '@flew/core';
 const { isBoolean } = lodash;
 import { FetchServer } from './server';
 import { FetchBrowser } from './browser';

@@ -1,6 +1,5 @@
 import { get, isEmpty, isObject } from 'lodash';
-import { Observable, PartialObserver } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, PartialObserver, map } from 'rxjs';
 
 import {
   FlewChainPayload,

@@ -31,7 +31,6 @@ export const Flew: FlewProtocol = {
   },
   store: {},
   events: {},
-  calls: {},
   storage: {
     enabled: false,
     get: key => Promise.resolve(),

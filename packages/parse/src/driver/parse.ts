@@ -1,4 +1,4 @@
-import { guid, namespace, subscribe } from '@flew/core';
+import { guid, subscribe } from '@flew/core';
 import {
   FlewDriver,
   FlewChainPayload,
@@ -8,10 +8,9 @@ import {
   FlewChain,
   Logger,
 } from '@flew/core';
-import { isEmpty, isFunction, trim, omit } from 'lodash';
+import { isEmpty, isFunction, omit } from 'lodash';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, map } from 'rxjs';
 import { transpileChainQuery } from '../effects/transpile';
 import { where } from '../effects/where';
 import { order } from '../effects/order';
@@ -20,8 +19,6 @@ import { skip } from '../effects/skip';
 import { find } from '../effects/find';
 import { select } from '../effects/select';
 import { ParseOptions } from '../structure/options';
-
-const workspace = namespace();
 
 export class ParseDriver implements FlewDriver {
   options: Partial<ParseOptions>;
@@ -122,9 +119,6 @@ export class ParseDriver implements FlewDriver {
               isFunction(item.toJSON) && !chain.useObject
                 ? item.toJSON()
                 : item;
-            if (!chain.useObject) {
-              entry.id = entry.objectId;
-            }
             response.push(entry);
           }
         }
@@ -157,14 +151,41 @@ export class ParseDriver implements FlewDriver {
   public on<T>(
     chain: FlewChainPayload,
     key: string,
-    options?: { debounceTime?: number },
-  ): Observable<T> {
-    return new Observable(observer => {
+    options?: {
+      find?: boolean;
+      enter?: boolean;
+      leave?: boolean;
+      create?: boolean;
+      update?: boolean;
+      delete?: boolean;
+      wsOpen?: any;
+      wsClose?: any;
+    },
+  ) {
+    let livequery: any;
+    const livequerySubscription = subscribe(
+      `flew-livequery-subscription-${key}`,
+      () => {
+        livequery.unsubscribe();
+        livequerySubscription.unsubscribe();
+      },
+    );
+    return new Observable<T[]>(subject => {
+      if (!options) {
+        options = {
+          find: true,
+          create: true,
+          update: true,
+          enter: false,
+          leave: false,
+          delete: false,
+        };
+      }
+
       const Parse = this.getInstance();
 
-      workspace.calls[key] = new Parse.Query(this.getCollectionName());
+      let query = new Parse.Query(this.getCollectionName());
 
-      //
       // Transpile chain query
       const specialQueries: any = transpileChainQuery(chain.query, {
         Parse: this.getInstance(),
@@ -175,114 +196,134 @@ export class ParseDriver implements FlewDriver {
         specialOperators: this.specialOperators,
       });
 
-      //
       // Join query with connector
       if (!isEmpty(specialQueries) && this.isSpecialQuery(chain)) {
-        workspace.calls[key] = Parse.Query.and(...specialQueries);
+        query = Parse.Query.and(...specialQueries);
       } else {
         for (const q in chain.query) {
           if (isFunction(chain.query[q])) {
-            workspace.calls[key][q](...chain.query[q]());
+            query[key][q](...chain.query[q]());
           } else {
-            workspace.calls[key][q](...chain.query[q]);
+            query[key][q](...chain.query[q]);
           }
         }
       }
 
-      //
       // set where
-      where(chain.where, workspace.calls[key]);
+      where(chain.where, query);
 
-      //
       // set order
-      order(chain.sort, workspace.calls[key]);
+      order(chain.sort, query);
 
-      //
       // set limit
-      if (chain.size) limit(chain.size, workspace.calls[key]);
+      if (chain.size) limit(chain.size, query);
 
-      //
       // set include (pointers, relation, etc)
       if (chain.fields) {
-        workspace.calls[key].include(chain.fields);
+        query.include(chain.fields);
       }
 
       if (chain.query && chain.query.include) {
-        workspace.calls[key].include(chain.query.include);
+        query.include(chain.query.include);
       }
 
-      //
       // set skip
-      if (chain.after) skip(chain.after, workspace.calls[key]);
+      if (chain.after) skip(chain.after, query);
 
-      //
       // set select
-      if (chain.select) select(chain.select, workspace.calls[key]);
+      if (chain.select) select(chain.select, query);
 
-      //
-      // fire in the hole
-      const getData = async (result?) => {
+      // find initial data
+      const find = async (result?) => {
         if (isEmpty(result)) {
           result = [];
-          const entries: any[] = await workspace.calls[key].find({
+          const entries: any[] = await query.find({
             useMasterKey: chain.useMasterKey,
             sessionToken: chain.useSessionToken,
           });
           for (const item of entries) {
-            // tslint:disable-next-line: deprecation
-            const entry = isFunction(item.toJSON) ? item.toJSON() : item;
-            entry.id = entry.objectId;
+            const entry =
+              isFunction(item.toJSON) && !chain.useObject
+                ? item.toJSON()
+                : item;
             result.push(entry);
           }
         } else {
           result = [result];
         }
-        //
-        // define standard response
+
         return result;
       };
 
-      workspace.calls[key].subscribe().then(async handler => {
-        let lastTimeChecked = new Date().getTime();
-        observer.next((await getData()) as T);
+      // load initial data
+      if (options.find) {
+        find().then(r => subject.next(r));
+      }
 
-        handler.on('create', async object => {
-          var lastTimeCheckedDue =
-            new Date().getTime() >
-            (lastTimeChecked + options?.debounceTime || 0);
-          if (lastTimeCheckedDue) {
-            lastTimeChecked = new Date().getTime();
-            observer.next((await getData()) as T);
-          }
-        });
+      // start parse's subscription
+      query.subscribe().then(async handler => {
+        livequery = handler;
 
-        handler.on('update', async object => {
-          var lastTimeCheckedDue =
-            new Date().getTime() >
-            (lastTimeChecked + options?.debounceTime || 0);
-          if (lastTimeCheckedDue) {
-            lastTimeChecked = new Date().getTime();
-            observer.next((await getData()) as T);
-          }
-        });
-
-        handler.on('delete', async object => {
-          var lastTimeCheckedDue =
-            new Date().getTime() >
-            (lastTimeChecked + options?.debounceTime || 0);
-          if (lastTimeCheckedDue) {
-            lastTimeChecked = new Date().getTime();
-            observer.next((await getData()) as T);
+        handler.on('open', () => {
+          if (options.wsOpen) {
+            options.wsOpen(true);
           }
         });
 
         handler.on('close', () => {
-          observer.complete();
+          if (options.wsClose) {
+            options.wsClose(true);
+          }
         });
 
-        const internalHandler = subscribe(`flew-${key}`, () => {
-          handler.unsubscribe();
-          internalHandler.unsubscribe();
+        handler.on('enter', async object => {
+          if (options.enter) {
+            const entry =
+              isFunction(object.toJSON) && !chain.useObject
+                ? object.toJSON()
+                : object;
+            subject.next([entry]);
+          }
+        });
+
+        handler.on('leave', async object => {
+          if (options.leave) {
+            const entry =
+              isFunction(object.toJSON) && !chain.useObject
+                ? object.toJSON()
+                : object;
+            subject.next([entry]);
+          }
+        });
+
+        handler.on('create', async object => {
+          if (options.create) {
+            const entry =
+              isFunction(object.toJSON) && !chain.useObject
+                ? object.toJSON()
+                : object;
+            subject.next([entry]);
+          }
+        });
+
+        handler.on('update', async object => {
+          if (options.update) {
+            const entry =
+              isFunction(object.toJSON) && !chain.useObject
+                ? object.toJSON()
+                : object;
+            subject.next([entry]);
+          }
+        });
+
+        handler.on('delete', async object => {
+          if (options.delete) {
+            const entry =
+              isFunction(object.toJSON) && !chain.useObject
+                ? object.toJSON()
+                : object;
+            subject.next([entry]);
+          }
         });
       });
     });
@@ -421,13 +462,10 @@ export class ParseDriver implements FlewDriver {
 
       //
       // persist on cloud
-      const id1 = new Parse.Query(this.getCollectionName());
-      id1.equalTo('objectId', chain.doc);
+      const query = new Parse.Query(this.getCollectionName());
+      query.equalTo(this.driverOptions.identifier, chain.doc);
 
-      const id2 = new Parse.Query(this.getCollectionName());
-      id2.equalTo(this.driverOptions.identifier, chain.doc);
-
-      Parse.Query.or(id1, id2)
+      query
         .find({
           useMasterKey: chain.useMasterKey,
           sessionToken: chain.useSessionToken,
@@ -463,35 +501,22 @@ export class ParseDriver implements FlewDriver {
     return new Observable(observer => {
       const Parse = this.getInstance();
 
-      //
-      // define adapter
+      // define initial query
       this.connector = new Parse.Query(this.getCollectionName());
 
-      //
-      // add or condition when doc is set
+      // set doc
       if (chain.doc) {
-        // console.log(this.driverOptions.identifier, trim(chain.doc));
-        let orQueryExtended = {
-          or: [
-            {
-              equalTo: () => [this.driverOptions.identifier, trim(chain.doc)],
-            },
-          ],
-        };
-        if (chain.query && chain.query.or) {
-          orQueryExtended = {
-            or: [...chain.query.or, ...orQueryExtended.or],
-          };
-        }
-        chain.query = {
-          ...chain.query,
-          ...orQueryExtended,
-        };
+        this.connector.equalTo(this.driverOptions.identifier, chain.doc);
       }
 
-      //
-      // Transpile chain query
-      const query: any = transpileChainQuery(chain.query, {
+      // set where
+      where(chain.where, this.connector);
+
+      // set skip
+      if (chain.after) skip(chain.after, this.connector);
+
+      // Transpile chain query to add more conditions when passed via query parameter
+      const extendedQueries: any = transpileChainQuery(chain.query, {
         Parse: this.getInstance(),
         chain: chain,
         collection: this.getCollectionName(),
@@ -500,19 +525,11 @@ export class ParseDriver implements FlewDriver {
         specialOperators: this.specialOperators,
       });
 
-      //
-      // Join query with connector
-      if (!isEmpty(query)) this.connector = Parse.Query.and(...query);
+      // Join initial query with extended queries
+      if (!isEmpty(extendedQueries)) {
+        this.connector = Parse.Query.and(...extendedQueries);
+      }
 
-      //
-      // set where
-      where(chain.where, this.connector);
-
-      //
-      // set skip
-      if (chain.after) skip(chain.after, this.connector);
-
-      //
       // network handle
       const error = err => {
         observer.error(err);
@@ -520,7 +537,7 @@ export class ParseDriver implements FlewDriver {
       };
 
       const success = async (data: any[]) => {
-        if (isEmpty(data)) return error({ message: `data wasn't found` });
+        if (isEmpty(data)) return error({ message: 'object not found' });
 
         const list = await Parse.Object.destroyAll(data, {
           context: chain.context,
@@ -533,7 +550,7 @@ export class ParseDriver implements FlewDriver {
             for (let i = 0; i < err.errors.length; i++) {
               const msg =
                 "Couldn't delete " +
-                err.errors[i].object.id +
+                err.errors[i].object +
                 'due to ' +
                 err.errors[i].message;
               console.log(msg);

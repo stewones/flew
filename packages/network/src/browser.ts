@@ -4,6 +4,7 @@ import {
   FlewVerb,
   isDiff,
   namespace,
+  publish,
 } from '@flew/core';
 import lodash from 'lodash';
 const { isEmpty } = lodash;
@@ -16,6 +17,7 @@ import {
   map,
   mergeMap,
   tap,
+  finalize,
 } from 'rxjs';
 import { FetchServer } from './server';
 
@@ -45,7 +47,16 @@ export class FetchBrowser extends FetchServer {
     return this.call$('findOne');
   }
 
-  public on<T>(options?: { debounceTime?: number }): Observable<T> {
+  public on<T>(options?: {
+    find?: boolean;
+    enter?: boolean;
+    leave?: boolean;
+    create?: boolean;
+    update?: boolean;
+    delete?: boolean;
+    wsOpen?: any;
+    wsClose?: any;
+  }): Observable<T> {
     return this.call$<T>('on', null, options);
   }
 
@@ -75,7 +86,7 @@ export class FetchBrowser extends FetchServer {
      * 2 - cache
      * 3 - network
      */
-    return new Observable(observer => {
+    return new Observable<T>(observer => {
       this.getDataFromStateOrCache$<T>(key, chain)
         .pipe(
           first(),
@@ -127,10 +138,6 @@ export class FetchBrowser extends FetchServer {
                   }
                   observer.next(data);
                 }
-
-                if (!['on'].includes(verb)) {
-                  observer.complete();
-                }
               }),
               catchError(err => {
                 observer.error(err);
@@ -140,18 +147,27 @@ export class FetchBrowser extends FetchServer {
           }),
         )
         .subscribe();
-    });
+    }).pipe(
+      finalize(() => {
+        if (['on'].includes(verb)) {
+          publish(`flew-livequery-subscription-${key}`);
+        }
+      }),
+    );
   }
 
   protected getDataFromNetwork$<T>(key, chain, path, verb, payload) {
     if (chain.useNetwork) {
-      return from(this.call<T>(verb, path, payload, chain, key)).pipe(
-        !['on'].includes(verb) ? first() : tap(),
-      );
+      if (!navigator.onLine) {
+        this.log().danger()(`${key} navigator is offline`);
+        return of();
+      }
+
+      return this.call<T>(verb, path, payload, chain, key);
     }
 
     this.log().danger()(`${key} network disabled`);
-    return of() as Observable<T>;
+    return of();
   }
 
   protected async setCache(

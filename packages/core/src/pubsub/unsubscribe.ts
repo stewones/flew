@@ -8,9 +8,9 @@ export function unsubscribe(key: string): void {
   if (workspace.events[key]) {
     workspace.events[key].unsubscribe();
   }
-  // cancel internal listeners (ie realtime drivers call)
-  if (workspace.events[`flew-${key}`]) {
-    publish(`flew-${key}`);
-    workspace.events[`flew-${key}`].unsubscribe();
+  // cancel livequery listeners
+  if (workspace.events[`flew-livequery-subscription-${key}`]) {
+    publish(`flew-livequery-subscription-${key}`);
+    workspace.events[`flew-livequery-subscription-${key}`].unsubscribe();
   }
 }

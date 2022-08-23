@@ -5,7 +5,6 @@ export interface FlewProtocol {
   options: FlewOptions;
   state: any;
   events: any;
-  calls: any;
   storage: StorageAdapter;
   store?: any;
   driver?: { [key: string]: FlewDriver };
