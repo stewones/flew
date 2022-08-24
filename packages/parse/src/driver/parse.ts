@@ -1,4 +1,4 @@
-import { guid, subscribe } from '@flew/core';
+import { guid, subscribe, unsubscribe } from '@flew/core';
 import {
   FlewDriver,
   FlewChainPayload,
@@ -162,14 +162,14 @@ export class ParseDriver implements FlewDriver {
       wsClose?: any;
     },
   ) {
-    let livequery: any;
-    const livequerySubscription = subscribe(
-      `flew-livequery-unsubscribe-${key}`,
-      () => {
-        livequery.unsubscribe();
-        livequerySubscription.unsubscribe();
-      },
-    );
+    let livequeryHandler: any;
+    const livequeryHandlerKey = `flew-livequery-unsubscribe-${key}`;
+    subscribe(livequeryHandlerKey, () => {
+      if (livequeryHandler) {
+        livequeryHandler.unsubscribe();
+      }
+      unsubscribe(livequeryHandlerKey);
+    });
     return new Observable<T[]>(subject => {
       if (isEmpty(options)) {
         options = {
@@ -262,7 +262,7 @@ export class ParseDriver implements FlewDriver {
 
       // start parse's subscription
       query.subscribe().then(async handler => {
-        livequery = handler;
+        livequeryHandler = handler;
 
         handler.on('open', () => {
           if (options.wsOpen) {
