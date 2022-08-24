@@ -138,6 +138,10 @@ export class FetchBrowser extends FetchServer {
                   }
                   observer.next(data);
                 }
+
+                if (!['on'].includes(verb)) {
+                  observer.complete();
+                }
               }),
               catchError(err => {
                 observer.error(err);
