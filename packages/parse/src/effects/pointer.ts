@@ -1,27 +1,19 @@
-import { parse } from './parse';
 import { mapping } from './mapping';
 
 /**
- * Creates a Parse pointer for relations
+ * Creates a Parse pointer for relation fields.
  *
  * @export
- * @template T
- * @param {string} name
- * @param {(string | any)} id
- * @param {{ clear?: boolean }} [options={ clear: true }]
- * @returns {*}  {T}
+ * @param {string} className
+ * @param {string} objectId
+ * @returns {*}
  */
-export function pointer<T = any>(
-  name: string,
-  id: string | any,
-  options: { clear?: boolean } = { clear: false },
-): T {
-  const Parse = parse();
-  const parsePointer = new Parse.Object(
-    mapping[name] ? mapping[name] : name,
-  ).set('id', id);
-  if (options.clear) {
-    return parsePointer.clear();
-  }
-  return parsePointer;
+export function pointer<T = any>(className: string, objectId: string): T {
+  const p = {
+    __type: 'Pointer',
+    className: mapping[className] ? mapping[className] : className,
+    objectId: objectId,
+  };
+
+  return p as any;
 }

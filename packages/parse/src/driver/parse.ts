@@ -223,6 +223,7 @@ export class ParseDriver implements FlewDriver {
         query.include(chain.fields);
       }
 
+      // include can also be present on custom query
       if (chain.query && chain.query.include) {
         query.include(chain.query.include);
       }
