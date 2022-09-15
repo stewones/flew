@@ -67,19 +67,25 @@ export class Storage {
 
       const actualConfig = Object.assign(defaultConfig, config || {});
 
-      localForage
-        .defineDriver(CordovaSQLiteDriver)
-        .then(() => {
-          db = localForage.createInstance(actualConfig);
-        })
-        .then(() =>
-          db.setDriver(this._getDriverOrder(actualConfig.driverOrder)),
-        )
-        .then(() => {
-          this._driver = db.driver();
-          resolve(db);
-        })
-        .catch(reason => reject(reason));
+      if (actualConfig.driverOrder.includes('sqlite')) {
+        localForage
+          .defineDriver(CordovaSQLiteDriver)
+          .then(() => {
+            db = localForage.createInstance(actualConfig);
+          })
+          .then(() =>
+            db.setDriver(this._getDriverOrder(actualConfig.driverOrder)),
+          )
+          .then(() => {
+            this._driver = db.driver();
+            resolve(db);
+          })
+          .catch(reason => reject(reason));
+      } else {
+        db.setDriver(this._getDriverOrder(actualConfig.driverOrder));
+        this._driver = db.driver();
+        resolve(db);
+      }
     });
   }
 
