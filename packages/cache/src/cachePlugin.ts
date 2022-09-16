@@ -1,30 +1,25 @@
 import { namespace } from '@flew/core';
-import { Storage, storageConfig } from './storage';
+import { Storage, storageConfig, Driver } from './storage';
 
 const workspace = namespace();
 export interface FlewCacheOptions {
   name: string;
   store: string;
-  driver?: string[];
+  driver?: Driver[];
 }
 
 /**
- * Cache setup
+ *
  *
  * @export
- * @param {*} name
- * @param {*} store
- * @param {string} [driver=['sqlite', 'indexeddb', 'localstorage']]
+ * @param {FlewCacheOptions} options
+ * @returns {*}
  */
 export function cachePlugin(options: FlewCacheOptions) {
   return () => {
     workspace.storage = new Storage(
-      storageConfig(
-        options.name,
-        options.store,
-        options.driver || ['sqlite', 'indexeddb', 'localstorage'],
-      ),
-    );
+      storageConfig(options.name, options.store, options.driver),
+    ) as any;
     workspace.storage.enabled = true;
   };
 }

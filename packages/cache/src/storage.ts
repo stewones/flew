@@ -11,7 +11,7 @@ const workspace = namespace();
 // TODO: Figure out why we can't get type LocalForage to work here in d.ts that is generated
 export type Database = any;
 
-type Driver = any;
+export type Driver = any;
 
 export const Drivers = {
   SecureStorage: 'flewSecureStorage',
@@ -37,12 +37,12 @@ export function storage(): StorageAdapter {
   return hasStorage ? workspace.storage : ({} as StorageAdapter);
 }
 
-export function storageConfig(db = '', store = '', driver = '') {
+export function storageConfig(db = '', store = '', driver: Driver = '') {
   return {
     name: db || defaultConfig.name,
     storeName: store || defaultConfig.storeName,
     driverOrder: driver || defaultConfig.driverOrder,
-  };
+  } as StorageConfig;
 }
 
 export interface StorageConfig {
@@ -79,6 +79,7 @@ export class Storage {
   constructor(config: StorageConfig = defaultConfig) {
     const actualConfig = Object.assign({}, defaultConfig, config || {});
     this._config = actualConfig;
+    this.create();
   }
 
   async create(): Promise<Storage> {

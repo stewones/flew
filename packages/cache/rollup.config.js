@@ -8,7 +8,6 @@ const { name } = pkg;
 
 const externals = {
   localforage: 'localforage',
-  'localforage-cordovasqlitedriver': 'localforage-cordovasqlitedriver',
   '@flew/core': '@flew/core',
 };
 

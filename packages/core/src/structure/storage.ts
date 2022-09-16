@@ -46,6 +46,6 @@ export interface StorageAdapter<T = any> {
    * @returns Returns a promise that resolves when the iteration has finished.
    */
   forEach(
-    iteratorCallback: (value: any, key: string, iterationNumber: number) => any,
+    iteratorCallback: (value: any, key: string, iterationNumber: Number) => any,
   ): Promise<void>;
 }
