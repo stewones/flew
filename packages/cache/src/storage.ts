@@ -1,7 +1,31 @@
-import localForage from 'localforage';
-import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
+import {
+  INDEXEDDB,
+  LOCALSTORAGE,
+  createInstance,
+  defineDriver,
+} from 'localforage';
+
 import { namespace, StorageAdapter } from '@flew/core';
 const workspace = namespace();
+
+// TODO: Figure out why we can't get type LocalForage to work here in d.ts that is generated
+export type Database = any;
+
+type Driver = any;
+
+export const Drivers = {
+  SecureStorage: 'flewSecureStorage',
+  IndexedDB: INDEXEDDB,
+  LocalStorage: LOCALSTORAGE,
+};
+
+export const defaultConfig = {
+  name: '_flew_storage',
+  storeName: '_flew_store',
+  dbKey: '_flew_key',
+  driverOrder: [Drivers.SecureStorage, Drivers.IndexedDB, Drivers.LocalStorage],
+};
+
 /**
  * Retrieve the storage instance
  *
@@ -13,24 +37,11 @@ export function storage(): StorageAdapter {
   return hasStorage ? workspace.storage : ({} as StorageAdapter);
 }
 
-/**
- * Config helper
- *
- * @export
- * @param {string} [db='app:db']
- * @param {string} [store='app:store']
- * @param {string} [driver=['sqlite', 'indexeddb', 'localstorage']]
- * @returns {*}
- */
-export function storageConfig(
-  db = 'app:db',
-  store = 'app:store',
-  driver = ['sqlite', 'indexeddb', 'localstorage'],
-) {
+export function storageConfig(db = '', store = '', driver = '') {
   return {
-    name: db,
-    storeName: store,
-    driverOrder: driver,
+    name: db || defaultConfig.name,
+    storeName: store || defaultConfig.storeName,
+    driverOrder: driver || defaultConfig.driverOrder,
   };
 }
 
@@ -40,7 +51,7 @@ export interface StorageConfig {
   size?: number;
   storeName?: string;
   description?: string;
-  driverOrder?: string[];
+  driverOrder?: Driver[];
   dbKey?: string;
 }
 
@@ -51,42 +62,44 @@ export interface StorageConfig {
  * @class Storage
  */
 export class Storage {
-  private _dbPromise: Promise<LocalForage>;
-  private _driver: string = null;
+  private _config: StorageConfig;
+  private _db: Database | null = null;
+  private _secureStorageDriver: Driver | null = null;
 
-  constructor(config: StorageConfig) {
-    this._dbPromise = new Promise((resolve, reject) => {
-      let db: LocalForage;
+  /**
+   * Create a new Storage instance using the order of drivers and any additional config
+   * options to pass to LocalForage.
+   *
+   * Possible default driverOrder options are: ['indexeddb', 'localstorage'] and the
+   * default is that exact ordering.
+   *
+   * When using Ionic Secure Storage (enterprise only), use ['ionicSecureStorage', 'indexeddb', 'localstorage'] to ensure
+   * Secure Storage is used when available, or fall back to IndexedDB or LocalStorage on the web.
+   */
+  constructor(config: StorageConfig = defaultConfig) {
+    const actualConfig = Object.assign({}, defaultConfig, config || {});
+    this._config = actualConfig;
+  }
 
-      const defaultConfig = {
-        name: '_flew_storage_',
-        storeName: '_flew_store_',
-        dbKey: '_flew_key_',
-        driverOrder: ['sqlite', 'indexeddb', 'websql', 'localstorage'],
-      };
+  async create(): Promise<Storage> {
+    const db = createInstance(this._config);
+    this._db = db;
+    await db.setDriver(this._config.driverOrder || []);
+    return this;
+  }
 
-      const actualConfig = Object.assign(defaultConfig, config || {});
-
-      if (actualConfig.driverOrder.includes('sqlite')) {
-        localForage
-          .defineDriver(CordovaSQLiteDriver)
-          .then(() => {
-            db = localForage.createInstance(actualConfig);
-          })
-          .then(() =>
-            db.setDriver(this._getDriverOrder(actualConfig.driverOrder)),
-          )
-          .then(() => {
-            this._driver = db.driver();
-            resolve(db);
-          })
-          .catch(reason => reject(reason));
-      } else {
-        db.setDriver(this._getDriverOrder(actualConfig.driverOrder));
-        this._driver = db.driver();
-        resolve(db);
-      }
-    });
+  /**
+   * Define a new Driver. Must be called before
+   * initializing the database. Example:
+   *
+   * await storage.defineDriver(myDriver);
+   * await storage.create();
+   */
+  async defineDriver(driver: Driver) {
+    if (driver._driver === Drivers.SecureStorage) {
+      this._secureStorageDriver = driver;
+    }
+    return defineDriver(driver);
   }
 
   /**
@@ -94,31 +107,15 @@ export class Storage {
    * @returns Name of the driver
    */
   get driver(): string | null {
-    return this._driver;
+    return this._db?.driver() || null;
   }
 
-  /**
-   * Reflect the readiness of the store.
-   * @returns Returns a promise that resolves when the store is ready
-   */
-  ready(): Promise<LocalForage> {
-    return this._dbPromise;
-  }
+  private assertDb(): Database {
+    if (!this._db) {
+      throw new Error('Database not created. Must call create() first');
+    }
 
-  /** @hidden */
-  private _getDriverOrder(driverOrder: string[]) {
-    return driverOrder.map((driver: string) => {
-      switch (driver) {
-        case 'sqlite':
-          return CordovaSQLiteDriver._driver;
-        case 'indexeddb':
-          return localForage.INDEXEDDB;
-        case 'websql':
-          return localForage.WEBSQL;
-        case 'localstorage':
-          return localForage.LOCALSTORAGE;
-      }
-    });
+    return this._db!;
   }
 
   /**
@@ -127,7 +124,8 @@ export class Storage {
    * @returns Returns a promise with the value of the given key
    */
   get(key: string): Promise<any> {
-    return this._dbPromise.then(db => db.getItem(key));
+    const db = this.assertDb();
+    return db.getItem(key);
   }
 
   /**
@@ -137,7 +135,8 @@ export class Storage {
    * @returns Returns a promise that resolves when the key and value are set
    */
   set(key: string, value: any): Promise<any> {
-    return this._dbPromise.then(db => db.setItem(key, value));
+    const db = this.assertDb();
+    return db.setItem(key, value);
   }
 
   /**
@@ -146,7 +145,8 @@ export class Storage {
    * @returns Returns a promise that resolves when the value is removed
    */
   remove(key: string): Promise<any> {
-    return this._dbPromise.then(db => db.removeItem(key));
+    const db = this.assertDb();
+    return db.removeItem(key);
   }
 
   /**
@@ -154,21 +154,24 @@ export class Storage {
    * @returns Returns a promise that resolves when the store is cleared
    */
   clear(): Promise<void> {
-    return this._dbPromise.then(db => db.clear());
+    const db = this.assertDb();
+    return db.clear();
   }
 
   /**
    * @returns Returns a promise that resolves with the number of keys stored.
    */
   length(): Promise<number> {
-    return this._dbPromise.then(db => db.length());
+    const db = this.assertDb();
+    return db.length();
   }
 
   /**
    * @returns Returns a promise that resolves with the keys in the store.
    */
   keys(): Promise<string[]> {
-    return this._dbPromise.then(db => db.keys());
+    const db = this.assertDb();
+    return db.keys();
   }
 
   /**
@@ -177,8 +180,19 @@ export class Storage {
    * @returns Returns a promise that resolves when the iteration has finished.
    */
   forEach(
-    iteratorCallback: (value: any, key: string, iterationNumber: number) => any,
+    iteratorCallback: (value: any, key: string, iterationNumber: Number) => any,
   ): Promise<void> {
-    return this._dbPromise.then(db => db.iterate(iteratorCallback));
+    const db = this.assertDb();
+    return db.iterate(iteratorCallback);
+  }
+
+  setEncryptionKey(key: string) {
+    if (!this._secureStorageDriver) {
+      throw new Error(
+        '@flew-enterprise/secure-cache not installed. Encryption support not available',
+      );
+    } else {
+      (this._secureStorageDriver as any)?.setEncryptionKey(key);
+    }
   }
 }
