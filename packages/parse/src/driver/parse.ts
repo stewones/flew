@@ -474,7 +474,9 @@ export class ParseDriver implements FlewDriver {
         .then((r: any[] = []) => {
           if (r.length) {
             for (const k in data) {
-              r[0].set(k, data[k]);
+              if (!['sessionToken'].includes(k)) {
+                r[0].set(k, data[k]);
+              }
             }
             r[0]
               .save(null, {
