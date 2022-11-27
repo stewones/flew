@@ -51,6 +51,10 @@ export function find(handler: QueryHandler) {
     connector.include(chain.query.include);
   }
 
+  if (typeof chain.allowDiskUse === 'boolean') {
+    connector.allowDiskUse(chain.allowDiskUse);
+  }
+
   //
   // set where
   where(chain.where, connector);

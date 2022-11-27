@@ -25,7 +25,8 @@ export type FlewChain =
   | 'withinMiles'
   | 'diff'
   | 'response'
-  | 'context';
+  | 'context'
+  | 'allowDiskUse';
 
 export interface FlewChainPayloadWhere {
   field: string;
@@ -63,4 +64,5 @@ export interface FlewChainPayload {
   diff?: any; // custom diff calculation
   response?: any; // callback for network
   context?: any; // extra context
+  allowDiskUse?: boolean; // mongo option
 }

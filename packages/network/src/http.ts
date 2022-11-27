@@ -62,6 +62,7 @@ export class HttpDriver implements FlewDriver {
     diff: true,
     response: true,
     context: false,
+    allowDiskUse: false,
   };
 
   constructor() {}

@@ -768,6 +768,12 @@ export class FlewNetwork {
     this.checkChainAvailability(this.chain.from, 'context');
     return this;
   }
+
+  public allowDiskUse(param: boolean): FlewNetwork {
+    this.chain.allowDiskUse = param;
+    this.checkChainAvailability(this.chain.from, 'allowDiskUse');
+    return this;
+  }
 }
 
 export class FetchServer extends FlewNetwork {}

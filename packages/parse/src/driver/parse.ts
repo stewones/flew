@@ -76,6 +76,7 @@ export class ParseDriver implements FlewDriver {
     diff: true,
     response: true,
     context: true,
+    allowDiskUse: false,
   };
 
   constructor(options: ParseOptions) {

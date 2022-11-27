@@ -1,6 +1,6 @@
 {
   "name": "@flew/parse",
-  "version": "0.0.55",
+  "version": "0.0.56-alpha.1",
   "description": "Parse Platform support for Flew",
   "keywords": [],
   "homepage": "https://flew.dev",
@@ -39,7 +39,7 @@
     "lodash": "^4.17.21",
     "parse": "^3.3.1",
     "rxjs": "^7.5.6",
-    "@flew/core": "latest"
+    "@flew/core": "0.0.56-alpha.1"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
